@@ -1,0 +1,217 @@
+-- MySQL dump 10.13  Distrib 5.1.52, for pc-linux-gnu (x86_64)
+--
+-- Host: blues2    Database: rbhus
+-- ------------------------------------------------------
+-- Server version	5.1.50-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `rbhus`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `rbhus` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `rbhus`;
+
+--
+-- Table structure for table `fileType`
+--
+
+DROP TABLE IF EXISTS `fileType`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fileType` (
+  `fileType` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `defScript` varchar(1024) CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  PRIMARY KEY (`fileType`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `frames`
+--
+
+DROP TABLE IF EXISTS `frames`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `frames` (
+  `id` int(11) NOT NULL,
+  `frameId` int(11) NOT NULL,
+  `ram` int(11) NOT NULL DEFAULT '0',
+  `sTime` datetime DEFAULT NULL,
+  `eTime` datetime DEFAULT NULL,
+  `logFile` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `hostName` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `runCount` int(2) NOT NULL DEFAULT '0',
+  `fThreads` int(2) NOT NULL DEFAULT '0',
+  `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - unassigned\n1 - assigned\n2 - pending (Intermidiate state before the client picks it up for running)\n3 - running\n4 - done\n5 - failed\n6 - hold\n7 - autohold\n9 - killed',
+  PRIMARY KEY (`id`,`frameId`),
+  KEY `fs_frames` (`id`),
+  CONSTRAINT `fk_frames` FOREIGN KEY (`id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Details of each frames . ';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `hostAlive`
+--
+
+DROP TABLE IF EXISTS `hostAlive`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hostAlive` (
+  `hostName` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `status` int(2) NOT NULL DEFAULT '1' COMMENT '0 - dead	\n1 - alive',
+  PRIMARY KEY (`hostName`),
+  KEY `fk_hostAlive_1` (`hostName`),
+  CONSTRAINT `fk_hostAlive_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `hostEffectiveResource`
+--
+
+DROP TABLE IF EXISTS `hostEffectiveResource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hostEffectiveResource` (
+  `hostName` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `eCpus` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`hostName`),
+  KEY `fk_hostEffectiveResource_1` (`hostName`),
+  CONSTRAINT `fk_hostEffectiveResource_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='This table manages the amount of resources made available to';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `hostInfo`
+--
+
+DROP TABLE IF EXISTS `hostInfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hostInfo` (
+  `hostName` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `totalRam` int(11) NOT NULL,
+  `totalCpus` int(11) NOT NULL,
+  `totalSwap` int(11) NOT NULL,
+  `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - disable\n1 - enable',
+  PRIMARY KEY (`hostName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Contains all the static info on a host';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `hostResource`
+--
+
+DROP TABLE IF EXISTS `hostResource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hostResource` (
+  `hostName` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `freeRam` int(11) NOT NULL DEFAULT '0',
+  `freeCpus` int(11) NOT NULL DEFAULT '0',
+  `freeSwap` int(11) NOT NULL DEFAULT '0',
+  `load1` float NOT NULL DEFAULT '0',
+  `load5` float NOT NULL DEFAULT '0',
+  `load10` float NOT NULL DEFAULT '0',
+  `status` int(2) unsigned zerofill NOT NULL DEFAULT '01' COMMENT '1 - active(ready for rendering)\n2 - stopped(autoactive after a timeout)\n3 - forced off\n',
+  PRIMARY KEY (`hostName`),
+  KEY `fk_hostResource_1` (`hostName`),
+  CONSTRAINT `fk_hostResource_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `proj`
+--
+
+DROP TABLE IF EXISTS `proj`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `proj` (
+  `id` int(11) NOT NULL,
+  `projName` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tasks`
+--
+
+DROP TABLE IF EXISTS `tasks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tasks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `projId` int(11) NOT NULL DEFAULT '0',
+  `description` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'rogue',
+  `user` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'shrinidhi',
+  `fileName` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
+  `fileType` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'blender',
+  `renderer` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `renExtArgs` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'renderer specific extra options if required',
+  `minRam` int(11) NOT NULL DEFAULT '1',
+  `maxRam` int(11) NOT NULL DEFAULT '1',
+  `outDir` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
+  `outName` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'image',
+  `logBase` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `pad` int(1) NOT NULL DEFAULT '4',
+  `fRange` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
+  `hostGroups` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `afterTaskCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `beforeTaskCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `afterFrameCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `beforeFrameCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `afterTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `afterTasks` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `afterFrame` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `rerunThresh` int(2) NOT NULL DEFAULT '5',
+  `threads` int(2) NOT NULL DEFAULT '0',
+  `priority` int(3) NOT NULL DEFAULT '1',
+  `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - waiting(Waiting initialization for Frames tables)\n1 - pending(intermediate state between wait n active)\n2 - active\n3 - stopped\n4 - done(Only if all the frames are done )\n5 - autoStopped',
+  PRIMARY KEY (`id`,`projId`),
+  KEY `fk_tasks_1` (`projId`),
+  KEY `fk_tasks_2` (`fileType`),
+  CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='The main task table ';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tasksLog`
+--
+
+DROP TABLE IF EXISTS `tasksLog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tasksLog` (
+  `id` int(11) NOT NULL,
+  `lastHost` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_tasksLog_1` (`id`),
+  CONSTRAINT `fk_tasksLog_1` FOREIGN KEY (`id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2010-11-25 12:33:36

@@ -1,0 +1,108 @@
+-- MySQL dump 10.13  Distrib 5.1.52, for pc-linux-gnu (x86_64)
+--
+-- Host: blues2    Database: hosts
+-- ------------------------------------------------------
+-- Server version	5.1.50-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `hosts`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `hosts` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `hosts`;
+
+--
+-- Table structure for table `class`
+--
+
+DROP TABLE IF EXISTS `class`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `class` (
+  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'desk',
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `domain`
+--
+
+DROP TABLE IF EXISTS `domain`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `domain` (
+  `domain` varchar(256) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Has a list of domains for which a host belongs';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `group`
+--
+
+DROP TABLE IF EXISTS `group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `group` (
+  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `hostMain`
+--
+
+DROP TABLE IF EXISTS `hostMain`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hostMain` (
+  `host_name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `mac` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `ip` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `alias` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
+  `class` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `os` int(2) DEFAULT NULL,
+  `weight` int(2) NOT NULL DEFAULT '1',
+  `renderFlag` int(2) NOT NULL DEFAULT '0' COMMENT 'This is used by the clients to check if they need to be enabled by default.\n0 - disable\n1- enable',
+  `groups` varchar(1024) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`host_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='hostname, alias, mac, ip';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `os`
+--
+
+DROP TABLE IF EXISTS `os`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `os` (
+  `id` int(2) NOT NULL AUTO_INCREMENT,
+  `os` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Operating sytem types';
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2010-11-25 12:34:00
