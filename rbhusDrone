@@ -201,6 +201,11 @@ def getAssignedFrames(qAssigned):
       for row in rows:
         qAssigned.put(row)
         while(1):
+          if(setFreeCpus(frameInfo) ==  1):
+            break   
+          time.sleep(0.5)
+
+        while(1):
           try:
             conn = db.connRbhus()
             cursor = conn.cursor()
@@ -335,10 +340,10 @@ def execFrames(frameInfo,frameScrutiny):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
           logging.debug("run cmd failed !! 1 :"+ runCmd)
           break
-      while(1):
-        time.sleep(0.5)
-        if(setFreeCpus(frameInfo) ==  1):
-          break        
+      #while(1):
+        #time.sleep(0.5)
+        #if(setFreeCpus(frameInfo) ==  1):
+          #break        
       sys.exit(0)
 
 
@@ -932,20 +937,18 @@ if __name__ == "__main__":
   p.append(hostUpdaterProcess)
   hostUpdaterProcess.start()
 
-  runFramesProcess = multiprocessing.Process(target=runFrames,args=(frameFcuk,frameScrutiny,))
-  p.append(runFramesProcess)
-  runFramesProcess.start()
-
   getAssignedFramesProcess = multiprocessing.Process(target=getAssignedFrames,args=(frameFcuk,))
   p.append(getAssignedFramesProcess)
   getAssignedFramesProcess.start()
+
+  runFramesProcess = multiprocessing.Process(target=runFrames,args=(frameFcuk,frameScrutiny,))
+  p.append(runFramesProcess)
+  runFramesProcess.start()
 
   atUrServiceProcess = multiprocessing.Process(target=atUrService)
   p.append(atUrServiceProcess)
   atUrServiceProcess.start()
   
-  
-
   frameScrutinizerProcess = multiprocessing.Process(target=frameScrutinizer,args=(frameScrutiny,))
   p.append(frameScrutinizerProcess)
   frameScrutinizerProcess.start()
