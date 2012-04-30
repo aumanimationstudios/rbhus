@@ -443,8 +443,11 @@ def execFrames(frameInfo,frameScrutiny):
     logging.debug("-------------------------------")   
     logging.debug("kidsForStatus : "+ str(kidsForStatus))    
 
-    time.sleep(5)
-    fProcess.poll()
+    time.sleep(1)
+    try:
+      fProcess.poll()
+    except:
+      logging.error(str(sys.exc_info()))
     status = fProcess.returncode
     logging.debug("frame status : "+ str(status))
     
