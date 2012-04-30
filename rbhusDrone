@@ -436,8 +436,9 @@ def execFrames(frameInfo,frameScrutiny):
       elif(sys.platform.find("win") >= 0):
         if(getProcessLastKids_win(fProcess.pid,kidsForStatus) == 0):
           break
-      logging.debug("kidsForStatus : "+ str(kidsForStatus))    
-      writeFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'],kidsForStatus)
+      if(len(kidsForStatus) > 0):
+        logging.debug("kidsForStatus : "+ str(kidsForStatus))    
+        writeFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'],kidsForStatus)
       time.sleep(0.5)
           
     logging.debug("-------------------------------")   
@@ -513,8 +514,9 @@ def writeFramePidFile(pidLock,taskId,frameId,pids):
     pidLock.acquire()
     taskPidD = open(taskPidF,"w")
     for pid in pids:
-      logging.debug(str(pid))
-      taskPidD.writelines(str(pid) +"\n\r")
+      if(pid):
+        logging.debug(str(pid))
+        taskPidD.writelines(str(pid) +"\n\r")
     taskPidD.close() 
     pidLock.release()
   except:
