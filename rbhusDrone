@@ -449,7 +449,7 @@ def execFrames(frameInfo,frameScrutiny):
     except:
       logging.error(str(sys.exc_info()))
     status = fProcess.returncode
-    logging.debug("frame status : "+ str(status))
+    logging.debug("frame status of pid :"+ str(fProcess.pid) +": "+ str(status))
     
     fStatus = getFrameStatus(frameInfo['id'],frameInfo['frameId'])
     logging.debug("Frame status afterdone 1: "+ str(fStatus[0]['status']))
