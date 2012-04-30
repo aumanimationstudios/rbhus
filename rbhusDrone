@@ -20,7 +20,7 @@ if(sys.platform.find("linux") >= 0):
   import psi.process
 import tempfile
 
-time.sleep(30)
+time.sleep(1)
 
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
@@ -153,10 +153,11 @@ def loadAvg():
     try:
       cmd = "wmic cpu get loadpercentage"
       load = str(os.popen(cmd + ' 2>&1','r').read().strip().split("\r\n")[1])
-      loads = []
-      loads.append(load)
-      loads.append('0')
-      loads.append('0')
+      if(load):
+        loads = []
+        loads.append(load)
+        loads.append('0')
+        loads.append('0')
     except:
       logging.debug(str(sys.exc_info()))
   return(loads)
@@ -266,8 +267,6 @@ def runFrames(qRun,frameScrutiny):
 def execFrames(frameInfo,frameScrutiny):
   logging.debug(str(os.getpid()) + ": execFrames func : "+ str(frameInfo))
   hostEff = getEffectiveDetails()
-  #envPickled = {}
-  #myPid = os.getpid()
   if(hostEff != 0):
     while(1):
       if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning) == 1):
@@ -444,7 +443,7 @@ def execFrames(frameInfo,frameScrutiny):
     logging.debug("-------------------------------")   
     logging.debug("kidsForStatus : "+ str(kidsForStatus))    
 
-    time.sleep(1)
+    time.sleep(0.5)
     try:
       fProcess.poll()
     except:
