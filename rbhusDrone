@@ -444,7 +444,7 @@ def execFrames(frameInfo,frameScrutiny):
     logging.debug("kidsForStatus : "+ str(kidsForStatus))    
 
     time.sleep(5)
-    fProcess.poll(None)
+    fProcess.poll()
     status = fProcess.returncode
     logging.debug("frame status : "+ str(status))
     
