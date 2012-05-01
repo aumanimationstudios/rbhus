@@ -361,7 +361,6 @@ def execFrames(frameInfo,frameScrutiny):
     try:
       logD = open(logFile,"a+",0)
       logD.write("START \n"+ socket.gethostname() +" : "+ time.asctime() +"\n")
-      logD.close()
     except:
       pass
 
@@ -395,8 +394,10 @@ def execFrames(frameInfo,frameScrutiny):
             logThisDebug("setFreeCpus  ") 
             while(1):
               if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
-                sys.exit(0)
+                break
               time.sleep(0.5)
+            sys.exit(0)
+            
     elif(sys.platform.find("win") >=0):
       logging.warning("PLATFORM : windoze!")          
 
@@ -505,7 +506,6 @@ def execFrames(frameInfo,frameScrutiny):
       time.sleep(0.2)
     
     try:
-      logD = open(logFile,"a+",0)
       logD.write(socket.gethostname() +" : "+ time.asctime() +"\nEND\n\n")
       logD.close()
     except:
