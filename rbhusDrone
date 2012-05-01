@@ -888,8 +888,11 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
 	cursor = conn.cursor()
         cursor.execute("SELECT * FROM hostInfo WHERE hostName = \'" + hostName + "\'")
       except:
-        cursor.close()
-        conn.close()
+        try:
+          cursor.close()
+          conn.close()
+        except:
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
         print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
         continue
       if(not cursor.fetchall()):
