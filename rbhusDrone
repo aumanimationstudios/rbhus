@@ -265,7 +265,7 @@ def runFrames(qRun,frameScrutiny):
 
     while(1):
       try:
-        frameInfo = qRun.get(False)
+        frameInfo = qRun.get()
         break
       except:
         time.sleep(0.2)
@@ -358,8 +358,12 @@ def execFrames(frameInfo,frameScrutiny):
 
     logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + ".".join(str(frameInfo['fileName']).lstrip(os.sep).rsplit(os.sep)[-1].rsplit(".")[0:-1]) +"_"+ str(frameInfo['frameId']).rjust(4,"0") +".log"
     logThisDebug("logFile : "+ str(logFile))
-    logD = open(logFile,"a+",0)
-    logD.write("START \n"+ socket.gethostname() +" : "+ time.asctime() +"\n")      
+    try:
+      logD = open(logFile,"a+",0)
+      logD.write("START \n"+ socket.gethostname() +" : "+ time.asctime() +"\n")
+      logD.close()
+    except:
+      pass
 
     while(1):
       if(setFramesStime(frameInfo) == 1):
@@ -410,18 +414,18 @@ def execFrames(frameInfo,frameScrutiny):
             while(1):
               if(setFramesEtime(frameInfo) == 1):
                 break
-              time.sleep(0.5)
+              time.sleep(0.2)
         
             while(1):
               if(setFreeCpus(frameInfo) ==  1):
                 break
-              time.sleep(0.5)
+              time.sleep(0.2)
               
             while(1):
               if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
                 logThisDebug("Break point ZERO")
-                sys.exit(0)
-              time.sleep(0.5)
+              time.sleep(0.2)
+            sys.exit(0)
     
     
     fProcessPid = [fProcess.pid]
@@ -460,6 +464,8 @@ def execFrames(frameInfo,frameScrutiny):
     except:
       logThisError(str(sys.exc_info()))
     status = fProcess.returncode
+    if(not status):
+      status = 0
     logThisDebug("frame status of pid :"+ str(fProcess.pid) +": "+ str(status))
     
     fStatus = getFrameStatus(frameInfo['id'],frameInfo['frameId'])
@@ -470,19 +476,19 @@ def execFrames(frameInfo,frameScrutiny):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesDone) == 1):
           logThisDebug("Break point ONE")
           break
-        time.sleep(0.5)
+        time.sleep(0.2)
     elif(fStatus[0]['status'] != 9):
       while(1):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
           logThisDebug("Break point TWO")
           break
-        time.sleep(0.5)
+        time.sleep(0.2)
           
     while(1):
       if(setFramesEtime(frameInfo) == 1):
         logThisDebug("Break point THREE")
         break
-      time.sleep(0.5)
+      time.sleep(0.2)
         
 
       
@@ -495,10 +501,14 @@ def execFrames(frameInfo,frameScrutiny):
       if(setFreeCpus(frameInfo) ==  1):
         logThisDebug("Break point FOUR")
         break
-      time.sleep(0.5)
-
-    logD.write(socket.gethostname() +" : "+ time.asctime() +"\nEND\n\n")
-    logD.close()
+      time.sleep(0.2)
+    
+    try:
+      logD = open(logFile,"a+",0)
+      logD.write(socket.gethostname() +" : "+ time.asctime() +"\nEND\n\n")
+      logD.close()
+    except:
+      pass
 
     sys.exit(0)
 
@@ -558,7 +568,8 @@ def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
     return(1)
   kpids = []
   for kpid in taskPidD.readlines():
-    kpids.append(kpid.rstrip().lstrip())
+    if(kpid):
+      kpids.append(kpid.rstrip().lstrip())
   taskPidD.close()
   if(pidLock != 0):
     pidLock.release()
@@ -569,10 +580,16 @@ def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
       kpid.rstrip().lstrip()
       if(sys.platform.find("linux") >= 0):
         if(kpid):
-          os.kill(int(kpid),signal.SIGTERM)
+	  try:
+	    os.kill(int(kpid),signal.SIGTERM)
+	  except:
+	    logThisError("killing problem .. please help me murder this")
       elif(sys.platform.find("win") >= 0):
         if(kpid):
-          os.system("taskkill /t /f /pid "+ str(kpid))
+	  try:
+	    os.system("taskkill /t /f /pid "+ str(kpid))
+	  except:
+	    logThisError("killing problem .. please help me murder this")
       logThisDebug("killFrame : "+ str(kpid))
     except:
       e = sys.exc_info()[1]
@@ -606,7 +623,7 @@ def frameScrutinizer(frameScrutiny):
     while(1):
       time.sleep(0.2)
       try:
-        frameDets = frameScrutiny.get(False)
+        frameDets = frameScrutiny.get()
         break
       except:
         pass
