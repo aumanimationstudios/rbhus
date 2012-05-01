@@ -998,8 +998,11 @@ if __name__ == "__main__":
       if(p[i].is_alive()):
         time.sleep(0.5)
       else: 
-        logThisDebug("Process dead : "+ str(p[i].pid))
-        del(p[i])
+        logThisDebug("MAIN Process dead : "+ str(p[i].pid))
+        try:
+	  del(p[i])
+	except:
+	  logThisError("MAIN Process dead . cannot delete index")
         break
     if(not p):
       break
