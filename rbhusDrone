@@ -965,7 +965,7 @@ def setFreeCpus(frameInfo):
     return(0)
     
 
-if __name__ == "__main__":
+def mainFunc():
   logThisDebug(inspect.stack()[1],str(os.getpid()) + ": main func")
   signal.signal(signal.SIGTERM,sigHandle)
   myPid = os.getpid()
@@ -1012,12 +1012,15 @@ if __name__ == "__main__":
       else: 
         logThisDebug(inspect.stack()[1],"MAIN Process dead : "+ str(p[i].pid))
         try:
-	  del(p[i])
-	except:
-	  logThisError(inspect.stack()[1],"MAIN Process dead . cannot delete index")
+          del(p[i])
+        except:
+          logThisError(inspect.stack()[1],"MAIN Process dead . cannot delete index")
         break
     if(not p):
       break
   
   time.sleep(10)    
   
+
+if __name__ == "__main__":
+  mainFunc()
