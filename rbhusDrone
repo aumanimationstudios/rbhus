@@ -534,7 +534,7 @@ def writeFramePidFile(pidLock,taskId,frameId,pids):
   taskPidF = tempDir + os.sep + "rbhus_"+ str(taskId).rstrip().lstrip() +"_"+ str(frameId).rstrip().lstrip()
   try:
     pidLock.acquire()
-    taskPidD = open(taskPidF,"w")
+    taskPidD = open(taskPidF,"a+")
     for pid in pids:
       if(pid):
         logThisDebug(inspect.stack()[1],str(pid))
