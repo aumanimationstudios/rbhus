@@ -881,39 +881,49 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
     try:
       ipAddr = socket.gethostbyname(socket.gethostname()).strip()
       logThisDebug("ipaddr : "+ str(ipAddr))
-      conn = db.connRbhus()
-      cursor = conn.cursor()
       try:
+	conn = db.connRbhus()
+	cursor = conn.cursor()
         cursor.execute("SELECT * FROM hostInfo WHERE hostName = \'" + hostName + "\'")
       except:
+        cursor.close()
+        conn.close()
         logThisError(str(sys.exc_info()))
         continue
       if(not cursor.fetchall()):
         logThisDebug("Hostname is new :)")
-        cursor.execute("INSERT INTO hostInfo \
-                        (hostName,totalRam,totalCpus,totalSwap,ip) \
-                        VALUES (\'" \
-                        + str(hostName) + "\', " \
-                        + str(totalRam) + "," \
-                        + str(totalCpus) + "," \
-                        + str(totalSwap) + ",\'" \
-                        + str(ipAddr) + "\')")
         
-        cursor.execute("INSERT INTO hostResource (hostName, freeCpus) VALUES (\'" 
-                        + hostName +"\'," \
-                        + str(totalCpus) +")")
-        cursor.execute("INSERT INTO hostAlive (hostName) VALUES (\'"+ hostName +"\')")
-        cursor.execute("INSERT INTO hostEffectiveResource (hostName) VALUES (\'"+ hostName +"\')")
+        
+        try:
+	  cursor.execute("INSERT INTO hostInfo \
+			  (hostName,totalRam,totalCpus,totalSwap,ip) \
+			  VALUES (\'" \
+			  + str(hostName) + "\', " \
+			  + str(totalRam) + "," \
+			  + str(totalCpus) + "," \
+			  + str(totalSwap) + ",\'" \
+			  + str(ipAddr) + "\')")
+        
+	  cursor.execute("INSERT INTO hostResource (hostName, freeCpus) VALUES (\'" 
+			  + hostName +"\'," \
+			  + str(totalCpus) +")")
+	  cursor.execute("INSERT INTO hostAlive (hostName) VALUES (\'"+ hostName +"\')")
+	  cursor.execute("INSERT INTO hostEffectiveResource (hostName) VALUES (\'"+ hostName +"\')")
+	except:
+	  logThisError(str(sys.exc_info()))
       else:
         logThisError(str(sys.exc_info()))
         logThisDebug("Hostname already in :)")
-        cursor.execute("UPDATE hostInfo SET \
-                        totalRam='"+ str(totalRam) +"', \
-                        totalCpus='"+ str(totalCpus) +"', \
-                        totalSwap='"+ str(totalSwap) +"' \
-                        WHERE hostName = \'"+ hostName +"\'")
-        cursor.execute("UPDATE hostResource SET freeCpus="+ str(totalCpus) +" WHERE hostName = \'"+ hostName +"\'")
-        upHostAliveStatus(hostName, 1)
+        try:
+	  cursor.execute("UPDATE hostInfo SET \
+			  totalRam='"+ str(totalRam) +"', \
+			  totalCpus='"+ str(totalCpus) +"', \
+			  totalSwap='"+ str(totalSwap) +"' \
+			  WHERE hostName = \'"+ hostName +"\'")
+	  cursor.execute("UPDATE hostResource SET freeCpus="+ str(totalCpus) +" WHERE hostName = \'"+ hostName +"\'")
+	except:
+	  logThisError(str(sys.exc_info()))
+      upHostAliveStatus(hostName, 1)
       cursor.close()
       conn.close()
       break
@@ -949,7 +959,7 @@ def setFreeCpus(frameInfo):
     conn.close()
     return(1)
   except:
-    logThisError(str(sys.exc_info()[1]))
+    logThisError(str(sys.exc_info()))
     return(0)
     
 
