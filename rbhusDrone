@@ -830,9 +830,23 @@ def atUrService():
       except:
         continue
       killFrame(taskId,frameId,0,constants.framesKilled)
+    elif(msg == "RESTART"):
+      if(sys.platform.find("linux")):
+	try:
+	  os.system("reboot >& /dev/null &")
+	except:
+	  print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ msg)
+      elif(sys.platform.find("win")):
+	try:
+	  os.system("shutdown /r /t 1")
+	except:
+	  print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ msg)
     else:
       print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ msg)
-  clientSocket.close()
+  try:
+    clientSocket.close()
+  except:
+    pass
     
     
 
