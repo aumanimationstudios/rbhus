@@ -556,8 +556,8 @@ def arrangedActiveTasks():
             runShit = getRunFrames(activeTask["id"])
             break
           except:
+	    time.sleep(0.1)
             pass
-          time.sleep(0.5)
         if(runShit):
           totalRunFrames = totalRunFrames + len(runShit)
 
@@ -570,8 +570,9 @@ def arrangedActiveTasks():
             runShit = getRunFrames(activeTask["id"])
             break
           except:
+	    time.sleep(0.1)
             pass
-          time.sleep(0.5)
+          
         if(runShit):
           runFrames = runFrames + len(runShit)
       try:
@@ -607,8 +608,8 @@ def arrangedActiveTasks():
             completedShit = getRunFrames(activeTask["id"])
             break
           except:
+	    time.sleep(0.1)
             pass
-          time.sleep(0.5)
         
         allFrames = 0
         while(1):
@@ -616,8 +617,8 @@ def arrangedActiveTasks():
             allFrames = getAllFrames(activeTask["id"])
             break
           except:
+	    time.sleep(0.1)
             pass
-          time.sleep(0.5)
           
         if(allFrames):
           numAllFrames = len(allFrames)
@@ -762,7 +763,7 @@ def scheduler():
   if(pid == 0):
     setproctitle.setproctitle("scheduler")
     while(1):
-      time.sleep(0.4)
+      time.sleep(0.2)
       activeTasks = arrangedActiveTasks()
       #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
       if(activeTasks):
@@ -804,7 +805,6 @@ def setCompletedTasks():
   if(pid == 0):
     setproctitle.setproctitle("setCompletedTasks")
     while(1):
-      time.sleep(0.5)
       tasks = getActiveTasks()
       if(tasks):
         for task in tasks:
@@ -813,7 +813,8 @@ def setCompletedTasks():
             while(1):
               if(setTaskStatus(task['id'],status)):
                 break
-              time.sleep(0.5)
+              time.sleep(0.1)
+      time.sleep(0.1)
   else:
     return(pid)
             
