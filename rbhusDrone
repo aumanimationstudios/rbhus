@@ -913,17 +913,10 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
 	cursor = conn.cursor()
         cursor.execute("SELECT * FROM hostInfo WHERE hostName = \'" + hostName + "\'")
       except:
-        try:
-          cursor.close()
-          conn.close()
-        except:
-          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
         print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
         continue
       if(not cursor.fetchall()):
         print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Hostname is new :)")
-        
-        
         try:
 	  cursor.execute("INSERT INTO hostInfo \
 			  (hostName,totalRam,totalCpus,totalSwap,ip) \
@@ -933,26 +926,60 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
 			  + str(totalCpus) + "," \
 			  + str(totalSwap) + ",\'" \
 			  + str(ipAddr) + "\')")
+	except:
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+      else:
+        print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+        try:
+          cursor.execute("UPDATE hostInfo SET \
+                          totalRam='"+ str(totalRam) +"', \
+                          totalCpus='"+ str(totalCpus) +"', \
+                          totalSwap='"+ str(totalSwap) +"' \
+                          WHERE hostName = \'"+ hostName +"\'")
+        except:
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
         
+      
+      try:
+        cursor.execute("SELECT * FROM hostResource WHERE hostName = \'" + hostName + "\'")
+      except:
+        print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+      if(not cursor.fetchall()):  
+        try:
 	  cursor.execute("INSERT INTO hostResource (hostName, freeCpus) VALUES (\'" 
 			  + hostName +"\'," \
 			  + str(totalCpus) +")")
-	  cursor.execute("INSERT INTO hostAlive (hostName) VALUES (\'"+ hostName +"\')")
-	  cursor.execute("INSERT INTO hostEffectiveResource (hostName) VALUES (\'"+ hostName +"\')")
 	except:
-	  print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
       else:
-        print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
-        print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Hostname already in :)")
         try:
-	  cursor.execute("UPDATE hostInfo SET \
-			  totalRam='"+ str(totalRam) +"', \
-			  totalCpus='"+ str(totalCpus) +"', \
-			  totalSwap='"+ str(totalSwap) +"' \
-			  WHERE hostName = \'"+ hostName +"\'")
-	  cursor.execute("UPDATE hostResource SET freeCpus="+ str(totalCpus) +" WHERE hostName = \'"+ hostName +"\'")
+          cursor.execute("UPDATE hostResource SET freeCpus="+ str(totalCpus) +" WHERE hostName = \'"+ hostName +"\'")
+        except:
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+      
+      try:
+        cursor.execute("SELECT * FROM hostAlive WHERE hostName = \'" + hostName + "\'")
+      except:
+        print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+      if(not cursor.fetchall()):  
+        try:
+	  cursor.execute("INSERT INTO hostAlive (hostName) VALUES (\'"+ hostName +"\')")
+	except:
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+          upHostAliveStatus(hostName, 1)
+      
+      
+      try:
+        cursor.execute("SELECT * FROM hostEffectiveResource WHERE hostName = \'" + hostName + "\'")
+      except:
+        print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+      if(not cursor.fetchall()):
+        try:
+          cursor.execute("INSERT INTO hostEffectiveResource (hostName) VALUES (\'"+ hostName +"\')")  
 	except:
 	  print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+	  continue
+      
       upHostAliveStatus(hostName, 1)
       cursor.close()
       conn.close()

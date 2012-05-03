@@ -87,8 +87,9 @@ def getWaitingTasks(pendingTasks):
         continue
       if(rows):
         for row in rows:
-          pendingTasks.put(row)
-          idTask = row['id']
+          if(row):
+            pendingTasks.put(row)
+            idTask = row['id']
           
           #REMOVE THE PENDING STATUS
           
@@ -104,15 +105,15 @@ def getWaitingTasks(pendingTasks):
               #break
             #except:
               #continue
-          try:
-            conn = db.connRbhus()
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
-            cursor.close()
-            conn.close()
-          except:
-            e = sys.exc_info()
-            logging.error("Screwed getWaitingTasks1 : "+ str(e))
+            try:
+              conn = db.connRbhus()
+              cursor = conn.cursor()
+              cursor.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
+              cursor.close()
+              conn.close()
+            except:
+              e = sys.exc_info()
+              logging.error("Screwed getWaitingTasks1 : "+ str(e))
   else:
     return(pid)
   
@@ -189,7 +190,7 @@ def initWaitingTasks(pendingTasks):
             if(str(sys.exc_info()).find("IntegrityError") >= 0):
               break
             logging.error("Screwed initWaitingTasks (Insert frames table (connection)) : "+ str(idTask) +" : "+ str(sys.exc_info()))
-          time.sleep(0.5)
+          time.sleep(0.2)
 
       logging.debug("Initialized frames table")
       while(1):
@@ -203,7 +204,7 @@ def initWaitingTasks(pendingTasks):
           break
         except:
           logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
-        time.sleep(0.5)
+        time.sleep(0.2)
         
   else:
     return(pid)
@@ -771,6 +772,7 @@ def scheduler():
         logging.debug("freehosts : "+ str(freeHosts))
         if(freeHosts):
           for activeTask in activeTasks:
+            logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
             assignedHost = getBestHost(activeTask)
             taskFramesAssigned = 0
             if(assignedHost):
@@ -790,7 +792,7 @@ def scheduler():
                   if(resetFailedFrames(activeTask["id"])):
                     logging.debug("resetFailedFrames : "+ str(activeTask['id']))
                     break
-                  time.sleep(0.5)
+                  time.sleep(0.1)
             if(taskFramesAssigned == 1):
               break
       else:
