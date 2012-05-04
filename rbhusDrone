@@ -190,7 +190,7 @@ def upHostAliveStatus(hostName, status):
   try:
     conn = db.connRbhus()
     cursor = conn.cursor()
-    cursor.execute("UPDATE hostAlive SET status = "+ str(status) +" WHERE hostName like \'"+ hostName +"\'")
+    cursor.execute("UPDATE hostAlive SET status = "+ str(status) +" WHERE hostName=\'"+ str(hostName) +"\'")
     cursor.close()
     conn.close()
   except:
@@ -1009,7 +1009,7 @@ def setHostResMem(hostName,freeRam=0,freeSwap=0, load1=0, load5=0, load10=0, sta
 	      +", load1="+ str(load1) \
 	      +", load5="+ str(load5) \
 	      +", load10="+ str(load10) \
-	      +" WHERE hostName like \'"+ hostName +"\'")
+	      +" WHERE hostName=\'"+ str(hostName) +"\'")
     cursor.close()
     conn.close()
     return(1)
