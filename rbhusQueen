@@ -237,8 +237,7 @@ def getUnassignedFrames(taskId):
     cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
                     AND tasks.id=frames.id \
-                    AND (frames.status="+ str(constants.framesUnassigned) +") \
-                    OR (frames.status="+ str(constants.framesKilled) +") \
+                    AND frames.status="+ str(constants.framesUnassigned) +" \
                     AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
                     ORDER BY frames.frameId")
     rows = cursor.fetchall()
@@ -498,6 +497,16 @@ def assignFrameToHost(hostDetail, taskFrame):
     conn.close()
   except:
     logging.error("2 : "+ str(sys.exc_info()))
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor()
+      cursor.execute("UPDATE hostResource \
+                      SET freeCpus=freeCpus+"+ str(eThreads) +" \
+                      WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+      cursor.close()
+      conn.close()
+    except:
+      logging.error("2.5 : "+ str(sys.exc_info()))
     return(0)
   try:
     conn = db.connRbhus()
@@ -507,7 +516,7 @@ def assignFrameToHost(hostDetail, taskFrame):
     conn.close()
   except:
     logging.error("3 : "+ str(sys.exc_info()))
-    return(0)
+    
   return(1)
 
 def getEffectiveDetails(hostName):
