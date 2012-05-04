@@ -176,10 +176,7 @@ def loadAvg():
         load = 1
 	logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
       if(load):
-        loads = []
-        loads.append(load)
-        loads.append('0')
-        loads.append('0')
+        loads = [str(load), '0', '0']
     except:
       logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
   return(loads)
