@@ -676,7 +676,8 @@ def getRunFrames(taskId):
                     OR frames.status="+ str(constants.framesAssigned) +" \
                     OR frames.status="+ str(constants.framesPending) +" \
                     OR frames.status="+ str(constants.framesRunning) +" \
-                    OR frames.status="+ str(constants.framesFailed) +") \
+                    OR frames.status="+ str(constants.framesFailed) +"
+                    OR frames.status="+ str(constants.framesKilled) +") \
                     ORDER BY frames.frameId")
     rows = cursor.fetchall()
     cursor.close()
