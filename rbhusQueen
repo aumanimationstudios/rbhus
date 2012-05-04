@@ -270,8 +270,7 @@ def getPotentHosts():
                            hostInfo.groups, \
                            hostInfo.os \
                      FROM hostResource, hostInfo, hostAlive, hostEffectiveResource \
-                     WHERE hostInfo.status = hostResource.status \
-                     AND hostResource.status = hostAlive.status \
+                     WHERE hostInfo.status = hostAlive.status \
                      AND hostAlive.status="+ str(constants.hostAliveAlive) +" \
                      AND hostInfo.hostName = hostResource.hostName \
                      AND hostResource.hostName = hostAlive.hostName \
