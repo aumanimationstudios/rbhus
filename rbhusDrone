@@ -50,6 +50,7 @@ def sigHandle(sigNum, frame):
   myPid = os.getpid()
   print(str(str(inspect.stack()[1][2])) +" : "+ str(inspect.stack()[1][3]) +" : "+"signal handler called with "+ str(sigNum) +" signal")
   print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+"my pid "+ str(myPid))
+  # run this only if linux?! .. omfg .. i dont know !!!!
   if(sys.platform.find("linux")):
     killProcessKids(myPid)
   return(1)
@@ -209,7 +210,7 @@ def getAssignedFrames(qAssigned):
       conn = db.connRbhus()
       cursor = conn.cursor(db.dict)
       cursor.execute("SELECT frames.frameId, frames.fThreads, tasks.* FROM frames, tasks \
-                      WHERE frames.hostName LIKE \'"+ hostname +"\' \
+                      WHERE frames.hostName=\'"+ str(hostname) +"\' \
                       AND tasks.id=frames.id \
                       AND frames.status="+ str(constants.framesAssigned) +" \
                       ORDER BY frames.frameId")
