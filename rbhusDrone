@@ -978,13 +978,19 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
         print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
       if(not cursor.fetchall()):  
         try:
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : Trying to insert hostResource")
 	  cursor.execute("INSERT INTO hostResource (hostName, freeCpus) VALUES (\'" 
 			  + hostName +"\'," \
 			  + str(totalCpus) +")")
 	except:
           print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
+          #try:
+            #cursor.execute("UPDATE hostResource SET freeCpus="+ str(totalCpus) +" WHERE hostName = \'"+ hostName +"\'")
+          #except:
+            #print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
       else:
         try:
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : Trying to update hostResource")
           cursor.execute("UPDATE hostResource SET freeCpus="+ str(totalCpus) +" WHERE hostName = \'"+ hostName +"\'")
         except:
           print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
@@ -995,6 +1001,7 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
         print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
       if(not cursor.fetchall()):  
         try:
+          print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : Trying to insert hostAlive")
 	  cursor.execute("INSERT INTO hostAlive (hostName) VALUES (\'"+ hostName +"\')")
 	except:
           print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
