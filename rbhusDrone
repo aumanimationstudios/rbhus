@@ -200,7 +200,6 @@ def upHostAliveStatus(hostName, status):
 def getAssignedFrames(qAssigned):
   print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": getAssignedFrames func")
   while(1):
-    time.sleep(1)
     hostname = socket.gethostname()
     rows = 0
     #while(1):
@@ -236,6 +235,8 @@ def getAssignedFrames(qAssigned):
           except:
             print(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "2 : "+ str(sys.exc_info()[1]))
           time.sleep(1)
+    time.sleep(1)
+
   sys.exit(0)
 
 
