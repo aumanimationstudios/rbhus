@@ -236,7 +236,7 @@ def getUnassignedFrames(taskId):
     cursor = conn.cursor(db.dict)
     cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
-                    AND tasks.id=frames.id \
+                    AND frames.id= tasks.id \
                     AND frames.status="+ str(constants.framesUnassigned) +" \
                     AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
                     ORDER BY frames.frameId")
