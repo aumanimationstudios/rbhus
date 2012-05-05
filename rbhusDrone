@@ -509,8 +509,6 @@ def execFrames(frameInfo,frameScrutiny):
     #DOING THIS FOR WINDOWS.. fucking 3dsmax-server doesnt close after rendering!!!! dont know y 3dsmax is still making bussiness!
     time.sleep(0.5)
     if(sys.platform.find("win") >= 0):
-      # run this twice to make sure the shit is killed!!!! fuck windoze
-      killFrame(frameInfo['id'],frameInfo['frameId'],pidfileLock,-1)
       killFrame(frameInfo['id'],frameInfo['frameId'],pidfileLock,-1)
     delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
 
