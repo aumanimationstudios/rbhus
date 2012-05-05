@@ -291,7 +291,7 @@ def getPotentHosts():
 def getFreeHosts():
   freeHosts = []
   potentHosts = getPotentHosts()
-  logging.debug("potentHosts : "+ str(potentHosts))
+  #logging.debug("potentHosts : "+ str(potentHosts))
   if(potentHosts):
     for hostDetails in potentHosts:
       if(hostDetails["eCpus"] == 0):
@@ -359,7 +359,7 @@ def pingClientProcess(client,ipAddr):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle(client)
-    status = os.system("ping -c 1 -W 60 "+ str(ipAddr) +" >& /dev/null")
+    status = os.system("ping -c 1 -W 30 "+ str(ipAddr) +" >& /dev/null")
     pingstatus = 0
     sockstatus = 0
     if(status == 0):
@@ -394,7 +394,7 @@ def pingClientProcess(client,ipAddr):
         clientSocket.close()
       exit(1)
 
-    clientSocket.settimeout(60)
+    clientSocket.settimeout(30)
     clientSocket.send("ALIVE")
     reply = ""
     try:
