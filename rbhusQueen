@@ -545,7 +545,7 @@ def arrangedActiveTasks():
         priorities[activeTask["priority"]].append(activeTask)
     pKeys = priorities.keys()
     pKeys.sort(reverse=True)
-    logging.debug("Sorted Keys :"+ str(pKeys))
+    #logging.debug("Sorted Keys :"+ str(pKeys))
     
     numPrios = len(pKeys)
     totalPrios = sum(pKeys)
@@ -553,7 +553,7 @@ def arrangedActiveTasks():
     pcentPkeys = {}
     for pKey in pKeys:
       pcentPkeys[pKey] = (float(pKey) * 100) / float(totalPrios)
-    logging.debug("pcentPkeys :" + str(pcentPkeys))
+    #logging.debug("pcentPkeys :" + str(pcentPkeys))
       
     pcentPkeysRun = {}
     totalRunFrames = 0
@@ -588,7 +588,7 @@ def arrangedActiveTasks():
         pcentPkeysRun[pKey] = (100 * float(runFrames)) / float(totalRunFrames)
       except:
         pcentPkeysRun[pKey] = 0
-    logging.debug("pcentPkeysRun :"+ str(pcentPkeysRun)) 
+    #logging.debug("pcentPkeysRun :"+ str(pcentPkeysRun)) 
     
     #The logic below SUCKS!!!! :`(  
     pKeysTmp = pKeys
@@ -606,7 +606,7 @@ def arrangedActiveTasks():
           pKeysRevised.append(pKey)
         break
         
-    logging.debug("RevisedPkeys : "+ str(pKeysRevised))    
+    #logging.debug("RevisedPkeys : "+ str(pKeysRevised))    
     
     for pKey in pKeysRevised:
       pcent = {}
@@ -778,16 +778,16 @@ def scheduler():
       #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
       if(activeTasks):
         freeHosts = getFreeHosts()
-        logging.debug("freehosts : "+ str(freeHosts))
+        #logging.debug("freehosts : "+ str(freeHosts))
         if(freeHosts):
           for activeTask in activeTasks:
-            logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
+            #logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
             assignedHost = getBestHost(activeTask)
             taskFramesAssigned = 0
             if(assignedHost):
-              logging.debug("bestHost "+ str(activeTask['id']) +":" + str(assignedHost))
+              #logging.debug("bestHost "+ str(activeTask['id']) +":" + str(assignedHost))
               taskFrames = getUnassignedFrames(activeTask["id"])
-              logging.debug("taskFrames "+ str(activeTask['id']) +" :"+ str(taskFrames))
+              #logging.debug("taskFrames "+ str(activeTask['id']) +" :"+ str(taskFrames))
               if(taskFrames):
                 taskFrame = taskFrames[0]
                 while(1):
