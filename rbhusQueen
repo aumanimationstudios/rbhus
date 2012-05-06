@@ -444,7 +444,7 @@ def resetAssignedFrame(hostName):
                     OR (status = "+ str(constants.framesRunning) +"))") 
     cursor.close()
     conn.close()
-    logging.debug("I CANT BELIVE I AM HERE")
+    logging.debug("I CANT BELIVE I AM HERE for host : "+ str(hostName))
     return(1)
   except:
     e = sys.exc_info()

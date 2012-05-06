@@ -1066,6 +1066,7 @@ def setFreeCpus(frameInfo):
     cursorSet.execute("UPDATE hostResource SET freeCpus=freeCpus+"+ str(frameInfo['fThreads']) +" WHERE hostName=\'"+ str(hostName) +"\'")
     cursorSet.close()
     conn.close()
+    logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : freeing CPUs : "+ str(hostName) +":"+ str(frameInfo['fThreads']))
   except:
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
     return(0)
