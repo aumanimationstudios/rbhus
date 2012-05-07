@@ -59,7 +59,8 @@ def connectSelf():
   
 def mainFunc():
   if(sys.platform.find("win")):
-    status = connectSelf()
+    os.remove(tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat")
+    #status = connectSelf()
     sys.exit(status)
     
     #Completly wrong shit . !!!!! imageName doest consists of frame Number !!!
