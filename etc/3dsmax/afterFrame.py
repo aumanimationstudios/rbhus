@@ -32,12 +32,10 @@ def connectSelf():
     time.sleep(1)
     try:
       clientSocket.connect(("127.0.0.1",6660))
-      logging.debug("Connected to local")
       break
     except:
       e = sys.exc_info()[1]   
       tryCount = tryCount - 1
-      logging.error("Screwed sock to local : "+ str(e))
       clientSocket.close()
       return(1)
   clientSocket.settimeout(30)
@@ -52,7 +50,6 @@ def connectSelf():
     clientSocket.close()
   except:
     e = sys.exc_info()[1]
-    logging.error("Screwed pingClientProcess sock : "+ client +" : "+ str(e))
     clientSocket.close()
   
   return(0)
@@ -60,6 +57,7 @@ def connectSelf():
 def mainFunc():
   if(sys.platform.find("win")):
     os.remove(tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat")
+    print()
     #status = connectSelf()
     sys.exit(status)
     
