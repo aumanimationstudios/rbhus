@@ -379,6 +379,7 @@ def pingClientProcess(client,ipAddr):
       time.sleep(1)
       try:
         clientSocket.connect((ipAddr,6660))
+        clientSocket.settimeout(30)
         logging.debug("Connected to "+ client)
         break
       except:
@@ -394,7 +395,6 @@ def pingClientProcess(client,ipAddr):
         clientSocket.close()
       exit(1)
 
-    clientSocket.settimeout(30)
     clientSocket.send("ALIVE")
     reply = ""
     try:
