@@ -407,10 +407,11 @@ def pingClientProcess(client,ipAddr):
       clientSocket.close()
       #exit(1)
     if((sockstatus == 1) and (pingstatus == 1)):
-      while(1):
-        if(setHostAliveStatus(client,constants.hostAliveAlive) == 1):
-          break
-        time.sleep(0.3)
+      #while(1):
+        #if(setHostAliveStatus(client,constants.hostAliveAlive) == 1):
+          #break
+        #time.sleep(0.3)
+      pass
     else:
       while(1):
         if(setHostAliveStatus(client,constants.hostAliveDead) == 1 and resetAssignedFrame(client) == 1):
@@ -508,6 +509,7 @@ def assignFrameToHost(hostDetail, taskFrame):
     except:
       logging.error("2.5 : "+ str(sys.exc_info()))
     return(0)
+  # The below code can be ignored
   try:
     conn = db.connRbhus()
     cursor = conn.cursor()
@@ -681,12 +683,7 @@ def getRunFrames(taskId):
                     WHERE tasks.id="+ str(taskId) +" \
                     AND tasks.id=frames.id \
                     AND tasks.status="+ str(constants.taskActive) +" \
-                    AND (frames.status="+ str(constants.framesDone) +" \
-                    OR frames.status="+ str(constants.framesAssigned) +" \
-                    OR frames.status="+ str(constants.framesPending) +" \
-                    OR frames.status="+ str(constants.framesRunning) +" \
-                    OR frames.status="+ str(constants.framesFailed) +" \
-                    OR frames.status="+ str(constants.framesKilled) +") \
+                    AND frames.status !="+ str(constants.framesUnassigned) +" \
                     ORDER BY frames.frameId")
     rows = cursor.fetchall()
     cursor.close()
