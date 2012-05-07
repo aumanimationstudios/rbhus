@@ -1,0 +1,948 @@
+#!/usr/bin/python
+
+# SERVER!!!!!!!!
+import sys
+import multiprocessing
+import socket
+import posix
+import os
+import logging
+import time
+import signal
+import setproctitle
+import rbhus.db as db
+import rbhus.constants as constants
+import psi
+import psi.process
+
+LOG_FILENAME = '/var/log/rbhusServer.log'
+logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
+logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+
+
+def sigHandle(sigNum, frame):
+  myPid = posix.getpid()
+  logging.debug("signal handler called with " + str(sigNum) +" signal")
+  logging.debug("my pid "+ str(myPid))
+  killProcessKids(myPid)
+  return(1)
+
+def killProcessKids(ppid):
+  try:
+    pidDets = psi.process.Process(ppid)
+  except:
+    logging.debug("No details : "+ str(ppid))
+    return(0)
+  try:
+    pidKids = pidDets.children()
+  except:
+    logging.error("No children")
+    return(0)
+  if(not pidKids):
+    logging.debug("killing kid "+ str(ppid))
+    posix.kill(int(ppid),9)
+    return(1)
+  else:
+    for pidKid in pidKids:
+      killProcessKids(pidKid.pid)
+
+  
+# Get all the info on the hosts 
+def getHostInfo(status):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    if(status == "ALL"):
+      cursor.execute("SELECT * FROM hostInfo")
+    elif(status == "ENABLED"):
+      cursor.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoEnable))
+    else:
+      cursor.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    return(0)
+  return(rows)
+  
+
+def dbConnectTest():
+  pass
+  
+  #These are the tasks that need to get inserted into "frames" table 
+def getWaitingTasks(pendingTasks):
+  pid = posix.fork()
+  if(pid == 0):
+    setproctitle.setproctitle("getPendingTasks")
+    while(1):
+      time.sleep(0.5)
+      try:
+        conn = db.connRbhus()
+        cursor = conn.cursor(db.dict)
+        cursor.execute("SELECT * FROM tasks WHERE status="+ str(constants.taskWaiting))
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
+      except:
+        continue
+      if(rows):
+        for row in rows:
+          if(row):
+            pendingTasks.put(row)
+            idTask = row['id']
+          
+          #REMOVE THE PENDING STATUS
+          
+          #while(1):
+            #time.sleep(0.5)
+            #try:
+              #conn = db.connRbhus()
+              #curStatus = conn.cursor()
+              #curStatus.execute("UPDATE tasks SET status="+ str(constants.taskPending) +" WHERE id = "+ str(idTask))
+              ##curStatus.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
+              #curStatus.close()
+              #conn.close()
+              #break
+            #except:
+              #continue
+            try:
+              conn = db.connRbhus()
+              cursor = conn.cursor()
+              cursor.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
+              cursor.close()
+              conn.close()
+            except:
+              e = sys.exc_info()
+              logging.error("Screwed getWaitingTasks1 : "+ str(e))
+  else:
+    return(pid)
+  
+  
+def initWaitingTasks(pendingTasks):
+  pid = posix.fork()
+  if(pid == 0):
+    setproctitle.setproctitle("initWaitingTasks")
+    while(1):
+      while(1):
+        try:
+          row = pendingTasks.get()
+          break
+        except:
+          time.sleep(0.1)
+        
+      idTask = row['id']
+      fRange = row['fRange']
+      frames = []
+      
+      for a in fRange.split(","):
+        frange = a.split(":")
+        pad = 1
+        Frange = frange[0]
+        if(len(frange) == 2):
+          pad = frange[1]
+        logging.debug("PAD : "+ str(pad))
+        logging.debug(str(int(Frange.split("-")[0])))
+        logging.debug(str(int(Frange.split("-")[-1]) + 1))
+        for b in range(int(Frange.split("-")[0]), int(Frange.split("-")[-1]) + 1, int(pad)):
+          frames.append(b)
+          
+      tFrames = []
+      framesTable = 0
+      while(1):
+        try:
+          framesTable = getAllFrames(idTask)
+          break
+        except:
+          pass
+        time.sleep(0.5)
+        
+      if(framesTable):
+        for frameTable in framesTable:
+          tFrames.append(frameTable['frameId'])
+      
+      tFramesSet = set(tFrames)
+      framesSet = set(frames)
+      forDelSet = tFramesSet.difference(framesSet)
+      for forDel in forDelSet:
+        while(1):
+          try:
+            conn = db.connRbhus()
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM frames WHERE frames.id="+ str(idTask) +" AND frameId="+ str(forDel))
+            cursor.close()
+            conn.close()
+            break
+          except:
+            logging.error("Screwed initWaitingTasks (Delete frames table (connection)) : "+ str(sys.exc_info()))
+          time.sleep(0.5)
+          
+      for frame in frames:
+        while(1):
+          try:
+            conn = db.connRbhus()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO frames (id, frameId) VALUES ("+ str(idTask) +", "+ str(frame) +")")
+            cursor.close()
+            conn.close()
+            break
+          except:
+            print(str(sys.exc_info()))
+            if(str(sys.exc_info()).find("IntegrityError") >= 0):
+              break
+            logging.error("Screwed initWaitingTasks (Insert frames table (connection)) : "+ str(idTask) +" : "+ str(sys.exc_info()))
+          time.sleep(0.2)
+
+      logging.debug("Initialized frames table")
+      while(1):
+        try:
+          conn = db.connRbhus()
+          cursor = conn.cursor()
+          cursor.execute("UPDATE tasks SET status="+ str(constants.taskActive) +" WHERE id = "+ str(idTask))
+          cursor.close()
+          conn.close()
+          logging.debug("Updated task:"+ str(idTask) +" status to 2(active)")
+          break
+        except:
+          logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
+        time.sleep(0.2)
+        
+  else:
+    return(pid)
+
+
+def getActiveTasks():
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
+                    WHERE tasks.status="+ str(constants.taskActive) +" \
+                    AND tasks.id=tasksLog.id \
+                    AND tasks.afterTime<=NOW() \
+                    ORDER BY tasks.priority DESC")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    return(0)
+  if(rows):
+    return(rows)
+  else:
+    return(0)    
+    
+
+def getUnassignedFrames(taskId):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+                    WHERE tasks.id="+ str(taskId) +" \
+                    AND frames.id= tasks.id \
+                    AND frames.status="+ str(constants.framesUnassigned) +" \
+                    AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
+                    ORDER BY frames.frameId")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    return(0)
+  if(rows):
+    return(rows)
+  return(0)
+    
+    
+def getPotentHosts():
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("SELECT hostInfo.hostName, \
+                           hostInfo.totalCpus, \
+                           hostResource.freeCpus, \
+                           hostInfo.totalRam, \
+                           hostResource.freeRam, \
+                           hostInfo.totalSwap, \
+                           hostResource.freeSwap, \
+                           hostResource.load1, \
+                           hostResource.load5, \
+                           hostResource.load10, \
+                           hostEffectiveResource.eCpus, \
+                           hostInfo.weight, \
+                           hostInfo.groups, \
+                           hostInfo.os \
+                     FROM hostResource, hostInfo, hostAlive, hostEffectiveResource \
+                     WHERE hostInfo.status = hostAlive.status \
+                     AND hostAlive.status="+ str(constants.hostAliveAlive) +" \
+                     AND hostInfo.hostName = hostResource.hostName \
+                     AND hostResource.hostName = hostAlive.hostName \
+                     AND hostAlive.hostName = hostEffectiveResource.hostName \
+                     ORDER BY hostInfo.weight DESC")
+    
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    e = sys.exc_info()   
+    logging.error("Screwed getPotentHosts : "+ str(e))    
+    return(0)
+  if(rows):
+    return(rows)
+  return(0)
+
+
+def getFreeHosts():
+  freeHosts = []
+  potentHosts = getPotentHosts()
+  #logging.debug("potentHosts : "+ str(potentHosts))
+  if(potentHosts):
+    for hostDetails in potentHosts:
+      if(hostDetails["eCpus"] == 0):
+        hostDetails["eCpus"] = hostDetails["totalCpus"]
+        if((hostDetails["freeCpus"] <= hostDetails["totalCpus"]) and (hostDetails["freeCpus"] > 0)):
+          freeHosts.append(hostDetails)
+      elif(hostDetails['eCpus'] != 0):
+        if((hostDetails["totalCpus"] - hostDetails["freeCpus"]) < hostDetails["eCpus"]):
+          freeHosts.append(hostDetails)
+  return(freeHosts)
+      
+
+def checkClientAlive():
+  pid = posix.fork()
+  if(pid == 0):
+    setproctitle.setproctitle("checkClientAlive")
+    maxPids = 10
+    while(1):
+      time.sleep(15)
+      hostInfos = getHostInfo(status="ALL")
+      if(not hostInfos):
+        continue
+      pidCount = 0
+      for hostInfo in hostInfos:
+        hostName = hostInfo['hostName']
+        ipAddr = hostInfo['ip']
+        logging.debug("Pinging "+ hostName + " with ip : "+ str(ipAddr))
+        pingClientProcess(hostName,ipAddr)
+        pidCount += 1
+        if(pidCount >= maxPids):
+          while(1):
+            time.sleep(1)
+            try:
+              (pid,exitStatus) = posix.waitpid(-1,posix.WNOHANG)
+            except OSError, e :
+              logging.error(e)
+              break
+            if(pid == 0):
+              continue
+            if(pid != -1):
+              #logging.debug(str(pid) +" :: "+ str(exitStatus))
+              pidCount += -1
+            else:
+              break
+            if(pidCount < maxPids):
+              break
+      while(1):
+        time.sleep(1)
+        try:
+          (pid,exitStatus) = posix.waitpid(-1,posix.WNOHANG)
+        except OSError, e :
+          logging.error(e)
+          break
+        if(pid == 0):
+          continue
+        if(pid != -1):
+          pass
+        else:
+          break
+  else:
+    return(pid)
+	      
+
+def pingClientProcess(client,ipAddr):
+  pid = posix.fork()
+  if(pid == 0):
+    setproctitle.setproctitle(client)
+    status = os.system("ping -c 1 -W 30 "+ str(ipAddr) +" >& /dev/null")
+    pingstatus = 0
+    sockstatus = 0
+    if(status == 0):
+      logging.debug("Connected to "+ client)
+      pingstatus = 1
+    else:
+      logging.debug("Not able to connect to "+ client)
+      while(1):
+        if(setHostAliveStatus(client,constants.hostAliveDead) == 1 and resetAssignedFrame(client) == 1):
+          break
+        time.sleep(0.3)
+      exit(1)
+
+    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tryCount = 5 
+    while(tryCount):
+      time.sleep(1)
+      try:
+        clientSocket.connect((ipAddr,6660))
+        logging.debug("Connected to "+ client)
+        break
+      except:
+        e = sys.exc_info()[1]   
+        tryCount = tryCount - 1
+        logging.error("Screwed pingClientProcess sock : "+ client +" : "+ str(e))
+        clientSocket.close()
+    if(tryCount == 0):
+      while(1):
+        if(setHostAliveStatus(client,constants.hostAliveDead) == 1 and resetAssignedFrame(client) == 1):
+          break
+        time.sleep(0.3)
+        clientSocket.close()
+      exit(1)
+
+    clientSocket.settimeout(30)
+    clientSocket.send("ALIVE")
+    reply = ""
+    try:
+      reply = clientSocket.recv(1024)
+      clientSocket.close()
+      sockstatus = 1
+    except:
+      e = sys.exc_info()[1]
+      logging.error("Screwed pingClientProcess sock : "+ client +" : "+ str(e))
+      clientSocket.close()
+      #exit(1)
+    if((sockstatus == 1) and (pingstatus == 1)):
+      while(1):
+        if(setHostAliveStatus(client,constants.hostAliveAlive) == 1):
+          break
+        time.sleep(0.3)
+    else:
+      while(1):
+        if(setHostAliveStatus(client,constants.hostAliveDead) == 1 and resetAssignedFrame(client) == 1):
+          break
+        time.sleep(0.3)
+
+    exit(0)
+  else:
+    return(pid)
+
+
+def setHostAliveStatus(hostName, status):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE hostAlive SET status='"+ str(status) +"' WHERE hostName=\""+ hostName +"\"")
+    #logging.debug("UPDATE hostAlive SET status='"+ str(status) +"' WHERE hostName=\""+ hostName +"\"")
+    cursor.close()
+    conn.close()
+    return(1)
+  except:
+    return(0)
+    
+def resetAssignedFrame(hostName):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" \
+                    WHERE hostName=\""+ hostName +"\" AND ((status = "+ str(constants.framesPending) +") \
+                    OR (status = "+ str(constants.framesAssigned) +") \
+                    OR (status = "+ str(constants.framesRunning) +"))") 
+    cursor.close()
+    conn.close()
+    logging.debug("I CANT BELIVE I AM HERE")
+    return(1)
+  except:
+    e = sys.exc_info()
+    logging.error("resetAssignedFrame : "+ str(e))
+    return(0)
+  
+#def createRamDisk():
+  #status = os.system("/sbin/mkfs.ext4 /dev/ram0")
+  #if(not os.path.exists("/mnt/ramdisk")):
+    #status +=  os.system("/bin/mkdir -m 0777 /mnt/ramdisk")
+  #status += os.system("/bin/mount /dev/ram0 /mnt/ramdisk")
+  #if(status == 0):
+    #return(1)
+  #return(0)
+  
+
+# taskFrame is a dict which contains all the info regarding the frame.
+def assignFrameToHost(hostDetail, taskFrame):
+  eThreads = 0
+  if(taskFrame['threads'] == 0):
+    if(hostDetail['eCpus'] == 0):
+      eThreads = hostDetail['freeCpus']
+    else:
+      eThreads = hostDetail['freeCpus'] - (hostDetail['totalCpus'] - hostDetail['eCpus'])
+  else:
+    eThreads = taskFrame['threads']
+
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE hostResource \
+                    SET freeCpus=freeCpus-"+ str(eThreads) +" \
+                    WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+    cursor.close()
+    conn.close()
+  except:
+    logging.error("1 : "+ str(sys.exc_info()))
+    return(0)
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE frames \
+                    SET hostName=\""+ hostDetail['hostName'] +"\" , \
+                    status="+ str(constants.framesAssigned) +", \
+                    runCount=runCount+1 , \
+                    fThreads="+ str(eThreads) +" \
+                    WHERE frames.frameId="+ str(taskFrame["frameId"]) +" \
+                    AND frames.id="+ str(taskFrame["id"]))
+    cursor.close()
+    conn.close()
+  except:
+    logging.error("2 : "+ str(sys.exc_info()))
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor()
+      cursor.execute("UPDATE hostResource \
+                      SET freeCpus=freeCpus+"+ str(eThreads) +" \
+                      WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+      cursor.close()
+      conn.close()
+    except:
+      logging.error("2.5 : "+ str(sys.exc_info()))
+    return(0)
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskFrame['id']))
+    cursor.close()
+    conn.close()
+  except:
+    logging.error("3 : "+ str(sys.exc_info()))
+    
+  return(1)
+
+def getEffectiveDetails(hostName):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'"+ hostName +"\'")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    return(0)
+  return(rows[0])	   
+    
+def arrangedActiveTasks():
+  priorities = {}
+  arrangedTasks = []
+  activeTasks = getActiveTasks()
+  #logging.debug("activeTasks :"+ str(activeTasks))
+  if(activeTasks):
+    for activeTask in activeTasks:
+      try:
+        priorities[activeTask["priority"]].append(activeTask)
+      except:
+        priorities[activeTask["priority"]] = []
+        priorities[activeTask["priority"]].append(activeTask)
+    pKeys = priorities.keys()
+    pKeys.sort(reverse=True)
+    #logging.debug("Sorted Keys :"+ str(pKeys))
+    
+    numPrios = len(pKeys)
+    totalPrios = sum(pKeys)
+    
+    pcentPkeys = {}
+    for pKey in pKeys:
+      pcentPkeys[pKey] = (float(pKey) * 100) / float(totalPrios)
+    #logging.debug("pcentPkeys :" + str(pcentPkeys))
+      
+    pcentPkeysRun = {}
+    totalRunFrames = 0
+    for pKey in pKeys:
+      for activeTask in priorities[pKey]:
+        runShit = 0
+        while(1):
+          try:
+            runShit = getRunFrames(activeTask["id"])
+            break
+          except:
+	    time.sleep(0.1)
+            pass
+        if(runShit):
+          totalRunFrames = totalRunFrames + len(runShit)
+
+    for pKey in pKeys:
+      runFrames = 0
+      for activeTask in priorities[pKey]:
+        runShit = 0
+        while(1):
+          try:
+            runShit = getRunFrames(activeTask["id"])
+            break
+          except:
+	    time.sleep(0.1)
+            pass
+          
+        if(runShit):
+          runFrames = runFrames + len(runShit)
+      try:
+        pcentPkeysRun[pKey] = (100 * float(runFrames)) / float(totalRunFrames)
+      except:
+        pcentPkeysRun[pKey] = 0
+    #logging.debug("pcentPkeysRun :"+ str(pcentPkeysRun)) 
+    
+    #The logic below SUCKS!!!! :`(  
+    pKeysTmp = pKeys
+    pKeysRevised = []
+    while(len(pKeysTmp)):
+      doneCrapping = 0
+      for pKey in pKeysTmp:
+        if(pcentPkeysRun[pKey] <= pcentPkeys[pKey]):
+          pKeysRevised.append(pKey)
+          pKeysTmp.remove(pKey)
+          doneCrapping = 1
+          break
+      if(doneCrapping == 0):
+        for pKey in pKeysTmp:
+          pKeysRevised.append(pKey)
+        break
+        
+    #logging.debug("RevisedPkeys : "+ str(pKeysRevised))    
+    
+    for pKey in pKeysRevised:
+      pcent = {}
+      for activeTask in priorities[pKey]:
+        completedShit = 0
+        while(1):
+          try:
+            completedShit = getRunFrames(activeTask["id"])
+            break
+          except:
+	    time.sleep(0.1)
+            pass
+        
+        allFrames = 0
+        while(1):
+          try:
+            allFrames = getAllFrames(activeTask["id"])
+            break
+          except:
+	    time.sleep(0.1)
+            pass
+          
+        if(allFrames):
+          numAllFrames = len(allFrames)
+        else:
+          return(0)
+          
+        if(completedShit):
+          numCompletedShit = len(completedShit)
+        else:
+          numCompletedShit = 0
+        percent = (100 * numCompletedShit) / numAllFrames
+        try:
+          pcent[percent].append(activeTask)
+        except:
+          pcent[percent] = []
+          pcent[percent].append(activeTask)
+      pcentKeys = pcent.keys()
+      pcentKeys.sort()
+      for pcentKey in pcentKeys:
+        tasks = pcent[pcentKey]
+        for task in tasks:
+          arrangedTasks.append(task)
+    #logging.debug("arrangeTasks :"+ str(arrangedTasks))
+    return(arrangedTasks)
+  else:
+    return(0)
+        
+    
+def getAllFrames(taskId):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+                    WHERE tasks.id=\'"+ str(taskId) +"\' \
+                    AND tasks.id=frames.id \
+                    ORDER BY frames.frameId")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    return(0)
+  if(rows):
+    return(rows)
+  return(0)
+  
+def getRunFrames(taskId):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+                    WHERE tasks.id="+ str(taskId) +" \
+                    AND tasks.id=frames.id \
+                    AND tasks.status="+ str(constants.taskActive) +" \
+                    AND (frames.status="+ str(constants.framesDone) +" \
+                    OR frames.status="+ str(constants.framesAssigned) +" \
+                    OR frames.status="+ str(constants.framesPending) +" \
+                    OR frames.status="+ str(constants.framesRunning) +" \
+                    OR frames.status="+ str(constants.framesFailed) +" \
+                    OR frames.status="+ str(constants.framesKilled) +") \
+                    ORDER BY frames.frameId")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    raise
+  if(rows):
+    return(rows)
+  return(0)
+    
+def resetFailedFrames(taskId):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE id="+ str(taskId) +" \
+                    AND (status="+ str(constants.framesFailed) +" \
+                    OR status="+ str(constants.framesKilled) +")")
+    cursor.close()
+    conn.close()
+    return(1)
+  except:
+    e = sys.exc_info()[:2]
+    logging.error("resetFailedFrames : "+ str(e))
+    return(0)
+  
+  
+def getBestHost(activeTask):
+  freeHosts = getFreeHosts()
+  #logging.debug("free host : "+ str(freeHosts))
+  #Try to giv to the last host that the task ran
+  for freeHost in freeHosts:
+    if(not activeTask['lastHost']):
+      activeTask['lastHost'] = ""
+    if(freeHost['hostName'].find(activeTask['lastHost'])):
+      hostGroups = freeHost["groups"].split(",")
+      taskGroups = activeTask["hostGroups"].split(",")
+      inGroupFlag = 0
+      for taskGroup in taskGroups:
+       try:
+        hostGroups.index(taskGroup)
+        inGroupFlag = 1
+       except:
+        pass
+      if(inGroupFlag):
+        if(freeHost['freeRam'] >= activeTask['minRam']):
+          if(activeTask['threads'] == 0):
+            if(freeHost['totalCpus'] - freeHost['freeCpus'] == 0):
+              #logging.debug("free host : "+ str(freeHost))
+              return(freeHost)
+          else:
+            if((freeHost['freeCpus'] - activeTask['threads']) >= (freeHost['totalCpus'] - freeHost['eCpus'])):
+              #logging.debug("free host : "+ str(freeHost))
+              return(freeHost)
+    
+  #If no last host then find a new one :)
+  for freeHost in freeHosts:
+    hostGroups = freeHost["groups"].split(",")
+    taskGroups = activeTask["hostGroups"].split(",")
+    inGroupFlag = 0
+    for taskGroup in taskGroups:
+     try:
+      hostGroups.index(taskGroup)
+      inGroupFlag = 1
+     except:
+      pass
+    if(inGroupFlag):
+      if(freeHost['freeRam'] >= activeTask['minRam']):
+        if(activeTask['threads'] == 0):
+          if(freeHost['totalCpus'] - freeHost['freeCpus'] == 0):
+            #logging.debug("free host : "+ str(freeHost))
+            return(freeHost)
+        else:
+          if((freeHost['freeCpus'] - activeTask['threads']) >= (freeHost['totalCpus'] - freeHost['eCpus'])):
+            #logging.debug("free host : "+ str(freeHost))
+            return(freeHost)
+  return(0)
+        
+    
+    
+    
+  
+def scheduler():
+  pid = posix.fork()
+  if(pid == 0):
+    setproctitle.setproctitle("scheduler")
+    while(1):
+      time.sleep(0.2)
+      activeTasks = arrangedActiveTasks()
+      #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
+      if(activeTasks):
+        freeHosts = getFreeHosts()
+        #logging.debug("freehosts : "+ str(freeHosts))
+        if(freeHosts):
+          for activeTask in activeTasks:
+            #logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
+            assignedHost = getBestHost(activeTask)
+            taskFramesAssigned = 0
+            if(assignedHost):
+              #logging.debug("bestHost "+ str(activeTask['id']) +":" + str(assignedHost))
+              taskFrames = getUnassignedFrames(activeTask["id"])
+              #logging.debug("taskFrames "+ str(activeTask['id']) +" :"+ str(taskFrames))
+              if(taskFrames):
+                taskFrame = taskFrames[0]
+                while(1):
+                  if(assignFrameToHost(assignedHost, taskFrame)):
+                    logging.debug("ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(taskFrame["id"]) +" : "+ str(taskFrame["frameId"]))
+                    taskFramesAssigned = 1
+                    break
+                  time.sleep(0.1)
+              else:
+                while(1):
+                  if(resetFailedFrames(activeTask["id"])):
+                    logging.debug("resetFailedFrames : "+ str(activeTask['id']))
+                    break
+                  time.sleep(0.1)
+            if(taskFramesAssigned == 1):
+              break
+      else:
+        pass
+    
+    sys.exit(0)
+  else:
+    return(pid)
+ 
+def setCompletedTasks():
+  pid = posix.fork()
+  if(pid == 0):
+    setproctitle.setproctitle("setCompletedTasks")
+    while(1):
+      tasks = getActiveTasks()
+      if(tasks):
+        for task in tasks:
+          status = checkTaskCompleted(task['id'])
+          if(status >= 0):
+            while(1):
+              if(setTaskStatus(task['id'],status)):
+                break
+              time.sleep(0.1)
+      time.sleep(0.1)
+  else:
+    return(pid)
+            
+        
+def autoStopper():
+  pid = posix.fork()
+  if(pid == 0):
+    setproctitle.setproctitle("autoStopper")
+    while(1):
+      tasks = getActiveTasks()
+      if(tasks):
+        for task in tasks:
+          allFrames = getAllFrames(task['id'])
+          framesThresh = getFramesRerunThresh(task['id'])
+          if(allFrames == 0):
+            continue
+          if(framesThresh == 0):
+            continue
+          totalFrames = len(allFrames)
+          totalThresh = len(framesThresh)
+          if((totalFrames - totalThresh) == 0):
+            logging.debug("Auto stopping task : "+ str(task['id']))
+            while(1):
+              if(setTaskStatus(task['id'],constants.taskAutoStopped)):
+                break
+              time.sleep(0.05)
+      time.sleep(0.5)
+  else:
+    return(pid)
+          
+          
+    
+# Frames that have reached rerunThresh
+def getFramesRerunThresh(taskId):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("SELECT frames.* FROM frames, tasks \
+                    WHERE tasks.id=\'"+ str(taskId) +"\' \
+                    AND tasks.id=frames.id \
+                    AND frames.runCount>=tasks.rerunThresh \
+                    AND frames.status!="+ str(constants.framesDone) +" \
+                    ORDER BY frames.frameId")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    logging.error(str(sys.exc_info()[1]))
+    return(0)
+  if(rows):
+    return(rows)
+  return(0)
+
+
+#Return value is the status of the task that needs to be set
+def checkTaskCompleted(taskId):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId) +" \
+                    AND frames.status="+ str(constants.framesDone))
+    compCount = (cursor.fetchall())[0][0]
+    cursor.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId))
+    totalCount = (cursor.fetchall())[0][0]
+    cursor.close()
+    conn.close()
+    if(totalCount == compCount) :
+      return(constants.taskDone)
+    #elif(((totalCount - compCount) == 0) and (totalCount != 0)):
+      #return(constants.taskWaiting)
+    else:
+      return(-2)
+  except:
+    return(-1)
+    
+    
+def setTaskStatus(taskId,status):
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE tasks SET status="+ str(status) +" WHERE id="+ str(taskId))
+    cursor.close()
+    conn.close()
+    logging.debug("Updated task:"+ str(taskId) +" status to "+ str(status))
+    return(1)
+  except:
+    logging.error(str(sys.exc_info()))
+    return(0)
+
+def reapAll():
+  while(1):
+    time.sleep(1)
+    try:
+      (pid,exitStatus) = posix.waitpid(-1,posix.WNOHANG)
+    except OSError, e :
+      logging.error(e)
+      break
+    if(pid == 0):
+      continue
+    if(pid != -1):
+      logging.debug(str(pid) +" :: "+ str(exitStatus))
+    else:
+      break
+  
+
+if __name__ == "__main__":
+  setproctitle.setproctitle("RBHUS:server")
+  signal.signal(signal.SIGTERM,sigHandle)
+  pendTasks = multiprocessing.Queue()
+  checkClientAlive()
+  getWaitingTasks(pendTasks)
+  initWaitingTasks(pendTasks)
+  setCompletedTasks()
+  autoStopper()
+  pendTasks.close()
+  pendTasks.join_thread()
+  scheduler()
+  
+  
+  reapAll()
