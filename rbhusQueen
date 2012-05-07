@@ -125,7 +125,7 @@ def initWaitingTasks(pendingTasks):
     while(1):
       while(1):
         try:
-          row = pendingTasks.get()
+          row = pendingTasks.get(False)
           break
         except:
           time.sleep(0.1)
@@ -775,10 +775,11 @@ def scheduler():
       #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
       if(activeTasks):
         freeHosts = getFreeHosts()
-        #logging.debug("freehosts : "+ str(freeHosts))
+        if(freeHosts):
+          logging.debug("freehosts : "+ str(freeHosts))
         if(freeHosts):
           for activeTask in activeTasks:
-            #logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
+            logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
             assignedHost = getBestHost(activeTask)
             taskFramesAssigned = 0
             if(assignedHost):
