@@ -61,3 +61,6 @@ def mainFunc():
     #os.system("\"C:\\Program Files\\Chaos Group\\V-Ray\\3dsmax 2011 for x64\\tools\\vrimg2exr.exe\" \""+ imageName +"\""
   else:
     sys.exit(666)
+    
+if __name__=="__main__":
+  mainFunc()
