@@ -62,6 +62,5 @@ def mainFunc():
   else:
     sys.exit(666)
     
-if __name__ == "__main__":
-  mainFunc()
-  sys.exit(0)
+mainFunc()
+sys.exit(0)
