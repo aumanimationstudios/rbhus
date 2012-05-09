@@ -22,9 +22,6 @@ outDir = os.environ['rbhus_outDir']
 outFile = os.environ['rbhus_outName']
 afterFrameCmd = os.environ['rbhus_afCmd']
 
-if(outDir != "default"):
-  imageName = outDir.rstrip(os.sep) + os.sep + outFile
-
 def connectSelf():
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   tryCount = 5 
@@ -55,9 +52,8 @@ def connectSelf():
   return(0)
   
 def mainFunc():
-  if(sys.platform.find("win")):
     os.remove(tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat")
-    print()
+    print("REMOVE THE SHIT : "+ tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat")
     #status = connectSelf()
     sys.exit(status)
     
