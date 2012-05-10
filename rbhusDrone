@@ -603,6 +603,7 @@ def writeFramePidFile(pidLock,taskId,frameId,pids):
       pass
       
     for pid in pids:
+      pid.rstrip().lstrip()
       if(pid and (pid != str(os.getpid())) and (pid not in inPids)):
 	inPids.append(pid)
     
