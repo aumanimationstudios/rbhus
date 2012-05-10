@@ -54,13 +54,6 @@ def connectSelf():
 def mainFunc():
     os.remove(tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat")
     print("REMOVE THE SHIT : "+ tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat")
-    #status = connectSelf()
-    sys.exit(status)
-    
-    #Completly wrong shit . !!!!! imageName doest consists of frame Number !!!
-    #os.system("\"C:\\Program Files\\Chaos Group\\V-Ray\\3dsmax 2011 for x64\\tools\\vrimg2exr.exe\" \""+ imageName +"\""
-  else:
-    sys.exit(666)
     
 mainFunc()
 sys.exit(0)
