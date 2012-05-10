@@ -371,7 +371,7 @@ def execFrames(frameInfo,frameScrutiny):
         time.sleep(0.5)
 
       #Run the afterFrame shits
-      runCommand(frameInfo['afterFrameCmd'])
+      runCommand(str(frameInfo['afterFrameCmd']))
         
       while(1):
         if(setFreeCpus(frameInfo) ==  1):
@@ -420,7 +420,7 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.2)
             
             #Run the afterFrame shits
-            runCommand(frameInfo['afterFrameCmd'])
+            runCommand(str(frameInfo['afterFrameCmd']))
               
             while(1):
               if(setFreeCpus(frameInfo) ==  1):
@@ -456,7 +456,7 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.2)
               
             #Run the afterFrame shits
-            runCommand(frameInfo['afterFrameCmd'])
+            runCommand(str(frameInfo['afterFrameCmd']))
               
             while(1):
               if(setFreeCpus(frameInfo) ==  1):
@@ -538,7 +538,7 @@ def execFrames(frameInfo,frameScrutiny):
 
     
     #Run the afterFrame shits
-    runCommand(frameInfo['afterFrameCmd'])
+    runCommand(str(frameInfo['afterFrameCmd']))
     
     try:
       logD.write(socket.gethostname() +" : "+ time.asctime() +"\nEND\n\n")
