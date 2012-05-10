@@ -538,7 +538,9 @@ def execFrames(frameInfo,frameScrutiny):
 
     
     #Run the afterFrame shits
+    logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
     runCommand(str(frameInfo['afterFrameCmd']))
+    
     
     try:
       logD.write(socket.gethostname() +" : "+ time.asctime() +"\nEND\n\n")
