@@ -358,6 +358,7 @@ def execFrames(frameInfo,frameScrutiny):
       elif(sys.platform.find("linux") >= 0):
         runCmd = os.popen('python '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
     except:
+      os.environ['rbhus_exit']   = "1"
       loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCmd  : "+ str(sys.exc_info()))
       while(1):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
@@ -402,6 +403,7 @@ def execFrames(frameInfo,frameScrutiny):
           fProcess = subprocess.Popen("/bin/su "+ frameInfo['user'] +" -c \'"+ runCmd +"\'",shell=True,stdout=logD,stderr=logD)
           break
         except:
+          os.environ['rbhus_exit']   = "2"
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
           retryCount = retryCount + 1
           if(retryCount >= retryThres):
@@ -440,6 +442,7 @@ def execFrames(frameInfo,frameScrutiny):
           fProcess = subprocess.Popen(runCmd.split(),stdout=logD,stderr=logD)
           break
         except:
+          os.environ['rbhus_exit']   = "2"
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
           retryCount = retryCount + 1
           if(retryCount >= retryThres):
@@ -511,12 +514,14 @@ def execFrames(frameInfo,frameScrutiny):
     loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Frame status afterdone 1: "+ str(fStatus[0]['status']))
     
     if((status == 0) and (fStatus[0]['status'] != constants.framesKilled)):
+      os.environ['rbhus_exit']   = "0"
       while(1):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesDone) == 1):
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point ONE")
           break
         time.sleep(0.2)
     elif(fStatus[0]['status'] != constants.framesKilled):
+      os.environ['rbhus_exit']   = str(constants.framesKilled)
       while(1):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point TWO")
