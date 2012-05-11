@@ -1066,7 +1066,7 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
 	  cursor.execute("INSERT INTO hostAlive (hostName) VALUES (\'"+ str(hostName) +"\')")
 	except:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
-          upHostAliveStatus(hostName, 1)
+          #upHostAliveStatus(hostName, 1)
       
       
       try:
@@ -1080,7 +1080,7 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
 	  loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
 	  continue
       
-      upHostAliveStatus(hostName, 1)
+      #upHostAliveStatus(hostName, 1)
       cursor.close()
       conn.close()
       break
