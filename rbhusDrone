@@ -561,15 +561,18 @@ def execFrames(frameInfo,frameScrutiny):
 def runCommand(rcmd):
   pro = 0
   try:
-    pro = os.system(rcmd)
+    pro = subprocess.Popen(rcmd.rstrip().lstrip().split())
   except:
-    pro = 1
     loggingError(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCommand  : "+ str(rcmd) +":"+ str(sys.exc_info()))
-  if(pro):
-    return(pro)
-  else:
-    return(-1)
-                
+    return(1)
+  
+  try:
+    pro.wait()
+  except:
+    loggingError(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCommand  : "+ str(rcmd) +":"+ str(sys.exc_info()))
+    return(1)
+    
+  return(pro.returncode)              
                 
 def getFrameStatus(taskId,frameId):
   try:
