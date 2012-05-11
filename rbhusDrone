@@ -345,14 +345,9 @@ def execFrames(frameInfo,frameScrutiny):
       
       
     #Run the beforeFrame shits
-    if(str(frameInfo['beforeFrameCmd']) != "default"):
-      try:
-        if(sys.platform.find("linux")):
-          os.system("python "+ str(frameInfo['beforeFrameCmd']))
-        elif(sys.platform.find("win")):
-          os.system("python.exe "+ str(frameInfo['beforeFrameCmd']))
-      except:
-        logging.error(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCmd  : "+ str(sys.exc_info()))
+    if(str(frameInfo['beforeFrameCmd']) != 'default'):
+      logging.debug("running beforeFrameCmd :"+ str(frameInfo['beforeFrameCmd']))
+      runCommand(str(frameInfo['beforeFrameCmd']))
       
     
 
@@ -372,7 +367,9 @@ def execFrames(frameInfo,frameScrutiny):
         time.sleep(0.5)
 
       #Run the afterFrame shits
-      runCommand(str(frameInfo['afterFrameCmd']))
+      if(str(frameInfo['afterFrameCmd']) != 'default'):
+        logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
+        runCommand(str(frameInfo['afterFrameCmd']))
         
       while(1):
         if(setFreeCpus(frameInfo) ==  1):
@@ -421,7 +418,9 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.2)
             
             #Run the afterFrame shits
-            runCommand(str(frameInfo['afterFrameCmd']))
+            if(str(frameInfo['afterFrameCmd']) != 'default'):
+              logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
+              runCommand(str(frameInfo['afterFrameCmd']))
               
             while(1):
               if(setFreeCpus(frameInfo) ==  1):
@@ -457,7 +456,9 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.2)
               
             #Run the afterFrame shits
-            runCommand(str(frameInfo['afterFrameCmd']))
+            if(str(frameInfo['afterFrameCmd']) != 'default'):
+              logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
+              runCommand(str(frameInfo['afterFrameCmd']))
               
             while(1):
               if(setFreeCpus(frameInfo) ==  1):
@@ -539,8 +540,9 @@ def execFrames(frameInfo,frameScrutiny):
 
     
     #Run the afterFrame shits
-    logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
-    runCommand(str(frameInfo['afterFrameCmd']))
+    if(str(frameInfo['afterFrameCmd']) != 'default'):
+      logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
+      runCommand(str(frameInfo['afterFrameCmd']))
     
     
     try:
@@ -558,12 +560,11 @@ def execFrames(frameInfo,frameScrutiny):
 
 def runCommand(rcmd):
   pro = 0
-  if(rcmd != 'default'):
-    try:
-      pro = os.system(rcmd)
-    except:
-      pro = 1
-      logging.error(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCommand  : "+ str(rcmd) +":"+ str(sys.exc_info()))
+  try:
+    pro = os.system(rcmd)
+  except:
+    pro = 1
+    logging.error(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCommand  : "+ str(rcmd) +":"+ str(sys.exc_info()))
   if(pro):
     return(pro)
   else:
