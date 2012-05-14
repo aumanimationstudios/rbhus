@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.1.52, for pc-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.50, for pc-linux-gnu (x86_64)
 --
--- Host: blues2    Database: rbhus
+-- Host: localhost    Database: rbhus
 -- ------------------------------------------------------
 -- Server version	5.1.50-log
 
@@ -14,14 +14,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Current Database: `rbhus`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `rbhus` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `rbhus`;
 
 --
 -- Table structure for table `fileType`
@@ -47,7 +39,7 @@ DROP TABLE IF EXISTS `frames`;
 CREATE TABLE `frames` (
   `id` int(11) NOT NULL,
   `frameId` int(11) NOT NULL,
-  `ram` int(11) NOT NULL DEFAULT '0',
+  `ram` bigint(32) NOT NULL DEFAULT '0',
   `sTime` datetime DEFAULT NULL,
   `eTime` datetime DEFAULT NULL,
   `logFile` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -102,10 +94,14 @@ DROP TABLE IF EXISTS `hostInfo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostInfo` (
   `hostName` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `totalRam` int(11) NOT NULL,
-  `totalCpus` int(11) NOT NULL,
-  `totalSwap` int(11) NOT NULL,
+  `totalRam` int(11) NOT NULL DEFAULT '0',
+  `totalCpus` int(11) NOT NULL DEFAULT '0',
+  `totalSwap` int(11) NOT NULL DEFAULT '0',
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - disable\n1 - enable',
+  `groups` varchar(1024) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `weight` int(2) NOT NULL DEFAULT '1',
+  `ip` varchar(92) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `os` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
   PRIMARY KEY (`hostName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Contains all the static info on a host';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -160,15 +156,15 @@ CREATE TABLE `tasks` (
   `user` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'shrinidhi',
   `fileName` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
   `fileType` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'blender',
-  `renderer` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `renderer` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
   `renExtArgs` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'renderer specific extra options if required',
   `minRam` int(11) NOT NULL DEFAULT '1',
   `maxRam` int(11) NOT NULL DEFAULT '1',
-  `outDir` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
+  `outDir` varchar(2048) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
   `outName` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'image',
   `logBase` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
   `pad` int(1) NOT NULL DEFAULT '4',
-  `fRange` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
+  `fRange` varchar(1024) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
   `hostGroups` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
   `afterTaskCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
   `beforeTaskCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -186,7 +182,7 @@ CREATE TABLE `tasks` (
   KEY `fk_tasks_2` (`fileType`),
   CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='The main task table ';
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='The main task table ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,4 +210,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-25 12:33:36
+-- Dump completed on 2012-05-14 19:04:50
