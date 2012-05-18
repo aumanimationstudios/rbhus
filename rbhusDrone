@@ -47,18 +47,28 @@ elif(sys.platform.find("win") >=0):
   #LOG_FILENAME = "z:"+ os.sep +"pythonTestWindoze.DONOTDELETE"+ os.sep +"rbhus"+ os.sep +"rbusClient_"+ str(hostname) +".log"
 logging.BASIC_FORMAT = "%(asctime)s - %(lineno)s -  %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
-
+#logLock = multiprocessing.Lock()
 def loggingDebug(msg):
-  try:
-    logging.debug(msg)
-  except:
-    pass
+  #if(sys.platform.find("linux")):
+    #try:
+      #logging.debug(msg)
+    #except:
+      #pass
+  #else:
+    ##logLock.acquire()
+  print("debug : "+ msg)
+    #logLock.release()
 
 def loggingError(msg):
-  try:
-    logging.error(msg)
-  except:
-    pass
+  #if(sys.platform.find("linux")):
+    #try:
+      #logging.error(msg)
+    #except:
+      #pass
+  #else:
+    ##logLock.acquire()
+  print("error : "+ msg)
+    #logLock.release()
     
 # The most stupid signal handler :)
 def sigHandle(sigNum, frame):
