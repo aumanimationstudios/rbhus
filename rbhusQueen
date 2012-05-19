@@ -247,6 +247,7 @@ def getActiveTasks():
 
 def getUnassignedFrames(taskId):
   try:
+    print("TASK ID : "+ str(taskId))
     conn = db.connRbhus()
     cursor = conn.cursor(db.dict)
     cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
@@ -256,6 +257,7 @@ def getUnassignedFrames(taskId):
                     AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
                     ORDER BY frames.frameId")
     rows = cursor.fetchall()
+    print("FRAMES : "+ str(rows))
     cursor.close()
     conn.close()
   except:
