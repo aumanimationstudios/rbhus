@@ -23,6 +23,16 @@ taskStopped = 3
 taskAutoStopped = 5
 taskDone = 4
 
+taskStatus = {
+  0 : "waiting",
+  1 : "pending",
+  2 : "active",
+  3 : "stopped",
+  4 : "done",
+  5 : "autoStopped"
+}
+
+
 #frames table
 framesUnassigned = 0
 framesAssigned = 1
@@ -34,9 +44,27 @@ framesHold = 6
 framesAutoHold = 7
 framesKilled = 9
 
+
+frameStatus = {
+  0 : "unassigned",
+  1 : "assigned",
+  2 : "pending",
+  3 : "running",
+  4 : "done",
+  5 : "failed",
+  6 : "hold",
+  7 : "autohold",
+  9 : "killed"
+}
+
 #hostInfo table
 hostInfoDisable = 0
 hostInfoEnable = 1
+
+hostInfoStatus = {
+  0 : "enabled",
+  1 : "disabled"
+}
 
 #hostAlive table
 hostAliveDead = 0
