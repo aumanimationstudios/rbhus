@@ -21,9 +21,9 @@
     <item row="3" column="0">
      <widget class="QTableWidget" name="tableFrames">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+        <horstretch>1</horstretch>
+        <verstretch>1</verstretch>
        </sizepolicy>
       </property>
       <property name="palette">
@@ -113,6 +113,12 @@
     </item>
     <item row="0" column="0">
      <widget class="QTableWidget" name="tableList">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="palette">
        <palette>
         <active>
