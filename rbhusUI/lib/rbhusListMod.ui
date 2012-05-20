@@ -15,6 +15,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMinAndMaxSize</enum>
+    </property>
     <item row="3" column="0">
      <widget class="QTableWidget" name="tableFrames">
       <property name="sizePolicy">
@@ -240,6 +243,13 @@
         </property>
         <property name="text">
          <string>ALL</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelTotal">
+        <property name="text">
+         <string>Total : </string>
         </property>
        </widget>
       </item>
