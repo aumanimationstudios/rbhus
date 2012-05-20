@@ -1,0 +1,130 @@
+#!/usr/bin/python
+from PyQt4 import QtCore, QtGui
+import glob
+import os
+import sys
+
+progPath =  sys.argv[0].split("/")
+print progPath
+if(len(progPath) > 1):
+  pwd = "/".join(progPath[0:-1])
+  cwd = os.path.abspath(pwd)
+else:
+  cwd = os.path.abspath(os.getcwd())
+  
+sys.path.append(cwd.rstrip("/") +"/lib")
+import rbhusListMod
+print(cwd.rstrip("/").rstrip("rbhusUI").rstrip("/") +"/rbhus")
+sys.path.append(cwd.rstrip("/").rstrip("rbhusUI").rstrip("/") +"/rbhus")
+import db
+import constants
+
+
+try:
+  _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+  _fromUtf8 = lambda s: s
+  
+
+class Ui_Form(rbhusListMod.Ui_mainRbhusList):
+  def setupUi(self, Form):
+    self.selectedTaskList = []
+    rbhusListMod.Ui_mainRbhusList.setupUi(self,Form)
+    QtCore.QObject.connect(self.pushRefresh, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTables)
+    QtCore.QObject.connect(self.tableList, QtCore.SIGNAL(_fromUtf8("itemSelectionChanged()")), self.selectedTasks)
+  
+  
+  def popTables(self):
+    
+    self.tableList.clearContents()
+    self.tableList.setSortingEnabled(False)
+    colNames = ["id","fileName","status"]
+    colCount = 0
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor(db.dict)
+      cursor.execute("select "+ ",".join(colNames) +" from tasks")
+      rows = cursor.fetchall()
+      cursor.close()
+      conn.close()
+    except:
+      print("Error connecting to db")
+      return()
+      
+    for row in rows:
+      colCount = len(row)
+      break
+      
+    self.tableList.setColumnCount(colCount)
+    self.tableList.setRowCount(len(rows))
+    
+    for x in range(0,colCount):
+      item = QtGui.QTableWidgetItem()
+      self.tableList.setHorizontalHeaderItem(x, item)
+    #item = QtGui.QTableWidgetItem()
+    #self.tableList.setHorizontalHeaderItem(1, item)
+    #item = QtGui.QTableWidgetItem()
+    #self.tableList.setHorizontalHeaderItem(2, item)
+    #item = QtGui.QTableWidgetItem()
+    #self.tableList.setHorizontalHeaderItem(3, item)
+    #item = QtGui.QTableWidgetItem()
+    #self.tableList.setHorizontalHeaderItem(4, item)
+    indx = 0
+    for x in colNames:
+      self.tableList.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      indx = indx + 1
+
+    #self.tableList.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("Form", "#", None, QtGui.QApplication.UnicodeUTF8))
+    #self.tableList.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("Form", "desc", None, QtGui.QApplication.UnicodeUTF8))
+    #self.tableList.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("Form", "user", None, QtGui.QApplication.UnicodeUTF8))
+    #self.tableList.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("Form", "date", None, QtGui.QApplication.UnicodeUTF8))
+    #self.tableList.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("Form", "tag", None, QtGui.QApplication.UnicodeUTF8))
+
+    indx = 0
+    for row in rows:
+      item = QtGui.QTableWidgetItem()
+      self.tableList.setVerticalHeaderItem(indx, item)
+      colIndx = 0
+      for colName in colNames:
+        if(colName == "status"):
+          item = QtGui.QTableWidgetItem()
+          self.tableList.setItem(indx, colIndx, item)
+          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        item = QtGui.QTableWidgetItem()
+        self.tableList.setItem(indx, colIndx, item)
+        self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        colIndx = colIndx + 1
+      indx = indx + 1
+      
+    self.tableList.resizeColumnsToContents()
+    self.tableList.setSortingEnabled(True)
+    
+    
+  
+    
+    
+  def selectedTasks(self):
+    rows=[]
+    for idx in self.tableList.selectionModel().selectedRows():
+      rows.append(str(idx.data().toString()).lstrip("0"))
+    
+    if(rows):
+      self.selectedTaskList = rows
+    #else:
+      #selectedTaskList = 0
+    if(self.selectedTaskList):
+      print("FOOK : "+ str(self.selectedTaskList))
+      return(self.selectedTaskList)
+    
+        
+    
+if __name__ == "__main__":
+  import sys
+  app = QtGui.QApplication(sys.argv)
+  Form = QtGui.QMainWindow()
+  ui = Ui_Form()
+  ui.setupUi(Form)
+  Form.show()
+  sys.exit(app.exec_())

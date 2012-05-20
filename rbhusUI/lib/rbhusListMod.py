@@ -1,0 +1,118 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'lib/rbhusListMod.ui'
+#
+# Created: Sun May 20 00:23:03 2012
+#      by: PyQt4 UI code generator 4.9.1
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt4 import QtCore, QtGui
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+
+class Ui_mainRbhusList(object):
+    def setupUi(self, mainRbhusList):
+        mainRbhusList.setObjectName(_fromUtf8("mainRbhusList"))
+        mainRbhusList.resize(786, 666)
+        self.centralwidget = QtGui.QWidget(mainRbhusList)
+        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+        self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+        self.horizontalLayout = QtGui.QHBoxLayout()
+        self.horizontalLayout.setSpacing(1)
+        self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
+        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.tableList = QtGui.QTableWidget(self.centralwidget)
+        self.tableList.setFrameShadow(QtGui.QFrame.Raised)
+        self.tableList.setEditTriggers(QtGui.QAbstractItemView.DoubleClicked|QtGui.QAbstractItemView.EditKeyPressed)
+        self.tableList.setAlternatingRowColors(True)
+        self.tableList.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.tableList.setVerticalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.tableList.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.tableList.setGridStyle(QtCore.Qt.SolidLine)
+        self.tableList.setObjectName(_fromUtf8("tableList"))
+        self.tableList.setColumnCount(0)
+        self.tableList.setRowCount(0)
+        self.tableList.horizontalHeader().setCascadingSectionResizes(True)
+        self.tableList.verticalHeader().setCascadingSectionResizes(True)
+        self.horizontalLayout.addWidget(self.tableList)
+        self.verticalLayout_2 = QtGui.QVBoxLayout()
+        self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
+        self.horizontalLayout_3 = QtGui.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
+        self.checkDone = QtGui.QCheckBox(self.centralwidget)
+        self.checkDone.setObjectName(_fromUtf8("checkDone"))
+        self.horizontalLayout_3.addWidget(self.checkDone)
+        self.checkFailed = QtGui.QCheckBox(self.centralwidget)
+        self.checkFailed.setObjectName(_fromUtf8("checkFailed"))
+        self.horizontalLayout_3.addWidget(self.checkFailed)
+        self.checkRunning = QtGui.QCheckBox(self.centralwidget)
+        self.checkRunning.setObjectName(_fromUtf8("checkRunning"))
+        self.horizontalLayout_3.addWidget(self.checkRunning)
+        self.checkAssigned = QtGui.QCheckBox(self.centralwidget)
+        self.checkAssigned.setObjectName(_fromUtf8("checkAssigned"))
+        self.horizontalLayout_3.addWidget(self.checkAssigned)
+        self.checkHold = QtGui.QCheckBox(self.centralwidget)
+        self.checkHold.setObjectName(_fromUtf8("checkHold"))
+        self.horizontalLayout_3.addWidget(self.checkHold)
+        self.checkAutohold = QtGui.QCheckBox(self.centralwidget)
+        self.checkAutohold.setObjectName(_fromUtf8("checkAutohold"))
+        self.horizontalLayout_3.addWidget(self.checkAutohold)
+        self.checkKilled = QtGui.QCheckBox(self.centralwidget)
+        self.checkKilled.setObjectName(_fromUtf8("checkKilled"))
+        self.horizontalLayout_3.addWidget(self.checkKilled)
+        self.checkAll = QtGui.QCheckBox(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.checkAll.setFont(font)
+        self.checkAll.setObjectName(_fromUtf8("checkAll"))
+        self.horizontalLayout_3.addWidget(self.checkAll)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.tableFrames = QtGui.QTableWidget(self.centralwidget)
+        self.tableFrames.setEditTriggers(QtGui.QAbstractItemView.AnyKeyPressed|QtGui.QAbstractItemView.DoubleClicked|QtGui.QAbstractItemView.EditKeyPressed)
+        self.tableFrames.setAlternatingRowColors(True)
+        self.tableFrames.setVerticalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.tableFrames.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.tableFrames.setObjectName(_fromUtf8("tableFrames"))
+        self.tableFrames.setColumnCount(0)
+        self.tableFrames.setRowCount(0)
+        self.verticalLayout_2.addWidget(self.tableFrames)
+        self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.horizontalLayout.setStretch(1, 5)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        self.checkRefresh = QtGui.QCheckBox(self.centralwidget)
+        self.checkRefresh.setObjectName(_fromUtf8("checkRefresh"))
+        self.horizontalLayout_2.addWidget(self.checkRefresh)
+        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
+        self.pushRefresh = QtGui.QPushButton(self.centralwidget)
+        self.pushRefresh.setObjectName(_fromUtf8("pushRefresh"))
+        self.horizontalLayout_2.addWidget(self.pushRefresh)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        mainRbhusList.setCentralWidget(self.centralwidget)
+
+        self.retranslateUi(mainRbhusList)
+        QtCore.QMetaObject.connectSlotsByName(mainRbhusList)
+
+    def retranslateUi(self, mainRbhusList):
+        mainRbhusList.setWindowTitle(QtGui.QApplication.translate("mainRbhusList", "rbhusList", None, QtGui.QApplication.UnicodeUTF8))
+        self.tableList.setSortingEnabled(True)
+        self.checkDone.setText(QtGui.QApplication.translate("mainRbhusList", "done", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkFailed.setText(QtGui.QApplication.translate("mainRbhusList", "failed", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkRunning.setText(QtGui.QApplication.translate("mainRbhusList", "running", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkAssigned.setText(QtGui.QApplication.translate("mainRbhusList", "assigned", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkHold.setText(QtGui.QApplication.translate("mainRbhusList", "hold", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkAutohold.setText(QtGui.QApplication.translate("mainRbhusList", "autohold", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkKilled.setText(QtGui.QApplication.translate("mainRbhusList", "killed", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkAll.setText(QtGui.QApplication.translate("mainRbhusList", "ALL", None, QtGui.QApplication.UnicodeUTF8))
+        self.tableFrames.setSortingEnabled(True)
+        self.checkRefresh.setText(QtGui.QApplication.translate("mainRbhusList", "autoRefresh", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushRefresh.setText(QtGui.QApplication.translate("mainRbhusList", "refresh", None, QtGui.QApplication.UnicodeUTF8))
+
