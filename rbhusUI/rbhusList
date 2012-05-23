@@ -28,22 +28,234 @@ except AttributeError:
 
 class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def setupUi(self, Form):
+    self.colNamesTask = ["id","fileName","status"]
+    self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status"]
+    
+    
     self.selectedTaskList = []
     rbhusListMod.Ui_mainRbhusList.setupUi(self,Form)
-    QtCore.QObject.connect(self.pushRefresh, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTables)
-    QtCore.QObject.connect(self.tableList, QtCore.SIGNAL(_fromUtf8("itemSelectionChanged()")), self.selectedTasks)
-  
-  
-  def popTables(self):
+    QtCore.QObject.connect(self.pushRefresh, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableList)
+    QtCore.QObject.connect(self.tableList, QtCore.SIGNAL(_fromUtf8("itemSelectionChanged()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkAll, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkDone, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkAssigned, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkAutohold, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkFailed, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkKilled, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkRunning, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkHold, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    self.checkTAll.clicked.connect(self.popTableList)
+    self.checkTActive.clicked.connect(self.popTableList)
+    self.checkTAutohold.clicked.connect(self.popTableList)
+    self.checkTDone.clicked.connect(self.popTableList)
+    self.checkTHold.clicked.connect(self.popTableList)
     
+    self.taskHold.clicked.connect(self.holdTask)
+    self.taskRerun.clicked.connect(self.rerunTask)
+    self.taskActivate.clicked.connect(self.activateTask)
+    
+    
+    self.frameStop.clicked.connect(self.stopFrame)
+    self.frameRerun.clicked.connect(self.rerunFrame)
+    self.frameHold.clicked.connect(self.holdFrame)
+    
+    #self.tableFrames.itemSelectionChanged.connect(self.stopFrame)
+    self.timer = QtCore.QTimer()
+    self.timer.timeout.connect(self.popTableFrames)
+    self.checkRefresh.clicked.connect(self.timeCheck)
+    self.popTableList()
+    
+    
+  
+  
+  def stopFrame(self):
+    selFramesDict = self.selectedFrames()
+    selFrames = {}
+    for x in selFramesDict:
+      if(x['status'] == "running"):
+        os.system("echo \'MURDER:"+ str(x['id']) +"%"+ str(x['frameId']) +"\' | telnet "+ str(x['hostName']) +" 6660")
+      else:
+        print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
+    self.popTableFrames()
+        
+  
+  def rerunFrame(self):
+    selFramesDict = self.selectedFrames()
+    selFrames = {}
+    for x in selFramesDict:
+      if((x['status'] != "running") and (x['status'] != "assigned") and (x['status'] != "pending")):
+        try:
+          selFrames[x['id']].append(x['frameId'])
+        except:
+          selFrames[x['id']] = []
+          selFrames[x['id']].append(x['frameId'])
+      else:
+        print(str(x['id']) +"%"+ str(x['frameId']) +" cannot rerun frames that are already running. please stop and rerun them")
+    if(selFrames):
+      for x in selFrames.keys():
+        ids = " or frameId=".join(selFrames[x])
+        try:
+          conn = db.connRbhus()
+          cursor = conn.cursor()
+          cursor.execute("update frames set status = "+ str(constants.framesUnassigned) +" where (id="+ str(x) +") and (frameId="+ str(ids) +")")
+          cursor.close()
+          conn.close()
+        except:
+          print("1 :Error connecting to db :"+ str(sys.exc_info()))
+          return()    
+    self.popTableFrames()
+    
+  
+  def holdFrame(self):
+    selFramesDict = self.selectedFrames()
+    selFrames = {}
+    for x in selFramesDict:
+      if((x['status'] != "running") and (x['status'] != "assigned") and (x['status'] != "pending")):
+        try:
+          selFrames[x['id']].append(x['frameId'])
+        except:
+          selFrames[x['id']] = []
+          selFrames[x['id']].append(x['frameId'])
+      else:
+        print(str(x['id']) +"%"+ str(x['frameId']) +" cannot hold frames that are running. please stop them before holding them")
+        
+    if(selFrames):
+      for x in selFrames.keys():
+        ids = " or frameId=".join(selFrames[x])
+        try:
+          conn = db.connRbhus()
+          cursor = conn.cursor()
+          cursor.execute("update frames set status = "+ str(constants.framesHold) +" where (id="+ str(x) +") and (frameId="+ str(ids) +")")
+          cursor.close()
+          conn.close()
+        except:
+          print("1 :Error connecting to db :"+ str(sys.exc_info()))
+          return()    
+    self.popTableFrames()
+
+  
+  def holdTask(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    for x in selTasksDict:
+      selTasks.append(x['id'])
+    if(selTasks):
+      ids = " or id = ".join(selTasks)
+    else:
+      return
+    ids = " or id=".join(selTasks)
+    print ids
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor()
+      cursor.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ ids +")")
+      cursor.close()
+      conn.close()
+    except:
+      print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      return()    
+    self.popTableList()
+    
+    
+    
+  def activateTask(self):
+    #selTasks = self.selectedTasks()
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    for x in selTasksDict:
+      selTasks.append(x['id'])
+    if(selTasks):
+      ids = " or id = ".join(selTasks)
+    else:
+      return
+    ids = " or id=".join(selTasks)
+    print ids
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor()
+      cursor.execute("update tasks set status = "+ str(constants.taskActive) +" where (id="+ ids +") and status != "+ str(constants.taskActive))
+      cursor.close()
+      conn.close()
+    except:
+      print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      return()    
+    self.popTableList()
+    
+    
+  def rerunTask(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    for x in selTasksDict:
+      selTasks.append(x['id'])
+    if(selTasks):
+      ids = " or id = ".join(selTasks)
+    else:
+      return
+    #selTasks = self.selectedTasks()
+    ids = " or id=".join(selTasks)
+    print ids
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor()
+      cursor.execute("delete from frames where (id="+ ids +")")
+      cursor.execute("update tasks set status = "+ str(constants.taskWaiting) +" where (id="+ ids +")")
+      cursor.close()
+      conn.close()
+    except:
+      print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      return()    
+    self.popTableList()
+
+  
+  def stopRunning(self,tableType):
+    pass
+    
+  
+  def timeCheck(self):
+    cRefresh = self.checkRefresh.isChecked()
+    if(cRefresh):
+      self.startTimer()
+    else:
+      self.stopTimer()
+  
+  def startTimer(self):
+    self.timer.start(2000)
+
+  def stopTimer(self):
+    self.timer.stop()
+  
+  def popTableList(self):
     self.tableList.clearContents()
     self.tableList.setSortingEnabled(False)
-    colNames = ["id","fileName","status"]
+    self.tableList.resizeColumnsToContents()
     colCount = 0
+    
+    statusToCheck = []
+    cTDone = self.checkTDone.isChecked()
+    cTActive = self.checkTActive.isChecked()
+    cTHold = self.checkTHold.isChecked()
+    cTAutohold = self.checkTAutohold.isChecked()
+    cTAll = self.checkTAll.isChecked()
+    if(cTDone):
+      statusToCheck.append(str(constants.taskDone))
+    if(cTActive):
+      statusToCheck.append(str(constants.taskActive))
+    if(cTHold):
+      statusToCheck.append(str(constants.taskStopped))
+    if(cTAutohold):
+      statusToCheck.append(str(constants.taskAutoStop))
+    
+    print(statusToCheck) 
+    
     try:
       conn = db.connRbhus()
       cursor = conn.cursor(db.dict)
-      cursor.execute("select "+ ",".join(colNames) +" from tasks")
+      if(cTAll):
+        cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks")
+      else:
+        statusCheck = " or status=".join(statusToCheck)
+        cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck)
+        
       rows = cursor.fetchall()
       cursor.close()
       conn.close()
@@ -51,6 +263,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       print("Error connecting to db")
       return()
       
+    if(not rows):
+      return()
     for row in rows:
       colCount = len(row)
       break
@@ -61,31 +275,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for x in range(0,colCount):
       item = QtGui.QTableWidgetItem()
       self.tableList.setHorizontalHeaderItem(x, item)
-    #item = QtGui.QTableWidgetItem()
-    #self.tableList.setHorizontalHeaderItem(1, item)
-    #item = QtGui.QTableWidgetItem()
-    #self.tableList.setHorizontalHeaderItem(2, item)
-    #item = QtGui.QTableWidgetItem()
-    #self.tableList.setHorizontalHeaderItem(3, item)
-    #item = QtGui.QTableWidgetItem()
-    #self.tableList.setHorizontalHeaderItem(4, item)
     indx = 0
-    for x in colNames:
+    for x in self.colNamesTask:
       self.tableList.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
       indx = indx + 1
 
-    #self.tableList.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("Form", "#", None, QtGui.QApplication.UnicodeUTF8))
-    #self.tableList.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("Form", "desc", None, QtGui.QApplication.UnicodeUTF8))
-    #self.tableList.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("Form", "user", None, QtGui.QApplication.UnicodeUTF8))
-    #self.tableList.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("Form", "date", None, QtGui.QApplication.UnicodeUTF8))
-    #self.tableList.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("Form", "tag", None, QtGui.QApplication.UnicodeUTF8))
 
     indx = 0
     for row in rows:
       item = QtGui.QTableWidgetItem()
       self.tableList.setVerticalHeaderItem(indx, item)
       colIndx = 0
-      for colName in colNames:
+      for colName in self.colNamesTask:
         if(colName == "status"):
           item = QtGui.QTableWidgetItem()
           self.tableList.setItem(indx, colIndx, item)
@@ -97,27 +298,151 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
       indx = indx + 1
-      
+
+ 
     self.tableList.resizeColumnsToContents()
     self.tableList.setSortingEnabled(True)
     
     
+  def popTableFrames(self):
+    
+    self.tableFrames.clearContents()
+    self.tableFrames.setSortingEnabled(False)
+    self.tableFrames.resizeColumnsToContents()
+    colCount = 0
+    
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    for x in selTasksDict:
+      selTasks.append(x['id'])
+    if(selTasks):
+      ids = " or id = ".join(selTasks)
+    else:
+      return
+    
+    statusToCheck = []
+    cDone = self.checkDone.isChecked()
+    cAssigned = self.checkAssigned.isChecked()
+    cRun = self.checkRunning.isChecked()
+    cFailed = self.checkFailed.isChecked()
+    cHold = self.checkHold.isChecked()
+    cAutohold = self.checkAutohold.isChecked()
+    cKilled = self.checkKilled.isChecked()
+    cAll = self.checkAll.isChecked()
+    if(cDone):
+      statusToCheck.append(str(constants.framesDone))
+    if(cAssigned):
+      statusToCheck.append(str(constants.framesAssigned))
+    if(cRun):
+      statusToCheck.append(str(constants.framesRunning))
+    if(cFailed):
+      statusToCheck.append(str(constants.framesFailed))
+    if(cHold):
+      statusToCheck.append(str(constants.framesHold))
+    if(cAutohold):
+      statusToCheck.append(str(constants.framesAutoHold))
+    if(cKilled):
+      statusToCheck.append(str(constants.framesKilled))
+    
+    print(statusToCheck)
+    
+    
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor(db.dict)
+      if(cAll):
+        cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where id = "+ ids)
+      elif(statusToCheck):
+        statusCheck = " or status=".join(statusToCheck)
+        cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where (id = "+ ids +") and (status="+ statusCheck +")")
+      else:
+        print("please check status")
+        self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+        return()
+        
+      rows = cursor.fetchall()
+      cursor.close()
+      conn.close()
+    except:
+      print(str(sys.exc_info()))
+      self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+      return()
+      
+    if(not rows):
+      return()
+    for row in rows:
+      colCount = len(row)
+      break
+      
+    self.tableFrames.setColumnCount(colCount)
+    self.tableFrames.setRowCount(len(rows))
+    
+    for x in range(0,colCount):
+      item = QtGui.QTableWidgetItem()
+      self.tableFrames.setHorizontalHeaderItem(x, item)
+    indx = 0
+    for x in self.colNamesFrames:
+      self.tableFrames.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      indx = indx + 1
+
+
+    indx = 0
+    for row in rows:
+      item = QtGui.QTableWidgetItem()
+      self.tableFrames.setVerticalHeaderItem(indx, item)
+      colIndx = 0
+      for colName in self.colNamesFrames:
+        if(colName == "status"):
+          item = QtGui.QTableWidgetItem()
+          self.tableFrames.setItem(indx, colIndx, item)
+          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.framesStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        item = QtGui.QTableWidgetItem()
+        self.tableFrames.setItem(indx, colIndx, item)
+        self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        print self.tableFrames.item(indx, colIndx).type()
+        colIndx = colIndx + 1
+      indx = indx + 1
+
+    self.labelTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
+      
+    self.tableFrames.resizeColumnsToContents()
+    self.tableFrames.setSortingEnabled(True)
   
     
     
   def selectedTasks(self):
-    rows=[]
+    rowstask=[]
+    rowsSelected = []
     for idx in self.tableList.selectionModel().selectedRows():
-      rows.append(str(idx.data().toString()).lstrip("0"))
+      rowsSelected.append(idx.row())
+    colCount = self.tableList.columnCount()
+
+    for row in rowsSelected:
+      singleRow = {}
+      for col in range(0,colCount):
+        singleRow[self.colNamesTask[col]] = str(self.tableList.item(row,col).text())
+      if(singleRow):
+        rowstask.append(singleRow)
+
+    return(rowstask)
     
-    if(rows):
-      self.selectedTaskList = rows
-    #else:
-      #selectedTaskList = 0
-    if(self.selectedTaskList):
-      print("FOOK : "+ str(self.selectedTaskList))
-      return(self.selectedTaskList)
     
+  def selectedFrames(self):
+    rowsframes=[]
+    rowsSelected = []
+    for idx in self.tableFrames.selectionModel().selectedRows():
+      rowsSelected.append(idx.row())
+    colCount = self.tableFrames.columnCount()
+    for row in rowsSelected:
+      singleRow = {}
+      for col in range(0,colCount):
+        singleRow[self.colNamesFrames[col]] = str(self.tableFrames.item(row,col).text())
+      if(singleRow):
+        rowsframes.append(singleRow)
+
+    return(rowsframes)
         
     
 if __name__ == "__main__":

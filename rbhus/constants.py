@@ -45,7 +45,7 @@ framesAutoHold = 7
 framesKilled = 9
 
 
-frameStatus = {
+framesStatus = {
   0 : "unassigned",
   1 : "assigned",
   2 : "pending",
@@ -53,7 +53,7 @@ frameStatus = {
   4 : "done",
   5 : "failed",
   6 : "hold",
-  7 : "autohold",
+  7 : "autoHold",
   9 : "killed"
 }
 
