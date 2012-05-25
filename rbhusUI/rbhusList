@@ -28,7 +28,7 @@ except AttributeError:
 
 class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def setupUi(self, Form):
-    self.colNamesTask = ["id","fileName","status"]
+    self.colNamesTask = ["id","fileName","hostGroups","status"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status"]
     
     
