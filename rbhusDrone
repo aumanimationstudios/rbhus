@@ -336,7 +336,8 @@ def execFrames(frameInfo,frameScrutiny):
     os.environ['rbhus_bfCmd']     = str(frameInfo['beforeFrameCmd']).lstrip().rstrip()
     os.environ['rbhus_afCmd']     = str(frameInfo['afterFrameCmd']).lstrip().rstrip()
     os.environ['rbhus_threads']   = str(frameInfo['fThreads']).lstrip().rstrip()
-    
+    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ str(frameInfo['frameId']).rjust(4,"0") +".log"
+    os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
     if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]
       rgid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[3]
@@ -405,7 +406,7 @@ def execFrames(frameInfo,frameScrutiny):
 
     loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "RUN CMD :"+ runCmd)
 
-    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ str(frameInfo['frameId']).rjust(4,"0") +".log"
+    
     loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "logFile : "+ str(logFile))
     try:
       logD = open(logFile,"a+",0)
@@ -1059,7 +1060,8 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
           cursor.execute("UPDATE hostInfo SET \
                           totalRam='"+ str(totalRam) +"', \
                           totalCpus='"+ str(totalCpus) +"', \
-                          totalSwap='"+ str(totalSwap) +"' \
+                          totalSwap='"+ str(totalSwap) +"' ,\
+                          ip='"+ str(ipAddr) +"' \
                           WHERE hostName = \'"+ str(hostName) +"\'")
         except:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))

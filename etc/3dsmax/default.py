@@ -38,6 +38,7 @@ rThreads = os.environ['rbhus_threads']
 pad = os.environ['rbhus_pad']
 outDir = os.environ['rbhus_outDir']
 outFile = os.environ['rbhus_outName']
+logFile = os.environ['rbhus_logFile']
 RENDERCMD = "\"c:\\Program Files\\Autodesk\\3ds Max 2011\\3dsmaxcmd.exe\""
 RENDER_CMD = ""
 
@@ -52,13 +53,13 @@ hexAffinity = hex(int(b.rjust(totalCpus,"0"),2))
 
 f = open(tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat","w")
 
-logFile = str(logBase).rstrip(os.sep) + os.sep + ".".join(str(fileName).lstrip(os.sep).rsplit(os.sep)[-1].rsplit(".")[0:-1]) +"_"+ str(frameId).rjust(int(pad),"0") +".log"
+#logFile = str(logBase).rstrip(os.sep) + os.sep + ".".join(str(fileName).lstrip(os.sep).rsplit(os.sep)[-1].rsplit(".")[0:-1]) +"_"+ str(frameId).rjust(int(pad),"0") +".log"
 #f.write("echo %pid%\n\r")
 
 if(outDir != "default"):
-  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -start:"+ frameId +" -end:"+ frameId +" -showRFW:0 -o:"+ imageName +" 2>&1"
+  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -start:"+ frameId +" -end:"+ frameId +" -showRFW:0 -o:"+ imageName +" 2>&1"#+ logFile
 else:
-  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -start:"+ frameId +" -end:"+ frameId +" -showRFW:0 2>&1"
+  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -start:"+ frameId +" -end:"+ frameId +" -showRFW:0 2>&1"#+ logFile
   
 
 f.write(RENDER_CMD +"\n\r")
