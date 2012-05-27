@@ -28,7 +28,7 @@ except AttributeError:
 
 class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def setupUi(self, Form):
-    self.colNamesTask = ["id","fileName","hostGroups","status"]
+    self.colNamesTask = ["id","fileName","hostGroups","afterTasks","status"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status"]
     
     
@@ -44,6 +44,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     QtCore.QObject.connect(self.checkKilled, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
     QtCore.QObject.connect(self.checkRunning, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
     QtCore.QObject.connect(self.checkHold, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    self.checkUnassigned.clicked.connect(self.popTableFrames)
     self.checkTAll.clicked.connect(self.popTableList)
     self.checkTActive.clicked.connect(self.popTableList)
     self.checkTAutohold.clicked.connect(self.popTableList)
@@ -323,6 +324,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     statusToCheck = []
     cDone = self.checkDone.isChecked()
     cAssigned = self.checkAssigned.isChecked()
+    cUnassigned = self.checkUnassigned.isChecked()
     cRun = self.checkRunning.isChecked()
     cFailed = self.checkFailed.isChecked()
     cHold = self.checkHold.isChecked()
@@ -343,6 +345,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       statusToCheck.append(str(constants.framesAutoHold))
     if(cKilled):
       statusToCheck.append(str(constants.framesKilled))
+    if(cUnassigned):
+      statusToCheck.append(str(constants.framesUnassigned))
     
     print(statusToCheck)
     
