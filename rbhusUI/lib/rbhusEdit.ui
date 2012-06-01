@@ -100,7 +100,7 @@
         </widget>
        </item>
        <item row="10" column="0">
-        <widget class="QLabel" name="label_8">
+        <widget class="QLabel" name="labelRerunThresh">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -250,7 +250,7 @@
         </widget>
        </item>
        <item row="9" column="2">
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="pushLogOpen">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -300,7 +300,7 @@
         </widget>
        </item>
        <item row="10" column="1">
-        <widget class="QSpinBox" name="spinBox">
+        <widget class="QSpinBox" name="spinRerunThres">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>

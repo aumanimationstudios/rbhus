@@ -247,7 +247,6 @@ def getActiveTasks():
 
 def getUnassignedFrames(taskId):
   try:
-    print("TASK ID : "+ str(taskId))
     conn = db.connRbhus()
     cursor = conn.cursor(db.dict)
     cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
@@ -257,7 +256,6 @@ def getUnassignedFrames(taskId):
                     AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
                     ORDER BY frames.frameId")
     rows = cursor.fetchall()
-    print("FRAMES : "+ str(rows))
     cursor.close()
     conn.close()
   except:
@@ -397,11 +395,13 @@ def pingClientProcess(client,ipAddr):
         clientSocket.connect((ipAddr,6660))
         clientSocket.settimeout(30)
         logging.debug("Connected to "+ client)
+        sockstatus = 1
         break
       except:
         e = sys.exc_info()[1]   
         tryCount = tryCount - 1
-        logging.error("Screwed pingClientProcess sock : "+ client +" : "+ str(e))
+        logging.error("Screwed pingClientProcess sock connect : "+ client +" : "+ str(e))
+        sockstatus = 0
         clientSocket.close()
       time.sleep(1)
     if(tryCount == 0):
@@ -420,7 +420,8 @@ def pingClientProcess(client,ipAddr):
       sockstatus = 1
     except:
       e = sys.exc_info()[1]
-      logging.error("Screwed pingClientProcess sock : "+ client +" : "+ str(e))
+      logging.error("Screwed pingClientProcess sock send : "+ client +" : "+ str(e))
+      sockstatus = 0
       clientSocket.close()
       #exit(1)
     if((sockstatus == 1) and (pingstatus == 1)):
@@ -803,38 +804,40 @@ def scheduler():
       time.sleep(0.2)
       activeTasks = arrangedActiveTasks()
       
-      #logic for afterTasks
-      afterTasks = {}
       
-      for activeTask in activeTasks:
-        if(activeTask["afterTasks"]):
-          ats = activeTask["afterTasks"].split(",")
-          for at in ats:
-            try:
-              afterTasks[at.lstrip().rstrip()].append(activeTask)
-            except:
-              afterTasks[at.lstrip().rstrip()] = []
-              afterTasks[at.lstrip().rstrip()].append(activeTask)
-      if(afterTasks):
-        for ats in afterTasks.keys():
-          for ts in afterTasks[ats]:
-            indx = -1
-            try:
-              indx = activeTasks.index(ts)
-            except:
-              continue
-            if(indx != -1):
-              for activeTask in activeTasks:
-                if(activeTask["id"] == ats):
-                  indxT = activeTasks.index(activeTask)
-                  if(indx > indxT):
-                    activeTasks.remove(activeTask)
-                    activeTasks.insert(indx,activeTask)
-                    activeTasks.remove(ts)
-                    activeTasks.insert(indxT,ts)
       
       #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
       if(activeTasks):
+        #logic for afterTasks
+        afterTasks = {}
+      
+        for activeTask in activeTasks:
+          if(activeTask["afterTasks"]):
+            ats = activeTask["afterTasks"].split(",")
+            for at in ats:
+              try:
+                afterTasks[at.lstrip().rstrip()].append(activeTask)
+              except:
+                afterTasks[at.lstrip().rstrip()] = []
+                afterTasks[at.lstrip().rstrip()].append(activeTask)
+        if(afterTasks):
+          for ats in afterTasks.keys():
+            for ts in afterTasks[ats]:
+              indx = -1
+              try:
+                indx = activeTasks.index(ts)
+              except:
+                continue
+              if(indx != -1):
+                for activeTask in activeTasks:
+                  if(activeTask["id"] == ats):
+                    indxT = activeTasks.index(activeTask)
+                    if(indx > indxT):
+                      activeTasks.remove(activeTask)
+                      activeTasks.insert(indx,activeTask)
+                      activeTasks.remove(ts)
+                      activeTasks.insert(indxT,ts)
+                      
         freeHosts = getFreeHosts()
         if(freeHosts):
           logging.debug("freehosts : "+ str(freeHosts))

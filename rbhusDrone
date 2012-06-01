@@ -37,9 +37,10 @@ import tempfile
 import inspect
 
 time.sleep(1)
-
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
+mainPidFile = tempDir + os.sep +"rbusClient.pids"
+
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = '/var/log/rbhusClient.log'
 elif(sys.platform.find("win") >=0):
@@ -690,6 +691,13 @@ def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
   if(kpidsAll):
     kpids = kpidsAll.keys()
   taskPidD.close()
+  
+  mainPidD = open(mainPidFile,"r")
+  mainPids = []
+  for x in mainPidD.readlines():
+    mainPids.append(x.rstrip().lstrip())
+    
+  
   if(pidLock != 0):
     pidLock.release()
   numPids = len(kpids)
@@ -698,6 +706,10 @@ def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
   for kpid in kpids:
     try:
       kpid.rstrip().lstrip()
+      #Check if the pid belongs to any mother process . (i think i need to check this only when running on windows .. damn Y WINDOZE)
+      if(kpid in mainPids):
+        print("Opps .. killing mother process is not allowed .its against humanity!!!")
+        continue
       if(sys.platform.find("linux") >= 0):
         if(kpid):
           try:
@@ -1191,6 +1203,15 @@ def mainFunc():
   frameFcuk.join_thread()
   frameScrutiny.close()
   frameScrutiny.join_thread()
+  
+  mainPidD = open(mainPidFile,"w",0)
+  for i in range(0,len(p)):
+    try:
+      mainPidD.write(str(p[i].pid))
+    except:
+      print("Couldnt write mainPidFile : "+ str(sys.exc_info()))
+  mainPidD.close()
+    
   
   
   while(1):
