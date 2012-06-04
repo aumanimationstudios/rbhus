@@ -4,18 +4,18 @@ import glob
 import os
 import sys
 
-progPath =  sys.argv[0].split("/")
+progPath =  sys.argv[0].split(os.sep)
 print progPath
 if(len(progPath) > 1):
-  pwd = "/".join(progPath[0:-1])
+  pwd = os.sep.join(progPath[0:-1])
   cwd = os.path.abspath(pwd)
 else:
   cwd = os.path.abspath(os.getcwd())
   
-sys.path.append(cwd.rstrip("/") +"/lib")
+sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 import rbhusListMod
-print(cwd.rstrip("/").rstrip("rbhusUI").rstrip("/") +"/rbhus")
-sys.path.append(cwd.rstrip("/").rstrip("rbhusUI").rstrip("/") +"/rbhus")
+print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
 import constants
 
