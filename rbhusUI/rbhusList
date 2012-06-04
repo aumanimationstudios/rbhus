@@ -4,6 +4,7 @@ import glob
 import os
 import sys
 
+
 progPath =  sys.argv[0].split(os.sep)
 print progPath
 if(len(progPath) > 1):
