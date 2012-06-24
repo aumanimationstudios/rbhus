@@ -150,7 +150,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     try:
       conn = db.connRbhus()
       cursor = conn.cursor()
-      cursor.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ ids +")")
+      cursor.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +"))")
       cursor.close()
       conn.close()
     except:
@@ -295,6 +295,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
+        if(colName == "id"):
+          item = QtGui.QTableWidgetItem()
+          self.tableList.setItem(indx, colIndx, item)
+          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(3), None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        
         item = QtGui.QTableWidgetItem()
         self.tableList.setItem(indx, colIndx, item)
         self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
