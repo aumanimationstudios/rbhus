@@ -1,0 +1,171 @@
+#!/usr/bin/python
+from PyQt4 import QtCore, QtGui
+import glob
+import os
+import sys
+import datetime
+
+progPath =  sys.argv[0].split(os.sep)
+print progPath
+if(len(progPath) > 1):
+  pwd = os.sep.join(progPath[0:-1])
+  cwd = os.path.abspath(pwd)
+else:
+  cwd = os.path.abspath(os.getcwd())
+  
+sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+import rbhusEditMod
+print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+import db
+import constants
+
+
+try:
+  _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+  _fromUtf8 = lambda s: s
+  
+
+class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
+  def setupUi(self, Form):
+    icon = QtGui.QIcon()
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    Form.setWindowIcon(icon)
+    
+    rbhusEditMod.Ui_rbhusEdit.setupUi(self,Form)
+    self.popEditItems()
+    self.setFileTypes()
+    self.setHostGroups()
+    self.pushFileName.clicked.connect(self.selectFileName)
+    self.pushOutPutDir.clicked.connect(self.selectOutPutDir)
+    self.pushBfc.clicked.connect(self.selectBfc)
+    self.pushAfc.clicked.connect(self.selectAfc)
+    self.pushLogOpen.clicked.connect(self.selectLogBase)
+    self.checkAfterTime.clicked.connect(self.afterTimeEnable)
+    self.spinRerunThresh.valueChanged.connect(self.getSpinRerunThresh)
+    
+    print self.afterTimeEdit.dateTime().toString()
+
+
+  def popEditItems(self):
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor(db.dict)
+      cursor.execute("select * from tasks where id="+ str(sys.argv[1].rstrip().lstrip()))
+      rows = cursor.fetchall()
+      cursor.close()
+      conn.close()
+    except:
+      print("Error connecting to db")
+      return()
+      
+    if(rows):
+      for row in rows:
+        self.lineEditFileName.setText(row['fileName'])
+        self.lineEditOutPutDir.setText(row['outDir'])
+        self.lineEditImageName.setText(row['outName'])
+        self.lineEditFrange.setText(row['fRange'])
+        self.lineEditLogbase.setText(row['logBase'])
+        self.lineEditAfc.setText(row['afterFrameCmd'])
+        self.lineEditBfc.setText(row['beforeFrameCmd'])
+        self.spinRerunThresh.setValue(row['rerunThresh'])
+        self.afterTimeEdit.setTime(QtCore.QTime(row['afterTime'].hour, row['afterTime'].minute, row['afterTime'].second))
+        self.afterTimeEdit.setDate(QtCore.QDate(row['afterTime'].year, row['afterTime'].month, row['afterTime'].day))
+      return(1)
+    else:
+      return(0)
+  
+  
+  
+  def getSpinRerunThresh(self):
+    print self.spinRerunThresh.value()
+  
+  def afterTimeEnable(self):
+    cAT = self.checkAfterTime.isChecked()
+    if(cAT):
+      self.afterTimeEdit.setEnabled(True)
+    else:
+      self.afterTimeEdit.setEnabled(False)
+
+  
+  def selectFileName(self):
+    fila = QtGui.QFileDialog.getOpenFileName()
+    if(fila):
+      self.lineEditFileName.setText(fila)
+
+  def selectOutPutDir(self):
+    fila = QtGui.QFileDialog.getExistingDirectory()
+    if(fila):
+      self.lineEditOutPutDir.setText(fila)
+
+  def selectLogBase(self):
+    fila = QtGui.QFileDialog.getExistingDirectory()
+    if(fila):
+      self.lineEditLogbase.setText(fila)
+  
+  def selectBfc(self):
+    fila = QtGui.QFileDialog.getOpenFileName()
+    if(fila):
+      self.lineEditBfc.setText(fila)
+
+  def selectAfc(self):
+    fila = QtGui.QFileDialog.getOpenFileName()
+    if(fila):
+      self.lineEditAfc.setText(fila)
+      
+      
+  def setFileTypes(self):
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor(db.dict)
+      cursor.execute("select * from fileType")
+      rows = cursor.fetchall()
+      cursor.close()
+      conn.close()
+    except:
+      print("Error connecting to db")
+      return()
+      
+    if(rows):
+      for row in rows:
+        self.comboType.addItem(_fromUtf8(row['fileType']))
+      return(1)
+    else:
+      return(0)
+    
+
+  def setHostGroups(self):
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor(db.dict)
+      cursor.execute("select groups from hostInfo group by groups")
+      rows = cursor.fetchall()
+      cursor.close()
+      conn.close()
+    except:
+      print("Error connecting to db")
+      return()
+      
+    if(rows):
+      for row in rows:
+        self.comboHostGroup.addItem(_fromUtf8(row['groups']))
+      return(1)
+    else:
+      return(0)
+
+  def applyNew(self):
+    pass
+    #colsToEdit = {}
+    #if()
+    
+    
+  
+    
+if __name__ == "__main__":
+  app = QtGui.QApplication(sys.argv)
+  Form = QtGui.QMainWindow()
+  ui = Ui_Form()
+  ui.setupUi(Form)
+  Form.show()
+  sys.exit(app.exec_())

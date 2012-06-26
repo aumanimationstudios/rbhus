@@ -1,0 +1,131 @@
+#!/usr/bin/python
+from PyQt4 import QtCore, QtGui
+import glob
+import os
+import sys
+import datetime
+
+progPath =  sys.argv[0].split(os.sep)
+print progPath
+if(len(progPath) > 1):
+  pwd = os.sep.join(progPath[0:-1])
+  cwd = os.path.abspath(pwd)
+else:
+  cwd = os.path.abspath(os.getcwd())
+  
+sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+import rbhusSubmitMod
+print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+import db
+import constants
+
+
+try:
+  _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+  _fromUtf8 = lambda s: s
+  
+
+class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
+  def setupUi(self, Form):
+    icon = QtGui.QIcon()
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    Form.setWindowIcon(icon)
+    
+    rbhusSubmitMod.Ui_rbhusSubmit.setupUi(self,Form)
+    self.pushFileName.clicked.connect(self.selectFileName)
+    self.pushSubmit.clicked.connect(self.submitTasks)
+    self.comboHostGroup.currentIndexChanged.connect(self.printGroupSel)
+    self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
+    groups = self.getHostGroups()
+    for group in groups:
+      self.comboHostGroup.addItem(_fromUtf8(group))
+      
+    
+    
+  def printGroupSel(self):
+    print self.comboHostGroup.currentText()
+    
+    
+  def printPrioSel(self):
+    print self.comboPrio.currentText()
+    
+    
+  def getHostGroups(self):
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor(db.dict)
+      cursor.execute("select groups from hostInfo group by groups")
+      rows = cursor.fetchall()
+      cursor.close()
+      conn.close()
+    except:
+      print("Error connecting to db")
+      return(0)
+    gtr = {}
+    retRows = []
+    if(rows):
+      for row in rows:
+        tmpRow = row['groups'].split(",")
+        for tr in tmpRow:
+          gtr[tr.rstrip().lstrip()] = 1
+      for gt in gtr.keys():
+        retRows.append(gt)
+      return(retRows)
+    else:
+      return(0)
+    
+    
+  def selectFileName(self):
+    fila = QtGui.QFileDialog.getOpenFileName()
+    if(fila):
+      self.lineEditFileName.setText(fila)
+      
+  def submitTasks(self):
+    fileName = self.lineEditFileName.text()
+    fRange = self.lineEditFrange.text()
+    if(fileName and fRange):
+      print fileName
+      print fRange
+      
+      prios = str(self.comboPrio.currentText())
+      if(prios == "low"):
+        p = 1
+      if(prios == "high"):
+        p = 9000
+      if(prios == "normal"):
+        p = 5000
+      
+    
+      try:
+        conn = db.connRbhus()
+        cursor = conn.cursor()
+        cursor.execute("insert into tasks (fileName, logBase, fRange, fileType, afterFrameCmd, beforeFrameCmd, hostGroups, submitTime, priority) values (\'"+ str(fileName) + "\', \'z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\\', \'"+ str(fRange) + "\', \'3dsmax\', \'Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py\', \'Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\beforeFrame.py\', '"+ str(self.comboHostGroup.currentText()) +"', now(), "+ str(p) +")")
+        cursor.close()
+        cursor = conn.cursor(db.dict)
+        cursor.execute("select last_insert_id()")
+        rows = cursor.fetchall()
+        lastID =  rows[0]['last_insert_id()']
+        cursor.close()
+        conn.close()
+      except:
+        print("Error connecting to db : "+ str(sys.exc_info()))
+        return()
+    
+    QtGui.qApp.closeAllWindows()
+    
+    
+    
+    
+    
+    
+if __name__ == "__main__":
+  app = QtGui.QApplication(sys.argv)
+  Form = QtGui.QMainWindow()
+  ui = Ui_Form()
+  ui.setupUi(Form)
+  Form.show()
+  sys.exit(app.exec_())
+    
+    

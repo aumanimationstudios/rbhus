@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48"
+   height="48"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="rbhus.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3811">
+      <stop
+         style="stop-color:#04002f;stop-opacity:1;"
+         offset="0"
+         id="stop3813" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0.76078433;"
+         offset="1"
+         id="stop3815" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3811"
+       id="radialGradient3817"
+       cx="552.5744"
+       cy="509.48114"
+       fx="552.5744"
+       fy="509.48114"
+       r="448.60434"
+       gradientTransform="matrix(1,0,0,1.0435219,0,-22.173597)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="45.254834"
+     inkscape:cx="14.73509"
+     inkscape:cy="5.5217465"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     width="1024px"
+     inkscape:window-width="1680"
+     inkscape:window-height="995"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1004.3622)">
+    <g
+       style="font-size:442.98641967999998315px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:url(#radialGradient3817);fill-opacity:1.0;stroke:none;font-family:Sans;opacity:1"
+       id="text2985"
+       inkscape:export-filename="/home/shrinidhi/bin/gitHub/rbhus/etc/icons/rbhus.png"
+       inkscape:export-xdpi="563.96997"
+       inkscape:export-ydpi="563.96997"
+       transform="matrix(0.05118198,0,0,0.05093969,-4.2818526,1002.4094)">
+      <path
+         d="m 399.21489,879.48712 69.45314,0 c -30.32247,50.75077 -60.66834,74.33379 -103.61656,89.70546 -40.45708,14.48007 -89.55861,14.07514 -128.79547,-3.47032 -36.06461,-16.12694 -58.73929,-39.80891 -81.59805,-86.23514 l 79.067,0 c 0,0 180.46932,-121.323 135.46717,-409.35904 C 324.18997,182.09204 113.64641,355.85001 113.64641,355.85001 c 0,0 -40.560952,-132.41891 44.40466,-222.92267 84.9656,-90.503771 204.58914,-60.90544 245.79916,17.44743 41.21002,78.35287 52.22183,181.14429 52.22183,181.14429 0,0 23.26442,-105.88335 87.7159,-184.224 64.45148,-78.340647 168.18967,-116.509213 260.70261,-103.407792 75.7249,10.723948 149.03901,71.176932 181.79561,140.608312 23.24132,49.26263 17.46192,113.75984 -4.79243,163.48046 -22.25223,49.71599 -118.53414,112.07029 -118.53414,112.07029 0,0 11.85934,-134.3067 -119.19483,-153.96372 C 612.71062,286.4256 526.63261,393.53594 444.58642,572.17587 362.54023,750.8158 399.21492,879.48712 399.21489,879.48712 z"
+         style="font-size:1594.75097656px;font-variant:normal;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;font-family:Luxi Mono;-inkscape-font-specification:Luxi Mono"
+         id="path2998"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccaacczczzczaaaczzc" />
+    </g>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2989"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><flowRegion
+         id="flowRegion2991"><rect
+           id="rect2993"
+           width="46.42857"
+           height="40"
+           x="146.42857"
+           y="478.07648" /></flowRegion><flowPara
+         id="flowPara2995"></flowPara></flowRoot>  </g>
+</svg>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'lib/rbhusListMod.ui'
 #
-# Created: Fri Jun  1 12:43:22 2012
+# Created: Tue Jun 26 10:01:58 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -160,6 +160,9 @@ class Ui_mainRbhusList(object):
         self.taskRerun = QtGui.QPushButton(self.frame)
         self.taskRerun.setObjectName(_fromUtf8("taskRerun"))
         self.verticalLayout_2.addWidget(self.taskRerun)
+        self.taskEdit = QtGui.QPushButton(self.frame)
+        self.taskEdit.setObjectName(_fromUtf8("taskEdit"))
+        self.verticalLayout_2.addWidget(self.taskEdit)
         self.verticalLayout.addWidget(self.frame)
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
@@ -409,6 +412,7 @@ class Ui_mainRbhusList(object):
         self.taskActivate.setText(QtGui.QApplication.translate("mainRbhusList", "activate", None, QtGui.QApplication.UnicodeUTF8))
         self.taskHold.setText(QtGui.QApplication.translate("mainRbhusList", "hold", None, QtGui.QApplication.UnicodeUTF8))
         self.taskRerun.setText(QtGui.QApplication.translate("mainRbhusList", "rerun", None, QtGui.QApplication.UnicodeUTF8))
+        self.taskEdit.setText(QtGui.QApplication.translate("mainRbhusList", "edit!", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("mainRbhusList", "FRAMES", None, QtGui.QApplication.UnicodeUTF8))
         self.checkFailed.setText(QtGui.QApplication.translate("mainRbhusList", "failed", None, QtGui.QApplication.UnicodeUTF8))
         self.checkKilled.setText(QtGui.QApplication.translate("mainRbhusList", "killed", None, QtGui.QApplication.UnicodeUTF8))
