@@ -3,6 +3,8 @@ from PyQt4 import QtCore, QtGui
 import glob
 import os
 import sys
+import socket
+import time
 
 
 progPath =  sys.argv[0].split(os.sep)
@@ -75,7 +77,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     selFrames = {}
     for x in selFramesDict:
       if(x['status'] == "running"):
-        os.system("echo \'MURDER:"+ str(x['id']) +"%"+ str(x['frameId']) +"\' | telnet "+ str(x['hostName']) +" 6660")
+        print self.getHostIp(x['hostName'])
+        self.stopFrames(str(self.getHostIp(x['hostName'])),x['id'],x['frameId'])
       else:
         print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
     self.popTableFrames()
@@ -298,7 +301,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         if(colName == "id"):
           item = QtGui.QTableWidgetItem()
           self.tableList.setItem(indx, colIndx, item)
-          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(3), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         
@@ -410,6 +413,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.framesStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
+        if(colName == "id"):
+          item = QtGui.QTableWidgetItem()
+          self.tableFrames.setItem(indx, colIndx, item)
+          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        if(colName == "frameId"):
+          item = QtGui.QTableWidgetItem()
+          self.tableFrames.setItem(indx, colIndx, item)
+          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
         item = QtGui.QTableWidgetItem()
         self.tableFrames.setItem(indx, colIndx, item)
         self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
@@ -455,7 +470,39 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         rowsframes.append(singleRow)
 
     return(rowsframes)
-        
+    
+  def getHostIp(self, hostN):
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor(db.dict)
+      cursor.execute("select ip from hostInfo where hostName = \'"+ str(hostN) +"\'")
+      rows = cursor.fetchall()
+      cursor.close()
+      conn.close()
+      return(rows[0]['ip'])
+    except:
+      print(str(sys.exc_info()))
+      return(0)
+      
+      
+  def stopFrames(self,hostIp, tId, fId):
+    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tryCount = 5 
+    while(tryCount):
+      time.sleep(1)
+      try:
+        clientSocket.connect((str(hostIp),6660))
+        clientSocket.settimeout(30)
+        clientSocket.send("MURDER:"+ str(tId).lstrip("0") +"%"+ str(fId).lstrip("0"))
+        clientSocket.close()
+        break
+      except:
+        print(str(sys.exc_info()))
+        tryCount = tryCount - 1
+        clientSocket.close()
+        return(1)
+    return(0)
+      
     
 if __name__ == "__main__":
   import sys

@@ -279,6 +279,13 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QPushButton" name="taskEdit">
+             <property name="text">
+              <string>edit!</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>

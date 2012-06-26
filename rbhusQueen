@@ -748,17 +748,22 @@ def getBestHost(activeTask):
   for freeHost in freeHosts:
     if(not activeTask['lastHost']):
       activeTask['lastHost'] = ""
-    if(freeHost['hostName'].find(activeTask['lastHost'])):
+    if(freeHost['hostName'].find(activeTask['lastHost']) >= 0):
       hostGroups = freeHost["groups"].split(",")
       taskGroups = activeTask["hostGroups"].split(",")
-      inGroupFlag = 0
+      hostOss = freeHost["os"].split(",")
+      taskOss = activeTask["os"].split(",")
+      inOSflag = 1
+      for tOs in taskOss:
+        if(tOs not in hostOss):
+          inOSflag = 0
+      
+      inGroupFlag = 1
       for taskGroup in taskGroups:
-       try:
-        hostGroups.index(taskGroup)
-        inGroupFlag = 1
-       except:
-        pass
-      if(inGroupFlag):
+        if(taskGroup not in hostGroups):
+          inGroupFlag = 0
+      
+      if(inGroupFlag and inOSflag):
         if(freeHost['freeRam'] >= activeTask['minRam']):
           if(activeTask['threads'] == 0):
             if(freeHost['totalCpus'] - freeHost['freeCpus'] == 0):
@@ -773,14 +778,18 @@ def getBestHost(activeTask):
   for freeHost in freeHosts:
     hostGroups = freeHost["groups"].split(",")
     taskGroups = activeTask["hostGroups"].split(",")
-    inGroupFlag = 0
+    hostOss = freeHost["os"].split(",")
+    taskOss = activeTask["os"].split(",")
+    inOSflag = 1
+    for tOs in taskOss:
+      if(tOs not in hostOss):
+        inOSflag = 0
+        
+    inGroupFlag = 1
     for taskGroup in taskGroups:
-     try:
-      hostGroups.index(taskGroup)
-      inGroupFlag = 1
-     except:
-      pass
-    if(inGroupFlag):
+      if(taskGroup not in hostGroups):
+        inGroupFlag = 0
+    if(inGroupFlag and inOSflag):
       if(freeHost['freeRam'] >= activeTask['minRam']):
         if(activeTask['threads'] == 0):
           if(freeHost['totalCpus'] - freeHost['freeCpus'] == 0):
