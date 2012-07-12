@@ -19,6 +19,7 @@ print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
 import constants
+import utils as rUtils
 
 
 try:
@@ -46,6 +47,19 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.spinRerunThresh.valueChanged.connect(self.getSpinRerunThresh)
     
     print self.afterTimeEdit.dateTime().toString()
+    
+    self.db_filetype = 0
+    self.db_hostgroup = 0
+    self.db_filename = 0
+    self.db_outputdir = 0
+    self.db_bfc = 0
+    self.db_afc = 0
+    self.db_logbase = 0
+    self.db_aftertime = 0
+    self.db_rerunthresh = 0
+    self.db_framerange = 0
+    
+    
 
 
   def popEditItems(self):
@@ -136,20 +150,11 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
 
   def setHostGroups(self):
-    try:
-      conn = db.connRbhus()
-      cursor = conn.cursor(db.dict)
-      cursor.execute("select groups from hostInfo group by groups")
-      rows = cursor.fetchall()
-      cursor.close()
-      conn.close()
-    except:
-      print("Error connecting to db")
-      return()
+    rows = rUtils.getHostGroups()
       
     if(rows):
       for row in rows:
-        self.comboHostGroup.addItem(_fromUtf8(row['groups']))
+        self.comboHostGroup.addItem(_fromUtf8(row))
       return(1)
     else:
       return(0)

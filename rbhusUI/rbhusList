@@ -16,6 +16,15 @@ else:
   cwd = os.path.abspath(os.getcwd())
   
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+
+if(sys.platform.find("win") >= 0):
+  rEc = "rbhusEdit.py"
+elif(sys.platform.find("linux") >= 0):
+  rEc = "rbhusEdit"
+  
+editTaskCmd = cwd.rstrip(os.sep) + os.sep + rEc
+
+print editTaskCmd
 import rbhusListMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -61,6 +70,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.taskHold.clicked.connect(self.holdTask)
     self.taskRerun.clicked.connect(self.rerunTask)
     self.taskActivate.clicked.connect(self.activateTask)
+    self.taskEdit.clicked.connect(self.editTask)
     
     
     self.frameStop.clicked.connect(self.stopFrame)
@@ -142,6 +152,16 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           return()    
     self.popTableFrames()
 
+  def editTask(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    for x in selTasksDict:
+      selTasks.append(x['id'].lstrip("0"))
+      
+    if(selTasks and (len(selTasks) == 1)):
+      os.system(editTaskCmd +" "+ str(selTasks[0]))
+    else:
+      print "madness .. too many tasks selected"
   
   def holdTask(self):
     selTasksDict = self.selectedTasks()
