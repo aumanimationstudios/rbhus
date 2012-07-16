@@ -45,12 +45,14 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.pushLogOpen.clicked.connect(self.selectLogBase)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
     self.spinRerunThresh.valueChanged.connect(self.getSpinRerunThresh)
+    self.afterTimeEdit.dateTimeChanged.connect(self.afePrint)
     
     print self.afterTimeEdit.dateTime().toString()
     
     self.db_filetype = 0
     self.db_hostgroup = 0
     self.db_filename = 0
+    self.db_imagename = 0
     self.db_outputdir = 0
     self.db_bfc = 0
     self.db_afc = 0
@@ -62,6 +64,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
 
 
+  def afePrint(self):
+    print dir(self.afterTimeEdit.dateTime().date())
+    
   def popEditItems(self):
     try:
       conn = db.connRbhus()
@@ -93,7 +98,8 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   
   
   def getSpinRerunThresh(self):
-    print self.spinRerunThresh.value()
+    self.db_rerunthresh = self.spinRerunThresh.value()
+    print(self.db_rerunthresh)
   
   def afterTimeEnable(self):
     cAT = self.checkAfterTime.isChecked()
@@ -130,20 +136,11 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       
       
   def setFileTypes(self):
-    try:
-      conn = db.connRbhus()
-      cursor = conn.cursor(db.dict)
-      cursor.execute("select * from fileType")
-      rows = cursor.fetchall()
-      cursor.close()
-      conn.close()
-    except:
-      print("Error connecting to db")
-      return()
+    rows = rUtils.getFileTypes()
       
     if(rows):
       for row in rows:
-        self.comboType.addItem(_fromUtf8(row['fileType']))
+        self.comboType.addItem(_fromUtf8(row))
       return(1)
     else:
       return(0)

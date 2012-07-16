@@ -38,3 +38,23 @@ def getHostGroups():
       return(retRows)
     else:
       return(0)
+      
+def getFileTypes():
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("select * from fileType")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    print("Error connecting to db")
+    return(0)
+  retRows = []  
+  if(rows):
+    for row in rows:
+      retRows.append(row['fileType'])
+    return(retRows)
+  else:
+    return(0)
+      
