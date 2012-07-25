@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.1.50, for pc-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.62, for pc-linux-gnu (x86_64)
 --
--- Host: localhost    Database: rbhus
+-- Host: blues2    Database: rbhus
 -- ------------------------------------------------------
 -- Server version	5.1.50-log
 
@@ -166,6 +166,7 @@ CREATE TABLE `tasks` (
   `pad` int(1) NOT NULL DEFAULT '4',
   `fRange` varchar(1024) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
   `hostGroups` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `os` varchar(1024) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default' COMMENT 'Specify the Operating system type\n',
   `afterTaskCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
   `beforeTaskCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
   `afterFrameCmd` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -175,14 +176,15 @@ CREATE TABLE `tasks` (
   `afterFrame` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
   `rerunThresh` int(2) NOT NULL DEFAULT '5',
   `threads` int(2) NOT NULL DEFAULT '0',
-  `priority` int(3) NOT NULL DEFAULT '1',
+  `priority` int(10) NOT NULL DEFAULT '1',
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - waiting(Waiting initialization for Frames tables)\n1 - pending(intermediate state between wait n active)\n2 - active\n3 - stopped\n4 - done(Only if all the frames are done )\n5 - autoStopped',
+  `submitTime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`,`projId`),
   KEY `fk_tasks_1` (`projId`),
   KEY `fk_tasks_2` (`fileType`),
   CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='The main task table ';
+) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='The main task table ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,7 +196,7 @@ DROP TABLE IF EXISTS `tasksLog`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tasksLog` (
   `id` int(11) NOT NULL,
-  `lastHost` varchar(128) DEFAULT NULL,
+  `lastHost` varchar(128) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_tasksLog_1` (`id`),
   CONSTRAINT `fk_tasksLog_1` FOREIGN KEY (`id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -210,4 +212,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-14 19:04:50
+-- Dump completed on 2012-07-25 22:22:49
