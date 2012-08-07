@@ -44,7 +44,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
-    self.colNamesTask = ["id","fileName","hostGroups","afterTasks","status"]
+    self.colNamesTask = ["id","fileName","hostGroups","fileType","fRange","afterTasks","priority","status","description"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status"]
     
     
@@ -60,6 +60,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     QtCore.QObject.connect(self.checkKilled, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
     QtCore.QObject.connect(self.checkRunning, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
     QtCore.QObject.connect(self.checkHold, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
+    QtCore.QObject.connect(self.checkHung, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
     self.checkUnassigned.clicked.connect(self.popTableFrames)
     self.checkTAll.clicked.connect(self.popTableList)
     self.checkTActive.clicked.connect(self.popTableList)
@@ -365,6 +366,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     cHold = self.checkHold.isChecked()
     cAutohold = self.checkAutohold.isChecked()
     cKilled = self.checkKilled.isChecked()
+    cHung =  self.checkHung.isChecked()
     cAll = self.checkAll.isChecked()
     if(cDone):
       statusToCheck.append(str(constants.framesDone))
@@ -382,26 +384,33 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       statusToCheck.append(str(constants.framesKilled))
     if(cUnassigned):
       statusToCheck.append(str(constants.framesUnassigned))
+    if(cHung):
+      statusToCheck.append(str(constants.framesHung))
     
     print(statusToCheck)
     
     
     try:
-      conn = db.connRbhus()
-      cursor = conn.cursor(db.dict)
+      rows = []
       if(cAll):
+        conn = db.connRbhus()
+        cursor = conn.cursor(db.dict)
         cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where id = "+ ids)
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
       elif(statusToCheck):
         statusCheck = " or status=".join(statusToCheck)
+        conn = db.connRbhus()
+        cursor = conn.cursor(db.dict)
         cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where (id = "+ ids +") and (status="+ statusCheck +")")
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
       else:
         print("please check status")
         self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
         return()
-        
-      rows = cursor.fetchall()
-      cursor.close()
-      conn.close()
     except:
       print(str(sys.exc_info()))
       self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))

@@ -229,14 +229,12 @@ def upHostAliveStatus(hostName, status):
   return(1)
 
 
-#This piece of shit should be a forked process which should use the multiprocessing.Queue to add the tasks into it
+
 def getAssignedFrames(qAssigned):
   loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": getAssignedFrames func")
   while(1):
     hostname = socket.gethostname()
     rows = 0
-    #while(1):
-    #time.sleep(1)
     try:
       conn = db.connRbhus()
       cursor = conn.cursor(db.dict)
@@ -700,11 +698,8 @@ def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
     kpids = kpidsAll.keys()
   taskPidD.close()
   
-  mainPidD = open(mainPidFile,"r")
-  mainPids = []
-  for x in mainPidD.readlines():
-    mainPids.append(x.rstrip().lstrip())
-    
+  mainPids = getMainPids()
+  loggingDebug("MAIN PIDS : "+ str(mainPids))  
   
   if(pidLock != 0):
     pidLock.release()
@@ -743,6 +738,17 @@ def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
       time.sleep(0.5)
   return(0)
 
+def getMainPids():
+  mainPidD = open(mainPidFile,"r")
+  mainPids = []
+  for x in mainPidD.readlines():
+    mainPids.append(x.rstrip().lstrip())
+    loggingDebug("MAIN PIDS : "+ str(mainPids))
+  if(mainPids):
+    return(mainPids)
+  else:
+    return(0)
+  
 #For future ref for loading custom envs from files in diff paths
 #DOES NOT WORK ON WINDOZE!
 #def setSysEnviron(envPath):
@@ -755,7 +761,7 @@ def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
         #if(envLine.startswith("export")):
           #os.environ[envLine.split()[-1].split("=")[0]] = envLine.split()[-1].split("=")[1]
   #return(1)
-    
+   
   
 def frameScrutinizer(frameScrutiny):
   loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": frameScrutinizer func")
@@ -812,7 +818,15 @@ def snoopFrames(fDets):
       forMean.sort()
       vmSizeAvg = forMean[(len(forMean)-1)/2]
       setFramesVmSize(frameInfo,vmSizeAvg)
-      time.sleep(1)
+      time.sleep(0.2)
+      fInfo = getFrameInfo(frameInfo['id'],frameInfo['frameId'])
+      if(fInfo[0]['status'] == constants.framesHung):
+        while(1):
+          if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning) == 1):
+            loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point SNOOOOOOOOOP")
+            break
+          time.sleep(1)
+      time.sleep(2)
     else:
       continue
   if(len(forMean) > 0):
@@ -1095,12 +1109,17 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
         conn = db.connRbhus()
         cursor = conn.cursor(db.dict)
         cursor.execute("SELECT * FROM hostInfo WHERE hostName = \'" + hostName + "\'")
+        rowss = cursor.fetchall()
+        cursor.close()
+        conn.close()
       except:
         loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
         continue
-      if(len(cursor.fetchall()) == 0):
+      if(len(rowss) == 0):
         loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Hostname is new :)")
         try:
+          conn = db.connRbhus()
+          cursor = conn.cursor(db.dict)
           cursor.execute("INSERT INTO hostInfo \
                         (hostName,groups,totalRam,totalCpus,totalSwap,ip,os) \
                         VALUES ('" \
@@ -1111,6 +1130,8 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
                         + str(totalSwap) + ", '" \
                         + str(ipAddr) + "', '" \
                         + str("default,"+ plat) +"')")
+          cursor.close()
+          conn.close()
         except:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
       else:
@@ -1134,6 +1155,8 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
           grps.append(hostName)
 
         try:
+          conn = db.connRbhus()
+          cursor = conn.cursor(db.dict)
           cursor.execute("UPDATE hostInfo SET \
                           totalRam='"+ str(totalRam) +"', \
                           totalCpus='"+ str(totalCpus) +"', \
@@ -1142,59 +1165,92 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
                           os='"+ str("default,"+ plat) +"' ,\
                           groups='"+ ",".join(grps) +"' \
                           WHERE hostName = \'"+ str(hostName) +"\'")
+          cursor.close()
+          conn.close()                         
         except:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
           continue
         
       
       try:
+        conn = db.connRbhus()
+        cursor = conn.cursor(db.dict)
         cursor.execute("SELECT * FROM hostResource WHERE hostName = \'" + str(hostName) + "\'")
+        rowss = cursor.fetchall()
+        cursor.close()
+        conn.close()
       except:
         loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
-      if(len(cursor.fetchall()) == 0):  
+      if(len(rowss) == 0):  
         try:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : Trying to insert hostResource")
+          conn = db.connRbhus()
+          cursor = conn.cursor(db.dict)
           cursor.execute("INSERT INTO hostResource (hostName, freeCpus) VALUES (\'" 
                         + hostName +"\'," \
                         + str(totalCpus) +")")
+          cursor.close()
+          conn.close()
         except:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
           continue
       else:
         try:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : Trying to update hostResource")
+          conn = db.connRbhus()
+          cursor = conn.cursor(db.dict)
           cursor.execute("UPDATE hostResource SET freeCpus=\'"+ str(totalCpus) +"\' WHERE hostName=\'"+ str(hostName) +"\'")
+          cursor.close()
+          conn.close()
         except:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
           continue
       
       try:
+        conn = db.connRbhus()
+        cursor = conn.cursor(db.dict)
         cursor.execute("SELECT * FROM hostAlive WHERE hostName=\'" + hostName + "\'")
+        rowss = cursor.fetchall()
+        cursor.close()
+        conn.close()
       except:
         loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
-      if(len(cursor.fetchall()) == 0):  
+      if(len(rowss) == 0):  
         try:
+          conn = db.connRbhus()
+          cursor = conn.cursor(db.dict)
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : Trying to insert hostAlive")
           cursor.execute("INSERT INTO hostAlive (hostName) VALUES (\'"+ str(hostName) +"\')")
+          cursor.close()
+          conn.close()
         except:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
           continue
       
       
       try:
+        conn = db.connRbhus()
+        cursor = conn.cursor(db.dict)
         cursor.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'" + str(hostName) + "\'")
+        rowss = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        
       except:
         loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
-      if(len(cursor.fetchall()) == 0):
+      if(len(rowss) == 0):
         try:
+          conn = db.connRbhus()
+          cursor = conn.cursor(db.dict)
           cursor.execute("INSERT INTO hostEffectiveResource (hostName) VALUES (\'"+ str(hostName) +"\')")  
+          cursor.close()
+          conn.close()
+          
         except:
           loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
           continue
       
       #upHostAliveStatus(hostName, 1)
-      cursor.close()
-      conn.close()
       break
     except:
       loggingDebug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
@@ -1274,7 +1330,7 @@ def mainFunc():
   mainPidD = open(mainPidFile,"w",0)
   for i in range(0,len(p)):
     try:
-      mainPidD.write(str(p[i].pid))
+      mainPidD.write(str(p[i].pid) +"\n")
     except:
       print("Couldnt write mainPidFile : "+ str(sys.exc_info()))
   mainPidD.close()

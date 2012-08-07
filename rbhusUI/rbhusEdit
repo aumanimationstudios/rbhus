@@ -45,6 +45,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.pushLogOpen.clicked.connect(self.selectLogBase)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
     self.spinRerunThresh.valueChanged.connect(self.getSpinRerunThresh)
+    self.spinPriority.valueChanged.connect(self.getPriority)
     self.afterTimeEdit.dateTimeChanged.connect(self.afePrint)
     self.comboHostGroup.currentIndexChanged.connect(self.hostGroupPrint)
     self.comboType.currentIndexChanged.connect(self.fileTypePrint)
@@ -71,6 +72,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_logbase = 0
     self.db_aftertime = 0
     self.db_rerunthresh = 0
+    self.db_priority = 0
     self.db_framerange = 0
     
     
@@ -131,6 +133,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     if(self.db_framerange):
       self.updateTask("fRange","\""+ str(self.lineEditFrange.text()) +"\"")
       self.db_framerange = 0
+    if(self.db_priority):
+      self.updateTask("priority","\""+ str(self.db_priority) +"\"")
+      self.db_priority = 0
         
       
   
@@ -174,6 +179,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
         self.lineEditAfc.setText(row['afterFrameCmd'])
         self.lineEditBfc.setText(row['beforeFrameCmd'])
         self.spinRerunThresh.setValue(row['rerunThresh'])
+        self.spinPriority.setValue(row['priority'])
         self.afterTimeEdit.setTime(QtCore.QTime(row['afterTime'].hour, row['afterTime'].minute, row['afterTime'].second))
         self.afterTimeEdit.setDate(QtCore.QDate(row['afterTime'].year, row['afterTime'].month, row['afterTime'].day))
       return(1)
@@ -185,6 +191,11 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def getSpinRerunThresh(self):
     self.db_rerunthresh = self.spinRerunThresh.value()
     print(self.db_rerunthresh)
+    
+    
+  def getPriority(self):
+    self.db_priority = self.spinPriority.value()
+    print(self.db_priority)
   
   def afterTimeEnable(self):
     cAT = self.checkAfterTime.isChecked()

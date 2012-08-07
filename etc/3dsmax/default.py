@@ -43,7 +43,10 @@ RENDERCMD = "\"c:\\Program Files\\Autodesk\\3ds Max 2011\\3dsmaxcmd.exe\""
 RENDER_CMD = ""
 
 if(outDir != "default"):
-  imageName = outDir.rstrip(os.sep) + os.sep + outFile
+  if(outFile != "default"):
+    imageName = outDir.rstrip(os.sep) + os.sep + outFile
+  else:
+    imageName = outDir.rstrip(os.sep) + os.sep 
 
 totalCpus = multiprocessing.cpu_count()
 b = ""

@@ -1,0 +1,42 @@
+#!/usr/bin/python
+from PyQt4 import QtCore, QtGui
+import glob
+import os
+import sys
+import socket
+import time
+
+
+progPath =  sys.argv[0].split(os.sep)
+print progPath
+if(len(progPath) > 1):
+  pwd = os.sep.join(progPath[0:-1])
+  cwd = os.path.abspath(pwd)
+else:
+  cwd = os.path.abspath(os.getcwd())
+  
+sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+
+if(sys.platform.find("win") >= 0):
+  rEc = "rbhusEdit.py"
+elif(sys.platform.find("linux") >= 0):
+  rEc = "rbhusEdit"
+  
+editTaskCmd = cwd.rstrip(os.sep) + os.sep + rEc
+
+print editTaskCmd
+import rbhusListMod
+print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+import db
+import constants
+
+
+try:
+  _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+  _fromUtf8 = lambda s: s
+  
+
+class Ui_Form(rbhusListMod.Ui_mainRbhusList):
+  def setupUi(self, Form):

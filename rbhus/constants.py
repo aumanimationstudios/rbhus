@@ -43,6 +43,7 @@ framesFailed = 5
 framesHold = 6
 framesAutoHold = 7
 framesKilled = 9
+framesHung = 10
 
 
 framesStatus = {
@@ -54,7 +55,8 @@ framesStatus = {
   5 : "failed",
   6 : "hold",
   7 : "autoHold",
-  9 : "killed"
+  9 : "killed",
+  10 : "hung"
 }
 
 #hostInfo table
