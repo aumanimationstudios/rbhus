@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'lib/rbhusListMod.ui'
 #
-# Created: Wed Aug  1 21:55:53 2012
+# Created: Fri Aug 10 23:38:07 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -96,7 +96,7 @@ class Ui_mainRbhusList(object):
         self.horizontalLayout_3.setSizeConstraint(QtGui.QLayout.SetNoConstraint)
         self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
         self.tableList = QtGui.QTableWidget(self.centralwidget)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.tableList.sizePolicy().hasHeightForWidth())
@@ -164,6 +164,17 @@ class Ui_mainRbhusList(object):
         self.taskEdit.setObjectName(_fromUtf8("taskEdit"))
         self.verticalLayout_2.addWidget(self.taskEdit)
         self.verticalLayout.addWidget(self.frame)
+        spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem1)
+        self.taskDelete = QtGui.QPushButton(self.centralwidget)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.taskDelete.sizePolicy().hasHeightForWidth())
+        self.taskDelete.setSizePolicy(sizePolicy)
+        self.taskDelete.setFlat(False)
+        self.taskDelete.setObjectName(_fromUtf8("taskDelete"))
+        self.verticalLayout.addWidget(self.taskDelete)
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
         self.line = QtGui.QFrame(self.centralwidget)
@@ -300,8 +311,8 @@ class Ui_mainRbhusList(object):
         self.checkHung.setObjectName(_fromUtf8("checkHung"))
         self.gridLayout_2.addWidget(self.checkHung, 1, 4, 1, 1)
         self.horizontalLayout.addWidget(self.groupBox)
-        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem1)
+        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem2)
         self.label = QtGui.QLabel(self.centralwidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -397,13 +408,16 @@ class Ui_mainRbhusList(object):
         self.checkRefresh = QtGui.QCheckBox(self.centralwidget)
         self.checkRefresh.setObjectName(_fromUtf8("checkRefresh"))
         self.horizontalLayout_2.addWidget(self.checkRefresh)
-        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem2)
+        spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem3)
         self.pushRefresh = QtGui.QPushButton(self.centralwidget)
         self.pushRefresh.setObjectName(_fromUtf8("pushRefresh"))
         self.horizontalLayout_2.addWidget(self.pushRefresh)
         self.verticalLayout_3.addLayout(self.horizontalLayout_2)
         mainRbhusList.setCentralWidget(self.centralwidget)
+        self.statusBar = QtGui.QStatusBar(mainRbhusList)
+        self.statusBar.setObjectName(_fromUtf8("statusBar"))
+        mainRbhusList.setStatusBar(self.statusBar)
 
         self.retranslateUi(mainRbhusList)
         QtCore.QMetaObject.connectSlotsByName(mainRbhusList)
@@ -421,6 +435,9 @@ class Ui_mainRbhusList(object):
         self.taskHold.setText(QtGui.QApplication.translate("mainRbhusList", "hold", None, QtGui.QApplication.UnicodeUTF8))
         self.taskRerun.setText(QtGui.QApplication.translate("mainRbhusList", "rerun", None, QtGui.QApplication.UnicodeUTF8))
         self.taskEdit.setText(QtGui.QApplication.translate("mainRbhusList", "edit!", None, QtGui.QApplication.UnicodeUTF8))
+        self.taskDelete.setToolTip(QtGui.QApplication.translate("mainRbhusList", "<html><head/><body><p><span style=\" font-weight:600; text-decoration: underline; color:#ff0000;\">CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+        self.taskDelete.setStatusTip(QtGui.QApplication.translate("mainRbhusList", "CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!", None, QtGui.QApplication.UnicodeUTF8))
+        self.taskDelete.setText(QtGui.QApplication.translate("mainRbhusList", "delete", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("mainRbhusList", "FRAMES", None, QtGui.QApplication.UnicodeUTF8))
         self.checkAutohold.setText(QtGui.QApplication.translate("mainRbhusList", "autohold", None, QtGui.QApplication.UnicodeUTF8))
         self.checkFailed.setText(QtGui.QApplication.translate("mainRbhusList", "failed", None, QtGui.QApplication.UnicodeUTF8))

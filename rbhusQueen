@@ -529,7 +529,7 @@ def assignFrameToHost(hostDetail, taskFrame):
     except:
       logging.error("2.5 : "+ str(sys.exc_info()))
     return(0)
-  # The below code can be ignored
+  # The below code can be ignored?
   try:
     conn = db.connRbhus()
     cursor = conn.cursor()

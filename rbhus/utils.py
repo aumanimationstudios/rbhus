@@ -57,4 +57,29 @@ def getFileTypes():
     return(retRows)
   else:
     return(0)
+    
+    
+def getOsTypes():
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("select os from hostInfo group by os")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    print("Error connecting to db 1")
+    return(0)
+  otr = {}
+  retRows = []
+  if(rows):
+    for row in rows:
+      tmpRow = row['os'].split(",")
+      for tr in tmpRow:
+        otr[tr.rstrip().lstrip()] = 1
+    for gt in otr.keys():
+      retRows.append(gt)
+    return(retRows)
+  else:
+    return(0)
       

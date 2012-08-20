@@ -72,6 +72,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.taskRerun.clicked.connect(self.rerunTask)
     self.taskActivate.clicked.connect(self.activateTask)
     self.taskEdit.clicked.connect(self.editTask)
+    self.taskDelete.clicked.connect(self.delTask)
     
     
     self.frameStop.clicked.connect(self.stopFrame)
@@ -186,7 +187,39 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       return()    
     self.popTableList()
     
+ 
+  def delTask(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    #self.showDialog()
     
+    for x in selTasksDict:
+      selTasks.append(x['id'])
+    if(selTasks):
+      ids = " or id = ".join(selTasks)
+    else:
+      return
+    ids = " or id=".join(selTasks)
+    print ids
+    try:
+      conn = db.connRbhus()
+      cursor = conn.cursor()
+      cursor.execute("delete from tasks where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
+      cursor.close()
+      conn.close()
+    except:
+      print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      return()    
+    self.popTableList()
+    
+  
+  #def showDialog(self):  
+    #self._dialog = QtGui.QDialog()
+    #self._dialog.resize(200, 100)
+    
+    #self._dialog.show()
+      
+      
     
   def activateTask(self):
     #selTasks = self.selectedTasks()

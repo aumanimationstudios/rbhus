@@ -64,8 +64,8 @@ hostInfoDisable = 0
 hostInfoEnable = 1
 
 hostInfoStatus = {
-  0 : "enabled",
-  1 : "disabled"
+  0 : "disabled",
+  1 : "enabled"
 }
 
 #hostAlive table

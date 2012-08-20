@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'lib/rbhusHostMod.ui'
 #
-# Created: Mon Jul 30 14:45:07 2012
+# Created: Tue Aug  7 23:53:08 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,21 +17,34 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(341, 524)
+        MainWindow.resize(1029, 360)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
         self.centralwidget = QtGui.QWidget(MainWindow)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.tableWidget = QtGui.QTableWidget(self.centralwidget)
-        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
-        self.tableWidget.setColumnCount(0)
-        self.tableWidget.setRowCount(0)
-        self.horizontalLayout.addWidget(self.tableWidget)
+        self.tableHost = QtGui.QTableWidget(self.centralwidget)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tableHost.sizePolicy().hasHeightForWidth())
+        self.tableHost.setSizePolicy(sizePolicy)
+        self.tableHost.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.tableHost.setObjectName(_fromUtf8("tableHost"))
+        self.tableHost.setColumnCount(0)
+        self.tableHost.setRowCount(0)
+        self.tableHost.horizontalHeader().setCascadingSectionResizes(True)
+        self.tableHost.horizontalHeader().setStretchLastSection(True)
+        self.horizontalLayout.addWidget(self.tableHost)
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.pushEdit = QtGui.QPushButton(self.centralwidget)

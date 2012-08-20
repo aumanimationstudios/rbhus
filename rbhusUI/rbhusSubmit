@@ -39,9 +39,17 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.pushSubmit.clicked.connect(self.submitTasks)
     self.comboHostGroup.currentIndexChanged.connect(self.printGroupSel)
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
+    self.comboFileType.currentIndexChanged.connect(self.fileTypePrint)
+    self.comboOsType.currentIndexChanged.connect(self.osTypePrint)
     groups = rUtils.getHostGroups()
+    ostypes = rUtils.getOsTypes()
+    ftypes = rUtils.getFileTypes()
     for group in groups:
       self.comboHostGroup.addItem(_fromUtf8(group))
+    for ft in ftypes:
+      self.comboFileType.addItem(_fromUtf8(ft))
+    for ost in ostypes:
+      self.comboOsType.addItem(_fromUtf8(ost))
       
     
     
@@ -52,7 +60,39 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   def printPrioSel(self):
     print self.comboPrio.currentText()
     
+  
+  
+  def fileTypePrint(self):
+    print(self.comboFileType.currentText())
     
+  
+  def osTypePrint(self):
+    print(self.comboOsType.currentText())
+  
+  
+  def setFileTypes(self):
+    rows = rUtils.getFileTypes()
+      
+    if(rows):
+      for row in rows:
+        self.comboFileType.addItem(_fromUtf8(row))
+      
+      return(1)
+    else:
+      return(0)
+      
+      
+  def setOsTypes(self):
+    rows = rUtils.getOsTypes()
+      
+    if(rows):
+      for row in rows:
+        self.comboOsType.addItem(_fromUtf8(row))
+      
+      return(1)
+    else:
+      return(0)     
+  
   #def getHostGroups(self):
     #try:
       #conn = db.connRbhus()
@@ -91,18 +131,27 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       print fRange
       
       prios = str(self.comboPrio.currentText())
+      ostype = str(self.comboOsType.currentText())
+      filetype = str(self.comboFileType.currentText())
       if(prios == "low"):
         p = 1
       if(prios == "high"):
         p = 9000
       if(prios == "normal"):
         p = 5000
-      
-    
+      if((filetype == "3dsmax") and ((ostype == "default") or (ostype == "win"))):
+        logB = "z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\"
+        fileT = filetype
+        afterFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py"
+        beforeFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\beforeFrame.py"
+        print logB
+        print fileT
+        print afterFrameC
+        print beforeFrameC
       try:
         conn = db.connRbhus()
         cursor = conn.cursor()
-        cursor.execute("insert into tasks (fileName, logBase, fRange, fileType, afterFrameCmd, beforeFrameCmd, hostGroups, submitTime, priority) values (\'"+ str(fileName) + "\', \'z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\\', \'"+ str(fRange) + "\', \'3dsmax\', \'Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py\', \'Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\beforeFrame.py\', '"+ str(self.comboHostGroup.currentText()) +"', now(), "+ str(p) +")")
+        cursor.execute("insert into tasks (fileName, logBase, fRange, fileType, afterFrameCmd, beforeFrameCmd, hostGroups, submitTime, priority, afterTasks) values (\'"+ str(fileName) +"\', \'"+ str(logB) +"\', \'"+ str(fRange) +"\', \'"+ str(filetype) +"\', \'"+ str(afterFrameC) +"\', \'"+ str(beforeFrameC) +"\', \'"+ str(self.comboHostGroup.currentText()) +"\', now(), "+ str(p) +", "+ str(lineEditAfterTask.text()) +")")
         cursor.close()
         cursor = conn.cursor(db.dict)
         cursor.execute("select last_insert_id()")
