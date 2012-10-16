@@ -24,7 +24,7 @@ class dbRbhus:
     while(1):
       try:
         con = self._connDb("dbRbhus","rbhus")
-        print("Db connected : "+ str(sys.exc_info()))
+        print("Db connected")
         return(con)
         break
       except:
