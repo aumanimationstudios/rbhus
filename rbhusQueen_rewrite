@@ -882,20 +882,21 @@ def autoStopper():
       tasks = getActiveTasks()
       if(tasks):
         for task in tasks:
-          allFrames = getAllFrames(task['id'])
-          framesThresh = getFramesRerunThresh(task['id'])
-          if(allFrames == 0):
-            continue
-          if(framesThresh == 0):
-            continue
-          totalFrames = len(allFrames)
-          totalThresh = len(framesThresh)
-          if((totalFrames - totalThresh) == 0):
-            logging.debug("Auto stopping task : "+ str(task['id']))
-            while(1):
-              if(setTaskStatus(task['id'],constants.taskAutoStopped)):
-                break
-              time.sleep(0.05)
+          if(task):
+            allFrames = getAllFrames(task['id'])
+            framesThresh = getFramesRerunThresh(task['id'])
+            if(allFrames == 0):
+              continue
+            if(framesThresh == 0):
+              continue
+            totalFrames = len(allFrames)
+            totalThresh = len(framesThresh)
+            if((totalFrames - totalThresh) == 0):
+              logging.debug("Auto stopping task : "+ str(task['id']))
+              while(1):
+                if(setTaskStatus(task['id'],constants.taskAutoStopped)):
+                  break
+                time.sleep(0.05)
       time.sleep(0.5)
   else:
     return(pid)
