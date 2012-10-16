@@ -34,7 +34,7 @@ LOG_FILENAME = '/var/log/rbhusServer.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
-#db_conn = dbRbhus.dbRbhus()
+db_conn = dbRbhus.dbRbhus()
 
 def sigHandle(sigNum, frame):
   myPid = posix.getpid()
@@ -79,10 +79,11 @@ def getHostInfo(status):
 
   
   #These are the tasks that need to get inserted into "frames" table 
-def getWaitingTasks(pendingTasks,db_conn=dbRbhus.dbRbhus()):
+def getWaitingTasks(pendingTasks):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("getPendingTasks")
+    global db_conn
     while(1):
       rows = {}
       logging.error("ROWS WTF2 : "+ str(rows))
@@ -116,10 +117,11 @@ def getWaitingTasks(pendingTasks,db_conn=dbRbhus.dbRbhus()):
     return(pid)
   
   
-def initWaitingTasks(pendingTasks, db_conn=dbRbhus.dbRbhus()):
+def initWaitingTasks(pendingTasks):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("initWaitingTasks")
+    global db_conn
     while(1):
       row = {}
       while(1):
@@ -297,10 +299,11 @@ def getFreeHosts():
   return(freeHosts)
       
 
-def checkClientAlive(db_conn=dbRbhus.dbRbhus()):
+def checkClientAlive():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("checkClientAlive")
+    global db_conn
     maxPids = 100
     pidCount = 0
     while(1):
@@ -369,10 +372,11 @@ def checkClientAlive(db_conn=dbRbhus.dbRbhus()):
     return(pid)
 	      
 
-def pingClientProcess(client,ipAddr,db_conn = dbRbhus.dbRbhus()):
+def pingClientProcess(client,ipAddr):
   pid = posix.fork()
   if(pid == 0):
-    setproctitle.setproctitle("ping: "+ str(client))
+    setproctitle.setproctitle("ping_"+ str(client))
+    global db_conn
     status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
     pingstatus = 0
     sockstatus = 0
@@ -743,10 +747,11 @@ def getBestHost(activeTask):
     
     
   
-def scheduler(db_conn = dbRbhus.dbRbhus()):
+def scheduler():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("scheduler")
+    global db_conn
     while(1):
       activeTasks = arrangedActiveTasks()
       #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
@@ -817,10 +822,11 @@ def scheduler(db_conn = dbRbhus.dbRbhus()):
     return(pid)
  
 
-def setCompletedTasks(db_conn=dbRbhus.dbRbhus()):
+def setCompletedTasks():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("setCompletedTasks")
+    global db_conn
     while(1):
       tasks = getActiveTasks()
       logging.debug("active tasks wtf5 : "+ str(tasks))
@@ -851,10 +857,11 @@ def getHungFrames(taskId):
     
 
 
-def resetHungFramesProc(db_conn=dbRbhus.dbRbhus()):
+def resetHungFramesProc():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("resetHungFramesProc")
+    global db_conn
     while(1):
       tasks = getActiveTasks()
       if(tasks):
@@ -870,11 +877,11 @@ def resetHungFramesProc(db_conn=dbRbhus.dbRbhus()):
     
     
     
-def autoStopper(db_conn=dbRbhus.dbRbhus()):
+def autoStopper():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("autoStopper")
-    db_conn = dbRbhus.dbRbhus()
+    global db_conn
     while(1):
       tasks = getActiveTasks()
       if(tasks):
