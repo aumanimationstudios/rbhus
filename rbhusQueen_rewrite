@@ -224,6 +224,7 @@ def initWaitingTasks(pendingTasks):
   
 
 def getActiveTasks():
+  global db_conn
   try:
     rows = db_conn.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
                     WHERE tasks.status=\'"+ str(constants.taskActive) +"\' \
