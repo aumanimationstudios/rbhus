@@ -830,7 +830,7 @@ def setCompletedTasks():
     db_conn = dbRbhus.dbRbhus()
     while(1):
       tasks = getActiveTasks()
-      logging.debug("active tasks wtf5 : "+ str(tasks))
+      logging.debug("\n\nactive tasks wtf5 : "+ str(tasks))
       if(tasks):
         for task in tasks:
           status = checkTaskCompleted(task['id'])
