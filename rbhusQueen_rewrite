@@ -85,7 +85,7 @@ def getWaitingTasks(pendingTasks):
     setproctitle.setproctitle("getPendingTasks")
     global db_conn
     while(1):
-      rows = {}
+      rows = 0
       logging.error("ROWS WTF2 : "+ str(rows))
       rows = db_conn.execute("SELECT * FROM tasks WHERE status="+ str(constants.taskWaiting), dictionary=True)
       logging.error("ROWS WTF3 : "+ str(rows))
@@ -123,7 +123,7 @@ def initWaitingTasks(pendingTasks):
     setproctitle.setproctitle("initWaitingTasks")
     global db_conn
     while(1):
-      row = {}
+      #row = {}
       while(1):
         try:
           row = pendingTasks.get(False)
