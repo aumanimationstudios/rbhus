@@ -34,8 +34,7 @@ LOG_FILENAME = '/var/log/rbhusServer.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
-db_conn = dbRbhus.dbRbhus()
-print "WTF#"
+#db_conn = dbRbhus.dbRbhus()
 
 def sigHandle(sigNum, frame):
   myPid = posix.getpid()
@@ -370,11 +369,10 @@ def checkClientAlive(db_conn=dbRbhus.dbRbhus()):
     return(pid)
 	      
 
-def pingClientProcess(client,ipAddr):
+def pingClientProcess(client,ipAddr,db_conn = dbRbhus.dbRbhus()):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("ping: "+ str(client))
-    db_conn = dbRbhus.dbRbhus()
     status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
     pingstatus = 0
     sockstatus = 0
