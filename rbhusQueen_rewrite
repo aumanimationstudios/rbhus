@@ -25,7 +25,7 @@ import logging
 import time
 import signal
 import setproctitle
-import rbhus.db as db
+import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
 import psi
 import psi.process
@@ -34,6 +34,7 @@ LOG_FILENAME = '/var/log/rbhusServer.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
+db_conn = dbRbhus.dbRbhus()
 
 def sigHandle(sigNum, frame):
   myPid = posix.getpid()
@@ -65,26 +66,13 @@ def killProcessKids(ppid):
 # Get all the info on the hosts 
 def getHostInfo(status):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
     if(status == "ALL"):
-      cursor.execute("SELECT * FROM hostInfo")
+      rows = db_conn.execute("SELECT * FROM hostInfo", dictionary=True)
     elif(status == "ENABLED"):
-      cursor.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoEnable))
+      rows = db_conn.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoEnable), dictionary=True)
     else:
-      cursor.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable))
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+      rows = db_conn.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable), dictionary=True)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
   return(rows)
   
@@ -100,24 +88,7 @@ def getWaitingTasks(pendingTasks):
     while(1):
       rows = {}
       logging.error("ROWS WTF2 : "+ str(rows))
-      try:
-        conn = db.connRbhus()
-        cursor = conn.cursor(db.dict)
-        cursor.execute("SELECT * FROM tasks WHERE status="+ str(constants.taskWaiting))
-        rows = cursor.fetchall()
-        cursor.close()
-        conn.close()
-      except:
-        try:
-          cursor.close()
-        except:
-          pass
-        try:
-          conn.close()
-        except:
-          pass
-        logging.error("Screwed selects wtf: "+ str(sys.exc_info()))
-        continue
+      rows = db_conn.execute("SELECT * FROM tasks WHERE status="+ str(constants.taskWaiting), dictionary=True)
       logging.error("ROWS WTF3 : "+ str(rows))
       if(rows):
         for row in rows:
@@ -128,44 +99,20 @@ def getWaitingTasks(pendingTasks):
             ##DO NOT REMOVE THE PENDING STATUS
             while(1):
               try:  
-                conn = db.connRbhus()
-                curStatus = conn.cursor()
-                curStatus.execute("UPDATE tasks SET status="+ str(constants.taskPending) +" WHERE (id = "+ str(idTask) +") and ( status = "+ str(constants.taskWaiting) +")")
-                curStatus.close()
-                conn.close()
+                db_conn.execute("UPDATE tasks SET status="+ str(constants.taskPending) +" WHERE (id = "+ str(idTask) +") and ( status = "+ str(constants.taskWaiting) +")")
                 logging.debug("updating tasks table with pending status wtf4")
                 break
               except:
                 logging.error("Screwed updating tasks table with pending status : "+ str(sys.exc_info()))
-                try:
-                  curStatus.close()
-                except:
-                  pass
-                try:
-                  conn.close()
-                except:
-                  pass
                 continue
               time.sleep(0.1)
               
             try:
-              conn = db.connRbhus()
-              cursor = conn.cursor()
-              cursor.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
-              cursor.close()
-              conn.close()
+              db_conn.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
             except:
               e = sys.exc_info()
               logging.error("Screwed inserting into tasklog : "+ str(e))
-              try:
-                cursor.close()
-              except:
-                pass
-              try:
-                conn.close()
-              except:
-                pass
-            time.sleep(0.1)
+            #time.sleep(0.1)
       time.sleep(1)
   else:
     return(pid)
@@ -221,23 +168,11 @@ def initWaitingTasks(pendingTasks):
         for forDel in forDelSet:
           while(1):
             try:
-              conn = db.connRbhus()
-              cursor = conn.cursor()
-              cursor.execute("DELETE FROM frames WHERE frames.id="+ str(idTask) +" AND frameId="+ str(forDel))
-              cursor.close()
-              conn.close()
+              db_conn.execute("DELETE FROM frames WHERE frames.id="+ str(idTask) +" AND frameId="+ str(forDel))
               break
             except:
-              try:
-                cursor.close()
-              except:
-                pass
-              try:
-                conn.close()
-              except:
-                pass
               logging.error("Screwed initWaitingTasks (Delete frames table (connection)) : "+ str(sys.exc_info()))
-            time.sleep(0.5)
+            time.sleep(0.1)
         
         
         #while(1):
@@ -265,55 +200,22 @@ def initWaitingTasks(pendingTasks):
         for frame in frames:
           while(1):
             try:
-              conn = db.connRbhus()
-              cursor = conn.cursor()
-              cursor.execute("INSERT INTO frames (id, frameId) VALUES ("+ str(idTask) +", "+ str(frame) +")")
-              cursor.close()
-              conn.close()
+              db_conn.execute("INSERT INTO frames (id, frameId) VALUES ("+ str(idTask) +", "+ str(frame) +")")
               break
             except:
               logging.error("Screwed initWaitingTasks (Insert frames table (connection)) : "+ str(idTask) +" : "+ str(sys.exc_info()))
               if(str(sys.exc_info()).find("IntegrityError") >= 0):
-                try:
-                  cursor.close()
-                except:
-                  pass
-                try:
-                  conn.close()
-                except:
-                  pass
                 break
-              try:
-                cursor.close()
-              except:
-                pass
-              try:
-                conn.close()
-              except:
-                pass
-                
-            time.sleep(0.2)
+            time.sleep(0.1)
   
         logging.debug("Initialized frames table")
         while(1):
           try:
-            conn = db.connRbhus()
-            cursor = conn.cursor()
-            cursor.execute("UPDATE tasks SET status="+ str(constants.taskActive) +" WHERE id="+ str(idTask))
-            cursor.close()
-            conn.close()
+            db_conn.execute("UPDATE tasks SET status="+ str(constants.taskActive) +" WHERE id="+ str(idTask))
             logging.debug("Updated task:"+ str(idTask) +" status to 2(active)")
             break
           except:
             logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
-            try:
-              cursor.close()
-            except:
-              pass
-            try:
-              conn.close()
-            except:
-              pass
           time.sleep(0.1)
       time.sleep(0.1)
           
@@ -323,68 +225,36 @@ def initWaitingTasks(pendingTasks):
 
 def getActiveTasks():
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
+    rows = db_conn.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
                     WHERE tasks.status=\'"+ str(constants.taskActive) +"\' \
                     AND tasks.id=tasksLog.id \
                     AND tasks.afterTime<=NOW() \
-                    ORDER BY tasks.priority DESC")
-    rows = cursor.fetchall()
-    #logging.debug("active tasks ROWS : "+ str(rows))
-    cursor.close()
-    conn.close()
+                    ORDER BY tasks.priority DESC", dictionary=True)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
+    logging.error(str(sys.exc_info()))
     return(0)
-  if(rows):
-    return(rows)
-  else:
-    return(0)    
+  return(rows)
     
 
 def getUnassignedFrames(taskId):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
                     AND frames.id= tasks.id \
                     AND frames.status="+ str(constants.framesUnassigned) +" \
                     AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
-                    ORDER BY frames.frameId")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+                    ORDER BY frames.frameId", dictionary=True)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
+    logging.error(str(sys.exc_info()))
     return(0)
-  if(rows):
-    return(rows)
-  return(0)
+  return(rows)
   
   
 
     
 def getPotentHosts():
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("SELECT hostInfo.hostName, \
+    rows = db_conn.execute("SELECT hostInfo.hostName, \
                            hostInfo.totalCpus, \
                            hostResource.freeCpus, \
                            hostInfo.totalRam, \
@@ -404,27 +274,14 @@ def getPotentHosts():
                      AND hostInfo.hostName = hostResource.hostName \
                      AND hostResource.hostName = hostAlive.hostName \
                      AND hostAlive.hostName = hostEffectiveResource.hostName \
-                     ORDER BY hostInfo.weight DESC")
+                     ORDER BY hostInfo.weight DESC", dictionary=True)
     
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
-  except:
-    e = sys.exc_info()   
-    logging.error("Screwed getPotentHosts : "+ str(e))    
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
-    return(0)
-  if(rows):
-    return(rows)
-  return(0)
 
+  except:
+    logging.error(str(sys.exc_info()))    
+    return(0)
+  return(rows)
+  
 
 def getFreeHosts():
   freeHosts = []
@@ -589,47 +446,22 @@ def pingClientProcess(client,ipAddr):
 
 def setHostAliveStatus(hostName, status):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE hostAlive SET status='"+ str(status) +"' WHERE hostName=\""+ hostName +"\"")
-    #logging.debug("UPDATE hostAlive SET status='"+ str(status) +"' WHERE hostName=\""+ hostName +"\"")
-    cursor.close()
-    conn.close()
+    db_conn.execute("UPDATE hostAlive SET status='"+ str(status) +"' WHERE hostName=\""+ hostName +"\"")
     return(1)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
     
 def resetAssignedFrame(hostName, statusReset=0):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE frames SET status="+ str(statusReset) +" \
+    db_conn.execute("UPDATE frames SET status="+ str(statusReset) +" \
                     WHERE hostName=\""+ hostName +"\" AND ((status = "+ str(constants.framesPending) +") \
                     OR (status = "+ str(constants.framesAssigned) +") \
                     OR (status = "+ str(constants.framesRunning) +"))") 
-    cursor.close()
-    conn.close()
     logging.debug("I CANT BELIVE I AM HERE for host : "+ str(hostName) +" : Resetting frame status to "+ constants.framesStatus[statusReset])
     return(1)
   except:
     e = sys.exc_info()
     logging.error("resetAssignedFrame : "+ str(e))
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
   
 #def createRamDisk():
@@ -654,104 +486,43 @@ def assignFrameToHost(hostDetail, taskFrame):
     eThreads = taskFrame['threads']
 
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE hostResource \
+    db_conn.execute("UPDATE hostResource \
                     SET freeCpus=freeCpus-"+ str(eThreads) +" \
                     WHERE hostName=\""+ hostDetail['hostName'] +"\"")
-    cursor.close()
-    conn.close()
   except:
     logging.error("1 : "+ str(sys.exc_info()))
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE frames \
+    db_conn.execute("UPDATE frames \
                     SET hostName=\""+ hostDetail['hostName'] +"\" , \
                     status="+ str(constants.framesAssigned) +", \
                     runCount=runCount+1 , \
                     fThreads="+ str(eThreads) +" \
                     WHERE frames.frameId="+ str(taskFrame["frameId"]) +" \
                     AND frames.id="+ str(taskFrame["id"]))
-    cursor.close()
-    conn.close()
   except:
     logging.error("2 : "+ str(sys.exc_info()))
     try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
-    try:
-      conn = db.connRbhus()
-      cursor = conn.cursor()
-      cursor.execute("UPDATE hostResource \
+      db_conn.execute("UPDATE hostResource \
                       SET freeCpus=freeCpus+"+ str(eThreads) +" \
                       WHERE hostName=\""+ hostDetail['hostName'] +"\"")
-      cursor.close()
-      conn.close()
     except:
       logging.error("2.5 : "+ str(sys.exc_info()))
-      try:
-        cursor.close()
-      except:
-        pass
-      try:
-        conn.close()
-      except:
-        pass
     return(0)
   # The below code can be ignored?
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskFrame['id']))
-    cursor.close()
-    conn.close()
+    db_conn.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskFrame['id']))
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     logging.error("3 : "+ str(sys.exc_info()))
     
   return(1)
 
 def getEffectiveDetails(hostName):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'"+ hostName +"\'")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    rows = db_conn.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'"+ hostName +"\'", dictionary=True)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
-  return(rows[0])	   
+  return(rows[0])
     
 def arrangedActiveTasks():
   priorities = {}
@@ -787,27 +558,14 @@ def arrangedActiveTasks():
     totalRunFrames = 0
     for pKey in pKeys:
       for activeTask in priorities[pKey]:
-        runShit = 0
-        while(1):
-          try:
-            runShit = getRunFrames(activeTask["id"])
-            break
-          except:
-            pass
+        runShit = getRunFrames(activeTask["id"])
         if(runShit):
           totalRunFrames = totalRunFrames + len(runShit)
 
     for pKey in pKeys:
       runFrames = 0
       for activeTask in priorities[pKey]:
-        runShit = 0
-        while(1):
-          try:
-            runShit = getRunFrames(activeTask["id"])
-            break
-          except:
-            pass
-          
+        runShit = getRunFrames(activeTask["id"])
         if(runShit):
           runFrames = runFrames + len(runShit)
       try:
@@ -838,23 +596,9 @@ def arrangedActiveTasks():
       pcent = {}
       for activeTask in priorities[pKey]:
         completedShit = 0
-        while(1):
-          try:
-            completedShit = getRunFrames(activeTask["id"])
-            break
-          except:
-            time.sleep(0.1)
-            pass
-        
+        completedShit = getRunFrames(activeTask["id"])
         allFrames = 0
-        while(1):
-          try:
-            allFrames = getAllFrames(activeTask["id"])
-            break
-          except:
-            time.sleep(0.1)
-            pass
-          
+        allFrames = getAllFrames(activeTask["id"])
         if(allFrames):
           numAllFrames = len(allFrames)
         else:
@@ -891,102 +635,48 @@ def arrangedActiveTasks():
     
 def getAllFrames(taskId):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id=\'"+ str(taskId) +"\' \
                     AND tasks.id=frames.id \
-                    ORDER BY frames.frameId")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+                    ORDER BY frames.frameId", dictionary=True)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
-  if(rows):
-    return(rows)
-  return(0)
+  return(rows)
   
 def getRunFrames(taskId):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
                     AND tasks.id=frames.id \
                     AND tasks.status="+ str(constants.taskActive) +" \
                     AND frames.status !="+ str(constants.framesUnassigned) +" \
-                    ORDER BY frames.frameId")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+                    ORDER BY frames.frameId", dictionary=True)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
-    raise
-  if(rows):
-    return(rows)
-  return(0)
+    return(0)
+  return(rows)
     
 def resetFailedFrames(taskId):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE id="+ str(taskId) +" \
+    db_conn.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE id="+ str(taskId) +" \
                     AND (status="+ str(constants.framesFailed) +" \
                     OR status="+ str(constants.framesKilled) +")")
-    cursor.close()
-    conn.close()
     return(1)
   except:
     e = sys.exc_info()
     logging.error("resetFailedFrames 2 : "+ str(e))
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
   
 
   
 def resetHungFrames(taskId, fId):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE (id="+ str(taskId) +") \
+    db_conn.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE (id="+ str(taskId) +") \
                     AND (frameId = "+ str(fId) +") \
                     AND (status="+ str(constants.framesHung) +")")
-    cursor.close()
-    conn.close()
     return(1)
   except:
     e = sys.exc_info()[:2]
     logging.error("resetHungFrames : "+ str(e))
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
     
     
@@ -1153,30 +843,15 @@ def setCompletedTasks():
  
 def getHungFrames(taskId):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows = cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
                     AND frames.id= tasks.id \
                     AND frames.status="+ str(constants.framesHung) +" \
                     AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
-                    ORDER BY frames.frameId")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+                    ORDER BY frames.frameId", dictionary=True)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
-  if(rows):
-    return(rows)
-  return(0)
+  return(rows)
     
 
 
@@ -1230,45 +905,26 @@ def autoStopper():
 # Frames that have reached rerunThresh
 def getFramesRerunThresh(taskId):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("SELECT frames.* FROM frames, tasks \
+    rows = db_conn.execute("SELECT frames.* FROM frames, tasks \
                     WHERE tasks.id=\'"+ str(taskId) +"\' \
                     AND tasks.id=frames.id \
                     AND frames.runCount>=tasks.rerunThresh \
                     AND frames.status!="+ str(constants.framesDone) +" \
-                    ORDER BY frames.frameId")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+                    ORDER BY frames.frameId", dictionary=True)
   except:
     logging.error(str(sys.exc_info()[1]))
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
-  if(rows):
-    return(rows)
-  return(0)
+  return(rows)
 
 
 #Return value is the status of the task that needs to be set
 def checkTaskCompleted(taskId):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId) +" \
-                    AND frames.status="+ str(constants.framesDone))
-    compCount = (cursor.fetchall())[0][0]
-    cursor.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId))
-    totalCount = (cursor.fetchall())[0][0]
-    cursor.close()
-    conn.close()
+    compCount_ = db_conn.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId) +" \
+                    AND frames.status="+ str(constants.framesDone), dictionary=True)
+    compCount = compCount_[0][0]
+    totalCount_ = db_conn.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
+    totalCount = totalCount_[0][0]
     if(totalCount == compCount) :
       return(constants.taskDone)
     #elif(((totalCount - compCount) == 0) and (totalCount != 0)):
@@ -1276,36 +932,16 @@ def checkTaskCompleted(taskId):
     else:
       return(-2)
   except:
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(-1)
     
     
 def setTaskStatus(taskId,status):
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE tasks SET status="+ str(status) +" WHERE id="+ str(taskId))
-    cursor.close()
-    conn.close()
+    db_conn.execute("UPDATE tasks SET status="+ str(status) +" WHERE id="+ str(taskId))
     logging.debug("Updated task:"+ str(taskId) +" status to "+ str(status))
     return(1)
   except:
     logging.error(str(sys.exc_info()))
-    try:
-      cursor.close()
-    except:
-      pass
-    try:
-      conn.close()
-    except:
-      pass
     return(0)
 
 def reapAll():

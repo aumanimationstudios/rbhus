@@ -1261,12 +1261,12 @@ def setHostResMem(hostName,freeRam='0',freeSwap='0', load1='0', load5='0', load1
   try:
     conn = db.connRbhus()
     cursor = conn.cursor()
-    cursor.execute("UPDATE hostResource SET freeRam=" + str(freeRam) \
-	      +", freeSwap="+ str(freeSwap) \
-	      +", load1="+ str(load1) \
-	      +", load5="+ str(load5) \
-	      +", load10="+ str(load10) \
-	      +" WHERE hostName=\'"+ str(hostName) +"\'")
+    cursor.execute("UPDATE hostResource SET freeRam=\'" + str(freeRam) +"\' \
+	      , \'freeSwap="+ str(freeSwap) +"\' \
+	      , load1=\'"+ str(load1) +"\' \
+	      , load5=\'"+ str(load5) +"\' \
+	      , load10=\'"+ str(load10) +"\' \
+	       WHERE hostName=\'"+ str(hostName) +"\'")
     cursor.close()
     conn.close()
   except:
