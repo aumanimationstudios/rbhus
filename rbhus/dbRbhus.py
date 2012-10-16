@@ -26,7 +26,6 @@ class dbRbhus:
         con = self._connDb("dbRbhus","rbhus")
         print("Db connected")
         return(con)
-        break
       except:
         print("Db not connected : "+ str(sys.exc_info()))
       time.sleep(1)
