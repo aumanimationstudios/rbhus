@@ -81,11 +81,10 @@ def dbConnectTest():
   pass
   
   #These are the tasks that need to get inserted into "frames" table 
-def getWaitingTasks(pendingTasks):
+def getWaitingTasks(pendingTasks,db_conn=dbRbhus.dbRbhus()):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("getPendingTasks")
-    db_conn = dbRbhus.dbRbhus()
     while(1):
       rows = {}
       logging.error("ROWS WTF2 : "+ str(rows))
@@ -119,11 +118,10 @@ def getWaitingTasks(pendingTasks):
     return(pid)
   
   
-def initWaitingTasks(pendingTasks):
+def initWaitingTasks(pendingTasks, db_conn=dbRbhus.dbRbhus()):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("initWaitingTasks")
-    db_conn = dbRbhus.dbRbhus()
     while(1):
       row = {}
       while(1):
@@ -301,11 +299,10 @@ def getFreeHosts():
   return(freeHosts)
       
 
-def checkClientAlive():
+def checkClientAlive(db_conn=dbRbhus.dbRbhus()):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("checkClientAlive")
-    db_conn = dbRbhus.dbRbhus()
     maxPids = 100
     pidCount = 0
     while(1):
@@ -749,16 +746,12 @@ def getBestHost(activeTask):
     
     
   
-def scheduler():
+def scheduler(db_conn = dbRbhus.dbRbhus()):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("scheduler")
-    db_conn = dbRbhus.dbRbhus()
     while(1):
       activeTasks = arrangedActiveTasks()
-      
-      
-      
       #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
       if(activeTasks):
         #logic for afterTasks
@@ -826,11 +819,11 @@ def scheduler():
   else:
     return(pid)
  
-def setCompletedTasks():
+
+def setCompletedTasks(db_conn=dbRbhus.dbRbhus()):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("setCompletedTasks")
-    db_conn = dbRbhus.dbRbhus()
     while(1):
       tasks = getActiveTasks()
       logging.debug("active tasks wtf5 : "+ str(tasks))
@@ -861,11 +854,10 @@ def getHungFrames(taskId):
     
 
 
-def resetHungFramesProc():
+def resetHungFramesProc(db_conn=dbRbhus.dbRbhus()):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("resetHungFramesProc")
-    db_conn = dbRbhus.dbRbhus()
     while(1):
       tasks = getActiveTasks()
       if(tasks):
@@ -881,7 +873,7 @@ def resetHungFramesProc():
     
     
     
-def autoStopper():
+def autoStopper(db_conn=dbRbhus.dbRbhus()):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("autoStopper")
@@ -972,7 +964,7 @@ def reapAll():
 if __name__ == "__main__":
   setproctitle.setproctitle("RBHUS:server")
   signal.signal(signal.SIGTERM,sigHandle)
-  db_conn = dbRbhus.dbRbhus()
+#  db_conn = dbRbhus.dbRbhus()
   pendTasks = multiprocessing.Queue()
   getWaitingTasks(pendTasks)
   time.sleep(1)
