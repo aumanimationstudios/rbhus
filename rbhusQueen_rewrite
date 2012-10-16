@@ -34,7 +34,7 @@ LOG_FILENAME = '/var/log/rbhusServer.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
-db_conn = dbRbhus.dbRbhus()
+#db_conn = dbRbhus.dbRbhus()
 
 def sigHandle(sigNum, frame):
   myPid = posix.getpid()
@@ -964,6 +964,7 @@ def reapAll():
 if __name__ == "__main__":
   setproctitle.setproctitle("RBHUS:server")
   signal.signal(signal.SIGTERM,sigHandle)
+  db_conn = dbRbhus.dbRbhus()
   pendTasks = multiprocessing.Queue()
   getWaitingTasks(pendTasks)
   time.sleep(1)
