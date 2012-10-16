@@ -85,6 +85,7 @@ def getWaitingTasks(pendingTasks):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("getPendingTasks")
+    db_conn = dbRbhus.dbRbhus()
     while(1):
       rows = {}
       logging.error("ROWS WTF2 : "+ str(rows))
@@ -122,6 +123,7 @@ def initWaitingTasks(pendingTasks):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("initWaitingTasks")
+    db_conn = dbRbhus.dbRbhus()
     while(1):
       row = {}
       while(1):
@@ -303,6 +305,7 @@ def checkClientAlive():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("checkClientAlive")
+    db_conn = dbRbhus.dbRbhus()
     maxPids = 100
     pidCount = 0
     while(1):
@@ -375,6 +378,7 @@ def pingClientProcess(client,ipAddr):
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("ping: "+ str(client))
+    db_conn = dbRbhus.dbRbhus()
     status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
     pingstatus = 0
     sockstatus = 0
@@ -749,6 +753,7 @@ def scheduler():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("scheduler")
+    db_conn = dbRbhus.dbRbhus()
     while(1):
       activeTasks = arrangedActiveTasks()
       
@@ -825,6 +830,7 @@ def setCompletedTasks():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("setCompletedTasks")
+    db_conn = dbRbhus.dbRbhus()
     while(1):
       tasks = getActiveTasks()
       logging.debug("active tasks wtf5 : "+ str(tasks))
@@ -859,6 +865,7 @@ def resetHungFramesProc():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("resetHungFramesProc")
+    db_conn = dbRbhus.dbRbhus()
     while(1):
       tasks = getActiveTasks()
       if(tasks):
@@ -878,6 +885,7 @@ def autoStopper():
   pid = posix.fork()
   if(pid == 0):
     setproctitle.setproctitle("autoStopper")
+    db_conn = dbRbhus.dbRbhus()
     while(1):
       tasks = getActiveTasks()
       if(tasks):
