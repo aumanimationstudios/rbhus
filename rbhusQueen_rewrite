@@ -35,6 +35,7 @@ logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
 db_conn = dbRbhus.dbRbhus()
+print "WTF#"
 
 def sigHandle(sigNum, frame):
   myPid = posix.getpid()
