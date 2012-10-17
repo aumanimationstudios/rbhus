@@ -191,7 +191,12 @@ def getActiveTasks():
                     AND tasks.id=tasksLog.id \
                     AND tasks.afterTime<=NOW() \
                     ORDER BY tasks.priority DESC", dictionary=True)
-    print("faaaaaaaaaaaaaaaaaaack : "+ str(rows1))
+    
+    #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem
+    if(rows1):
+      if(not 'priority' in rows1[0].keys()):
+        print("faaaaaaaaack ..getActiveTasks missed!!!! ")
+        return(0)
   except:
     logging.error(str(sys.exc_info()))
     return(0)
