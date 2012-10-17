@@ -73,7 +73,7 @@ def getHostInfo(status):
   #These are the tasks that need to get inserted into "frames" table 
 def getWaitingTasks(pendingTasks):
   setproctitle.setproctitle("getPendingTasks")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     rows = 0
     #logging.error("ROWS WTF2 : "+ str(rows))
@@ -107,7 +107,7 @@ def getWaitingTasks(pendingTasks):
   
 def initWaitingTasks(pendingTasks):
   setproctitle.setproctitle("initWaitingTasks")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     row = {}
     while(1):
@@ -312,7 +312,7 @@ def checkClientAlive():
 
 def pingClientProcess(client,ipAddr):
   setproctitle.setproctitle("ping_"+ str(client))
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
   pingstatus = 0
   sockstatus = 0
@@ -338,8 +338,7 @@ def pingClientProcess(client,ipAddr):
       sockstatus = 1
       break
     except:
-      e = sys.exc_info()[1]   
-      logging.error("Screwed pingClientProcess sock connect : "+ client +" : "+ str(e))
+      logging.error("Screwed pingClientProcess sock connect : "+ client +" : "+ str(sys.exc_info()))
       sockstatus = 0
       clientSocket.close()
     time.sleep(1)
@@ -396,8 +395,7 @@ def resetAssignedFrame(hostName, statusReset=0):
     logging.debug("I CANT BELIVE I AM HERE for host : "+ str(hostName) +" : Resetting frame status to "+ constants.framesStatus[statusReset])
     return(1)
   except:
-    e = sys.exc_info()
-    logging.error("resetAssignedFrame : "+ str(e))
+    logging.error("resetAssignedFrame : "+ str(sys.exc_info()))
     return(0)
   
 #def createRamDisk():
@@ -683,7 +681,7 @@ def getBestHost(activeTask):
   
 def scheduler():
   setproctitle.setproctitle("scheduler")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     activeTasks = arrangedActiveTasks()
     #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
@@ -754,7 +752,7 @@ def scheduler():
 
 def setCompletedTasks():
   setproctitle.setproctitle("setCompletedTasks")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     tasks = getActiveTasks()
     
@@ -789,7 +787,7 @@ def getHungFrames(taskId):
 
 def resetHungFramesProc():
   setproctitle.setproctitle("resetHungFramesProc")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     tasks = getActiveTasks()
     if(tasks):
@@ -805,7 +803,7 @@ def resetHungFramesProc():
     
 def autoStopper():
   setproctitle.setproctitle("autoStopper")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     tasks = getActiveTasks()
     if(tasks):
