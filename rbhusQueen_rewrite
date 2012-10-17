@@ -272,7 +272,7 @@ def checkClientAlive():
   maxPids = 100
   pIds = []
   while(1):
-    time.sleep(15)
+    time.sleep(30)
     hostInfos = getHostInfo(status="ALL")
     if(not hostInfos):
       continue
@@ -472,7 +472,6 @@ def arrangedActiveTasks():
   #logging.debug("activeTasks :"+ str(activeTasks))
   if(activeTasks):
     for activeTask in activeTasks:
-      print("activeTasksssssssssssssssssssssssss :"+ str(activeTasks))
       try:
         priorities[activeTask["priority"]].append(activeTask)
       except:
@@ -763,7 +762,6 @@ def setCompletedTasks():
     
     if(tasks):
       for task in tasks:
-        print("rrrrrrrrrrrestttt : "+ str(task))
         if(task):
           status = checkTaskCompleted(task['id'])
           #logging.debug("active tasks wtf5 status: "+ str(status))
@@ -815,7 +813,6 @@ def autoStopper():
     tasks = getActiveTasks()
     if(tasks):
       for task in tasks:
-        print "ttttttttttttest "+ str(task)
         if(task):
           allFrames = getAllFrames(task['id'])
           framesThresh = getFramesRerunThresh(task['id'])
