@@ -191,13 +191,11 @@ def getActiveTasks():
                     AND tasks.id=tasksLog.id \
                     AND tasks.afterTime<=NOW() \
                     ORDER BY tasks.priority DESC", dictionary=True)
+    print("faaaaaaaaaaaaaaaaaaack : "+ str(rows))
   except:
     logging.error(str(sys.exc_info()))
     return(0)
-  if(rows):
-    return(rows)
-  else:
-    return(0)
+  return(rows)
     
 
 def getUnassignedFrames(taskId):
