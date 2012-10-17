@@ -469,6 +469,7 @@ def arrangedActiveTasks():
   #logging.debug("activeTasks :"+ str(activeTasks))
   if(activeTasks):
     for activeTask in activeTasks:
+      print("activeTasksssssssssssssssssssssssss :"+ str(activeTasks))
       try:
         priorities[activeTask["priority"]].append(activeTask)
       except:
@@ -761,15 +762,17 @@ def setCompletedTasks():
     
     if(tasks):
       for task in tasks:
-        status = checkTaskCompleted(task['id'])
-        #logging.debug("active tasks wtf5 status: "+ str(status))
-        #logging.debug("active tasks wtf5 : "+ str(task['id']) +"\n\n")
+        print("rrrrrrrrrrrestttt : "+ str(task))
+        if(task):
+          status = checkTaskCompleted(task['id'])
+          #logging.debug("active tasks wtf5 status: "+ str(status))
+          #logging.debug("active tasks wtf5 : "+ str(task['id']) +"\n\n")
         
-        if(status >= 0):
-          while(1):
-            if(setTaskStatus(task['id'],status)):
-              break
-            time.sleep(0.1)
+          if(status >= 0):
+            while(1):
+              if(setTaskStatus(task['id'],status)):
+                break
+              time.sleep(0.1)
     time.sleep(0.1)
  
  
