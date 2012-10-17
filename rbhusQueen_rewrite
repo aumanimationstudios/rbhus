@@ -58,15 +58,15 @@ def killProcessKids():
 def getHostInfo(status):
   try:
     if(status == "ALL"):
-      rows = db_conn.execute("SELECT * FROM hostInfo", dictionary=True)
+      rows9 = db_conn.execute("SELECT * FROM hostInfo", dictionary=True)
     elif(status == "ENABLED"):
-      rows = db_conn.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoEnable), dictionary=True)
+      rows9 = db_conn.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoEnable), dictionary=True)
     else:
-      rows = db_conn.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable), dictionary=True)
+      rows9 = db_conn.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable), dictionary=True)
   except:
     logging.error(str(sys.exc_info()))
     return(0)
-  return(rows)
+  return(rows9)
   
 
   
@@ -186,21 +186,21 @@ def initWaitingTasks(pendingTasks):
 
 def getActiveTasks():
   try:
-    rows = db_conn.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
+    rows1 = db_conn.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
                     WHERE tasks.status=\'"+ str(constants.taskActive) +"\' \
                     AND tasks.id=tasksLog.id \
                     AND tasks.afterTime<=NOW() \
                     ORDER BY tasks.priority DESC", dictionary=True)
-    print("faaaaaaaaaaaaaaaaaaack : "+ str(rows))
+    print("faaaaaaaaaaaaaaaaaaack : "+ str(rows1))
   except:
     logging.error(str(sys.exc_info()))
     return(0)
-  return(rows)
+  return(rows1)
     
 
 def getUnassignedFrames(taskId):
   try:
-    rows = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows2 = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
                     AND frames.id= tasks.id \
                     AND frames.status="+ str(constants.framesUnassigned) +" \
@@ -209,14 +209,14 @@ def getUnassignedFrames(taskId):
   except:
     logging.error(str(sys.exc_info()))
     return(0)
-  return(rows)
+  return(rows2)
   
   
 
     
 def getPotentHosts():
   try:
-    rows = db_conn.execute("SELECT hostInfo.hostName, \
+    rows3 = db_conn.execute("SELECT hostInfo.hostName, \
                            hostInfo.totalCpus, \
                            hostResource.freeCpus, \
                            hostInfo.totalRam, \
@@ -242,7 +242,7 @@ def getPotentHosts():
   except:
     logging.error(str(sys.exc_info()))    
     return(0)
-  return(rows)
+  return(rows3)
   
 
 def getFreeHosts():
@@ -454,10 +454,10 @@ def assignFrameToHost(hostDetail, taskFrame):
 
 def getEffectiveDetails(hostName):
   try:
-    rows = db_conn.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'"+ hostName +"\'", dictionary=True)
+    rows4 = db_conn.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'"+ hostName +"\'", dictionary=True)
   except:
     return(0)
-  return(rows[0])
+  return(rows4[0])
     
 def arrangedActiveTasks():
   priorities = {}
@@ -571,18 +571,18 @@ def arrangedActiveTasks():
     
 def getAllFrames(taskId):
   try:
-    rows = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows5 = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id=\'"+ str(taskId) +"\' \
                     AND tasks.id=frames.id \
                     ORDER BY frames.frameId", dictionary=True)
   except:
     logging.error(str(sys.exc_info()))
     return(0)
-  return(rows)
+  return(rows5)
   
 def getRunFrames(taskId):
   try:
-    rows = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows6 = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
                     AND tasks.id=frames.id \
                     AND tasks.status="+ str(constants.taskActive) +" \
@@ -591,7 +591,7 @@ def getRunFrames(taskId):
   except:
     logging.error(str(sys.exc_info()))
     return(0)
-  return(rows)
+  return(rows6)
     
 def resetFailedFrames(taskId):
   try:
@@ -776,7 +776,7 @@ def setCompletedTasks():
  
 def getHungFrames(taskId):
   try:
-    rows = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows7 = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
                     AND frames.id= tasks.id \
                     AND frames.status="+ str(constants.framesHung) +" \
@@ -785,7 +785,7 @@ def getHungFrames(taskId):
   except:
     logging.error(str(sys.exc_info()))
     return(0)
-  return(rows)
+  return(rows7)
     
 
 
@@ -835,16 +835,16 @@ def autoStopper():
 # Frames that have reached rerunThresh
 def getFramesRerunThresh(taskId):
   try:
-    rows = db_conn.execute("SELECT frames.* FROM frames, tasks \
+    rows8 = db_conn.execute("SELECT frames.* FROM frames, tasks \
                     WHERE tasks.id=\'"+ str(taskId) +"\' \
                     AND tasks.id=frames.id \
                     AND frames.runCount>=tasks.rerunThresh \
                     AND frames.status!="+ str(constants.framesDone) +" \
                     ORDER BY frames.frameId", dictionary=True)
   except:
-    logging.error(str(sys.exc_info()[1]))
+    logging.error(str(sys.exc_info()))
     return(0)
-  return(rows)
+  return(rows8)
 
 
 #Return value is the status of the task that needs to be set
