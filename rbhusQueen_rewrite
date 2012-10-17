@@ -342,7 +342,7 @@ def pingClientProcess(client,ipAddr):
       logging.error("Screwed pingClientProcess sock connect : "+ client +" : "+ str(sys.exc_info()))
       sockstatus = 0
       clientSocket.close()
-    time.sleep(1)
+    time.sleep(5)
     if(tryCount <= 0):
       break
   if(tryCount <= 0):
