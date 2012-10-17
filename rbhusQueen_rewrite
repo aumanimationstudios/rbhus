@@ -25,6 +25,8 @@ import logging
 import time
 import signal
 import setproctitle
+import inspect
+import tempfile
 import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
 import psi
@@ -35,34 +37,22 @@ logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
 db_conn = dbRbhus.dbRbhus()
+tempDir = tempfile.gettempdir()
+mainPidFile = tempDir + os.sep +"rbusServer.pids"
 time.sleep(5)
 
 def sigHandle(sigNum, frame):
-  myPid = posix.getpid()
   logging.debug("signal handler called with " + str(sigNum) +" signal")
-  logging.debug("my pid "+ str(myPid))
-  killProcessKids(myPid)
+  killProcessKids()
   return(1)
 
-def killProcessKids(ppid):
-  try:
-    pidDets = psi.process.Process(ppid)
-  except:
-    logging.debug("No details : "+ str(ppid))
-    return(0)
-  try:
-    pidKids = pidDets.children()
-  except:
-    logging.error("No children")
-    return(0)
-  if(not pidKids):
-    logging.debug("killing kid "+ str(ppid))
-    posix.kill(int(ppid),9)
-    return(1)
-  else:
-    for pidKid in pidKids:
-      killProcessKids(pidKid.pid)
-
+def killProcessKids():
+  allPids = getMainPids()
+  if(allPids):
+    for x in allPids:
+      logging.debug("killing kid "+ str(x))
+      posix.kill(int(x),9)
+  
   
 # Get all the info on the hosts 
 def getHostInfo(status):
@@ -74,6 +64,7 @@ def getHostInfo(status):
     else:
       rows = db_conn.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable), dictionary=True)
   except:
+    logging.error(str(sys.exc_info()))
     return(0)
   return(rows)
   
@@ -81,148 +72,117 @@ def getHostInfo(status):
   
   #These are the tasks that need to get inserted into "frames" table 
 def getWaitingTasks(pendingTasks):
-  pid = posix.fork()
-  if(pid == 0):
-    setproctitle.setproctitle("getPendingTasks")
-    db_conn = dbRbhus.dbRbhus()
-    while(1):
-      rows = 0
-      logging.error("ROWS WTF2 : "+ str(rows))
-      rows = db_conn.execute("SELECT * FROM tasks WHERE status="+ str(constants.taskWaiting), dictionary=True)
-      logging.error("ROWS WTF3 : "+ str(rows))
-      if(rows):
-        for row in rows:
-          if(row):
-            pendingTasks.put(row)
-            idTask = row['id']
-            logging.debug("Adding task wtf: "+ str(row))
-            ##DO NOT REMOVE THE PENDING STATUS
-            while(1):
-              try:  
-                db_conn.execute("UPDATE tasks SET status="+ str(constants.taskPending) +" WHERE (id = "+ str(idTask) +") and ( status = "+ str(constants.taskWaiting) +")")
-                logging.debug("updating tasks table with pending status wtf4")
-                break
-              except:
-                logging.error("Screwed updating tasks table with pending status : "+ str(sys.exc_info()))
-                continue
-              time.sleep(0.1)
-              
-            try:
-              db_conn.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
+  setproctitle.setproctitle("getPendingTasks")
+  #db_conn = dbRbhus.dbRbhus()
+  while(1):
+    rows = 0
+    #logging.error("ROWS WTF2 : "+ str(rows))
+    rows = db_conn.execute("SELECT * FROM tasks WHERE status="+ str(constants.taskWaiting), dictionary=True)
+    #logging.error("ROWS WTF3 : "+ str(rows))
+    if(rows):
+      for row in rows:
+        if(row):
+          pendingTasks.put(row)
+          idTask = row['id']
+          #logging.debug("Adding task wtf: "+ str(row))
+          ##DO NOT REMOVE THE PENDING STATUS
+          while(1):
+            try:  
+              db_conn.execute("UPDATE tasks SET status="+ str(constants.taskPending) +" WHERE (id = "+ str(idTask) +") and ( status = "+ str(constants.taskWaiting) +")")
+              #logging.debug("updating tasks table with pending status wtf4")
+              break
             except:
-              e = sys.exc_info()
-              logging.error("Screwed inserting into tasklog : "+ str(e))
-            #time.sleep(0.1)
-      time.sleep(1)
-  else:
-    return(pid)
-  
+              logging.error("Screwed updating tasks table with pending status : "+ str(sys.exc_info()))
+              continue
+            time.sleep(0.1)
+            
+          try:
+            db_conn.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
+          except:
+            e = sys.exc_info()
+            logging.error("Screwed inserting into tasklog : "+ str(e))
+          #time.sleep(0.1)
+    time.sleep(1)
+
   
 def initWaitingTasks(pendingTasks):
-  pid = posix.fork()
-  if(pid == 0):
-    setproctitle.setproctitle("initWaitingTasks")
-    db_conn = dbRbhus.dbRbhus()
+  setproctitle.setproctitle("initWaitingTasks")
+  #db_conn = dbRbhus.dbRbhus()
+  while(1):
+    row = {}
     while(1):
-      row = {}
+      try:
+        row = pendingTasks.get(False)
+        break
+      except:
+        #logging.error("Screwed initWaitingTasks WTF1 : "+ str(sys.exc_info()))
+        time.sleep(0.2)
+    if(row):  
+      idTask = row['id']
+      fRange = row['fRange']
+      frames = []
+      
+      for a in fRange.split(","):
+        frange = a.split(":")
+        pad = 1
+        Frange = frange[0]
+        if(len(frange) == 2):
+          pad = frange[1]
+        logging.debug("PAD : "+ str(pad))
+        logging.debug(str(int(Frange.split("-")[0])))
+        logging.debug(str(int(Frange.split("-")[-1]) + 1))
+        for b in range(int(Frange.split("-")[0]), int(Frange.split("-")[-1]) + 1, int(pad)):
+          frames.append(b)
+          
+      tFrames = []
+      framesTable = 0
       while(1):
         try:
-          row = pendingTasks.get(False)
+          framesTable = getAllFrames(idTask)
           break
         except:
-          logging.error("Screwed initWaitingTasks WTF1 : "+ str(sys.exc_info()))
-          time.sleep(0.2)
-      if(row):  
-        idTask = row['id']
-        fRange = row['fRange']
-        frames = []
+          pass
+        time.sleep(0.5)
         
-        for a in fRange.split(","):
-          frange = a.split(":")
-          pad = 1
-          Frange = frange[0]
-          if(len(frange) == 2):
-            pad = frange[1]
-          logging.debug("PAD : "+ str(pad))
-          logging.debug(str(int(Frange.split("-")[0])))
-          logging.debug(str(int(Frange.split("-")[-1]) + 1))
-          for b in range(int(Frange.split("-")[0]), int(Frange.split("-")[-1]) + 1, int(pad)):
-            frames.append(b)
-            
-        tFrames = []
-        framesTable = 0
-        while(1):
-          try:
-            framesTable = getAllFrames(idTask)
-            break
-          except:
-            pass
-          time.sleep(0.5)
-          
-        if(framesTable):
-          for frameTable in framesTable:
-            tFrames.append(frameTable['frameId'])
-        
-        tFramesSet = set(tFrames)
-        framesSet = set(frames)
-        forDelSet = tFramesSet.difference(framesSet)
-        for forDel in forDelSet:
-          while(1):
-            try:
-              db_conn.execute("DELETE FROM frames WHERE frames.id="+ str(idTask) +" AND frameId="+ str(forDel))
-              break
-            except:
-              logging.error("Screwed initWaitingTasks (Delete frames table (connection)) : "+ str(sys.exc_info()))
-            time.sleep(0.1)
-        
-        
-        #while(1):
-          #try:
-            #conn = db.connRbhus()
-            #cursor = conn.cursor()
-            #cursor.execute("UPDATE tasks SET status='"+ str(constants.taskActive) +"' WHERE id='"+ str(idTask) +"'")
-            #cursor.close()
-            #conn.close()
-            #logging.debug("Updated task:"+ str(idTask) +" status to 2(active)")
-            #break
-          #except:
-            #logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
-            #try:
-              #cursor.close()
-            #except:
-              #pass
-            #try:
-              #conn.close()
-            #except:
-              #pass
-          #time.sleep(0.2)    
-        
+      if(framesTable):
+        for frameTable in framesTable:
+          tFrames.append(frameTable['frameId'])
       
-        for frame in frames:
-          while(1):
-            try:
-              db_conn.execute("INSERT INTO frames (id, frameId) VALUES ("+ str(idTask) +", "+ str(frame) +")")
-              break
-            except:
-              logging.error("Screwed initWaitingTasks (Insert frames table (connection)) : "+ str(idTask) +" : "+ str(sys.exc_info()))
-              if(str(sys.exc_info()).find("IntegrityError") >= 0):
-                break
-            time.sleep(0.1)
-  
-        logging.debug("Initialized frames table")
+      tFramesSet = set(tFrames)
+      framesSet = set(frames)
+      forDelSet = tFramesSet.difference(framesSet)
+      for forDel in forDelSet:
         while(1):
           try:
-            db_conn.execute("UPDATE tasks SET status="+ str(constants.taskActive) +" WHERE id="+ str(idTask))
-            logging.debug("Updated task:"+ str(idTask) +" status to 2(active)")
+            db_conn.execute("DELETE FROM frames WHERE frames.id="+ str(idTask) +" AND frameId="+ str(forDel))
             break
           except:
-            logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
+            logging.error("Screwed initWaitingTasks (Delete frames table (connection)) : "+ str(sys.exc_info()))
           time.sleep(0.1)
-      time.sleep(0.1)
-          
-  else:
-    return(pid)
-  
+    
+      for frame in frames:
+        while(1):
+          try:
+            db_conn.execute("INSERT INTO frames (id, frameId) VALUES ("+ str(idTask) +", "+ str(frame) +")")
+            break
+          except:
+            logging.error("Screwed initWaitingTasks (Insert frames table (connection)) : "+ str(idTask) +" : "+ str(sys.exc_info()))
+            if(str(sys.exc_info()).find("IntegrityError") >= 0):
+              break
+          time.sleep(0.1)
+
+      logging.debug("Initialized frames table")
+      while(1):
+        try:
+          db_conn.execute("UPDATE tasks SET status="+ str(constants.taskActive) +" WHERE id="+ str(idTask))
+          logging.debug("Updated task:"+ str(idTask) +" status to 2(active)")
+          break
+        except:
+          logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
+        time.sleep(0.1)
+    time.sleep(0.1)
+        
+
 
 def getActiveTasks():
   try:
@@ -301,150 +261,123 @@ def getFreeHosts():
       
 
 def checkClientAlive():
-  pid = posix.fork()
-  if(pid == 0):
-    setproctitle.setproctitle("checkClientAlive")
-    db_conn = dbRbhus.dbRbhus()
-    maxPids = 100
-    pidCount = 0
+  setproctitle.setproctitle("checkClientAlive")
+  #Sdb_conn = dbRbhus.dbRbhus()
+  maxPids = 100
+  pIds = []
+  while(1):
+    time.sleep(15)
+    hostInfos = getHostInfo(status="ALL")
+    if(not hostInfos):
+      continue
+    
     while(1):
-      time.sleep(15)
-      hostInfos = getHostInfo(status="ALL")
-      if(not hostInfos):
-        continue
-      for hostInfo in hostInfos:
-        hostName = hostInfo['hostName']
-        ipAddr = hostInfo['ip']
-        logging.debug("Pinging "+ hostName + " with ip : "+ str(ipAddr))
-        pingClientProcess(hostName,ipAddr)
-        pidCount += 1
-        if(pidCount >= maxPids):
-          while(1):
-            time.sleep(1)
-            try:
-              (pid,exitStatus) = posix.waitpid(-1,posix.WNOHANG)
-            except OSError, e :
-              logging.error(e)
-              break
-            if(pid == 0):
-              continue
-            if(pid != -1):
-              #logging.debug(str(pid) +" :: "+ str(exitStatus))
-              pidCount += -1
-            else:
-              break
-            if(pidCount < maxPids):
-              break
-        while(1):
-          time.sleep(1)
-          try:
-            (pid,exitStatus) = posix.waitpid(-1,posix.WNOHANG)
-          except OSError, e :
-            logging.error(e)
-            break
-          if(pid == 0):
-            break
-          if(pid != -1):
-            #logging.debug(str(pid) +" :: "+ str(exitStatus))
-            pidCount += -1
+      if(len(pIds) >= maxPids):
+        for i in range(0,len(pIds)):
+          if(pIds[i].is_alive()):
+            pass
           else:
+            del(pIds[i])
             break
-          if(pidCount < maxPids):
-            break
-            
-      if(pidCount >= maxPids):
-        while(1):
-          time.sleep(1)
-          try:
-            (pid,exitStatus) = posix.waitpid(-1,posix.WNOHANG)
-          except OSError, e :
-            logging.error(e)
-            break
-          if(pid == 0):
-            #print("PID : "+ str(pid))
-            continue
-          if(pid != -1):
-            pidCount += -1
+        if(len(pIds) < maxPids):
+          break
+        if(not pIds):
+          break
+      else:
+        break
+      time.sleep(1)
+    
+    for hostInfo in hostInfos:
+      hostName = hostInfo['hostName']
+      ipAddr = hostInfo['ip']
+      logging.debug("Pinging "+ hostName + " with ip : "+ str(ipAddr))
+      
+      pingClientProcess_proc = multiprocessing.Process(target=pingClientProcess, args=(hostName,ipAddr,))
+      pIds.append(pingClientProcess_proc)
+      pingClientProcess_proc.start()
+      
+      while(1):
+        for i in range(0,len(pIds)):
+          if(pIds[i].is_alive()):
+            pass
           else:
+            del(pIds[i])
             break
-          if(pidCount < maxPids):
-            break
-  else:
-    return(pid)
-	      
+        if(len(pIds) < maxPids):
+          break
+        if(not pIds):
+          break
+        time.sleep(1)
+      
 
 def pingClientProcess(client,ipAddr):
-  pid = posix.fork()
-  if(pid == 0):
-    setproctitle.setproctitle("ping_"+ str(client))
-    db_conn = dbRbhus.dbRbhus()
-    status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
-    pingstatus = 0
-    sockstatus = 0
-    if(status == 0):
-      logging.debug("Connected to "+ client)
-      pingstatus = 1
-    else:
-      logging.debug("Not able to connect to "+ client)
-      while(1):
-        if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
-          break
-        time.sleep(0.3)
-      exit(1)
-
-    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    tryCount = 5 
+  setproctitle.setproctitle("ping_"+ str(client))
+  #db_conn = dbRbhus.dbRbhus()
+  status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
+  pingstatus = 0
+  sockstatus = 0
+  if(status == 0):
+    logging.debug("Connected to "+ client)
+    pingstatus = 1
+  else:
+    logging.debug("Not able to connect to "+ client)
     while(1):
-      tryCount = tryCount - 1
-      try:
-        clientSocket.connect((ipAddr,6660))
-        clientSocket.settimeout(15)
-        logging.debug("Connected to "+ client)
-        sockstatus = 1
+      if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
         break
-      except:
-        e = sys.exc_info()[1]   
-        logging.error("Screwed pingClientProcess sock connect : "+ client +" : "+ str(e))
-        sockstatus = 0
-        clientSocket.close()
-      time.sleep(1)
-      if(tryCount <= 0):
-        break
-    if(tryCount <= 0):
-      while(1):
-        if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
-          break
-        time.sleep(0.3)
-        clientSocket.close()
-      exit(1)
+      time.sleep(0.3)
+    exit(1)
 
-    clientSocket.send("ALIVE")
-    reply = ""
+  clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  tryCount = 5 
+  while(1):
+    tryCount = tryCount - 1
     try:
-      reply = clientSocket.recv(1024)
-      clientSocket.close()
+      clientSocket.connect((ipAddr,6660))
+      clientSocket.settimeout(15)
+      logging.debug("Connected to "+ client)
       sockstatus = 1
+      break
     except:
-      e = sys.exc_info()[1]
-      logging.error("Screwed pingClientProcess sock send : "+ client +" : "+ str(e))
+      e = sys.exc_info()[1]   
+      logging.error("Screwed pingClientProcess sock connect : "+ client +" : "+ str(e))
       sockstatus = 0
       clientSocket.close()
-      #exit(1)
-    if((sockstatus == 1) and (pingstatus == 1)):
-      while(1):
-        if(setHostAliveStatus(client,constants.hostAliveAlive) == 1):
-          break
-        time.sleep(0.3)
-      pass
-    else:
-      while(1):
-        if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
-          break
-        time.sleep(0.3)
+    time.sleep(1)
+    if(tryCount <= 0):
+      break
+  if(tryCount <= 0):
+    while(1):
+      if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
+        break
+      time.sleep(0.3)
+      clientSocket.close()
+    exit(1)
 
-    exit(0)
+  clientSocket.send("ALIVE")
+  reply = ""
+  try:
+    reply = clientSocket.recv(1024)
+    clientSocket.close()
+    sockstatus = 1
+  except:
+    e = sys.exc_info()[1]
+    logging.error("Screwed pingClientProcess sock send : "+ client +" : "+ str(e))
+    sockstatus = 0
+    clientSocket.close()
+    #exit(1)
+  if((sockstatus == 1) and (pingstatus == 1)):
+    while(1):
+      if(setHostAliveStatus(client,constants.hostAliveAlive) == 1):
+        break
+      time.sleep(0.3)
+    pass
   else:
-    return(pid)
+    while(1):
+      if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
+        break
+      time.sleep(0.3)
+
+  exit(0)
 
 
 def setHostAliveStatus(hostName, status):
@@ -643,6 +576,7 @@ def getAllFrames(taskId):
                     AND tasks.id=frames.id \
                     ORDER BY frames.frameId", dictionary=True)
   except:
+    logging.error(str(sys.exc_info()))
     return(0)
   return(rows)
   
@@ -655,6 +589,7 @@ def getRunFrames(taskId):
                     AND frames.status !="+ str(constants.framesUnassigned) +" \
                     ORDER BY frames.frameId", dictionary=True)
   except:
+    logging.error(str(sys.exc_info()))
     return(0)
   return(rows)
     
@@ -665,8 +600,7 @@ def resetFailedFrames(taskId):
                     OR status="+ str(constants.framesKilled) +")")
     return(1)
   except:
-    e = sys.exc_info()
-    logging.error("resetFailedFrames 2 : "+ str(e))
+    logging.error(str(sys.exc_info()))
     return(0)
   
 
@@ -678,8 +612,7 @@ def resetHungFrames(taskId, fId):
                     AND (status="+ str(constants.framesHung) +")")
     return(1)
   except:
-    e = sys.exc_info()[:2]
-    logging.error("resetHungFrames : "+ str(e))
+    logging.error(str(sys.exc_info()))
     return(0)
     
     
@@ -749,163 +682,151 @@ def getBestHost(activeTask):
     
   
 def scheduler():
-  pid = posix.fork()
-  if(pid == 0):
-    setproctitle.setproctitle("scheduler")
-    db_conn = dbRbhus.dbRbhus()
-    while(1):
-      activeTasks = arrangedActiveTasks()
-      #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
-      if(activeTasks):
-        #logic for afterTasks
-        afterTasks = {}
-      
-        for activeTask in activeTasks:
-          if(activeTask["afterTasks"]):
-            ats = activeTask["afterTasks"].split(",")
-            for at in ats:
-              try:
-                afterTasks[at.lstrip().rstrip()].append(activeTask)
-              except:
-                afterTasks[at.lstrip().rstrip()] = []
-                afterTasks[at.lstrip().rstrip()].append(activeTask)
-        if(afterTasks):
-          for ats in afterTasks.keys():
-            for ts in afterTasks[ats]:
-              indx = -1
-              try:
-                indx = activeTasks.index(ts)
-              except:
-                continue
-              if(indx != -1):
-                for activeTask in activeTasks:
-                  if(activeTask["id"] == ats):
-                    indxT = activeTasks.index(activeTask)
-                    if(indx > indxT):
-                      activeTasks.remove(activeTask)
-                      activeTasks.insert(indx,activeTask)
-                      activeTasks.remove(ts)
-                      activeTasks.insert(indxT,ts)
-                      
-        freeHosts = getFreeHosts()
-        #if(freeHosts):
-          #logging.debug("freehosts : "+ str(freeHosts))
-        if(freeHosts):
-          for activeTask in activeTasks:
-            #logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
-            assignedHost = getBestHost(activeTask)
-            taskFramesAssigned = 0
-            if(assignedHost):
-              #logging.debug("bestHost "+ str(activeTask['id']) +":" + str(assignedHost))
-              taskFrames = getUnassignedFrames(activeTask["id"])
-              #logging.debug("taskFrames "+ str(activeTask['id']) +" :"+ str(taskFrames))
-              if(taskFrames):
-                taskFrame = taskFrames[0]
-                while(1):
-                  if(assignFrameToHost(assignedHost, taskFrame)):
-                    logging.debug("ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(taskFrame["id"]) +" : "+ str(taskFrame["frameId"]))
-                    taskFramesAssigned = 1
-                    break
-                  time.sleep(0.1)
-              else:
-                while(1):
-                  if(resetFailedFrames(activeTask["id"])):
-                    logging.debug("resetFailedFrames : "+ str(activeTask['id']))
-                    break
-                  time.sleep(0.1)
-            if(taskFramesAssigned == 1):
-              break
-      time.sleep(0.05)
-      
+  setproctitle.setproctitle("scheduler")
+  #db_conn = dbRbhus.dbRbhus()
+  while(1):
+    activeTasks = arrangedActiveTasks()
+    #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
+    if(activeTasks):
+      #logic for afterTasks
+      afterTasks = {}
     
-    sys.exit(0)
-  else:
-    return(pid)
+      for activeTask in activeTasks:
+        if(activeTask["afterTasks"]):
+          ats = activeTask["afterTasks"].split(",")
+          for at in ats:
+            try:
+              afterTasks[at.lstrip().rstrip()].append(activeTask)
+            except:
+              afterTasks[at.lstrip().rstrip()] = []
+              afterTasks[at.lstrip().rstrip()].append(activeTask)
+      if(afterTasks):
+        for ats in afterTasks.keys():
+          for ts in afterTasks[ats]:
+            indx = -1
+            try:
+              indx = activeTasks.index(ts)
+            except:
+              continue
+            if(indx != -1):
+              for activeTask in activeTasks:
+                if(activeTask["id"] == ats):
+                  indxT = activeTasks.index(activeTask)
+                  if(indx > indxT):
+                    activeTasks.remove(activeTask)
+                    activeTasks.insert(indx,activeTask)
+                    activeTasks.remove(ts)
+                    activeTasks.insert(indxT,ts)
+                    
+      freeHosts = getFreeHosts()
+      #if(freeHosts):
+        #logging.debug("freehosts : "+ str(freeHosts))
+      if(freeHosts):
+        for activeTask in activeTasks:
+          #logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
+          assignedHost = getBestHost(activeTask)
+          taskFramesAssigned = 0
+          if(assignedHost):
+            #logging.debug("bestHost "+ str(activeTask['id']) +":" + str(assignedHost))
+            taskFrames = getUnassignedFrames(activeTask["id"])
+            #logging.debug("taskFrames "+ str(activeTask['id']) +" :"+ str(taskFrames))
+            if(taskFrames):
+              taskFrame = taskFrames[0]
+              while(1):
+                if(assignFrameToHost(assignedHost, taskFrame)):
+                  logging.debug("ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(taskFrame["id"]) +" : "+ str(taskFrame["frameId"]))
+                  taskFramesAssigned = 1
+                  break
+                time.sleep(0.1)
+            else:
+              while(1):
+                if(resetFailedFrames(activeTask["id"])):
+                  logging.debug("resetFailedFrames : "+ str(activeTask['id']))
+                  break
+                time.sleep(0.1)
+          if(taskFramesAssigned == 1):
+            break
+    time.sleep(0.05)
+    
+  
+  sys.exit(0)
  
 
 def setCompletedTasks():
-  pid = posix.fork()
-  if(pid == 0):
-    setproctitle.setproctitle("setCompletedTasks")
-    db_conn = dbRbhus.dbRbhus()
-    while(1):
-      tasks = getActiveTasks()
-      logging.debug("\n\nactive tasks wtf5 : "+ str(tasks))
-      if(tasks):
-        for task in tasks:
-          status = checkTaskCompleted(task['id'])
-          if(status >= 0):
-            while(1):
-              if(setTaskStatus(task['id'],status)):
-                break
-              time.sleep(0.1)
-      time.sleep(0.1)
-  else:
-    return(pid)
+  setproctitle.setproctitle("setCompletedTasks")
+  #db_conn = dbRbhus.dbRbhus()
+  while(1):
+    tasks = getActiveTasks()
+    
+    if(tasks):
+      for task in tasks:
+        status = checkTaskCompleted(task['id'])
+        #logging.debug("active tasks wtf5 status: "+ str(status))
+        #logging.debug("active tasks wtf5 : "+ str(task['id']) +"\n\n")
+        
+        if(status >= 0):
+          while(1):
+            if(setTaskStatus(task['id'],status)):
+              break
+            time.sleep(0.1)
+    time.sleep(0.1)
  
  
 def getHungFrames(taskId):
   try:
-    rows = cursor.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+    rows = db_conn.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                     WHERE tasks.id="+ str(taskId) +" \
                     AND frames.id= tasks.id \
                     AND frames.status="+ str(constants.framesHung) +" \
                     AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
                     ORDER BY frames.frameId", dictionary=True)
   except:
+    logging.error(str(sys.exc_info()))
     return(0)
   return(rows)
     
 
 
 def resetHungFramesProc():
-  pid = posix.fork()
-  if(pid == 0):
-    setproctitle.setproctitle("resetHungFramesProc")
-    db_conn = dbRbhus.dbRbhus()
-    while(1):
-      tasks = getActiveTasks()
-      if(tasks):
-        for task in tasks:
-          hFrames = getHungFrames(task['id'])
-          if(hFrames):
-            for hF in hFrames:
-              resetHungFrames(hF['id'], hF['frameId'])
-      time.sleep(1800)
-      #keep this at 1800
-  else:
-    return(pid)
+  setproctitle.setproctitle("resetHungFramesProc")
+  #db_conn = dbRbhus.dbRbhus()
+  while(1):
+    tasks = getActiveTasks()
+    if(tasks):
+      for task in tasks:
+        hFrames = getHungFrames(task['id'])
+        if(hFrames):
+          for hF in hFrames:
+            resetHungFrames(hF['id'], hF['frameId'])
+    time.sleep(1800)
+    #keep this at 1800
     
     
     
 def autoStopper():
-  pid = posix.fork()
-  if(pid == 0):
-    setproctitle.setproctitle("autoStopper")
-    db_conn = dbRbhus.dbRbhus()
-    while(1):
-      tasks = getActiveTasks()
-      if(tasks):
-        for task in tasks:
-          if(task):
-            allFrames = getAllFrames(task['id'])
-            framesThresh = getFramesRerunThresh(task['id'])
-            if(allFrames == 0):
-              continue
-            if(framesThresh == 0):
-              continue
-            totalFrames = len(allFrames)
-            totalThresh = len(framesThresh)
-            if((totalFrames - totalThresh) == 0):
-              logging.debug("Auto stopping task : "+ str(task['id']))
-              while(1):
-                if(setTaskStatus(task['id'],constants.taskAutoStopped)):
-                  break
-                time.sleep(0.05)
-      time.sleep(0.5)
-  else:
-    return(pid)
-          
+  setproctitle.setproctitle("autoStopper")
+  #db_conn = dbRbhus.dbRbhus()
+  while(1):
+    tasks = getActiveTasks()
+    if(tasks):
+      for task in tasks:
+        if(task):
+          allFrames = getAllFrames(task['id'])
+          framesThresh = getFramesRerunThresh(task['id'])
+          if(allFrames == 0):
+            continue
+          if(framesThresh == 0):
+            continue
+          totalFrames = len(allFrames)
+          totalThresh = len(framesThresh)
+          if((totalFrames - totalThresh) == 0):
+            logging.debug("Auto stopping task : "+ str(task['id']))
+            while(1):
+              if(setTaskStatus(task['id'],constants.taskAutoStopped)):
+                break
+              time.sleep(0.05)
+    time.sleep(0.5)
+        
           
     
 # Frames that have reached rerunThresh
@@ -928,16 +849,17 @@ def checkTaskCompleted(taskId):
   try:
     compCount_ = db_conn.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId) +" \
                     AND frames.status="+ str(constants.framesDone), dictionary=True)
-    compCount = compCount_[0][0]
+    compCount = compCount_[0][compCount_[0].keys()[0]]
     totalCount_ = db_conn.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
-    totalCount = totalCount_[0][0]
+    totalCount = totalCount_[0][totalCount_[0].keys()[0]]
     if(totalCount == compCount) :
       return(constants.taskDone)
-    #elif(((totalCount - compCount) == 0) and (totalCount != 0)):
-      #return(constants.taskWaiting)
+    elif(((totalCount - compCount) == 0) and (totalCount != 0)):
+      return(constants.taskWaiting)
     else:
       return(-2)
   except:
+    logging.error(str(sys.exc_info()))
     return(-1)
     
     
@@ -966,26 +888,94 @@ def reapAll():
       break
   
 
+def getMainPids():
+  mainPidD = open(mainPidFile,"r")
+  mainPids = []
+  for x in mainPidD.readlines():
+    mainPids.append(x.rstrip().lstrip())
+    loggingDebug("MAIN PIDS : "+ str(mainPids))
+  if(mainPids):
+    return(mainPids)
+  else:
+    return(0)  
+  
+
 if __name__ == "__main__":
   setproctitle.setproctitle("RBHUS:server")
   signal.signal(signal.SIGTERM,sigHandle)
 #  db_conn = dbRbhus.dbRbhus()
+  p = []
   pendTasks = multiprocessing.Queue()
-  getWaitingTasks(pendTasks)
-  time.sleep(1)
-  initWaitingTasks(pendTasks)
-  time.sleep(1)
-  checkClientAlive()
-  time.sleep(1)
-  setCompletedTasks()
-  time.sleep(1)
-  resetHungFramesProc()
-  time.sleep(1)
-  autoStopper()
-  time.sleep(1)
-  scheduler()
+  
+  getWaitingTasks_proc = multiprocessing.Process(target=getWaitingTasks,args=(pendTasks,))
+  p.append(getWaitingTasks_proc)
+  getWaitingTasks_proc.start()
+  
+  
+  time.sleep(2)
+  
+  
+  initWaitingTasks_proc = multiprocessing.Process(target=initWaitingTasks,args=(pendTasks,))
+  p.append(initWaitingTasks_proc)
+  initWaitingTasks_proc.start()
+  
+  
+  time.sleep(2)
+  
+  checkClientAlive_proc = multiprocessing.Process(target=checkClientAlive)
+  p.append(checkClientAlive_proc)
+  checkClientAlive_proc.start()
+  
+  time.sleep(2)
+  
+  setCompletedTasks_proc = multiprocessing.Process(target=setCompletedTasks)
+  p.append(setCompletedTasks_proc)
+  setCompletedTasks_proc.start()
+  
+  time.sleep(2)
+  
+  resetHungFramesProc_proc = multiprocessing.Process(target=resetHungFramesProc)
+  p.append(resetHungFramesProc_proc)
+  resetHungFramesProc_proc.start()
+  
+  time.sleep(2)
+  
+  autoStopper_proc = multiprocessing.Process(target=autoStopper)
+  p.append(autoStopper_proc)
+  autoStopper_proc.start()
+  
+  time.sleep(2)
+  
+  scheduler_proc = multiprocessing.Process(target=scheduler)
+  p.append(scheduler_proc)
+  scheduler_proc.start()
+  
   pendTasks.close()
+  
   pendTasks.join_thread()
   
+  mainPidD = open(mainPidFile,"w",0)
+  for i in range(0,len(p)):
+    try:
+      mainPidD.write(str(p[i].pid) +"\n")
+    except:
+      print("Couldnt write mainPidFile : "+ str(sys.exc_info()))
+  mainPidD.close()
   
-  reapAll()
+  while(1):
+    time.sleep(1)
+    if(not p):
+      break
+    for i in range(0,len(p)):
+      if(p[i].is_alive()):
+        time.sleep(0.5)
+      else: 
+        logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "MAIN Process dead : "+ str(p[i].pid))
+        try:
+          del(p[i])
+        except:
+          logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "MAIN Process dead . cannot delete index")
+        break
+  
+  time.sleep(10)    
+  #reapAll()
