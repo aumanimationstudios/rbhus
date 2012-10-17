@@ -808,6 +808,7 @@ def autoStopper():
     tasks = getActiveTasks()
     if(tasks):
       for task in tasks:
+        print "ttttttttttttest "+ str(task)
         if(task):
           allFrames = getAllFrames(task['id'])
           framesThresh = getFramesRerunThresh(task['id'])
