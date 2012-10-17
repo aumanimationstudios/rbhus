@@ -262,7 +262,7 @@ def getFreeHosts():
 
 def checkClientAlive():
   setproctitle.setproctitle("checkClientAlive")
-  #Sdb_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   maxPids = 100
   pIds = []
   while(1):
