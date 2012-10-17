@@ -73,7 +73,7 @@ def getHostInfo(status):
   #These are the tasks that need to get inserted into "frames" table 
 def getWaitingTasks(pendingTasks):
   setproctitle.setproctitle("getPendingTasks")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     rows = 0
     #logging.error("ROWS WTF2 : "+ str(rows))
@@ -107,7 +107,7 @@ def getWaitingTasks(pendingTasks):
   
 def initWaitingTasks(pendingTasks):
   setproctitle.setproctitle("initWaitingTasks")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     row = {}
     while(1):
@@ -268,7 +268,7 @@ def getFreeHosts():
 
 def checkClientAlive():
   setproctitle.setproctitle("checkClientAlive")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   maxPids = 100
   pIds = []
   while(1):
@@ -318,7 +318,7 @@ def checkClientAlive():
 
 def pingClientProcess(client,ipAddr):
   setproctitle.setproctitle("ping_"+ str(client))
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
   pingstatus = 0
   sockstatus = 0
@@ -687,7 +687,7 @@ def getBestHost(activeTask):
   
 def scheduler():
   setproctitle.setproctitle("scheduler")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     activeTasks = arrangedActiveTasks()
     #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
@@ -756,7 +756,7 @@ def scheduler():
 
 def setCompletedTasks():
   setproctitle.setproctitle("setCompletedTasks")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     tasks = getActiveTasks()
     
@@ -792,7 +792,7 @@ def getHungFrames(taskId):
 
 def resetHungFramesProc():
   setproctitle.setproctitle("resetHungFramesProc")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     tasks = getActiveTasks()
     if(tasks):
@@ -808,7 +808,7 @@ def resetHungFramesProc():
     
 def autoStopper():
   setproctitle.setproctitle("autoStopper")
-  #db_conn = dbRbhus.dbRbhus()
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     tasks = getActiveTasks()
     if(tasks):
