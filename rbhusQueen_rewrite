@@ -331,7 +331,7 @@ def pingClientProcess(client,ipAddr):
       if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
         break
       time.sleep(0.3)
-    sys.exit(1)
+    exit(1)
 
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   tryCount = 5 
@@ -339,7 +339,7 @@ def pingClientProcess(client,ipAddr):
     tryCount = tryCount - 1
     try:
       clientSocket.connect((ipAddr,6660))
-      clientSocket.settimeout(3)
+      clientSocket.settimeout(10)
       logging.debug("Connected to "+ client)
       sockstatus = 1
       break
@@ -347,16 +347,16 @@ def pingClientProcess(client,ipAddr):
       logging.error("Screwed pingClientProcess sock connect : "+ client +" : "+ str(sys.exc_info()))
       sockstatus = 0
       clientSocket.close()
-    time.sleep(5)
+    time.sleep(1)
     if(tryCount <= 0):
       break
   if(tryCount <= 0):
     while(1):
       if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
         break
-      time.sleep(0.3)
+      time.sleep(1)
       clientSocket.close()
-    sys.exit(1)
+    exit(1)
 
   clientSocket.send("ALIVE")
   reply = ""
@@ -374,15 +374,15 @@ def pingClientProcess(client,ipAddr):
     while(1):
       if(setHostAliveStatus(client,constants.hostAliveAlive) == 1):
         break
-      time.sleep(0.3)
+      time.sleep(1)
     pass
   else:
     while(1):
       if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
         break
-      time.sleep(0.3)
+      time.sleep(1)
 
-  sys.exit(0)
+  exit(0)
 
 
 def setHostAliveStatus(hostName, status):
