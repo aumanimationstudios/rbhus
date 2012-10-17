@@ -747,8 +747,6 @@ def scheduler():
           if(taskFramesAssigned == 1):
             break
     time.sleep(0.05)
-    
-  
   sys.exit(0)
  
 
@@ -906,7 +904,6 @@ def getMainPids():
 if __name__ == "__main__":
   setproctitle.setproctitle("RBHUS:server")
   signal.signal(signal.SIGTERM,sigHandle)
-  db_conn = dbRbhus.dbRbhus()
   p = []
   pendTasks = multiprocessing.Queue()
   
