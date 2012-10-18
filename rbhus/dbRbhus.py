@@ -2,6 +2,7 @@ import MySQLdb
 import MySQLdb.cursors
 import time
 import sys
+import constants
 
 class dbRbhus:
   """database querying class for rbhus"""
@@ -56,16 +57,96 @@ class dbRbhus:
           return(1)
       except:
         print("Failed query : "+ str(query) +" : "+ str(sys.exc_info()) +"\n")
-        try:
-          cur.close()
-        except:
-          pass
         if(str(sys.exc_info()).find("OperationalError") >= 0):
+          try:
+            cur.close()
+          except:
+            pass
+          try:
+            self._conn.close()
+          except:
+            pass
           self.__conn = self._connRbhus()
           continue
         else:
+          try:
+            cur.close()
+          except:
+            pass
           raise
         
+  def getActiveTasks(self):
+    try:
+      rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
+                      WHERE tasks.status=\'"+ str(constants.taskActive) +"\' \
+                      AND tasks.id=tasksLog.id \
+                      AND tasks.afterTime<=NOW() \
+                      ORDER BY tasks.priority DESC", dictionary=True)
+    
+      #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem
+      if(rows):
+        if(not 'priority' in rows[0].keys()):
+          print("faaaaaaaaack ..getActiveTasks missed!!!! ")
+          return(0)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+    
+  def getPotentHosts(self):
+    try:
+      rows = self.execute("SELECT hostInfo.hostName, \
+                            hostInfo.totalCpus, \
+                            hostResource.freeCpus, \
+                            hostInfo.totalRam, \
+                            hostResource.freeRam, \
+                            hostInfo.totalSwap, \
+                            hostResource.freeSwap, \
+                            hostResource.load1, \
+                            hostResource.load5, \
+                            hostResource.load10, \
+                            hostEffectiveResource.eCpus, \
+                            hostInfo.weight, \
+                            hostInfo.groups, \
+                            hostInfo.os \
+                      FROM hostResource, hostInfo, hostAlive, hostEffectiveResource \
+                      WHERE hostInfo.status = hostAlive.status \
+                      AND hostAlive.status="+ str(constants.hostAliveAlive) +" \
+                      AND hostInfo.hostName = hostResource.hostName \
+                      AND hostResource.hostName = hostAlive.hostName \
+                      AND hostAlive.hostName = hostEffectiveResource.hostName \
+                      ORDER BY hostInfo.weight DESC", dictionary=True)
+      if(rows):
+        if(not 'eCpus' in rows[0].keys()):
+          print("faaaaaaaaack ..getPotentHosts missed!!!!")
+          return(0)
+    except:
+      logging.error(str(sys.exc_info()))    
+      return(0)
+    return(rows)
+    
+  def getUnassignedFrames(self,taskId):
+    try:
+      rows = self.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+                       WHERE tasks.id="+ str(taskId) +" \
+                       AND frames.id= tasks.id \
+                       AND frames.status="+ str(constants.framesUnassigned) +" \
+                       AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
+                       ORDER BY frames.frameId", dictionary=True)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+  
+  def resetFailedFrames(self,taskId):
+    try:  
+      self.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE id="+ str(taskId) +" \
+                      AND (status="+ str(constants.framesFailed) +" \
+                      OR status="+ str(constants.framesKilled) +")")
+      return(1)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
     
 def test():
   dbR = dbRbhus()
