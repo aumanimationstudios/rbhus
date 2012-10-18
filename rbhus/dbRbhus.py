@@ -8,9 +8,9 @@ class dbRbhus:
   def __init__(self):
     self.__conn = self._connRbhus()
 
-  def __del__(self):
-    self.__conn.close()
-    print("Db connection closed")
+  #def __del__(self):
+    #self.__conn.close()
+    #print("Db connection closed" +"\n")
   
   def _connDb(self,hostname,dbname):
     try:
@@ -24,10 +24,10 @@ class dbRbhus:
     while(1):
       try:
         con = self._connDb("dbRbhus","rbhus")
-        print("Db connected")
+        print("Db connected" +"\n")
         return(con)
       except:
-        print("Db not connected : "+ str(sys.exc_info()))
+        print("Db not connected : "+ str(sys.exc_info()) +"\n")
       time.sleep(1)
       
        
@@ -41,7 +41,11 @@ class dbRbhus:
         cur.execute(query)
         
         if(dictionary):
-          rows = cur.fetchall()
+          try:
+            rows = cur.fetchall()
+          except:
+            print("fetching failed : "+ str(sys.exc_info()) +"\n")
+          
           cur.close()
           if(rows):
             return(rows)
@@ -51,7 +55,7 @@ class dbRbhus:
           cur.close()
           return(1)
       except:
-        print("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
+        print("Failed query : "+ str(query) +" : "+ str(sys.exc_info()) +"\n")
         try:
           cur.close()
         except:

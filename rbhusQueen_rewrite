@@ -42,20 +42,35 @@ mainPidFile = tempDir + os.sep +"rbusServer.pids"
 time.sleep(5)
 
 def sigHandle(sigNum, frame):
+  myPid = posix.getpid()
   logging.debug("signal handler called with " + str(sigNum) +" signal")
-  killProcessKids()
+  logging.debug("my pid "+ str(myPid))
+  killProcessKids(myPid)
   return(1)
 
-def killProcessKids():
-  allPids = getMainPids()
-  if(allPids):
-    for x in allPids:
-      logging.debug("killing kid "+ str(x))
-      os.system("kill -9 "+ str(x))
+def killProcessKids(ppid):
+  try:
+    pidDets = psi.process.Process(ppid)
+  except:
+    logging.debug("No details : "+ str(ppid))
+    return(0)
+  try:
+    pidKids = pidDets.children()
+  except:
+    logging.error("No children")
+    return(0)
+  if(not pidKids):
+    logging.debug("killing kid "+ str(ppid))
+    os.system("kill -9 "+ str(ppid))
+    return(1)
+  else:
+    for pidKid in pidKids:
+      killProcessKids(pidKid.pid)
   
   
 # Get all the info on the hosts 
 def getHostInfo(status):
+  rows9 = {}
   try:
     if(status == "ALL"):
       rows9 = db_conn.execute("SELECT * FROM hostInfo", dictionary=True)
@@ -66,6 +81,7 @@ def getHostInfo(status):
   except:
     logging.error(str(sys.exc_info()))
     return(0)
+  print(rows9)
   return(rows9)
   
 
@@ -99,8 +115,7 @@ def getWaitingTasks(pendingTasks):
           try:
             db_conn.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
           except:
-            e = sys.exc_info()
-            logging.error("Screwed inserting into tasklog : "+ str(e))
+            logging.error("Screwed inserting into tasklog : "+ str(sys.exc_info()))
           #time.sleep(0.1)
     time.sleep(1)
 
@@ -242,8 +257,10 @@ def getPotentHosts():
                      AND hostResource.hostName = hostAlive.hostName \
                      AND hostAlive.hostName = hostEffectiveResource.hostName \
                      ORDER BY hostInfo.weight DESC", dictionary=True)
-    
-
+    if(rows3):
+      if(not 'eCpus' in rows3[0].keys()):
+        print("faaaaaaaaack ..getPotentHosts missed!!!!")
+        return(0)
   except:
     logging.error(str(sys.exc_info()))    
     return(0)
@@ -272,28 +289,32 @@ def checkClientAlive():
   maxPids = 100
   pIds = []
   while(1):
-    time.sleep(30)
+    print("WTF4")
+    hostInfos = {}
     hostInfos = getHostInfo(status="ALL")
+    print("WTF5 : "+ str(hostInfos))
     if(not hostInfos):
+      print("WTF6")
       continue
-    
-    while(1):
-      if(len(pIds) >= maxPids):
-        for i in range(0,len(pIds)):
-          if(pIds[i].is_alive()):
-            pass
-          else:
-            del(pIds[i])
-            break
-        if(len(pIds) < maxPids):
-          break
-        if(not pIds):
-          break
-      else:
-        break
-      time.sleep(1)
+    print("WTF7")
+    #if(len(pIds) > 0):
+      #while(1):
+        #print("WTF0")
+        #for i in range(0,len(pIds)):
+          #if(pIds[i].is_alive()):
+            #pass
+          #else:
+            #print("GONE1 -WTF3: "+ str(pIds[i].pid))
+            #del(pIds[i])
+            #break
+        #if(len(pIds) < maxPids):
+          #break
+        #if(not pIds):
+          #break
+        #time.sleep(1)
     
     for hostInfo in hostInfos:
+      print("WTF3")
       hostName = hostInfo['hostName']
       ipAddr = hostInfo['ip']
       logging.debug("Pinging "+ hostName + " with ip : "+ str(ipAddr))
@@ -301,20 +322,41 @@ def checkClientAlive():
       pingClientProcess_proc = multiprocessing.Process(target=pingClientProcess, args=(hostName,ipAddr,))
       pIds.append(pingClientProcess_proc)
       pingClientProcess_proc.start()
+      time.sleep(1)
       
-      while(1):
-        for i in range(0,len(pIds)):
-          if(pIds[i].is_alive()):
-            pass
-          else:
-            del(pIds[i])
-            break
-        if(len(pIds) < maxPids):
-          break
-        if(not pIds):
-          break
-        time.sleep(1)
-      
+      #if(len(pIds) >= maxPids):
+        #while(1):
+          #print("WTF1")
+          #for i in range(0,len(pIds)):
+            #if(pIds[i].is_alive()):
+              #pass
+            #else:
+              #print("GONE2 -WTF3: "+ str(pIds[i].pid))
+              #del(pIds[i])
+              #break
+          #if(len(pIds) < maxPids):
+            #break
+          #if(not pIds):
+            #break
+          #time.sleep(1)
+    
+    #if(len(pIds) > 0):      
+      #while(1):
+        #print("WTF2")
+        #for i in range(0,len(pIds)):
+          #if(pIds[i].is_alive()):
+            #pass
+          #else:
+            #print("GONE3 -WTF3: "+ str(pIds[i].pid))
+            #del(pIds[i])
+            #break
+        #if(len(pIds) < maxPids):
+          #break
+        #if(not pIds):
+          #break
+        #time.sleep(1)
+    time.sleep(15)
+    
 
 def pingClientProcess(client,ipAddr):
   setproctitle.setproctitle("ping_"+ str(client))
@@ -331,7 +373,7 @@ def pingClientProcess(client,ipAddr):
       if((setHostAliveStatus(client,constants.hostAliveDead) == 1) and (resetAssignedFrame(client, constants.framesHung) == 1)):
         break
       time.sleep(0.3)
-    exit(1)
+    return(1)
 
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
@@ -342,10 +384,13 @@ def pingClientProcess(client,ipAddr):
   except:
     logging.error("Screwed pingClientProcess sock connect : "+ client +" : "+ str(sys.exc_info()))
     sockstatus = 0
-    clientSocket.close()
+    try:
+      clientSocket.close()
+    except:
+      pass
     setHostAliveStatus(client,constants.hostAliveDead)
     resetAssignedFrame(client, constants.framesHung)
-    exit(1)
+    return(1)
 
   clientSocket.send("ALIVE")
   reply = ""
@@ -364,7 +409,7 @@ def pingClientProcess(client,ipAddr):
   else:
     setHostAliveStatus(client,constants.hostAliveDead)
     resetAssignedFrame(client, constants.framesHung)
-  exit(0)
+  return(0)
 
 
 def setHostAliveStatus(hostName, status):
@@ -732,7 +777,7 @@ def scheduler():
                 time.sleep(0.1)
           if(taskFramesAssigned == 1):
             break
-    time.sleep(0.05)
+    time.sleep(0.01)
   sys.exit(0)
  
 
@@ -962,4 +1007,4 @@ if __name__ == "__main__":
         break
   
   time.sleep(10)    
-  #reapAll()
+  reapAll()
