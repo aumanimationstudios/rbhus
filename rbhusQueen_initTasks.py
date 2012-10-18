@@ -153,7 +153,7 @@ def initWaitingTasks(pendingTasks):
     
 def initTasks():
   pendTasks = multiprocessing.Queue()
-  
+  p = []
   getWaitingTasks_proc = multiprocessing.Process(target=getWaitingTasks,args=(pendTasks,))
   p.append(getWaitingTasks_proc)
   getWaitingTasks_proc.start()
