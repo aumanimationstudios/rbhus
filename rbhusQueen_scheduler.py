@@ -194,7 +194,7 @@ def arrangedActiveTasks():
         completedShit = 0
         completedShit = db_conn.getRunFrames(activeTask["id"])
         allFrames = 0
-        allFrames = getAllFrames(activeTask["id"])
+        allFrames = db_conn.getAllFrames(activeTask["id"])
         if(allFrames):
           numAllFrames = len(allFrames)
         else:

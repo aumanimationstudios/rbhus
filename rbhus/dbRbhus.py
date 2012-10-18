@@ -161,6 +161,17 @@ class dbRbhus:
       return(0)
     return(rows)
     
+  def getAllFrames(self.taskId):
+    try:
+      rows = self.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+                      WHERE tasks.id=\'"+ str(taskId) +"\' \
+                      AND tasks.id=frames.id \
+                      ORDER BY frames.frameId", dictionary=True)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+    
 def test():
   dbR = dbRbhus()
   y = 0
