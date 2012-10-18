@@ -28,7 +28,7 @@ import rbhus.constants as constants
 import multiprocessing
 import socket
 
-LOG_FILENAME = '/var/log/rbhusQueen_initTasks.log'
+LOG_FILENAME = '/var/log/rbhusQueen_pingClient.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
