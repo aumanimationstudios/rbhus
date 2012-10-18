@@ -6,7 +6,7 @@ import constants
 import logging
 
 LOG_FILENAME = '/var/log/rbhusDb_module.log'
-modLogger = logging.getLogger("modLogger")
+modLogger = logging.Logger("modLogger")
 modLogger.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 modLogger.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
