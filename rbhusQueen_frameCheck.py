@@ -26,7 +26,6 @@ import tempfile
 import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
 import multiprocessing
-import socket
 
 LOG_FILENAME = '/var/log/rbhusQueen_frameCheck.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
@@ -106,3 +105,39 @@ def setCompletedTasks():
                 break
               time.sleep(0.1)
     time.sleep(0.01)
+    
+    
+if __name__=="__main__":
+  p = []
+  setCompletedTasks_proc = multiprocessing.Process(target=setCompletedTasks)
+  p.append(setCompletedTasks_proc)
+  setCompletedTasks_proc.start()
+  
+  time.sleep(2)
+  
+  resetHungFramesProc_proc = multiprocessing.Process(target=resetHungFramesProc)
+  p.append(resetHungFramesProc_proc)
+  resetHungFramesProc_proc.start()
+  
+  time.sleep(2)
+  
+  autoStopper_proc = multiprocessing.Process(target=autoStopper)
+  p.append(autoStopper_proc)
+  autoStopper_proc.start()
+  
+  
+  while(1):
+    time.sleep(1)
+    if(not p):
+      break
+    for i in range(0,len(p)):
+      if(p[i].is_alive()):
+        time.sleep(0.5)
+      else: 
+        logging.debug("MAIN Process dead : "+ str(p[i].pid))
+        try:
+          del(p[i])
+        except:
+          logging.debug("MAIN Process dead . cannot delete index")
+        break
+  
