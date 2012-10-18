@@ -27,7 +27,7 @@ import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
 import multiprocessing
 
-LOG_FILENAME = '/var/log/rbhusQueen_scheduler.log'
+LOG_FILENAME = '/var/log/rbhusQueen_initTasks.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
@@ -184,3 +184,6 @@ def initTasks():
         except:
           logging.debug("MAIN Process dead . cannot delete index")
         break
+        
+if __name__=="__main__":
+  initTasks()
