@@ -3,6 +3,12 @@ import MySQLdb.cursors
 import time
 import sys
 import constants
+import logging
+
+LOG_FILENAME = '/var/log/rbhusDb_module.log'
+logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
+logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+
 
 class dbRbhus:
   """database querying class for rbhus"""
@@ -25,10 +31,10 @@ class dbRbhus:
     while(1):
       try:
         con = self._connDb("dbRbhus","rbhus")
-        print("Db connected" +"\n")
+        logging.debug("Db connected")
         return(con)
       except:
-        print("Db not connected : "+ str(sys.exc_info()) +"\n")
+        logging.error("Db not connected : "+ str(sys.exc_info()))
       time.sleep(1)
       
        
@@ -45,7 +51,7 @@ class dbRbhus:
           try:
             rows = cur.fetchall()
           except:
-            print("fetching failed : "+ str(sys.exc_info()) +"\n")
+            logging.error("fetching failed : "+ str(sys.exc_info()))
           
           cur.close()
           if(rows):
@@ -56,7 +62,7 @@ class dbRbhus:
           cur.close()
           return(1)
       except:
-        print("Failed query : "+ str(query) +" : "+ str(sys.exc_info()) +"\n")
+        logging.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
         if(str(sys.exc_info()).find("OperationalError") >= 0):
           try:
             cur.close()
@@ -86,7 +92,7 @@ class dbRbhus:
       #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem
       if(rows):
         if(not 'priority' in rows[0].keys()):
-          print("faaaaaaaaack ..getActiveTasks missed!!!! ")
+          logging.error("faaaaaaaaack ..getActiveTasks missed!!!! ")
           return(0)
     except:
       logging.error(str(sys.exc_info()))
@@ -118,7 +124,7 @@ class dbRbhus:
                       ORDER BY hostInfo.weight DESC", dictionary=True)
       if(rows):
         if(not 'eCpus' in rows[0].keys()):
-          print("faaaaaaaaack ..getPotentHosts missed!!!!")
+          logging.error("faaaaaaaaack ..getPotentHosts missed!!!!")
           return(0)
     except:
       logging.error(str(sys.exc_info()))    
@@ -171,6 +177,39 @@ class dbRbhus:
       logging.error(str(sys.exc_info()))
       return(0)
     return(rows)
+    
+  def getHostInfo(self,status):
+    try:
+      if(status == "ALL"):
+        rows = self.execute("SELECT * FROM hostInfo", dictionary=True)
+      elif(status == "ENABLED"):
+        rows = self.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoEnable), dictionary=True)
+      else:
+        rows = self.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable), dictionary=True)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+    
+    
+  def setHostAliveStatus(self,hostName,status):
+    try:
+      self.execute("UPDATE hostAlive SET status='"+ str(status) +"' WHERE hostName=\""+ hostName +"\"")
+      return(1)
+    except:
+      return(0)
+      
+  def resetAssignedFrame(self,hostName,statusReset=0):
+    try:
+      self.execute("UPDATE frames SET status="+ str(statusReset) +" \
+                      WHERE hostName=\""+ hostName +"\" AND ((status = "+ str(constants.framesPending) +") \
+                      OR (status = "+ str(constants.framesAssigned) +") \
+                      OR (status = "+ str(constants.framesRunning) +"))") 
+      logging.debug("I CANT BELIVE I AM HERE for host : "+ str(hostName) +" : Resetting frame status to "+ constants.framesStatus[statusReset])
+      return(1)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
     
 def test():
   dbR = dbRbhus()
