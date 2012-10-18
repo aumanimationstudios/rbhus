@@ -152,10 +152,11 @@ class dbRbhus:
       self.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE id="+ str(taskId) +" \
                       AND (status="+ str(constants.framesFailed) +" \
                       OR status="+ str(constants.framesKilled) +")")
-      return(1)
     except:
       modLogger.error(str(sys.exc_info()))
       return(0)
+    return(1)
+      
       
   def getRunFrames(self,taskId):
     try:
@@ -198,9 +199,10 @@ class dbRbhus:
   def setHostAliveStatus(self,hostName,status):
     try:
       self.execute("UPDATE hostAlive SET status='"+ str(status) +"' WHERE hostName=\""+ hostName +"\"")
-      return(1)
     except:
       return(0)
+    return(1)
+      
       
   def resetAssignedFrame(self,hostName,statusReset=0):
     try:
@@ -209,10 +211,65 @@ class dbRbhus:
                       OR (status = "+ str(constants.framesAssigned) +") \
                       OR (status = "+ str(constants.framesRunning) +"))") 
       modLogger.debug("I CANT BELIVE I AM HERE for host : "+ str(hostName) +" : Resetting frame status to "+ constants.framesStatus[statusReset])
-      return(1)
     except:
       modLogger.error(str(sys.exc_info()))
       return(0)
+    return(1)
+  
+  
+  def getHungFrames(self,taskId):
+    try:
+      rows = self.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+                      WHERE tasks.id="+ str(taskId) +" \
+                      AND frames.id= tasks.id \
+                      AND frames.status="+ str(constants.framesHung) +" \
+                      AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
+                      ORDER BY frames.frameId", dictionary=True)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+    
+  def getFramesRerunThresh(self,taskId):
+    try:
+      rows = self.execute("SELECT frames.* FROM frames, tasks \
+                      WHERE tasks.id=\'"+ str(taskId) +"\' \
+                      AND tasks.id=frames.id \
+                      AND frames.runCount>=tasks.rerunThresh \
+                      AND frames.status!="+ str(constants.framesDone) +" \
+                      ORDER BY frames.frameId", dictionary=True)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+    
+  def setTaskStatus(self,taskId,status):
+    try:
+      self.execute("UPDATE tasks SET status="+ str(status) +" WHERE id="+ str(taskId))
+      logging.debug("Updated task:"+ str(taskId) +" status to "+ str(status))
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(1)
+    
+  #Return value is the status of the task that needs to be set
+  def checkTaskCompleted(self,taskId):
+    try:
+      compCount_ = self.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId) +" \
+                      AND frames.status="+ str(constants.framesDone), dictionary=True)
+      compCount = compCount_[0][compCount_[0].keys()[0]]
+      totalCount_ = self.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
+      totalCount = totalCount_[0][totalCount_[0].keys()[0]]
+      if(totalCount == compCount) :
+        return(constants.taskDone)
+      elif(((totalCount - compCount) == 0) and (totalCount != 0)):
+        return(constants.taskWaiting)
+      else:
+        return(-2)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(-1)
+
     
 def test():
   dbR = dbRbhus()
