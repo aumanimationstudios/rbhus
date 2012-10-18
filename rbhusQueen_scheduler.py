@@ -17,13 +17,11 @@
 
 # SERVER!!!!!!!!
 import sys
-import posix
 import os
 import logging
 import time
 import signal
 import setproctitle
-import inspect
 import tempfile
 import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
@@ -37,7 +35,6 @@ logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 db_conn = dbRbhus.dbRbhus()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusServer.pids"
-time.sleep(5)
 
 
       
