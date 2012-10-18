@@ -154,14 +154,14 @@ def arrangedActiveTasks():
     totalRunFrames = 0
     for pKey in pKeys:
       for activeTask in priorities[pKey]:
-        runShit = getRunFrames(activeTask["id"])
+        runShit = db_conn.getRunFrames(activeTask["id"])
         if(runShit):
           totalRunFrames = totalRunFrames + len(runShit)
 
     for pKey in pKeys:
       runFrames = 0
       for activeTask in priorities[pKey]:
-        runShit = getRunFrames(activeTask["id"])
+        runShit = db_conn.getRunFrames(activeTask["id"])
         if(runShit):
           runFrames = runFrames + len(runShit)
       try:
@@ -192,7 +192,7 @@ def arrangedActiveTasks():
       pcent = {}
       for activeTask in priorities[pKey]:
         completedShit = 0
-        completedShit = getRunFrames(activeTask["id"])
+        completedShit = db_conn.getRunFrames(activeTask["id"])
         allFrames = 0
         allFrames = getAllFrames(activeTask["id"])
         if(allFrames):

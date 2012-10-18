@@ -147,6 +147,19 @@ class dbRbhus:
     except:
       logging.error(str(sys.exc_info()))
       return(0)
+      
+  def getRunFrames(self,taskId):
+    try:
+      rows = self.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
+                      WHERE tasks.id="+ str(taskId) +" \
+                      AND tasks.id=frames.id \
+                      AND tasks.status="+ str(constants.taskActive) +" \
+                      AND frames.status !="+ str(constants.framesUnassigned) +" \
+                      ORDER BY frames.frameId", dictionary=True)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
     
 def test():
   dbR = dbRbhus()
