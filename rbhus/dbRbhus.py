@@ -161,7 +161,7 @@ class dbRbhus:
       return(0)
     return(rows)
     
-  def getAllFrames(self.taskId):
+  def getAllFrames(self,taskId):
     try:
       rows = self.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                       WHERE tasks.id=\'"+ str(taskId) +"\' \
