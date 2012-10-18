@@ -163,3 +163,7 @@ def pingClientProcess(client,ipAddr):
     db_conn.setHostAliveStatus(client,constants.hostAliveDead)
     db_conn.resetAssignedFrame(client, constants.framesHung)
   sys.exit(0)
+  
+  
+if __name__="__main__":
+  checkClientAlive()
