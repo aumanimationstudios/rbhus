@@ -1,5 +1,3 @@
-
-
 #!/usr/bin/python
 ###
 # Copyright (C) 2012  Shrinidhi Rao shrinidhi@clickbeetle.in
@@ -27,8 +25,6 @@ import setproctitle
 import tempfile
 import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
-import psi
-import psi.process
 import multiprocessing
 
 LOG_FILENAME = '/var/log/rbhusQueen_scheduler.log'
