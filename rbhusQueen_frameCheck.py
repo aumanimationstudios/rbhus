@@ -96,12 +96,12 @@ def setCompletedTasks():
       for task in tasks:
         if(task):
           status = db_conn.checkTaskCompleted(task['id'])
-          #logging.debug("active tasks wtf5 status: "+ str(status))
           #logging.debug("active tasks wtf5 : "+ str(task['id']) +"\n\n")
         
           if(status >= 0):
             while(1):
               if(db_conn.setTaskStatus(task['id'],status)):
+                logging.debug("task "+ str(task['id']) +" status changed to : "+ str(status))
                 break
               time.sleep(0.1)
     time.sleep(0.01)
