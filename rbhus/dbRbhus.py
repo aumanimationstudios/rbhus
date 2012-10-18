@@ -5,11 +5,14 @@ import sys
 import constants
 import logging
 
-LOG_FILENAME = '/var/log/rbhusDb_module.log'
-modLogger = logging.Logger("modLogger")
-modLogger.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
-modLogger.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
+modLogger = logging.getLogger("modLogger")
+modLogger.setLevel(logging.ERROR)
 
+BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
+modLogger.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+LOG_FILENAME.setFormatter(BASIC_FORMAT)
+modLogger.addHandler(LOG_FILENAME)
 
 class dbRbhus:
   """database querying class for rbhus"""
