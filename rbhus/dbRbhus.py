@@ -6,8 +6,9 @@ import constants
 import logging
 
 LOG_FILENAME = '/var/log/rbhusDb_module.log'
-logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
-logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+modLogger = logging.Logger()
+modLogger.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
+modLogger.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
 
 class dbRbhus:
@@ -31,10 +32,10 @@ class dbRbhus:
     while(1):
       try:
         con = self._connDb("dbRbhus","rbhus")
-        logging.debug("Db connected")
+        modLogger.debug("Db connected")
         return(con)
       except:
-        logging.error("Db not connected : "+ str(sys.exc_info()))
+        modLogger.error("Db not connected : "+ str(sys.exc_info()))
       time.sleep(1)
       
        
@@ -51,7 +52,7 @@ class dbRbhus:
           try:
             rows = cur.fetchall()
           except:
-            logging.error("fetching failed : "+ str(sys.exc_info()))
+            modLogger.error("fetching failed : "+ str(sys.exc_info()))
           
           cur.close()
           if(rows):
@@ -62,7 +63,7 @@ class dbRbhus:
           cur.close()
           return(1)
       except:
-        logging.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
+        modLogger.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
         if(str(sys.exc_info()).find("OperationalError") >= 0):
           try:
             cur.close()
@@ -92,10 +93,10 @@ class dbRbhus:
       #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem
       if(rows):
         if(not 'priority' in rows[0].keys()):
-          logging.error("faaaaaaaaack ..getActiveTasks missed!!!! ")
+          modLogger.error("faaaaaaaaack ..getActiveTasks missed!!!! ")
           return(0)
     except:
-      logging.error(str(sys.exc_info()))
+      modLogger.error(str(sys.exc_info()))
       return(0)
     return(rows)
     
@@ -124,10 +125,10 @@ class dbRbhus:
                       ORDER BY hostInfo.weight DESC", dictionary=True)
       if(rows):
         if(not 'eCpus' in rows[0].keys()):
-          logging.error("faaaaaaaaack ..getPotentHosts missed!!!!")
+          modLogger.error("faaaaaaaaack ..getPotentHosts missed!!!!")
           return(0)
     except:
-      logging.error(str(sys.exc_info()))    
+      modLogger.error(str(sys.exc_info()))    
       return(0)
     return(rows)
     
@@ -140,7 +141,7 @@ class dbRbhus:
                        AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
                        ORDER BY frames.frameId", dictionary=True)
     except:
-      logging.error(str(sys.exc_info()))
+      modLogger.error(str(sys.exc_info()))
       return(0)
     return(rows)
   
@@ -151,7 +152,7 @@ class dbRbhus:
                       OR status="+ str(constants.framesKilled) +")")
       return(1)
     except:
-      logging.error(str(sys.exc_info()))
+      modLogger.error(str(sys.exc_info()))
       return(0)
       
   def getRunFrames(self,taskId):
@@ -163,7 +164,7 @@ class dbRbhus:
                       AND frames.status !="+ str(constants.framesUnassigned) +" \
                       ORDER BY frames.frameId", dictionary=True)
     except:
-      logging.error(str(sys.exc_info()))
+      modLogger.error(str(sys.exc_info()))
       return(0)
     return(rows)
     
@@ -174,7 +175,7 @@ class dbRbhus:
                       AND tasks.id=frames.id \
                       ORDER BY frames.frameId", dictionary=True)
     except:
-      logging.error(str(sys.exc_info()))
+      modLogger.error(str(sys.exc_info()))
       return(0)
     return(rows)
     
@@ -187,7 +188,7 @@ class dbRbhus:
       else:
         rows = self.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable), dictionary=True)
     except:
-      logging.error(str(sys.exc_info()))
+      modLogger.error(str(sys.exc_info()))
       return(0)
     return(rows)
     
@@ -205,10 +206,10 @@ class dbRbhus:
                       WHERE hostName=\""+ hostName +"\" AND ((status = "+ str(constants.framesPending) +") \
                       OR (status = "+ str(constants.framesAssigned) +") \
                       OR (status = "+ str(constants.framesRunning) +"))") 
-      logging.debug("I CANT BELIVE I AM HERE for host : "+ str(hostName) +" : Resetting frame status to "+ constants.framesStatus[statusReset])
+      modLogger.debug("I CANT BELIVE I AM HERE for host : "+ str(hostName) +" : Resetting frame status to "+ constants.framesStatus[statusReset])
       return(1)
     except:
-      logging.error(str(sys.exc_info()))
+      modLogger.error(str(sys.exc_info()))
       return(0)
     
 def test():
