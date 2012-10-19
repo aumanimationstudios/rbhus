@@ -43,32 +43,32 @@ def checkClientAlive():
   maxPids = 100
   pIds = []
   while(1):
-    print("WTF4")
+    logging.debug("WTF4")
     hostInfos = {}
     hostInfos = db_conn.getHostInfo(status="ALL")
-    print("WTF5 : "+ str(hostInfos))
+    logging.debug("WTF5 : "+ str(hostInfos))
     if(not hostInfos):
-      print("WTF6")
+      logging.debug("WTF6")
       continue
-    print("WTF7")
-    #if(len(pIds) > 0):
-      #while(1):
-        #print("WTF0")
-        #for i in range(0,len(pIds)):
-          #if(pIds[i].is_alive()):
-            #pass
-          #else:
-            #print("GONE1 -WTF3: "+ str(pIds[i].pid))
-            #del(pIds[i])
-            #break
-        #if(len(pIds) < maxPids):
-          #break
-        #if(not pIds):
-          #break
-        #time.sleep(1)
+    logging.debug("WTF7")
+    if(len(pIds) > 0):
+      while(1):
+        logging.debug("WTF0")
+        for i in range(0,len(pIds)):
+          if(pIds[i].is_alive()):
+            pass
+          else:
+            logging.debug("GONE1 -WTF3: "+ str(pIds[i].pid))
+            del(pIds[i])
+            break
+        if(len(pIds) < maxPids):
+          break
+        if(not pIds):
+          break
+        time.sleep(1)
     
     for hostInfo in hostInfos:
-      print("WTF3")
+      logging.debug("WTF3")
       hostName = hostInfo['hostName']
       ipAddr = hostInfo['ip']
       logging.debug("Pinging "+ hostName + " with ip : "+ str(ipAddr))
@@ -78,44 +78,44 @@ def checkClientAlive():
       pingClientProcess_proc.start()
       time.sleep(1)
       
-      #if(len(pIds) >= maxPids):
-        #while(1):
-          #print("WTF1")
-          #for i in range(0,len(pIds)):
-            #if(pIds[i].is_alive()):
-              #pass
-            #else:
-              #print("GONE2 -WTF3: "+ str(pIds[i].pid))
-              #del(pIds[i])
-              #break
-          #if(len(pIds) < maxPids):
-            #break
-          #if(not pIds):
-            #break
-          #time.sleep(1)
+      if(len(pIds) >= maxPids):
+        while(1):
+          logging.debug("WTF1")
+          for i in range(0,len(pIds)):
+            if(pIds[i].is_alive()):
+              pass
+            else:
+              logging.debug("GONE2 -WTF3: "+ str(pIds[i].pid))
+              del(pIds[i])
+              break
+          if(len(pIds) < maxPids):
+            break
+          if(not pIds):
+            break
+          time.sleep(1)
     
-    #if(len(pIds) > 0):      
-      #while(1):
-        #print("WTF2")
-        #for i in range(0,len(pIds)):
-          #if(pIds[i].is_alive()):
-            #pass
-          #else:
-            #print("GONE3 -WTF3: "+ str(pIds[i].pid))
-            #del(pIds[i])
-            #break
-        #if(len(pIds) < maxPids):
-          #break
-        #if(not pIds):
-          #break
-        #time.sleep(1)
-    time.sleep(10)
+    if(len(pIds) > 0):      
+      while(1):
+        logging.debug("WTF2")
+        for i in range(0,len(pIds)):
+          if(pIds[i].is_alive()):
+            pass
+          else:
+            logging.debug("GONE3 -WTF3: "+ str(pIds[i].pid))
+            del(pIds[i])
+            break
+        if(len(pIds) < maxPids):
+          break
+        if(not pIds):
+          break
+        time.sleep(1)
+    time.sleep(35)
     
 
 def pingClientProcess(client,ipAddr):
   setproctitle.setproctitle("ping_"+ str(client))
   db_conn = dbRbhus.dbRbhus()
-  status = os.system("ping -c 1 -W 4 "+ str(ipAddr) +" >& /dev/null")
+  status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
   pingstatus = 0
   sockstatus = 0
   if(status == 0):
@@ -127,12 +127,12 @@ def pingClientProcess(client,ipAddr):
       if((db_conn.setHostAliveStatus(client,constants.hostAliveDead) == 1) and (db_conn.resetAssignedFrame(client, constants.framesHung) == 1)):
         break
       time.sleep(0.3)
-    sys.exit(1)
+    sys.exit()
 
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
+    clientSocket.settimeout(15)
     clientSocket.connect((ipAddr,6660))
-    clientSocket.settimeout(4)
     logging.debug("Connected to "+ client)
     sockstatus = 1
   except:
@@ -144,7 +144,7 @@ def pingClientProcess(client,ipAddr):
       pass
     db_conn.setHostAliveStatus(client,constants.hostAliveDead)
     db_conn.resetAssignedFrame(client, constants.framesHung)
-    sys.exit(1)
+    sys.exit()
 
   clientSocket.send("ALIVE")
   reply = ""
@@ -162,7 +162,7 @@ def pingClientProcess(client,ipAddr):
   else:
     db_conn.setHostAliveStatus(client,constants.hostAliveDead)
     db_conn.resetAssignedFrame(client, constants.framesHung)
-  sys.exit(0)
+  sys.exit()
   
   
 if __name__=="__main__":
