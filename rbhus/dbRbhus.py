@@ -4,6 +4,19 @@ import time
 import sys
 import constants
 import logging
+import socket
+import os
+import tempfile
+
+
+hostname = socket.gethostname()
+tempDir = tempfile.gettempdir()
+
+if(sys.platform.find("linux") >=0):
+  LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
+elif(sys.platform.find("win") >=0):
+  LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
+
 
 LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
 modLogger = logging.getLogger("modLogger")
