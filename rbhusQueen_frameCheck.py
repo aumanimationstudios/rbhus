@@ -31,13 +31,13 @@ LOG_FILENAME = '/var/log/rbhusQueen_frameCheck.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
-db_conn = dbRbhus.dbRbhus()
+
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusServer.pids"
 
 setproctitle.setproctitle("frameCheck")
 
-def resetHungFrames(taskId):
+def resetHungFrames(taskId,db_conn):
   try:
     db_conn.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE (id="+ str(taskId) +") \
                     AND (status="+ str(constants.framesHung) +")")
@@ -48,12 +48,13 @@ def resetHungFrames(taskId):
 
 
 def resetHungFramesProc():
+  db_conn = dbRbhus.dbRbhus()
   setproctitle.setproctitle("resetHungFramesProc")
   while(1):
     tasks = db_conn.getActiveTasks()
     if(tasks):
       for task in tasks:
-        resetHungFrames(task['id'])
+        resetHungFrames(task['id'],db_conn)
         #hFrames = db_conn.getHungFrames(task['id'])
         #if(hFrames):
           #for hF in hFrames:
@@ -61,9 +62,11 @@ def resetHungFramesProc():
     time.sleep(1800)
     #keep this at 1800
     
-    
+
+
     
 def autoStopper():
+  db_conn = dbRbhus.dbRbhus()
   setproctitle.setproctitle("autoStopper")
   while(1):
     tasks = db_conn.getActiveTasks()
@@ -84,10 +87,14 @@ def autoStopper():
               if(db_conn.setTaskStatus(task['id'],constants.taskAutoStopped)):
                 break
               time.sleep(0.05)
-    time.sleep(0.5)
+          else:
+            for x in framesThresh:
+              db_conn.setFramesStatus(x['id'],x['frameId'],constants.framesAutoHold)
+    time.sleep(0.05)
 
 
 def setCompletedTasks():
+  db_conn = dbRbhus.dbRbhus()
   setproctitle.setproctitle("setCompletedTasks")
   while(1):
     tasks = db_conn.getActiveTasks()
@@ -104,7 +111,7 @@ def setCompletedTasks():
                 logging.debug("task "+ str(task['id']) +" status changed to : "+ str(status))
                 break
               time.sleep(0.1)
-    time.sleep(0.01)
+    time.sleep(0.05)
     
     
 if __name__=="__main__":

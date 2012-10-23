@@ -31,9 +31,9 @@ class dbRbhus:
   def __init__(self):
     self.__conn = self._connRbhus()
 
-  #def __del__(self):
-    #self.__conn.close()
-    #print("Db connection closed" +"\n")
+  def __del__(self):
+    self.__conn.close()
+    print("Db connection closed" +"\n")
   
   def _connDb(self,hostname,dbname):
     try:
@@ -108,7 +108,7 @@ class dbRbhus:
       #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem
       if(rows):
         if(not 'priority' in rows[0].keys()):
-          modLogger.error("faaaaaaaaack ..getActiveTasks missed!!!! ")
+          modLogger.error("faaaaaaaaack ..getActiveTasks missed!!!!  : "+ str(rows))
           return(0)
     except:
       modLogger.error(str(sys.exc_info()))
@@ -250,6 +250,9 @@ class dbRbhus:
                       AND tasks.id=frames.id \
                       AND frames.runCount>=tasks.rerunThresh \
                       AND frames.status!="+ str(constants.framesDone) +" \
+                      AND frames.status!="+ str(constants.framesPending) +" \
+                      AND frames.status!="+ str(constants.framesRunning) +" \
+                      AND frames.status!="+ str(constants.framesAssigned) +" \
                       ORDER BY frames.frameId", dictionary=True)
     except:
       logging.error(str(sys.exc_info()))
@@ -283,6 +286,15 @@ class dbRbhus:
       logging.error(str(sys.exc_info()))
       return(-1)
 
+      
+  def setFramesStatus(self,taskId, frameId, status):
+    try:
+      self.execute("UPDATE frames SET status="+ str(status) +" \
+                      WHERE frameId="+ str(frameId) +" \
+                      AND id="+ str(taskId))
+    except:
+      return(0)
+    return(1)
     
 def test():
   dbR = dbRbhus()
