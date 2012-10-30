@@ -35,7 +35,7 @@ logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusServer.pids"
 
-setproctitle.setproctitle("frameCheck")
+setproctitle.setproctitle("rQ_frameCheck")
 
 def resetHungFrames(taskId,db_conn):
   try:
@@ -49,7 +49,7 @@ def resetHungFrames(taskId,db_conn):
 
 def resetHungFramesProc():
   db_conn = dbRbhus.dbRbhus()
-  setproctitle.setproctitle("resetHungFramesProc")
+  setproctitle.setproctitle("rQ_resetHungFramesProc")
   while(1):
     tasks = db_conn.getActiveTasks()
     if(tasks):
@@ -67,7 +67,7 @@ def resetHungFramesProc():
     
 def autoStopper():
   db_conn = dbRbhus.dbRbhus()
-  setproctitle.setproctitle("autoStopper")
+  setproctitle.setproctitle("rQ_autoStopper")
   while(1):
     tasks = db_conn.getActiveTasks()
     if(tasks):
@@ -90,12 +90,13 @@ def autoStopper():
           else:
             for x in framesThresh:
               db_conn.setFramesStatus(x['id'],x['frameId'],constants.framesAutoHold)
+              logging.debug("Auto stopping frame  : "+ str(task['id']) +" "+ str(x['frameId']))
     time.sleep(0.05)
 
 
 def setCompletedTasks():
   db_conn = dbRbhus.dbRbhus()
-  setproctitle.setproctitle("setCompletedTasks")
+  setproctitle.setproctitle("rQ_setCompletedTasks")
   while(1):
     tasks = db_conn.getActiveTasks()
     

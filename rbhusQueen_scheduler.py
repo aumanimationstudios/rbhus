@@ -40,7 +40,7 @@ mainPidFile = tempDir + os.sep +"rbusServer.pids"
       
       
       
-setproctitle.setproctitle("scheduler")
+setproctitle.setproctitle("rQ_scheduler")
 
 def getFreeHosts():
   freeHosts = []
@@ -270,67 +270,64 @@ def assignFrameToHost(hostDetail, taskFrame):
 
 def scheduler():
   while(1):
-    activeTasks = arrangedActiveTasks()
-    #logging.debug("ACTIVE TASKS!!! :"+ str(activeTasks))
-    if(activeTasks):
-      #logic for afterTasks
-      afterTasks = {}
-    
-      for activeTask in activeTasks:
-        if(activeTask["afterTasks"]):
-          ats = activeTask["afterTasks"].split(",")
-          for at in ats:
-            try:
-              afterTasks[at.lstrip().rstrip()].append(activeTask)
-            except:
-              afterTasks[at.lstrip().rstrip()] = []
-              afterTasks[at.lstrip().rstrip()].append(activeTask)
-      if(afterTasks):
-        for ats in afterTasks.keys():
-          for ts in afterTasks[ats]:
-            indx = -1
-            try:
-              indx = activeTasks.index(ts)
-            except:
-              continue
-            if(indx != -1):
-              for activeTask in activeTasks:
-                if(activeTask["id"] == ats):
-                  indxT = activeTasks.index(activeTask)
-                  if(indx > indxT):
-                    activeTasks.remove(activeTask)
-                    activeTasks.insert(indx,activeTask)
-                    activeTasks.remove(ts)
-                    activeTasks.insert(indxT,ts)
-                    
-      freeHosts = getFreeHosts()
-      #if(freeHosts):
-        #logging.debug("freehosts : "+ str(freeHosts))
-      if(freeHosts):
+    freeHosts = getFreeHosts()
+    if(freeHosts):
+      activeTasks = arrangedActiveTasks()
+      if(activeTasks):
+        #logging.debug("wtf1")
+        #logic for afterTasks
+        afterTasks = {}
+  
         for activeTask in activeTasks:
-          #logging.debug("ACTIVE TASK ID : "+ str(activeTask['id']))
-          assignedHost = getBestHost(activeTask)
-          taskFramesAssigned = 0
-          if(assignedHost):
-            #logging.debug("bestHost "+ str(activeTask['id']) +":" + str(assignedHost))
-            taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
-            #logging.debug("taskFrames "+ str(activeTask['id']) +" :"+ str(taskFrames))
-            if(taskFrames):
+          if(activeTask["afterTasks"]):
+            ats = activeTask["afterTasks"].split(",")
+            for at in ats:
+              try:
+                afterTasks[at.lstrip().rstrip()].append(activeTask)
+              except:
+                afterTasks[at.lstrip().rstrip()] = []
+                afterTasks[at.lstrip().rstrip()].append(activeTask)
+        if(afterTasks):
+          for ats in afterTasks.keys():
+            for ts in afterTasks[ats]:
+              indx = -1
+              try:
+                indx = activeTasks.index(ts)
+              except:
+                continue
+              if(indx != -1):
+                for activeTask in activeTasks:
+                  if(activeTask["id"] == ats):
+                    indxT = activeTasks.index(activeTask)
+                    if(indx > indxT):
+                      activeTasks.remove(activeTask)
+                      activeTasks.insert(indx,activeTask)
+                      activeTasks.remove(ts)
+                      activeTasks.insert(indxT,ts)
+          
+        #logging.debug("wtf1.1")
+        for activeTask in activeTasks:
+          taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
+          #logging.debug("wtf2")
+          if(taskFrames):
+            
+            assignedHost = getBestHost(activeTask)
+            if(assignedHost):
               taskFrame = taskFrames[0]
+              #logging.debug("wtf3 :"+ str(activeTask['id']) +" ::: "+ str(assignedHost))
               while(1):
                 if(assignFrameToHost(assignedHost, taskFrame)):
                   logging.debug("ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(taskFrame["id"]) +" : "+ str(taskFrame["frameId"]))
-                  taskFramesAssigned = 1
                   break
                 time.sleep(0.1)
-            else:
-              while(1):
-                if(db_conn.resetFailedFrames(activeTask["id"])):
-                  logging.debug("resetFailedFrames : "+ str(activeTask['id']))
-                  break
-                time.sleep(0.1)
-          if(taskFramesAssigned == 1):
-            break
+          else:
+            while(1):
+              if(db_conn.resetFailedFrames(activeTask["id"])):
+                logging.debug("resetFailedFrames : "+ str(activeTask['id']))
+                break
+              time.sleep(0.1)
+          #if(taskFramesAssigned == 1):
+            #break
     time.sleep(0.01)
 
 

@@ -36,7 +36,7 @@ db_conn = dbRbhus.dbRbhus()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusServer.pids"
 
-setproctitle.setproctitle("pingClient")
+setproctitle.setproctitle("rQ_pingClient")
 
 
 def checkClientAlive():
@@ -113,7 +113,7 @@ def checkClientAlive():
     
 
 def pingClientProcess(client,ipAddr):
-  setproctitle.setproctitle("ping_"+ str(client))
+  setproctitle.setproctitle("rQ_ping_"+ str(client))
   db_conn = dbRbhus.dbRbhus()
   status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
   pingstatus = 0

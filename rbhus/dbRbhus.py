@@ -18,7 +18,7 @@ elif(sys.platform.find("win") >=0):
   LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
 
 
-LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
+#LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
 modLogger = logging.getLogger("modLogger")
 modLogger.setLevel(logging.ERROR)
 
@@ -33,7 +33,7 @@ class dbRbhus:
 
   def __del__(self):
     self.__conn.close()
-    print("Db connection closed" +"\n")
+    modLogger.debug("Db connection closed" +"\n")
   
   def _connDb(self,hostname,dbname):
     try:

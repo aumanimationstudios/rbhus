@@ -35,10 +35,10 @@ db_conn = dbRbhus.dbRbhus()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusServer.pids"
 
-setproctitle.setproctitle("initTasks")
+setproctitle.setproctitle("rQ_initTasks")
 
 def getWaitingTasks(pendingTasks):
-  setproctitle.setproctitle("get")
+  setproctitle.setproctitle("rQ_get")
   while(1):
     rows = 0
     #logging.error("ROWS WTF2 : "+ str(rows))
@@ -75,7 +75,7 @@ def getWaitingTasks(pendingTasks):
 
 
 def initWaitingTasks(pendingTasks):
-  setproctitle.setproctitle("set")
+  setproctitle.setproctitle("rQ_set")
   while(1):
     row = {}
     while(1):
