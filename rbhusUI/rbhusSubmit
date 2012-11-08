@@ -36,6 +36,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     
     rbhusSubmitMod.Ui_rbhusSubmit.setupUi(self,Form)
     self.pushFileName.clicked.connect(self.selectFileName)
+    self.pushOutDir.clicked.connect(self.selectOutDir)
     self.pushSubmit.clicked.connect(self.submitTasks)
     self.comboHostGroup.currentIndexChanged.connect(self.printGroupSel)
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
@@ -64,6 +65,11 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   
   def fileTypePrint(self):
     print(self.comboFileType.currentText())
+    renders = rUtils.getRenderers()
+    self.comboRenderer.clear()
+    for x in renders[str(self.comboFileType.currentText())]:
+      self.comboRenderer.addItem(_fromUtf8(x))
+
     
   
   def osTypePrint(self):
@@ -93,35 +99,18 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     else:
       return(0)     
   
-  #def getHostGroups(self):
-    #try:
-      #conn = db.connRbhus()
-      #cursor = conn.cursor(db.dict)
-      #cursor.execute("select groups from hostInfo group by groups")
-      #rows = cursor.fetchall()
-      #cursor.close()
-      #conn.close()
-    #except:
-      #print("Error connecting to db")
-      #return(0)
-    #gtr = {}
-    #retRows = []
-    #if(rows):
-      #for row in rows:
-        #tmpRow = row['groups'].split(",")
-        #for tr in tmpRow:
-          #gtr[tr.rstrip().lstrip()] = 1
-      #for gt in gtr.keys():
-        #retRows.append(gt)
-      #return(retRows)
-    #else:
-      #return(0)
-    
-    
   def selectFileName(self):
     fila = QtGui.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditFileName.setText(fila)
+      
+  def selectOutDir(self):
+    dirac = QtGui.QFileDialog()
+    dirac.FileMode(QtGui.QFileDialog.Directory)
+    dira = dirac.getExistingDirectory()
+    if(dira):
+      self.lineEditOutDir.setText(dira)
+      
       
   def submitTasks(self):
     fileName = self.lineEditFileName.text()
@@ -141,17 +130,23 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         p = 5000
       if((filetype == "3dsmax") and ((ostype == "default") or (ostype == "win"))):
         logB = "z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\"
-        fileT = filetype
         afterFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py"
         beforeFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\beforeFrame.py"
-        print logB
-        print fileT
-        print afterFrameC
-        print beforeFrameC
+      else:
+        logB = "default"
+        afterFrameC = "default"
+        beforeFrameC = "default"
       try:
         conn = db.connRbhus()
         cursor = conn.cursor()
-        cursor.execute("insert into tasks (fileName, logBase, fRange, fileType, afterFrameCmd, beforeFrameCmd, hostGroups, submitTime, priority, afterTasks) values (\'"+ str(fileName) +"\', \'"+ str(logB) +"\', \'"+ str(fRange) +"\', \'"+ str(filetype) +"\', \'"+ str(afterFrameC) +"\', \'"+ str(beforeFrameC) +"\', \'"+ str(self.comboHostGroup.currentText()) +"\', now(), "+ str(p) +", "+ str(lineEditAfterTask.text()) +")")
+        cursor.execute("insert into tasks (fileName, logBase, \
+                        fRange, fileType, afterFrameCmd, beforeFrameCmd, \
+                        hostGroups, submitTime, priority, afterTasks, \
+                        renderer, imageType, outDir, outName, layer, os) \
+                        values (\'"+ str(fileName) +"\', \'"+ str(logB) +"\', \
+                        \'"+ str(fRange) +"\', \'"+ str(filetype) +"\', \'"+ str(afterFrameC) +"\', \'"+ str(beforeFrameC) +"\', \
+                        \'"+ str(self.comboHostGroup.currentText()) +"\', now(), "+ str(p) +", \'"+ str(self.lineEditAfterTask.text())  +"\', \
+                        \'"+ str(self.comboRenderer.currentText()) +"\', \'"+ str(self.lineEditImageType.text()) +"\', \'"+ str(self.lineEditOutDir.text()) +"\', \'"+ str(self.lineEditOutName.text()) +"\', \'" +str(self.lineEditLayer.text()) +"\', \'"+ str(self.comboOsType.currentText()) +"\')")
         cursor.close()
         cursor = conn.cursor(db.dict)
         cursor.execute("select last_insert_id()")

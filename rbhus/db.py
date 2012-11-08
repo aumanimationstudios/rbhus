@@ -31,7 +31,7 @@ class dict(MySQLdb.cursors.DictCursor):
 
 def connHosts():
   try:
-    conn = MySQLdb.connect(host = "dbHosts",
+    conn = MySQLdb.connect(host = "192.168.1.198",
 			   db = "hosts")
     conn.autocommit(1)
   except:
@@ -41,7 +41,7 @@ def connHosts():
   
 def connRbhus():
   try:
-    conn = MySQLdb.connect(host = "dbRbhus",
+    conn = MySQLdb.connect(host = "192.168.1.198",
 			   db = "rbhus")
     conn.autocommit(1)
   except:

@@ -58,6 +58,28 @@ def getFileTypes():
   else:
     return(0)
     
+def getRenderers():
+  try:
+    conn = db.connRbhus()
+    cursor = conn.cursor(db.dict)
+    cursor.execute("select * from renderer")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+  except:
+    print("Error connecting to db 2")
+    return(0)
+  retRows = {}  
+  if(rows):
+    for row in rows:
+      try:
+        retRows[row['fileType']].append(row['renderer'])
+      except:
+        retRows[row['fileType']] = []
+        retRows[row['fileType']].append(row['renderer'])
+    return(retRows)
+  else:
+    return(0)
     
 def getOsTypes():
   try:
