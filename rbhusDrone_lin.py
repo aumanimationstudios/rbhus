@@ -43,7 +43,7 @@ hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusClient.pids"
 
-
+db_conn = dbRbhus.dbRbhus()
 
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = '/var/log/rbhusClient.log'
@@ -162,7 +162,7 @@ def killProcessKids(ppid):
 
 # Get the host info and update the database.
 def init():
-  db_conn = dbRbhus.dbRbhus()
+
   hostname = socket.gethostname()
   totalCpus = multiprocessing.cpu_count()
   totalMem = totalMemInfo()
