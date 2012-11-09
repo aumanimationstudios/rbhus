@@ -784,14 +784,14 @@ def frameScrutinizer(frameScrutiny):
         break
       except:
         pass
-      if(len(snoopFramesProcess) > 0):
-        for i in range(0,len(snoopFramesProcess)):
-          if(snoopFramesProcess[i].is_alive()):
-            continue
-          else:
-            logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "snoopFrameProcess dead : "+ str(snoopFramesProcess[i].pid))
-            del(snoopFramesProcess[i])
-            break
+    if(len(snoopFramesProcess) > 0):
+      for i in range(0,len(snoopFramesProcess)):
+        if(snoopFramesProcess[i].is_alive()):
+          continue
+        else:
+          logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "snoopFrameProcess dead : "+ str(snoopFramesProcess[i].pid))
+          del(snoopFramesProcess[i])
+          break
 
 
     snoopFramesProcess.append(multiprocessing.Process(target=snoopFrames,args=(frameDets,)))
