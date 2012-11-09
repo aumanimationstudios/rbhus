@@ -1,0 +1,4 @@
+START 
+blue0666 : Fri Nov  9 00:46:59 2012
+/bin/bash: -c: line 0: syntax error near unexpected token `most'
+/bin/bash: -c: line 0: `Traceback (most recent call last):'

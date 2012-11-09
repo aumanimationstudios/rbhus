@@ -33,8 +33,6 @@ import rbhus.constants as constants
 if(sys.platform.find("linux") >= 0):
   import psi
   import psi.process
-  import setproctitle
-  setproctitle.setproctitle("rD_client")
 import tempfile
 import inspect
 
@@ -171,12 +169,8 @@ def init():
  
  
 def hostUpdater():
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("hostUpdater")
   myPid = os.getpid()
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) +" : "+ "hostUpdater : "+ str(myPid))
-  db_conn = dbRbhus.dbRbhus()
-  
   while(1):
     time.sleep(5)
     hostname = socket.gethostname()
@@ -236,10 +230,7 @@ def upHostAliveStatus(hostName, status):
 
 
 def getAssignedFrames(qAssigned):
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("getAssignedFrames")
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": getAssignedFrames func")
-  db_conn = dbRbhus.dbRbhus()
   while(1):
     hostname = socket.gethostname()
     rows = 0
@@ -271,13 +262,10 @@ def getAssignedFrames(qAssigned):
 
 
 def runFrames(qRun,frameScrutiny):
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("runFrames")
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": runFrames func")
-  db_conn = dbRbhus.dbRbhus()
   processFrames = []
   while(1):
-    time.sleep(0.5)
+    time.sleep(0.2)
     hostEff = getEffectiveDetails()
     
     totalPids = multiprocessing.cpu_count()
@@ -303,47 +291,29 @@ def runFrames(qRun,frameScrutiny):
           break
       else:
         break
-      time.sleep(0.5)
+      time.sleep(0.1)
       
 
     while(1):
       try:
         frameInfo = qRun.get()
-        try:
-          if(not frameInfo['frameId']):
-            logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "frameInfo FAILED! : ")
-          else:
-            break
-        except:
-          logging.error(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "frameInfo FAILED!! : ")
+        break
       except:
-        time.sleep(0.5)
+        time.sleep(0.2)
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Got frameInfo : "+ str(frameInfo))
-    print("LOL2")
     processFrames.append(multiprocessing.Process(target=execFrames,args=(frameInfo,frameScrutiny,)))
-    print("LOL3")
     processFrames[-1].start() 
-    print("LOL4")
 
 
 
 def execFrames(frameInfo,frameScrutiny):
-  db_conn = dbRbhus.dbRbhus()
-  try:
-    frameInfo['frameId']
-  except:
-    logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": execFrames WTF3 : "+ str(frameInfo))
-
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle(str(frameInfo['taskId']) +" : "+ str(frameInfo['frameId']))    
-
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": execFrames func : "+ str(frameInfo['fileName']))
   hostEff = getEffectiveDetails()
   if(hostEff != 0):
     while(1):
       if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning) == 1):
         break
-      time.sleep(0.5)
+      time.sleep(0.1)
       
     os.environ['rbhus_taskId']    = str(frameInfo['id']).lstrip().rstrip()
     os.environ['rbhus_frameId']   = str(frameInfo['frameId']).lstrip().rstrip()
@@ -357,22 +327,15 @@ def execFrames(frameInfo,frameScrutiny):
     os.environ['rbhus_maxRam']    = str(frameInfo['maxRam']).lstrip().rstrip()
     os.environ['rbhus_outDir']    = str(frameInfo['outDir']).lstrip().rstrip()
     os.environ['rbhus_outName']   = str(frameInfo['outName']).lstrip().rstrip()
+    os.environ['rbhus_logBase']   = str(frameInfo['logBase']).lstrip().rstrip()
     os.environ['rbhus_pad']       = str(frameInfo['pad']).lstrip().rstrip()
     os.environ['rbhus_atCmd']     = str(frameInfo['afterTaskCmd']).lstrip().rstrip()
     os.environ['rbhus_bfCmd']     = str(frameInfo['beforeFrameCmd']).lstrip().rstrip()
     os.environ['rbhus_afCmd']     = str(frameInfo['afterFrameCmd']).lstrip().rstrip()
     os.environ['rbhus_threads']   = str(frameInfo['fThreads']).lstrip().rstrip()
-    os.environ['rbhus_layer']   = str(frameInfo['layer']).lstrip().rstrip()
-    os.environ['rbhus_imageType']   = str(frameInfo['imageType']).lstrip().rstrip()
-    if((frameInfo['logBase'] == "default") and (frameInfo['outDir'] != "default")):
-      frameInfo['logBase'] = frameInfo['outDir'].rstrip(os.sep) + os.sep + "logs"
-    else:
-      frameInfo['logBase'] = tempDir
-    os.environ['rbhus_logBase']   = str(frameInfo['logBase']).lstrip().rstrip()
-      
     logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ str(frameInfo['frameId']).rjust(4,"0") +".log"
     os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
-    if(sys.platform.find("linux") >= 0):
+    if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]
       rgid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[3]
     #envFile = "/tmp/"+ str(myPid) +".rbhus"
@@ -380,17 +343,17 @@ def execFrames(frameInfo,frameScrutiny):
     #envFileDesc = open(envFile,"w")
     #pickle.dump(envPickled,envFileDesc)
     #envFileDesc.close()
-    if(frameInfo['outDir'] != "default"):
+    try:
+      os.makedirs(str(frameInfo['outDir']),0777)
+    except:
+      logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "MKDIR : "+ str(sys.exc_info()[1]))
+    if(sys.platform.find("linux") >= 0):
       try:
-        os.makedirs(str(frameInfo['outDir']),0777)
+        os.chmod(str(frameInfo['outDir']),0777)
+        os.chown(str(frameInfo['outDir']),ruid,rgid)
       except:
         logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "MKDIR : "+ str(sys.exc_info()[1]))
-      if(sys.platform.find("linux") >= 0):
-        try:
-          os.chmod(str(frameInfo['outDir']),0777)
-          os.chown(str(frameInfo['outDir']),ruid,rgid)
-        except:
-          logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "MKDIR : "+ str(sys.exc_info()[1]))
+      
       
     try:
       os.makedirs(str(frameInfo['logBase']),0777)
@@ -410,13 +373,7 @@ def execFrames(frameInfo,frameScrutiny):
       
     
 
-    while(1):
-      runScript = getDefaultScript(frameInfo['fileType'])
-      if(runScript == 0):
-        logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runScript missed1 : " + str(frameInfo['fileType']))
-        time.sleep(1)
-      else:
-        break
+    runScript = getDefaultScript(frameInfo['fileType'])
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runScript : "+ str(runScript))
     try:
       if(sys.platform.find("win") >= 0):
@@ -428,7 +385,7 @@ def execFrames(frameInfo,frameScrutiny):
       logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCmd  : "+ str(sys.exc_info()))
       while(1):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
-          logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "run cmd failed !! 1 :")
+          logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "run cmd failed !! 1 :"+ runCmd)
           break
         time.sleep(0.5)
 
@@ -466,7 +423,7 @@ def execFrames(frameInfo,frameScrutiny):
       while(1):
         try:
           logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "/bin/su "+ frameInfo['user'] +" -c \'"+ runCmd +"\' "+ str(logD))
-          fProcess = subprocess.Popen("/bin/su -s /bin/bash "+ frameInfo['user'] +" -c \'"+ runCmd +"\'",shell=True,stdout=logD,stderr=logD)
+          fProcess = subprocess.Popen("/bin/su "+ frameInfo['user'] +" -c \'"+ runCmd +"\'",shell=True,stdout=logD,stderr=logD)
           break
         except:
           os.environ['rbhus_exit']   = "2"
@@ -475,15 +432,14 @@ def execFrames(frameInfo,frameScrutiny):
           if(retryCount >= retryThres):
             while(1):
               if(setFramesEtime(frameInfo) == 1):
-                print("LOL1")
                 break
-              time.sleep(0.5)
+              time.sleep(0.2)
             logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "retryCount : "+ str(retryCount))
             
             while(1):
               if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
                 break
-              time.sleep(0.5)
+              time.sleep(0.2)
             
             #Run the afterFrame shits
             if(str(frameInfo['afterFrameCmd']) != 'default'):
@@ -493,7 +449,7 @@ def execFrames(frameInfo,frameScrutiny):
             while(1):
               if(setFreeCpus(frameInfo) ==  1):
                 break
-              time.sleep(0.5)
+              time.sleep(0.2)
             logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "setFreeCpus  ") 
             
             sys.exit(0)
@@ -516,13 +472,13 @@ def execFrames(frameInfo,frameScrutiny):
             while(1):
               if(setFramesEtime(frameInfo) == 1):
                 break
-              time.sleep(0.5)
+              time.sleep(0.2)
               
             while(1):
               if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
                 logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point ZERO")
                 break
-              time.sleep(0.5)
+              time.sleep(0.2)
               
             #Run the afterFrame shits
             if(str(frameInfo['afterFrameCmd']) != 'default'):
@@ -532,7 +488,7 @@ def execFrames(frameInfo,frameScrutiny):
             while(1):
               if(setFreeCpus(frameInfo) ==  1):
                 break
-              time.sleep(0.5)
+              time.sleep(0.2)
               
             sys.exit(0)
         time.sleep(1)
@@ -552,7 +508,6 @@ def execFrames(frameInfo,frameScrutiny):
       kidsForStatus = []
       if(sys.platform.find("linux") >= 0):
         if(getProcessLastKids(fProcess.pid,kidsForStatus) == 0):
-          logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "WAIT1")
           break
       elif(sys.platform.find("win") >= 0):
         if(getProcessLastKids_win(fProcess.pid,kidsForStatus) == 0):
@@ -584,20 +539,20 @@ def execFrames(frameInfo,frameScrutiny):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesDone) == 1):
           logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point ONE")
           break
-        time.sleep(0.5)
+        time.sleep(0.2)
     elif(fStatus[0]['status'] != constants.framesKilled):
       os.environ['rbhus_exit']   = str(constants.framesKilled)
       while(1):
         if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
           logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point TWO")
           break
-        time.sleep(0.5)
+        time.sleep(0.2)
           
     while(1):
       if(setFramesEtime(frameInfo) == 1):
         logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point THREE")
         break
-      time.sleep(0.5)
+      time.sleep(0.2)
         
 
       
@@ -623,7 +578,7 @@ def execFrames(frameInfo,frameScrutiny):
       if(setFreeCpus(frameInfo) ==  1):
         logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point FOUR")
         break
-      time.sleep(0.5)
+      time.sleep(0.2)
     sys.exit(0)
 
 
@@ -665,8 +620,8 @@ def writeFramePidFile(pidLock,taskId,frameId,pids):
       pass
       
     for pid in pids:
-      if(str(pid).rstrip().lstrip() and str(pid).rstrip().lstrip() != str(os.getpid())):
-        pidDict[str(pid).rstrip().lstrip()] = 0
+      if(pid.rstrip().lstrip() and pid.rstrip().lstrip() != str(os.getpid())):
+        pidDict[pid.rstrip().lstrip()] = 0
     
     taskPidD = open(taskPidF,"w")
     if(pidDict):
@@ -790,31 +745,27 @@ def getMainPids():
   
 def frameScrutinizer(frameScrutiny):
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": frameScrutinizer func")
-  db_conn = dbRbhus.dbRbhus()
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("frameScrutinizer")
   snoopFramesProcess = [] 
   while(1):
     while(1):
-      time.sleep(0.5)
+      time.sleep(0.2)
       try:
         frameDets = frameScrutiny.get()
         break
       except:
         pass
-    if(len(snoopFramesProcess) > 0):
-      for i in range(0,len(snoopFramesProcess)):
-        if(snoopFramesProcess[i].is_alive()):
-          continue
-        else:
-          logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "snoopFrameProcess dead : "+ str(snoopFramesProcess[i].pid))
-          del(snoopFramesProcess[i])
-          break
+      if(len(snoopFramesProcess) > 0):
+        for i in range(0,len(snoopFramesProcess)):
+          if(snoopFramesProcess[i].is_alive()):
+            continue
+          else:
+            logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "snoopFrameProcess dead : "+ str(snoopFramesProcess[i].pid))
+            del(snoopFramesProcess[i])
+            break
 
     
     snoopFramesProcess.append(multiprocessing.Process(target=snoopFrames,args=(frameDets,)))
     snoopFramesProcess[-1].start()
-    time.sleep(0.2)
     
         
 #this should inteligently snoop on any more pids that are spawned by the given pids
@@ -822,17 +773,14 @@ def frameScrutinizer(frameScrutiny):
 #welll... yes !!! . INTELIGENTLY!!!! :|
 #
 def snoopFrames(fDets):
-  db_conn = dbRbhus.dbRbhus()
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": snoopFrames func")
   frameInfo = fDets.pop(0)
   ProcessPid = fDets.pop(0)
   forMean = []
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle(str(frameInfo['frameId']) +" : "+ str(frameInfo['fileName']))  
+  
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": snoopFrames func : "+ str(ProcessPid) +" : "+ str(frameInfo))
   lastKids = []
   while(1):
-    time.sleep(.2)
     lastKids = []
     vmSize = 0
     if(sys.platform.find("win") >= 0):
@@ -850,7 +798,7 @@ def snoopFrames(fDets):
       forMean.sort()
       vmSizeAvg = forMean[(len(forMean)-1)/2]
       setFramesVmSize(frameInfo,vmSizeAvg)
-      time.sleep(0.5)
+      time.sleep(0.2)
       fInfo = getFrameInfo(frameInfo['id'],frameInfo['frameId'])
       if(fInfo[0]['status'] == constants.framesHung):
         while(1):
@@ -948,12 +896,7 @@ def setFramesStatus(taskId, frameId, status):
 def getEffectiveDetails():
   hostname = socket.gethostname()
   try:
-    rows = db_conn.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'"+ str(hostname) +"\'", dictionary=True)
-    try:
-      if(not rows['freeCpus']):
-        return(0)
-    except:
-      return(0)
+    rows = db_conn.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'"+ hostname +"\'", dictionary=True)
   except:
     return(0)
   return(rows[0])
@@ -963,10 +906,7 @@ def getEffectiveDetails():
 #If not used remove
  
 def atUrService():
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("atUrService")
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": atUrService func")
-  db_conn = dbRbhus.dbRbhus()
   while(1):
     try:
       hostName = socket.gethostname()
@@ -1004,7 +944,7 @@ def atUrService():
       #while(1):
         #if(setFreeCpus(frameInfos) == 1):
           #break
-        #time.sleep(0.5)
+        #time.sleep(0.2)
     elif(msg == "RESTART"):
       if(sys.platform.find("linux") >= 0):
         try:
@@ -1106,7 +1046,7 @@ def getHostGroups(hostName):
 
 def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
   while(1):
-    time.sleep(0.5)
+    time.sleep(0.1)
     if(sys.platform.find("linux") >=0):
       plat = "linux"
     elif(sys.platform.find("win") >= 0):
@@ -1278,7 +1218,10 @@ def mainFunc():
   
   
   
-  
+  frameFcuk.close()
+  frameFcuk.join_thread()
+  frameScrutiny.close()
+  frameScrutiny.join_thread()
   
   mainPidD = open(mainPidFile,"w",0)
   for i in range(0,len(p)):
@@ -1305,12 +1248,7 @@ def mainFunc():
     if(not p):
       break
   
-  time.sleep(10)
-  
-  frameFcuk.close()
-  frameFcuk.join_thread()
-  frameScrutiny.close()
-  frameScrutiny.join_thread()
+  time.sleep(10)    
   
 
 if __name__ == "__main__":
