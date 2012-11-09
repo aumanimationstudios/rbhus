@@ -557,7 +557,7 @@ def execFrames(frameInfo,frameScrutiny):
     status = fProcess.returncode
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "frame status of pid :"+ str(fProcess.pid) +": "+ str(status))
 
-    fStatus = getFrameStatus(frameInfo['id'],frameInfo['frameId'])
+    fStatus = getFrameStatus(frameInfo['id'],frameInfo['frameId'],db_conn)
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Frame status afterdone 1: "+ str(fStatus[0]['status']))
 
     if((status == 0) and (fStatus[0]['status'] != constants.framesKilled)):
@@ -623,9 +623,9 @@ def runCommand(rcmd):
   except:
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCmd  : "+ rcmd +" : "+ str(sys.exc_info()))
 
-def getFrameStatus(taskId,frameId):
+def getFrameStatus(taskId,frameId, dbconn):
   try:
-    rows = db_conn.execute("SELECT frames.status FROM frames \
+    rows = dbconn.execute("SELECT frames.status FROM frames \
                     WHERE frames.id = "+ str(taskId) +" \
                     AND frames.frameId = "+ str(frameId), dictionary=True)
     return(rows)
@@ -832,7 +832,7 @@ def snoopFrames(fDets):
       forMean.append(vmSize)
       forMean.sort()
       vmSizeAvg = forMean[(len(forMean)-1)/2]
-      setFramesVmSize(frameInfo,vmSizeAvg)
+      setFramesVmSize(frameInfo,vmSizeAvg, db_conn)
       time.sleep(0.2)
       fInfo = getFrameInfo(frameInfo['id'],frameInfo['frameId'], db_conn)
       if(fInfo[0]['status'] == constants.framesHung):
@@ -848,7 +848,7 @@ def snoopFrames(fDets):
     forMean.sort()
     vmSizeAvg = forMean[len(forMean)/2]
     while(1):
-      if(setFramesVmSize(frameInfo,vmSizeAvg) == 1):
+      if(setFramesVmSize(frameInfo,vmSizeAvg, db_conn) == 1):
         break
       time.sleep(1)
   sys.exit(0)
@@ -874,9 +874,9 @@ def getProcessVmSize(pid):
   return(vmSizeRet)
 
 
-def setFramesVmSize(frameInfo,vmSize):
+def setFramesVmSize(frameInfo,vmSize, dbconn):
   try:
-    db_conn.execute("UPDATE frames SET ram="+ str(vmSize) +" \
+    dbconn.execute("UPDATE frames SET ram="+ str(vmSize) +" \
                     WHERE frameId="+ str(frameInfo['frameId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
