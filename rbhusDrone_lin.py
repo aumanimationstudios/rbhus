@@ -180,7 +180,7 @@ def hostUpdater():
       logging.debug("WTF0 : "+ str(freeMem))
       loads = loadAvg()
       logging.debug("WTF1 : "+ str(loads))
-      setHostResMem(hostname,freeMem['MemFree'],freeMem['SwapFree'], loads[0], loads[1], loads[2], db_conn)
+      setHostResMem(hostname, db_conn,freeMem['MemFree'],freeMem['SwapFree'], loads[0], loads[1], loads[2])
       #print("foooooooooooooooooooooooooooooook")
       #print(hostname)
       #print(freeMem['MemFree'])
@@ -1188,7 +1188,7 @@ def setHostInfo(hostName,totalRam=0,totalCpus=0,totalSwap=0):
       pass
 
 
-def setHostResMem(hostName,freeRam='0',freeSwap='0', load1='0', load5='0', load10='0', dbconn):
+def setHostResMem(hostName, dbconn,freeRam='0',freeSwap='0', load1='0', load5='0', load10='0'):
   try:
     dbconn.execute("UPDATE hostResource SET freeRam=\'" + str(freeRam) +"\' \
           , freeSwap=\'"+ str(freeSwap) +"\' \
