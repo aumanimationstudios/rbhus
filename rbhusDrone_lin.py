@@ -410,7 +410,7 @@ def execFrames(frameInfo,frameScrutiny):
         runCommand(str(frameInfo['afterFrameCmd']))
 
       while(1):
-        if(setFreeCpus(frameInfo) ==  1):
+        if(setFreeCpus(frameInfo, db_conn) ==  1):
           break
         time.sleep(0.5)
       sys.exit(0)
@@ -462,7 +462,7 @@ def execFrames(frameInfo,frameScrutiny):
               runCommand(str(frameInfo['afterFrameCmd']))
 
             while(1):
-              if(setFreeCpus(frameInfo) ==  1):
+              if(setFreeCpus(frameInfo, db_conn) ==  1):
                 break
               time.sleep(0.2)
             logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "setFreeCpus  ")
@@ -501,7 +501,7 @@ def execFrames(frameInfo,frameScrutiny):
               runCommand(str(frameInfo['afterFrameCmd']))
 
             while(1):
-              if(setFreeCpus(frameInfo) ==  1):
+              if(setFreeCpus(frameInfo, db_conn) ==  1):
                 break
               time.sleep(0.2)
 
@@ -590,7 +590,7 @@ def execFrames(frameInfo,frameScrutiny):
     except:
       pass
     while(1):
-      if(setFreeCpus(frameInfo) ==  1):
+      if(setFreeCpus(frameInfo, db_conn) ==  1):
         logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point FOUR")
         break
       time.sleep(0.2)
@@ -1201,10 +1201,10 @@ def setHostResMem(hostName, dbconn,freeRam='0',freeSwap='0', load1='0', load5='0
     return(0)
   return(1)
 
-def setFreeCpus(frameInfo):
+def setFreeCpus(frameInfo, dbconn):
   hostName = socket.gethostname()
   try:
-    db_conn.execute("UPDATE hostResource SET freeCpus=freeCpus+"+ str(frameInfo['fThreads']) +" WHERE hostName=\'"+ str(hostName) +"\'")
+    dbconn.execute("UPDATE hostResource SET freeCpus=freeCpus+"+ str(frameInfo['fThreads']) +" WHERE hostName=\'"+ str(hostName) +"\'")
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : freeing CPUs : "+ str(hostName) +":"+ str(frameInfo['fThreads']))
   except:
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
