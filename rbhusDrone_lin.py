@@ -528,7 +528,7 @@ def execFrames(frameInfo,frameScrutiny):
     forScrutiny = fProcessPid
     frameScrutiny.put(forScrutiny)
 
-
+    time.sleep(1)
     kidsForStatus = []
     pidfileLock = multiprocessing.Lock()
     while(1):
@@ -545,7 +545,7 @@ def execFrames(frameInfo,frameScrutiny):
           if(writeFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'],kidsForStatus) == 1):
             break
           time.sleep(1)
-      time.sleep(2)
+      time.sleep(1)
 
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "-------------------------------")
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "kidsForStatus : "+ str(kidsForStatus))
