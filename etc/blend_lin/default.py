@@ -9,21 +9,21 @@ import subprocess
 
 taskId = os.environ['rbhus_taskId']
 frameId = os.environ['rbhus_frameId']
-user = os.environ['rbhus_user']     
-fileName = os.environ['rbhus_fileName'] 
+user = os.environ['rbhus_user']
+fileName = os.environ['rbhus_fileName']
 btCmd = os.environ['rbhus_btCmd']    #Should be run by the server .. WTF!!!!!!!!!
-fileType = os.environ['rbhus_fileType'] 
-renderer = os.environ['rbhus_renderer'] 
-minRam = os.environ['rbhus_minRam']   
-maxRam = os.environ['rbhus_maxRam']   
-outDir = os.environ['rbhus_outDir']   
-outName = os.environ['rbhus_outName']  
-logBase = os.environ['rbhus_logBase']  
-framePad = os.environ['rbhus_pad']      
+fileType = os.environ['rbhus_fileType']
+renderer = os.environ['rbhus_renderer']
+minRam = os.environ['rbhus_minRam']
+maxRam = os.environ['rbhus_maxRam']
+outDir = os.environ['rbhus_outDir']
+outName = os.environ['rbhus_outName']
+logBase = os.environ['rbhus_logBase']
+framePad = os.environ['rbhus_pad']
 atCmd = os.environ['rbhus_atCmd']    #Should be run by the server .. WTF!!!!!!!!!
-bfCmd = os.environ['rbhus_bfCmd']    
-afCmd = os.environ['rbhus_afCmd']    
-rThreads = os.environ['rbhus_threads']  
+bfCmd = os.environ['rbhus_bfCmd']
+afCmd = os.environ['rbhus_afCmd']
+rThreads = os.environ['rbhus_threads']
 renExtArgs = os.environ['rbhus_renExtArgs']
 layer = os.environ['rbhus_layer']
 pad = os.environ['rbhus_pad']
@@ -36,7 +36,7 @@ RENDER_CMD = ""
 layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +".py"
 
 if(layer.find("default") < 0):
-  layerScript = "#!/usr/bin/python3\nimport bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name] = False\n\nbpy.context.scene.render.layers["+ layer +"] = True"
+  layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name] = False\n\nbpy.context.scene.render.layers["+ layer +"] = True"
   f = open(layerScF,"w")
   f.writelines(layerScript)
   f.flush()
@@ -69,7 +69,7 @@ print(RENDER_CMD)
 
 
 sys.exit(0)
-  
+
 
 
 

@@ -796,6 +796,7 @@ def frameScrutinizer(frameScrutiny):
 
     snoopFramesProcess.append(multiprocessing.Process(target=snoopFrames,args=(frameDets,)))
     snoopFramesProcess[-1].start()
+    time.sleep(0.5)
 
 
 #this should inteligently snoop on any more pids that are spawned by the given pids
