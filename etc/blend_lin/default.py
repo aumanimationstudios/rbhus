@@ -36,7 +36,7 @@ RENDER_CMD = ""
 layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +".py"
 
 if(layer.find("default") < 0):
-  layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name] = False\n\nbpy.context.scene.render.layers["+ layer +"] = True"
+  layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name] = False\n\nbpy.context.scene.render.layers[\'"+ layer +"\'] = True"
   f = open(layerScF,"w")
   f.writelines(layerScript)
   f.flush()
