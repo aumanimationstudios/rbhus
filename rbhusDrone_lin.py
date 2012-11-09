@@ -652,10 +652,10 @@ def writeFramePidFile(pidLock,taskId,frameId,pids):
 def delFramePidFile(pidLock,taskId,frameId):
   taskPidF = tempDir + os.sep + "rbhus_"+ str(taskId).rstrip().lstrip() +"_"+ str(frameId).rstrip().lstrip()
   try:
-    if(isinstance(pidLock), int):
+    if(isinstance(pidLock, int)):
       pidLock.acquire()
     os.remove(taskPidF)
-    if(isinstance(pidLock), int):
+    if(isinstance(pidLock, int)):
       pidLock.release()
     return(1)
   except:
