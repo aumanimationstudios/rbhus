@@ -33,6 +33,8 @@ import rbhus.constants as constants
 if(sys.platform.find("linux") >= 0):
   import psi
   import psi.process
+  import setproctitle
+  setproctitle.setproctitle("rD")
 import tempfile
 import inspect
 
@@ -41,6 +43,8 @@ hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusClient.pids"
 db_conn = dbRbhus.dbRbhus()
+
+
 
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = '/var/log/rbhusClient.log'
@@ -169,6 +173,8 @@ def init():
 
 
 def hostUpdater():
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle("hostUpdater")
   db_conn = dbRbhus.dbRbhus()
   myPid = os.getpid()
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) +" : "+ "hostUpdater : "+ str(myPid))
@@ -231,6 +237,8 @@ def upHostAliveStatus(hostName, status, dbconn):
 
 
 def getAssignedFrames(qAssigned):
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle("getAssignedFrames")
   db_conn = dbRbhus.dbRbhus()
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": getAssignedFrames func")
   while(1):
@@ -264,6 +272,8 @@ def getAssignedFrames(qAssigned):
 
 
 def runFrames(qRun,frameScrutiny):
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle("runFrames")
   db_conn = dbRbhus.dbRbhus()
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": runFrames func")
   processFrames = []
@@ -310,12 +320,14 @@ def runFrames(qRun,frameScrutiny):
 
 
 def execFrames(frameInfo,frameScrutiny):
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
   db_conn = dbRbhus.dbRbhus()
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": execFrames func : "+ str(frameInfo['fileName']))
   hostEff = getEffectiveDetails(db_conn)
   if(hostEff != 0):
     while(1):
-      if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning) == 1):
+      if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
         break
       time.sleep(0.1)
 
@@ -388,7 +400,7 @@ def execFrames(frameInfo,frameScrutiny):
 
 
 
-    runScript = getDefaultScript(frameInfo['fileType'])
+    runScript = getDefaultScript(frameInfo['fileType'], db_conn)
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runScript : "+ str(runScript))
     try:
       if(sys.platform.find("win") >= 0):
@@ -399,7 +411,7 @@ def execFrames(frameInfo,frameScrutiny):
       os.environ['rbhus_exit']   = "1"
       logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "runCmd  : "+ str(sys.exc_info()))
       while(1):
-        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
+        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
           logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "run cmd failed !! ")
           break
         time.sleep(0.5)
@@ -427,7 +439,7 @@ def execFrames(frameInfo,frameScrutiny):
       pass
 
     while(1):
-      if(setFramesStime(frameInfo) == 1):
+      if(setFramesStime(frameInfo, db_conn) == 1):
         break
       time.sleep(0.5)
 
@@ -446,13 +458,13 @@ def execFrames(frameInfo,frameScrutiny):
           retryCount = retryCount + 1
           if(retryCount >= retryThres):
             while(1):
-              if(setFramesEtime(frameInfo) == 1):
+              if(setFramesEtime(frameInfo, db_conn) == 1):
                 break
               time.sleep(0.2)
             logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "retryCount : "+ str(retryCount))
 
             while(1):
-              if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
+              if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
                 break
               time.sleep(0.2)
 
@@ -485,12 +497,12 @@ def execFrames(frameInfo,frameScrutiny):
           retryCount = retryCount + 1
           if(retryCount >= retryThres):
             while(1):
-              if(setFramesEtime(frameInfo) == 1):
+              if(setFramesEtime(frameInfo, db_conn) == 1):
                 break
               time.sleep(0.2)
 
             while(1):
-              if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
+              if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
                 logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point ZERO")
                 break
               time.sleep(0.2)
@@ -551,20 +563,20 @@ def execFrames(frameInfo,frameScrutiny):
     if((status == 0) and (fStatus[0]['status'] != constants.framesKilled)):
       os.environ['rbhus_exit']   = "0"
       while(1):
-        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesDone) == 1):
+        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesDone,db_conn) == 1):
           logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point ONE")
           break
         time.sleep(0.2)
     elif(fStatus[0]['status'] != constants.framesKilled):
       os.environ['rbhus_exit']   = str(constants.framesKilled)
       while(1):
-        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed) == 1):
+        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
           logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point TWO")
           break
         time.sleep(0.2)
 
     while(1):
-      if(setFramesEtime(frameInfo) == 1):
+      if(setFramesEtime(frameInfo, db_conn) == 1):
         logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point THREE")
         break
       time.sleep(0.2)
@@ -574,7 +586,7 @@ def execFrames(frameInfo,frameScrutiny):
     #DOING THIS FOR WINDOWS.. fucking 3dsmax-server doesnt close after rendering!!!! dont know y 3dsmax is still making bussiness!
     #time.sleep(0.5)
     if(sys.platform.find("win") >= 0):
-      killFrame(frameInfo['id'],frameInfo['frameId'],pidfileLock,-1)
+      killFrame(db_conn,frameInfo['id'],frameInfo['frameId'],pidfileLock,-1)
     delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
 
 
@@ -674,7 +686,7 @@ def getFrameInfo(taskid, frameid, dbconn):
   return(rows)
 
 #error = 1 ; success = 0
-def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
+def killFrame(dbconn,taskId,frameId,pidLock = 0,statusAfterKill = -1):
   taskPidF = tempDir + os.sep + "rbhus_"+ str(taskId).rstrip().lstrip() +"_"+ str(frameId).rstrip().lstrip()
   try:
     if(pidLock != 0):
@@ -728,7 +740,7 @@ def killFrame(taskId,frameId,pidLock = 0,statusAfterKill = -1):
       killFail += 1
   if((killFail < numPids) and (statusAfterKill != -1)):
     while(1):
-      if(setFramesStatus(taskId,frameId,statusAfterKill) == 1):
+      if(setFramesStatus(taskId,frameId,statusAfterKill,dbconn) == 1):
         break
       time.sleep(0.5)
   return(0)
@@ -759,6 +771,8 @@ def getMainPids():
 
 
 def frameScrutinizer(frameScrutiny):
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle("frameScrutinizer")
   db_conn = dbRbhus.dbRbhus()
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": frameScrutinizer func")
   snoopFramesProcess = []
@@ -793,6 +807,10 @@ def snoopFrames(fDets):
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": snoopFrames func")
   frameInfo = fDets.pop(0)
   ProcessPid = fDets.pop(0)
+
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
+
   forMean = []
 
   logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(os.getpid()) + ": snoopFrames func : "+ str(ProcessPid) +" : "+ str(frameInfo))
@@ -819,7 +837,7 @@ def snoopFrames(fDets):
       fInfo = getFrameInfo(frameInfo['id'],frameInfo['frameId'], db_conn)
       if(fInfo[0]['status'] == constants.framesHung):
         while(1):
-          if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning) == 1):
+          if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
             logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "Break point SNOOOOOOOOOP")
             break
           time.sleep(1)
@@ -866,9 +884,9 @@ def setFramesVmSize(frameInfo,vmSize):
   return(1)
 
 
-def setFramesStime(frameInfo):
+def setFramesStime(frameInfo, dbconn):
   try:
-    db_conn.execute("UPDATE frames SET sTime=NOW() \
+    dbconn.execute("UPDATE frames SET sTime=NOW() \
                     WHERE frameId="+ str(frameInfo['frameId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
@@ -876,9 +894,9 @@ def setFramesStime(frameInfo):
   return(1)
 
 
-def setFramesEtime(frameInfo):
+def setFramesEtime(frameInfo, dbconn):
   try:
-    db_conn.execute("UPDATE frames SET eTime=NOW() \
+    dbconn.execute("UPDATE frames SET eTime=NOW() \
                     WHERE frameId="+ str(frameInfo['frameId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
@@ -887,10 +905,10 @@ def setFramesEtime(frameInfo):
   return(1)
 
 
-def getDefaultScript(fileType):
+def getDefaultScript(fileType, dbconn):
   rows = 0
   try:
-    rows = db_conn.execute("SELECT defScript FROM fileType WHERE fileType.fileType=\'"+ str(fileType) +"\'", dictionary=True)
+    rows = dbconn.execute("SELECT defScript FROM fileType WHERE fileType.fileType=\'"+ str(fileType) +"\'", dictionary=True)
   except:
     return(0)
   if(rows):
@@ -900,9 +918,9 @@ def getDefaultScript(fileType):
     logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ "NO SCRIPT")
     return(0)
 
-def setFramesStatus(taskId, frameId, status):
+def setFramesStatus(taskId, frameId, status, dbconn):
   try:
-    db_conn.execute("UPDATE frames SET status="+ str(status) +" \
+    dbconn.execute("UPDATE frames SET status="+ str(status) +" \
                     WHERE frameId="+ str(frameId) +" \
                     AND id="+ str(taskId))
   except:
@@ -957,7 +975,7 @@ def atUrService():
       except:
         continue
       frameInfos = getFrameInfo(taskId, frameId, db_conn)
-      killFrame(taskId,frameId,0,constants.framesKilled)
+      killFrame(db_conn,taskId,frameId,0,constants.framesKilled)
       delFramePidFile(0,taskId,frameId)
       #while(1):
         #if(setFreeCpus(frameInfos) == 1):
