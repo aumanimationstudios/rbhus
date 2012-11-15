@@ -183,18 +183,10 @@ def hostUpdater():
     hostname = socket.gethostname()
     try:
       freeMem = freeMeminfo()
-      logging.debug("WTF0 : "+ str(freeMem))
+      #logging.debug("WTF0 : "+ str(freeMem))
       loads = loadAvg()
-      logging.debug("WTF1 : "+ str(loads))
+      #logging.debug("WTF1 : "+ str(loads))
       setHostResMem(hostname, db_conn,freeMem['MemFree'],freeMem['SwapFree'], loads[0], loads[1], loads[2])
-      #print("foooooooooooooooooooooooooooooook")
-      #print(hostname)
-      #print(freeMem['MemFree'])
-      #print(freeMem['SwapFree'])
-      #print(loads[0])
-      #print(loads[1])
-      #print(loads[2])
-      #print("fuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuk")
     except:
       logging.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) + " : "+ str(sys.exc_info()))
       continue
