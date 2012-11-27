@@ -29,8 +29,10 @@ import rbhusHostMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
+import dbRbhus
 import constants
 
+dbconn = dbRbhus.dbRbhus()
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -41,9 +43,44 @@ except AttributeError:
 class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusHostMod.Ui_MainWindow.setupUi(self,Form)
-    self.colNamesHost = ["hostName","totalRam","totalCpus","status","groups","os"]
+    self.colNamesHost = ["hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostInfo.groups"]
     self.popTableHost()
+    self.pushDisable.clicked.connect(self.hostDisable)
+    self.pushEnable.clicked.connect(self.hostEnable)
+    self.pushRefresh.clicked.connect(self.popTableHost)
+  
+  
+  def hostEnable(self):
+    hosts =  self.selectedHosts()
+    if(hosts):
+      for h in hosts:
+        dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where hostName=\'"+ str(h['hostInfo.hostName']) +"\'")
+    self.popTableHost()
+
+
+  def hostDisable(self):
+    hosts = self.selectedHosts() 
+    if(hosts):
+      for h in hosts:
+        dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where hostName=\'"+ str(h['hostInfo.hostName']) +"\'")
+    self.popTableHost()
+  
     
+  def selectedHosts(self):
+    rowsHosts=[]
+    rowsSelected = []
+    for idx in self.tableHost.selectionModel().selectedRows():
+      rowsSelected.append(idx.row())
+    colCount = self.tableHost.columnCount()
+    for row in rowsSelected:
+      singleRow = {}
+      for col in range(0,colCount):
+        singleRow[self.colNamesHost[col]] = str(self.tableHost.item(row,col).text())
+      if(singleRow):
+        rowsHosts.append(singleRow)
+
+    return(rowsHosts)
+  
   def popTableHost(self):
     self.tableHost.clearContents()
     self.tableHost.setSortingEnabled(False)
@@ -51,15 +88,10 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     colCount = 0
     
     try:
-      conn = db.connRbhus()
-      cursor = conn.cursor(db.dict)
-      cursor.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo")
-      rows = cursor.fetchall()
-      cursor.close()
-      conn.close()
+      rows = dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive where hostInfo.hostName=hostAlive.hostName", dictionary=True)
     except:
       print("Error connecting to db")
-      return()
+      return(0)
       
     if(not rows):
       return()
@@ -75,6 +107,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       self.tableHost.setHorizontalHeaderItem(x, item)
     indx = 0
     for x in self.colNamesHost:
+      y = x.split(" as ")
+      x = y[-1].split(".")[-1]
       self.tableHost.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
       indx = indx + 1
 
@@ -86,6 +120,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       self.tableHost.setVerticalHeaderItem(indx, item)
       colIndx = 0
       for colName in self.colNamesHost:
+        colName = colName.split(" as ")[-1].split(".")[-1]
         item = QtGui.QTableWidgetItem()
         brush = QtGui.QBrush()
         if(colName == "status"):
@@ -100,10 +135,24 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
           self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.hostInfoStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
+        if(colName == "alive"):
+          if(row[colName] == constants.hostInfoDisable):
+            brush.setColor(QtGui.QColor(200, 0, 0))
+            brush.setStyle(QtCore.Qt.SolidPattern)
+          else:
+            brush.setColor(QtGui.QColor(0, 200, 0))
+            brush.setStyle(QtCore.Qt.SolidPattern)
+          item.setBackground(brush)
+          self.tableHost.setItem(indx, colIndx, item)
+          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.hostAliveStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        
         item.setBackground(brush)
         self.tableHost.setItem(indx, colIndx, item)
         self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
+        
       indx = indx + 1
 
  

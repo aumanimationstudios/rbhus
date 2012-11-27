@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'lib/rbhusHostMod.ui'
+# Form implementation generated from reading ui file 'rbhusHostMod.ui'
 #
-# Created: Tue Aug  7 23:53:08 2012
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Sat Nov 17 00:41:18 2012
+#      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1029, 360)
+        MainWindow.resize(1053, 355)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -30,8 +30,8 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.horizontalLayout = QtGui.QHBoxLayout(self.centralwidget)
-        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.gridLayout = QtGui.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.tableHost = QtGui.QTableWidget(self.centralwidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -44,7 +44,8 @@ class Ui_MainWindow(object):
         self.tableHost.setRowCount(0)
         self.tableHost.horizontalHeader().setCascadingSectionResizes(True)
         self.tableHost.horizontalHeader().setStretchLastSection(True)
-        self.horizontalLayout.addWidget(self.tableHost)
+        self.tableHost.verticalHeader().setStretchLastSection(False)
+        self.gridLayout.addWidget(self.tableHost, 2, 0, 1, 1)
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.pushEdit = QtGui.QPushButton(self.centralwidget)
@@ -58,18 +59,25 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.pushDisable)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
-        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.gridLayout.addLayout(self.verticalLayout, 2, 1, 1, 1)
+        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
+        self.pushRefresh = QtGui.QPushButton(self.centralwidget)
+        self.pushRefresh.setObjectName(_fromUtf8("pushRefresh"))
+        self.horizontalLayout_2.addWidget(self.pushRefresh)
+        self.gridLayout.addLayout(self.horizontalLayout_2, 3, 0, 1, 2)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
-        self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "rbhusHost", None, QtGui.QApplication.UnicodeUTF8))
+        self.tableHost.setSortingEnabled(True)
         self.pushEdit.setText(QtGui.QApplication.translate("MainWindow", "edit", None, QtGui.QApplication.UnicodeUTF8))
         self.pushEnable.setText(QtGui.QApplication.translate("MainWindow", "enable", None, QtGui.QApplication.UnicodeUTF8))
         self.pushDisable.setText(QtGui.QApplication.translate("MainWindow", "disable", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushRefresh.setText(QtGui.QApplication.translate("MainWindow", "refresh", None, QtGui.QApplication.UnicodeUTF8))
 

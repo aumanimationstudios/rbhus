@@ -17,10 +17,7 @@ else:
   
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 
-if(sys.platform.find("win") >= 0):
-  rEc = "rbhusEdit.py"
-elif(sys.platform.find("linux") >= 0):
-  rEc = "rbhusEdit"
+rEc = "rbhusEdit.py"
   
 editTaskCmd = cwd.rstrip(os.sep) + os.sep + rEc
 

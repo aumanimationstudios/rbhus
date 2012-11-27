@@ -10,19 +10,14 @@ else:
   cwd = os.path.abspath(os.getcwd())
 
 sys.path.append(cwd.rstrip(os.sep) + os.sep)
-import db
+import dbRbhus
 
 
-
+dbconn = dbRbhus.dbRbhus()
 
 def getHostGroups():
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("select groups from hostInfo group by groups")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    rows = dbconn.execute("select groups from hostInfo group by groups", dictionary=True)
   except:
     print("Error connecting to db 1")
     return(0)
@@ -41,12 +36,7 @@ def getHostGroups():
       
 def getFileTypes():
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("select * from fileType")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    rows = dbconn.execute("select * from fileType", dictionary=True)
   except:
     print("Error connecting to db 2")
     return(0)
@@ -60,12 +50,7 @@ def getFileTypes():
     
 def getRenderers():
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("select * from renderer")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    rows = dbconn.execute("select * from renderer", dictionary=True)
   except:
     print("Error connecting to db 2")
     return(0)
@@ -83,12 +68,7 @@ def getRenderers():
     
 def getOsTypes():
   try:
-    conn = db.connRbhus()
-    cursor = conn.cursor(db.dict)
-    cursor.execute("select os from hostInfo group by os")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    rows = dbconn.execute("select os from hostInfo group by os", dictionary=True)
   except:
     print("Error connecting to db 1")
     return(0)

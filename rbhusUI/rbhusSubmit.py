@@ -17,10 +17,11 @@ sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 import rbhusSubmitMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-import db
+import dbRbhus
 import constants
 import utils as rUtils
 
+dbconn = dbRbhus.dbRbhus()
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -45,12 +46,33 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     groups = rUtils.getHostGroups()
     ostypes = rUtils.getOsTypes()
     ftypes = rUtils.getFileTypes()
+
     for group in groups:
       self.comboHostGroup.addItem(_fromUtf8(group))
+    ind = 0
+    try:
+      ind = groups.index("default")
+    except:
+      pass
+    self.comboHostGroup.setCurrentIndex(ind)
+    
     for ft in ftypes:
       self.comboFileType.addItem(_fromUtf8(ft))
+    ind = 0
+    try:
+      ind = ftypes.index("default")
+    except:
+      pass
+    self.comboFileType.setCurrentIndex(ind)
+      
     for ost in ostypes:
       self.comboOsType.addItem(_fromUtf8(ost))
+    ind = 0
+    try:
+      ind = ostypes.index("default")
+    except:
+      pass
+    self.comboOsType.setCurrentIndex(ind)
       
     
     
@@ -125,9 +147,9 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       if(prios == "low"):
         p = 1
       if(prios == "high"):
-        p = 9000
+        p = 300
       if(prios == "normal"):
-        p = 5000
+        p = 150
       if((filetype == "3dsmax") and ((ostype == "default") or (ostype == "win"))):
         logB = "z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\"
         afterFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py"
@@ -137,9 +159,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         afterFrameC = "default"
         beforeFrameC = "default"
       try:
-        conn = db.connRbhus()
-        cursor = conn.cursor()
-        cursor.execute("insert into tasks (fileName, logBase, \
+        dbconn.execute("insert into tasks (fileName, logBase, \
                         fRange, fileType, afterFrameCmd, beforeFrameCmd, \
                         hostGroups, submitTime, priority, afterTasks, \
                         renderer, imageType, outDir, outName, layer, os) \
@@ -147,13 +167,8 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
                         \'"+ str(fRange) +"\', \'"+ str(filetype) +"\', \'"+ str(afterFrameC) +"\', \'"+ str(beforeFrameC) +"\', \
                         \'"+ str(self.comboHostGroup.currentText()) +"\', now(), "+ str(p) +", \'"+ str(self.lineEditAfterTask.text())  +"\', \
                         \'"+ str(self.comboRenderer.currentText()) +"\', \'"+ str(self.lineEditImageType.text()) +"\', \'"+ str(self.lineEditOutDir.text()) +"\', \'"+ str(self.lineEditOutName.text()) +"\', \'" +str(self.lineEditLayer.text()) +"\', \'"+ str(self.comboOsType.currentText()) +"\')")
-        cursor.close()
-        cursor = conn.cursor(db.dict)
-        cursor.execute("select last_insert_id()")
-        rows = cursor.fetchall()
+        rows = dbconn.execute("select last_insert_id()", dictionary = True)
         lastID =  rows[0]['last_insert_id()']
-        cursor.close()
-        conn.close()
       except:
         print("Error connecting to db : "+ str(sys.exc_info()))
         return()

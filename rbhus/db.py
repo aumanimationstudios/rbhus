@@ -18,6 +18,9 @@
 
 # place this file in /prodloops/lib/python2/
 
+# DEPRECATED #
+
+
 import MySQLdb
 import MySQLdb.cursors
 

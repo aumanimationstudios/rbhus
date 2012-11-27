@@ -98,7 +98,7 @@ def setCompletedTasks():
   db_conn = dbRbhus.dbRbhus()
   setproctitle.setproctitle("rQ_setCompletedTasks")
   while(1):
-    tasks = db_conn.getActiveTasks()
+    tasks = db_conn.getAllTasks()
     
     if(tasks):
       for task in tasks:
@@ -112,7 +112,7 @@ def setCompletedTasks():
                 logging.debug("task "+ str(task['id']) +" status changed to : "+ str(status))
                 break
               time.sleep(0.1)
-    time.sleep(0.05)
+    time.sleep(0.1)
     
     
 if __name__=="__main__":

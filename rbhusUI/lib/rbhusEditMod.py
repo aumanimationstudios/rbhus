@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'lib/rbhusEditMod.ui'
+# Form implementation generated from reading ui file 'rbhusEditMod.ui'
 #
-# Created: Sat Jul 28 22:22:21 2012
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Fri Nov 16 21:15:35 2012
+#      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
 

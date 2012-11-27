@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Wed Nov  7 21:35:09 2012
+# Created: Sat Nov 17 00:30:01 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_rbhusSubmit(object):
     def setupUi(self, rbhusSubmit):
         rbhusSubmit.setObjectName(_fromUtf8("rbhusSubmit"))
-        rbhusSubmit.resize(724, 525)
+        rbhusSubmit.resize(724, 580)
         self.centralwidget = QtGui.QWidget(rbhusSubmit)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -293,9 +293,9 @@ class Ui_rbhusSubmit(object):
         self.labeFileType.setText(QtGui.QApplication.translate("rbhusSubmit", "fileType", None, QtGui.QApplication.UnicodeUTF8))
         self.pushSubmit.setText(QtGui.QApplication.translate("rbhusSubmit", "submit", None, QtGui.QApplication.UnicodeUTF8))
         self.labeRenderer.setText(QtGui.QApplication.translate("rbhusSubmit", "renderer", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboPrio.setItemText(0, QtGui.QApplication.translate("rbhusSubmit", "high", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboPrio.setItemText(0, QtGui.QApplication.translate("rbhusSubmit", "low", None, QtGui.QApplication.UnicodeUTF8))
         self.comboPrio.setItemText(1, QtGui.QApplication.translate("rbhusSubmit", "normal", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboPrio.setItemText(2, QtGui.QApplication.translate("rbhusSubmit", "low", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboPrio.setItemText(2, QtGui.QApplication.translate("rbhusSubmit", "high", None, QtGui.QApplication.UnicodeUTF8))
         self.lineEditAfterTask.setText(QtGui.QApplication.translate("rbhusSubmit", "0", None, QtGui.QApplication.UnicodeUTF8))
         self.lineEditLayer.setText(QtGui.QApplication.translate("rbhusSubmit", "default", None, QtGui.QApplication.UnicodeUTF8))
         self.textEdit.setHtml(QtGui.QApplication.translate("rbhusSubmit", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

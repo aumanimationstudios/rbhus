@@ -115,6 +115,23 @@ class dbRbhus:
       return(0)
     return(rows)
     
+    
+  def getAllTasks(self):
+    try:
+      rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
+                      WHERE tasks.id=tasksLog.id \
+                      ORDER BY tasks.priority DESC", dictionary=True)
+    
+      #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem
+      if(rows):
+        if(not 'priority' in rows[0].keys()):
+          modLogger.error("faaaaaaaaack ..getActiveTasks missed!!!!  : "+ str(rows))
+          return(0)
+    except:
+      modLogger.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+    
   def getPotentHosts(self):
     try:
       rows = self.execute("SELECT hostInfo.hostName, \
@@ -271,17 +288,25 @@ class dbRbhus:
   #Return value is the status of the task that needs to be set
   def checkTaskCompleted(self,taskId):
     try:
-      compCount_ = self.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId) +" \
-                      AND frames.status="+ str(constants.framesDone), dictionary=True)
-      compCount = compCount_[0][compCount_[0].keys()[0]]
-      totalCount_ = self.execute("SELECT COUNT(*) FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
-      totalCount = totalCount_[0][totalCount_[0].keys()[0]]
-      if(totalCount == compCount) :
-        return(constants.taskDone)
-      elif(((totalCount - compCount) == 0) and (totalCount != 0)):
-        return(constants.taskWaiting)
-      else:
-        return(-2)
+      rowss_ = self.execute("SELECT * FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
+      f_status = {}
+      for k in constants.framesStatus:
+        f_status[constants.framesStatus[k]] = 0
+      if(rowss_):
+        for x in rowss_:
+          f_status[constants.framesStatus[x['status']]] = f_status[constants.framesStatus[x['status']]] + 1
+      if(f_status):
+        for k in f_status:
+          if(f_status[k] == len(rowss_)):
+            if(k == constants.framesStatus[constants.framesDone]):
+              return(constants.taskDone)
+            elif(k == constants.framesStatus[constants.framesHold]):
+              return(constants.taskStopped)
+            elif(k == constants.framesStatus[constants.framesAutoHold]):
+              return(constants.taskAutoStopped)
+        if((f_status[constants.framesStatus[constants.framesDone]] + f_status[constants.framesStatus[constants.framesHold]] + f_status[constants.framesStatus[constants.framesAutoHold]]) == len(rowss_)):
+          return(constants.taskAutoStopped)
+      return(-2)
     except:
       logging.error(str(sys.exc_info()))
       return(-1)
@@ -299,19 +324,9 @@ class dbRbhus:
 def test():
   dbR = dbRbhus()
   y = 0
-  while(1):
-    row = dbR.execute("select id,fileName,status from tasks where status=3", dictionary=True)
-    if(row == 1):
-      print "done"
-      break
-      
-    if(not row):
-      print "quit"
-      print row
-      break
-    for x in row:
-      print str(y)+ ":"+ str(x)
-      y = y+1
+  row = dbR.checkTaskCompleted(sys.argv[1])
+  if(row >= 0):
+    print constants.taskStatus[row]
     #time.sleep(1)
   
   

@@ -72,6 +72,12 @@ hostInfoStatus = {
 hostAliveDead = 0
 hostAliveAlive = 1
 
+hostAliveStatus = {
+  0 : "dead", 
+  1 : "alive"
+}
+  
+
 #hostResource
 hostResourceActive = 1
 hostResourceStopped = 2
