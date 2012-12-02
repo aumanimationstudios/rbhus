@@ -154,6 +154,10 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         logB = "z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\"
         afterFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py"
         beforeFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\beforeFrame.py"
+      elif((filetype == "3dsmax2013") and ((ostype == "default") or (ostype == "win"))):
+        logB = "z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\"
+        afterFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax2013\\\\afterFrame.py"
+        beforeFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax2013\\\\beforeFrame.py"
       else:
         logB = "default"
         afterFrameC = "default"

@@ -82,6 +82,7 @@ def sigHandle(sigNum, frame):
   logging.debug("my pid "+ str(myPid))
   # run this only if linux?! .. omfg .. i dont know !!!!
   if(sys.platform.find("linux")):
+    logging.debug("starting to kill processes")
     killProcessKids(myPid)
   return(1)
 
@@ -532,11 +533,22 @@ def execFrames(frameInfo,frameScrutiny):
         if(getProcessLastKids_win(fProcess.pid,kidsForStatus) == 0):
           break
       if(len(kidsForStatus) > 0):
-        logging.debug("kidsForStatus : "+ str(kidsForStatus))
+        #logging.debug("kidsForStatus : "+ str(kidsForStatus))
         while(1):
           if(writeFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'],kidsForStatus) == 1):
             break
           time.sleep(1)
+        
+        ### THE BELOW CODE IS WRITTEN FOR A STUPID USECASE WHEN THERE ARE NETWORK PROBLEMS
+        fInfo = getFrameInfo(frameInfo['id'],frameInfo['frameId'], db_conn)
+        #if((fInfo[0]['status'] == constants.framesHung) or (fInfo[0]['status'] == constants.framesDone)):
+        if(fInfo[0]['status'] == constants.framesHung):
+          while(1):
+            if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
+              logging.debug("Break point MADNESS")
+              break
+            time.sleep(1)
+      
       time.sleep(1)
 
     logging.debug("-------------------------------")
@@ -552,20 +564,7 @@ def execFrames(frameInfo,frameScrutiny):
     fStatus = getFrameStatus(frameInfo['id'],frameInfo['frameId'],db_conn)
     logging.debug("Frame status afterdone 1: "+ str(fStatus[0]['status']))
 
-    if((status == 0) and (fStatus[0]['status'] != constants.framesKilled)):
-      os.environ['rbhus_exit']   = "0"
-      while(1):
-        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesDone,db_conn) == 1):
-          logging.debug("Break point ONE")
-          break
-        time.sleep(0.2)
-    elif(fStatus[0]['status'] != constants.framesKilled):
-      os.environ['rbhus_exit']   = str(constants.framesKilled)
-      while(1):
-        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
-          logging.debug("Break point TWO")
-          break
-        time.sleep(0.2)
+    
 
     while(1):
       if(setFramesEtime(frameInfo, db_conn) == 1):
@@ -582,10 +581,7 @@ def execFrames(frameInfo,frameScrutiny):
     delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
 
 
-    #Run the afterFrame shits
-    if(str(frameInfo['afterFrameCmd']) != 'default'):
-      logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
-      runCommand(str(frameInfo['afterFrameCmd']))
+    
 
 
     try:
@@ -593,11 +589,34 @@ def execFrames(frameInfo,frameScrutiny):
       logD.close()
     except:
       pass
+    
+      
+    if((status == 0) and (fStatus[0]['status'] != constants.framesKilled)):
+      os.environ['rbhus_exit']   = "0"
+      while(1):
+        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesDone,db_conn) == 1):
+          logging.debug("Break point ONE")
+          break
+        time.sleep(0.2)
+    elif(fStatus[0]['status'] != constants.framesKilled):
+      os.environ['rbhus_exit']   = str(constants.framesKilled)
+      while(1):
+        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
+          logging.debug("Break point TWO")
+          break
+        time.sleep(0.2)
+        
+    #Run the afterFrame shits
+    if(str(frameInfo['afterFrameCmd']) != 'default'):
+      logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
+      runCommand(str(frameInfo['afterFrameCmd']))
+      
     while(1):
       if(setFreeCpus(frameInfo, db_conn) ==  1):
         logging.debug("Break point FOUR")
         break
       time.sleep(0.2)
+      
     sys.exit(0)
 
 
@@ -769,13 +788,11 @@ def frameScrutinizer(frameScrutiny):
   logging.debug(str(os.getpid()) + ": frameScrutinizer func")
   snoopFramesProcess = []
   while(1):
-    while(1):
-      time.sleep(0.2)
-      try:
-        frameDets = frameScrutiny.get()
-        break
-      except:
-        pass
+    try:
+      frameDets = frameScrutiny.get()
+    except:
+      logging.error(str(sys.exc_info()))
+
     if(len(snoopFramesProcess) > 0):
       for i in range(0,len(snoopFramesProcess)):
         if(snoopFramesProcess[i].is_alive()):
@@ -806,44 +823,44 @@ def snoopFrames(fDets):
 
   forMean = []
 
-  logging.debug(str(os.getpid()) + ": snoopFrames func : "+ str(ProcessPid) +" : "+ str(frameInfo))
+  logging.debug(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
   lastKids = []
-  while(1):
-    lastKids = []
-    vmSize = 0
-    if(sys.platform.find("win") >= 0):
-      lKids = getProcessLastKids_win(ProcessPid,lastKids)
-      if(lKids == 0):
-        break
-    elif(sys.platform.find("linux") >= 0):
-      lKids = getProcessLastKids(ProcessPid,lastKids)
-      if(lKids == 0):
-        break
-    if(len(lastKids) != 0):
-      for framePid in lastKids:
-        vmSize = vmSize + int(getProcessVmSize(framePid))
-      forMean.append(vmSize)
+  try:
+    while(1):
+      lastKids = []
+      vmSize = 0
+      if(sys.platform.find("win") >= 0):
+        lKids = getProcessLastKids_win(ProcessPid,lastKids)
+        if(lKids == 0):
+          break
+      elif(sys.platform.find("linux") >= 0):
+        lKids = getProcessLastKids(ProcessPid,lastKids)
+        if(lKids == 0):
+          break
+      if(len(lastKids) != 0):
+        for framePid in lastKids:
+          vmSize = vmSize + int(getProcessVmSize(framePid))
+        forMean.append(vmSize)
+        forMean.sort()
+        vmSizeAvg = forMean[(len(forMean)-1)/2]
+        if(vmSizeAvg != 0):
+          setFramesVmSize(frameInfo,vmSizeAvg, db_conn)
+        #time.sleep(0.2)
+        
+        
+      else:
+        continue
+      time.sleep(1)
+    if(len(forMean) > 0):
       forMean.sort()
-      vmSizeAvg = forMean[(len(forMean)-1)/2]
-      setFramesVmSize(frameInfo,vmSizeAvg, db_conn)
-      time.sleep(0.2)
-      fInfo = getFrameInfo(frameInfo['id'],frameInfo['frameId'], db_conn)
-      if((fInfo[0]['status'] == constants.framesHung) or (fInfo[0]['status'] == constants.framesDone)):
+      vmSizeAvg = forMean[len(forMean)/2]
+      if(vmSizeAvg != 0):
         while(1):
-          if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
-            logging.debug("Break point SNOOOOOOOOOP")
+          if(setFramesVmSize(frameInfo,vmSizeAvg, db_conn) == 1):
             break
           time.sleep(1)
-      time.sleep(2)
-    else:
-      continue
-  if(len(forMean) > 0):
-    forMean.sort()
-    vmSizeAvg = forMean[len(forMean)/2]
-    while(1):
-      if(setFramesVmSize(frameInfo,vmSizeAvg, db_conn) == 1):
-        break
-      time.sleep(1)
+  except:
+    logging.debug(str(sys.exc_info()))
   sys.exit(0)
 
 
