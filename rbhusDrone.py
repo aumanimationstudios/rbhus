@@ -538,7 +538,7 @@ def execFrames(frameInfo,frameScrutiny):
           if(writeFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'],kidsForStatus) == 1):
             break
           time.sleep(1)
-        
+
         ### THE BELOW CODE IS WRITTEN FOR A STUPID USECASE WHEN THERE ARE NETWORK PROBLEMS
         fInfo = getFrameInfo(frameInfo['id'],frameInfo['frameId'], db_conn)
         #if((fInfo[0]['status'] == constants.framesHung) or (fInfo[0]['status'] == constants.framesDone)):
@@ -548,7 +548,7 @@ def execFrames(frameInfo,frameScrutiny):
               logging.debug("Break point MADNESS")
               break
             time.sleep(1)
-      
+
       time.sleep(1)
 
     logging.debug("-------------------------------")
@@ -564,7 +564,7 @@ def execFrames(frameInfo,frameScrutiny):
     fStatus = getFrameStatus(frameInfo['id'],frameInfo['frameId'],db_conn)
     logging.debug("Frame status afterdone 1: "+ str(fStatus[0]['status']))
 
-    
+
 
     while(1):
       if(setFramesEtime(frameInfo, db_conn) == 1):
@@ -581,7 +581,7 @@ def execFrames(frameInfo,frameScrutiny):
     delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
 
 
-    
+
 
 
     try:
@@ -589,8 +589,8 @@ def execFrames(frameInfo,frameScrutiny):
       logD.close()
     except:
       pass
-    
-      
+
+
     if((status == 0) and (fStatus[0]['status'] != constants.framesKilled)):
       os.environ['rbhus_exit']   = "0"
       while(1):
@@ -605,18 +605,18 @@ def execFrames(frameInfo,frameScrutiny):
           logging.debug("Break point TWO")
           break
         time.sleep(0.2)
-        
+
     #Run the afterFrame shits
     if(str(frameInfo['afterFrameCmd']) != 'default'):
       logging.debug("running afterFrameCmd :"+ str(frameInfo['afterFrameCmd']))
       runCommand(str(frameInfo['afterFrameCmd']))
-      
+
     while(1):
       if(setFreeCpus(frameInfo, db_conn) ==  1):
         logging.debug("Break point FOUR")
         break
       time.sleep(0.2)
-      
+
     sys.exit(0)
 
 
@@ -846,8 +846,8 @@ def snoopFrames(fDets):
         if(vmSizeAvg != 0):
           setFramesVmSize(frameInfo,vmSizeAvg, db_conn)
         #time.sleep(0.2)
-        
-        
+
+
       else:
         continue
       time.sleep(1)
@@ -1276,10 +1276,10 @@ def mainFunc():
 
 
 
-  frameFcuk.close()
-  frameFcuk.join_thread()
-  frameScrutiny.close()
-  frameScrutiny.join_thread()
+  #frameFcuk.close()
+  #frameFcuk.join_thread()
+  #frameScrutiny.close()
+  #frameScrutiny.join_thread()
 
   mainPidD = open(mainPidFile,"w",0)
   for i in range(0,len(p)):

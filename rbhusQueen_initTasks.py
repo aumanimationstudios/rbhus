@@ -57,7 +57,7 @@ def getWaitingTasks(pendingTasks):
           #logging.debug("Adding task wtf: "+ str(row))
           ##DO NOT REMOVE THE PENDING STATUS
           while(1):
-            try:  
+            try:
               db_conn.execute("UPDATE tasks SET status="+ str(constants.taskPending) +" WHERE (id = "+ str(idTask) +") and ( status = "+ str(constants.taskWaiting) +")")
               #logging.debug("updating tasks table with pending status wtf4")
               break
@@ -65,7 +65,7 @@ def getWaitingTasks(pendingTasks):
               logging.error("Screwed updating tasks table with pending status : "+ str(sys.exc_info()))
               continue
             time.sleep(0.1)
-            
+
           try:
             db_conn.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
           except:
@@ -85,11 +85,11 @@ def initWaitingTasks(pendingTasks):
       except:
         #logging.error("Screwed initWaitingTasks WTF1 : "+ str(sys.exc_info()))
         time.sleep(0.2)
-    if(row):  
+    if(row):
       idTask = row['id']
       fRange = row['fRange']
       frames = []
-      
+
       for a in fRange.split(","):
         frange = a.split(":")
         pad = 1
@@ -101,7 +101,7 @@ def initWaitingTasks(pendingTasks):
         logging.debug(str(int(Frange.split("-")[-1]) + 1))
         for b in range(int(Frange.split("-")[0]), int(Frange.split("-")[-1]) + 1, int(pad)):
           frames.append(b)
-          
+
       tFrames = []
       framesTable = 0
       while(1):
@@ -111,11 +111,11 @@ def initWaitingTasks(pendingTasks):
         except:
           pass
         time.sleep(0.5)
-        
+
       if(framesTable):
         for frameTable in framesTable:
           tFrames.append(frameTable['frameId'])
-      
+
       tFramesSet = set(tFrames)
       framesSet = set(frames)
       forDelSet = tFramesSet.difference(framesSet)
@@ -127,7 +127,7 @@ def initWaitingTasks(pendingTasks):
           except:
             logging.error("Screwed initWaitingTasks (Delete frames table (connection)) : "+ str(sys.exc_info()))
           time.sleep(0.1)
-    
+
       for frame in frames:
         while(1):
           try:
@@ -149,27 +149,27 @@ def initWaitingTasks(pendingTasks):
           logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
         time.sleep(0.1)
     time.sleep(0.1)
-    
-    
+
+
 def initTasks():
   pendTasks = multiprocessing.Queue()
   p = []
   getWaitingTasks_proc = multiprocessing.Process(target=getWaitingTasks,args=(pendTasks,))
   p.append(getWaitingTasks_proc)
   getWaitingTasks_proc.start()
-  
-  
+
+
   time.sleep(2)
-  
-  
+
+
   initWaitingTasks_proc = multiprocessing.Process(target=initWaitingTasks,args=(pendTasks,))
   p.append(initWaitingTasks_proc)
   initWaitingTasks_proc.start()
-  
-  pendTasks.close()
-  
-  pendTasks.join_thread()
-  
+
+  #pendTasks.close()
+
+  #pendTasks.join_thread()
+
   while(1):
     time.sleep(1)
     if(not p):
@@ -177,13 +177,13 @@ def initTasks():
     for i in range(0,len(p)):
       if(p[i].is_alive()):
         time.sleep(0.5)
-      else: 
+      else:
         logging.debug("MAIN Process dead : "+ str(p[i].pid))
         try:
           del(p[i])
         except:
           logging.debug("MAIN Process dead . cannot delete index")
         break
-        
+
 if __name__=="__main__":
   initTasks()
