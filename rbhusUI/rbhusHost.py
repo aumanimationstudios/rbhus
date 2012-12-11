@@ -43,7 +43,7 @@ except AttributeError:
 class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusHostMod.Ui_MainWindow.setupUi(self,Form)
-    self.colNamesHost = ["hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostInfo.groups"]
+    self.colNamesHost = ["hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
     self.popTableHost()
     self.pushDisable.clicked.connect(self.hostDisable)
     self.pushEnable.clicked.connect(self.hostEnable)
@@ -88,7 +88,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     colCount = 0
     
     try:
-      rows = dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive where hostInfo.hostName=hostAlive.hostName", dictionary=True)
+      rows = dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource where hostInfo.hostName=hostAlive.hostName and hostAlive.hostName=hostResource.hostName", dictionary=True)
     except:
       print("Error connecting to db")
       return(0)

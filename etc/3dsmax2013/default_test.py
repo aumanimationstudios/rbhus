@@ -75,7 +75,7 @@ f.flush()
 f.write("EXIT %errorlevel%\n\r")
 f.close()
 
-print("C:\Windows\System32\cmd.exe /C start /wait /affinity "+ str(hexAffinity) +" "+ tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat 2>&1" )
+print("C:\Windows\System32\cmd.exe /k start /affinity "+ str(hexAffinity) +" "+ tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat 2>&1" )
 
 
 sys.exit(0)

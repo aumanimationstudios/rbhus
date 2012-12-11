@@ -282,28 +282,39 @@ def scheduler():
           if(activeTask["afterTasks"]):
             ats = activeTask["afterTasks"].split(",")
             for at in ats:
-              try:
-                afterTasks[at.lstrip().rstrip()].append(activeTask)
-              except:
-                afterTasks[at.lstrip().rstrip()] = []
-                afterTasks[at.lstrip().rstrip()].append(activeTask)
+              if(int(at) != 0):
+                try:
+                  afterTasks[at.lstrip().rstrip()].append(activeTask)
+                except:
+                  afterTasks[at.lstrip().rstrip()] = []
+                  afterTasks[at.lstrip().rstrip()].append(activeTask)
         if(afterTasks):
           for ats in afterTasks.keys():
+            ##logging.debug(ats)
+            #if(ats == 0):
+              #continue
             for ts in afterTasks[ats]:
-              indx = -1
-              try:
-                indx = activeTasks.index(ts)
-              except:
+              if(ts == 0):
                 continue
-              if(indx != -1):
-                for activeTask in activeTasks:
-                  if(activeTask["id"] == ats):
-                    indxT = activeTasks.index(activeTask)
-                    if(indx > indxT):
-                      activeTasks.remove(activeTask)
-                      activeTasks.insert(indx,activeTask)
-                      activeTasks.remove(ts)
-                      activeTasks.insert(indxT,ts)
+              try:
+                activeTasks.remove(ts)
+                #logging.debug("task removed : "+ str(ats))
+              except:
+                pass
+              #indx = -1
+              #try:
+                #indx = activeTasks.index(ts)
+              #except:
+                #continue
+              #if(indx != -1):
+                #for activeTask in activeTasks:
+                  #if(activeTask["id"] == ats):
+                    #indxT = activeTasks.index(activeTask)
+                    #if(indx > indxT):
+                      #activeTasks.remove(activeTask)
+                      #activeTasks.insert(indx,activeTask)
+                      #activeTasks.remove(ts)
+                      #activeTasks.insert(indxT,ts)
           
         #logging.debug("wtf1.1")
         for activeTask in activeTasks:
@@ -323,7 +334,7 @@ def scheduler():
           else:
             while(1):
               if(db_conn.resetFailedFrames(activeTask["id"])):
-                logging.debug("resetFailedFrames : "+ str(activeTask['id']))
+                #logging.debug("resetFailedFrames : "+ str(activeTask['id']))
                 break
               time.sleep(0.1)
           #if(taskFramesAssigned == 1):

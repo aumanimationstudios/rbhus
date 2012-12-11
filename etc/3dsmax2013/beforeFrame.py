@@ -39,4 +39,5 @@ outFile = os.environ['rbhus_outName']
 afterFrameCmd = os.environ['rbhus_afCmd']
 
 os.system("del /q \"c:\\Users\\blue\\AppData\\Local\\Autodesk\\3dsMax\\2013 - 64bit\\ENU\\3dsmax.ini\"")
-os.system("mklink \"c:\\Users\\blue\\AppData\\Local\\Autodesk\\3dsMax\\2013 - 64bit\\ENU\\3dsmax.ini\" \"X:\\standard\\Autodesk\\3dsMax\\2013 - 64bit\\ENU\\3dsmax.ini\"")
+#os.system("mklink \"c:\\Users\\blue\\AppData\\Local\\Autodesk\\3dsMax\\2013 - 64bit\\ENU\\3dsmax.ini\" \"X:\\standard\\Autodesk\\3dsMax\\2013 - 64bit\\ENU\\3dsmax.ini\"")
+os.system("copy \"X:\\standard\\Autodesk\\3dsMax\\2013 - 64bit\\ENU\\3dsmax.ini\" \"c:\\Users\\blue\\AppData\\Local\\Autodesk\\3dsMax\\2013 - 64bit\\ENU\\\" /y")
