@@ -35,9 +35,9 @@ tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusServer.pids"
 
 
-      
-      
-      
+
+
+
 setproctitle.setproctitle("rQ_scheduler")
 
 def getFreeHosts():
@@ -54,7 +54,7 @@ def getFreeHosts():
         if((hostDetails["totalCpus"] - hostDetails["freeCpus"]) < hostDetails["eCpus"]):
           freeHosts.append(hostDetails)
   return(freeHosts)
-  
+
 def getBestHost(activeTask):
   freeHosts = getFreeHosts()
   #logging.debug("free host : "+ str(freeHosts))
@@ -71,12 +71,12 @@ def getBestHost(activeTask):
       for tOs in taskOss:
         if(tOs not in hostOss):
           inOSflag = 0
-      
+
       inGroupFlag = 1
       for taskGroup in taskGroups:
         if(taskGroup not in hostGroups):
           inGroupFlag = 0
-      
+
       if(inGroupFlag and inOSflag):
         if(freeHost['freeRam'] >= activeTask['minRam']):
           if(activeTask['threads'] == 0):
@@ -87,7 +87,7 @@ def getBestHost(activeTask):
             if((freeHost['freeCpus'] - activeTask['threads']) >= (freeHost['totalCpus'] - freeHost['eCpus'])):
               #logging.debug("free host : "+ str(freeHost))
               return(freeHost)
-    
+
   #If no last host then find a new one :)
   for freeHost in freeHosts:
     hostGroups = freeHost["groups"].split(",")
@@ -98,7 +98,7 @@ def getBestHost(activeTask):
     for tOs in taskOss:
       if(tOs not in hostOss):
         inOSflag = 0
-        
+
     inGroupFlag = 1
     for taskGroup in taskGroups:
       if(taskGroup not in hostGroups):
@@ -136,15 +136,15 @@ def arrangedActiveTasks():
     pKeys = priorities.keys()
     pKeys.sort(reverse=True)
     #logging.debug("Sorted Keys :"+ str(pKeys))
-    
+
     numPrios = len(pKeys)
     totalPrios = sum(pKeys)
-    
+
     pcentPkeys = {}
     for pKey in pKeys:
       pcentPkeys[pKey] = (float(pKey) * 100) / float(totalPrios)
     #logging.debug("pcentPkeys :" + str(pcentPkeys))
-      
+
     pcentPkeysRun = {}
     totalRunFrames = 0
     for pKey in pKeys:
@@ -163,9 +163,9 @@ def arrangedActiveTasks():
         pcentPkeysRun[pKey] = (100 * float(runFrames)) / float(totalRunFrames)
       except:
         pcentPkeysRun[pKey] = 0
-    #logging.debug("pcentPkeysRun :"+ str(pcentPkeysRun)) 
-    
-    #The logic below SUCKS!!!! :`(  
+    #logging.debug("pcentPkeysRun :"+ str(pcentPkeysRun))
+
+    #The logic below SUCKS!!!! :`(
     pKeysTmp = pKeys
     pKeysRevised = []
     while(len(pKeysTmp)):
@@ -180,9 +180,9 @@ def arrangedActiveTasks():
         for pKey in pKeysTmp:
           pKeysRevised.append(pKey)
         break
-        
-    #logging.debug("RevisedPkeys : "+ str(pKeysRevised))    
-    
+
+    #logging.debug("RevisedPkeys : "+ str(pKeysRevised))
+
     for pKey in pKeysRevised:
       pcent = {}
       for activeTask in priorities[pKey]:
@@ -194,7 +194,7 @@ def arrangedActiveTasks():
           numAllFrames = len(allFrames)
         else:
           return(0)
-          
+
         if(completedShit):
           numCompletedShit = len(completedShit)
         else:
@@ -212,17 +212,17 @@ def arrangedActiveTasks():
         for task in tasks:
           arrangedTasks.append(task)
     #logging.debug("arrangeTasks :"+ str(arrangedTasks))
-    
-    
+
+
     ##get the tasks arranged according to afterTasks shits
     #if(afterTasks):
       #for afterT in afterTasks.keys():
-        #afterTid = 
-    
+        #afterTid =
+
     return(arrangedTasks)
   else:
     return(0)
-    
+
 def assignFrameToHost(hostDetail, taskFrame):
   eThreads = 0
   if(taskFrame['threads'] == 0):
@@ -262,7 +262,7 @@ def assignFrameToHost(hostDetail, taskFrame):
     db_conn.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskFrame['id']))
   except:
     logging.error("3 : "+ str(sys.exc_info()))
-    
+
   return(1)
 
 
@@ -278,11 +278,14 @@ def scheduler():
             ats = activeTask["afterTasks"].split(",")
             for at in ats:
               if(int(at) != 0):
-                try:
-                  afterTasks[at.lstrip().rstrip()].append(activeTask)
-                except:
-                  afterTasks[at.lstrip().rstrip()] = []
-                  afterTasks[at.lstrip().rstrip()].append(activeTask)
+                for actsk in activeTasks:
+                  if(int(at) == int(actsk['id'])):
+                    try:
+                      afterTasks[at.lstrip().rstrip()].append(activeTask)
+                    except:
+                      afterTasks[at.lstrip().rstrip()] = []
+                      afterTasks[at.lstrip().rstrip()].append(activeTask)
+                    break
         if(afterTasks):
           for ats in afterTasks.keys():
             for ts in afterTasks[ats]:
@@ -296,7 +299,7 @@ def scheduler():
         for activeTask in activeTasks:
           taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
           if(taskFrames):
-            
+
             assignedHost = getBestHost(activeTask)
             if(assignedHost):
               taskFrame = taskFrames[0]
@@ -319,4 +322,3 @@ def scheduler():
 
 if __name__=="__main__":
   scheduler()
-  
