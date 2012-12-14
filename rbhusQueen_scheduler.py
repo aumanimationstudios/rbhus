@@ -280,7 +280,6 @@ def scheduler():
               if(int(at) != 0):
                 for actsk in activeTasks:
                   if(int(at) == int(actsk['id'])):
-                    logging.debug("afterTask : "+ str(at))
                     try:
                       afterTasks[at.lstrip().rstrip()].append(activeTask)
                     except:
@@ -288,7 +287,6 @@ def scheduler():
                       afterTasks[at.lstrip().rstrip()].append(activeTask)
                     break
         if(afterTasks):
-          logging.debug("afterTasks : "+ str(afterTasks))
           for ats in afterTasks.keys():
             for ts in afterTasks[ats]:
               if(ts == 0):
