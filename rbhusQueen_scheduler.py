@@ -25,8 +25,6 @@ import setproctitle
 import tempfile
 import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
-import psi
-import psi.process
 
 LOG_FILENAME = '/var/log/rbhusQueen_scheduler.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
@@ -274,10 +272,7 @@ def scheduler():
     if(freeHosts):
       activeTasks = arrangedActiveTasks()
       if(activeTasks):
-        #logging.debug("wtf1")
-        #logic for afterTasks
         afterTasks = {}
-  
         for activeTask in activeTasks:
           if(activeTask["afterTasks"]):
             ats = activeTask["afterTasks"].split(",")
@@ -290,42 +285,21 @@ def scheduler():
                   afterTasks[at.lstrip().rstrip()].append(activeTask)
         if(afterTasks):
           for ats in afterTasks.keys():
-            ##logging.debug(ats)
-            #if(ats == 0):
-              #continue
             for ts in afterTasks[ats]:
               if(ts == 0):
                 continue
               try:
                 activeTasks.remove(ts)
-                #logging.debug("task removed : "+ str(ats))
               except:
                 pass
-              #indx = -1
-              #try:
-                #indx = activeTasks.index(ts)
-              #except:
-                #continue
-              #if(indx != -1):
-                #for activeTask in activeTasks:
-                  #if(activeTask["id"] == ats):
-                    #indxT = activeTasks.index(activeTask)
-                    #if(indx > indxT):
-                      #activeTasks.remove(activeTask)
-                      #activeTasks.insert(indx,activeTask)
-                      #activeTasks.remove(ts)
-                      #activeTasks.insert(indxT,ts)
-          
-        #logging.debug("wtf1.1")
+
         for activeTask in activeTasks:
           taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
-          #logging.debug("wtf2")
           if(taskFrames):
             
             assignedHost = getBestHost(activeTask)
             if(assignedHost):
               taskFrame = taskFrames[0]
-              #logging.debug("wtf3 :"+ str(activeTask['id']) +" ::: "+ str(assignedHost))
               while(1):
                 if(assignFrameToHost(assignedHost, taskFrame)):
                   logging.debug("ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(taskFrame["id"]) +" : "+ str(taskFrame["frameId"]))
@@ -334,11 +308,8 @@ def scheduler():
           else:
             while(1):
               if(db_conn.resetFailedFrames(activeTask["id"])):
-                #logging.debug("resetFailedFrames : "+ str(activeTask['id']))
                 break
               time.sleep(0.1)
-          #if(taskFramesAssigned == 1):
-            #break
     time.sleep(0.01)
 
 

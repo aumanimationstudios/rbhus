@@ -215,8 +215,8 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def selectOutPutDir(self):
     fila = QtGui.QFileDialog.getExistingDirectory()
     if(fila):
-      self.lineEditOutPutDir.setText(fila)
-      self.db_outputdir = fila
+      self.lineEditOutPutDir.setText(fila.replace("\\","/"))
+      self.db_outputdir = fila.replace("\\","/")
       
 
   def selectLogBase(self):

@@ -285,31 +285,55 @@ class dbRbhus:
       return(0)
     return(1)
     
+  def getTaskStatus(self,taskId):
+    try:
+      status = self.execute("select status from tasks where id="+ str(taskId), dictionary=True)
+      return(status[0]['status'])
+    except:
+      logging.error(str(sys.exc_info()))
+      return(-1)
+    return(-2)
+    
+    
   #Return value is the status of the task that needs to be set
   def checkTaskCompleted(self,taskId):
     try:
-      rowss_ = self.execute("SELECT * FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
       f_status = {}
+      taskStatus = self.getTaskStatus(taskId)
       for k in constants.framesStatus:
         f_status[constants.framesStatus[k]] = 0
+      if((taskStatus == constants.taskWaiting) or (taskStatus == constants.taskPending) or (taskStatus == constants.taskStopped)):
+        return(-1)
+      
+      rowss_ = self.execute("SELECT * FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
       if(rowss_):
         for x in rowss_:
           f_status[constants.framesStatus[x['status']]] = f_status[constants.framesStatus[x['status']]] + 1
       if(f_status):
-        for k in f_status:
-          if(f_status[k] == len(rowss_)):
-            if(k == constants.framesStatus[constants.framesDone]):
-              return(constants.taskDone)
-            elif(k == constants.framesStatus[constants.framesHold]):
-              return(constants.taskStopped)
-            elif(k == constants.framesStatus[constants.framesAutoHold]):
-              return(constants.taskAutoStopped)
-        if((f_status[constants.framesStatus[constants.framesDone]] + f_status[constants.framesStatus[constants.framesHold]] + f_status[constants.framesStatus[constants.framesAutoHold]]) == len(rowss_)):
+        if((f_status[constants.framesStatus[constants.framesHold]] + f_status[constants.framesStatus[constants.framesAutoHold]]) == len(rowss_)):
           return(constants.taskAutoStopped)
+        elif(f_status[constants.framesStatus[constants.framesDone]] == len(rowss_)):
+          return(constants.taskDone)
+        else:
+          return(constants.taskActive)
+          
+        #for k in f_status:
+          #if(f_status[k] == len(rowss_)):
+            #if(k == constants.framesStatus[constants.framesDone]):
+              #return(constants.taskDone)
+            #elif(k == constants.framesStatus[constants.framesHold]):
+              #return(constants.taskStopped)
+            #elif(k == constants.framesStatus[constants.framesAutoHold]):
+              #return(constants.taskAutoStopped)
+            #elif(k == constants.framesStatus[constants.framesUnassigned]):
+              #return(constants.taskActive)
+          #else:
+            #return(constants.taskActive)
+        
       return(-2)
     except:
       logging.error(str(sys.exc_info()))
-      return(-1)
+      return(-3)
 
       
   def setFramesStatus(self,taskId, frameId, status):
@@ -323,10 +347,8 @@ class dbRbhus:
     
 def test():
   dbR = dbRbhus()
-  y = 0
-  row = dbR.checkTaskCompleted(sys.argv[1])
-  if(row >= 0):
-    print constants.taskStatus[row]
+  status = dbR.getTaskStatus(sys.argv[1])
+  print(str(status))
     #time.sleep(1)
   
   

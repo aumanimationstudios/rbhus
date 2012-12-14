@@ -700,9 +700,10 @@ def killFrame(dbconn,taskId,frameId,pidLock = 0,statusAfterKill = -1):
     try:
       kpid.rstrip().lstrip()
       #Check if the pid belongs to any mother process . (i think i need to check this only when running on windows .. damn Y WINDOZE)
-      if(kpid in mainPids):
-        print("Opps .. killing mother process is not allowed .its against humanity!!!")
-        continue
+      if(mainPids):
+        if(kpid in mainPids):
+          print("Opps .. killing mother process is not allowed .its against humanity!!!")
+          continue
       allKids = []
       getProcessLastKids(int(kpid),allKids)
       if(allKids):
@@ -726,10 +727,13 @@ def killFrame(dbconn,taskId,frameId,pidLock = 0,statusAfterKill = -1):
   return(0)
 
 def getMainPids():
-  mainPidD = open(mainPidFile,"r")
   mainPids = []
-  for x in mainPidD.readlines():
-    mainPids.append(x.rstrip().lstrip())
+  try:
+    mainPidD = open(mainPidFile,"r")
+    for x in mainPidD.readlines():
+      mainPids.append(x.rstrip().lstrip())
+  except:
+    logClient.debug("mainPidFile not found : "+ str(sys.exc_info()))
   if(mainPids):
     return(mainPids)
   else:
@@ -844,7 +848,7 @@ def snoopFrames(fDets):
       time.sleep(1)
     if(len(forMean) > 0):
       forMean.sort()
-      vmSizeAvg = forMean[len(forMean)/2]
+      vmSizeAvg = max(forMean)
       if(vmSizeAvg != 0):
         while(1):
           if(setFramesVmSize(frameInfo,vmSizeAvg, db_conn) == 1):
@@ -859,7 +863,13 @@ def getProcessVmSize(pid):
   vmSizeRet = 0
   try:
     pidDets = psutil.Process(pid)
-    vmSizeRet = pidDets.get_memory_info().rss
+    if(sys.platform.find("linux") >= 0):
+      vmSizeRet = pidDets.get_memory_info().rss
+    elif(sys.platform.find("win") >= 0):
+      vmS = pidDets.get_ext_memory_info()
+      for x in vmS:
+        if(x > 0):
+          vmSizeRet = vmSizeRet + x
   except:
     logClient.debug(str(sys.exc_info()))
   if(vmSizeRet < 0):

@@ -127,16 +127,15 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       self.lineEditFileName.setText(fila)
       
   def selectOutDir(self):
-    dirac = QtGui.QFileDialog()
-    dirac.FileMode(QtGui.QFileDialog.Directory)
-    dira = dirac.getExistingDirectory()
-    if(dira):
-      self.lineEditOutDir.setText(dira)
+    dirac = QtGui.QFileDialog.getExistingDirectory()
+    if(dirac):
+      self.lineEditOutDir.setText(dirac.replace("\\","/"))
       
       
   def submitTasks(self):
     fileName = self.lineEditFileName.text()
     fRange = self.lineEditFrange.text()
+    outDir = self.lineEditOutDir.text()
     if(fileName and fRange):
       print fileName
       print fRange
@@ -170,7 +169,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
                         values (\'"+ str(fileName) +"\', \'"+ str(logB) +"\', \
                         \'"+ str(fRange) +"\', \'"+ str(filetype) +"\', \'"+ str(afterFrameC) +"\', \'"+ str(beforeFrameC) +"\', \
                         \'"+ str(self.comboHostGroup.currentText()) +"\', now(), "+ str(p) +", \'"+ str(self.lineEditAfterTask.text())  +"\', \
-                        \'"+ str(self.comboRenderer.currentText()) +"\', \'"+ str(self.lineEditImageType.text()) +"\', \'"+ str(self.lineEditOutDir.text()) +"\', \'"+ str(self.lineEditOutName.text()) +"\', \'" +str(self.lineEditLayer.text()) +"\', \'"+ str(self.comboOsType.currentText()) +"\')")
+                        \'"+ str(self.comboRenderer.currentText()) +"\', \'"+ str(self.lineEditImageType.text()) +"\', \'"+ str(outDir) +"\', \'"+ str(self.lineEditOutName.text()) +"\', \'" +str(self.lineEditLayer.text()) +"\', \'"+ str(self.comboOsType.currentText()) +"\')")
         rows = dbconn.execute("select last_insert_id()", dictionary = True)
         lastID =  rows[0]['last_insert_id()']
       except:
