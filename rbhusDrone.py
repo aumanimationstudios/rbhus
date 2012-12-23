@@ -826,10 +826,8 @@ def snoopFrames(fDets):
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
 
-  forMean = []
-
+  maxMemUsed = 0
   logClient.debug(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
-  lastKids = []
   try:
     while(1):
       lastKids = []
@@ -838,22 +836,16 @@ def snoopFrames(fDets):
       if(len(lastKids) != 0):
         for framePid in lastKids:
           vmSize = vmSize + int(getProcessVmSize(framePid))
-        forMean.append(vmSize)
-        forMean.sort()
-        vmSizeAvg = forMean[(len(forMean)-1)/2]
-        if(vmSizeAvg != 0):
-          setFramesVmSize(frameInfo,vmSizeAvg, db_conn)
+        if(vmSize > maxMemUsed):
+          setFramesVmSize(frameInfo,vmSize, db_conn)
+          maxMemUsed = vmSize
       else:
         break
+      time.sleep(5)
+    while(1):
+      if(setFramesVmSize(frameInfo,maxMemUsed, db_conn) == 1):
+        break
       time.sleep(1)
-    if(len(forMean) > 0):
-      forMean.sort()
-      vmSizeAvg = max(forMean)
-      if(vmSizeAvg != 0):
-        while(1):
-          if(setFramesVmSize(frameInfo,vmSizeAvg, db_conn) == 1):
-            break
-          time.sleep(1)
   except:
     logClient.debug(str(sys.exc_info()))
   sys.exit(0)
@@ -863,13 +855,7 @@ def getProcessVmSize(pid):
   vmSizeRet = 0
   try:
     pidDets = psutil.Process(pid)
-    if(sys.platform.find("linux") >= 0):
-      vmSizeRet = pidDets.get_memory_info().rss
-    elif(sys.platform.find("win") >= 0):
-      vmS = pidDets.get_ext_memory_info()
-      for x in vmS:
-        if(x > 0):
-          vmSizeRet = vmSizeRet + x
+    vmSizeRet = pidDets.get_memory_info().rss
   except:
     logClient.debug(str(sys.exc_info()))
   if(vmSizeRet < 0):
