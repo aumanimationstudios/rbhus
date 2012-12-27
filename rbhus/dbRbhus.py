@@ -176,6 +176,17 @@ class dbRbhus:
       modLogger.error(str(sys.exc_info()))
       return(0)
     return(rows)
+    
+    
+  # Get the total number of unassigned frames  
+  def getTotalUnAsFrames(self):
+    try:
+      rows = self.execute("select count(*) from frames where status=0", dictionary=True)
+    except:
+      modLogger.error(str(sys.exc_info()))
+      return(0)
+    return(int(rows[0][rows[0].keys()[-1]]))
+    
   
   def resetFailedFrames(self,taskId):
     try:  

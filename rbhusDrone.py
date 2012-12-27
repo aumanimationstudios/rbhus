@@ -113,7 +113,7 @@ def init():
 
 def hostUpdater():
   if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("hostUpdater")
+    setproctitle.setproctitle("rD_hostUpdater")
   db_conn = dbRbhus.dbRbhus()
   myPid = os.getpid()
   logClient.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) +" : "+ "hostUpdater : "+ str(myPid))
@@ -164,7 +164,7 @@ def upHostAliveStatus(hostName, status, dbconn):
 
 def getAssignedFrames(qAssigned):
   if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("getAssignedFrames")
+    setproctitle.setproctitle("rD_getAssignedFrames")
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": getAssignedFrames func")
   while(1):
@@ -199,7 +199,7 @@ def getAssignedFrames(qAssigned):
 
 def runFrames(qRun,frameScrutiny):
   if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("runFrames")
+    setproctitle.setproctitle("rD_runFrames")
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": runFrames func")
   processFrames = []
@@ -291,7 +291,7 @@ def _execFrames(frameInfo,frameScrutiny):
 
 def execFrames(frameInfo,frameScrutiny):
   if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
+    setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": execFrames func : "+ str(frameInfo['fileName']))
   hostEff = getEffectiveDetails(db_conn)
@@ -511,6 +511,9 @@ def execFrames(frameInfo,frameScrutiny):
         ### THE BELOW CODE IS WRITTEN FOR A STUPID USECASE WHEN THERE ARE NETWORK PROBLEMS
         fInfo = getFrameInfo(frameInfo['id'],frameInfo['frameId'], db_conn)
         #if((fInfo[0]['status'] == constants.framesHung) or (fInfo[0]['status'] == constants.framesDone)):
+        if(isinstance(fInfo, int)):
+          continue
+          
         if(fInfo[0]['status'] == constants.framesHung):
           while(1):
             if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
@@ -742,7 +745,7 @@ def getMainPids():
 
 def frameScrutinizer(frameScrutiny):
   if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("frameScrutinizer")
+    setproctitle.setproctitle("rD_frameScrutinizer")
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": frameScrutinizer func")
   snoopFramesProcess = []
@@ -824,7 +827,7 @@ def snoopFrames(fDets):
   ProcessPid = fDets.pop(0)
 
   if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
+    setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
 
   maxMemUsed = 0
   logClient.debug(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
@@ -931,7 +934,7 @@ def getEffectiveDetails(db_conn):
 
 def atUrService():
   if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("atUrService")
+    setproctitle.setproctitle("rD_atUrService")
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": atUrService func")
   while(1):

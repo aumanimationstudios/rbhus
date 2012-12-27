@@ -265,7 +265,16 @@ def assignFrameToHost(hostDetail, taskFrame):
 
   return(1)
 
-
+def initBatchId():
+  try:
+    db_conn.execute("insert into batch (frange) value ('')")
+    batchId = db_conn.execute("select last_insert_id()", dictionary=True)
+  except:
+    logging.error("batchId failed : "+ str(sys.exc_info()))
+    return(-1)
+  return(int(batchId[0][batchId[0].keys()[-1]]))
+  
+  
 def scheduler():
   while(1):
     freeHosts = getFreeHosts()
