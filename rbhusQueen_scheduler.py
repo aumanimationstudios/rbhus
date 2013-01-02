@@ -223,7 +223,7 @@ def arrangedActiveTasks():
   else:
     return(0)
 
-def assignFrameToHost(hostDetail, taskFrame):
+def assignFrameToHost(hostDetail, taskFrame, assignStatus):
   eThreads = 0
   if(taskFrame['threads'] == 0):
     if(hostDetail['eCpus'] == 0):
@@ -232,38 +232,33 @@ def assignFrameToHost(hostDetail, taskFrame):
       eThreads = hostDetail['freeCpus'] - (hostDetail['totalCpus'] - hostDetail['eCpus'])
   else:
     eThreads = taskFrame['threads']
-
-  try:
-    db_conn.execute("UPDATE hostResource \
-                    SET freeCpus=freeCpus-"+ str(eThreads) +" \
-                    WHERE hostName=\""+ hostDetail['hostName'] +"\"")
-  except:
-    logging.error("1 : "+ str(sys.exc_info()))
-    return(0)
-  try:
-    db_conn.execute("UPDATE frames \
-                    SET hostName=\""+ hostDetail['hostName'] +"\" , \
-                    status="+ str(constants.framesAssigned) +", \
-                    runCount=runCount+1 , \
-                    fThreads="+ str(eThreads) +" \
-                    WHERE frames.frameId="+ str(taskFrame["frameId"]) +" \
-                    AND frames.id="+ str(taskFrame["id"]))
-  except:
-    logging.error("2 : "+ str(sys.exc_info()))
+  #Initialize batch id for the frame
+  batchId = 0
+  while(1)
     try:
-      db_conn.execute("UPDATE hostResource \
-                      SET freeCpus=freeCpus+"+ str(eThreads) +" \
-                      WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+      batchId = initBatchId()
+      break
     except:
-      logging.error("2.5 : "+ str(sys.exc_info()))
-    return(0)
-  # The below code can be ignored?
-  try:
-    db_conn.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskFrame['id']))
-  except:
-    logging.error("3 : "+ str(sys.exc_info()))
+      time.sleep(0.1)
+      
+    
+  db_conn.execute("UPDATE hostResource \
+                  SET freeCpus=freeCpus-"+ str(eThreads) +" \
+                  WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+  db_conn.execute("UPDATE frames \
+                  SET hostName=\""+ hostDetail['hostName'] +"\" , \
+                  status="+ str(assignStatus) +", \
+                  runCount=runCount+1 , \
+                  batchId="+ str(batchId) +", \
+                  fThreads="+ str(eThreads) +" \
+                  WHERE frames.frameId="+ str(taskFrame["frameId"]) +" \
+                  AND frames.id="+ str(taskFrame["id"]))
+  #db_conn.execute("UPDATE hostResource \
+                  #SET freeCpus=freeCpus+"+ str(eThreads) +" \
+                  #WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+  db_conn.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskFrame['id']))
 
-  return(1)
+  return(batchId)
 
 def initBatchId():
   try:
@@ -271,8 +266,20 @@ def initBatchId():
     batchId = db_conn.execute("select last_insert_id()", dictionary=True)
   except:
     logging.error("batchId failed : "+ str(sys.exc_info()))
-    return(-1)
+    raise
   return(int(batchId[0][batchId[0].keys()[-1]]))
+  
+  
+def insertToBatchId(batchId,frameNo):
+  try:
+    db_conn.execute("update batch set frange=CONCAT(frange,\""+ str(frameNo) +",\") where id="+ str(batchId))
+    logging.debug("adding frame : "+ str(frameNo) +" to batchId : "+ str(batchId))
+  except:
+    logging.error("adding frame to batchId failed : "+ str(sys.exc_info()))
+    return(0)
+  return(1)
+  
+  
   
   
 def scheduler():
@@ -307,16 +314,22 @@ def scheduler():
 
         for activeTask in activeTasks:
           taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
+          batchFlag = activeTask["batch"]
+          minBatch = activeTask["minBatch"]
+          maxBatch = activeTask["maxBatch"]
+          
           if(taskFrames):
-
             assignedHost = getBestHost(activeTask)
             if(assignedHost):
               taskFrame = taskFrames[0]
-              while(1):
-                if(assignFrameToHost(assignedHost, taskFrame)):
-                  logging.debug("ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(taskFrame["id"]) +" : "+ str(taskFrame["frameId"]))
-                  break
-                time.sleep(0.1)
+              batchId = assignFrameToHost(assignedHost, taskFrame, constants.framesAssigned)
+              insertToBatchId(batchId,taskFrame['frameId'])
+              logging.debug("batchID : "+ str(batchId) +" : ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(taskFrame["id"]) +" : "+ str(taskFrame["frameId"]))
+              if(batchFlag == constants.batchActive):
+                minB = len(taskFrames)/int(minBatch)
+                maxB = len(taskFrames)/int(maxBatch)
+                
+              break
           else:
             while(1):
               if(db_conn.resetFailedFrames(activeTask["id"])):

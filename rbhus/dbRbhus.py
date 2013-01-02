@@ -97,6 +97,17 @@ class dbRbhus:
             pass
           raise
         
+  # returns an array of all the frames in the given batchId   
+  def getFrangeBatchId(self,batchId):
+    try:
+      rows = self.execute("select frange from batch where id="+ str(batchId) ,dictionary=True)
+      frange = rows[0][rows[0].keys()[-1]].rstrip(",").split(",")
+    except:
+      modLogger.error("adding frame to batchId failed : "+ str(sys.exc_info()))
+      return(None)
+    return(frange)
+
+  
   def getActiveTasks(self):
     try:
       rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
@@ -181,7 +192,7 @@ class dbRbhus:
   # Get the total number of unassigned frames  
   def getTotalUnAsFrames(self):
     try:
-      rows = self.execute("select count(*) from frames where status=0", dictionary=True)
+      rows = self.execute("select count(*) from frames where status=0 and frames.id=tasks.id and tasks.status="+ str(constants.taskActive), dictionary=True)
     except:
       modLogger.error(str(sys.exc_info()))
       return(0)

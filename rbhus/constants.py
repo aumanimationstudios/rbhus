@@ -23,6 +23,15 @@ taskStopped = 3
 taskAutoStopped = 5
 taskDone = 4
 
+# batching 
+batchActive = 1
+batchDeactive = 0
+
+batchStatus = {
+  1 : "active",
+  0 : "deactive"
+}
+
 taskStatus = {
   0 : "waiting",
   1 : "pending",
@@ -44,6 +53,7 @@ framesHold = 6
 framesAutoHold = 7
 framesKilled = 9
 framesHung = 10
+framesBatched = 11
 
 
 framesStatus = {
@@ -56,7 +66,8 @@ framesStatus = {
   6 : "hold",
   7 : "autoHold",
   9 : "killed",
-  10 : "hung"
+  10 : "hung",
+  11 : "batched"
 }
 
 #hostInfo table
