@@ -223,7 +223,7 @@ def arrangedActiveTasks():
   else:
     return(0)
 
-def assignFrameToHost(hostDetail,taskDets, taskFrames, batchId):
+def assignFramesToHost(hostDetail,taskDets, taskFrames, batchId):
   eThreads = 0
   if(taskDets['threads'] == 0):
     if(hostDetail['eCpus'] == 0):
@@ -244,11 +244,11 @@ def assignFrameToHost(hostDetail,taskDets, taskFrames, batchId):
                   batchId="+ str(batchId) +", \
                   fThreads="+ str(eThreads) +" \
                   WHERE (frames.frameId="+ framesStr +") \
-                  AND frames.id="+ str(taskFrame["id"]))
+                  AND frames.id="+ str(taskDets["id"]))
   #db_conn.execute("UPDATE hostResource \
                   #SET freeCpus=freeCpus+"+ str(eThreads) +" \
                   #WHERE hostName=\""+ hostDetail['hostName'] +"\"")
-  db_conn.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskFrame['id']))
+  db_conn.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskDets['id']))
 
 
 def initBatchId():
@@ -332,7 +332,7 @@ def scheduler():
               for bB in range(0,bestBatch):
                 taskFramesToAssign.append(taskFrames[bB]['frameId'])
                 insertToBatchId(batchId,taskFrames[bB]['frameId'])
-              assignFrameToHost(assignedHost, activeTask, taskFramesToAssign, batchId, constants.framesAssigned)
+              assignFramesToHost(assignedHost, activeTask, taskFramesToAssign, batchId)
 
 
 
