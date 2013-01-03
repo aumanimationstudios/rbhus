@@ -171,7 +171,7 @@ def getAssignedFrames(qAssigned):
     hostname = socket.gethostname()
     rows = 0
     try:
-      rows = db_conn.execute("SELECT frames.frameId, frames.fThreads, tasks.* FROM frames, tasks \
+      rows = db_conn.execute("SELECT frames.frameId, frames.fThreads,frames.batchId, tasks.* FROM frames, tasks \
                       WHERE frames.hostName=\'"+ str(hostname) +"\' \
                       AND tasks.id=frames.id \
                       AND frames.status="+ str(constants.framesAssigned) +" \
@@ -196,7 +196,22 @@ def getAssignedFrames(qAssigned):
 
   sys.exit(0)
 
-
+def getBatchedFrames(taskId, batchId):
+  db_conn = dbRbhus.dbRbhus()
+  logClient.debug(str(os.getpid()) + ": getBatchedFrames func")
+  rows = 0
+  try:
+    rows = db_conn.execute("SELECT frames.frameId FROM frames \
+                    WHERE frames.batchId="+ str(batchId) +" \
+                    AND frames.id="+ str(taskId) +" \
+                    AND (frames.status="+ str(constants.framesBatched) +" or frames.status="+ str(constants.framesAssigned) +") \
+                    ORDER BY frames.frameId", dictionary=True)
+  except:
+    logClient.debug("1 : "+ str(sys.exc_info()[1]))
+    return(x['frameId'] for x in rows)
+  
+  
+  
 def runFrames(qRun,frameScrutiny):
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_runFrames")
