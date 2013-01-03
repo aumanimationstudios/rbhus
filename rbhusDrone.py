@@ -76,14 +76,14 @@ def getProcessLastKids(ppid,lastKids):
   except:
     logClient.debug(str(sys.exc_info()))
     return(0)
-    
+
   pidKids = pidDets.get_children(recursive=True)
   if(pidKids):
     for pidKid in pidKids:
       lastKids.append(pidKid.pid)
   lastKids.append(ppid)
   return(1)
-  
+
 
 def killProcessKids(ppid):
   try:
@@ -91,7 +91,7 @@ def killProcessKids(ppid):
   except:
     logClient.debug(str(sys.exc_info()))
     return(0)
-  
+
   pidKids = pidDets.get_children(recursive=True)
   if(pidKids):
     for pidKid in pidKids:
@@ -199,19 +199,24 @@ def getAssignedFrames(qAssigned):
 def getBatchedFrames(taskId, batchId):
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": getBatchedFrames func")
-  rows = 0
   try:
     rows = db_conn.execute("SELECT frames.frameId FROM frames \
                     WHERE frames.batchId="+ str(batchId) +" \
                     AND frames.id="+ str(taskId) +" \
                     AND (frames.status="+ str(constants.framesBatched) +" or frames.status="+ str(constants.framesAssigned) +") \
                     ORDER BY frames.frameId", dictionary=True)
+    if(not isinstance(rows,int)):
+      r = [x['frameId'] for x in rows]
+      return(r)
+    else:
+      return(None)
   except:
     logClient.debug("1 : "+ str(sys.exc_info()[1]))
-    return(x['frameId'] for x in rows)
-  
-  
-  
+    return(None)
+
+
+
+
 def runFrames(qRun,frameScrutiny):
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_runFrames")
@@ -246,7 +251,7 @@ def runFrames(qRun,frameScrutiny):
         break
       if(a):
         break
-         
+
     while(1):
       if(len(processFrames) >= totalPids):
         for i in range(0,len(processFrames)):
@@ -283,7 +288,7 @@ def runFrames(qRun,frameScrutiny):
             break
     processFrames.append(multiprocessing.Process(target=_execFrames,args=(frameInfo,frameScrutiny,)))
     processFrames[-1].start()
-    
+
     while(1):
       a = 1
       if(len(processFrames) > 0):
@@ -315,7 +320,8 @@ def execFrames(frameInfo,frameScrutiny):
       if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
         break
       time.sleep(0.1)
-
+    batchedFrames = getBatchedFrames(frameInfo['id'],frameInfo['batchId'])
+    os.environ['rbhus_frames']    = ",".join(batchedFrames)
     os.environ['rbhus_taskId']    = str(frameInfo['id']).lstrip().rstrip()
     os.environ['rbhus_frameId']   = str(frameInfo['frameId']).lstrip().rstrip()
     os.environ['rbhus_user']      = str(frameInfo['user']).lstrip().rstrip()
@@ -350,7 +356,7 @@ def execFrames(frameInfo,frameScrutiny):
     if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]
       rgid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[3]
-    
+
     try:
       os.makedirs(str(frameInfo['outDir']),0777)
     except:
@@ -507,7 +513,7 @@ def execFrames(frameInfo,frameScrutiny):
     #logClient.debug("Frame pid : "+ str(fProcessPid))
     forScrutiny = fProcessPid
     frameScrutiny.put(forScrutiny)
-    
+
     time.sleep(1)
     kidsForStatus = []
     pidfileLock = multiprocessing.Lock()
@@ -528,7 +534,7 @@ def execFrames(frameInfo,frameScrutiny):
         #if((fInfo[0]['status'] == constants.framesHung) or (fInfo[0]['status'] == constants.framesDone)):
         if(isinstance(fInfo, int)):
           continue
-          
+
         if(fInfo[0]['status'] == constants.framesHung):
           while(1):
             if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
@@ -765,8 +771,8 @@ def frameScrutinizer(frameScrutiny):
   logClient.debug(str(os.getpid()) + ": frameScrutinizer func")
   snoopFramesProcess = []
   while(1):
-    
-    
+
+
     while(1):
       a = 1
       if(len(snoopFramesProcess) > 0):
@@ -781,7 +787,7 @@ def frameScrutinizer(frameScrutiny):
         break
       if(a):
         break
-    
+
     while(1):
       try:
         frameDets = frameScrutiny.get(timeout=1)
@@ -802,13 +808,13 @@ def frameScrutinizer(frameScrutiny):
           if(a):
             break
 
-    
+
 
     snoopFramesProcess.append(multiprocessing.Process(target=_snoopFrames,args=(frameDets,)))
     snoopFramesProcess[-1].start()
     time.sleep(0.5)
-    
-    
+
+
     while(1):
       a = 1
       if(len(snoopFramesProcess) > 0):
@@ -834,7 +840,7 @@ def _snoopFrames(fDets):
   proc = multiprocessing.Process(target=snoopFrames,args=(fDets,))
   proc.start()
   proc.join()
-  
+
 def snoopFrames(fDets):
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": snoopFrames func")
