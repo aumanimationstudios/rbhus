@@ -310,17 +310,17 @@ def _execFrames(frameInfo,frameScrutiny):
   proc.join()
 
 def execFrames(frameInfo,frameScrutiny):
+  batchedFrames = getBatchedFrames(frameInfo['id'],frameInfo['batchId'])
   if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
+    setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ "-".join(batchedFrames))
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": execFrames func : "+ str(frameInfo['fileName']))
   hostEff = getEffectiveDetails(db_conn)
   if(hostEff != 0):
     while(1):
-      if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
+      if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesRunning,db_conn) == 1):
         break
       time.sleep(0.1)
-    batchedFrames = getBatchedFrames(frameInfo['id'],frameInfo['batchId'])
     os.environ['rbhus_frames']    = ",".join(batchedFrames)
     os.environ['rbhus_taskId']    = str(frameInfo['id']).lstrip().rstrip()
     os.environ['rbhus_frameId']   = str(frameInfo['frameId']).lstrip().rstrip()
@@ -351,7 +351,7 @@ def execFrames(frameInfo,frameScrutiny):
 
 
 
-    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ str(frameInfo['frameId']).rjust(4,"0") +".log"
+    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ "-".join(batchedFrames) +".log"
     os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
     if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]
@@ -398,7 +398,7 @@ def execFrames(frameInfo,frameScrutiny):
       os.environ['rbhus_exit']   = "1"
       logClient.debug(str(sys.exc_info()))
       while(1):
-        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
+        if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesFailed,db_conn) == 1):
           logClient.debug("run cmd failed !! ")
           break
         time.sleep(0.5)
@@ -451,7 +451,7 @@ def execFrames(frameInfo,frameScrutiny):
             logClient.debug("retryCount : "+ str(retryCount))
 
             while(1):
-              if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
+              if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesFailed,db_conn) == 1):
                 break
               time.sleep(0.2)
 
@@ -489,7 +489,7 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.2)
 
             while(1):
-              if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
+              if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesFailed,db_conn) == 1):
                 logClient.debug("Break point ZERO")
                 break
               time.sleep(0.2)
@@ -537,7 +537,7 @@ def execFrames(frameInfo,frameScrutiny):
 
         if(fInfo[0]['status'] == constants.framesHung):
           while(1):
-            if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesRunning,db_conn) == 1):
+            if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesRunning,db_conn) == 1):
               logClient.debug("Break point MADNESS")
               break
             time.sleep(1)
@@ -588,14 +588,14 @@ def execFrames(frameInfo,frameScrutiny):
     if((status == 0) and (fStatus[0]['status'] != constants.framesKilled)):
       os.environ['rbhus_exit']   = "0"
       while(1):
-        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesDone,db_conn) == 1):
+        if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesDone,db_conn) == 1):
           logClient.debug("Break point ONE")
           break
         time.sleep(0.2)
     elif(fStatus[0]['status'] != constants.framesKilled):
       os.environ['rbhus_exit']   = str(constants.framesKilled)
       while(1):
-        if(setFramesStatus(frameInfo['id'],frameInfo['frameId'],constants.framesFailed,db_conn) == 1):
+        if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesFailed,db_conn) == 1):
           logClient.debug("Break point TWO")
           break
         time.sleep(0.2)
@@ -745,7 +745,7 @@ def killFrame(dbconn,taskId,frameId,pidLock = 0,statusAfterKill = -1):
       killFail += 1
   if((killFail < numPids) and (statusAfterKill != -1)):
     while(1):
-      if(setFramesStatus(taskId,frameId,statusAfterKill,dbconn) == 1):
+      if(setFramesStatus(taskId,batchedFrames,statusAfterKill,dbconn) == 1):
         break
       time.sleep(0.5)
   return(0)
@@ -930,11 +930,12 @@ def getDefaultScript(fileType, dbconn):
     logClient.debug("NO SCRIPT")
     return(0)
 
-def setFramesStatus(taskId, frameId, status, dbconn):
+def setFramesStatus(taskId, frames, status, dbconn):
+  framesStr = " or frames.frameId=".join(str(x) for x in frames)
   try:
-    dbconn.execute("UPDATE frames SET status="+ str(status) +" \
-                    WHERE frameId="+ str(frameId) +" \
-                    AND id="+ str(taskId))
+    dbconn.execute("UPDATE frames SET frames.status="+ str(status) +" \
+                    WHERE (frames.frameId="+ str(framesStr) +") \
+                    AND frames.id="+ str(taskId))
   except:
     return(0)
   logClient.debug("STATUS CHANGED to "+ constants.framesStatus[int(status)] +" : "+ str(taskId) +"_"+ str(frameId))
