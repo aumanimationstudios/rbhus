@@ -203,7 +203,7 @@ def getBatchedFrames(batchId):
     rows = db_conn.execute("SELECT frange FROM batch \
                     WHERE id="+ str(batchId), dictionary=True)
     if(not isinstance(rows,int)):
-      r = x[0]['frange']
+      r = rows[0]['frange']
       return(r)
     else:
       return(None)
