@@ -35,9 +35,9 @@ class dbRbhus:
     self.__conn.close()
     modLogger.debug("Db connection closed" +"\n")
   
-  def _connDb(self,hostname,dbname):
+  def _connDb(self,hostname,port,dbname):
     try:
-      conn = MySQLdb.connect(host = hostname,db = dbname)
+      conn = MySQLdb.connect(host = hostname,port=port,db = dbname)
       conn.autocommit(1)
     except:
       raise
@@ -46,7 +46,7 @@ class dbRbhus:
   def _connRbhus(self):
     while(1):
       try:
-        con = self._connDb("192.168.1.198","rbhus")
+        con = self._connDb(host="192.168.1.198",port="3306",db="rbhus")
         modLogger.debug("Db connected")
         return(con)
       except:

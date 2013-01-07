@@ -9,6 +9,7 @@ import subprocess
 
 taskId = os.environ['rbhus_taskId']
 frameId = os.environ['rbhus_frameId']
+frames = os.environ['rbhus_frames']
 user = os.environ['rbhus_user']
 fileName = os.environ['rbhus_fileName']
 btCmd = os.environ['rbhus_btCmd']    #Should be run by the server .. WTF!!!!!!!!!
@@ -31,7 +32,7 @@ imType = os.environ['rbhus_imageType']
 
 if(renExtArgs == "None"):
   renExtArgs = ""
-RENDERCMD = "/usr/local/blender_svn/blender -noaudio"
+RENDERCMD = "/usr/local/bin/blender -noaudio"
 RENDER_CMD = ""
 layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +".py"
 
@@ -45,25 +46,31 @@ if(layer.find("default") < 0):
 if(renderer.find("default") < 0):
   if(layer.find("default") < 0):
     if(imType.find("default") < 0):
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" --python "+ layerScF +" -F "+ imType +" -o "+ outDir.rstrip(os.sep) + os.sep + layer + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a -t "+ rThreads
+      if(outDir and outName):
+        RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" --python "+ layerScF +" -F "+ imType +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + layer + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
+      else:
+        RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" --python "+ layerScF +" -F "+ imType +" -t "+ rThreads +" -s "+ frameId +" -e "+ frameId +" -a"
     else:
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" --python "+ layerScF +" -o "+ outDir.rstrip(os.sep) + os.sep + layer + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a -t "+ rThreads
+      if(outDir and outName):
+        RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" --python "+ layerScF +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + layer + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a "
+      else:
+        RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" --python "+ layerScF +" -t "+ rThreads +" -s "+ frameId +" -e "+ frameId +" -a "
   else:
     if(imType.find("default") < 0):
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" -F "+ imType +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a -t "+ rThreads
+      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" -F "+ imType +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
     else:
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a -t "+ rThreads
+      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
 else:
   if(layer.find("default") < 0):
     if(imType.find("default") < 0):
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" --python "+ layerScF +" -F "+ imType +" -o "+ outDir.rstrip(os.sep) + os.sep + layer + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a -t "+ rThreads
+      RENDER_CMD = RENDERCMD +" -b "+ fileName +" --python "+ layerScF +" -F "+ imType +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + layer + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
     else:
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" --python "+ layerScF +" -o "+ outDir.rstrip(os.sep) + os.sep + layer + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a -t "+ rThreads
+      RENDER_CMD = RENDERCMD +" -b "+ fileName +" --python "+ layerScF +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + layer + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
   else:
     if(imType.find("default") < 0):
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -F "+ imType +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a -t "+ rThreads
+      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -F "+ imType +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
     else:
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a -t "+ rThreads
+      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
 
 print(RENDER_CMD)
 

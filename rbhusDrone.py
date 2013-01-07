@@ -196,17 +196,14 @@ def getAssignedFrames(qAssigned):
 
   sys.exit(0)
 
-def getBatchedFrames(taskId, batchId):
+def getBatchedFrames(batchId):
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": getBatchedFrames func")
   try:
-    rows = db_conn.execute("SELECT frames.frameId FROM frames \
-                    WHERE frames.batchId="+ str(batchId) +" \
-                    AND frames.id="+ str(taskId) +" \
-                    AND (frames.status="+ str(constants.framesBatched) +" or frames.status="+ str(constants.framesAssigned) +") \
-                    ORDER BY frames.frameId", dictionary=True)
+    rows = db_conn.execute("SELECT frange FROM batch \
+                    WHERE id="+ str(batchId), dictionary=True)
     if(not isinstance(rows,int)):
-      r = [x['frameId'] for x in rows]
+      r = x[0]['frange']
       return(r)
     else:
       return(None)

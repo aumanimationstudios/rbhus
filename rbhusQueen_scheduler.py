@@ -263,7 +263,7 @@ def initBatchId():
 
 def insertToBatchId(batchId,frameNo):
   try:
-    db_conn.execute("update batch set frange=CONCAT(frange,\""+ str(frameNo) +",\") where id="+ str(batchId))
+    db_conn.execute("update batch set frange=CONCAT(frange,\""+ str(frameNo) +" \") where id="+ str(batchId))
     logging.debug("adding frame : "+ str(frameNo) +" to batchId : "+ str(batchId))
   except:
     logging.error("adding frame to batchId failed : "+ str(sys.exc_info()))
