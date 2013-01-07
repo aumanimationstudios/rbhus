@@ -57,7 +57,10 @@ if(renderer.find("default") < 0):
         RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" --python "+ layerScF +" -t "+ rThreads +" -s "+ frameId +" -e "+ frameId +" -a "
   else:
     if(imType.find("default") < 0):
-      RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" -F "+ imType +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
+      if(outDir and outName):
+        RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" -F "+ imType +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
+      else:
+        RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" -F "+ imType +" -t "+ rThreads +" -s "+ frameId +" -e "+ frameId +" -a"
     else:
       RENDER_CMD = RENDERCMD +" -b "+ fileName +" -E "+ renderer +" -t "+ rThreads +" -o "+ outDir.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1] +" -s "+ frameId +" -e "+ frameId +" -a"
 else:
