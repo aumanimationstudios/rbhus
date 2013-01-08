@@ -311,7 +311,7 @@ def execFrames(frameInfo,frameScrutiny):
         break
       time.sleep(0.1)
 
-    os.environ['rbhus_washmybutt'] = tempDir + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ str(frameInfo['frameId']).lstrip().rstrip()
+    os.environ['rbhus_washmybutt'] = tempDir + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ str(frameInfo['frameId']).lstrip().rstrip() +".butt"
     os.environ['rbhus_frames']    = ",".join(batchedFrames)
     os.environ['rbhus_taskId']    = str(frameInfo['id']).lstrip().rstrip()
     os.environ['rbhus_frameId']   = str(frameInfo['frameId']).lstrip().rstrip()
@@ -608,11 +608,20 @@ def execFrames(frameInfo,frameScrutiny):
 
 
 def washMyButt(taskid, frameid):
-  buttFile = tempDir + os.sep + str(taskid).lstrip().rstrip() +"_"+ str(frameid).lstrip().rstrip()
-  bfd = open(buttFile,"r")
+  buttFile = tempDir + os.sep + str(taskid).lstrip().rstrip() +"_"+ str(frameid).lstrip().rstrip() +".butt"
+  try:
+    bfd = open(buttFile,"r")
+  except:
+    logClient.debug("no butt file found")
   for x in bfd.readlines():
-    os.remove(x)
-  os.remove(buttFile)
+    try:
+      os.remove(x)
+    except:
+      logClient.debug("error removing "+ str(x))
+  try:
+    os.remove(buttFile)
+  except:
+    logClient.debug("error removing "+ str(buttFile))
 
 def runCommand(rcmd):
   try:
