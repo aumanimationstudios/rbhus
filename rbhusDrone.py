@@ -290,10 +290,11 @@ def _execFrames(frameInfo,frameScrutiny):
   proc.join()
 
 def execFrames(frameInfo,frameScrutiny):
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ "-".join(batchedFrames))
   db_conn = dbRbhus.dbRbhus()
   batchedFrames = db_conn.getBatchedFrames(frameInfo['batchId'])
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ "-".join(batchedFrames))
+  
   logClient.debug(str(os.getpid()) + ": execFrames func : "+ str(frameInfo['fileName']))
   hostEff = getEffectiveDetails(db_conn)
   if(hostEff != 0):
