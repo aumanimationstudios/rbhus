@@ -242,7 +242,7 @@ def assignFramesToHost(hostDetail,taskDets, taskFrames, batchId):
                   SET hostName=\""+ hostDetail['hostName'] +"\" , \
                   status=if(frameId="+ str(min(taskFrames)) +","+ str(constants.framesAssigned) +","+ str(constants.framesBatched) +"), \
                   runCount=runCount+1 , \
-                  batchId="+ str(batchId) +", \
+                  batchId=\""+ str(batchId) +"\", \
                   fThreads="+ str(eThreads) +" \
                   WHERE (frames.frameId="+ framesStr +") \
                   AND frames.id="+ str(taskDets["id"]))

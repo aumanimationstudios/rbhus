@@ -100,7 +100,7 @@ class dbRbhus:
   # returns an array of all the frames in the given batchId   
   def getBatchedFrames(self,batchId):
     try:
-      rows = self.execute("select frange from batch where id="+ str(batchId) ,dictionary=True)
+      rows = self.execute("select frange from batch where id=\""+ str(batchId) +"\"",dictionary=True)
       frange = rows[0][rows[0].keys()[-1]].split()
       try:
         frange.remove("default")
