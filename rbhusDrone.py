@@ -271,12 +271,7 @@ def runFrames(qRun,frameScrutiny):
             break
     processFrames.append(multiprocessing.Process(target=_execFrames,args=(frameInfo,frameScrutiny,)))
     processFrames[-1].start()
-    processFramesId = psutil.Process(processFrames[-1].pid)
-    cpuAffi = []
-    for ca in range(0,int(frameInfo['fThreads'])):
-      cpuAffi.append(ca)
-    logClient.debug("CPU AFFINITY : "+ str(cpuAffi))
-    processFramesId.set_cpu_affinity(cpuAffi)
+    
     while(1):
       a = 1
       if(len(processFrames) > 0):
@@ -295,6 +290,13 @@ def runFrames(qRun,frameScrutiny):
 def _execFrames(frameInfo,frameScrutiny):
   proc = multiprocessing.Process(target=execFrames,args=(frameInfo,frameScrutiny,))
   proc.start()
+  
+  processFramesId = psutil.Process(proc.pid)
+  cpuAffi = []
+  for ca in range(0,int(frameInfo['fThreads'])):
+    cpuAffi.append(ca)
+  logClient.debug("CPU AFFINITY : "+ str(cpuAffi))
+  processFramesId.set_cpu_affinity(cpuAffi)
   proc.join()
 
 def execFrames(frameInfo,frameScrutiny):
