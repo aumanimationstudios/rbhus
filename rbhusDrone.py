@@ -919,7 +919,7 @@ def setFramesStatus(taskId, frames, status, dbconn):
                     AND frames.id="+ str(taskId))
   except:
     return(0)
-  logClient.debug("STATUS CHANGED to "+ constants.framesStatus[int(status)] +" : "+ str(taskId) +"_"+ str(frameId))
+  logClient.debug("STATUS CHANGED to "+ constants.framesStatus[int(status)] +" : "+ str(taskId) +"_"+ str(frames))
   return(1)
 
 
