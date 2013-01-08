@@ -341,7 +341,9 @@ def execFrames(frameInfo,frameScrutiny):
     else:
       frameInfo['logBase'] = tempDir
     os.environ['rbhus_logBase']   = str(frameInfo['logBase']).lstrip().rstrip()
-
+    runScript = getDefaultScript(frameInfo['fileType'], db_conn)
+    logClient.debug("runScript : "+ str(runScript))
+    os.environ['rbhus_runScript'] = runScript
 
 
     logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ "-".join(batchedFrames) +".log"
@@ -380,8 +382,7 @@ def execFrames(frameInfo,frameScrutiny):
 
 
 
-    runScript = getDefaultScript(frameInfo['fileType'], db_conn)
-    logClient.debug("runScript : "+ str(runScript))
+    
     try:
       if(sys.platform.find("win") >= 0):
         runCmd = os.popen('python.exe '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
