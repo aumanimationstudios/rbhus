@@ -275,6 +275,7 @@ def runFrames(qRun,frameScrutiny):
     cpuAffi = []
     for ca in range(0,int(frameInfo['fThreads'])):
       cpuAffi.append(ca)
+    logClient.debug("CPU AFFINITY : "+ str(cpuAffi))
     processFramesId.set_cpu_affinity(cpuAffi)
     while(1):
       a = 1
