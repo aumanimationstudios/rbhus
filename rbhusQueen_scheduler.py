@@ -23,6 +23,7 @@ import time
 import signal
 import setproctitle
 import tempfile
+import uuid
 import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
 
@@ -253,17 +254,17 @@ def assignFramesToHost(hostDetail,taskDets, taskFrames, batchId):
 
 def initBatchId():
   try:
-    db_conn.execute("insert into batch (frange) value ('')")
-    batchId = db_conn.execute("select last_insert_id()", dictionary=True)
+    bUid = str(uuid.uuid4())
+    db_conn.execute("insert into batch (id) value ('"+ str(bUid) +"')")
   except:
     logging.error("batchId failed : "+ str(sys.exc_info()))
     raise
-  return(int(batchId[0][batchId[0].keys()[-1]]))
+  return(str(bUid))
 
 
 def insertToBatchId(batchId,frameNo):
   try:
-    db_conn.execute("update batch set frange=CONCAT(frange,\""+ str(frameNo) +" \") where id="+ str(batchId))
+    db_conn.execute("update batch set frange=CONCAT(frange,\" "+ str(frameNo) +" \") where id="+ str(batchId))
     logging.debug("adding frame : "+ str(frameNo) +" to batchId : "+ str(batchId))
   except:
     logging.error("adding frame to batchId failed : "+ str(sys.exc_info()))
@@ -315,12 +316,12 @@ def scheduler():
             assignedHost = getBestHost(activeTask)
             if(assignedHost):
               #Initialize batch id for the frame
-              while(1)
+              while(1):
                 try:
                   batchId = initBatchId()
                   break
                 except:
-                  time.sleep(0.1)
+                  time.sleep(1)
 
               bestBatch = 1
               if(batchFlag == constants.batchActive):
@@ -332,23 +333,15 @@ def scheduler():
               for bB in range(0,bestBatch):
                 taskFramesToAssign.append(taskFrames[bB]['frameId'])
                 insertToBatchId(batchId,taskFrames[bB]['frameId'])
+                
               assignFramesToHost(assignedHost, activeTask, taskFramesToAssign, batchId)
-
-
-
-              logging.debug("batchID : "+ str(batchId) +" : ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(taskFrame["id"]) +" : "+ str(taskFrame["frameId"]))
-
-
-
-
-
-
+              logging.debug("batchID : "+ str(batchId) +" : ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(activeTask["id"]) +" : "+ str(taskFramesToAssign))
               break
           else:
             while(1):
               if(db_conn.resetFailedFrames(activeTask["id"])):
                 break
-              time.sleep(0.1)
+              time.sleep(1)
     time.sleep(0.01)
 
 

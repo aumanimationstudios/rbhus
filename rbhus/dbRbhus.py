@@ -98,16 +98,21 @@ class dbRbhus:
           raise
         
   # returns an array of all the frames in the given batchId   
-  def getFrangeBatchId(self,batchId):
+  def getBatchedFrames(self,batchId):
     try:
       rows = self.execute("select frange from batch where id="+ str(batchId) ,dictionary=True)
-      frange = rows[0][rows[0].keys()[-1]].rstrip(",").split(",")
+      frange = rows[0][rows[0].keys()[-1]].split()
+      try:
+        frange.remove("default")
+      except:
+        pass
     except:
-      modLogger.error("adding frame to batchId failed : "+ str(sys.exc_info()))
+      modLogger.error("getting batched frames : "+ str(sys.exc_info()))
       return(None)
     return(frange)
 
-  
+
+
   def getActiveTasks(self):
     try:
       rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
