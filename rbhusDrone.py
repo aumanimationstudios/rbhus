@@ -614,16 +614,16 @@ def washMyButt(taskid, frameid):
   try:
     bfd = open(buttFile,"r")
   except:
-    logClient.debug("no butt file found")
+    logClient.debug(str(sys.exc_info()))
   for x in bfd.readlines():
     try:
       os.remove(x)
     except:
-      logClient.debug("error removing "+ str(x))
+      logClient.debug(str(sys.exc_info()))
   try:
     os.remove(buttFile)
   except:
-    logClient.debug("error removing "+ str(buttFile))
+    logClient.debug(str(sys.exc_info()))
 
 def runCommand(rcmd):
   try:
