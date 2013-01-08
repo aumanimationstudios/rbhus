@@ -111,7 +111,14 @@ class dbRbhus:
       return(None)
     return(frange)
 
-
+  # returns an array of all the frames in the given batchId   
+  def delBatchId(self,batchId):
+    try:
+      self.execute("delete from batch where id=\""+ str(batchId) +"\"")
+      return(1)
+    except:
+      modLogger.error("deleting batchId : "+ str(batchId))
+      return(0)
 
   def getActiveTasks(self):
     try:

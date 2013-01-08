@@ -216,6 +216,9 @@ def runFrames(qRun,frameScrutiny):
         totalPids = eCpus
       else:
         totalPids = 1
+    
+    
+    
 
     while(1):
       a = 1
@@ -268,7 +271,11 @@ def runFrames(qRun,frameScrutiny):
             break
     processFrames.append(multiprocessing.Process(target=_execFrames,args=(frameInfo,frameScrutiny,)))
     processFrames[-1].start()
-
+    processFramesId = psutil.Process(processFrames[-1].pid)
+    cpuAffi = []
+    for ca in range(0,int(frameInfo['fThreads'])):
+      cpuAffi.append(ca)
+    processFramesId.set_cpu_affinity(cpuAffi)
     while(1):
       a = 1
       if(len(processFrames) > 0):
@@ -302,6 +309,8 @@ def execFrames(frameInfo,frameScrutiny):
       if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesRunning,db_conn) == 1):
         break
       time.sleep(0.1)
+
+    os.environ['rbhus_washmybutt'] = tempDir + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ str(frameInfo['frameId']).lstrip().rstrip()
     os.environ['rbhus_frames']    = ",".join(batchedFrames)
     os.environ['rbhus_taskId']    = str(frameInfo['id']).lstrip().rstrip()
     os.environ['rbhus_frameId']   = str(frameInfo['frameId']).lstrip().rstrip()
@@ -445,8 +454,8 @@ def execFrames(frameInfo,frameScrutiny):
               if(setFreeCpus(frameInfo, db_conn) ==  1):
                 break
               time.sleep(0.2)
-            logClient.debug("setFreeCpus  ")
-
+            washMyButt(frameInfo['id'],frameInfo['frameId'])
+            db_conn.delBatchId(frameInfo['batchId'])
             sys.exit(0)
         time.sleep(1)
 
@@ -484,7 +493,8 @@ def execFrames(frameInfo,frameScrutiny):
               if(setFreeCpus(frameInfo, db_conn) ==  1):
                 break
               time.sleep(0.2)
-
+            washMyButt(frameInfo['id'],frameInfo['frameId'])
+            db_conn.delBatchId(frameInfo['batchId'])
             sys.exit(0)
         time.sleep(1)
 
@@ -591,9 +601,17 @@ def execFrames(frameInfo,frameScrutiny):
         logClient.debug("Break point FOUR")
         break
       time.sleep(0.2)
-
+    washMyButt(frameInfo['id'],frameInfo['frameId'])
+    db_conn.delBatchId(frameInfo['batchId'])
     sys.exit(0)
 
+
+def washMyButt(taskid, frameid):
+  buttFile = tempDir + os.sep + str(taskid).lstrip().rstrip() +"_"+ str(frameid).lstrip().rstrip()
+  bfd = open(buttFile,"r")
+  for x in bfd.readlines():
+    os.remove(x)
+  os.remove(buttFile)
 
 def runCommand(rcmd):
   try:

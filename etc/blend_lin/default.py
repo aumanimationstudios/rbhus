@@ -29,14 +29,22 @@ renExtArgs = os.environ['rbhus_renExtArgs']
 layer = os.environ['rbhus_layer']
 pad = os.environ['rbhus_pad']
 imType = os.environ['rbhus_imageType']
+washMyButt = os.environ['rbhus_washmybutt']
 
 if(renExtArgs == "None"):
   renExtArgs = ""
 RENDERCMD = "/usr/local/bin/blender -noaudio"
 RENDER_CMD = ""
 layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +".py"
+wbd = open(washMyButt,"w")
+wbd.writelines(layerScF +"\n\r")
+wbd.flush()
+wbd.close()
+
 
 fRs = " -f ".join(frames.split(","))
+
+
 
 if(layer.find("default") < 0):
   layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name].use = False\n\nbpy.context.scene.render.layers[\'"+ layer +"\'].use = True"
