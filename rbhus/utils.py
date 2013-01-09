@@ -2,7 +2,6 @@ import sys
 import os
 
 progPath =  sys.argv[0].split(os.sep)
-print progPath
 if(len(progPath) > 1):
   pwd = os.sep.join(progPath[0:-1])
   cwd = os.path.abspath(pwd)
@@ -13,9 +12,10 @@ sys.path.append(cwd.rstrip(os.sep) + os.sep)
 import dbRbhus
 
 
-dbconn = dbRbhus.dbRbhus()
+
 
 def getHostGroups():
+  dbconn = dbRbhus.dbRbhus()
   try:
     rows = dbconn.execute("select groups from hostInfo group by groups", dictionary=True)
   except:
@@ -35,6 +35,7 @@ def getHostGroups():
     return(0)
       
 def getFileTypes():
+  dbconn = dbRbhus.dbRbhus()
   try:
     rows = dbconn.execute("select * from fileType", dictionary=True)
   except:
@@ -49,6 +50,7 @@ def getFileTypes():
     return(0)
     
 def getRenderers():
+  dbconn = dbRbhus.dbRbhus()
   try:
     rows = dbconn.execute("select * from renderer", dictionary=True)
   except:
@@ -67,6 +69,7 @@ def getRenderers():
     return(0)
     
 def getOsTypes():
+  dbconn = dbRbhus.dbRbhus()
   try:
     rows = dbconn.execute("select os from hostInfo group by os", dictionary=True)
   except:
@@ -84,4 +87,74 @@ def getOsTypes():
     return(retRows)
   else:
     return(0)
+
+
+class tasks(object):
+  def __init__(self):
+    self.db_conn = dbRbhus.dbRbhus()
+    self.tFields = self._getTaskFields()
+  
+  def _getTaskFields(self):
+    try:
+      rows = self.db_conn.execute("desc tasks",dictionary=True)
+      tFieldss = {}
+      for row in rows:
+        tFieldss[row['Field']] = row['Default']
+      return(tFieldss)
+    except:
+      return(0)
       
+  def submit(self,fieldDict):
+    self.validFields = {}
+    self.invalidFields = {}
+    for x in fieldDict.keys():
+      if(self.tFields.has_key(x)):
+        self.validFields[x] = fieldDict[x]
+      else:
+        self.invalidFields[x] = fieldDict[x]
+    self.validFields_keys = [x for x in self.validFields.keys()]
+    self.validFields_values = ["'"+ str(self.validFields[x]) +"'" for x in self.validFields_keys]
+    self.insertStatement = "insert into tasks ("+ ", ".join(self.validFields_keys) +") values ("+ ", ".join(self.validFields_values) +")"
+    try:
+      self.db_conn.execute(self.insertStatement)
+      rows = self.db_conn.execute("select last_insert_id()", dictionary = True)
+      self.lastID =  rows[0]['last_insert_id()']
+    except:
+      self.lastID = 0
+      raise
+  
+  def edit(self,taskId,fieldDict):
+    self.validFields = {}
+    self.invalidFields = {}
+    for x in fieldDict.keys():
+      if(self.tFields.has_key(x)):
+        self.validFields[x] = fieldDict[x]
+      else:
+        self.invalidFields[x] = fieldDict[x]
+    
+    for x in self.validFields.keys():
+      try:
+        self.db_conn.execute("update tasks set "+ str(x) +"='"+ str(self.validFields[x]) +"' where id='"+ str(taskId) +"'")
+      except:
+        raise
+
+      
+      
+    
+        
+    
+  
+  
+      
+      
+if __name__ == "__main__":
+  b = {}
+  b['batch'] = "1"
+  b['minBatch'] = "1"
+  b['maxBatch'] = "3"
+  c = 738
+  
+  a = tasks()
+  a.edit(c,b)
+  
+  
