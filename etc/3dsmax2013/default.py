@@ -39,6 +39,12 @@ pad = os.environ['rbhus_pad']
 outDir = os.environ['rbhus_outDir']
 outFile = os.environ['rbhus_outName']
 logFile = os.environ['rbhus_logFile']
+washMyButt = os.environ['rbhus_washmybutt']
+runScript = os.environ['rbhus_runScript']
+frames = os.environ['rbhus_frames']
+
+wbd = open(washMyButt,"w")
+
 RENDERCMD = "\"c:\\Program Files\\Autodesk\\3ds Max 2013\\3dsmaxcmd.exe\""
 RENDER_CMD = ""
 
@@ -54,15 +60,21 @@ for x in range(0,int(rThreads)):
   b = b + "1"
 hexAffinity = hex(int(b.rjust(totalCpus,"0"),2))
 
-f = open(tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat","w")
+ffile = tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat"
+
+wbd.writelines(ffile +"\n\r")
+wbd.flush()
+wbd.close()
+f = open(ffile,"w")
+
 
 #logFile = str(logBase).rstrip(os.sep) + os.sep + ".".join(str(fileName).lstrip(os.sep).rsplit(os.sep)[-1].rsplit(".")[0:-1]) +"_"+ str(frameId).rjust(int(pad),"0") +".log"
 #f.write("echo %pid%\n\r")
 
 if(outDir != "default"):
-  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -start:"+ frameId +" -end:"+ frameId +" -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:1 -continueOnError -o:"+ imageName +" 2>&1"#+ logFile
+  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -frames:"+ frames +" -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:1 -continueOnError -o:"+ imageName +" 2>&1"#+ logFile
 else:
-  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -start:"+ frameId +" -end:"+ frameId +" -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:1 -continueOnError 2>&1"#+ logFile
+  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -frames:"+ frames +" -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:1 -continueOnError 2>&1"#+ logFile
   
 
 f.write(RENDER_CMD +"\n\r")
