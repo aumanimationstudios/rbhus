@@ -90,17 +90,31 @@ def getOsTypes():
 
 
 class tasks(object):
-  def __init__(self):
+  def __init__(self, tId = 0):
     self.db_conn = dbRbhus.dbRbhus()
-    self.tFields = self._getTaskFields()
+    self.taskFields = self._getTaskFields()
+    if(tId):
+      self.taskId = tId
+      self.taskDetails = self._getTaskDetails(tId)
+      
   
   def _getTaskFields(self):
     try:
       rows = self.db_conn.execute("desc tasks",dictionary=True)
-      tFieldss = {}
+      taskFieldss = {}
       for row in rows:
-        tFieldss[row['Field']] = row['Default']
-      return(tFieldss)
+        taskFieldss[row['Field']] = row['Default']
+      return(taskFieldss)
+    except:
+      return(0)
+  
+  def _getTaskDetails(self,tid):
+    try:
+      rows = self.db_conn.execute("select * from tasks where id='"+ str(tid) +"'",dictionary=True)
+      if(rows):
+        return(rows[-1])
+      else:
+        return(0)
     except:
       return(0)
       
@@ -108,7 +122,7 @@ class tasks(object):
     self.validFields = {}
     self.invalidFields = {}
     for x in fieldDict.keys():
-      if(self.tFields.has_key(x)):
+      if(self.taskFields.has_key(x)):
         self.validFields[x] = fieldDict[x]
       else:
         self.invalidFields[x] = fieldDict[x]
@@ -118,25 +132,25 @@ class tasks(object):
     try:
       self.db_conn.execute(self.insertStatement)
       rows = self.db_conn.execute("select last_insert_id()", dictionary = True)
-      self.lastID =  rows[0]['last_insert_id()']
+      self.taskId =  rows[0]['last_insert_id()']
     except:
       self.lastID = 0
       raise
   
-  def edit(self,taskId,fieldDict):
+  def edit(self,fieldDict):
     self.validFields = {}
     self.invalidFields = {}
     for x in fieldDict.keys():
-      if(self.tFields.has_key(x)):
+      if(self.taskFields.has_key(x)):
         self.validFields[x] = fieldDict[x]
       else:
         self.invalidFields[x] = fieldDict[x]
-    
-    for x in self.validFields.keys():
-      try:
-        self.db_conn.execute("update tasks set "+ str(x) +"='"+ str(self.validFields[x]) +"' where id='"+ str(taskId) +"'")
-      except:
-        raise
+    if(taskId):
+      for x in self.validFields.keys():
+        try:
+          self.db_conn.execute("update tasks set "+ str(x) +"='"+ str(self.validFields[x]) +"' where id='"+ str(self.taskId) +"'")
+        except:
+          raise
 
       
       
@@ -152,9 +166,9 @@ if __name__ == "__main__":
   b['batch'] = "1"
   b['minBatch'] = "1"
   b['maxBatch'] = "3"
-  c = 738
+  c = 799
   
   a = tasks()
-  a.edit(c,b)
+  print(str(a.taskDetails))
   
   

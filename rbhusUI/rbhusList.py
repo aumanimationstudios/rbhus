@@ -80,6 +80,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.popTableFrames)
     self.checkRefresh.clicked.connect(self.timeCheck)
+    self.lineEditSearch.textChanged.connect(self.popTableList)
     self.popTableList()
     
     
@@ -343,28 +344,34 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
     indx = 0
     for row in rows:
-      item = QtGui.QTableWidgetItem()
-      self.tableList.setVerticalHeaderItem(indx, item)
-      colIndx = 0
+      sFlag = 0
       for colName in self.colNamesTask:
-        if(colName == "status"):
-          item = QtGui.QTableWidgetItem()
-          self.tableList.setItem(indx, colIndx, item)
-          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
-          colIndx = colIndx + 1
-          continue
-        if(colName == "id"):
-          item = QtGui.QTableWidgetItem()
-          self.tableList.setItem(indx, colIndx, item)
-          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
-          colIndx = colIndx + 1
-          continue
+        if(str(row[colName]).find(str(self.lineEditSearch.text())) >= 0):
+          sFlag = 1
         
+      if(sFlag):
         item = QtGui.QTableWidgetItem()
-        self.tableList.setItem(indx, colIndx, item)
-        self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
-        colIndx = colIndx + 1
-      indx = indx + 1
+        self.tableList.setVerticalHeaderItem(indx, item)
+        colIndx = 0
+        for colName in self.colNamesTask:
+          if(colName == "status"):
+            item = QtGui.QTableWidgetItem()
+            self.tableList.setItem(indx, colIndx, item)
+            self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+            colIndx = colIndx + 1
+            continue
+          if(colName == "id"):
+            item = QtGui.QTableWidgetItem()
+            self.tableList.setItem(indx, colIndx, item)
+            self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+            colIndx = colIndx + 1
+            continue
+          
+          item = QtGui.QTableWidgetItem()
+          self.tableList.setItem(indx, colIndx, item)
+          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+        indx = indx + 1
 
  
     self.tableList.resizeColumnsToContents()

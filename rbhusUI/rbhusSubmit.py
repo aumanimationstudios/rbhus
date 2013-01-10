@@ -133,47 +133,45 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
       
   def submitTasks(self):
-    fileName = self.lineEditFileName.text()
-    fRange = self.lineEditFrange.text()
-    outDir = self.lineEditOutDir.text()
-    if(fileName and fRange):
+    submitDict = {}
+    submitDict['fileName'] = str(self.lineEditFileName.text())
+    submitDict['fRange'] = str(self.lineEditFrange.text())
+    submitDict['outDir'] = str(self.lineEditOutDir.text())
+    submitDict['description'] = str(self.lineEditDescription.text())
+    if(submitDict['fileName']):
       print fileName
-      print fRange
       
+      submitDict['os'] = str(self.comboOsType.currentText())
+      submitDict['fileType'] = str(self.comboFileType.currentText())
       prios = str(self.comboPrio.currentText())
-      ostype = str(self.comboOsType.currentText())
-      filetype = str(self.comboFileType.currentText())
       if(prios == "low"):
         p = 1
       if(prios == "high"):
         p = 300
       if(prios == "normal"):
         p = 150
-      if((filetype == "3dsmax") and ((ostype == "default") or (ostype == "win"))):
-        logB = "z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\"
-        afterFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py"
-        beforeFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\beforeFrame.py"
-      elif((filetype == "3dsmax2013") and ((ostype == "default") or (ostype == "win"))):
-        logB = "z:\\\\vajram essenza\\\\isomatrics\\\\logs\\\\"
-        afterFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax2013\\\\afterFrame.py"
-        beforeFrameC = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax2013\\\\beforeFrame.py"
+      batchFlag = str(self.comboBatching.currentText())
+      if(batchFlag == "enable"):
+        submitDict['batch'] = str(constants.batchActive)
       else:
-        logB = "default"
-        afterFrameC = "default"
-        beforeFrameC = "default"
+        submitDict['batch'] = str(constants.batchDeactive)
+      
+      submitDict['minBatch'] = str(self.spinMinBatch.value())
+      submitDict['maxBatch'] = str(self.spinMaxBatch.value())
+      submitDict['priority'] = str(p)
+        
+      if((filetype == "3dsmax") and ((ostype == "default") or (ostype == "win"))):
+        submitDict['afterFrameCmd'] = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py"
+        submitDict['beforeFrameCmd'] = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\beforeFrame.py"
+      elif((filetype == "3dsmax2013") and ((ostype == "default") or (ostype == "win"))):
+        submitDict['afterFrameCmd'] = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax2013\\\\afterFrame.py"
+        submitDict['beforeFrameCmd'] = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax2013\\\\beforeFrame.py"
+        
+      a = rUtils.tasks()
       try:
-        dbconn.execute("insert into tasks (fileName, logBase, \
-                        fRange, fileType, afterFrameCmd, beforeFrameCmd, \
-                        hostGroups, submitTime, priority, afterTasks, \
-                        renderer, imageType, outDir, outName, layer, os) \
-                        values (\'"+ str(fileName) +"\', \'"+ str(logB) +"\', \
-                        \'"+ str(fRange) +"\', \'"+ str(filetype) +"\', \'"+ str(afterFrameC) +"\', \'"+ str(beforeFrameC) +"\', \
-                        \'"+ str(self.comboHostGroup.currentText()) +"\', now(), "+ str(p) +", \'"+ str(self.lineEditAfterTask.text())  +"\', \
-                        \'"+ str(self.comboRenderer.currentText()) +"\', \'"+ str(self.lineEditImageType.text()) +"\', \'"+ str(outDir) +"\', \'"+ str(self.lineEditOutName.text()) +"\', \'" +str(self.lineEditLayer.text()) +"\', \'"+ str(self.comboOsType.currentText()) +"\')")
-        rows = dbconn.execute("select last_insert_id()", dictionary = True)
-        lastID =  rows[0]['last_insert_id()']
+        b = a.submit(submitDict)
       except:
-        print("Error connecting to db : "+ str(sys.exc_info()))
+        print("Error inserting task : "+ str(sys.exc_info()))
         return()
     
     QtGui.qApp.closeAllWindows()

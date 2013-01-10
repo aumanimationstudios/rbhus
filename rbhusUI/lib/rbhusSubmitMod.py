@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Wed Jan  9 08:45:51 2013
+# Created: Thu Jan 10 09:53:12 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_rbhusSubmit(object):
   def setupUi(self, rbhusSubmit):
     rbhusSubmit.setObjectName(_fromUtf8("rbhusSubmit"))
-    rbhusSubmit.resize(724, 635)
+    rbhusSubmit.resize(724, 661)
     self.centralwidget = QtGui.QWidget(rbhusSubmit)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -379,6 +379,7 @@ class Ui_rbhusSubmit(object):
     self.labelHostGroup.setText(_translate("rbhusSubmit", "hostGroup", None))
     self.labelMaxBatch.setText(_translate("rbhusSubmit", "maxBatch", None))
     self.labelImageType.setText(_translate("rbhusSubmit", "imageType", None))
+    self.lineEditFrange.setText(_translate("rbhusSubmit", "1", None))
     self.lineEditAfterTask.setText(_translate("rbhusSubmit", "0", None))
     self.labelBatching.setText(_translate("rbhusSubmit", "batching", None))
     self.labeFileType.setText(_translate("rbhusSubmit", "fileType", None))

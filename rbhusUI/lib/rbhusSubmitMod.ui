@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>724</width>
-    <height>635</height>
+    <height>661</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -190,6 +190,9 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="text">
+       <string>1</string>
       </property>
      </widget>
     </item>
