@@ -151,7 +151,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       if(prios == "normal"):
         p = 150
       batchFlag = str(self.comboBatching.currentText())
-      if(batchFlag == "enable"):
+      if(batchFlag == "active"):
         submitDict['batch'] = str(constants.batchActive)
       else:
         submitDict['batch'] = str(constants.batchDeactive)

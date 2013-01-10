@@ -1,6 +1,6 @@
 import sys
 import os
-
+import MySQLdb
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
   pwd = os.sep.join(progPath[0:-1])
@@ -121,6 +121,7 @@ class tasks(object):
   def submit(self,fieldDict):
     self.validFields = {}
     self.invalidFields = {}
+    fieldDict['submitTime'] = str(MySQLdb.Timestamp.now())
     for x in fieldDict.keys():
       if(self.taskFields.has_key(x)):
         self.validFields[x] = fieldDict[x]
@@ -133,8 +134,9 @@ class tasks(object):
       self.db_conn.execute(self.insertStatement)
       rows = self.db_conn.execute("select last_insert_id()", dictionary = True)
       self.taskId =  rows[0]['last_insert_id()']
+      self.taskDetails = self._getTaskDetails(self.taskId)
     except:
-      self.lastID = 0
+      self.taskId = 0
       raise
   
   def edit(self,fieldDict):
@@ -163,12 +165,14 @@ class tasks(object):
       
 if __name__ == "__main__":
   b = {}
+  b['fileName'] = "/tmp/fff.ff"
   b['batch'] = "1"
   b['minBatch'] = "1"
   b['maxBatch'] = "3"
   c = 799
   
   a = tasks()
+  a.submit(b)
   print(str(a.taskDetails))
   
   

@@ -29,7 +29,13 @@ except AttributeError:
   
 
 class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
+    
+    
   def setupUi(self, Form):
+    
+    self.task = rUtils.tasks(tId = sys.argv[1].rstrip().lstrip())
+    self.taskValues = self.task.taskDetails
+    
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
@@ -76,7 +82,6 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_framerange = 0
     
     
-    
   def reset_outPutDir(self):
     self.db_outputdir = 1
   
@@ -101,40 +106,41 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
     
   def applyNew(self):
+    editDict = {}
     if(self.db_filetype):
-      self.updateTask("fileType","\""+ str(self.comboType.currentText()) +"\"")
+      editDict["fileType"] = str(self.comboType.currentText())
       self.db_filetype = 0
     if(self.db_hostgroup):
-      self.updateTask("hostGroups","\""+ str(self.comboHostGroup.currentText()) +"\"")
+      editDict["hostGroups"] = str(self.comboHostGroup.currentText())
       self.db_hostgroup = 0
     if(self.db_filename):
-      self.updateTask("fileName","\""+ str(self.lineEditFileName.text()) +"\"")
+      editDict["fileName"] = str(self.lineEditFileName.text())
       self.db_filename = 0
     if(self.db_imagename):
-      self.updateTask("outName","\""+ str(self.lineEditImageName.text()) +"\"")
+      editDict["outName"] = str(self.lineEditImageName.text())
       self.db_imagename = 0
     if(self.db_outputdir):
-      self.updateTask("outDir","\""+ str(self.lineEditOutPutDir.text()) +"\"")
+      editDict["outDir"] = str(self.lineEditOutPutDir.text())
       self.db_outputdir = 0
     if(self.db_bfc):
-      self.updateTask("beforeFrameCmd","\""+ str(self.lineEditBfc.text()) +"\"")
+      editDict["beforeFrameCmd"] = str(self.lineEditBfc.text())
       self.db_bfc = 0
     if(self.db_afc):
-      self.updateTask("afterFrameCmd","\""+ str(self.lineEditAfc.text()) +"\"")
+      editDict["afterFrameCmd"] = str(self.lineEditAfc.text())
       self.db_afc = 0
     if(self.db_logbase):
-      self.updateTask("logBase","\""+ str(self.lineEditLogbase.text()) +"\"")
+      editDict["logBase"] = str(self.lineEditLogbase.text())
       self.db_logbase = 0
     if(self.db_aftertime):
-      self.updateTask("afterTime","\""+ str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second()) +"\"")
+      editDict["afterTime"] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
     if(self.db_rerunthresh):
-      self.updateTask("rerunThresh","\""+ str(self.db_rerunthresh) +"\"")
+      editDict["rerunThresh"] = str(self.db_rerunthresh)
       self.db_rerunthresh = 0
     if(self.db_framerange):
-      self.updateTask("fRange","\""+ str(self.lineEditFrange.text()) +"\"")
+      editDict["fRange"] = str(self.lineEditFrange.text())
       self.db_framerange = 0
     if(self.db_priority):
-      self.updateTask("priority","\""+ str(self.db_priority) +"\"")
+      editDict["priority"] = str(self.db_priority)
       self.db_priority = 0
         
       
@@ -158,30 +164,24 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     print(self.afterTimeEdit.dateTime().time().second())
     
   def popEditItems(self):
-    try:
-      conn = db.connRbhus()
-      cursor = conn.cursor(db.dict)
-      cursor.execute("select * from tasks where id="+ str(sys.argv[1].rstrip().lstrip()))
-      rows = cursor.fetchall()
-      cursor.close()
-      conn.close()
-    except:
-      print("Error connecting to db")
-      return()
-      
-    if(rows):
-      for row in rows:
-        self.lineEditFileName.setText(row['fileName'])
-        self.lineEditOutPutDir.setText(row['outDir'])
-        self.lineEditImageName.setText(row['outName'])
-        self.lineEditFrange.setText(row['fRange'])
-        self.lineEditLogbase.setText(row['logBase'])
-        self.lineEditAfc.setText(row['afterFrameCmd'])
-        self.lineEditBfc.setText(row['beforeFrameCmd'])
-        self.spinRerunThresh.setValue(row['rerunThresh'])
-        self.spinPriority.setValue(row['priority'])
-        self.afterTimeEdit.setTime(QtCore.QTime(row['afterTime'].hour, row['afterTime'].minute, row['afterTime'].second))
-        self.afterTimeEdit.setDate(QtCore.QDate(row['afterTime'].year, row['afterTime'].month, row['afterTime'].day))
+    if(self.taskValues):
+      self.lineEditFileName.setText(self.taskValues['fileName'])
+      self.lineEditOutPutDir.setText(self.taskValues['outDir'])
+      self.lineEditImageName.setText(self.taskValues['outName'])
+      self.lineEditFrange.setText(self.taskValues['fRange'])
+      self.lineEditLogbase.setText(self.taskValues['logBase'])
+      self.lineEditAfc.setText(self.taskValues['afterFrameCmd'])
+      self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'])
+      self.spinRerunThresh.setValue(self.taskValues['rerunThresh'])
+      self.spinMinBatch.setValue(self.taskValues['minBatch'])
+      self.spinMaxBatch.setValue(self.taskValues['maxBatch'])
+      self.spinPriority.setValue(self.taskValues['priority'])
+      self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
+      self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
+      self.lineEditDescription.setText(self.taskValues['description'])
+      batchFF = self.taskValues['batch']
+      self.comboBatching.setCurrentIndex(batchFF)
+      batchAD = constants.batchStatus[batchFF]
       return(1)
     else:
       return(0)

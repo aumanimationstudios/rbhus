@@ -478,12 +478,12 @@
          </property>
          <item>
           <property name="text">
-           <string>disable</string>
+           <string>deactive</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>enable</string>
+           <string>active</string>
           </property>
          </item>
         </widget>
