@@ -7,6 +7,7 @@ import socket
 import time
 
 
+
 progPath =  sys.argv[0].split(os.sep)
 print progPath
 if(len(progPath) > 1):
@@ -41,7 +42,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
-    self.colNamesTask = ["id","fileName","hostGroups","fileType","fRange","afterTasks","priority","submitTime","status","description"]
+    self.colNamesTask = ["id","fileName","hostGroups","os","fileType","fRange","afterTasks","priority","submitTime","status","description"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status"]
     
     

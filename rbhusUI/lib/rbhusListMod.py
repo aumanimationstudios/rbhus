@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Thu Jan 10 09:53:12 2013
+# Created: Thu Jan 10 22:29:12 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!

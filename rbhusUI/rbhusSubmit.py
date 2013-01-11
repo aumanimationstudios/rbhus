@@ -122,9 +122,12 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       return(0)     
   
   def selectFileName(self):
-    fila = QtGui.QFileDialog.getOpenFileName()
+    fila = QtGui.QFileDialog.getOpenFileNames()
     if(fila):
-      self.lineEditFileName.setText(fila)
+      if(self.lineEditFileName.text()):
+        self.lineEditFileName.setText(self.lineEditFileName.text() +","+ fila.join(","))
+      else:
+        self.lineEditFileName.setText(fila.join(","))
       
   def selectOutDir(self):
     dirac = QtGui.QFileDialog.getExistingDirectory()
@@ -134,45 +137,47 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
   def submitTasks(self):
     submitDict = {}
-    submitDict['fileName'] = str(self.lineEditFileName.text())
+    files = str(self.lineEditFileName.text()).split(",")
     submitDict['fRange'] = str(self.lineEditFrange.text())
     submitDict['outDir'] = str(self.lineEditOutDir.text())
     submitDict['description'] = str(self.lineEditDescription.text())
-    if(submitDict['fileName']):
-      print fileName
+    
+    submitDict['os'] = str(self.comboOsType.currentText())
+    submitDict['fileType'] = str(self.comboFileType.currentText())
+    prios = str(self.comboPrio.currentText())
+    if(prios == "low"):
+      p = 1
+    if(prios == "high"):
+      p = 300
+    if(prios == "normal"):
+      p = 150
+    batchFlag = str(self.comboBatching.currentText())
+    if(batchFlag == "active"):
+      submitDict['batch'] = str(constants.batchActive)
+    else:
+      submitDict['batch'] = str(constants.batchDeactive)
+    
+    submitDict['minBatch'] = str(self.spinMinBatch.value())
+    submitDict['maxBatch'] = str(self.spinMaxBatch.value())
+    submitDict['priority'] = str(p)
       
-      submitDict['os'] = str(self.comboOsType.currentText())
-      submitDict['fileType'] = str(self.comboFileType.currentText())
-      prios = str(self.comboPrio.currentText())
-      if(prios == "low"):
-        p = 1
-      if(prios == "high"):
-        p = 300
-      if(prios == "normal"):
-        p = 150
-      batchFlag = str(self.comboBatching.currentText())
-      if(batchFlag == "active"):
-        submitDict['batch'] = str(constants.batchActive)
-      else:
-        submitDict['batch'] = str(constants.batchDeactive)
+    if((submitDict['fileType'] == "3dsmax") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
+      submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/afterFrame.py"
+      submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/beforeFrame.py"
+    elif((submitDict['fileType'] == "3dsmax2013") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
+      submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
+      submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"
       
-      submitDict['minBatch'] = str(self.spinMinBatch.value())
-      submitDict['maxBatch'] = str(self.spinMaxBatch.value())
-      submitDict['priority'] = str(p)
-        
-      if((filetype == "3dsmax") and ((ostype == "default") or (ostype == "win"))):
-        submitDict['afterFrameCmd'] = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\afterFrame.py"
-        submitDict['beforeFrameCmd'] = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax\\\\beforeFrame.py"
-      elif((filetype == "3dsmax2013") and ((ostype == "default") or (ostype == "win"))):
-        submitDict['afterFrameCmd'] = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax2013\\\\afterFrame.py"
-        submitDict['beforeFrameCmd'] = "Z:\\\\pythonTestWindoze.DONOTDELETE\\\\rbhus\\\\etc\\\\3dsmax2013\\\\beforeFrame.py"
-        
-      a = rUtils.tasks()
-      try:
-        b = a.submit(submitDict)
-      except:
-        print("Error inserting task : "+ str(sys.exc_info()))
-        return()
+    a = rUtils.tasks()
+    
+    for f in files:
+      if(f):
+        submitDict['fileName'] = f
+        try:
+          b = a.submit(submitDict)
+          print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+        except:
+          print("Error inserting task : "+ str(sys.exc_info()))
     
     QtGui.qApp.closeAllWindows()
     

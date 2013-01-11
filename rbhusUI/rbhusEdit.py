@@ -42,8 +42,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
     rbhusEditMod.Ui_rbhusEdit.setupUi(self,Form)
     self.popEditItems()
-    self.setFileTypes()
-    self.setHostGroups()
+    
     self.pushFileName.clicked.connect(self.selectFileName)
     self.pushOutPutDir.clicked.connect(self.selectOutPutDir)
     self.pushBfc.clicked.connect(self.selectBfc)
@@ -52,10 +51,14 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
     self.spinRerunThresh.valueChanged.connect(self.getSpinRerunThresh)
     self.spinPriority.valueChanged.connect(self.getPriority)
+    self.spinMinBatch.valueChanged.connect(self.getMinBatch)
+    self.spinMaxBatch.valueChanged.connect(self.getMaxBatch)
     self.afterTimeEdit.dateTimeChanged.connect(self.afePrint)
     self.comboHostGroup.currentIndexChanged.connect(self.hostGroupPrint)
+    self.comboBatching.currentIndexChanged.connect(self.batchStatus)
     self.comboType.currentIndexChanged.connect(self.fileTypePrint)
     self.pushApply.clicked.connect(self.applyNew)
+    self.pushCancel.clicked.connect(self.popEditItems)
     self.lineEditAfc.textChanged.connect(self.reset_afc)
     self.lineEditBfc.textChanged.connect(self.reset_bfc)
     self.lineEditFileName.textChanged.connect(self.reset_fileName)
@@ -63,7 +66,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.lineEditImageName.textChanged.connect(self.reset_imageName)
     self.lineEditLogbase.textChanged.connect(self.reset_logbase)
     self.lineEditOutPutDir.textChanged.connect(self.reset_outPutDir)
-  
+    self.lineEditDescription.textChanged.connect(self.reset_desc)
     
     print self.afterTimeEdit.dateTime().toString()
     
@@ -80,6 +83,28 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_rerunthresh = 0
     self.db_priority = 0
     self.db_framerange = 0
+    self.db_minbatch = 0
+    self.db_maxbatch = 0
+    self.db_batch = 0
+    self.db_desc = 0
+    
+  def reset_variables(self):
+    self.db_filetype = 0
+    self.db_hostgroup = 0
+    self.db_filename = 0
+    self.db_imagename = 0
+    self.db_outputdir = 0
+    self.db_bfc = 0
+    self.db_afc = 0
+    self.db_logbase = 0
+    self.db_aftertime = 0
+    self.db_rerunthresh = 0
+    self.db_priority = 0
+    self.db_framerange = 0
+    self.db_minbatch = 0
+    self.db_maxbatch = 0
+    self.db_batch = 0
+    self.db_desc = 0
     
     
   def reset_outPutDir(self):
@@ -100,6 +125,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def reset_bfc(self):
     self.db_bfc = 1
     
+    
+  def reset_desc(self):
+    self.db_desc = 1
     
   def reset_afc(self):
     self.db_afc = 1
@@ -142,8 +170,23 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     if(self.db_priority):
       editDict["priority"] = str(self.db_priority)
       self.db_priority = 0
-        
+    if(self.db_batch):
+      editDict['batch'] = str(self.db_batch)
+    if(self.db_maxbatch):
+      editDict['maxBatch'] = str(self.db_maxbatch)
+    if(self.db_minbatch):
+      editDict['minBatch'] = str(self.db_minbatch)
+    if(self.db_desc):
+      editDict['description'] = str(self.db_desc)
+    print(str(editDict))
+    try:
+      self.task.edit(editDict)
+    except:
+      print(str(sys.exc_info()))
       
+    self.taskValues = self.task.taskDetails
+    self.popEditItems()  
+    
   
   def hostGroupPrint(self):
     print(self.comboHostGroup.currentText())
@@ -153,6 +196,10 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def fileTypePrint(self):
     print(self.comboType.currentText())
     self.db_filetype = 1
+    
+  def batchStatus(self):
+    print(self.comboBatching.currentText())
+    self.db_batch = constants.batchStatus[str(self.comboBatching.currentText())]
     
     
   def afePrint(self):
@@ -165,13 +212,13 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
   def popEditItems(self):
     if(self.taskValues):
-      self.lineEditFileName.setText(self.taskValues['fileName'])
-      self.lineEditOutPutDir.setText(self.taskValues['outDir'])
+      self.lineEditFileName.setText(self.taskValues['fileName'].replace("\\","/"))
+      self.lineEditOutPutDir.setText(self.taskValues['outDir'].replace("\\","/"))
       self.lineEditImageName.setText(self.taskValues['outName'])
       self.lineEditFrange.setText(self.taskValues['fRange'])
-      self.lineEditLogbase.setText(self.taskValues['logBase'])
-      self.lineEditAfc.setText(self.taskValues['afterFrameCmd'])
-      self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'])
+      self.lineEditLogbase.setText(self.taskValues['logBase'].replace("\\","/"))
+      self.lineEditAfc.setText(self.taskValues['afterFrameCmd'].replace("\\","/"))
+      self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'].replace("\\","/"))
       self.spinRerunThresh.setValue(self.taskValues['rerunThresh'])
       self.spinMinBatch.setValue(self.taskValues['minBatch'])
       self.spinMaxBatch.setValue(self.taskValues['maxBatch'])
@@ -182,6 +229,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       batchFF = self.taskValues['batch']
       self.comboBatching.setCurrentIndex(batchFF)
       batchAD = constants.batchStatus[batchFF]
+      self.setFileTypes()
+      self.setHostGroups()
+      self.reset_variables()
       return(1)
     else:
       return(0)
@@ -192,6 +242,14 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_rerunthresh = self.spinRerunThresh.value()
     print(self.db_rerunthresh)
     
+    
+  def getMinBatch(self):
+    self.db_minbatch = self.spinMinBatch.value()
+    print(self.db_minbatch)
+
+  def getMaxBatch(self):
+    self.db_maxbatch = self.spinMaxBatch.value()
+    print(self.db_maxbatch)
     
   def getPriority(self):
     self.db_priority = self.spinPriority.value()
@@ -210,7 +268,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     fila = QtGui.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditFileName.setText(fila)
-      self.db_filename = fila
+      self.db_filename = fila.replace("\\","/")
 
   def selectOutPutDir(self):
     fila = QtGui.QFileDialog.getExistingDirectory()
@@ -223,28 +281,35 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     fila = QtGui.QFileDialog.getExistingDirectory()
     if(fila):
       self.lineEditLogbase.setText(fila)
-      self.db_logbase = fila
+      self.db_logbase = fila.replace("\\","/")
   
   def selectBfc(self):
     fila = QtGui.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditBfc.setText(fila)
-      self.db_bfc = fila
+      self.db_bfc = fila.replace("\\","/")
 
   def selectAfc(self):
     fila = QtGui.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditAfc.setText(fila)
-      self.db_afc = fila
+      self.db_afc = fila.replace("\\","/")
       
       
   def setFileTypes(self):
     rows = rUtils.getFileTypes()
-      
+    self.comboType.clear()  
     if(rows):
+      indx = 0
+      setIndx = 0
       for row in rows:
         self.comboType.addItem(_fromUtf8(row))
+        print(str(self.taskValues['fileType']))
+        if(row.endswith(str(self.taskValues['fileType']))):
+          setIndx = indx
+        indx = indx + 1
       
+      self.comboType.setCurrentIndex(setIndx)
       return(1)
     else:
       return(0)
@@ -252,10 +317,17 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
 
   def setHostGroups(self):
     rows = rUtils.getHostGroups()
-      
+    indx = 0
+    setIndx = 0  
+    self.comboHostGroup.clear()  
     if(rows):
       for row in rows:
         self.comboHostGroup.addItem(_fromUtf8(row))
+        if(row.endswith(str(self.taskValues['hostGroups']))):
+          setIndx = indx
+        indx = indx + 1
+        
+      self.comboHostGroup.setCurrentIndex(setIndx)
       return(1)
     else:
       return(0)

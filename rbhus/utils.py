@@ -135,6 +135,7 @@ class tasks(object):
       rows = self.db_conn.execute("select last_insert_id()", dictionary = True)
       self.taskId =  rows[0]['last_insert_id()']
       self.taskDetails = self._getTaskDetails(self.taskId)
+      return(self.taskId)
     except:
       self.taskId = 0
       raise
@@ -147,19 +148,14 @@ class tasks(object):
         self.validFields[x] = fieldDict[x]
       else:
         self.invalidFields[x] = fieldDict[x]
-    if(taskId):
+    if(self.taskId):
       for x in self.validFields.keys():
         try:
           self.db_conn.execute("update tasks set "+ str(x) +"='"+ str(self.validFields[x]) +"' where id='"+ str(self.taskId) +"'")
         except:
           raise
+      self.taskDetails = self._getTaskDetails(self.taskId)
 
-      
-      
-    
-        
-    
-  
   
       
       

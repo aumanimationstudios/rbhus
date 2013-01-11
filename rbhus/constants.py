@@ -29,7 +29,9 @@ batchDeactive = 0
 
 batchStatus = {
   1 : "active",
-  0 : "deactive"
+  0 : "deactive",
+  "active" : 1,
+  "deactive" : 0
 }
 
 taskStatus = {

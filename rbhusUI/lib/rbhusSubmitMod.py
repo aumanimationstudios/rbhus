@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Thu Jan 10 09:53:12 2013
+# Created: Thu Jan 10 22:29:12 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -391,8 +391,8 @@ class Ui_rbhusSubmit(object):
     self.pushFileName.setText(_translate("rbhusSubmit", "open", None))
     self.labelMinBatch.setText(_translate("rbhusSubmit", "minBatch", None))
     self.labeRenderer.setText(_translate("rbhusSubmit", "renderer", None))
-    self.comboBatching.setItemText(0, _translate("rbhusSubmit", "disable", None))
-    self.comboBatching.setItemText(1, _translate("rbhusSubmit", "enable", None))
+    self.comboBatching.setItemText(0, _translate("rbhusSubmit", "deactive", None))
+    self.comboBatching.setItemText(1, _translate("rbhusSubmit", "active", None))
     self.labelImageName.setText(_translate("rbhusSubmit", "outName", None))
     self.pushOutDir.setText(_translate("rbhusSubmit", "open", None))
     self.lineEditOutDir.setText(_translate("rbhusSubmit", "default", None))

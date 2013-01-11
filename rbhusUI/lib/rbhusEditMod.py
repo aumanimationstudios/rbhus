@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusEditMod.ui'
 #
-# Created: Thu Jan 10 09:53:11 2013
+# Created: Thu Jan 10 22:29:11 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -438,8 +438,8 @@ class Ui_rbhusEdit(object):
     self.labelBfc.setText(_translate("rbhusEdit", "bfc          ", None))
     self.labelFrange.setText(_translate("rbhusEdit", "fRange     ", None))
     self.pushLogOpen.setText(_translate("rbhusEdit", "open", None))
-    self.comboBatching.setItemText(0, _translate("rbhusEdit", "disable", None))
-    self.comboBatching.setItemText(1, _translate("rbhusEdit", "enable", None))
+    self.comboBatching.setItemText(0, _translate("rbhusEdit", "deactive", None))
+    self.comboBatching.setItemText(1, _translate("rbhusEdit", "active", None))
     self.labelDescription.setText(_translate("rbhusEdit", "description", None))
     self.lineEditDescription.setText(_translate("rbhusEdit", "default", None))
     self.pushCancel.setText(_translate("rbhusEdit", "cancel", None))
