@@ -159,16 +159,16 @@ class tasks(object):
   
       
       
-if __name__ == "__main__":
-  b = {}
-  b['fileName'] = "/tmp/fff.ff"
-  b['batch'] = "1"
-  b['minBatch'] = "1"
-  b['maxBatch'] = "3"
-  c = 799
+#if __name__ == "__main__":
+  #b = {}
+  #b['fileName'] = "/tmp/fff.ff"
+  #b['batch'] = "1"
+  #b['minBatch'] = "1"
+  #b['maxBatch'] = "3"
+  #c = 799
   
-  a = tasks()
-  a.submit(b)
-  print(str(a.taskDetails))
+  #a = tasks()
+  #a.submit(b)
+  #print(str(a.taskDetails))
   
   
