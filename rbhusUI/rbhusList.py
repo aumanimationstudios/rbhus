@@ -65,7 +65,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkTAutohold.clicked.connect(self.popTableList)
     self.checkTDone.clicked.connect(self.popTableList)
     self.checkTHold.clicked.connect(self.popTableList)
-    
+    self.tableList.customContextMenuRequested.connect(self.popupTask)
     self.taskHold.clicked.connect(self.holdTask)
     self.taskRerun.clicked.connect(self.rerunTask)
     self.taskActivate.clicked.connect(self.activateTask)
@@ -85,7 +85,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.popTableList()
     
     
-  
+  def popupTask(self, pos):
+    menu = QtGui.QMenu()
+    quitAction = menu.addAction("wtf")
+    
+    action = menu.exec_(self.tableList.mapToGlobal(pos))
+    if action == quitAction:
+      print(str(self.selectedTasks))
   
   def stopFrame(self):
     selFramesDict = self.selectedFrames()

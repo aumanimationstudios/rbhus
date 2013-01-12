@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Thu Jan 10 22:29:12 2013
+# Created: Sat Jan 12 22:32:04 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -124,6 +124,31 @@ class Ui_mainRbhusList(object):
     self.horizontalLayout_6.addWidget(self.lineEditSearch)
     spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_6.addItem(spacerItem1)
+    self.label_4 = QtGui.QLabel(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+    self.label_4.setSizePolicy(sizePolicy)
+    self.label_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+    self.label_4.setObjectName(_fromUtf8("label_4"))
+    self.horizontalLayout_6.addWidget(self.label_4)
+    self.labelTaskTotal = QtGui.QLabel(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.labelTaskTotal.sizePolicy().hasHeightForWidth())
+    self.labelTaskTotal.setSizePolicy(sizePolicy)
+    self.labelTaskTotal.setLayoutDirection(QtCore.Qt.LeftToRight)
+    self.labelTaskTotal.setAutoFillBackground(True)
+    self.labelTaskTotal.setFrameShape(QtGui.QFrame.WinPanel)
+    self.labelTaskTotal.setFrameShadow(QtGui.QFrame.Sunken)
+    self.labelTaskTotal.setTextFormat(QtCore.Qt.PlainText)
+    self.labelTaskTotal.setScaledContents(False)
+    self.labelTaskTotal.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+    self.labelTaskTotal.setMargin(2)
+    self.labelTaskTotal.setObjectName(_fromUtf8("labelTaskTotal"))
+    self.horizontalLayout_6.addWidget(self.labelTaskTotal)
     self.verticalLayout_3.addLayout(self.horizontalLayout_6)
     self.horizontalLayout_3 = QtGui.QHBoxLayout()
     self.horizontalLayout_3.setSizeConstraint(QtGui.QLayout.SetNoConstraint)
@@ -145,8 +170,9 @@ class Ui_mainRbhusList(object):
     brush.setStyle(QtCore.Qt.SolidPattern)
     palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
     self.tableList.setPalette(palette)
+    self.tableList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.tableList.setFrameShadow(QtGui.QFrame.Raised)
-    self.tableList.setEditTriggers(QtGui.QAbstractItemView.DoubleClicked|QtGui.QAbstractItemView.EditKeyPressed)
+    self.tableList.setEditTriggers(QtGui.QAbstractItemView.AnyKeyPressed|QtGui.QAbstractItemView.DoubleClicked|QtGui.QAbstractItemView.EditKeyPressed|QtGui.QAbstractItemView.SelectedClicked)
     self.tableList.setAlternatingRowColors(False)
     self.tableList.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableList.setVerticalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
@@ -464,6 +490,8 @@ class Ui_mainRbhusList(object):
     self.checkTAutohold.setText(_translate("mainRbhusList", "autohold", None))
     self.checkTAll.setText(_translate("mainRbhusList", "ALL", None))
     self.labelSearch.setText(_translate("mainRbhusList", "search", None))
+    self.label_4.setText(_translate("mainRbhusList", "total", None))
+    self.labelTaskTotal.setText(_translate("mainRbhusList", "22", None))
     self.tableList.setSortingEnabled(True)
     self.taskActivate.setText(_translate("mainRbhusList", "activate", None))
     self.taskHold.setText(_translate("mainRbhusList", "hold", None))
