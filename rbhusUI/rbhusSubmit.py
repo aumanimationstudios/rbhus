@@ -132,18 +132,18 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   def selectOutDir(self):
     dirac = QtGui.QFileDialog.getExistingDirectory()
     if(dirac):
-      self.lineEditOutDir.setText(dirac.replace("\\","/"))
+      self.lineEditOutDir.setText(dirac)
       
       
   def submitTasks(self):
     submitDict = {}
-    files = str(self.lineEditFileName.text()).split(",")
+    files = self.lineEditFileName.text().split(",")
     submitDict['fRange'] = str(self.lineEditFrange.text())
-    submitDict['outDir'] = str(self.lineEditOutDir.text())
+    submitDict['outDir'] = self.lineEditOutDir.text().toUtf8().replace("\\","/")
     submitDict['description'] = str(self.lineEditDescription.text())
     
     submitDict['os'] = str(self.comboOsType.currentText())
-    submitDict['fileType'] = str(self.comboFileType.currentText())
+    submitDict['fileType'] = self.comboFileType.currentText()
     prios = str(self.comboPrio.currentText())
     if(prios == "low"):
       p = 1
@@ -172,7 +172,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     
     for f in files:
       if(f):
-        submitDict['fileName'] = f
+        submitDict['fileName'] = f.replace("\\","/")
         try:
           b = a.submit(submitDict)
           print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
