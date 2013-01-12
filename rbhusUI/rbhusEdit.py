@@ -142,22 +142,22 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       editDict["hostGroups"] = str(self.comboHostGroup.currentText())
       self.db_hostgroup = 0
     if(self.db_filename):
-      editDict["fileName"] = str(self.lineEditFileName.text())
+      editDict["fileName"] = str(self.lineEditFileName.text().replace("\\","/"))
       self.db_filename = 0
     if(self.db_imagename):
       editDict["outName"] = str(self.lineEditImageName.text())
       self.db_imagename = 0
     if(self.db_outputdir):
-      editDict["outDir"] = str(self.lineEditOutPutDir.text())
+      editDict["outDir"] = str(self.lineEditOutPutDir.text().replace("\\","/"))
       self.db_outputdir = 0
     if(self.db_bfc):
-      editDict["beforeFrameCmd"] = str(self.lineEditBfc.text())
+      editDict["beforeFrameCmd"] = str(self.lineEditBfc.text().replace("\\","/"))
       self.db_bfc = 0
     if(self.db_afc):
-      editDict["afterFrameCmd"] = str(self.lineEditAfc.text())
+      editDict["afterFrameCmd"] = str(self.lineEditAfc.text().replace("\\","/"))
       self.db_afc = 0
     if(self.db_logbase):
-      editDict["logBase"] = str(self.lineEditLogbase.text())
+      editDict["logBase"] = str(self.lineEditLogbase.text().replace("\\","/"))
       self.db_logbase = 0
     if(self.db_aftertime):
       editDict["afterTime"] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
@@ -212,13 +212,13 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
   def popEditItems(self):
     if(self.taskValues):
-      self.lineEditFileName.setText(self.taskValues['fileName'].replace("\\","/"))
-      self.lineEditOutPutDir.setText(self.taskValues['outDir'].replace("\\","/"))
+      self.lineEditFileName.setText(self.taskValues['fileName'])
+      self.lineEditOutPutDir.setText(self.taskValues['outDir'])
       self.lineEditImageName.setText(self.taskValues['outName'])
       self.lineEditFrange.setText(self.taskValues['fRange'])
-      self.lineEditLogbase.setText(self.taskValues['logBase'].replace("\\","/"))
-      self.lineEditAfc.setText(self.taskValues['afterFrameCmd'].replace("\\","/"))
-      self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'].replace("\\","/"))
+      self.lineEditLogbase.setText(self.taskValues['logBase'])
+      self.lineEditAfc.setText(self.taskValues['afterFrameCmd'])
+      self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'])
       self.spinRerunThresh.setValue(self.taskValues['rerunThresh'])
       self.spinMinBatch.setValue(self.taskValues['minBatch'])
       self.spinMaxBatch.setValue(self.taskValues['maxBatch'])
@@ -267,33 +267,33 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def selectFileName(self):
     fila = QtGui.QFileDialog.getOpenFileName()
     if(fila):
-      self.lineEditFileName.setText(fila)
-      self.db_filename = fila.replace("\\","/")
+      self.lineEditFileName.setText(fila.replace("\\","/"))
+      self.db_filename = fila
 
   def selectOutPutDir(self):
     fila = QtGui.QFileDialog.getExistingDirectory()
     if(fila):
       self.lineEditOutPutDir.setText(fila.replace("\\","/"))
-      self.db_outputdir = fila.replace("\\","/")
+      self.db_outputdir = fila
       
 
   def selectLogBase(self):
     fila = QtGui.QFileDialog.getExistingDirectory()
     if(fila):
       self.lineEditLogbase.setText(fila)
-      self.db_logbase = fila.replace("\\","/")
+      self.db_logbase = fila
   
   def selectBfc(self):
     fila = QtGui.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditBfc.setText(fila)
-      self.db_bfc = fila.replace("\\","/")
+      self.db_bfc = fila
 
   def selectAfc(self):
     fila = QtGui.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditAfc.setText(fila)
-      self.db_afc = fila.replace("\\","/")
+      self.db_afc = fila
       
       
   def setFileTypes(self):
