@@ -82,7 +82,7 @@ def initWaitingTasks(pendingTasks):
     row = {}
     while(1):
       try:
-        row = pendingTasks.get(False)
+        row = pendingTasks.get()
         break
       except:
         #logging.error("Screwed initWaitingTasks WTF1 : "+ str(sys.exc_info()))

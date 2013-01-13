@@ -169,6 +169,7 @@ def getAssignedFrames(qAssigned):
   logClient.debug(str(os.getpid()) + ": getAssignedFrames func")
   while(1):
     hostname = socket.gethostname()
+    ipAddr = socket.gethostbyname(socket.gethostname()).strip()
     rows = 0
     try:
       rows = db_conn.execute("SELECT frames.frameId, frames.fThreads,frames.batchId, tasks.* FROM frames, tasks \
