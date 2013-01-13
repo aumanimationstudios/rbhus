@@ -31,7 +31,7 @@ LOG_FILENAME = '/var/log/rbhusQueen_initTasks.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
-db_conn = dbRbhus.dbRbhus()
+
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusServer.pids"
 
@@ -39,6 +39,7 @@ setproctitle.setproctitle("rQ_initTasks")
 
 def getWaitingTasks(pendingTasks):
   setproctitle.setproctitle("rQ_get")
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     rows = 0
     #logging.error("ROWS WTF2 : "+ str(rows))
@@ -76,6 +77,7 @@ def getWaitingTasks(pendingTasks):
 
 def initWaitingTasks(pendingTasks):
   setproctitle.setproctitle("rQ_set")
+  db_conn = dbRbhus.dbRbhus()
   while(1):
     row = {}
     while(1):

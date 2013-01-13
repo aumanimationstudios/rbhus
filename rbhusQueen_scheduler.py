@@ -337,8 +337,9 @@ def scheduler():
                 
               taskFramesToAssign = []
               for bB in range(0,bestBatch):
-                taskFramesToAssign.append(taskFrames[bB]['frameId'])
                 insertToBatchId(batchId,taskFrames[bB]['frameId'])
+                taskFramesToAssign.append(taskFrames[bB]['frameId'])
+                
                 
               assignFramesToHost(assignedHost, activeTask, taskFramesToAssign, batchId)
               logging.debug("batchID : "+ str(batchId) +" : ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(activeTask["id"]) +" : "+ str(taskFramesToAssign))

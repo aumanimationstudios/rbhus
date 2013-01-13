@@ -87,11 +87,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
   def popupTask(self, pos):
     menu = QtGui.QMenu()
-    quitAction = menu.addAction("wtf")
+    test1Action = menu.addAction("test1")
+    test2Action = menu.addAction("test2")
+    test3Action = menu.addAction("test3")
     
     action = menu.exec_(self.tableList.mapToGlobal(pos))
-    if action == quitAction:
-      print(str(self.selectedTasks))
+    if(action == test1Action):
+      print("test1")
+    if(action == test2Action):
+      print("test2")
+    if(action == test3Action):
+      print("test3")
+      
   
   def stopFrame(self):
     selFramesDict = self.selectedFrames()
@@ -166,7 +173,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       selTasks.append(x['id'].lstrip("0"))
       
     if(selTasks and (len(selTasks) == 1)):
-      os.system(editTaskCmd +" "+ str(selTasks[0]))
+      os.system(editTaskCmd +" "+ str(selTasks[0]) +"&")
     else:
       print "madness .. too many tasks selected"
   
@@ -336,7 +343,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for row in rows:
       colCount = len(row)
       break
-      
+    self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8)) 
     self.tableList.setColumnCount(colCount)
     self.tableList.setRowCount(len(rows))
     
@@ -380,7 +387,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           colIndx = colIndx + 1
         indx = indx + 1
 
- 
+    self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
     self.tableList.resizeColumnsToContents()
     self.tableList.setSortingEnabled(True)
     
@@ -431,7 +438,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(cHung):
       statusToCheck.append(str(constants.framesHung))
     
-    print(statusToCheck)
+    #print(statusToCheck)
     
     
     try:
@@ -452,7 +459,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         cursor.close()
         conn.close()
       else:
-        print("please check status")
+        #print("please check status")
         self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
         return()
     except:

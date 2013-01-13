@@ -32,7 +32,7 @@ LOG_FILENAME = '/var/log/rbhusQueen_pingClient.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
-db_conn = dbRbhus.dbRbhus()
+
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbusServer.pids"
 
@@ -40,6 +40,7 @@ setproctitle.setproctitle("rQ_pingClient")
 
 
 def checkClientAlive():
+  db_conn = dbRbhus.dbRbhus()
   maxPids = 100
   pIds = []
   while(1):
