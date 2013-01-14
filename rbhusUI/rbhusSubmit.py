@@ -174,7 +174,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       if(f):
         submitDict['fileName'] = f.replace("\\","/")
         if(submitDict['outDir'].find("default") != 0):
-          submitDict['outDir'] = submitDict['outDir'] + ".".join(submitDict['fileName'].split("/")[-1].split(".")[0:-1])
+          submitDict['outDir'] = submitDict['outDir'] + ".".join(submitDict['outDir'].split("/")[-1].split(".")[0:-1])
         try:
           b = a.submit(submitDict)
           print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
