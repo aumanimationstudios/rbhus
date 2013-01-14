@@ -139,7 +139,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     submitDict = {}
     files = self.lineEditFileName.text().split(",")
     submitDict['fRange'] = str(self.lineEditFrange.text())
-    submitDict['outDir'] = self.lineEditOutDir.text().toUtf8().replace("\\","/")
+    submitDict['outDir'] = self.lineEditOutDir.text().replace("\\","/")
     submitDict['description'] = str(self.lineEditDescription.text())
     
     submitDict['os'] = str(self.comboOsType.currentText())
