@@ -334,7 +334,9 @@ def execFrames(frameInfo,frameScrutiny):
     os.environ['rbhus_bfCmd']     = str(frameInfo['beforeFrameCmd']).lstrip().rstrip()
     os.environ['rbhus_afCmd']     = str(frameInfo['afterFrameCmd']).lstrip().rstrip()
     os.environ['rbhus_threads']   = str(frameInfo['fThreads']).lstrip().rstrip()
-    os.environ['rbhus_layer']      = str(frameInfo['layer'])
+    os.environ['rbhus_layer']      = str(frameInfo['layer']).lstrip().rstrip()
+    os.environ['rbhus_camera']    = str(frameInfo['camera']).lstrip().rstrip()
+    os.environ['rbhus_resolution'] = str(frameInfo['resolution']).lstrip().rstrip()
     os.environ['rbhus_imageType']   = str(frameInfo['imageType']).lstrip().rstrip()
     if((frameInfo['logBase'] == "default") and (frameInfo['outDir'] != "default")):
       lb = frameInfo['outDir'].rstrip(os.sep) + os.sep + "logs"
@@ -407,6 +409,8 @@ def execFrames(frameInfo,frameScrutiny):
         if(setFreeCpus(frameInfo, db_conn) ==  1):
           break
         time.sleep(0.5)
+      washMyButt(frameInfo['id'],frameInfo['frameId'])
+      db_conn.delBatchId(frameInfo['batchId'])
       sys.exit(0)
 
 
@@ -617,6 +621,7 @@ def washMyButt(taskid, frameid):
     bfd = open(buttFile,"r")
   except:
     logClient.debug(str(sys.exc_info()))
+    return(0)
   for x in bfd.readlines():
     try:
       os.remove(x)
@@ -626,6 +631,7 @@ def washMyButt(taskid, frameid):
     os.remove(buttFile)
   except:
     logClient.debug(str(sys.exc_info()))
+  return(1)
 
 def runCommand(rcmd):
   try:
@@ -708,6 +714,11 @@ def getFrameInfo(taskid, frameid, dbconn):
 #error = 1 ; success = 0
 def killFrame(dbconn,taskId,frameId,pidLock = 0,statusAfterKill = -1):
   taskPidF = tempDir + os.sep + "rbhus_"+ str(taskId).rstrip().lstrip() +"_"+ str(frameId).rstrip().lstrip()
+  batchId = dbconn.getBatchId(taskId,frameId)
+  if(batchId):
+    batchedFrames = dbconn.getBatchedFrames(batchId)
+  else:
+    return(0)
   try:
     if(pidLock != 0):
       pidLock.acquire()
@@ -761,6 +772,9 @@ def killFrame(dbconn,taskId,frameId,pidLock = 0,statusAfterKill = -1):
       if(setFramesStatus(taskId,batchedFrames,statusAfterKill,dbconn) == 1):
         break
       time.sleep(0.5)
+      
+  washMyButt(taskId,frameId)
+  db_conn.delBatchId(batchId)
   return(0)
 
 def getMainPids():

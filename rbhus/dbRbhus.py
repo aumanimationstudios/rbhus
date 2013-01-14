@@ -110,6 +110,19 @@ class dbRbhus:
       modLogger.error("getting batched frames : "+ str(sys.exc_info()))
       return(None)
     return(frange)
+    
+  def getBatchId(self, taskId, frameId):
+    try:
+      rows = self.execute("select batchId from frames where id=\""+ str(taskId) +"\" and frameId=\""+ str(frameId) +"\"",dictionary=True)
+      batchId = str(rows[0][rows[0].keys()[-1]])
+      try:
+        batchId.remove("default")
+      except:
+        pass
+    except:
+      modLogger.error("getting batchId : "+ str(sys.exc_info()))
+      return(None)
+    return(batchId)
 
   # returns an array of all the frames in the given batchId   
   def delBatchId(self,batchId):

@@ -42,7 +42,8 @@ logFile = os.environ['rbhus_logFile']
 washMyButt = os.environ['rbhus_washmybutt']
 runScript = os.environ['rbhus_runScript']
 frames = os.environ['rbhus_frames']
-
+cam = os.environ['rbhus_camera']
+res = os.environ['rbhus_resolution']
 wbd = open(washMyButt,"w")
 
 RENDERCMD = "\"c:\\Program Files\\Autodesk\\3ds Max 2013\\3dsmaxcmd.exe\""
