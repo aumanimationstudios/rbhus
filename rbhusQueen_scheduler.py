@@ -327,7 +327,7 @@ def scheduler():
               if(batchFlag == constants.batchActive):
                 bestBatch = int(totalTaskFrames)/int(totalFreeHosts)
                 
-                if(bestBatch <= totalTaskFrames)
+                if(bestBatch <= totalTaskFrames):
                   if(bestBatch < minBatch):
                     bestBatch = minBatch
                   elif(bestBatch > maxBatch):
