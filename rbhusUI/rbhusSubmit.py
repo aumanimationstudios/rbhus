@@ -139,7 +139,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     submitDict = {}
     files = self.lineEditFileName.text().split(",")
     submitDict['fRange'] = str(self.lineEditFrange.text())
-    submitDict['outDir'] = self.lineEditOutDir.text().replace("\\","/")
+    submitdir = self.lineEditOutDir.text().replace("\\","/")
     submitDict['description'] = str(self.lineEditDescription.text())
     
     submitDict['os'] = str(self.comboOsType.currentText())
@@ -173,8 +173,12 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     for f in files:
       if(f):
         submitDict['fileName'] = f.replace("\\","/")
-        if(submitDict['outDir'].find("default") != 0):
-          submitDict['outDir'] = submitDict['outDir'] + ".".join(submitDict['outDir'].split("/")[-1].split(".")[0:-1])
+        submitDict['outDir'] = submitdir
+        if(not submitDict['outDir'].endsWith("/")):
+          submitDict['outDir'] = submitDict['outDir'] + "/"
+        if(submitDict['outDir'].indexOf("default") == -1):
+          submitDict['outDir'] = submitDict['outDir'] +".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1])
+          print(str(submitDict['outDir']))
         try:
           b = a.submit(submitDict)
           print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
