@@ -208,11 +208,11 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
           #submitDict['cameras'] = submitDict['cameras'] + "/"
           
           #print(str(submitDict['outDir']))
-        try:
-          b = a.submit(submitDict)
-          print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
-        except:
-          print("Error inserting task : "+ str(sys.exc_info()))
+        #try:
+          #b = a.submit(submitDict)
+          #print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+        #except:
+          #print("Error inserting task : "+ str(sys.exc_info()))
     
     QtGui.qApp.closeAllWindows()
     

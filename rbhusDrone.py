@@ -1020,8 +1020,8 @@ def atUrService():
         continue
       frameInfos = getFrameInfo(taskId, frameId, db_conn)
       killFrame(db_conn,taskId,frameId,0,constants.framesKilled)
-      washMyButt(taskId,frameId)
-      delFramePidFile(0,taskId,frameId)
+      #washMyButt(taskId,frameId)
+      #delFramePidFile(0,taskId,frameId)
       
     elif(msg == "RESTART"):
       if(sys.platform.find("linux") >= 0):

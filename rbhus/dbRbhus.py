@@ -22,6 +22,8 @@ elif(sys.platform.find("win") >=0):
 modLogger = logging.getLogger("modLogger")
 modLogger.setLevel(logging.ERROR)
 
+
+
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
 LOG_FILENAME.setFormatter(BASIC_FORMAT)
 modLogger.addHandler(LOG_FILENAME)

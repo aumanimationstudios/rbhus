@@ -43,7 +43,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     Form.setWindowIcon(icon)
     
     self.colNamesTask = ["id","fileName","hostGroups","os","fileType","fRange","afterTasks","priority","submitTime","status","description"]
-    self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status"]
+    self.colNamesFrames = ["id","frameId","batchId","hostName","ram","sTime","eTime","runCount","status"]
     
     
     self.selectedTaskList = []
@@ -318,7 +318,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(cTHold):
       statusToCheck.append(str(constants.taskStopped))
     if(cTAutohold):
-      statusToCheck.append(str(constants.taskAutoStop))
+      statusToCheck.append(str(constants.taskAutoStopped))
     
     print(statusToCheck) 
     
