@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>724</width>
-    <height>661</height>
+    <height>763</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,7 @@
       </property>
      </widget>
     </item>
-    <item row="13" column="2">
+    <item row="14" column="2">
      <widget class="QComboBox" name="comboPrio">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -53,7 +53,7 @@
       </item>
      </widget>
     </item>
-    <item row="11" column="2">
+    <item row="12" column="2">
      <widget class="QComboBox" name="comboOsType">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -63,7 +63,7 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="2">
+    <item row="11" column="2">
      <widget class="QLineEdit" name="lineEditLayer">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -118,7 +118,7 @@
       </property>
      </widget>
     </item>
-    <item row="19" column="5">
+    <item row="20" column="5">
      <widget class="QPushButton" name="pushSubmit">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -131,7 +131,7 @@
       </property>
      </widget>
     </item>
-    <item row="12" column="0">
+    <item row="13" column="0">
      <widget class="QLabel" name="labelAfterTask">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -144,7 +144,7 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
+    <item row="7" column="0">
      <widget class="QLabel" name="labelHostGroup">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -157,7 +157,7 @@
       </property>
      </widget>
     </item>
-    <item row="17" column="0">
+    <item row="18" column="0">
      <widget class="QLabel" name="labelMaxBatch">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -196,7 +196,7 @@
       </property>
      </widget>
     </item>
-    <item row="12" column="2">
+    <item row="13" column="2">
      <widget class="QLineEdit" name="lineEditAfterTask">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -209,7 +209,7 @@
       </property>
      </widget>
     </item>
-    <item row="15" column="0">
+    <item row="16" column="0">
      <widget class="QLabel" name="labelBatching">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -222,7 +222,23 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
+    <item row="19" column="2">
+     <widget class="QLineEdit" name="lineEditDescription">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>default</string>
+      </property>
+      <property name="dragEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
      <widget class="QLabel" name="labeFileType">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -248,7 +264,7 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0">
+    <item row="11" column="0">
      <widget class="QLabel" name="labelLayer">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -274,7 +290,7 @@
       </property>
      </widget>
     </item>
-    <item row="19" column="2">
+    <item row="20" column="2">
      <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -287,7 +303,7 @@
       </property>
      </spacer>
     </item>
-    <item row="6" column="2">
+    <item row="7" column="2">
      <widget class="QComboBox" name="comboHostGroup">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -297,7 +313,7 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="0">
+    <item row="12" column="0">
      <widget class="QLabel" name="labelOsType">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -310,7 +326,7 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="2">
+    <item row="9" column="2">
      <widget class="QComboBox" name="comboRenderer">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -320,7 +336,7 @@
       </property>
      </widget>
     </item>
-    <item row="13" column="0">
+    <item row="14" column="0">
      <widget class="QLabel" name="labelPrio">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -346,7 +362,7 @@
       </property>
      </widget>
     </item>
-    <item row="16" column="0">
+    <item row="17" column="0">
      <widget class="QLabel" name="labelMinBatch">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -359,7 +375,7 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="2">
+    <item row="8" column="2">
      <widget class="QComboBox" name="comboFileType">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -369,7 +385,7 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="0">
+    <item row="9" column="0">
      <widget class="QLabel" name="labeRenderer">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -382,7 +398,7 @@
       </property>
      </widget>
     </item>
-    <item row="15" column="2">
+    <item row="16" column="2">
      <widget class="QComboBox" name="comboBatching">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -444,7 +460,7 @@
       </property>
      </widget>
     </item>
-    <item row="17" column="2">
+    <item row="18" column="2">
      <widget class="QSpinBox" name="spinMaxBatch">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -460,7 +476,7 @@
       </property>
      </widget>
     </item>
-    <item row="16" column="2">
+    <item row="17" column="2">
      <widget class="QSpinBox" name="spinMinBatch">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -476,7 +492,20 @@
       </property>
      </widget>
     </item>
-    <item row="20" column="0" colspan="6">
+    <item row="19" column="0">
+     <widget class="QLabel" name="labelDescription">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>description</string>
+      </property>
+     </widget>
+    </item>
+    <item row="21" column="0" colspan="6">
      <widget class="QTextEdit" name="textEdit">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -565,8 +594,8 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </item>
-    <item row="18" column="0">
-     <widget class="QLabel" name="labelDescription">
+    <item row="5" column="0">
+     <widget class="QLabel" name="labelCamera">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -574,12 +603,12 @@ p, li { white-space: pre-wrap; }
        </sizepolicy>
       </property>
       <property name="text">
-       <string>description</string>
+       <string>camera</string>
       </property>
      </widget>
     </item>
-    <item row="18" column="2">
-     <widget class="QLineEdit" name="lineEditDescription">
+    <item row="5" column="2">
+     <widget class="QLineEdit" name="lineEditCamera">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -589,8 +618,31 @@ p, li { white-space: pre-wrap; }
       <property name="text">
        <string>default</string>
       </property>
-      <property name="dragEnabled">
-       <bool>true</bool>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="labelResolution">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>resolution</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QLineEdit" name="lineEditResolution">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>default</string>
       </property>
      </widget>
     </item>
@@ -602,7 +654,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>724</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

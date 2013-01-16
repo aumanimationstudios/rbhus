@@ -138,6 +138,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   def submitTasks(self):
     submitDict = {}
     files = self.lineEditFileName.text().split(",")
+    cameras = self.lineEditCameras.text().split(",")
     submitDict['fRange'] = str(self.lineEditFrange.text())
     submitdir = self.lineEditOutDir.text().replace("\\","/")
     submitDict['description'] = str(self.lineEditDescription.text())
@@ -174,11 +175,31 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       if(f):
         submitDict['fileName'] = f.replace("\\","/")
         submitDict['outDir'] = submitdir
-        if(not submitDict['outDir'].endsWith("/")):
-          submitDict['outDir'] = submitDict['outDir'] + "/"
-        if(submitDict['outDir'].indexOf("default") == -1):
+        #submitDict['cameras'] = cameras
+        
+        
+        if((submitDict['outDir'].indexOf("default") == -1) or (submitDict['outDir'].length() > 7) ):
+          if(not submitDict['outDir'].endsWith("/")):
+            submitDict['outDir'] = submitDict['outDir'] + "/"
           submitDict['outDir'] = submitDict['outDir'] +".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1])
           print(str(submitDict['outDir']))
+          
+          
+        for c in cameras:
+          if(c):
+            submitDict['camera'] = c
+            if((submitDict['camera'].indexOf("default") == -1) or (submitDict['camera'].length() > 7) ):
+              if(not submitDict['outDir'].endsWith("/")):
+                submitDict['outDir'] = submitDict['outDir'] + "/"
+              submitDict['outDir'] = submitDict['outDir'] + c 
+            
+              
+            
+          
+        #if((submitDict['cameras'].indexOf("default") == -1) or (submitDict['cameras'].length() > 7) ):
+          #submitDict['cameras'] = submitDict['cameras'] + "/"
+          
+          #print(str(submitDict['outDir']))
         try:
           b = a.submit(submitDict)
           print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
