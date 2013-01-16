@@ -572,7 +572,7 @@ def execFrames(frameInfo,frameScrutiny):
     #time.sleep(0.5)
     if(sys.platform.find("win") >= 0):
       killFrame(db_conn,frameInfo['id'],frameInfo['frameId'],pidfileLock,-1)
-    delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
+    
 
 
 
@@ -612,6 +612,7 @@ def execFrames(frameInfo,frameScrutiny):
       time.sleep(0.2)
     washMyButt(frameInfo['id'],frameInfo['frameId'])
     db_conn.delBatchId(frameInfo['batchId'])
+    delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
     sys.exit(0)
 
 
