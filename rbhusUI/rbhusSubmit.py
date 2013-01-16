@@ -4,6 +4,7 @@ import glob
 import os
 import sys
 import datetime
+import re
 
 progPath =  sys.argv[0].split(os.sep)
 print progPath
@@ -137,10 +138,10 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
   def submitTasks(self):
     submitDict = {}
-    files = self.lineEditFileName.text().split(",")
-    cameras = self.lineEditCameras.text().split(",")
+    files = str(self.lineEditFileName.text())
+    cameras = str(self.lineEditCameras.text())
     submitDict['fRange'] = str(self.lineEditFrange.text())
-    submitdir = self.lineEditOutDir.text().replace("\\","/")
+    submitdir = str(self.lineEditOutDir.text())
     submitDict['description'] = str(self.lineEditDescription.text())
     submitDict['resolution'] = str(self.lineEditResolution.text())
     
@@ -172,28 +173,33 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
     a = rUtils.tasks()
     
-    for f in files:
+    for f in files.split(","):
       if(f):
         submitDict['fileName'] = f.replace("\\","/")
-        submitDict['outDir'] = submitdir
+        submitDict['outDir'] = submitdir.replace("\\","/")
         #submitDict['cameras'] = cameras
         
         
-        if(submitDict['outDir'].indexOf("default") != 0):
-          if(not submitDict['outDir'].endsWith("/")):
-            submitDict['outDir'] = submitDict['outDir'] + "/"
-          submitDict['outDir'] = submitDict['outDir'] +".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1])
+        if(re.search('^default&',submitDict['outDir']) == None):
+          submitDict['outDir'] = submitDict['outDir'].rstrip("/") +"/"+ ".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1]) +"/"
           print(str(submitDict['outDir']))
           
           
           for c in cameras:
             if(c):
               submitDict['camera'] = c
-              if(submitDict['camera'].indexOf("default") != 0):
-                if(not submitDict['outDir'].endsWith("/")):
-                  submitDict['outDir'] = submitDict['outDir'] + "/"
-                submitDict['outDir'] = submitDict['outDir'] + c 
+              if(re.search('^default$',submitDict['camera']) == None):
+                submitDict['outDir'] = submitDict['outDir'].rstrip("/") + c + "/"
               
+              try:
+                b = a.submit(submitDict)
+                print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+              except:
+                print("Error inserting task : "+ str(sys.exc_info()))
+        else:
+          for c in cameras:
+            if(c):
+              submitDict['camera'] = c
               try:
                 b = a.submit(submitDict)
                 print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
