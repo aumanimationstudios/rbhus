@@ -1019,11 +1019,9 @@ def atUrService():
         continue
       frameInfos = getFrameInfo(taskId, frameId, db_conn)
       killFrame(db_conn,taskId,frameId,0,constants.framesKilled)
+      washMyButt(taskId,frameId)
       delFramePidFile(0,taskId,frameId)
-      #while(1):
-        #if(setFreeCpus(frameInfos) == 1):
-          #break
-        #time.sleep(0.2)
+      
     elif(msg == "RESTART"):
       if(sys.platform.find("linux") >= 0):
         try:
