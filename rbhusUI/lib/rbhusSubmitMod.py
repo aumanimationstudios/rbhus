@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Wed Jan 16 13:45:11 2013
+# Created: Wed Jan 16 17:51:28 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -369,14 +369,14 @@ class Ui_rbhusSubmit(object):
     self.labelCamera.setSizePolicy(sizePolicy)
     self.labelCamera.setObjectName(_fromUtf8("labelCamera"))
     self.gridLayout.addWidget(self.labelCamera, 5, 0, 1, 1)
-    self.lineEditCamera = QtGui.QLineEdit(self.centralwidget)
+    self.lineEditCameras = QtGui.QLineEdit(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.lineEditCamera.sizePolicy().hasHeightForWidth())
-    self.lineEditCamera.setSizePolicy(sizePolicy)
-    self.lineEditCamera.setObjectName(_fromUtf8("lineEditCamera"))
-    self.gridLayout.addWidget(self.lineEditCamera, 5, 2, 1, 1)
+    sizePolicy.setHeightForWidth(self.lineEditCameras.sizePolicy().hasHeightForWidth())
+    self.lineEditCameras.setSizePolicy(sizePolicy)
+    self.lineEditCameras.setObjectName(_fromUtf8("lineEditCameras"))
+    self.gridLayout.addWidget(self.lineEditCameras, 5, 2, 1, 1)
     self.labelResolution = QtGui.QLabel(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
@@ -456,9 +456,9 @@ class Ui_rbhusSubmit(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:normal;\">             eg: if we want every 5th frame to render from 1 to 300 </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:normal;\">                   we can input 1-300:5 , </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:normal;\">             </span></p></body></html>", None))
-    self.labelCamera.setText(_translate("rbhusSubmit", "camera", None))
-    self.lineEditCamera.setToolTip(_translate("rbhusSubmit", "comma seperated list of cameras to render", None))
-    self.lineEditCamera.setText(_translate("rbhusSubmit", "default", None))
+    self.labelCamera.setText(_translate("rbhusSubmit", "cameras", None))
+    self.lineEditCameras.setToolTip(_translate("rbhusSubmit", "comma seperated list of cameras to render", None))
+    self.lineEditCameras.setText(_translate("rbhusSubmit", "default", None))
     self.labelResolution.setText(_translate("rbhusSubmit", "resolution", None))
     self.lineEditResolution.setToolTip(_translate("rbhusSubmit", "resolution of the output", None))
     self.lineEditResolution.setText(_translate("rbhusSubmit", "default", None))

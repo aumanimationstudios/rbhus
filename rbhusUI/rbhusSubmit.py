@@ -179,26 +179,26 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         #submitDict['cameras'] = cameras
         
         
-        if((submitDict['outDir'].indexOf("default") == -1) or (submitDict['outDir'].length() > 7) ):
+        if(submitDict['outDir'].indexOf("default") != 0):
           if(not submitDict['outDir'].endsWith("/")):
             submitDict['outDir'] = submitDict['outDir'] + "/"
           submitDict['outDir'] = submitDict['outDir'] +".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1])
           print(str(submitDict['outDir']))
           
           
-        for c in cameras:
-          if(c):
-            submitDict['camera'] = c
-            if((submitDict['camera'].indexOf("default") == -1) or (submitDict['camera'].length() > 7) ):
-              if(not submitDict['outDir'].endsWith("/")):
-                submitDict['outDir'] = submitDict['outDir'] + "/"
-              submitDict['outDir'] = submitDict['outDir'] + c 
+          for c in cameras:
+            if(c):
+              submitDict['camera'] = c
+              if(submitDict['camera'].indexOf("default") != 0):
+                if(not submitDict['outDir'].endsWith("/")):
+                  submitDict['outDir'] = submitDict['outDir'] + "/"
+                submitDict['outDir'] = submitDict['outDir'] + c 
               
-            try:
-              b = a.submit(submitDict)
-              print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
-            except:
-              print("Error inserting task : "+ str(sys.exc_info()))
+              try:
+                b = a.submit(submitDict)
+                print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+              except:
+                print("Error inserting task : "+ str(sys.exc_info()))
                 
             
               
