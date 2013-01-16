@@ -71,6 +71,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="toolTip">
+       <string/>
+      </property>
       <property name="text">
        <string>default</string>
       </property>
@@ -83,6 +86,12 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>name of the image file. eg: wtf.png</string>
+      </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;name of the image file. eg: &lt;span style=&quot; font-weight:600;&quot;&gt;wtfigo.png&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>default</string>
@@ -100,6 +109,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;type of image. &lt;/p&gt;&lt;p&gt;eg: PNG, MULTIEXR etc . &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;note : image type depends on the command line interface of the program&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>default</string>
       </property>
@@ -112,6 +127,12 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string>comma seperated list of files to render</string>
       </property>
       <property name="dragEnabled">
        <bool>true</bool>
@@ -190,6 +211,12 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;frame range in the format&lt;/p&gt;&lt;p&gt;startframe-endframe:byframes&lt;/p&gt;&lt;p&gt;eg:&lt;/p&gt;&lt;p&gt;render frames from 1 to 100 	: &lt;span style=&quot; font-weight:600;&quot;&gt;1-100&lt;/span&gt;&lt;/p&gt;&lt;p&gt;render every 5th frame from 1 to 100 	: &lt;span style=&quot; font-weight:600;&quot;&gt;1-100:5&lt;/span&gt;&lt;/p&gt;&lt;p&gt;render 1 frame 		:&lt;span style=&quot; font-weight:600;&quot;&gt; 1&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>1</string>
@@ -452,6 +479,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string>output directory to dump files</string>
+      </property>
       <property name="text">
        <string>default</string>
       </property>
@@ -615,6 +648,9 @@ p, li { white-space: pre-wrap; }
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="toolTip">
+       <string>comma seperated list of cameras to render</string>
+      </property>
       <property name="text">
        <string>default</string>
       </property>
@@ -641,6 +677,9 @@ p, li { white-space: pre-wrap; }
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="toolTip">
+       <string>resolution of the output</string>
+      </property>
       <property name="text">
        <string>default</string>
       </property>
@@ -654,7 +693,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>724</width>
-     <height>23</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>

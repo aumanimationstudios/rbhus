@@ -168,6 +168,23 @@ class dbRbhus:
       return(0)
     return(rows)
     
+  def getAllButStoppedTasks(self):
+    try:
+      rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
+                      WHERE (tasks.id = tasksLog.id) \
+                      AND ((tasks.status != "+ str(constants.taskStopped) +") or (tasks.status != "+ str(constants.taskAutoStopped +"))
+                      ORDER BY tasks.priority DESC", dictionary=True)
+    
+      #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem
+      if(rows):
+        if(not 'priority' in rows[0].keys()):
+          modLogger.error("faaaaaaaaack ..getActiveTasks missed!!!!  : "+ str(rows))
+          return(0)
+    except:
+      modLogger.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+    
   def getPotentHosts(self):
     try:
       rows = self.execute("SELECT hostInfo.hostName, \
@@ -349,7 +366,7 @@ class dbRbhus:
       taskStatus = self.getTaskStatus(taskId)
       for k in constants.framesStatus:
         f_status[constants.framesStatus[k]] = 0
-      if((taskStatus == constants.taskWaiting) or (taskStatus == constants.taskPending) or (taskStatus == constants.taskStopped)):
+      if((taskStatus == constants.taskWaiting) or (taskStatus == constants.taskPending) or (taskStatus == constants.taskStopped) or (taskStatus == constants.taskAutoStopped)):
         return(-1)
       
       rowss_ = self.execute("SELECT * FROM frames WHERE frames.id="+ str(taskId), dictionary=True)

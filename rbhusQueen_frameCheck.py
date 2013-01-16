@@ -81,24 +81,24 @@ def autoStopper():
             continue
           totalFrames = len(allFrames)
           totalThresh = len(framesThresh)
-          if((totalFrames - totalThresh) == 0):
+          if(totalFrames == totalThresh):
             logging.debug("Auto stopping task : "+ str(task['id']))
             while(1):
               if(db_conn.setTaskStatus(task['id'],constants.taskAutoStopped)):
                 break
-              time.sleep(0.05)
+              time.sleep(1)
           else:
             for x in framesThresh:
               db_conn.setFramesStatus(x['id'],x['frameId'],constants.framesAutoHold)
               logging.debug("Auto stopping frame  : "+ str(task['id']) +" "+ str(x['frameId']))
-    time.sleep(0.05)
+    time.sleep(0.1)
 
 
 def setCompletedTasks():
   db_conn = dbRbhus.dbRbhus()
   setproctitle.setproctitle("rQ_setCompletedTasks")
   while(1):
-    tasks = db_conn.getAllTasks()
+    tasks = db_conn.getAllButStoppedTasks()
     
     if(tasks):
       for task in tasks:

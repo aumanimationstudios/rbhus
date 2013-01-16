@@ -142,6 +142,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     submitDict['fRange'] = str(self.lineEditFrange.text())
     submitdir = self.lineEditOutDir.text().replace("\\","/")
     submitDict['description'] = str(self.lineEditDescription.text())
+    submitDict['resolution'] = str(self.lineEditResolution.text())
     
     submitDict['os'] = str(self.comboOsType.currentText())
     submitDict['fileType'] = self.comboFileType.currentText()
@@ -192,6 +193,13 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
               if(not submitDict['outDir'].endsWith("/")):
                 submitDict['outDir'] = submitDict['outDir'] + "/"
               submitDict['outDir'] = submitDict['outDir'] + c 
+              
+            try:
+              b = a.submit(submitDict)
+              print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+            except:
+              print("Error inserting task : "+ str(sys.exc_info()))
+                
             
               
             
