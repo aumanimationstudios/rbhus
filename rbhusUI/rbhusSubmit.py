@@ -176,20 +176,20 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     for f in files.split(","):
       if(f):
         submitDict['fileName'] = f.replace("\\","/")
-        submitDict['outDir'] = submitdir.replace("\\","/")
+        sd = submitdir.replace("\\","/")
         #submitDict['cameras'] = cameras
         
         
-        if(re.search('^default&',submitDict['outDir']) == None):
-          submitDict['outDir'] = submitDict['outDir'].rstrip("/") +"/"+ ".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1]) +"/"
-          print(str(submitDict['outDir']))
+        if(re.search('^default$',sd) == None):
+          sd = sd.rstrip("/") +"/"+ ".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1]) +"/"
+          print(str(sd))
           
           
-          for c in cameras:
+          for c in cameras.split(","):
             if(c):
               submitDict['camera'] = c
               if(re.search('^default$',submitDict['camera']) == None):
-                submitDict['outDir'] = submitDict['outDir'].rstrip("/") + c + "/"
+                submitDict['outDir'] = sd.rstrip("/") +"/"+ c + "/"
               
               try:
                 b = a.submit(submitDict)
@@ -197,7 +197,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
               except:
                 print("Error inserting task : "+ str(sys.exc_info()))
         else:
-          for c in cameras:
+          for c in cameras.split(","):
             if(c):
               submitDict['camera'] = c
               try:

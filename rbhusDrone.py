@@ -628,6 +628,7 @@ def washMyButt(taskid, frameid):
       os.remove(x)
     except:
       logClient.debug(str(sys.exc_info()))
+  bfd.close()
   try:
     os.remove(buttFile)
   except:
