@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusEditMod.ui'
 #
-# Created: Thu Jan 17 20:11:24 2013
+# Created: Thu Jan 17 21:14:56 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_rbhusEdit(object):
   def setupUi(self, rbhusEdit):
     rbhusEdit.setObjectName(_fromUtf8("rbhusEdit"))
-    rbhusEdit.resize(361, 660)
+    rbhusEdit.resize(596, 817)
     self.centralwidget = QtGui.QWidget(rbhusEdit)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)

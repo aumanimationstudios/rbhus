@@ -48,7 +48,7 @@ class dbRbhus:
   def _connRbhus(self):
     while(1):
       try:
-        con = self._connDb(hostname="bluepixelsanimation.dyndns-office.com",port=6000,dbname="rbhus")
+        con = self._connDb(hostname="blues2",port=3306,dbname="rbhus")
         modLogger.debug("Db connected")
         return(con)
       except:

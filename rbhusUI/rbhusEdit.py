@@ -163,6 +163,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     if(self.db_filetype):
       editDict["fileType"] = str(self.comboType.currentText())
       self.db_filetype = 0
+    if(self.db_renderer):
+      editDict["renderer"] = str(self.comboRenderer.currentText())
+      self.db_renderer = 0
     if(self.db_hostgroup):
       editDict["hostGroups"] = str(self.comboHostGroup.currentText())
       self.db_hostgroup = 0
@@ -208,6 +211,8 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       editDict['minBatch'] = str(self.db_minbatch)
     if(self.db_desc):
       editDict['description'] = str(self.db_desc)
+    if(self.db_os):
+      editDict['os'] = str(self.comboOsType.currentText())
     print(str(editDict))
     try:
       self.task.edit(editDict)
@@ -227,11 +232,12 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_os = 1
   
   def rendererPrint(self):
-    print(self.comboRenderer)
+    print(self.comboRenderer.currentText())
     self.db_renderer = 1
   
   def fileTypePrint(self):
     print(self.comboType.currentText())
+    self.setRenderer()
     self.db_filetype = 1
     
   def batchStatus(self):
@@ -272,7 +278,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       self.setFileTypes()
       self.setHostGroups()
       self.setOsTypes()
-      self.setRenderer()
+      #self.setRenderer()
       self.reset_variables()
       return(1)
     else:
@@ -352,6 +358,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
         indx = indx + 1
       
       self.comboType.setCurrentIndex(setIndx)
+      self.setRenderer()
       return(1)
     else:
       return(0)
@@ -377,22 +384,37 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       
       
   def setRenderer(self):
-    rows = rUtils.getRenderers()
-    self.comboRenderer.clear()  
-    if(rows):
-      indx = 0
-      setIndx = 0
-      for row in rows:
-        self.comboRenderer.addItem(_fromUtf8(row))
-        print(str(self.taskValues['renderer']))
-        if(row.endswith(str(self.taskValues['renderer']))):
+    renders = rUtils.getRenderers()
+    self.comboRenderer.clear()
+    indx = 0
+    setIndx = 0
+    try:
+      for x in renders[str(self.comboType.currentText())]:
+        self.comboRenderer.addItem(_fromUtf8(x))
+        if(x.endswith(str(self.taskValues['renderer']))):
           setIndx = indx
         indx = indx + 1
-      
       self.comboRenderer.setCurrentIndex(setIndx)
       return(1)
-    else:
+    except:
       return(0)
+      
+    #rows = rUtils.getRenderers()
+    #self.comboRenderer.clear()  
+    #if(rows):
+      #indx = 0
+      #setIndx = 0
+      #for row in rows:
+        #self.comboRenderer.addItem(_fromUtf8(row))
+        #print(str(self.taskValues['renderer']))
+        #if(row.endswith(str(self.taskValues['renderer']))):
+          #setIndx = indx
+        #indx = indx + 1
+      
+      #self.comboRenderer.setCurrentIndex(setIndx)
+      #return(1)
+    #else:
+      #return(0)
       
     
   def setHostGroups(self):

@@ -39,6 +39,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     rbhusSubmitMod.Ui_rbhusSubmit.setupUi(self,Form)
     self.pushFileName.clicked.connect(self.selectFileName)
     self.pushOutDir.clicked.connect(self.selectOutDir)
+    self.autoOutDir.clicked.connect(self.setOutDir)
     self.pushSubmit.clicked.connect(self.submitTasks)
     self.comboHostGroup.currentIndexChanged.connect(self.printGroupSel)
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
@@ -48,7 +49,12 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     groups = rUtils.getHostGroups()
     ostypes = rUtils.getOsTypes()
     ftypes = rUtils.getFileTypes()
-
+    
+    
+    self.autoOutDir.setIcon(icon)
+    self.autoOutDir.setIconSize(QtCore.QSize(12, 12))
+    
+    
     for group in groups:
       self.comboHostGroup.addItem(_fromUtf8(group))
     ind = 0
@@ -131,6 +137,13 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       else:
         self.lineEditFileName.setText(fila.join(","))
       
+  def setOutDir(self):
+    outFile = str(self.lineEditFileName.text())
+    if(sys.platform.find("win") >= 0):
+      self.lineEditOutDir.setText("z:/"+ "/".join(outFile.split("/")[2:-1]) +"/"+ ".".join(outFile.split("/")[-1].split(".")[0:-1]))
+    else:
+      self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/"+ ".".join(outFile.split("/")[-1].split(".")[0:-1]))
+  
   def selectOutDir(self):
     dirac = QtGui.QFileDialog.getExistingDirectory()
     if(dirac):
