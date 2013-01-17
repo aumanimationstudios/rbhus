@@ -44,6 +44,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
     self.comboFileType.currentIndexChanged.connect(self.fileTypePrint)
     self.comboOsType.currentIndexChanged.connect(self.osTypePrint)
+    self.checkAfterTime.clicked.connect(self.afterTimeEnable)
     groups = rUtils.getHostGroups()
     ostypes = rUtils.getOsTypes()
     ftypes = rUtils.getFileTypes()
@@ -134,7 +135,13 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     dirac = QtGui.QFileDialog.getExistingDirectory()
     if(dirac):
       self.lineEditOutDir.setText(dirac)
-      
+  
+  def afterTimeEnable(self):
+    cAT = self.checkAfterTime.isChecked()
+    if(cAT):
+      self.afterTimeEdit.setEnabled(True)
+    else:
+      self.afterTimeEdit.setEnabled(False)
       
   def submitTasks(self):
     submitDict = {}
@@ -144,6 +151,8 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     submitdir = str(self.lineEditOutDir.text())
     submitDict['description'] = str(self.lineEditDescription.text())
     submitDict['resolution'] = str(self.lineEditResolution.text())
+    if(self.checkAfterTime.isChecked()):
+      submitDict['afterTime'] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
     
     submitDict['os'] = str(self.comboOsType.currentText())
     submitDict['fileType'] = self.comboFileType.currentText()
@@ -189,8 +198,11 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
             if(c):
               submitDict['camera'] = c
               if(re.search('^default$',submitDict['camera']) == None):
-                submitDict['outDir'] = sd.rstrip("/") +"/"+ c + "/"
-              
+                sd = sd.rstrip("/") +"/"+ c + "/"
+              if(re.search('^default$',submitDict['resolution']) == None):
+                sd = sd.rstrip("/") +"/"+ submitDict['resolution'] + "/"
+                
+              submitDict['outDir'] = sd
               try:
                 b = a.submit(submitDict)
                 print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))

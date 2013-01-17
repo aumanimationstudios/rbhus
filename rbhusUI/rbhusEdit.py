@@ -56,7 +56,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.afterTimeEdit.dateTimeChanged.connect(self.afePrint)
     self.comboHostGroup.currentIndexChanged.connect(self.hostGroupPrint)
     self.comboBatching.currentIndexChanged.connect(self.batchStatus)
+    self.comboOsType.currentIndexChanged.connect(self.osTypesPrint)
     self.comboType.currentIndexChanged.connect(self.fileTypePrint)
+    self.comboRenderer.currentIndexChanged.connect(self.rendererPrint)
     self.pushApply.clicked.connect(self.applyNew)
     self.pushCancel.clicked.connect(self.popEditItems)
     self.lineEditAfc.textChanged.connect(self.reset_afc)
@@ -67,6 +69,8 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.lineEditLogbase.textChanged.connect(self.reset_logbase)
     self.lineEditOutPutDir.textChanged.connect(self.reset_outPutDir)
     self.lineEditDescription.textChanged.connect(self.reset_desc)
+    self.lineEditResolution.textChanged.connect(self.reset_res)
+    self.lineEditCamera.textChanged.connect(self.reset_cam)
     
     print self.afterTimeEdit.dateTime().toString()
     
@@ -87,6 +91,14 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_maxbatch = 0
     self.db_batch = 0
     self.db_desc = 0
+    self.db_cam = 0
+    self.db_res = 0
+    self.db_imageType = 0
+    self.db_outname = 0
+    self.db_os = 0
+    self.db_afterTask = 0
+    self.db_layer = 0
+    self.db_renderer = 0
     
   def reset_variables(self):
     self.db_filetype = 0
@@ -105,7 +117,20 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_maxbatch = 0
     self.db_batch = 0
     self.db_desc = 0
+    self.db_cam = 0
+    self.db_res = 0
+    self.db_imageType = 0
+    self.db_outname = 0
+    self.db_os = 0
+    self.db_afterTask = 0
+    self.db_layer = 0
+    self.db_renderer = 0
     
+  def reset_cam(self):
+    self.db_cam = 1
+    
+  def reset_res(sefl):
+    self.db_res = 1
     
   def reset_outPutDir(self):
     self.db_outputdir = 1
@@ -144,6 +169,11 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     if(self.db_filename):
       editDict["fileName"] = str(self.lineEditFileName.text().replace("\\","/"))
       self.db_filename = 0
+    if(self.db_cam)  :
+      editDict["camera"] = str(self.lineEditCamera.text())
+      self.db_cam = 0
+    if(self.db_res):
+      editDict["resolution"] = str(self.lineEditResolution.text())
     if(self.db_imagename):
       editDict["outName"] = str(self.lineEditImageName.text())
       self.db_imagename = 0
@@ -191,8 +221,15 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def hostGroupPrint(self):
     print(self.comboHostGroup.currentText())
     self.db_hostgroup = 1
-    
-    
+  
+  def osTypesPrint(self):
+    print(self.comboOsType.currentText())
+    self.db_os = 1
+  
+  def rendererPrint(self):
+    print(self.comboRenderer)
+    self.db_renderer = 1
+  
   def fileTypePrint(self):
     print(self.comboType.currentText())
     self.db_filetype = 1
@@ -218,6 +255,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       self.lineEditFrange.setText(self.taskValues['fRange'])
       self.lineEditLogbase.setText(self.taskValues['logBase'])
       self.lineEditAfc.setText(self.taskValues['afterFrameCmd'])
+      self.lineEditCamera.setText(self.taskValues['camera'])
+      self.lineEditLayer.setText(self.taskValues['layer'])
+      self.lineEditResolution.setText(self.taskValues['resolution'])
       self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'])
       self.spinRerunThresh.setValue(self.taskValues['rerunThresh'])
       self.spinMinBatch.setValue(self.taskValues['minBatch'])
@@ -231,6 +271,8 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       batchAD = constants.batchStatus[batchFF]
       self.setFileTypes()
       self.setHostGroups()
+      self.setOsTypes()
+      self.setRenderer()
       self.reset_variables()
       return(1)
     else:
@@ -313,8 +355,46 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       return(1)
     else:
       return(0)
+      
     
-
+  def setOsTypes(self):
+    rows = rUtils.getOsTypes()
+    self.comboOsType.clear()  
+    if(rows):
+      indx = 0
+      setIndx = 0
+      for row in rows:
+        self.comboOsType.addItem(_fromUtf8(row))
+        print(str(self.taskValues['os']))
+        if(row.endswith(str(self.taskValues['os']))):
+          setIndx = indx
+        indx = indx + 1
+      
+      self.comboOsType.setCurrentIndex(setIndx)
+      return(1)
+    else:
+      return(0)
+      
+      
+  def setRenderer(self):
+    rows = rUtils.getRenderers()
+    self.comboRenderer.clear()  
+    if(rows):
+      indx = 0
+      setIndx = 0
+      for row in rows:
+        self.comboRenderer.addItem(_fromUtf8(row))
+        print(str(self.taskValues['renderer']))
+        if(row.endswith(str(self.taskValues['renderer']))):
+          setIndx = indx
+        indx = indx + 1
+      
+      self.comboRenderer.setCurrentIndex(setIndx)
+      return(1)
+    else:
+      return(0)
+      
+    
   def setHostGroups(self):
     rows = rUtils.getHostGroups()
     indx = 0
