@@ -129,7 +129,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def reset_cam(self):
     self.db_cam = 1
     
-  def reset_res(sefl):
+  def reset_res(self):
     self.db_res = 1
     
   def reset_outPutDir(self):
