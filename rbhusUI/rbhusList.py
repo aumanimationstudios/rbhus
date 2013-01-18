@@ -42,7 +42,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
-    self.colNamesTask = ["id","fileName","camera","outDir","outName","hostGroups","os","fileType","renderer","fRange","afterTasks","priority","submitTime","status","description"]
+    self.colNamesTask = ["id","fileName","camera","resolution","outDir","outName","hostGroups","os","fileType","renderer","fRange","afterTasks","priority","submitTime","status","description"]
     self.colNamesFrames = ["id","frameId","batchId","hostName","ram","sTime","eTime","runCount","status"]
     
     
