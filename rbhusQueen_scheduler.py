@@ -327,14 +327,12 @@ def scheduler():
               if(batchFlag == constants.batchActive):
                 bestBatch = int(totalTaskFrames)/int(totalFreeHosts)
                 
-                if(bestBatch <= totalTaskFrames):
-                  if(bestBatch < minBatch):
-                    bestBatch = minBatch
-                  elif(bestBatch > maxBatch):
-                    bestBatch = maxBatch
-                else:
+                if(bestBatch < minBatch):
+                  bestBatch = minBatch
+                if(bestBatch > maxBatch):
+                  bestBatch = maxBatch
+                if(bestBatch > totalTaskFrames):
                   bestBatch = totalTaskFrames
-                
               taskFramesToAssign = []
               for bB in range(0,bestBatch):
                 insertToBatchId(batchId,taskFrames[bB]['frameId'])
