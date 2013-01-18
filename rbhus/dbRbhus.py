@@ -12,6 +12,24 @@ import tempfile
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
 
+dbHostname = "blues2"
+dbPort = "3306"
+dbDatabase = "rbhus"
+
+try:
+  dbHostname = os.environ['rbhus_dbHostname']
+except:
+  pass
+try:
+  dbPort = os.environ['rbhus_dbPort']
+except:
+  pass
+try:
+  dbDatabase = os.environ['rbhus_dbDatabase']
+except:
+  pass
+
+
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
 elif(sys.platform.find("win") >=0):
@@ -48,7 +66,7 @@ class dbRbhus:
   def _connRbhus(self):
     while(1):
       try:
-        con = self._connDb(hostname="blues2",port=3306,dbname="rbhus")
+        con = self._connDb(hostname=dbHostname,port=dbPort,dbname=dbDatabase)
         modLogger.debug("Db connected")
         return(con)
       except:
