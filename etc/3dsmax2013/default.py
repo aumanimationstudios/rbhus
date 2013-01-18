@@ -53,7 +53,7 @@ if(outDir != "default"):
   if(outFile != "default"):
     imageName = outDir.rstrip("/") + "/" + outFile
   else:
-    imageName = outDir.rstrip("/") + "/" + "image_"+ str(frameId).rjust(int(pad),"0") +".png"
+    imageName = outDir.rstrip("/") + "/" + "image_"+ str(frameId).rjust(int(pad),"0") +".vrimg"
 
 totalCpus = multiprocessing.cpu_count()
 b = ""
