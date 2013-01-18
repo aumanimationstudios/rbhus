@@ -334,7 +334,9 @@ def scheduler():
                 if(bestBatch > totalTaskFrames):
                   bestBatch = totalTaskFrames
               taskFramesToAssign = []
+              print("bestBatch : "+ str(bestBatch) +" : "+ str(activeTask['id']) +" : "+ batchId)
               for bB in range(0,bestBatch):
+                print("insert into batch id : " + str(batchId) +" : "+ str(taskFrames[bB]['frameId']))
                 insertToBatchId(batchId,taskFrames[bB]['frameId'])
                 taskFramesToAssign.append(taskFrames[bB]['frameId'])
                 
