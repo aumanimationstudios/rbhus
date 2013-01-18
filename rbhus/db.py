@@ -23,6 +23,26 @@
 
 import MySQLdb
 import MySQLdb.cursors
+import os
+
+
+dbHostname = "blues2"
+dbPort = "3306"
+dbDatabase = "rbhus"
+
+try:
+  dbHostname = os.environ['rbhus_dbHostname']
+except:
+  pass
+try:
+  dbPort = os.environ['rbhus_dbPort']
+except:
+  pass
+try:
+  dbDatabase = os.environ['rbhus_dbDatabase']
+except:
+  pass
+
 
 
 class dict(MySQLdb.cursors.DictCursor):
@@ -43,7 +63,7 @@ def connHosts():
   
 def connRbhus():
   try:
-    conn = MySQLdb.connect(host = "bluepixelsanimation.dyndns-office.com", port=6000, db = "rbhus")
+    conn = MySQLdb.connect(host=dbHostname, port=int(dbPort), db=dbDatabase)
     conn.autocommit(1)
   except:
     raise

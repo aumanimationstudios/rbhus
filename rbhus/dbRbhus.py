@@ -66,7 +66,7 @@ class dbRbhus:
   def _connRbhus(self):
     while(1):
       try:
-        con = self._connDb(hostname=dbHostname,port=dbPort,dbname=dbDatabase)
+        con = self._connDb(hostname=dbHostname,port=int(dbPort),dbname=dbDatabase)
         modLogger.debug("Db connected")
         return(con)
       except:
