@@ -143,7 +143,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       print("TOO MANY FILENAMES TO AUTO DO THE OUTPUTDIR")
       return(0)
     if(sys.platform.find("win") >= 0):
-      self.lineEditOutDir.setText("z:/"+ "/".join(outFile.split("/")[2:-1]) +"/"+ ".".join(outFile.split("/")[-1].split(".")[0:-1]))
+      self.lineEditOutDir.setText("z:/"+ "/".join(outFile.split("/")[3:-1]) +"/"+ ".".join(outFile.split("/")[-1].split(".")[0:-1]))
     else:
       self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/"+ ".".join(outFile.split("/")[-1].split(".")[0:-1]))
   
