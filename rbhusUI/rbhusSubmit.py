@@ -139,11 +139,8 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
   def setOutDir(self):
     outFile = str(self.lineEditFileName.text())
-    if(len(outFile.split(",")) > 1):
-      print("TOO MANY FILENAMES TO AUTO DO THE OUTPUTDIR")
-      return(0)
     if(sys.platform.find("win") >= 0):
-      self.lineEditOutDir.setText("z:/"+ "/".join(outFile.split("/")[3:-1]) +"/"+ ".".join(outFile.split("/")[-1].split(".")[0:-1]))
+      self.lineEditOutDir.setText("z:/"+ "/".join((outFile.replace("\\","/")).split("/")[1:-1]) +"/"+ ".".join((outFile.replace("\\","/")).split("/")[-1].split(".")[0:-1]))
     else:
       self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/"+ ".".join(outFile.split("/")[-1].split(".")[0:-1]))
   
@@ -192,9 +189,6 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     if((submitDict['fileType'] == "3dsmax") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
       submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/afterFrame.py"
       submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/beforeFrame.py"
-    elif((submitDict['fileType'] == "3dsmax2013") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
-      submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
-      submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"
     elif((submitDict['fileType'] == "3dsmax2013") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
       submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
       submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"

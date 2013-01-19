@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>796</width>
-    <height>659</height>
+    <width>677</width>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -670,6 +670,25 @@
       </property>
      </widget>
     </item>
+    <item row="3" column="4">
+     <widget class="QPushButton" name="autoOutName">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>12</width>
+        <height>12</height>
+       </size>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -677,7 +696,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>796</width>
+     <width>677</width>
      <height>23</height>
     </rect>
    </property>
