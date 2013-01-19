@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusEditMod.ui'
 #
-# Created: Thu Jan 17 21:14:56 2013
+# Created: Sat Jan 19 10:21:59 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_rbhusEdit(object):
   def setupUi(self, rbhusEdit):
     rbhusEdit.setObjectName(_fromUtf8("rbhusEdit"))
-    rbhusEdit.resize(596, 817)
+    rbhusEdit.resize(550, 669)
     self.centralwidget = QtGui.QWidget(rbhusEdit)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
@@ -155,6 +155,7 @@ class Ui_rbhusEdit(object):
     self.labelMaxBatch.setObjectName(_fromUtf8("labelMaxBatch"))
     self.gridLayout_2.addWidget(self.labelMaxBatch, 23, 0, 1, 1)
     self.pushOutPutDir = QtGui.QPushButton(self.groupBox_2)
+    self.pushOutPutDir.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -163,6 +164,7 @@ class Ui_rbhusEdit(object):
     self.pushOutPutDir.setObjectName(_fromUtf8("pushOutPutDir"))
     self.gridLayout_2.addWidget(self.pushOutPutDir, 1, 2, 1, 1)
     self.pushFileName = QtGui.QPushButton(self.groupBox_2)
+    self.pushFileName.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -244,6 +246,7 @@ class Ui_rbhusEdit(object):
     self.labelDescription.setObjectName(_fromUtf8("labelDescription"))
     self.gridLayout_2.addWidget(self.labelDescription, 24, 0, 1, 1)
     self.lineEditFileName = QtGui.QLineEdit(self.groupBox_2)
+    self.lineEditFileName.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -261,6 +264,7 @@ class Ui_rbhusEdit(object):
     self.lineEditLogbase.setObjectName(_fromUtf8("lineEditLogbase"))
     self.gridLayout_2.addWidget(self.lineEditLogbase, 18, 1, 1, 1)
     self.lineEditOutPutDir = QtGui.QLineEdit(self.groupBox_2)
+    self.lineEditOutPutDir.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -277,6 +281,7 @@ class Ui_rbhusEdit(object):
     self.labelImageName.setObjectName(_fromUtf8("labelImageName"))
     self.gridLayout_2.addWidget(self.labelImageName, 2, 0, 1, 1)
     self.lineEditFrange = QtGui.QLineEdit(self.groupBox_2)
+    self.lineEditFrange.setEnabled(True)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -318,6 +323,7 @@ class Ui_rbhusEdit(object):
     self.labelRerunThresh.setObjectName(_fromUtf8("labelRerunThresh"))
     self.gridLayout_2.addWidget(self.labelRerunThresh, 19, 0, 1, 1)
     self.comboRenderer = QtGui.QComboBox(self.groupBox_2)
+    self.comboRenderer.setEnabled(True)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -342,6 +348,7 @@ class Ui_rbhusEdit(object):
     self.labelHostGroup.setObjectName(_fromUtf8("labelHostGroup"))
     self.gridLayout_2.addWidget(self.labelHostGroup, 9, 0, 1, 1)
     self.lineEditLayer = QtGui.QLineEdit(self.groupBox_2)
+    self.lineEditLayer.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -360,6 +367,7 @@ class Ui_rbhusEdit(object):
     self.labelCamera.setObjectName(_fromUtf8("labelCamera"))
     self.gridLayout_2.addWidget(self.labelCamera, 7, 0, 1, 1)
     self.lineEditCamera = QtGui.QLineEdit(self.groupBox_2)
+    self.lineEditCamera.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -384,6 +392,7 @@ class Ui_rbhusEdit(object):
     self.labelResolution.setObjectName(_fromUtf8("labelResolution"))
     self.gridLayout_2.addWidget(self.labelResolution, 8, 0, 1, 1)
     self.lineEditResolution = QtGui.QLineEdit(self.groupBox_2)
+    self.lineEditResolution.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -408,6 +417,7 @@ class Ui_rbhusEdit(object):
     self.comboHostGroup.setObjectName(_fromUtf8("comboHostGroup"))
     self.gridLayout_2.addWidget(self.comboHostGroup, 9, 1, 1, 1)
     self.comboType = QtGui.QComboBox(self.groupBox_2)
+    self.comboType.setEnabled(True)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -456,6 +466,7 @@ class Ui_rbhusEdit(object):
     self.labelImageType.setObjectName(_fromUtf8("labelImageType"))
     self.gridLayout_2.addWidget(self.labelImageType, 3, 0, 1, 1)
     self.lineEditImageType = QtGui.QLineEdit(self.groupBox_2)
+    self.lineEditImageType.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)

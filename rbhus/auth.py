@@ -2,7 +2,7 @@ import ldap
 import sys
 
 
-def ldap(user, passwd, host='ldap://bluepixelsanimation.dyndns-office.com', port='500'):
+def ldapLogin(user, passwd, host='ldap://bluepixelsanimation.dyndns-office.com', port='500'):
   conn = ldap.initialize(host +":"+ port)
   try:
     conn.simple_bind_s('uid='+ user +',ou=people,dc=bluepixels,dc=in',passwd)

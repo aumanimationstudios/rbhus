@@ -245,7 +245,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         #except:
           #print("Error inserting task : "+ str(sys.exc_info()))
     
-    QtGui.qApp.closeAllWindows()
+    #QtGui.qApp.closeAllWindows()
     
     
     

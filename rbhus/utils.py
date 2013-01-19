@@ -122,6 +122,7 @@ class tasks(object):
     self.validFields = {}
     self.invalidFields = {}
     fieldDict['submitTime'] = str(MySQLdb.Timestamp.now())
+    fieldDict['user'] = os.environ['rbhus_user']
     for x in fieldDict.keys():
       if(self.taskFields.has_key(x)):
         self.validFields[x] = fieldDict[x]

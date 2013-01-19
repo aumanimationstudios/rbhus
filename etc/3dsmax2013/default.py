@@ -51,7 +51,7 @@ RENDER_CMD = ""
 
 if(outDir != "default"):
   if(outFile != "default"):
-    imageName = outDir.rstrip("/") + "/" + outFile
+    imageName = outDir.rstrip("/") + "/" + ".".join(outFile.split(".")[0:-1]) +"_"+ str(frameId).rjust(int(pad),"0") + outFile.split(".")[-1]
   else:
     imageName = outDir.rstrip("/") + "/" + "image_"+ str(frameId).rjust(int(pad),"0") +".vrimg"
 

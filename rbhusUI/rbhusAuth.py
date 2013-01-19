@@ -1,10 +1,7 @@
 #!/usr/bin/python
 from PyQt4 import QtCore, QtGui
-import glob
 import os
 import sys
-import socket
-import time
 
 
 
@@ -39,6 +36,15 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     rbhusAuthMod.Ui_MainWindowAuth.setupUi(self,Form)
+    self.pushButton.clicked.connect(self.tryAuth)
+    
+  def tryAuth(self):
+    ret = auth.ldapLogin(str(self.lineEditUser.text()),str(self.lineEditPass.text()))
+    if(ret):
+      print("VALID")
+      os.environ['rbhus_user'] = str(self.lineEditUser.text())
+    else:
+      print("wtf INVALID login.. :) !")
     
 if __name__ == "__main__":
   app = QtGui.QApplication(sys.argv)

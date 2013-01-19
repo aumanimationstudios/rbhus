@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>596</width>
-    <height>817</height>
+    <width>550</width>
+    <height>669</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -218,6 +218,9 @@
        </item>
        <item row="1" column="2">
         <widget class="QPushButton" name="pushOutPutDir">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -231,6 +234,9 @@
        </item>
        <item row="0" column="2">
         <widget class="QPushButton" name="pushFileName">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -362,6 +368,9 @@
        </item>
        <item row="0" column="1">
         <widget class="QLineEdit" name="lineEditFileName">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -385,6 +394,9 @@
        </item>
        <item row="1" column="1">
         <widget class="QLineEdit" name="lineEditOutPutDir">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -408,6 +420,9 @@
        </item>
        <item row="6" column="1">
         <widget class="QLineEdit" name="lineEditFrange">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -473,6 +488,9 @@
        </item>
        <item row="11" column="1">
         <widget class="QComboBox" name="comboRenderer">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -509,6 +527,9 @@
        </item>
        <item row="12" column="1">
         <widget class="QLineEdit" name="lineEditLayer">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -538,6 +559,9 @@
        </item>
        <item row="7" column="1">
         <widget class="QLineEdit" name="lineEditCamera">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -574,6 +598,9 @@
        </item>
        <item row="8" column="1">
         <widget class="QLineEdit" name="lineEditResolution">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -607,6 +634,9 @@
        </item>
        <item row="10" column="1">
         <widget class="QComboBox" name="comboType">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -679,6 +709,9 @@
        </item>
        <item row="3" column="1">
         <widget class="QLineEdit" name="lineEditImageType">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>

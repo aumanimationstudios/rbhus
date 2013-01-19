@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusAuthMod.ui'
 #
-# Created: Tue Jan 15 22:49:35 2013
+# Created: Sat Jan 19 11:05:36 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,26 +26,28 @@ except AttributeError:
 class Ui_MainWindowAuth(object):
   def setupUi(self, MainWindowAuth):
     MainWindowAuth.setObjectName(_fromUtf8("MainWindowAuth"))
-    MainWindowAuth.resize(498, 116)
+    MainWindowAuth.setWindowModality(QtCore.Qt.WindowModal)
+    MainWindowAuth.resize(294, 90)
     self.centralwidget = QtGui.QWidget(MainWindowAuth)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
     self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
     self.gridLayout = QtGui.QGridLayout()
     self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-    self.label = QtGui.QLabel(self.centralwidget)
-    self.label.setObjectName(_fromUtf8("label"))
-    self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-    self.lineEdit = QtGui.QLineEdit(self.centralwidget)
-    self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
-    self.gridLayout.addWidget(self.lineEdit, 0, 1, 1, 1)
-    self.label_2 = QtGui.QLabel(self.centralwidget)
-    self.label_2.setObjectName(_fromUtf8("label_2"))
-    self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
-    self.lineEdit_2 = QtGui.QLineEdit(self.centralwidget)
-    self.lineEdit_2.setEchoMode(QtGui.QLineEdit.Password)
-    self.lineEdit_2.setObjectName(_fromUtf8("lineEdit_2"))
-    self.gridLayout.addWidget(self.lineEdit_2, 1, 1, 1, 1)
+    self.labelUser = QtGui.QLabel(self.centralwidget)
+    self.labelUser.setEnabled(True)
+    self.labelUser.setObjectName(_fromUtf8("labelUser"))
+    self.gridLayout.addWidget(self.labelUser, 0, 0, 1, 1)
+    self.lineEditUser = QtGui.QLineEdit(self.centralwidget)
+    self.lineEditUser.setObjectName(_fromUtf8("lineEditUser"))
+    self.gridLayout.addWidget(self.lineEditUser, 0, 1, 1, 1)
+    self.labelPass = QtGui.QLabel(self.centralwidget)
+    self.labelPass.setObjectName(_fromUtf8("labelPass"))
+    self.gridLayout.addWidget(self.labelPass, 1, 0, 1, 1)
+    self.lineEditPass = QtGui.QLineEdit(self.centralwidget)
+    self.lineEditPass.setEchoMode(QtGui.QLineEdit.Password)
+    self.lineEditPass.setObjectName(_fromUtf8("lineEditPass"))
+    self.gridLayout.addWidget(self.lineEditPass, 1, 1, 1, 1)
     self.verticalLayout.addLayout(self.gridLayout)
     spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
     self.verticalLayout.addItem(spacerItem)
@@ -60,11 +62,17 @@ class Ui_MainWindowAuth(object):
     MainWindowAuth.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(MainWindowAuth)
+    QtCore.QObject.connect(self.lineEditUser, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.lineEditPass.setFocus)
+    QtCore.QObject.connect(self.lineEditPass, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.pushButton.animateClick)
+    QtCore.QObject.connect(self.lineEditPass, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.pushButton.setFocus)
+    QtCore.QObject.connect(self.lineEditUser, QtCore.SIGNAL(_fromUtf8("editingFinished()")), self.lineEditPass.setFocus)
+    QtCore.QObject.connect(self.lineEditPass, QtCore.SIGNAL(_fromUtf8("editingFinished()")), self.pushButton.animateClick)
     QtCore.QMetaObject.connectSlotsByName(MainWindowAuth)
 
   def retranslateUi(self, MainWindowAuth):
-    MainWindowAuth.setWindowTitle(_translate("MainWindowAuth", "MainWindow", None))
-    self.label.setText(_translate("MainWindowAuth", "username", None))
-    self.label_2.setText(_translate("MainWindowAuth", "password", None))
+    MainWindowAuth.setWindowTitle(_translate("MainWindowAuth", "login", None))
+    self.labelUser.setText(_translate("MainWindowAuth", "username", None))
+    self.labelPass.setText(_translate("MainWindowAuth", "password", None))
     self.pushButton.setText(_translate("MainWindowAuth", "try ur luck!", None))
+    self.pushButton.setShortcut(_translate("MainWindowAuth", "Return, Ctrl+R", None))
 
