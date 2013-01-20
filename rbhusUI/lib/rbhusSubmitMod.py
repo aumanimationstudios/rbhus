@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Fri Jan 18 00:01:14 2013
+# Created: Sat Jan 19 20:35:16 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_rbhusSubmit(object):
   def setupUi(self, rbhusSubmit):
     rbhusSubmit.setObjectName(_fromUtf8("rbhusSubmit"))
-    rbhusSubmit.resize(796, 659)
+    rbhusSubmit.resize(677, 658)
     self.centralwidget = QtGui.QWidget(rbhusSubmit)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -401,9 +401,19 @@ class Ui_rbhusSubmit(object):
     self.pushOutDir.setSizePolicy(sizePolicy)
     self.pushOutDir.setObjectName(_fromUtf8("pushOutDir"))
     self.gridLayout.addWidget(self.pushOutDir, 1, 2, 1, 1)
+    self.autoOutName = QtGui.QPushButton(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.autoOutName.sizePolicy().hasHeightForWidth())
+    self.autoOutName.setSizePolicy(sizePolicy)
+    self.autoOutName.setText(_fromUtf8(""))
+    self.autoOutName.setIconSize(QtCore.QSize(12, 12))
+    self.autoOutName.setObjectName(_fromUtf8("autoOutName"))
+    self.gridLayout.addWidget(self.autoOutName, 3, 4, 1, 1)
     rbhusSubmit.setCentralWidget(self.centralwidget)
     self.menubar = QtGui.QMenuBar(rbhusSubmit)
-    self.menubar.setGeometry(QtCore.QRect(0, 0, 796, 23))
+    self.menubar.setGeometry(QtCore.QRect(0, 0, 677, 23))
     self.menubar.setObjectName(_fromUtf8("menubar"))
     rbhusSubmit.setMenuBar(self.menubar)
 

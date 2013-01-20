@@ -40,6 +40,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.pushFileName.clicked.connect(self.selectFileName)
     self.pushOutDir.clicked.connect(self.selectOutDir)
     self.autoOutDir.clicked.connect(self.setOutDir)
+    self.autoOutName.clicked.connect(self.setOutName)
     self.pushSubmit.clicked.connect(self.submitTasks)
     self.comboHostGroup.currentIndexChanged.connect(self.printGroupSel)
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
@@ -53,7 +54,8 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     
     self.autoOutDir.setIcon(icon)
     self.autoOutDir.setIconSize(QtCore.QSize(12, 12))
-    
+    self.autoOutName.setIcon(icon)
+    self.autoOutName.setIconSize(QtCore.QSize(12, 12))
     
     for group in groups:
       self.comboHostGroup.addItem(_fromUtf8(group))
@@ -137,6 +139,10 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       else:
         self.lineEditFileName.setText(fila.join(","))
       
+  def setOutName(self):
+    outFile = str(self.lineEditFileName.text())
+    self.lineEditOutName.setText(".".join((outFile.replace("\\","/")).split("/")[-1].split(".")[0:-1]) +".png")
+    
   def setOutDir(self):
     outFile = str(self.lineEditFileName.text())
     if(sys.platform.find("win") >= 0):

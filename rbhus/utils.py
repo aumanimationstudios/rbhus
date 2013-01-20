@@ -13,7 +13,6 @@ import dbRbhus
 
 
 
-
 def getHostGroups():
   dbconn = dbRbhus.dbRbhus()
   try:
@@ -88,13 +87,18 @@ def getOsTypes():
   else:
     return(0)
 
-
 class tasks(object):
   def __init__(self, tId = 0):
     self.db_conn = dbRbhus.dbRbhus()
     self.taskFields = self._getTaskFields()
+    self.username = None
+    try:
+      self.username = os.environ['rbhus_acl_user'].rstrip().lstrip()
+    except:
+      pass
+    
+    self.taskId = tId
     if(tId):
-      self.taskId = tId
       self.taskDetails = self._getTaskDetails(tId)
       
   
@@ -122,7 +126,10 @@ class tasks(object):
     self.validFields = {}
     self.invalidFields = {}
     fieldDict['submitTime'] = str(MySQLdb.Timestamp.now())
-    fieldDict['user'] = os.environ['rbhus_user']
+    if(self.username):
+      fieldDict['user'] = self.username
+    else:
+      return(0)
     for x in fieldDict.keys():
       if(self.taskFields.has_key(x)):
         self.validFields[x] = fieldDict[x]
@@ -144,22 +151,42 @@ class tasks(object):
   def edit(self,fieldDict):
     self.validFields = {}
     self.invalidFields = {}
+    if(self.username):
+      fieldDict['user'] = self.username
+    else:
+      return(0)
     for x in fieldDict.keys():
       if(self.taskFields.has_key(x)):
         self.validFields[x] = fieldDict[x]
       else:
         self.invalidFields[x] = fieldDict[x]
-    if(self.taskId):
-      for x in self.validFields.keys():
+        
+    if(self.validFields):
+      for validF in  self.validFields.keys():
         try:
-          self.db_conn.execute("update tasks set "+ str(x) +"='"+ str(self.validFields[x]) +"' where id='"+ str(self.taskId) +"'")
+          taskAclList = os.environ['rbhus_acl_tasks'].rstrip().lstrip().split()
+          try:
+            taskAclList.index('all')
+            continue
+          except:
+            pass
+          for taskFAcl in taskAclList:
+            print("removing "+ str(taskFAcl) +" from editing since you are not qualified to use it :D .. ")
+            try:
+              del(self.validFields[taskFAcl])
+            except:
+              print(str(sys.exc_info()))
         except:
-          raise
-      self.taskDetails = self._getTaskDetails(self.taskId)
-
-  
-      
-      
+          print(str(sys.exc_info()))
+      if(self.taskId):
+        for x in self.validFields.keys():
+          try:
+            self.db_conn.execute("update tasks set "+ str(x) +"='"+ str(self.validFields[x]) +"' where id='"+ str(self.taskId) +"'")
+          except:
+            raise
+        self.taskDetails = self._getTaskDetails(self.taskId)
+        
+        
 #if __name__ == "__main__":
   #b = {}
   #b['fileName'] = "/tmp/fff.ff"
@@ -167,9 +194,6 @@ class tasks(object):
   #b['minBatch'] = "1"
   #b['maxBatch'] = "3"
   #c = 799
-  
   #a = tasks()
   #a.submit(b)
   #print(str(a.taskDetails))
-  
-  

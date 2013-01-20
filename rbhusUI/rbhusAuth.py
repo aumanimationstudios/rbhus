@@ -32,19 +32,37 @@ except AttributeError:
 
 class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   def setupUi(self, Form):
+    
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    
     Form.setWindowIcon(icon)
+    self.center()
     rbhusAuthMod.Ui_MainWindowAuth.setupUi(self,Form)
     self.pushButton.clicked.connect(self.tryAuth)
+  
+  def center(self):
     
+    qr = Form.frameGeometry()
+    cp = QtGui.QDesktopWidget().availableGeometry().center()
+    qr.moveCenter(cp)
+    Form.move(qr.topLeft())
+  
   def tryAuth(self):
-    ret = auth.ldapLogin(str(self.lineEditUser.text()),str(self.lineEditPass.text()))
+    acl = auth.login()
+    ret = acl.ldapLogin(str(self.lineEditUser.text()),str(self.lineEditPass.text()))
     if(ret):
       print("VALID")
       os.environ['rbhus_user'] = str(self.lineEditUser.text())
+      print(str(acl.username))
+      print(str(acl.userAcl))
+      if(acl.userAcl):
+        print("exporting environment variables...")
+        for x in acl.userAcl.keys():
+          os.environ['rbhus_acl_'+ str(x)] = str(acl.userAcl[x])
+      os.system("env |& grep -i rbhus_")
     else:
-      print("wtf INVALID login.. :) !")
+      print("\n&*^*&^*%&$&^(*)(__)&*%^$#   .. :) !\n")
     
 if __name__ == "__main__":
   app = QtGui.QApplication(sys.argv)
