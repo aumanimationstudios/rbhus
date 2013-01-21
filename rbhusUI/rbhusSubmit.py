@@ -173,8 +173,14 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     if(self.checkAfterTime.isChecked()):
       submitDict['afterTime'] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
     
+    submitDict['afterTasks'] = str(self.lineEditAfterTask.text())
+    submitDict['outName'] = str(self.lineEditOutName.text())
     submitDict['os'] = str(self.comboOsType.currentText())
-    submitDict['fileType'] = self.comboFileType.currentText()
+    submitDict['fileType'] = str(self.comboFileType.currentText())
+    submitDict['hostGroups'] = str(self.comboHostGroup.currentText())
+    submitDict['renderer'] = str(self.comboRenderer.currentText())
+    submitDict['layer'] = str(self.lineEditLayer.text())
+    
     prios = str(self.comboPrio.currentText())
     if(prios == "low"):
       p = 1

@@ -1,6 +1,7 @@
 import ldap
 import sys
 import dbRbhus
+import os
 
 
 
@@ -9,10 +10,21 @@ class login():
     self.status = False
     self.userAcl = None
     self.username = None
+    
+    try:
+      self.ldaphost = os.environ['rbhus_ldapHost']
+    except:
+      self.ldaphost = 'ldap://ldaphost'
+    
+    try:
+      self.ldapport = os.environ['rbhus_ldapPort']
+    except:
+      self.ldapport = '389'
   
   
-  def ldapLogin(self,user, passwd, host='ldap://ldaphost', port='389'):
-    conn = ldap.initialize(host +":"+ port)
+  def ldapLogin(self,user, passwd):
+    print("connecting ldap server : "+ str(self.ldaphost) +" : at port : "+ str(self.ldapport))
+    conn = ldap.initialize(self.ldaphost +":"+ self.ldapport)
     try:
       conn.simple_bind_s('uid='+ user +',ou=people,dc=bluepixels,dc=in',passwd)
       conn.unbind()
