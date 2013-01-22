@@ -53,18 +53,20 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     ret = acl.ldapLogin(str(self.lineEditUser.text()),str(self.lineEditPass.text()))
     if(ret):
       print("VALID")
-      os.environ['rbhus_user'] = str(self.lineEditUser.text())
       print(str(acl.username))
-      print(str(acl.userAcl))
-      if(acl.userAcl):
-        print("exporting environment variables...")
-        for x in acl.userAcl.keys():
-          os.environ['rbhus_acl_'+ str(x)] = str(acl.userAcl[x])
       os.system("env |& grep -i rbhus_")
     else:
       print("\n&*^*&^*%&$&^(*)(__)&*%^$#   .. :) !\n")
     
 if __name__ == "__main__":
+  #if(sys.platform.find("linux") >= 0):
+    #acl = auth.login()
+    #ret = acl.useEnvUser()
+    #if(ret):
+      #os.system("env |& grep -i rbhus_")
+      #sys.exit(0)
+    #else:
+      #sys.exit(1)
   app = QtGui.QApplication(sys.argv)
   Form = QtGui.QMainWindow()
   ui = Ui_Form()

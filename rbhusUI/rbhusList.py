@@ -53,13 +53,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     ret = acl.ldapLogin(str(self.lineEditUser.text()),str(self.lineEditPass.text()))
     if(ret):
       print("VALID")
-      os.environ['rbhus_user'] = str(self.lineEditUser.text())
       print(str(acl.username))
-      print(str(acl.userAcl))
-      if(acl.userAcl):
-        print("exporting environment variables...")
-        for x in acl.userAcl.keys():
-          os.environ['rbhus_acl_'+ str(x)] = str(acl.userAcl[x])
       os.system("env |& grep -i rbhus_")
       os.system("./_rbhusList.py")
     else:

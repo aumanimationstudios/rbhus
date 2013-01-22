@@ -172,6 +172,17 @@ class dbRbhus:
     return(rows)
     
     
+  def getProjectId(self,projectName):
+    try:
+      rows = self.execute("SELECT * FROM proj WHERE projName="+ str(projectName))
+      if(rows):
+        return(rows[0]['id'])
+      else:
+        return(0)
+    except:
+      modLogger.error(str(sys.exc_info()))
+      return(0)
+  
   def getAllTasks(self):
     try:
       rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \

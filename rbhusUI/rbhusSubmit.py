@@ -51,7 +51,6 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     ostypes = rUtils.getOsTypes()
     ftypes = rUtils.getFileTypes()
     
-    
     self.autoOutDir.setIcon(icon)
     self.autoOutDir.setIconSize(QtCore.QSize(12, 12))
     self.autoOutName.setIcon(icon)
@@ -146,9 +145,9 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   def setOutDir(self):
     outFile = str(self.lineEditFileName.text())
     if(sys.platform.find("win") >= 0):
-      self.lineEditOutDir.setText("z:/"+ "/".join((outFile.replace("\\","/")).split("/")[1:-1]) +"/"+ ".".join((outFile.replace("\\","/")).split("/")[-1].split(".")[0:-1]))
+      self.lineEditOutDir.setText("z:/"+ "/".join((outFile.replace("\\","/")).split("/")[1:-1]) +"/"))
     else:
-      self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/"+ ".".join(outFile.split("/")[-1].split(".")[0:-1]))
+      self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/")
   
   def selectOutDir(self):
     dirac = QtGui.QFileDialog.getExistingDirectory()
@@ -257,7 +256,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         #except:
           #print("Error inserting task : "+ str(sys.exc_info()))
     
-    #QtGui.qApp.closeAllWindows()
+    QtGui.qApp.closeAllWindows()
     
     
     

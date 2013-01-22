@@ -33,12 +33,27 @@ def getHostGroups():
   else:
     return(0)
       
+def getProjects():
+  dbconn = dbRbhus.dbRbhus()
+  try:
+    rows = dbconn.execute("select * from proj", dictionary=True)
+  except:
+    print("Error connecting to db 2")
+    return(0)
+  retRows = []  
+  if(rows):
+    for row in rows:
+      retRows.append(row['projName'])
+    return(retRows)
+  else:
+    return(0)
+
 def getFileTypes():
   dbconn = dbRbhus.dbRbhus()
   try:
     rows = dbconn.execute("select * from fileType", dictionary=True)
   except:
-    print("Error connecting to db 2")
+    print("Error connecting to db 3")
     return(0)
   retRows = []  
   if(rows):
@@ -96,7 +111,10 @@ class tasks(object):
       self.username = os.environ['rbhus_acl_user'].rstrip().lstrip()
     except:
       pass
-    
+    try:
+      self.projIds = os.environ['rbhus_acl_projIds'].split()
+    except:
+      pass
     self.taskId = tId
     if(tId):
       self.taskDetails = self._getTaskDetails(tId)
@@ -152,7 +170,11 @@ class tasks(object):
     self.validFields = {}
     self.invalidFields = {}
     if(self.username):
-      fieldDict['user'] = self.username
+      if(self.username == self.taskDetails['user']):
+        print("user : "+ str(self.username) +" : allowed to edit")
+      else:
+        print("user : "+ str(self.username) +" : NOT allowed to edit")
+        return(0)
     else:
       return(0)
     for x in fieldDict.keys():
@@ -162,21 +184,21 @@ class tasks(object):
         self.invalidFields[x] = fieldDict[x]
         
     if(self.validFields):
-      try:
-        taskAclList = os.environ['rbhus_acl_tasks'].rstrip().lstrip().split()
-      except:
-        return(0)
+      #try:
+        #taskAclList = os.environ['rbhus_acl_tasks'].rstrip().lstrip().split()
+      #except:
+        #return(0)
         
-      try:
-        taskAclList.index('all')
-      except:
-        for validF in  self.validFields.keys():
-          if(not str(validF) in taskAclList):
-            try:
-              del(self.validFields[validF])
-              print("removing "+ str(validF) +" from editing since you are not qualified to use it :D .. ")
-            except:
-              print(str(sys.exc_info()))
+      #try:
+        #taskAclList.index('all')
+      #except:
+        #for validF in  self.validFields.keys():
+          #if(not str(validF) in taskAclList):
+            #try:
+              #del(self.validFields[validF])
+              #print("removing "+ str(validF) +" from editing since you are not qualified to use it :D .. ")
+            #except:
+              #print(str(sys.exc_info()))
       if(self.taskId):
         for x in self.validFields.keys():
           try:
