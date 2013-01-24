@@ -139,7 +139,7 @@ def initWaitingTasks(pendingTasks):
             logging.error("Screwed initWaitingTasks (Insert frames table (connection)) : "+ str(idTask) +" : "+ str(sys.exc_info()))
             if(str(sys.exc_info()).find("IntegrityError") >= 0):
               break
-          time.sleep(0.1)
+          time.sleep(0.001)
 
       logging.debug("Initialized frames table")
       while(1):
@@ -149,8 +149,8 @@ def initWaitingTasks(pendingTasks):
           break
         except:
           logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
-        time.sleep(0.1)
-    time.sleep(0.1)
+        time.sleep(0.01)
+    time.sleep(0.001)
 
 
 def initTasks():

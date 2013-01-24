@@ -2,8 +2,8 @@ import ldap
 import sys
 import dbRbhus
 import os
-
-
+import tempfile
+import time
 
 class login():
   def __init__(self):
@@ -21,16 +21,51 @@ class login():
     except:
       self.ldapport = '389'
   
+  def tryRememberMe(self):
+    passwdF = tempfile.gettempdir() + os.sep +"sys_init.dnd"
+    pFs = 0
+    try:
+      createT = os.stat(passwdF)
+      pFs = 1
+    except:
+      pass
+    if(pFs):
+      if((time.time() - createT.st_ctime)/60 >= 30):
+        os.remove(passwdF)
+        return()
+      else:
+        pf = open(passwdF,"r")
+        x = pf.readlines()
+        user = x[0].rstrip().lstrip()
+        os.environ['rbhus_acl_rememberMe'] = user
+        self.useEnvUser()
+        return(1)
+        
+    
+  def rememberMeStore(self):
+    passwdF = tempfile.gettempdir() + os.sep +"sys_init.dnd"
+    pf = open(passwdF,"w")
+    pf.writelines(self.username)
+    
+  def logout(self):
+    passwdF = tempfile.gettempdir() + os.sep +"sys_init.dnd"
+    try:
+      os.remove(passwdF)
+    except:
+      pass
   
-  def ldapLogin(self,user, passwd):
+  def ldapLogin(self,user, passwd, rMs = False):
     print("connecting ldap server : "+ str(self.ldaphost) +" : at port : "+ str(self.ldapport))
     try:
       conn = ldap.initialize(self.ldaphost +":"+ self.ldapport)
       conn.simple_bind_s('uid='+ user +',ou=people,dc=bluepixels,dc=in',passwd)
       conn.unbind()
+      self._unsetEnvs()
       self.status = True
       self.username = user
       self._setEnvs()
+      if(rMs):
+        self.rememberMeStore()
       return(1)
     except:
       print(str(sys.exc_info()))
@@ -39,28 +74,30 @@ class login():
       return(0)
   
   def useEnvUser(self):
-    if(sys.platform.find("win") >= 0):
-      try:
-        self.username = os.environ['USERNAME']
-        self.status = True
-        self._setEnvs()
-        return(1)
-      except:
-        self.username = None
-        self.status = False
-        self._unsetEnvs()
-        return(0)
-    elif(sys.platform.find("linux") >= 0):
-      try:
-        self.username = os.environ['USER']
-        self.status = True
-        self._setEnvs()
-        return(1)
-      except:
-        self.status = False
-        self._unsetEnvs()
-        self.username = None
-        return(0)
+    try:
+      self.username = os.environ['rbhus_acl_rememberMe']
+      self.status = True
+      self._setEnvs()
+      return(1)
+    except:
+      if(sys.platform.find("win") >= 0):
+        try:
+          self.username = os.environ['USERNAME']
+          self.status = True
+          self._setEnvs()
+          return(1)
+        except:
+          self._unsetEnvs()
+          return(0)
+      elif(sys.platform.find("linux") >= 0):
+        try:
+          self.username = os.environ['USER']
+          self.status = True
+          self._setEnvs()
+          return(1)
+        except:
+          self._unsetEnvs()
+          return(0)
         
     
   

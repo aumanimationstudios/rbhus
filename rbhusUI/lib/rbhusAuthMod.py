@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusAuthMod.ui'
 #
-# Created: Sat Jan 19 11:05:36 2013
+# Created: Thu Jan 24 10:06:08 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ class Ui_MainWindowAuth(object):
   def setupUi(self, MainWindowAuth):
     MainWindowAuth.setObjectName(_fromUtf8("MainWindowAuth"))
     MainWindowAuth.setWindowModality(QtCore.Qt.WindowModal)
-    MainWindowAuth.resize(294, 90)
+    MainWindowAuth.resize(294, 116)
     self.centralwidget = QtGui.QWidget(MainWindowAuth)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
@@ -53,6 +53,9 @@ class Ui_MainWindowAuth(object):
     self.verticalLayout.addItem(spacerItem)
     self.horizontalLayout_3 = QtGui.QHBoxLayout()
     self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
+    self.checkBoxRememberMe = QtGui.QCheckBox(self.centralwidget)
+    self.checkBoxRememberMe.setObjectName(_fromUtf8("checkBoxRememberMe"))
+    self.horizontalLayout_3.addWidget(self.checkBoxRememberMe)
     spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_3.addItem(spacerItem1)
     self.pushButton = QtGui.QPushButton(self.centralwidget)
@@ -62,17 +65,13 @@ class Ui_MainWindowAuth(object):
     MainWindowAuth.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(MainWindowAuth)
-    QtCore.QObject.connect(self.lineEditUser, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.lineEditPass.setFocus)
-    QtCore.QObject.connect(self.lineEditPass, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.pushButton.animateClick)
-    QtCore.QObject.connect(self.lineEditPass, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.pushButton.setFocus)
-    QtCore.QObject.connect(self.lineEditUser, QtCore.SIGNAL(_fromUtf8("editingFinished()")), self.lineEditPass.setFocus)
-    QtCore.QObject.connect(self.lineEditPass, QtCore.SIGNAL(_fromUtf8("editingFinished()")), self.pushButton.animateClick)
     QtCore.QMetaObject.connectSlotsByName(MainWindowAuth)
 
   def retranslateUi(self, MainWindowAuth):
     MainWindowAuth.setWindowTitle(_translate("MainWindowAuth", "login", None))
     self.labelUser.setText(_translate("MainWindowAuth", "username", None))
     self.labelPass.setText(_translate("MainWindowAuth", "password", None))
+    self.checkBoxRememberMe.setText(_translate("MainWindowAuth", "rememberMe", None))
     self.pushButton.setText(_translate("MainWindowAuth", "try ur luck!", None))
     self.pushButton.setShortcut(_translate("MainWindowAuth", "Return, Ctrl+R", None))
 

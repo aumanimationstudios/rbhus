@@ -21,6 +21,7 @@ sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"r
 import db
 import constants
 import auth
+import dbRbhus
 
 
 try:
@@ -32,7 +33,8 @@ except AttributeError:
 
 class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   def setupUi(self, Form):
-    
+    dbConn = dbRbhus.dbRbhus()
+    clientPrefs = dbConn.getClientPrefs()
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     
@@ -40,6 +42,20 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     self.center()
     rbhusAuthMod.Ui_MainWindowAuth.setupUi(self,Form)
     self.pushButton.clicked.connect(self.tryAuth)
+    self.acl = auth.login()
+    if(not clientPrefs['authentication']):
+      self.acl.useEnvUser()
+      os.system("env |& grep -i rbhus_")
+      os.system("."+ os.sep +"_rbhusList.py")
+      sys.exit(0)
+      
+    rms = self.acl.tryRememberMe()
+    if(rms):
+      print(str(self.acl.username))
+      os.system("env |& grep -i rbhus_")
+      os.system("."+ os.sep +"_rbhusList.py")
+      sys.exit(0)
+    
   
   def center(self):
     
@@ -49,15 +65,20 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     Form.move(qr.topLeft())
   
   def tryAuth(self):
-    acl = auth.login()
-    ret = acl.ldapLogin(str(self.lineEditUser.text()),str(self.lineEditPass.text()))
+    
+    rM = self.checkBoxRememberMe.isChecked()
+    ret = self.acl.ldapLogin(str(self.lineEditUser.text()), str(self.lineEditPass.text()), rM)
     if(ret):
       print("VALID")
-      print(str(acl.username))
+      print(str(self.acl.username))
       os.system("env |& grep -i rbhus_")
-      os.system("./_rbhusList.py")
+      if(sys.platform.find("win") >= 0):
+        os.system("."+ os.sep +"_rbhusList.py")
+      elif(sys.platform.find("linux") >= 0):
+        os.system("."+ os.sep +"_rbhusList.py")
     else:
       print("\n&*^*&^*%&$&^(*)(__)&*%^$#   .. :) !\n")
+    sys.exit(0)
     
 if __name__ == "__main__":
   app = QtGui.QApplication(sys.argv)

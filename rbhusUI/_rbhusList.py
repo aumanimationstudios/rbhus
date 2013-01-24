@@ -15,7 +15,7 @@ if(len(progPath) > 1):
   cwd = os.path.abspath(pwd)
 else:
   cwd = os.path.abspath(os.getcwd())
-  
+print cwd  
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 
 rEc = "rbhusEdit.py"
@@ -28,7 +28,7 @@ print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
 import constants
-
+import auth
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -41,8 +41,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
-    
-    self.colNamesTask = ["id","fileName","camera","resolution","outDir","outName","hostGroups","os","fileType","renderer","fRange","afterTasks","priority","submitTime","status","description"]
+    self.authL = auth.login()
+    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","renderer","fRange","afterTasks","priority","submitTime","status","description"]
     self.colNamesFrames = ["id","frameId","batchId","hostName","ram","sTime","eTime","runCount","status"]
     
     
@@ -71,7 +71,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.taskActivate.clicked.connect(self.activateTask)
     self.taskEdit.clicked.connect(self.editTask)
     self.taskDelete.clicked.connect(self.delTask)
-    
+    self.pushLogout.clicked.connect(self.logout)
     
     self.frameStop.clicked.connect(self.stopFrame)
     self.frameRerun.clicked.connect(self.rerunFrame)
@@ -83,7 +83,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkRefresh.clicked.connect(self.timeCheck)
     self.lineEditSearch.textChanged.connect(self.popTableList)
     self.popTableList()
-    
+    self.labelUser.setText(os.environ['rbhus_acl_user'])
     
   def popupTask(self, pos):
     menu = QtGui.QMenu()
@@ -99,6 +99,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(action == test3Action):
       print("test3")
       
+  
+  def logout(self):
+    self.authL.logout()
+    sys.exit(0)
   
   def stopFrame(self):
     selFramesDict = self.selectedFrames()
@@ -272,7 +276,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     try:
       conn = db.connRbhus()
       cursor = conn.cursor()
-      cursor.execute("delete from frames where (id="+ ids +")")
+      cursor.execute("delete from frames where (id="+ ids +" and status!="+ str(constants.framesRunning) +")")
       cursor.execute("update tasks set status = "+ str(constants.taskWaiting) +" where (id="+ ids +")")
       cursor.close()
       conn.close()

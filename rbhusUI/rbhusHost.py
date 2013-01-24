@@ -43,7 +43,7 @@ except AttributeError:
 class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusHostMod.Ui_MainWindow.setupUi(self,Form)
-    self.colNamesHost = ["hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
+    self.colNamesHost = ["hostInfo.hostName","hostInfo.ip","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
     self.popTableHost()
     self.pushDisable.clicked.connect(self.hostDisable)
     self.pushEnable.clicked.connect(self.hostEnable)

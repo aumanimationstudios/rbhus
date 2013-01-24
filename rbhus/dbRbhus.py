@@ -296,6 +296,18 @@ class dbRbhus:
       return(0)
     return(rows)
     
+  def getClientPrefs(self):
+    try:
+      rows = self.execute("SELECT * FROM clientPref", dictionary=True)
+      if(not isinstance(rows,int)):
+        return(rows[0])
+      else:
+        return(0)
+    except:
+      modLogger.error(str(sys.exc_info()))
+      return(0)
+    
+    
   def getAllFrames(self,taskId):
     try:
       rows = self.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \

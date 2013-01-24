@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>294</width>
-    <height>90</height>
+    <height>116</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -65,6 +65,13 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
+       <widget class="QCheckBox" name="checkBoxRememberMe">
+        <property name="text">
+         <string>rememberMe</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -80,7 +87,7 @@
       <item>
        <widget class="QPushButton" name="pushButton">
         <property name="text">
-         <string>try ur luck!</string>
+         <string>get me in!</string>
         </property>
         <property name="shortcut">
          <string>Return, Ctrl+R</string>
@@ -93,86 +100,5 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>lineEditUser</sender>
-   <signal>returnPressed()</signal>
-   <receiver>lineEditPass</receiver>
-   <slot>setFocus()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>186</x>
-     <y>15</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>186</x>
-     <y>35</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEditPass</sender>
-   <signal>returnPressed()</signal>
-   <receiver>pushButton</receiver>
-   <slot>animateClick()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>243</x>
-     <y>41</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>247</x>
-     <y>82</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEditPass</sender>
-   <signal>returnPressed()</signal>
-   <receiver>pushButton</receiver>
-   <slot>setFocus()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>153</x>
-     <y>35</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>217</x>
-     <y>82</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEditUser</sender>
-   <signal>editingFinished()</signal>
-   <receiver>lineEditPass</receiver>
-   <slot>setFocus()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>121</x>
-     <y>12</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>122</x>
-     <y>40</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEditPass</sender>
-   <signal>editingFinished()</signal>
-   <receiver>pushButton</receiver>
-   <slot>animateClick()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>104</x>
-     <y>44</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>233</x>
-     <y>77</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

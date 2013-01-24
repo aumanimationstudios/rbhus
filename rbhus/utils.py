@@ -107,12 +107,13 @@ class tasks(object):
     self.db_conn = dbRbhus.dbRbhus()
     self.taskFields = self._getTaskFields()
     self.username = None
+    self.userProjIds = []
     try:
       self.username = os.environ['rbhus_acl_user'].rstrip().lstrip()
     except:
       pass
     try:
-      self.projIds = os.environ['rbhus_acl_projIds'].split()
+      self.userProjIds = os.environ['rbhus_acl_userProjIds'].split()
     except:
       pass
     self.taskId = tId
@@ -170,7 +171,7 @@ class tasks(object):
     self.validFields = {}
     self.invalidFields = {}
     if(self.username):
-      if(self.username == self.taskDetails['user']):
+      if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds)):
         print("user : "+ str(self.username) +" : allowed to edit")
       else:
         print("user : "+ str(self.username) +" : NOT allowed to edit")
