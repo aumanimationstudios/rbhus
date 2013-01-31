@@ -30,7 +30,7 @@ class login():
     except:
       pass
     if(pFs):
-      if((time.time() - createT.st_ctime)/60 >= 30):
+      if((time.time() - createT.st_ctime)/60 >= 500):
         os.remove(passwdF)
         return()
       else:

@@ -154,7 +154,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   def setOutDir(self):
     outFile = str(self.lineEditFileName.text())
     if(sys.platform.find("win") >= 0):
-      self.lineEditOutDir.setText("z:/"+ "/".join((outFile.replace("\\","/")).split("/")[1:-1]) +"/")
+      self.lineEditOutDir.setText("z:/"+ "/".join((outFile.replace("\\","/")).split("/")[1:-1]).rstrip().lstrip() +"/")
     else:
       self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/")
   
@@ -228,19 +228,19 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         
         
         if(re.search('^default$',sd) == None):
-          sd = sd.rstrip("/") +"/"+ ".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1]) +"/"
+          sd = sd.rstrip("/") +"/"+ ".".join(str((submitDict['fileName']).split("/")[-1]).split(".")[0:-1]).rstrip().lstrip() +"/"
           print(str(sd))
           
-          
+          sdc = sd
           for c in cameras.split(","):
             if(c):
               submitDict['camera'] = c
               if(re.search('^default$',submitDict['camera']) == None):
-                sd = sd.rstrip("/") +"/"+ c + "/"
+                sdc = sd.rstrip("/") +"/"+ c + "/"
               if(re.search('^default$',submitDict['resolution']) == None):
-                sd = sd.rstrip("/") +"/"+ submitDict['resolution'] + "/"
+                sdc = sdc.rstrip("/") +"/"+ submitDict['resolution'] + "/"
                 
-              submitDict['outDir'] = sd
+              submitDict['outDir'] = sdc
               try:
                 b = a.submit(submitDict)
                 print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))

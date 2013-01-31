@@ -39,14 +39,21 @@ pad = os.environ['rbhus_pad']
 outDir = os.environ['rbhus_outDir']
 outFile = os.environ['rbhus_outName']
 logFile = os.environ['rbhus_logFile']
-RENDERCMD = "\"c:\\Program Files\\Autodesk\\3ds Max 2013\\3dsmaxcmd.exe\""
+washMyButt = os.environ['rbhus_washmybutt']
+runScript = os.environ['rbhus_runScript']
+frames = os.environ['rbhus_frames']
+cam = os.environ['rbhus_camera']
+res = os.environ['rbhus_resolution']
+wbd = open(washMyButt,"w")
+
+RENDERCMD = "\"c:/Program Files/Autodesk/3ds Max 2013/3dsmaxcmd.exe\""
 RENDER_CMD = ""
 
 if(outDir != "default"):
   if(outFile != "default"):
-    imageName = outDir.rstrip(os.sep) + os.sep + outFile
+    imageName = outDir.rstrip("/") + "/" + ".".join(outFile.split(".")[0:-1]) +"_"+ str(frameId).rjust(int(pad),"0") +"."+ outFile.split(".")[-1]
   else:
-    imageName = outDir.rstrip(os.sep) + os.sep 
+    imageName = outDir.rstrip("/") + "/" + "image_"+ str(frameId).rjust(int(pad),"0") +".png"
 
 totalCpus = multiprocessing.cpu_count()
 b = ""
@@ -54,29 +61,45 @@ for x in range(0,int(rThreads)):
   b = b + "1"
 hexAffinity = hex(int(b.rjust(totalCpus,"0"),2))
 
-f = open(tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat","w")
+ffile = tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat"
+
+wbd.writelines(ffile +"\n\r")
+wbd.flush()
+wbd.close()
+f = open(ffile,"w")
+
+renderCmd = RENDERCMD +" \""+ fileName +"\" -frames:"+ frames
 
 #logFile = str(logBase).rstrip(os.sep) + os.sep + ".".join(str(fileName).lstrip(os.sep).rsplit(os.sep)[-1].rsplit(".")[0:-1]) +"_"+ str(frameId).rjust(int(pad),"0") +".log"
 #f.write("echo %pid%\n\r")
+if(cam != "default"):
+  renderCmd = renderCmd +" -camera:"+ cam 
+if(res != "default"):
+  renderCmd = renderCmd +" -width:"+ res.split("x")[0] +" -height:"+ res.split("x")[1]
+  
+renderCmd = renderCmd + " -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:1 -continueOnError"
 
-if(outDir != "default"):
-  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -start:"+ frameId +" -end:"+ frameId +" -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:1 -continueOnError -o:"+ imageName +" 2>&1"#+ logFile
-else:
-  RENDER_CMD = RENDERCMD +" \""+ fileName +"\" -start:"+ frameId +" -end:"+ frameId +" -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:1 -continueOnError 2>&1"#+ logFile
   
 
-f.write(RENDER_CMD +"\n\r")
+if(outDir != "default"):
+  renderCmd = renderCmd +" -o:"+ imageName 
+
+  
+
+f.write("@ECHO ON\n\r")
+f.flush()
+f.write(renderCmd +"\n\r")
 f.flush()
 #f.write("taskkill /f /t /fi \""+ fileName +"\"\n\r")
 #f.write("del %0\n\r")
-f.write("SLEEP 20\n\r")
+f.write("SLEEP 1\n\r")
 f.flush()
 
 f.write("EXIT %errorlevel%\n\r")
 f.close()
 
-print("C:\Windows\System32\cmd.exe /k start /affinity "+ str(hexAffinity) +" "+ tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat 2>&1" )
+#print("C:\Windows\System32\cmd.exe /C start /wait /affinity "+ str(hexAffinity) +" "+ tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat ")
 
-
+print("C:\Windows\System32\cmd.exe /C start /wait "+ tempfile.gettempdir() + os.sep + taskId +"_"+ frameId +".bat ")
 sys.exit(0)
   

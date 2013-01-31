@@ -128,7 +128,7 @@ def pingClientProcess(client,ipAddr):
       if((db_conn.setHostAliveStatus(client,constants.hostAliveDead) == 1) and (db_conn.resetAssignedFrame(client, constants.framesHung) == 1)):
         break
       time.sleep(0.3)
-    sys.exit()
+    sys.exit(1)
 
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
@@ -145,7 +145,7 @@ def pingClientProcess(client,ipAddr):
       pass
     db_conn.setHostAliveStatus(client,constants.hostAliveDead)
     db_conn.resetAssignedFrame(client, constants.framesHung)
-    sys.exit()
+    sys.exit(1)
 
   clientSocket.send("ALIVE")
   reply = ""
@@ -163,7 +163,7 @@ def pingClientProcess(client,ipAddr):
   else:
     db_conn.setHostAliveStatus(client,constants.hostAliveDead)
     db_conn.resetAssignedFrame(client, constants.framesHung)
-  sys.exit()
+  sys.exit(0)
   
   
 if __name__=="__main__":

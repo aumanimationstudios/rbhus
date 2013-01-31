@@ -276,7 +276,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     try:
       conn = db.connRbhus()
       cursor = conn.cursor()
-      cursor.execute("delete from frames where (id="+ ids +" and status!="+ str(constants.framesRunning) +")")
+      cursor.execute("delete from frames where (id="+ ids +") and (status!="+ str(constants.framesRunning) +")")
       cursor.execute("update tasks set status = "+ str(constants.taskWaiting) +" where (id="+ ids +")")
       cursor.close()
       conn.close()

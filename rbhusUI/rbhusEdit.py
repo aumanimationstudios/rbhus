@@ -89,7 +89,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_framerange = 0
     self.db_minbatch = 0
     self.db_maxbatch = 0
-    self.db_batch = 0
+    self.db_batch = -1
     self.db_desc = 0
     self.db_cam = 0
     self.db_res = 0
@@ -115,7 +115,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.db_framerange = 0
     self.db_minbatch = 0
     self.db_maxbatch = 0
-    self.db_batch = 0
+    self.db_batch = -1
     self.db_desc = 0
     self.db_cam = 0
     self.db_res = 0
@@ -203,7 +203,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     if(self.db_priority):
       editDict["priority"] = str(self.db_priority)
       self.db_priority = 0
-    if(self.db_batch):
+    if(self.db_batch != -1):
       editDict['batch'] = str(self.db_batch)
     if(self.db_maxbatch):
       editDict['maxBatch'] = str(self.db_maxbatch)

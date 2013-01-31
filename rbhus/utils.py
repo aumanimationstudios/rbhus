@@ -113,7 +113,7 @@ class tasks(object):
     except:
       pass
     try:
-      self.userProjIds = os.environ['rbhus_acl_userProjIds'].split()
+      self.userProjIds = os.environ['rbhus_acl_projIds'].split()
     except:
       pass
     self.taskId = tId
@@ -170,6 +170,9 @@ class tasks(object):
   def edit(self,fieldDict):
     self.validFields = {}
     self.invalidFields = {}
+    print(self.username)
+    print(self.userProjIds)
+    print(self.taskDetails['projId'])
     if(self.username):
       if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds)):
         print("user : "+ str(self.username) +" : allowed to edit")

@@ -252,17 +252,42 @@ def assignFramesToHost(hostDetail,taskDets, taskFrames, batchId):
   db_conn.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskDets['id']))
 
 
-def initBatchId():
+def assignBatchToHost(hostDetail,taskDets, batchId):
+  eThreads = 0
+  if(taskDets['threads'] == 0):
+    if(hostDetail['eCpus'] == 0):
+      eThreads = hostDetail['freeCpus']
+    else:
+      eThreads = hostDetail['freeCpus'] - (hostDetail['totalCpus'] - hostDetail['eCpus'])
+  else:
+    eThreads = taskDets['threads']
+
+  db_conn.execute("UPDATE hostResource \
+                  SET freeCpus=freeCpus-"+ str(eThreads) +" \
+                  WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+  db_conn.execute("UPDATE batch \
+                  SET host=\""+ hostDetail['ip'] +"\" , \
+                  status="+ str(constants.framesAssigned) +", \
+                  fThreads="+ str(eThreads) +" \
+                  WHERE batch.id='"+ str(batchId) +"'")
+  #db_conn.execute("UPDATE hostResource \
+                  #SET freeCpus=freeCpus+"+ str(eThreads) +" \
+                  #WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+  db_conn.execute("UPDATE tasksLog SET lastHost=\""+ hostDetail['hostName'] +"\" WHERE tasksLog.id="+ str(taskDets['id']))
+
+
+
+def initBatchId(taskid):
   try:
     bUid = str(uuid.uuid4())
-    db_conn.execute("insert into batch (id) value ('"+ str(bUid) +"')")
+    db_conn.execute("insert into batch (id, taskId) value ('"+ str(bUid) +"',"+ str(taskid) +")")
   except:
     logging.error("batchId failed : "+ str(sys.exc_info()))
     raise
   return(str(bUid))
 
 
-def insertToBatchId(batchId,frameNo):
+def insertFramesInToBatchId(batchId,frameNo):
   try:
     db_conn.execute("update batch set frange=CONCAT(frange,\" "+ str(frameNo) +" \") where id=\""+ str(batchId) +"\"")
     logging.debug("adding frame : "+ str(frameNo) +" to batchId : "+ str(batchId))
@@ -318,7 +343,7 @@ def scheduler():
               #Initialize batch id for the frame
               while(1):
                 try:
-                  batchId = initBatchId()
+                  batchId = initBatchId(activeTask['id'])
                   break
                 except:
                   time.sleep(1)
@@ -337,10 +362,10 @@ def scheduler():
               print("bestBatch : "+ str(bestBatch) +" : "+ str(activeTask['id']) +" : "+ batchId)
               for bB in range(0,bestBatch):
                 print("insert into batch id : " + str(batchId) +" : "+ str(taskFrames[bB]['frameId']))
-                insertToBatchId(batchId,taskFrames[bB]['frameId'])
+                insertFramesInToBatchId(batchId,taskFrames[bB]['frameId'])
                 taskFramesToAssign.append(taskFrames[bB]['frameId'])
                 
-                
+              #assignBatchToHost(assignedHost, activeTask, batchId)  
               assignFramesToHost(assignedHost, activeTask, taskFramesToAssign, batchId)
               logging.debug("batchID : "+ str(batchId) +" : ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(activeTask["id"]) +" : "+ str(taskFramesToAssign))
               break

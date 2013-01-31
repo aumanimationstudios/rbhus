@@ -172,6 +172,30 @@ class dbRbhus:
     return(rows)
     
     
+  def delTask(self,taskId):
+    rowss_ = self.execute("SELECT * FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
+    f_status = {}
+    if(rowss_):
+      for x in rowss_:
+        try:
+          f_status[constants.framesStatus[x['status']]] = f_status[constants.framesStatus[x['status']]] + 1
+        except:
+          f_status[constants.framesStatus[x['status']]] = 1
+    print(str(f_status))
+        
+        
+    #try:
+      #conn = db.connRbhus()
+      #cursor = conn.cursor()
+      #cursor.execute("delete from tasks where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
+      #cursor.close()
+      #conn.close()
+    #except:
+      #print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      #return()    
+    #self.popTableList()
+  
+  
   def getProjectId(self,projectName):
     try:
       rows = self.execute("SELECT * FROM proj WHERE projName="+ str(projectName))
@@ -454,8 +478,8 @@ class dbRbhus:
     
 def test():
   dbR = dbRbhus()
-  status = dbR.getTaskStatus(sys.argv[1])
-  print(str(status))
+  dbR.delTask(sys.argv[1])
+  
     #time.sleep(1)
   
   

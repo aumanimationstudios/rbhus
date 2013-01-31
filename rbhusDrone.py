@@ -48,7 +48,7 @@ db_conn = dbRbhus.dbRbhus()
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = logging.FileHandler('/var/log/rbhusClient.log')
 elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusClient_"+ str(hostname) +".log")
+  LOG_FILENAME = logging.FileHandler("Z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusClient_"+ str(hostname) +".log")
 
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
@@ -204,11 +204,15 @@ def runFrames(qRun,frameScrutiny):
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": runFrames func")
   processFrames = []
+  cpuAffi = []
+  cpuMax = 0
   while(1):
     time.sleep(0.2)
     hostEff = getEffectiveDetails(db_conn)
 
     totalPids = multiprocessing.cpu_count()
+    for y in range(0,totalPids):
+      cpuAffi.append(y)
     if(hostEff):
       eCpus = hostEff['eCpus']
       if(eCpus == 0):
@@ -270,7 +274,23 @@ def runFrames(qRun,frameScrutiny):
             break
           if(a):
             break
-    processFrames.append(multiprocessing.Process(target=_execFrames,args=(frameInfo,frameScrutiny,)))
+    frameThreads = frameInfo['fThreads']
+
+    cpuAffiToSend = []
+    #if(max(cpuAffi) >= totalPids):
+      #cpuAffi = [0]
+    #cpuAMax = max(cpuAffi)
+    if(cpuMax >= totalPids):
+      cpuMax = 0
+    u = 0
+    for u in range(cpuMax,cpuMax + int(frameThreads)):
+      if(u >= totalPids):
+        u = 0
+      cpuAffiToSend.append(u)
+    cpuMax = u + 1
+      #cpuAffi.append(x)
+      
+    processFrames.append(multiprocessing.Process(target=_execFrames,args=(frameInfo,frameScrutiny,cpuAffiToSend,)))
     processFrames[-1].start()
     
     while(1):
@@ -288,14 +308,14 @@ def runFrames(qRun,frameScrutiny):
       if(a):
         break
 
-def _execFrames(frameInfo,frameScrutiny):
+def _execFrames(frameInfo,frameScrutiny,cpuAffi):
   proc = multiprocessing.Process(target=execFrames,args=(frameInfo,frameScrutiny,))
   proc.start()
   
   processFramesId = psutil.Process(proc.pid)
-  cpuAffi = []
-  for ca in range(0,int(frameInfo['fThreads'])):
-    cpuAffi.append(ca)
+  #cpuAffi = []
+  #for ca in range(0,int(frameInfo['fThreads'])):
+    #cpuAffi.append(ca)
   logClient.debug("CPU AFFINITY : "+ str(cpuAffi))
   processFramesId.set_cpu_affinity(cpuAffi)
   proc.join()
@@ -625,7 +645,7 @@ def washMyButt(taskid, frameid):
     return(0)
   for x in bfd.readlines():
     try:
-      os.remove(x)
+      os.remove(x.rstrip().lstrip())
     except:
       logClient.debug(str(sys.exc_info()))
   bfd.close()

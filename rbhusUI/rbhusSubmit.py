@@ -46,14 +46,14 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     if(not clientPrefs['authentication']):
       self.acl.useEnvUser()
       os.system("env |& grep -i rbhus_")
-      os.system("."+ os.sep +"_rbhusSubmit.py")
+      os.system("."+ os.sep +"_rbhusSubmit.py &")
       sys.exit(0)
       
     rms = self.acl.tryRememberMe()
     if(rms):
       print(str(self.acl.username))
       os.system("env |& grep -i rbhus_")
-      os.system("."+ os.sep +"_rbhusSubmit.py")
+      os.system("."+ os.sep +"_rbhusSubmit.py &")
       sys.exit(0)
       
     
@@ -74,9 +74,9 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
       print(str(self.acl.username))
       os.system("env |& grep -i rbhus_")
       if(sys.platform.find("win") >= 0):
-        os.system("."+ os.sep +"_rbhusSubmit.py")
+        os.system("."+ os.sep +"_rbhusSubmit.py &")
       elif(sys.platform.find("linux") >= 0):
-        os.system("."+ os.sep +"_rbhusSubmit.py")
+        os.system("."+ os.sep +"_rbhusSubmit.py &")
     else:
       print("\n&*^*&^*%&$&^(*)(__)&*%^$#   .. :) !\n")
     sys.exit(0)
