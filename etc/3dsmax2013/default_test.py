@@ -77,7 +77,7 @@ if(cam != "default"):
 if(res != "default"):
   renderCmd = renderCmd +" -width:"+ res.split("x")[0] +" -height:"+ res.split("x")[1]
   
-renderCmd = renderCmd + " -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:1 -continueOnError"
+renderCmd = renderCmd + " -showRFW:0 -gammaCorrection:1 -gammaValueIn:2.2 -gammaValueOut:2.2 -continueOnError"
 
   
 

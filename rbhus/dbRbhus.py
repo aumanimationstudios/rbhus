@@ -181,20 +181,17 @@ class dbRbhus:
           f_status[constants.framesStatus[x['status']]] = f_status[constants.framesStatus[x['status']]] + 1
         except:
           f_status[constants.framesStatus[x['status']]] = 1
-    print(str(f_status))
-        
-        
-    #try:
-      #conn = db.connRbhus()
-      #cursor = conn.cursor()
-      #cursor.execute("delete from tasks where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
-      #cursor.close()
-      #conn.close()
-    #except:
-      #print("1 :Error connecting to db :"+ str(sys.exc_info()))
-      #return()    
-    #self.popTableList()
-  
+    if(f_status.has_key(constants.framesStatus[constants.framesRunning])):
+      print("cannot delete a tasks that has running frames")
+      return(0)
+    else:
+      try:
+        self.execute("delete from tasks where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
+        return(1)
+      except:
+        print("1 :Error connecting to db :"+ str(sys.exc_info()))
+        return(0)    
+    
   
   def getProjectId(self,projectName):
     try:
