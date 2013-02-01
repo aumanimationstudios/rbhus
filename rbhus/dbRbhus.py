@@ -182,11 +182,11 @@ class dbRbhus:
         except:
           f_status[constants.framesStatus[x['status']]] = 1
     if(f_status.has_key(constants.framesStatus[constants.framesRunning])):
-      print("cannot delete a tasks that has running frames")
+      print("cannot delete task : "+ str(taskId) +" : running frames detected!")
       return(0)
     else:
       try:
-        self.execute("delete from tasks where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
+        self.execute("delete from tasks where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
         return(1)
       except:
         print("1 :Error connecting to db :"+ str(sys.exc_info()))

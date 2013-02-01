@@ -29,6 +29,7 @@ sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"r
 import db
 import constants
 import auth
+import dbRbhus
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -208,24 +209,26 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     selTasksDict = self.selectedTasks()
     selTasks = []
     #self.showDialog()
-    
-    for x in selTasksDict:
-      selTasks.append(x['id'])
-    if(selTasks):
-      ids = " or id = ".join(selTasks)
-    else:
-      return
-    ids = " or id=".join(selTasks)
-    print ids
-    try:
-      conn = db.connRbhus()
-      cursor = conn.cursor()
-      cursor.execute("delete from tasks where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
-      cursor.close()
-      conn.close()
-    except:
-      print("1 :Error connecting to db :"+ str(sys.exc_info()))
-      return()    
+    db_conn = dbRbhus.dbRbhus()
+    if(selTasksDict):
+      for x in selTasksDict:
+        xDel = db_conn.delTask(x['id'])
+      
+    #if(selTasks):
+      #ids = " or id = ".join(selTasks)
+    #else:
+      #return
+    #ids = " or id=".join(selTasks)
+    #print ids
+    #try:
+      #conn = db.connRbhus()
+      #cursor = conn.cursor()
+      #cursor.execute("delete from tasks where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
+      #cursor.close()
+      #conn.close()
+    #except:
+      #print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      #return()    
     self.popTableList()
     
   
