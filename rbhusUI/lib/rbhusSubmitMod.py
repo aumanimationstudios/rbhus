@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Thu Jan 24 17:58:03 2013
+# Created: Fri Feb  1 09:51:04 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -412,6 +412,11 @@ class Ui_rbhusSubmit(object):
     self.labelOutDir.setObjectName(_fromUtf8("labelOutDir"))
     self.gridLayout.addWidget(self.labelOutDir, 2, 0, 1, 1)
     self.label = QtGui.QLabel(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+    self.label.setSizePolicy(sizePolicy)
     font = QtGui.QFont()
     font.setBold(True)
     font.setWeight(75)
@@ -419,6 +424,11 @@ class Ui_rbhusSubmit(object):
     self.label.setObjectName(_fromUtf8("label"))
     self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
     self.labelUser = QtGui.QLabel(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.labelUser.sizePolicy().hasHeightForWidth())
+    self.labelUser.setSizePolicy(sizePolicy)
     font = QtGui.QFont()
     font.setPointSize(10)
     font.setBold(True)
@@ -429,7 +439,7 @@ class Ui_rbhusSubmit(object):
     self.gridLayout.addWidget(self.labelUser, 0, 1, 1, 1)
     self.pushLogout = QtGui.QPushButton(self.centralwidget)
     self.pushLogout.setObjectName(_fromUtf8("pushLogout"))
-    self.gridLayout.addWidget(self.pushLogout, 0, 2, 1, 1)
+    self.gridLayout.addWidget(self.pushLogout, 23, 0, 1, 1)
     rbhusSubmit.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(rbhusSubmit)
