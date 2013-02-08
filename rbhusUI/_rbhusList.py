@@ -140,7 +140,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           conn.close()
         except:
           print("1 :Error connecting to db :"+ str(sys.exc_info()))
-          return()    
+          return(0)    
     self.popTableFrames()
     
   
