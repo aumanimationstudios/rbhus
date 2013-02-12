@@ -369,7 +369,7 @@ def execFrames(frameInfo,frameScrutiny):
     os.environ['rbhus_runScript'] = runScript
 
 
-    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ "-".join(batchedFrames) +".log"
+    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ "-".join(frameInfo['batchId']) +".log"
     os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
     if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]
@@ -441,6 +441,7 @@ def execFrames(frameInfo,frameScrutiny):
     try:
       logD = open(logFile,"a+",0)
       logD.write("START \n"+ socket.gethostname() +" : "+ time.asctime() +"\n")
+      logD.write("FRAMES : "+ " ".join(batchedFrames))
     except:
       pass
 

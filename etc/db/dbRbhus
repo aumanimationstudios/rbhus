@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.1.62, for pc-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.28, for Linux (x86_64)
 --
--- Host: localhost    Database: rbhus
+-- Host: blues2    Database: rbhus
 -- ------------------------------------------------------
 -- Server version	5.1.62-log
 
@@ -32,6 +32,19 @@ CREATE TABLE `_peep_server` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `admins`
+--
+
+DROP TABLE IF EXISTS `admins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admins` (
+  `user` varchar(128) NOT NULL DEFAULT 'shrinidhi',
+  PRIMARY KEY (`user`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `batch`
 --
 
@@ -41,8 +54,30 @@ DROP TABLE IF EXISTS `batch`;
 CREATE TABLE `batch` (
   `id` varchar(100) NOT NULL DEFAULT 'default',
   `frange` varchar(1024) NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`id`)
+  `taskId` int(11) DEFAULT NULL,
+  `host` varchar(92) DEFAULT NULL,
+  `status` int(2) DEFAULT NULL,
+  `ram` bigint(32) DEFAULT NULL,
+  `sTime` datetime DEFAULT NULL,
+  `eTime` datetime DEFAULT NULL,
+  `logFile` varchar(2048) DEFAULT NULL,
+  `fThreads` int(2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `clientPref`
+--
+
+DROP TABLE IF EXISTS `clientPref`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clientPref` (
+  `authentication` int(1) NOT NULL DEFAULT '1' COMMENT '1 - enable authentication\n0 - disable authentication\n',
+  PRIMARY KEY (`authentication`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,8 +204,10 @@ DROP TABLE IF EXISTS `proj`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `proj` (
   `id` int(11) NOT NULL,
-  `projName` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`id`)
+  `projName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `admins` varchar(2048) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `projName_UNIQUE` (`projName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -239,7 +276,7 @@ CREATE TABLE `tasks` (
   KEY `fk_tasks_2` (`fileType`),
   CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,4 +304,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-18 23:00:01
+-- Dump completed on 2013-02-02 12:14:21
