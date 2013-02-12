@@ -212,7 +212,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     db_conn = dbRbhus.dbRbhus()
     if(selTasksDict):
       for x in selTasksDict:
-        xDel = db_conn.delTask(x['id'])
+        xDel = db_conn.delTask(x['id'],auth=True)
       
     #if(selTasks):
       #ids = " or id = ".join(selTasks)

@@ -172,7 +172,16 @@ class dbRbhus:
     return(rows)
     
     
-  def delTask(self,taskId):
+  def delTask(self,taskId,auth=False):
+    if(auth):
+      try:
+        username = os.environ['rbhus_acl_user'].rstrip().lstrip()
+      except:
+        pass
+      try:
+        userProjIds = os.environ['rbhus_acl_projIds'].split()
+      except:
+        pass
     rowss_ = self.execute("SELECT * FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
     f_status = {}
     if(rowss_):
@@ -186,7 +195,10 @@ class dbRbhus:
       return(0)
     else:
       try:
-        self.execute("delete from tasks where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
+        if(not auth):
+          self.execute("delete from tasks where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
+        else:
+          self.execute("delete from tasks where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +")) and ((user='"+ str(username) +"') or (projId in ('"+ ",".join(userProjIds) +"')))")
         return(1)
       except:
         print("1 :Error connecting to db :"+ str(sys.exc_info()))
