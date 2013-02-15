@@ -205,6 +205,49 @@ class dbRbhus:
         return(0)    
     
   
+  def holdTask(self,taskId,auth=False):
+    if(auth):
+      try:
+        username = os.environ['rbhus_acl_user'].rstrip().lstrip()
+      except:
+        pass
+      try:
+        userProjIds = os.environ['rbhus_acl_projIds'].split()
+      except:
+        pass
+    try:
+      if(not auth):
+        self.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +"))")
+      else:
+        self.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +")) and ((user='"+ str(username) +"') or (projId in ('"+ ",".join(userProjIds) +"')))")
+      return(1)
+    except:
+      print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      return(0)
+      
+      
+  def rerunTask(self,taskId,auth=False):
+    if(auth):
+      try:
+        username = os.environ['rbhus_acl_user'].rstrip().lstrip()
+      except:
+        pass
+      try:
+        userProjIds = os.environ['rbhus_acl_projIds'].split()
+      except:
+        pass
+    try:
+      if(not auth):
+        self.execute("update tasks set status = "+ str(constants.taskWaiting) +" where (id="+ str(taskId) +")")
+      else:
+        self.execute("update tasks set status = "+ str(constants.taskWaiting) +" where (id="+ str(taskId) +")  and ((user='"+ str(username) +"') or (projId in ('"+ ",".join(userProjIds) +"')))")
+      return(1)
+    except:
+      print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      return(0)
+      
+  
+
   def getProjectId(self,projectName):
     try:
       rows = self.execute("SELECT * FROM proj WHERE projName="+ str(projectName))

@@ -185,23 +185,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def holdTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
-    for x in selTasksDict:
-      selTasks.append(x['id'])
-    if(selTasks):
-      ids = " or id = ".join(selTasks)
-    else:
-      return
-    ids = " or id=".join(selTasks)
-    print ids
-    try:
-      conn = db.connRbhus()
-      cursor = conn.cursor()
-      cursor.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +"))")
-      cursor.close()
-      conn.close()
-    except:
-      print("1 :Error connecting to db :"+ str(sys.exc_info()))
-      return()    
+    db_conn = dbRbhus.dbRbhus()
+    if(selTasksDict):
+      for x in selTasksDict:
+        db_conn.holdTask(x['id'],auth=True)
     self.popTableList()
     
  
@@ -213,30 +200,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(selTasksDict):
       for x in selTasksDict:
         xDel = db_conn.delTask(x['id'],auth=True)
-      
-    #if(selTasks):
-      #ids = " or id = ".join(selTasks)
-    #else:
-      #return
-    #ids = " or id=".join(selTasks)
-    #print ids
-    #try:
-      #conn = db.connRbhus()
-      #cursor = conn.cursor()
-      #cursor.execute("delete from tasks where (id="+ ids +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +"))")
-      #cursor.close()
-      #conn.close()
-    #except:
-      #print("1 :Error connecting to db :"+ str(sys.exc_info()))
-      #return()    
     self.popTableList()
     
-  
-  #def showDialog(self):  
-    #self._dialog = QtGui.QDialog()
-    #self._dialog.resize(200, 100)
-    
-    #self._dialog.show()
       
       
     
@@ -267,26 +232,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def rerunTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
-    for x in selTasksDict:
-      selTasks.append(x['id'])
-    if(selTasks):
-      ids = " or id = ".join(selTasks)
-    else:
-      return
-    #selTasks = self.selectedTasks()
-    ids = " or id=".join(selTasks)
-    print ids
-    try:
-      conn = db.connRbhus()
-      cursor = conn.cursor()
-      cursor.execute("delete from frames where (id="+ ids +") and (status!="+ str(constants.framesRunning) +")")
-      cursor.execute("update tasks set status = "+ str(constants.taskWaiting) +" where (id="+ ids +")")
-      cursor.close()
-      conn.close()
-    except:
-      print("1 :Error connecting to db :"+ str(sys.exc_info()))
-      return()    
+    #self.showDialog()
+    db_conn = dbRbhus.dbRbhus()
+    if(selTasksDict):
+      for x in selTasksDict:
+        xRe = db_conn.rerunTask(x['id'],auth=True)
     self.popTableList()
+    
 
   
   def stopRunning(self,tableType):
