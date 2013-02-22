@@ -981,7 +981,10 @@ def getDefaultScript(fileType, dbconn):
     return(0)
 
 def setFramesStatus(taskId, frames, status, dbconn):
-  framesStr = " or frames.frameId=".join(str(x) for x in frames)
+  if(frames):
+    framesStr = " or frames.frameId=".join(str(x) for x in frames)
+  else:
+    return(1)
   try:
     dbconn.execute("UPDATE frames SET frames.status="+ str(status) +" \
                     WHERE (frames.frameId="+ str(framesStr) +") \
