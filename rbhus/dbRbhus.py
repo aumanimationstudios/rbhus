@@ -181,6 +181,7 @@ class dbRbhus:
       try:
         userProjIds = os.environ['rbhus_acl_projIds'].split()
       except:
+        userProjIds = [0]
         pass
     rowss_ = self.execute("SELECT * FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
     f_status = {}
@@ -214,6 +215,7 @@ class dbRbhus:
       try:
         userProjIds = os.environ['rbhus_acl_projIds'].split()
       except:
+        userProjIds = [0]
         pass
     try:
       if(not auth):
@@ -222,7 +224,7 @@ class dbRbhus:
         self.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +")) and ((user='"+ str(username) +"') or (projId in ('"+ ",".join(userProjIds) +"')))")
       return(1)
     except:
-      print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      print(str(sys.exc_info()))
       return(0)
       
       
@@ -235,6 +237,7 @@ class dbRbhus:
       try:
         userProjIds = os.environ['rbhus_acl_projIds'].split()
       except:
+        userProjIds = [0]
         pass
     try:
       if(not auth):
