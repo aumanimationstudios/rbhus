@@ -31,6 +31,9 @@ pad = os.environ['rbhus_pad']
 imType = os.environ['rbhus_imageType']
 washMyButt = os.environ['rbhus_washmybutt']
 runScript = os.environ['rbhus_runScript']
+camera = os.environ['rbhus_camera']
+res = os.environ['rbhus_resolution']
+
 runScript.split(os.sep)
 if(renExtArgs == "None"):
   renExtArgs = ""
@@ -39,9 +42,13 @@ RENDER_CMD = ""
 
 outputN = os.sep.join(runScript.split(os.sep)[0:-1]) + os.sep +"outputNodes.py"
 
-layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +".py"
+layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_layer.py"
+cameraF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_camera.py"
+resF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_res.py"
 wbd = open(washMyButt,"w")
 wbd.writelines(layerScF +"\n\r")
+wbd.writelines(cameraF +"\n\r")
+wbd.writelines(resF +"\n\r")
 wbd.flush()
 
 
@@ -50,9 +57,9 @@ fRs = " -f ".join(frames.split(","))
 fr = " -f "+ fRs
 
 outFile = "default"
-if(outDir.find("default") < 0):
+if(outDir != "default"):
   outFile = outDir.rstrip(os.sep) + os.sep
-if(outName.find("default") < 0):
+if(outName != "default"):
   outFile = outFile.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1]
 
 
@@ -70,16 +77,30 @@ wbd.close()
 
 os.system("cp "+ outputN +" "+ outputNoutF +" >& /dev/null")
 os.system("sed -i 's/renameOutputDir/"+"\\/".join(outDir.split(os.sep)) +"/' "+ outputNoutF +" >& /dev/null")
-if(renderer.find("default") < 0):
+if(renderer != "default"):
   RENDERCMD = RENDERCMD +" -E "+ renderer
 RENDERCMD = RENDERCMD +" -t "+ rThreads
-if(layer.find("default") < 0):
+if(layer != "default"):
   layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name].use = False\n\nbpy.context.scene.render.layers[\'"+ layer +"\'].use = True"
   f = open(layerScF,"w")
   f.writelines(layerScript)
   f.flush()
   f.close()
   RENDERCMD = RENDERCMD +" --python "+ layerScF
+if(camera != "default"):
+  cameraScript = "import bpy\nbpy.context.scene.camera = bpy.data.objects[\""+ camera + "\"]"
+  c = open(cameraF,"w")
+  c.writelines(cameraScript)
+  c.flush()
+  c.close()
+  RENDERCMD = RENDERCMD +" --python "+ cameraF
+if(res != "default"):
+  resScript = "import bpy\nbpy.context.scene.render.resolution_x = "+ res.split("x")[0] +"\nbpy.context.scene.render.resolution_y = "+ res.split("x")[0]
+  r = open(resF,"w")
+  r.writelines(resScript)
+  r.flush()
+  r.close()
+  RENDERCMD = RENDERCMD +" --python "+ resF
 RENDERCMD = RENDERCMD +" --python "+ outputNoutF
 if(imType.find("default") < 0):
   RENDERCMD = RENDERCMD +" -F "+ imType

@@ -181,7 +181,7 @@ class dbRbhus:
       try:
         userProjIds = os.environ['rbhus_acl_projIds'].split()
       except:
-        userProjIds = [0]
+        userProjIds = ['0']
         pass
     rowss_ = self.execute("SELECT * FROM frames WHERE frames.id="+ str(taskId), dictionary=True)
     f_status = {}
@@ -215,7 +215,7 @@ class dbRbhus:
       try:
         userProjIds = os.environ['rbhus_acl_projIds'].split()
       except:
-        userProjIds = [0]
+        userProjIds = ['0']
         pass
     try:
       if(not auth):
@@ -237,7 +237,7 @@ class dbRbhus:
       try:
         userProjIds = os.environ['rbhus_acl_projIds'].split()
       except:
-        userProjIds = [0]
+        userProjIds = ['0']
         pass
     try:
       if(not auth):

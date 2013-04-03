@@ -32,7 +32,7 @@ class login():
     if(pFs):
       if((time.time() - createT.st_ctime)/60 >= 500):
         os.remove(passwdF)
-        return()
+        return(0)
       else:
         pf = open(passwdF,"r")
         x = pf.readlines()
