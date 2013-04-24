@@ -43,6 +43,12 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     rbhusAuthMod.Ui_MainWindowAuth.setupUi(self,Form)
     self.pushButton.clicked.connect(self.tryAuth)
     self.acl = auth.login()
+    if(sys.platform.find("linux") >= 0):
+      self.acl.useEnvUser()
+      os.system("env |& grep -i rbhus_")
+      os.system("."+ os.sep +"_rbhusList.py &")
+      sys.exit(0)
+      
     if(not clientPrefs['authentication']):
       self.acl.useEnvUser()
       os.system("env |& grep -i rbhus_")

@@ -48,7 +48,8 @@ db_conn = dbRbhus.dbRbhus()
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = logging.FileHandler('/var/log/rbhusClient.log')
 elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = logging.FileHandler(tempDir + os.sep + str(hostname) +".log")
+  #LOG_FILENAME = logging.FileHandler(tempDir + os.sep + str(hostname) +".log")
+  LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusClient_'+ hostname +'.log')
 
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
@@ -154,8 +155,9 @@ def loadAvg():
 
 
 def upHostAliveStatus(hostName, status, dbconn):
+  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
   try:
-    dbconn.execute("UPDATE hostAlive SET status = "+ str(status) +" WHERE hostName=\'"+ str(hostName) +"\'")
+    dbconn.execute("UPDATE hostAlive SET status = "+ str(status) +" WHERE ip=\'"+ str(ipAddr) +"\'")
   except:
     return(0)
   return(1)
@@ -997,10 +999,13 @@ def setFramesStatus(taskId, frames, status, dbconn):
 
 def getEffectiveDetails(db_conn):
   hostname = socket.gethostname()
+  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
   try:
-    rows = db_conn.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'"+ hostname +"\'", dictionary=True)
+    rows = db_conn.execute("SELECT * FROM hostEffectiveResource WHERE ip=\'"+ str(ipAddr) +"\'", dictionary=True)
   except:
     return(0)
+  if(isinstance(rows,int)):
+    return(0) 
   return(rows[0])
 
 
@@ -1125,23 +1130,24 @@ def freeMeminfo():
   return(memDetails)
 
 
-def getHostGroups(hostName,dbconn):
-    try:
-      rows = dbconn.execute("select groups from hostInfo where hostName=\""+ str(hostName) +"\" group by groups", dictionary=True)
-    except:
-      raise
-    gtr = {}
-    retRows = []
-    if(rows):
-      for row in rows:
-        tmpRow = row['groups'].split(",")
-        for tr in tmpRow:
-          gtr[tr.rstrip().lstrip()] = 1
-      for gt in gtr.keys():
-        retRows.append(gt)
-      return(retRows)
-    else:
-      return(0)
+def getHostGroups(dbconn):
+  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+  try:
+    rows = dbconn.execute("select groups from hostInfo where ip=\""+ str(ipAddr) +"\" group by groups", dictionary=True)
+  except:
+    raise
+  gtr = {}
+  retRows = []
+  if(rows):
+    for row in rows:
+      tmpRow = row['groups'].split(",")
+      for tr in tmpRow:
+        gtr[tr.rstrip().lstrip()] = 1
+    for gt in gtr.keys():
+      retRows.append(gt)
+    return(retRows)
+  else:
+    return(0)
 
 def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
   while(1):
@@ -1156,7 +1162,7 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
       logClient.debug("ipaddr : "+ str(ipAddr))
 
       try:
-        rowss = dbconn.execute("SELECT * FROM hostInfo WHERE hostName = \'" + hostName + "\'", dictionary=True)
+        rowss = dbconn.execute("SELECT * FROM hostInfo WHERE ip = \'" + ipAddr + "\'", dictionary=True)
         logClient.debug("hostInfo : "+ str(rowss))
         if(isinstance(rowss,int)):
           rowss = []
@@ -1182,7 +1188,7 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
         logClient.debug(str(sys.exc_info()))
         grps = 0
         try:
-          grps = getHostGroups(hostName,db_conn)
+          grps = getHostGroups(db_conn)
         except:
           logClient.debug(str(sys.exc_info()))
 
@@ -1203,17 +1209,16 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
                           totalRam='"+ str(totalRam) +"', \
                           totalCpus='"+ str(totalCpus) +"', \
                           totalSwap='"+ str(totalSwap) +"' ,\
-                          ip='"+ str(ipAddr) +"' ,\
+                          hostName='"+ str(hostName) +"' ,\
                           os='"+ str("default,"+ plat) +"' ,\
                           groups='"+ ",".join(grps) +"' \
-                          WHERE hostName = \'"+ str(hostName) +"\'")
+                          WHERE ip = \'"+ str(ipAddr) +"\'")
         except:
           logClient.debug(str(sys.exc_info()))
-          continue
 
 
       try:
-        rowss = dbconn.execute("SELECT * FROM hostResource WHERE hostName = \'" + str(hostName) + "\'", dictionary=True)
+        rowss = dbconn.execute("SELECT * FROM hostResource WHERE ip = \'" + str(ipAddr) + "\'", dictionary=True)
         if(isinstance(rowss,int)):
           rowss = []
       except:
@@ -1221,22 +1226,21 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
       if(len(rowss) == 0):
         try:
           logClient.debug(" : Trying to insert hostResource")
-          dbconn.execute("INSERT INTO hostResource (hostName, freeCpus) VALUES (\'"
-                        + hostName +"\'," \
+          dbconn.execute("INSERT INTO hostResource (hostName,ip,freeCpus) VALUES (\'"
+                        + hostName +"\',\'" \
+                        + ipAddr +"\'," \
                         + str(totalCpus) +")")
         except:
           logClient.debug(str(sys.exc_info()))
-          continue
       else:
         try:
           logClient.debug(" : Trying to update hostResource")
-          dbconn.execute("UPDATE hostResource SET freeCpus=\'"+ str(totalCpus) +"\' WHERE hostName=\'"+ str(hostName) +"\'")
+          dbconn.execute("UPDATE hostResource SET freeCpus=\'"+ str(totalCpus) +"\' WHERE ip=\'"+ str(ipAddr) +"\'")
         except:
           logClient.debug(str(sys.exc_info()))
-          continue
 
       try:
-        rowss = dbconn.execute("SELECT * FROM hostAlive WHERE hostName=\'" + hostName + "\'", dictionary=True)
+        rowss = dbconn.execute("SELECT * FROM hostAlive WHERE ip=\'" + ipAddr + "\'", dictionary=True)
         if(isinstance(rowss,int)):
           rowss = []
       except:
@@ -1244,10 +1248,15 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
       if(len(rowss) == 0):
         try:
           logClient.debug(" : Trying to insert hostAlive")
-          dbconn.execute("INSERT INTO hostAlive (hostName) VALUES (\'"+ str(hostName) +"\')")
+          dbconn.execute("INSERT INTO hostAlive (hostName,ip) VALUES (\'"+ str(hostName) +"\',\'"+ str(ipAddr) +"\')")
         except:
           logClient.debug(str(sys.exc_info()))
-          continue
+          try:
+            logClient.dead(" : Trying to update hostAlive")
+            dbconn.execute("UPDATE hostAlive SET ip=\'"+ str(ipAddr) +"\' WHERE hostName=\'"+ str(hostName) +"\'")
+          except:
+            logClient.debug(str(sys.exc_info()))
+          
 
 
       try:
@@ -1258,10 +1267,14 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
         logClient.debug(str(sys.exc_info()))
       if(len(rowss) == 0):
         try:
-          dbconn.execute("INSERT INTO hostEffectiveResource (hostName) VALUES (\'"+ str(hostName) +"\')")
+          dbconn.execute("INSERT INTO hostEffectiveResource (hostName,ip) VALUES (\'"+ str(hostName) +"\',\'"+ str(ipAddr) +"\')")
         except:
           logClient.debug(str(sys.exc_info()))
-          continue
+          try:
+            logClient.dead(" : Trying to update hostEffectiveResource")
+            dbconn.execute("UPDATE hostEffectiveResource SET ip=\'"+ str(ipAddr) +"\' WHERE hostName=\'"+ str(hostName) +"\'")
+          except:
+            logClient.debug(str(sys.exc_info()))
       #upHostAliveStatus(hostName, 1)
       break
     except:
@@ -1270,22 +1283,24 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
 
 
 def setHostResMem(hostName, dbconn,freeRam='0',freeSwap='0', load1='0', load5='0', load10='0'):
+  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
   try:
     dbconn.execute("UPDATE hostResource SET freeRam=\'" + str(freeRam) +"\' \
           , freeSwap=\'"+ str(freeSwap) +"\' \
           , load1=\'"+ str(load1) +"\' \
           , load5=\'"+ str(load5) +"\' \
           , load10=\'"+ str(load10) +"\' \
-          WHERE hostName=\'"+ str(hostName) +"\'")
+          WHERE ip=\'"+ str(ipAddr) +"\'")
   except:
     logClient.debug(str(sys.exc_info()))
     return(0)
   return(1)
 
 def setFreeCpus(frameInfo, dbconn):
+  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
   hostName = socket.gethostname()
   try:
-    dbconn.execute("UPDATE hostResource SET freeCpus=freeCpus+"+ str(frameInfo['fThreads']) +" WHERE hostName=\'"+ str(hostName) +"\'")
+    dbconn.execute("UPDATE hostResource SET freeCpus=freeCpus+"+ str(frameInfo['fThreads']) +" WHERE ip=\'"+ str(ipAddr) +"\'")
     logClient.debug(" : freeing CPUs : "+ str(hostName) +":"+ str(frameInfo['fThreads']))
   except:
     logClient.debug(str(sys.exc_info()))

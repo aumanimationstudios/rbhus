@@ -60,7 +60,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.labelUser.setText(os.environ['rbhus_acl_user'])
     self.pushLogout.clicked.connect(self.logout)
     
-    
+    self.afterTimeEdit.setDateTime(QtCore.QDateTime.currentDateTime())
     for group in groups:
       self.comboHostGroup.addItem(_fromUtf8(group))
     ind = 0
