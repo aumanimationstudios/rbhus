@@ -48,8 +48,8 @@ db_conn = dbRbhus.dbRbhus()
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = logging.FileHandler('/var/log/rbhusClient.log')
 elif(sys.platform.find("win") >=0):
-  #LOG_FILENAME = logging.FileHandler(tempDir + os.sep + str(hostname) +".log")
-  LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusClient_'+ hostname +'.log')
+  LOG_FILENAME = logging.FileHandler(tempDir + os.sep + str(hostname) +".log")
+  #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusClient_'+ hostname +'.log')
 
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')

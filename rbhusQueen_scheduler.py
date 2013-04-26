@@ -123,6 +123,7 @@ def arrangedActiveTasks():
   afterTasks = {}
   #logging.debug("activeTasks :"+ str(activeTasks))
   if(activeTasks):
+    #logging.debug("w1")
     for activeTask in activeTasks:
       try:
         priorities[activeTask["priority"]].append(activeTask)
@@ -302,9 +303,12 @@ def insertFramesInToBatchId(batchId,frameNo):
 def scheduler():
   while(1):
     freeHosts = getFreeHosts()
+    #logging.debug("f1")
     if(freeHosts):
+      #logging.debug("f2")
       activeTasks = arrangedActiveTasks()
       if(activeTasks):
+        #logging.debug("f3")
         afterTasks = {}
         for activeTask in activeTasks:
           if(activeTask["afterTasks"]):
@@ -339,6 +343,7 @@ def scheduler():
             totalFreeHosts = len(freeHosts)
             totalTaskFrames = len(taskFrames)
             assignedHost = getBestHost(activeTask)
+            
             if(assignedHost):
               #Initialize batch id for the frame
               while(1):
@@ -364,7 +369,7 @@ def scheduler():
                 print("insert into batch id : " + str(batchId) +" : "+ str(taskFrames[bB]['frameId']))
                 insertFramesInToBatchId(batchId,taskFrames[bB]['frameId'])
                 taskFramesToAssign.append(taskFrames[bB]['frameId'])
-                
+              logging.debug("f2") 
               #assignBatchToHost(assignedHost, activeTask, batchId)  
               assignFramesToHost(assignedHost, activeTask, taskFramesToAssign, batchId)
               logging.debug("batchID : "+ str(batchId) +" : ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(activeTask["id"]) +" : "+ str(taskFramesToAssign))

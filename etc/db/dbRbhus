@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.5.28, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.30, for Linux (x86_64)
 --
 -- Host: blues2    Database: rbhus
 -- ------------------------------------------------------
@@ -114,6 +114,8 @@ CREATE TABLE `frames` (
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - unassigned\n1 - assigned\n2 - pending (Intermidiate state before the client picks it up for running)\n3 - running\n4 - done\n5 - failed\n6 - hold\n7 - autohold\n9 - killed',
   `batchId` varchar(100) NOT NULL DEFAULT 'default',
   `batchStatus` int(2) DEFAULT '0',
+  `wallTime` int(32) DEFAULT NULL,
+  `cpuTime` int(32) DEFAULT NULL,
   PRIMARY KEY (`id`,`frameId`),
   KEY `fs_frames` (`id`),
   CONSTRAINT `fk_frames` FOREIGN KEY (`id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -129,10 +131,11 @@ DROP TABLE IF EXISTS `hostAlive`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostAlive` (
   `hostName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `ip` varchar(92) NOT NULL,
   `status` int(2) NOT NULL DEFAULT '1' COMMENT '0 - dead	\n1 - alive',
   PRIMARY KEY (`hostName`),
   KEY `fk_hostAlive_1` (`hostName`),
-  CONSTRAINT `fk_hostAlive_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `fk_hostAlive_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -145,10 +148,11 @@ DROP TABLE IF EXISTS `hostEffectiveResource`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostEffectiveResource` (
   `hostName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `ip` varchar(92) NOT NULL,
   `eCpus` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`hostName`),
   KEY `fk_hostEffectiveResource_1` (`hostName`),
-  CONSTRAINT `fk_hostEffectiveResource_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `fk_hostEffectiveResource_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table manages the amount of resources made available to';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -169,7 +173,8 @@ CREATE TABLE `hostInfo` (
   `weight` int(2) NOT NULL DEFAULT '1',
   `ip` varchar(92) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
   `os` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`hostName`)
+  PRIMARY KEY (`hostName`),
+  UNIQUE KEY `ip_UNIQUE` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contains all the static info on a host';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -182,6 +187,7 @@ DROP TABLE IF EXISTS `hostResource`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostResource` (
   `hostName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `ip` varchar(92) NOT NULL,
   `freeRam` bigint(20) NOT NULL DEFAULT '0',
   `freeCpus` bigint(20) NOT NULL DEFAULT '0',
   `freeSwap` bigint(20) NOT NULL DEFAULT '0',
@@ -191,7 +197,7 @@ CREATE TABLE `hostResource` (
   `status` int(2) unsigned zerofill NOT NULL DEFAULT '01' COMMENT '1 - active(ready for rendering)\n2 - stopped(autoactive after a timeout)\n3 - forced off\n',
   PRIMARY KEY (`hostName`),
   KEY `fk_hostResource_1` (`hostName`),
-  CONSTRAINT `fk_hostResource_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `fk_hostResource_1` FOREIGN KEY (`hostName`) REFERENCES `hostInfo` (`hostName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -276,7 +282,7 @@ CREATE TABLE `tasks` (
   KEY `fk_tasks_2` (`fileType`),
   CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
+) ENGINE=InnoDB AUTO_INCREMENT=477 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -304,4 +310,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-02-02 12:14:21
+-- Dump completed on 2013-04-26  6:22:38

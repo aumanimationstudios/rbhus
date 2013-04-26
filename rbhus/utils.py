@@ -162,6 +162,7 @@ class tasks(object):
       rows = self.db_conn.execute("select last_insert_id()", dictionary = True)
       self.taskId =  rows[0]['last_insert_id()']
       self.taskDetails = self._getTaskDetails(self.taskId)
+      self.db_conn.execute("insert into tasksLog (id) values ("+ str(self.taskId) +")")
       return(self.taskId)
     except:
       self.taskId = 0
