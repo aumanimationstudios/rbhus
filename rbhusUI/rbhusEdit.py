@@ -265,6 +265,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       self.lineEditLayer.setText(self.taskValues['layer'])
       self.lineEditResolution.setText(self.taskValues['resolution'])
       self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'])
+      self.lineEditImageType.setText(self.taskValues['imageType'])
       self.spinRerunThresh.setValue(self.taskValues['rerunThresh'])
       self.spinMinBatch.setValue(self.taskValues['minBatch'])
       self.spinMaxBatch.setValue(self.taskValues['maxBatch'])

@@ -81,7 +81,12 @@ if(renderer != "default"):
   RENDERCMD = RENDERCMD +" -E "+ renderer
 RENDERCMD = RENDERCMD +" -t "+ rThreads
 if(layer != "default"):
-  layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name].use = False\n\nbpy.context.scene.render.layers[\'"+ layer +"\'].use = True"
+  
+  layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name].use = False\n\n"
+  lay = layer.split(",")
+  for l in lay:
+    if(l):
+      layerScript = layerScript + "\nbpy.context.scene.render.layers[\'"+ l +"\'].use = True\n"
   f = open(layerScF,"w")
   f.writelines(layerScript)
   f.flush()

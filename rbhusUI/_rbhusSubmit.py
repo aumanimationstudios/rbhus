@@ -188,6 +188,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     submitDict['hostGroups'] = str(self.comboHostGroup.currentText())
     submitDict['renderer'] = str(self.comboRenderer.currentText())
     submitDict['layer'] = str(self.lineEditLayer.text())
+    submitDict['imageType'] = str(self.lineEditImageType.text())
     
     prios = str(self.comboPrio.currentText())
     if(prios == "low"):
