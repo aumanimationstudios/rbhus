@@ -282,7 +282,7 @@ class dbRbhus:
     try:
       rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
                       WHERE (tasks.id = tasksLog.id) \
-                      AND ((tasks.status != "+ str(constants.taskStopped) +") or (tasks.status != "+ str(constants.taskAutoStopped) +")) \
+                      AND ((tasks.status != "+ str(constants.taskStopped) +") or (tasks.status != "+ str(constants.taskAutoStopped) +") or (tasks.status != "+ str(constants.taskWaiting) +")) \
                       ORDER BY tasks.priority DESC", dictionary=True)
     
       #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem

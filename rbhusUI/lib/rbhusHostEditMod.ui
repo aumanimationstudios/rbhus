@@ -39,7 +39,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>imageName</string>
+       <string>eCpus</string>
       </property>
      </widget>
     </item>

@@ -71,7 +71,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.lineEditDescription.textChanged.connect(self.reset_desc)
     self.lineEditResolution.textChanged.connect(self.reset_res)
     self.lineEditCamera.textChanged.connect(self.reset_cam)
-    
+    self.lineEditAfterTask.textChanged.connect(self.reset_afterTask)
     print self.afterTimeEdit.dateTime().toString()
     
     
@@ -156,6 +156,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
   def reset_afc(self):
     self.db_afc = 1
+  
+  def reset_afterTask(self):
+    self.db_afterTask = 1
     
     
   def applyNew(self):
@@ -213,6 +216,8 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       editDict['description'] = str(self.db_desc)
     if(self.db_os):
       editDict['os'] = str(self.comboOsType.currentText())
+    if(self.db_afterTask):
+      editDict['afterTasks'] = str(self.lineEditAfterTask.text())
     print(str(editDict))
     try:
       self.task.edit(editDict)
@@ -273,6 +278,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
       self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
       self.lineEditDescription.setText(self.taskValues['description'])
+      self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
       batchFF = self.taskValues['batch']
       self.comboBatching.setCurrentIndex(batchFF)
       batchAD = constants.batchStatus[batchFF]

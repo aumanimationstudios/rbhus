@@ -25,6 +25,7 @@ import time
 import signal
 import subprocess
 import psutil
+import re
 if(sys.platform.find("linux") >= 0):
   import pwd
 
@@ -103,7 +104,7 @@ def killProcessKids(ppid):
 # Get the host info and update the database.
 def init():
 
-  hostname = socket.gethostname()
+  hostname,ipAddr = getHostNameIP()
   totalCpus = multiprocessing.cpu_count()
   totalMem = totalMemInfo()
   ret = setHostInfo(db_conn,hostname,totalMem['MemTotal'],totalCpus,totalMem['SwapTotal'])
@@ -155,14 +156,23 @@ def loadAvg():
 
 
 def upHostAliveStatus(hostName, status, dbconn):
-  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+  hostname,ipAddr = getHostNameIP()
   try:
     dbconn.execute("UPDATE hostAlive SET status = "+ str(status) +" WHERE ip=\'"+ str(ipAddr) +"\'")
   except:
     return(0)
   return(1)
 
-
+def getHostNameIP():
+  while(1):
+    try:
+      hostname = socket.gethostname()
+      ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+      return(hostname,ipAddr)
+    except:
+      logClient.debug(str(sys.exc_info()))
+      time.sleep(1)
+    
 
 def getAssignedFrames(qAssigned):
   if(sys.platform.find("linux") >=0):
@@ -170,8 +180,7 @@ def getAssignedFrames(qAssigned):
   db_conn = dbRbhus.dbRbhus()
   logClient.debug(str(os.getpid()) + ": getAssignedFrames func")
   while(1):
-    hostname = socket.gethostname()
-    ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+    hostname,ipAddr = getHostNameIP()
     rows = 0
     try:
       rows = db_conn.execute("SELECT frames.frameId, frames.fThreads,frames.batchId, tasks.* FROM frames, tasks \
@@ -325,6 +334,8 @@ def _execFrames(frameInfo,frameScrutiny,cpuAffi):
 def execFrames(frameInfo,frameScrutiny):
   db_conn = dbRbhus.dbRbhus()
   batchedFrames = db_conn.getBatchedFrames(frameInfo['batchId'])
+  hostname,ipAddr = getHostNameIP()
+  
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ "-".join(batchedFrames))
   
@@ -371,7 +382,12 @@ def execFrames(frameInfo,frameScrutiny):
     os.environ['rbhus_runScript'] = runScript
 
 
-    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ "-".join(frameInfo['batchId']) +".log"
+    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ frameInfo['batchId'] +".log"
+    try:
+      db_conn.execute("update frames set logFile=\'"+ str(logFile) +"\' where batchId=\'"+ str(frameInfo['batchId']) +"\'")
+    except:
+      logClient.debug("update logFile  : "+ str(sys.exc_info()))
+      
     os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
     if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]
@@ -442,7 +458,7 @@ def execFrames(frameInfo,frameScrutiny):
     logClient.debug("logFile : "+ str(logFile))
     try:
       logD = open(logFile,"a+",0)
-      logD.write("START \n"+ socket.gethostname() +" : "+ time.asctime() +"\n")
+      logD.write("START \n"+ hostname +" : "+ time.asctime() +"\n")
       logD.write("FRAMES : "+ " ".join(batchedFrames))
     except:
       pass
@@ -595,14 +611,8 @@ def execFrames(frameInfo,frameScrutiny):
     #time.sleep(0.5)
     if(sys.platform.find("win") >= 0):
       killFrame(db_conn,frameInfo['id'],frameInfo['frameId'],pidfileLock,-1)
-    
-
-
-
-
-
     try:
-      logD.write(socket.gethostname() +" : "+ time.asctime() +"\nEND\n\n")
+      logD.write(hostname +" : "+ time.asctime() +"\nEND\n\n")
       logD.close()
     except:
       pass
@@ -998,8 +1008,7 @@ def setFramesStatus(taskId, frames, status, dbconn):
 
 
 def getEffectiveDetails(db_conn):
-  hostname = socket.gethostname()
-  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+  hostname,ipAddr = getHostNameIP()
   try:
     rows = db_conn.execute("SELECT * FROM hostEffectiveResource WHERE ip=\'"+ str(ipAddr) +"\'", dictionary=True)
   except:
@@ -1019,7 +1028,7 @@ def atUrService():
   logClient.debug(str(os.getpid()) + ": atUrService func")
   while(1):
     try:
-      hostName = socket.gethostname()
+      hostName,ipAddr = getHostNameIP()
       serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       serverSocket.bind(("", 6660))
       serverSocket.listen(5)
@@ -1131,7 +1140,7 @@ def freeMeminfo():
 
 
 def getHostGroups(dbconn):
-  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+  hostname,ipAddr = getHostNameIP()
   try:
     rows = dbconn.execute("select groups from hostInfo where ip=\""+ str(ipAddr) +"\" group by groups", dictionary=True)
   except:
@@ -1158,7 +1167,7 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
       plat = "win"
 
     try:
-      ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+      hostname,ipAddr = getHostNameIP()
       logClient.debug("ipaddr : "+ str(ipAddr))
 
       try:
@@ -1283,7 +1292,7 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
 
 
 def setHostResMem(hostName, dbconn,freeRam='0',freeSwap='0', load1='0', load5='0', load10='0'):
-  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+  hostname,ipAddr = getHostNameIP()
   try:
     dbconn.execute("UPDATE hostResource SET freeRam=\'" + str(freeRam) +"\' \
           , freeSwap=\'"+ str(freeSwap) +"\' \
@@ -1297,11 +1306,10 @@ def setHostResMem(hostName, dbconn,freeRam='0',freeSwap='0', load1='0', load5='0
   return(1)
 
 def setFreeCpus(frameInfo, dbconn):
-  ipAddr = socket.gethostbyname(socket.gethostname()).strip()
-  hostName = socket.gethostname()
+  hostname,ipAddr = getHostNameIP()
   try:
     dbconn.execute("UPDATE hostResource SET freeCpus=freeCpus+"+ str(frameInfo['fThreads']) +" WHERE ip=\'"+ str(ipAddr) +"\'")
-    logClient.debug(" : freeing CPUs : "+ str(hostName) +":"+ str(frameInfo['fThreads']))
+    logClient.debug(" : freeing CPUs : "+ str(hostname) +":"+ str(frameInfo['fThreads']))
   except:
     logClient.debug(str(sys.exc_info()))
     return(0)
