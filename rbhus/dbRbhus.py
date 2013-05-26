@@ -397,6 +397,17 @@ class dbRbhus:
       modLogger.error(str(sys.exc_info()))
       return(0)
     return(rows)
+  
+  def getFrameInfo(self,taskid, frameid):
+    try:
+      rows = self.execute("SELECT * FROM frames \
+                      WHERE frames.id="+ str(taskid) +" \
+                      AND frames.frameId="+ str(frameid), dictionary=True)
+    except:
+      modLogger.debug(str(sys.exc_info()))
+      rows = 0
+    return(rows[0])
+  
     
   def getHostInfo(self,status):
     try:

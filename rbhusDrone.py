@@ -459,7 +459,7 @@ def execFrames(frameInfo,frameScrutiny):
     try:
       logD = open(logFile,"a+",0)
       logD.write("START \n"+ hostname +" : "+ time.asctime() +"\n")
-      logD.write("FRAMES : "+ " ".join(batchedFrames))
+      logD.write("FRAMES : "+ " ".join(batchedFrames) +"\n")
     except:
       pass
 

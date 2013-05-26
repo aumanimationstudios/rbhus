@@ -5,7 +5,7 @@ import os
 import sys
 import socket
 import time
-
+import subprocess
 
 
 progPath =  sys.argv[0].split(os.sep)
@@ -67,6 +67,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkTDone.clicked.connect(self.popTableList)
     self.checkTHold.clicked.connect(self.popTableList)
     self.tableList.customContextMenuRequested.connect(self.popupTask)
+    self.tableFrames.customContextMenuRequested.connect(self.popupFrames)
     self.taskHold.clicked.connect(self.holdTask)
     self.taskRerun.clicked.connect(self.rerunTask)
     self.taskActivate.clicked.connect(self.activateTask)
@@ -95,6 +96,29 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     action = menu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
       print("test1")
+    if(action == test2Action):
+      print("test2")
+    if(action == test3Action):
+      print("test3")
+
+  def popupFrames(self, pos):
+    selFramesDict = self.selectedFrames()
+    menu = QtGui.QMenu()
+    db_conn = dbRbhus.dbRbhus()
+    test1Action = menu.addAction("check log")
+    test2Action = menu.addAction("test2")
+    test3Action = menu.addAction("test3")
+    
+    action = menu.exec_(self.tableFrames.mapToGlobal(pos))
+    if(action == test1Action):
+      for x in selFramesDict:
+        
+        fInfos = db_conn.getFrameInfo(x['id'],x['frameId'])
+        if(fInfos):
+          print(fInfos)
+          print("log file : "+ str(fInfos['logFile']))
+          openP = subprocess.Popen(["."+ os.sep + "rbhusReadText.py",fInfos['logFile']])
+          
     if(action == test2Action):
       print("test2")
     if(action == test3Action):
@@ -178,7 +202,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       selTasks.append(x['id'].lstrip("0"))
       
     if(selTasks and (len(selTasks) == 1)):
-      os.system(editTaskCmd +" "+ str(selTasks[0]) +"&")
+      subprocess.Popen([editTaskCmd,str(selTasks[0])])
     else:
       print "madness .. too many tasks selected"
   
@@ -279,7 +303,6 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(cTAutohold):
       statusToCheck.append(str(constants.taskAutoStopped))
     
-    print(statusToCheck) 
     
     try:
       conn = db.connRbhus()
@@ -302,6 +325,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for row in rows:
       colCount = len(row)
       break
+      
+    findRows = []
+    for row in rows:
+      sFlag = 0
+      for colName in self.colNamesTask:
+        if(str(row[colName]).find(str(self.lineEditSearch.text())) >= 0):
+          sFlag = 1
+      if(sFlag):
+        findRows.append(row)
+    rows = findRows   
+     
+    
     self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8)) 
     self.tableList.setColumnCount(colCount)
     self.tableList.setRowCount(len(rows))
@@ -317,34 +352,34 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
     indx = 0
     for row in rows:
-      sFlag = 0
-      for colName in self.colNamesTask:
-        if(str(row[colName]).find(str(self.lineEditSearch.text())) >= 0):
-          sFlag = 1
+      #sFlag = 0
+      #for colName in self.colNamesTask:
+        #if(str(row[colName]).find(str(self.lineEditSearch.text())) >= 0):
+          #sFlag = 1
         
-      if(sFlag):
-        item = QtGui.QTableWidgetItem()
-        self.tableList.setVerticalHeaderItem(indx, item)
-        colIndx = 0
-        for colName in self.colNamesTask:
-          if(colName == "status"):
-            item = QtGui.QTableWidgetItem()
-            self.tableList.setItem(indx, colIndx, item)
-            self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
-            colIndx = colIndx + 1
-            continue
-          if(colName == "id"):
-            item = QtGui.QTableWidgetItem()
-            self.tableList.setItem(indx, colIndx, item)
-            self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
-            colIndx = colIndx + 1
-            continue
-          
+      #if(sFlag):
+      item = QtGui.QTableWidgetItem()
+      self.tableList.setVerticalHeaderItem(indx, item)
+      colIndx = 0
+      for colName in self.colNamesTask:
+        if(colName == "status"):
           item = QtGui.QTableWidgetItem()
           self.tableList.setItem(indx, colIndx, item)
-          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
-        indx = indx + 1
+          continue
+        if(colName == "id"):
+          item = QtGui.QTableWidgetItem()
+          self.tableList.setItem(indx, colIndx, item)
+          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        
+        item = QtGui.QTableWidgetItem()
+        self.tableList.setItem(indx, colIndx, item)
+        self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        colIndx = colIndx + 1
+      indx = indx + 1
 
     self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
     self.tableList.resizeColumnsToContents()

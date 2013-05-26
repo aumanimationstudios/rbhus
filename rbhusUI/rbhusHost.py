@@ -20,7 +20,7 @@ sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 if(sys.platform.find("win") >= 0):
   rEc = "rbhusHostEdit.py"
 elif(sys.platform.find("linux") >= 0):
-  rEc = "rbhusHostEdit"
+  rEc = "rbhusHostEdit.py"
   
 editHostCmd = cwd.rstrip(os.sep) + os.sep + rEc
 
