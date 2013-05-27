@@ -68,46 +68,51 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkTHold.clicked.connect(self.popTableList)
     self.tableList.customContextMenuRequested.connect(self.popupTask)
     self.tableFrames.customContextMenuRequested.connect(self.popupFrames)
-    self.taskHold.clicked.connect(self.holdTask)
-    self.taskRerun.clicked.connect(self.rerunTask)
-    self.taskActivate.clicked.connect(self.activateTask)
-    self.taskEdit.clicked.connect(self.editTask)
+    #self.taskHold.clicked.connect(self.holdTask)
+    #self.taskRerun.clicked.connect(self.rerunTask)
+    #self.taskActivate.clicked.connect(self.activateTask)
+    #self.taskEdit.clicked.connect(self.editTask)
     self.taskDelete.clicked.connect(self.delTask)
     self.pushLogout.clicked.connect(self.logout)
     
-    self.frameStop.clicked.connect(self.stopFrame)
-    self.frameRerun.clicked.connect(self.rerunFrame)
-    self.frameHold.clicked.connect(self.holdFrame)
+    #self.frameStop.clicked.connect(self.stopFrame)
+    #self.frameRerun.clicked.connect(self.rerunFrame)
+    #self.frameHold.clicked.connect(self.holdFrame)
     
     #self.tableFrames.itemSelectionChanged.connect(self.stopFrame)
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.popTableFrames)
     self.checkRefresh.clicked.connect(self.timeCheck)
     self.lineEditSearch.textChanged.connect(self.popTableList)
+    self.lineEditSearchFrames.textChanged.connect(self.popTableFrames)
     self.popTableList()
     self.labelUser.setText(os.environ['rbhus_acl_user'])
     
   def popupTask(self, pos):
     menu = QtGui.QMenu()
-    test1Action = menu.addAction("test1")
-    test2Action = menu.addAction("test2")
-    test3Action = menu.addAction("test3")
+    test1Action = menu.addAction("activate")
+    test2Action = menu.addAction("hold")
+    test3Action = menu.addAction("rerun")
+    test4Action = menu.addAction("edit")
     
     action = menu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
-      print("test1")
+      self.activateTask()
     if(action == test2Action):
-      print("test2")
+      self.holdTask()
     if(action == test3Action):
-      print("test3")
+      self.rerunTask
+    if(action == test4Action):
+      self.editTask()
 
   def popupFrames(self, pos):
     selFramesDict = self.selectedFrames()
     menu = QtGui.QMenu()
     db_conn = dbRbhus.dbRbhus()
     test1Action = menu.addAction("check log")
-    test2Action = menu.addAction("test2")
-    test3Action = menu.addAction("test3")
+    test2Action = menu.addAction("stop/kill")
+    test3Action = menu.addAction("hold")
+    test4Action = menu.addAction("rerun")
     
     action = menu.exec_(self.tableFrames.mapToGlobal(pos))
     if(action == test1Action):
@@ -120,9 +125,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           openP = subprocess.Popen(["."+ os.sep + "rbhusReadText.py",fInfos['logFile']])
           
     if(action == test2Action):
-      print("test2")
+      self.stopFrame()
     if(action == test3Action):
-      print("test3")
+      self.holdFrame()
+    if(action == test4Action):
+      self.rerunFrame()
       
   
   def logout(self):
@@ -461,6 +468,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
       return()
       
+    
+    findRows = []
+    for row in rows:
+      sFlag = 0
+      for colName in self.colNamesFrames:
+        if(str(row[colName]).find(str(self.lineEditSearchFrames.text())) >= 0):
+          sFlag = 1
+      if(sFlag):
+        findRows.append(row)
+    rows = findRows   
+    
+    
     if(not rows):
       return()
     for row in rows:
