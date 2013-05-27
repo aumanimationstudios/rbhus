@@ -491,6 +491,18 @@ class dbRbhus:
       return(-1)
     return(-2)
     
+  
+  def getTaskDetails(self,taskId):
+    try:
+      rows = self.execute("select * from tasks where id="+ str(taskId), dictionary=True)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    if(rows):
+      return(rows[0])
+    else:
+      return(0)
+    
     
   #Return value is the status of the task that needs to be set
   def checkTaskCompleted(self,taskId):

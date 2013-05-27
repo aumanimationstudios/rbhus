@@ -88,12 +88,32 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.popTableList()
     self.labelUser.setText(os.environ['rbhus_acl_user'])
     
+  def previewTask(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    db_conn = dbRbhus.dbRbhus()
+    if(selTasksDict):
+      for x in selTasksDict:
+        tD = db_conn.getTaskDetails(x['id'])
+        oDir = tD['outDir']
+        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir)
+        if(fila):
+          for fi in fila:
+            if(sys.platform.find("win") >= 0):
+              subprocess.Popen(["z:/standard/template/djv-0.8.3-x64/bin/djv_view.exe",fi,"-file_seq_auto true"])
+            elif(sys.platform.find("linux") >= 0):
+              subprocess.Popen(["/usr/local/bin/djv_view",fi,"-file_seq_auto","true","-file_cache","true"])
+            print(fi)
+          
+        
+  
   def popupTask(self, pos):
     menu = QtGui.QMenu()
     test1Action = menu.addAction("activate")
     test2Action = menu.addAction("hold")
     test3Action = menu.addAction("rerun")
     test4Action = menu.addAction("edit")
+    test5Action = menu.addAction("open dir")
     
     action = menu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
@@ -104,6 +124,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.rerunTask
     if(action == test4Action):
       self.editTask()
+    if(action == test5Action):
+      self.previewTask()
 
   def popupFrames(self, pos):
     selFramesDict = self.selectedFrames()
