@@ -140,7 +140,10 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       return(0)     
   
   def selectFileName(self):
-    fila = QtGui.QFileDialog.getOpenFileNames()
+    if(sys.platform.find("win") >= 0):
+      fila = QtGui.QFileDialog.getOpenFileNames(directory="x:/")
+    elif(sys.platform.find("linux") >= 0):
+      fila = QtGui.QFileDialog.getOpenFileNames(directory="/proj/")
     if(fila):
       if(self.lineEditFileName.text()):
         self.lineEditFileName.setText(self.lineEditFileName.text() +","+ fila.join(","))
