@@ -44,6 +44,10 @@ class login():
     
   def rememberMeStore(self):
     passwdF = tempfile.gettempdir() + os.sep +"sys_init.dnd"
+    try:
+      os.remove(passwdF)
+    except:
+      print(str(sys.exc_info()))
     pf = open(passwdF,"w")
     pf.writelines(self.username)
     

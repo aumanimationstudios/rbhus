@@ -21,7 +21,7 @@ sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 rEc = "rbhusEdit.py"
   
 editTaskCmd = cwd.rstrip(os.sep) + os.sep + rEc
-
+editTaskCmd = editTaskCmd.replace("\\","/")
 print editTaskCmd
 import rbhusListMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -229,11 +229,14 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     selTasks = []
     for x in selTasksDict:
       selTasks.append(x['id'].lstrip("0"))
-      
-    if(selTasks and (len(selTasks) == 1)):
-      subprocess.Popen([editTaskCmd,str(selTasks[0])])
-    else:
-      print "madness .. too many tasks selected"
+    
+    
+    if(selTasks):
+      for sT in selTasks:
+        try:
+          subprocess.Popen([sys.executable,editTaskCmd,str(sT)])
+        except:
+          print(str(sys.exc_info()))
   
   def holdTask(self):
     selTasksDict = self.selectedTasks()

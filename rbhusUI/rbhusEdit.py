@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 from PyQt4 import QtCore, QtGui
 import glob
 import os

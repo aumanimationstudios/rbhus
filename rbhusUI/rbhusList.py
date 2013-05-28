@@ -79,7 +79,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
       print(str(self.acl.username))
       os.system("env |& grep -i rbhus_")
       if(sys.platform.find("win") >= 0):
-        os.system("."+ os.sep +"_rbhusList.py &")
+        os.system("."+ os.sep +"_rbhusList.py")
       elif(sys.platform.find("linux") >= 0):
         os.system("."+ os.sep +"_rbhusList.py &")
     else:
