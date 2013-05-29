@@ -6,6 +6,7 @@ import sys
 import socket
 import time
 import subprocess
+import re
 
 
 progPath =  sys.argv[0].split(os.sep)
@@ -43,7 +44,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
-    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","renderer","fRange","afterTasks","priority","submitTime","afterTime","status","description"]
+    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","renderer","fRange","pad","afterTasks","priority","submitTime","afterTime","status","description"]
     self.colNamesFrames = ["id","frameId","batchId","hostName","ram","sTime","eTime","runCount","status"]
     
     
@@ -96,7 +97,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       for x in selTasksDict:
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
-        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str())
+        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir)
         if(fila):
           for fi in fila:
             if(sys.platform.find("win") >= 0):
@@ -113,13 +114,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for x in selFramesDict:
       tD = db_conn.getTaskDetails(x['id'])
       oDir = tD['outDir']
-      fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(4) +"*")
+      fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*")
       if(fila):
         for fi in fila:
           if(sys.platform.find("win") >= 0):
-            subprocess.Popen(["x:/standard/template/djv-0.8.3-x64/bin/djv_view.exe",str(fi.replace("\\","/")),"-file_seq_auto","true","-file_cache","true"])
+            subprocess.Popen(["x:/standard/template/djv-0.8.3-x64/bin/djv_view.exe",str(fi.replace("\\","/")),"-file_seq_auto","false","-file_cache","true"])
           elif(sys.platform.find("linux") >= 0):
-            subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-file_seq_auto","true","-file_cache","true"])
+            subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-file_seq_auto","false","-file_cache","true"])
           print(fi)
             
   
@@ -446,8 +447,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     selTasksDict = self.selectedTasks()
     selTasks = []
+    db_conn = dbRbhus.dbRbhus()
+    padDict = {}
     for x in selTasksDict:
       selTasks.append(x['id'])
+      padDict[re.sub("^0+","",x['id'])] = x['pad']
+    print(padDict)  
     if(selTasks):
       ids = " or id = ".join(selTasks)
     else:
@@ -557,13 +562,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         if(colName == "id"):
           item = QtGui.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
-          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         if(colName == "frameId"):
           item = QtGui.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
-          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         item = QtGui.QTableWidgetItem()
