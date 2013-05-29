@@ -96,7 +96,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       for x in selTasksDict:
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
-        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir)
+        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str())
         if(fila):
           for fi in fila:
             if(sys.platform.find("win") >= 0):
@@ -106,6 +106,22 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             print(fi)
           
         
+  def previewFrame(self):
+    selFramesDict = self.selectedFrames()
+    selFrames = {}
+    db_conn = dbRbhus.dbRbhus()
+    for x in selFramesDict:
+      tD = db_conn.getTaskDetails(x['id'])
+      oDir = tD['outDir']
+      fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(4) +"*")
+      if(fila):
+        for fi in fila:
+          if(sys.platform.find("win") >= 0):
+            subprocess.Popen(["x:/standard/template/djv-0.8.3-x64/bin/djv_view.exe",str(fi.replace("\\","/")),"-file_seq_auto","true","-file_cache","true"])
+          elif(sys.platform.find("linux") >= 0):
+            subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-file_seq_auto","true","-file_cache","true"])
+          print(fi)
+            
   
   def popupTask(self, pos):
     menu = QtGui.QMenu()
@@ -135,6 +151,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test2Action = menu.addAction("stop/kill")
     test3Action = menu.addAction("hold")
     test4Action = menu.addAction("rerun")
+    test5Action = menu.addAction("check frame")
     
     action = menu.exec_(self.tableFrames.mapToGlobal(pos))
     if(action == test1Action):
@@ -152,6 +169,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.holdFrame()
     if(action == test4Action):
       self.rerunFrame()
+    if(action == test5Action):
+      self.previewFrame()
       
   
   def logout(self):
