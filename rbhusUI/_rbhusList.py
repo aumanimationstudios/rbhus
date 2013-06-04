@@ -116,6 +116,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       oDir = tD['outDir']
       fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*")
       if(fila):
+        print(fila)
         for fi in fila:
           if(sys.platform.find("win") >= 0):
             subprocess.Popen(["x:/standard/template/djv-0.8.3-x64/bin/djv_view.exe",str(fi.replace("\\","/")),"-file_seq_auto","false","-file_cache","true"])
