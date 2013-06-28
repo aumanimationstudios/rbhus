@@ -19,7 +19,7 @@
      <widget class="QPlainTextEdit" name="plainTextEdit"/>
     </item>
     <item>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QCheckBox" name="checkRefresh">
       <property name="text">
        <string>autoRefresh</string>
       </property>

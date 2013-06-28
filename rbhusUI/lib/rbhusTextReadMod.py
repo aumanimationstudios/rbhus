@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusTextReadMod.ui'
 #
-# Created: Sat May 25 23:10:14 2013
-#      by: PyQt4 UI code generator 4.10
+# Created: Sat Jun 29 00:00:34 2013
+#      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -34,6 +34,9 @@ class Ui_readText(object):
     self.plainTextEdit = QtGui.QPlainTextEdit(self.centralwidget)
     self.plainTextEdit.setObjectName(_fromUtf8("plainTextEdit"))
     self.verticalLayout.addWidget(self.plainTextEdit)
+    self.checkRefresh = QtGui.QCheckBox(self.centralwidget)
+    self.checkRefresh.setObjectName(_fromUtf8("checkRefresh"))
+    self.verticalLayout.addWidget(self.checkRefresh)
     readText.setCentralWidget(self.centralwidget)
     self.menubar = QtGui.QMenuBar(readText)
     self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
@@ -48,4 +51,5 @@ class Ui_readText(object):
 
   def retranslateUi(self, readText):
     readText.setWindowTitle(_translate("readText", "MainWindow", None))
+    self.checkRefresh.setText(_translate("readText", "autoRefresh", None))
 

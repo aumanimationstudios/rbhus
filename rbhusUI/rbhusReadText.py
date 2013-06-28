@@ -34,11 +34,33 @@ class Ui_Form(rbhusTextReadMod.Ui_readText):
     Form.setWindowTitle(textFile)
     self.popText(textFile)
     
+    self.timer = QtCore.QTimer()
+    self.timer.timeout.connect(lambda who=textFile: self.popText(who))
+    self.checkRefresh.clicked.connect(self.timeCheck)
+    
   def popText(self,textFile):
     f = open(textFile,"r")
+    self.plainTextEdit.clear()
+    
     for x in f.readlines():
       self.plainTextEdit.insertPlainText(x)
     self.plainTextEdit.setReadOnly(True)
+    self.plainTextEdit.moveCursor(QtGui.QTextCursor.End)
+    
+    f.close()
+    
+  def timeCheck(self):
+    cRefresh = self.checkRefresh.isChecked()
+    if(cRefresh):
+      self.startTimer()
+    else:
+      self.stopTimer()
+  
+  def startTimer(self):
+    self.timer.start(5000)
+
+  def stopTimer(self):
+    self.timer.stop()
   
 
 
