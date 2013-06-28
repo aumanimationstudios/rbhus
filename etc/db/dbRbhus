@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.1.62, for pc-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.30, for Linux (x86_64)
 --
 -- Host: blues2    Database: rbhus
 -- ------------------------------------------------------
@@ -234,6 +234,20 @@ CREATE TABLE `renderer` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `resTemplates`
+--
+
+DROP TABLE IF EXISTS `resTemplates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resTemplates` (
+  `name` varchar(45) NOT NULL,
+  `res` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `seqPlayers`
 --
 
@@ -296,7 +310,7 @@ CREATE TABLE `tasks` (
   KEY `fk_tasks_2` (`fileType`),
   CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=603 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
+) ENGINE=InnoDB AUTO_INCREMENT=776 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -324,4 +338,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-06-06 17:20:15
+-- Dump completed on 2013-06-28 23:57:01
