@@ -131,6 +131,8 @@ class dbRbhus:
       return(None)
     return(frange)
     
+    
+    
   def getBatchId(self, taskId, frameId):
     try:
       rows = self.execute("select batchId from frames where id=\""+ str(taskId) +"\" and frameId=\""+ str(frameId) +"\"",dictionary=True)
@@ -397,6 +399,9 @@ class dbRbhus:
       modLogger.error(str(sys.exc_info()))
       return(0)
     return(rows)
+    
+    
+  
   
   def getFrameInfo(self,taskid, frameid):
     try:

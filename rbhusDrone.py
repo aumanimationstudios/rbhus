@@ -474,7 +474,7 @@ def execFrames(frameInfo,frameScrutiny):
     if(sys.platform.find("linux") >=0):
       while(1):
         try:
-          logClient.debug("/bin/su "+ frameInfo['user'] +" -c \'"+ runCmd +"\' "+ str(logD))
+          logD.write("/bin/su "+ frameInfo['user'] +" -c \'"+ runCmd +"\' "+ str(logD) +"\n\n")
           fProcess = subprocess.Popen("/bin/su "+ frameInfo['user'] +" -c \'"+ runCmd +"\'",shell=True,stdout=logD,stderr=logD)
           break
         except:

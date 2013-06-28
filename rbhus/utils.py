@@ -32,7 +32,16 @@ def getHostGroups():
     return(retRows)
   else:
     return(0)
-      
+    
+def getResTemplates():
+  dbconn = dbRbhus.dbRbhus()
+  try:
+    rows = dbconn.execute("SELECT * FROM resTemplates", dictionary=True)
+  except:
+    print(str(sys.exc_info()))
+    return(0)
+  return(rows)
+    
 def getProjects():
   dbconn = dbRbhus.dbRbhus()
   try:

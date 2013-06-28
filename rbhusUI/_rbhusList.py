@@ -44,7 +44,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
-    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","renderer","fRange","pad","afterTasks","priority","submitTime","afterTime","status","description"]
+    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","priority","submitTime","afterTime","status","description"]
     self.colNamesFrames = ["id","frameId","batchId","hostName","ram","sTime","eTime","runCount","status"]
     
     
@@ -139,7 +139,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(action == test2Action):
       self.holdTask()
     if(action == test3Action):
-      self.rerunTask
+      self.rerunTask()
     if(action == test4Action):
       self.editTask()
     if(action == test5Action):
@@ -161,7 +161,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         
         fInfos = db_conn.getFrameInfo(x['id'],x['frameId'])
         if(fInfos):
-          print(fInfos)
+          #print(fInfos)
           print("log file : "+ str(fInfos['logFile']))
           openP = subprocess.Popen(["."+ os.sep + "rbhusReadText.py",fInfos['logFile']])
           
@@ -453,7 +453,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for x in selTasksDict:
       selTasks.append(x['id'])
       padDict[re.sub("^0+","",x['id'])] = x['pad']
-    print(padDict)  
+    #print(padDict)  
     if(selTasks):
       ids = " or id = ".join(selTasks)
     else:
@@ -575,7 +575,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         item = QtGui.QTableWidgetItem()
         self.tableFrames.setItem(indx, colIndx, item)
         self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
-        print self.tableFrames.item(indx, colIndx).type()
+        #print self.tableFrames.item(indx, colIndx).type()
         colIndx = colIndx + 1
       indx = indx + 1
 

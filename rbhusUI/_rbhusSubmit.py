@@ -52,6 +52,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     groups = rUtils.getHostGroups()
     ostypes = rUtils.getOsTypes()
     ftypes = rUtils.getFileTypes()
+    resTemplates = rUtils.getResTemplates()
     
     self.autoOutDir.setIcon(icon)
     self.autoOutDir.setIconSize(QtCore.QSize(12, 12))
@@ -87,6 +88,18 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     except:
       pass
     self.comboOsType.setCurrentIndex(ind)
+    
+    for rt in resTemplates:
+      self.comboRes.addItem(_fromUtf8(rt['name']))
+    ind = 0
+    try:
+      for rt in resTemplates:
+        if(rt['name'] == "default"):
+          break
+        ind = ind + 1
+    except:
+      pass
+    self.comboRes.setCurrentIndex(ind)
       
     
     
@@ -172,25 +185,38 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       self.afterTimeEdit.setEnabled(True)
     else:
       self.afterTimeEdit.setEnabled(False)
+  
       
+  
   def submitTasks(self):
+    resTemplates = rUtils.getResTemplates()
     submitDict = {}
     files = str(self.lineEditFileName.text())
     cameras = str(self.lineEditCameras.text())
     submitDict['fRange'] = str(self.lineEditFrange.text())
     submitdir = str(self.lineEditOutDir.text())
     submitDict['description'] = str(self.lineEditDescription.text())
-    submitDict['resolution'] = str(self.lineEditResolution.text())
+    if(str(self.lineEditRes.text()) == "default"):
+      for rt in resTemplates:
+        if(rt['name'] == str(self.comboRes.currentText())):
+          submitDict['resolution'] = str(rt['res'])
+          break
+    else:
+      submitDict['resolution'] = str(self.lineEditRes.text())
     if(self.checkAfterTime.isChecked()):
       submitDict['afterTime'] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
     
+    
+    hE = self.checkHold.isChecked()
+    if(hE):
+      submitDict['status'] = constants.taskStopped
     submitDict['afterTasks'] = str(self.lineEditAfterTask.text())
     submitDict['outName'] = str(self.lineEditOutName.text())
     submitDict['os'] = str(self.comboOsType.currentText())
     submitDict['fileType'] = str(self.comboFileType.currentText())
     submitDict['hostGroups'] = str(self.comboHostGroup.currentText())
     submitDict['renderer'] = str(self.comboRenderer.currentText())
-    submitDict['layer'] = str(self.lineEditLayer.text())
+    layers = str(self.lineEditLayer.text())
     submitDict['imageType'] = str(self.lineEditImageType.text())
     
     prios = str(self.comboPrio.currentText())
@@ -243,13 +269,24 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
                 sdc = sd.rstrip("/") +"/"+ c + "/"
               if(re.search('^default$',submitDict['resolution']) == None):
                 sdc = sdc.rstrip("/") +"/"+ submitDict['resolution'] + "/"
-                
-              submitDict['outDir'] = sdc
-              try:
-                b = a.submit(submitDict)
-                print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
-              except:
-                print("Error inserting task : "+ str(sys.exc_info()))
+              if(re.search('^default$',layers) == None):
+                sdcd = sdc
+                for l in layers.split(","):
+                  sdcd = sdc.rstrip("/") +"/"+ l + "/"
+                  submitDict['layer'] = l
+                  submitDict['outDir'] = sdcd
+                  try:
+                    b = a.submit(submitDict)
+                    print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+                  except:
+                    print("Error inserting task : "+ str(sys.exc_info()))
+              else:
+                submitDict['outDir'] = sdc
+                try:
+                  b = a.submit(submitDict)
+                  print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+                except:
+                  print("Error inserting task : "+ str(sys.exc_info()))
         else:
           for c in cameras.split(","):
             if(c):

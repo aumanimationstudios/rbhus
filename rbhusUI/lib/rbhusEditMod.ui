@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>550</width>
-    <height>669</height>
+    <height>706</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -710,7 +710,7 @@
        <item row="3" column="1">
         <widget class="QLineEdit" name="lineEditImageType">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
