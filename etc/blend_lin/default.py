@@ -45,10 +45,12 @@ outputN = os.sep.join(runScript.split(os.sep)[0:-1]) + os.sep +"outputNodes.py"
 layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_layer.py"
 cameraF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_camera.py"
 resF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_res.py"
+defaultF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_defF.py"
 wbd = open(washMyButt,"w")
 wbd.writelines(layerScF +"\n\r")
 wbd.writelines(cameraF +"\n\r")
 wbd.writelines(resF +"\n\r")
+wbd.writelines(defaultF +"\n\r")
 wbd.flush()
 
 
@@ -86,7 +88,11 @@ if(renderer != "default"):
 RENDERCMD = RENDERCMD +" -t "+ rThreads
 
 defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False"
-RENDERCMD = RENDERCMD +" --python "+ defaultScripts
+dF = open(defaultF,"w")
+dF.writelines(defaultScripts)
+dF.flush()
+dF.close()
+RENDERCMD = RENDERCMD +" --python "+ defaultF
 
 if(layer != "default"):
   
