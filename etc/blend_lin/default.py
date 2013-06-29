@@ -87,7 +87,7 @@ if(renderer != "default"):
   RENDERCMD = RENDERCMD +" -E "+ renderer
 RENDERCMD = RENDERCMD +" -t "+ rThreads
 
-defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False"
+defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False\nbpy.context.scene.render.use_overwrite = True"
 dF = open(defaultF,"w")
 dF.writelines(defaultScripts)
 dF.flush()
@@ -96,7 +96,7 @@ RENDERCMD = RENDERCMD +" --python "+ defaultF
 
 if(layer != "default"):
   
-  layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name].use = False\nbpy.context.scene.render.use_overwrite = True\n\n"
+  layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name].use = False\n\n"
   lay = layer.split(",")
   for l in lay:
     if(l):
