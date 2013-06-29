@@ -114,7 +114,7 @@ if(camera != "default"):
   c.close()
   RENDERCMD = RENDERCMD +" --python "+ cameraF
 if(res != "default"):
-  resScript = "import bpy\nbpy.context.scene.render.resolution_x = "+ res.split("x")[0] +"\nbpy.context.scene.render.resolution_y = "+ res.split("x")[1]
+  resScript = "import bpy\nbpy.context.scene.render.resolution_x = "+ res.split("x")[0] +"\nbpy.context.scene.render.resolution_y = "+ res.split("x")[1] +"\nbpy.context.scene.render.resolution_percentage = 100"
   r = open(resF,"w")
   r.writelines(resScript)
   r.flush()
