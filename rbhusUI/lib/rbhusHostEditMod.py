@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusHostEditMod.ui'
 #
-# Created: Thu Jan 10 09:53:11 2013
-#      by: PyQt4 UI code generator 4.9.6
+# Created: Fri Jul  5 22:01:47 2013
+#      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(531, 72)
+    MainWindow.resize(181, 70)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Minimum)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -51,22 +51,34 @@ class Ui_MainWindow(object):
     self.labelImageName.setObjectName(_fromUtf8("labelImageName"))
     self.gridLayout.addWidget(self.labelImageName, 0, 0, 1, 1)
     self.lineEditImageName = QtGui.QLineEdit(self.centralwidget)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.lineEditImageName.sizePolicy().hasHeightForWidth())
     self.lineEditImageName.setSizePolicy(sizePolicy)
     self.lineEditImageName.setObjectName(_fromUtf8("lineEditImageName"))
     self.gridLayout.addWidget(self.lineEditImageName, 0, 1, 1, 2)
+    self.horizontalLayout = QtGui.QHBoxLayout()
+    self.horizontalLayout.setContentsMargins(-1, 10, -1, -1)
+    self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+    spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+    self.horizontalLayout.addItem(spacerItem)
+    self.pushApply = QtGui.QPushButton(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.pushApply.sizePolicy().hasHeightForWidth())
+    self.pushApply.setSizePolicy(sizePolicy)
+    self.pushApply.setObjectName(_fromUtf8("pushApply"))
+    self.horizontalLayout.addWidget(self.pushApply)
+    self.gridLayout.addLayout(self.horizontalLayout, 1, 1, 1, 2)
     MainWindow.setCentralWidget(self.centralwidget)
-    self.statusbar = QtGui.QStatusBar(MainWindow)
-    self.statusbar.setObjectName(_fromUtf8("statusbar"))
-    MainWindow.setStatusBar(self.statusbar)
 
     self.retranslateUi(MainWindow)
     QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
   def retranslateUi(self, MainWindow):
     MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-    self.labelImageName.setText(_translate("MainWindow", "imageName", None))
+    self.labelImageName.setText(_translate("MainWindow", "eCpus", None))
+    self.pushApply.setText(_translate("MainWindow", "apply", None))
 
