@@ -5,6 +5,7 @@ import os
 import sys
 import socket
 import time
+import subprocess
 
 
 progPath =  sys.argv[0].split(os.sep)
@@ -43,13 +44,31 @@ except AttributeError:
 class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusHostMod.Ui_MainWindow.setupUi(self,Form)
-    self.colNamesHost = ["hostInfo.hostName","hostInfo.ip","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
+    self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
     self.popTableHost()
     self.pushDisable.clicked.connect(self.hostDisable)
     self.pushEnable.clicked.connect(self.hostEnable)
     self.pushRefresh.clicked.connect(self.popTableHost)
+    self.pushEdit.clicked.connect(self.editHost)
   
   
+  
+  def editHost(self):
+    selHostsDict = self.selectedHosts()
+    print(selHostsDict)
+    selHosts = []
+    for x in selHostsDict:
+      selHosts.append(x['hostInfo.ip'].lstrip("0"))
+    
+    
+    if(selHosts):
+      for sT in selHosts:
+        try:
+          subprocess.Popen([sys.executable,editHostCmd,str(sT)])
+        except:
+          print(str(sys.exc_info()))
+          
+          
   def hostEnable(self):
     hosts =  self.selectedHosts()
     if(hosts):

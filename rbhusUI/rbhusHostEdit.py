@@ -19,12 +19,8 @@ else:
 print cwd  
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 
-rEc = "rbhusHostEdit.py"
-  
-editHostCmd = cwd.rstrip(os.sep) + os.sep + rEc
-editHostCmd = editHostCmd.replace("\\","/")
-print editHostCmd
-import rbhusListMod
+import rbhusHostEditMod
+
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
@@ -38,11 +34,26 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
-class Ui_Form(rbhusListMod.Ui_mainRbhusList):
+class Ui_Form(rbhusHostEditMod.Ui_rbhusHostEdit):
   def setupUi(self, Form):
+    rbhusHostEditMod.Ui_rbhusHostEdit.setupUi(self,Form)
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
-    self.authL = auth.login()
-    self.pushApply.clicked.connect(self.applyResources)
     
+    self.authL = auth.login()
+    self.applyResources()
+    #self.pushApply.clicked.connect(self.applyResources)
+    
+  def applyResources(self):
+    print(sys.argv[1])
+    
+    
+    
+if __name__ == "__main__":
+  app = QtGui.QApplication(sys.argv)
+  Form = QtGui.QMainWindow()
+  ui = Ui_Form()
+  ui.setupUi(Form)
+  Form.show()
+  sys.exit(app.exec_())   
