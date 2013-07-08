@@ -43,7 +43,10 @@ class Ui_Form(rbhusHostEditMod.Ui_rbhusHostEdit):
     
     self.authL = auth.login()
     self.applyResources()
-    #self.pushApply.clicked.connect(self.applyResources)
+    self.pushApply.clicked.connect(self.applyResources)
+    
+    self.db_eCpus = 0
+    self.db_groups = 0
     
   def applyResources(self):
     print(sys.argv[1])

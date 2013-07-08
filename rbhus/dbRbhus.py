@@ -478,6 +478,16 @@ class dbRbhus:
       return(0)
     return(rows)
     
+    
+  def getRunningFrames(self):
+    try:
+      rows = self.execute("select * from frames where status = "+ str(constants.framesRunning), dictionary=True)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+    
+    
   def setTaskStatus(self,taskId,status):
     try:
       self.execute("UPDATE tasks SET status="+ str(status) +" WHERE id="+ str(taskId))

@@ -111,6 +111,27 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     except:
       print("Error connecting to db")
       return(0)
+    
+    hostsAll = [x['hostName'] for x in rows]
+    print(hostsAll)
+      
+      
+    try:
+      rowsRunning = dbconn.getRunningFrames()
+    except:
+      print("Error getting running frames")
+      return(0)
+    
+    hostsRunning = [x['hostName'] for x in rowsRunning]
+    print(hostsRunning)
+    
+    
+    
+    hostsColor = {}
+    for x in hostsAll:
+      if(x in hostsRunning):
+        print(x)
+      
       
     if(not rows):
       return()
@@ -154,6 +175,21 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
           self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.hostInfoStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
+        
+        if(colName == "hostName"):
+          if(row['hostName'] in hostsRunning):
+            brush.setColor(QtGui.QColor(0, 200, 0))
+            brush.setStyle(QtCore.Qt.SolidPattern)
+          else:
+            brush.setColor(QtGui.QColor(200, 0, 0))
+            brush.setStyle(QtCore.Qt.SolidPattern)
+          item.setBackground(brush)
+          self.tableHost.setItem(indx, colIndx, item)
+          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row['hostName']), None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        
+        
         if(colName == "alive"):
           if(row[colName] == constants.hostInfoDisable):
             brush.setColor(QtGui.QColor(200, 0, 0))
