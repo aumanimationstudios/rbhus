@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusHostMod.ui'
 #
-# Created: Thu Jan 10 22:29:11 2013
-#      by: PyQt4 UI code generator 4.9.6
+# Created: Mon Jul  8 13:30:26 2013
+#      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(1053, 355)
+    MainWindow.resize(715, 399)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -47,6 +47,8 @@ class Ui_MainWindow(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.tableHost.sizePolicy().hasHeightForWidth())
     self.tableHost.setSizePolicy(sizePolicy)
+    self.tableHost.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+    self.tableHost.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
     self.tableHost.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableHost.setObjectName(_fromUtf8("tableHost"))
     self.tableHost.setColumnCount(0)
@@ -57,6 +59,9 @@ class Ui_MainWindow(object):
     self.gridLayout.addWidget(self.tableHost, 2, 0, 1, 1)
     self.verticalLayout = QtGui.QVBoxLayout()
     self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+    self.LabelRunning = QtGui.QLabel(self.centralwidget)
+    self.LabelRunning.setObjectName(_fromUtf8("LabelRunning"))
+    self.verticalLayout.addWidget(self.LabelRunning)
     self.pushEdit = QtGui.QPushButton(self.centralwidget)
     self.pushEdit.setObjectName(_fromUtf8("pushEdit"))
     self.verticalLayout.addWidget(self.pushEdit)
@@ -66,6 +71,9 @@ class Ui_MainWindow(object):
     self.pushDisable = QtGui.QPushButton(self.centralwidget)
     self.pushDisable.setObjectName(_fromUtf8("pushDisable"))
     self.verticalLayout.addWidget(self.pushDisable)
+    self.pushStop = QtGui.QPushButton(self.centralwidget)
+    self.pushStop.setObjectName(_fromUtf8("pushStop"))
+    self.verticalLayout.addWidget(self.pushStop)
     spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
     self.verticalLayout.addItem(spacerItem)
     self.gridLayout.addLayout(self.verticalLayout, 2, 1, 1, 1)
@@ -85,8 +93,10 @@ class Ui_MainWindow(object):
   def retranslateUi(self, MainWindow):
     MainWindow.setWindowTitle(_translate("MainWindow", "rbhusHost", None))
     self.tableHost.setSortingEnabled(True)
+    self.LabelRunning.setText(_translate("MainWindow", "runing : 3", None))
     self.pushEdit.setText(_translate("MainWindow", "edit", None))
     self.pushEnable.setText(_translate("MainWindow", "enable", None))
     self.pushDisable.setText(_translate("MainWindow", "disable", None))
+    self.pushStop.setText(_translate("MainWindow", "stop my host", None))
     self.pushRefresh.setText(_translate("MainWindow", "refresh", None))
 

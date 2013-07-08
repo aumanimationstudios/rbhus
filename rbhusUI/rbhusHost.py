@@ -50,9 +50,33 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.pushEnable.clicked.connect(self.hostEnable)
     self.pushRefresh.clicked.connect(self.popTableHost)
     self.pushEdit.clicked.connect(self.editHost)
+    self.tableHost.customContextMenuRequested.connect(self.popupHost)
   
   
   
+  def popupHost(self, pos):
+    menu = QtGui.QMenu()
+    test1Action = menu.addAction("edit")
+    test2Action = menu.addAction("disable")
+    test3Action = menu.addAction("enable")
+    test4Action = menu.addAction("stop")
+    
+    
+    action = menu.exec_(self.tableHost.mapToGlobal(pos))
+    if(action == test1Action):
+      print("test1")
+      #self.activateTask()
+    if(action == test2Action):
+      print("test2")
+      #self.holdTask()
+    if(action == test3Action):
+      print("test3")
+      #self.rerunTask()
+    if(action == test4Action):
+      print("test4")
+      #self.editTask()
+      
+      
   def editHost(self):
     selHostsDict = self.selectedHosts()
     print(selHostsDict)
@@ -124,6 +148,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     
     hostsRunning = [x['hostName'] for x in rowsRunning]
     print(hostsRunning)
+    self.LabelRunning.setText(QtGui.QApplication.translate("Form", "RUNNING : "+ str(len(hostsRunning)), None, QtGui.QApplication.UnicodeUTF8))
     
     
     
@@ -165,7 +190,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
         brush = QtGui.QBrush()
         if(colName == "status"):
           if(row[colName] == constants.hostInfoDisable):
-            brush.setColor(QtGui.QColor(200, 0, 0))
+            brush.setColor(QtGui.QColor(255, 100, 100))
             brush.setStyle(QtCore.Qt.SolidPattern)
           else:
             brush.setColor(QtGui.QColor(0, 200, 0))
@@ -177,22 +202,22 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
           continue
         
         if(colName == "hostName"):
-          if(row['hostName'] in hostsRunning):
+          if(row[colName] in hostsRunning):
             brush.setColor(QtGui.QColor(0, 200, 0))
             brush.setStyle(QtCore.Qt.SolidPattern)
           else:
-            brush.setColor(QtGui.QColor(200, 0, 0))
+            brush.setColor(QtGui.QColor(255, 100, 100))
             brush.setStyle(QtCore.Qt.SolidPattern)
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row['hostName']), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         
         
         if(colName == "alive"):
           if(row[colName] == constants.hostInfoDisable):
-            brush.setColor(QtGui.QColor(200, 0, 0))
+            brush.setColor(QtGui.QColor(255, 100, 100))
             brush.setStyle(QtCore.Qt.SolidPattern)
           else:
             brush.setColor(QtGui.QColor(0, 200, 0))

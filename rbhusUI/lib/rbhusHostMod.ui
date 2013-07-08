@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1053</width>
-    <height>355</height>
+    <width>715</width>
+    <height>399</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -35,6 +35,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
@@ -55,6 +61,13 @@
     <item row="2" column="1">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <widget class="QLabel" name="LabelRunning">
+        <property name="text">
+         <string>runing : 3</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushEdit">
         <property name="text">
          <string>edit</string>
@@ -72,6 +85,13 @@
        <widget class="QPushButton" name="pushDisable">
         <property name="text">
          <string>disable</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushStop">
+        <property name="text">
+         <string>stop my host</string>
         </property>
        </widget>
       </item>

@@ -379,7 +379,7 @@
                 <enum>QFrame::Raised</enum>
                </property>
                <property name="editTriggers">
-                <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+                <set>QAbstractItemView::NoEditTriggers</set>
                </property>
                <property name="alternatingRowColors">
                 <bool>false</bool>
@@ -855,7 +855,7 @@
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="editTriggers">
-          <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+          <set>QAbstractItemView::NoEditTriggers</set>
          </property>
          <property name="alternatingRowColors">
           <bool>false</bool>
