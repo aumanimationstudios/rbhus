@@ -182,10 +182,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def stopFrame(self):
     selFramesDict = self.selectedFrames()
     selFrames = {}
+    db_conn = dbRbhus.dbRbhus()
     for x in selFramesDict:
       if(x['status'] == "running"):
         print self.getHostIp(x['hostName'])
-        self.stopFrames(str(self.getHostIp(x['hostName'])),x['id'],x['frameId'])
+        db_conn.stopFrames(str(self.getHostIp(x['hostName'])),x['id'],x['frameId'])
       else:
         print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
     self.popTableFrames()
@@ -632,23 +633,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       return(0)
       
       
-  def stopFrames(self,hostIp, tId, fId):
-    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    tryCount = 5 
-    while(tryCount):
-      time.sleep(1)
-      try:
-        clientSocket.connect((str(hostIp),6660))
-        clientSocket.settimeout(30)
-        clientSocket.send("MURDER:"+ str(tId).lstrip("0") +"%"+ str(fId).lstrip("0"))
-        clientSocket.close()
-        break
-      except:
-        print(str(sys.exc_info()))
-        tryCount = tryCount - 1
-        clientSocket.close()
-        return(1)
-    return(0)
+  
       
     
 if __name__ == "__main__":

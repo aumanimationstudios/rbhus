@@ -7,7 +7,7 @@ import socket
 import time
 import subprocess
 
-
+hName = socket.gethostname()
 progPath =  sys.argv[0].split(os.sep)
 print progPath
 if(len(progPath) > 1):
@@ -23,9 +23,9 @@ if(sys.platform.find("win") >= 0):
 elif(sys.platform.find("linux") >= 0):
   rEc = "rbhusHostEdit.py"
   
-editHostCmd = cwd.rstrip(os.sep) + os.sep + rEc
+hostEditCmd = cwd.rstrip(os.sep) + os.sep + rEc
 
-print editHostCmd
+print hostEditCmd
 import rbhusHostMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -44,12 +44,16 @@ except AttributeError:
 class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusHostMod.Ui_MainWindow.setupUi(self,Form)
+    icon = QtGui.QIcon()
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    Form.setWindowIcon(icon)
     self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
     self.popTableHost()
-    self.pushDisable.clicked.connect(self.hostDisable)
-    self.pushEnable.clicked.connect(self.hostEnable)
+    #self.pushDisable.clicked.connect(self.hostDisable)
+    #self.pushEnable.clicked.connect(self.hostEnable)
     self.pushRefresh.clicked.connect(self.popTableHost)
-    self.pushEdit.clicked.connect(self.editHost)
+    self.pushLocalStop.clicked.connect(self.hostLocalStop)
+    self.pushLocalEnable.clicked.connect(self.hostLocalEnable)
     self.tableHost.customContextMenuRequested.connect(self.popupHost)
   
   
@@ -64,22 +68,21 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     
     action = menu.exec_(self.tableHost.mapToGlobal(pos))
     if(action == test1Action):
-      print("test1")
-      #self.activateTask()
+      #print("test1")
+      self.hostEdit()
     if(action == test2Action):
-      print("test2")
-      #self.holdTask()
+      #print("test2")
+      self.hostDisable()
     if(action == test3Action):
-      print("test3")
-      #self.rerunTask()
+      #print("test3")
+      self.hostEnable()
     if(action == test4Action):
-      print("test4")
-      #self.editTask()
+      #print("test4")
+      self.hostStop()
       
       
-  def editHost(self):
+  def hostEdit(self):
     selHostsDict = self.selectedHosts()
-    print(selHostsDict)
     selHosts = []
     for x in selHostsDict:
       selHosts.append(x['hostInfo.ip'].lstrip("0"))
@@ -88,11 +91,40 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     if(selHosts):
       for sT in selHosts:
         try:
-          subprocess.Popen([sys.executable,editHostCmd,str(sT)])
+          subprocess.Popen([sys.executable,hostEditCmd,str(sT)])
         except:
           print(str(sys.exc_info()))
           
           
+  def hostStop(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      try:
+        rFrames = dbconn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(h['hostInfo.hostName']) +"\'", dictionary=True)
+      except:
+        print(str(sys.exc_info()))
+        continue
+      if(rFrames):
+        for rF in rFrames:
+          dbconn.stopFrames(h['hostInfo.hostName'],rF['id'],rF['frameId'])
+          print(str(h['hostInfo.hostName']) +" : "+ str(rF['id']) +" : "+ str(rF['frameId']))
+          
+          
+  def hostLocalStop(self):
+    try:
+      rFrames = dbconn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(hName) +"\'", dictionary=True)
+    except:
+      print(str(sys.exc_info()))
+      return(0)
+    if(rFrames):
+      for rF in rFrames:
+        dbconn.stopFrames(hName,rF['id'],rF['frameId'])
+        print(str(hName) +" : "+ str(rF['id']) +" : "+ str(rF['frameId']))
+    self.hostLocalDisable()
+   
+  
+  
+  
   def hostEnable(self):
     hosts =  self.selectedHosts()
     if(hosts):
@@ -101,12 +133,30 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.popTableHost()
 
 
+  def hostLocalEnable(self):
+    try:
+      dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where hostName=\'"+ str(hName) +"\'")
+    except:
+      print(str(sys.exc_info()))
+    self.popTableHost()
+
+
+
   def hostDisable(self):
     hosts = self.selectedHosts() 
     if(hosts):
       for h in hosts:
         dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where hostName=\'"+ str(h['hostInfo.hostName']) +"\'")
     self.popTableHost()
+    
+  def hostLocalDisable(self):
+    try:
+      dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where hostName=\'"+ str(hName) +"\'")
+    except:
+      print(str(sys.exc_info()))
+    self.popTableHost()
+      
+    
   
     
   def selectedHosts(self):
@@ -125,6 +175,13 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     return(rowsHosts)
   
   def popTableHost(self):
+    rSelected = self.selectedHosts()
+    hostSelected = []
+    if(rSelected):
+      for x in rSelected:
+        hostSelected.append(x['hostInfo.hostName'])
+    print(hostSelected)
+        
     self.tableHost.clearContents()
     self.tableHost.setSortingEnabled(False)
     self.tableHost.resizeColumnsToContents()
@@ -137,7 +194,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       return(0)
     
     hostsAll = [x['hostName'] for x in rows]
-    print(hostsAll)
+    #print(hostsAll)
       
       
     try:
@@ -145,18 +202,12 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     except:
       print("Error getting running frames")
       return(0)
-    
-    hostsRunning = [x['hostName'] for x in rowsRunning]
-    print(hostsRunning)
+    if(rowsRunning):
+      hostsRunning = [x['hostName'] for x in rowsRunning]
+    else:
+      hostsRunning = []
+    #print(hostsRunning)
     self.LabelRunning.setText(QtGui.QApplication.translate("Form", "RUNNING : "+ str(len(hostsRunning)), None, QtGui.QApplication.UnicodeUTF8))
-    
-    
-    
-    hostsColor = {}
-    for x in hostsAll:
-      if(x in hostsRunning):
-        print(x)
-      
       
     if(not rows):
       return()
@@ -211,6 +262,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
           self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+          if(row[colName] in hostSelected):
+            self.tableHost.selectRow(indx)
           colIndx = colIndx + 1
           continue
         
@@ -238,6 +291,9 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
  
     self.tableHost.resizeColumnsToContents()
     self.tableHost.setSortingEnabled(True)
+    
+    
+    
     
     
     
