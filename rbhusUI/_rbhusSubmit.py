@@ -45,7 +45,6 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.autoOutName.clicked.connect(self.setOutName)
     self.pushSubmit.clicked.connect(self.submitTasks)
     self.comboHostGroup.currentIndexChanged.connect(self.printGroupSel)
-    self.comboHostGroup.setCheckable(True)
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
     self.comboFileType.currentIndexChanged.connect(self.fileTypePrint)
     self.comboOsType.currentIndexChanged.connect(self.osTypePrint)
