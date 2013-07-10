@@ -252,7 +252,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     
     for f in files.split(","):
       if(f):
-        submitDict['fileName'] = f.replace("\\","/")
+        submitDict['fileName'] = f.lstrip().replace("\\","/")
         sd = submitdir.replace("\\","/")
         #submitDict['cameras'] = cameras
         
@@ -264,7 +264,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
           sdc = sd
           for c in cameras.split(","):
             if(c):
-              submitDict['camera'] = c
+              submitDict['camera'] = c.lstrip().rstrip()
               if(re.search('^default$',submitDict['camera']) == None):
                 sdc = sd.rstrip("/") +"/"+ c + "/"
               if(re.search('^default$',submitDict['resolution']) == None):
@@ -272,7 +272,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
               if(re.search('^default$',layers) == None):
                 sdcd = sdc
                 for l in layers.split(","):
-                  sdcd = sdc.rstrip("/") +"/"+ l + "/"
+                  sdcd = sdc.rstrip("/") +"/"+ l.lstrip().rstrip() + "/"
                   submitDict['layer'] = l
                   submitDict['outDir'] = sdcd
                   try:
@@ -290,7 +290,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         else:
           for c in cameras.split(","):
             if(c):
-              submitDict['camera'] = c
+              submitDict['camera'] = c.lstrip().rstrip()
               try:
                 b = a.submit(submitDict)
                 print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))

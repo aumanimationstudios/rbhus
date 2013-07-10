@@ -18,7 +18,7 @@ else:
   
 print cwd
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
-import rbhusEditTaskHostGroupsMod
+import selectCheckBoxMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import dbRbhus
@@ -27,12 +27,12 @@ import utils as rUtils
 import auth
 
 dbconn = dbRbhus.dbRbhus()
+parser = argparse.ArgumentParser()
 
 
 
-
-parser.add_argument("-i","--input",dest='input',help='comma seperated input list')
-parser.add_argument("-d","--default",dest='def',help='comma seperated default checked list')
+parser.add_argument("-i","--input",dest='inputlist',help='comma seperated input list')
+parser.add_argument("-d","--default",dest='defaultlist',help='comma seperated default checked list')
 args = parser.parse_args()
 
 
@@ -42,23 +42,45 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
-class Ui_Form(rbhusEditTaskHostGroupsMod.Ui_rbhusTaskHostGroups):
+class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
   def setupUi(self, Form):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
-    rbhusEditTaskHostGroupsMod.Ui_rbhusTaskHostGroups.setupUi(self,Form)
+    selectCheckBoxMod.Ui_selectCheckBox.setupUi(self,Form)
     
-    self.hostGroupsBoxed = rUtils.getHostGroups()
+    self.inList = args.inputlist.split(",")
+    self.defList = args.defaultlist.split(",")
     self.checkBoxes = {}
-    #self.verticalLayout.clear()
-    for x in self.hostGroupsBoxed:
-      print(x)
+    self.updateCheckBoxes()
+    self.updateSelected()
+      
+    
+    
+  def updateCheckBoxes(self):
+    for x in self.inList:
       self.checkBoxes[x] = QtGui.QCheckBox(self.scrollAreaWidgetContents)
       self.checkBoxes[x].setObjectName(_fromUtf8(x))
       self.verticalLayout.addWidget(self.checkBoxes[x])
       self.checkBoxes[x].setText(_fromUtf8(x))
+      self.checkBoxes[x].stateChanged.connect(self.updateSelected)
+      if(x in self.defList):
+        self.checkBoxes[x].setChecked(2)
+        
+        
+  def updateSelected(self):
+    updateLine = []
+    #self.plainTextEditSelected.setReadOnly(False)
+    self.plainTextEditSelected.clear()
+    for x in self.checkBoxes.keys():
+      #print(x + " : "+ str(self.checkBoxes[x].isChecked()))
+      if(self.checkBoxes[x].isChecked()):
+        updateLine.append(str(x))
+    self.plainTextEditSelected.setPlainText(_fromUtf8(", ".join(updateLine)))
+    #self.plainTextEditSelected.setReadOnly(True)
+      
+        
       
       
     #self.checkBox_2 = QtGui.QCheckBox(self.scrollAreaWidgetContents)
