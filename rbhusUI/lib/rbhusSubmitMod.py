@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Fri Jun 28 23:43:20 2013
+# Created: Wed Jul 10 00:28:58 2013
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!

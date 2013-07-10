@@ -111,6 +111,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
           
           
   def hostLocalStop(self):
+    self.hostLocalDisable()
     try:
       rFrames = dbconn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(hName) +"\'", dictionary=True)
     except:
@@ -120,7 +121,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       for rF in rFrames:
         dbconn.stopFrames(hName,rF['id'],rF['frameId'])
         print(str(hName) +" : "+ str(rF['id']) +" : "+ str(rF['frameId']))
-    self.hostLocalDisable()
+    
    
   
   
@@ -185,6 +186,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.tableHost.clearContents()
     self.tableHost.setSortingEnabled(False)
     self.tableHost.resizeColumnsToContents()
+    self.tableHost.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
     colCount = 0
     
     try:
@@ -291,6 +293,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
  
     self.tableHost.resizeColumnsToContents()
     self.tableHost.setSortingEnabled(True)
+    self.tableHost.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     
     
     

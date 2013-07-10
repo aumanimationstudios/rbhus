@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusHostMod.ui'
 #
-# Created: Tue Jul  9 00:12:13 2013
+# Created: Wed Jul 10 00:42:39 2013
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -122,7 +122,7 @@ class Ui_MainWindow(object):
     self.tableHost.setLayoutDirection(QtCore.Qt.LeftToRight)
     self.tableHost.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
     self.tableHost.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
-    self.tableHost.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+    self.tableHost.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     self.tableHost.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableHost.setObjectName(_fromUtf8("tableHost"))
     self.tableHost.setColumnCount(0)
