@@ -780,7 +780,7 @@
      </widget>
     </item>
     <item row="9" column="1">
-     <widget class="QLineEdit" name="lineEditCameras_2">
+     <widget class="QLineEdit" name="lineEditHostGroups">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -799,7 +799,7 @@
      </widget>
     </item>
     <item row="9" column="2">
-     <widget class="QPushButton" name="pushOutDir_2">
+     <widget class="QPushButton" name="pushSelectHostGroups">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
         <horstretch>0</horstretch>

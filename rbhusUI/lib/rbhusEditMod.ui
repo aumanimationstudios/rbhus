@@ -622,16 +622,6 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
-        <widget class="QComboBox" name="comboHostGroup">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
        <item row="10" column="1">
         <widget class="QComboBox" name="comboType">
          <property name="enabled">
@@ -710,7 +700,7 @@
        <item row="3" column="1">
         <widget class="QLineEdit" name="lineEditImageType">
          <property name="enabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -726,6 +716,38 @@
          </property>
          <property name="text">
           <string>default</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QLineEdit" name="lineEditHostGroups">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>comma seperated list of cameras to render</string>
+         </property>
+         <property name="text">
+          <string>default</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QPushButton" name="pushSelectHostGroups">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>select</string>
          </property>
         </widget>
        </item>

@@ -5,6 +5,7 @@ import os
 import sys
 import datetime
 import re
+import subprocess
 
 progPath =  sys.argv[0].split(os.sep)
 print progPath
@@ -16,6 +17,12 @@ else:
   
 print cwd
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+
+scb = "selectCheckBox.py"
+
+selectCheckBoxCmd = cwd.rstrip(os.sep) + os.sep + scb
+selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
+
 import rbhusSubmitMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -44,12 +51,12 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.autoOutDir.clicked.connect(self.setOutDir)
     self.autoOutName.clicked.connect(self.setOutName)
     self.pushSubmit.clicked.connect(self.submitTasks)
-    self.comboHostGroup.currentIndexChanged.connect(self.printGroupSel)
+    self.pushSelectHostGroups.clicked.connect(self.printGroupSel)
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
     self.comboFileType.currentIndexChanged.connect(self.fileTypePrint)
     self.comboOsType.currentIndexChanged.connect(self.osTypePrint)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
-    groups = rUtils.getHostGroups()
+    
     ostypes = rUtils.getOsTypes()
     ftypes = rUtils.getFileTypes()
     resTemplates = rUtils.getResTemplates()
@@ -62,14 +69,14 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.pushLogout.clicked.connect(self.logout)
     
     self.afterTimeEdit.setDateTime(QtCore.QDateTime.currentDateTime())
-    for group in groups:
-      self.comboHostGroup.addItem(_fromUtf8(group))
-    ind = 0
-    try:
-      ind = groups.index("default")
-    except:
-      pass
-    self.comboHostGroup.setCurrentIndex(ind)
+    #for group in groups:
+      #self.comboHostGroup.addItem(_fromUtf8(group))
+    #ind = 0
+    #try:
+      #ind = groups.index("default")
+    #except:
+      #pass
+    #self.comboHostGroup.setCurrentIndex(ind)
     
     for ft in ftypes:
       self.comboFileType.addItem(_fromUtf8(ft))
@@ -108,7 +115,12 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     sys.exit(0)
   
   def printGroupSel(self):
-    print self.comboHostGroup.currentText()
+    groups = rUtils.getHostGroups()
+    outGroups = subprocess.Popen([selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outGroups == ""):
+      outGroups = "default"
+    print(outGroups)
+    self.lineEditHostGroups.setText(_fromUtf8(outGroups))
     
     
   def printPrioSel(self):
@@ -214,7 +226,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     submitDict['outName'] = str(self.lineEditOutName.text())
     submitDict['os'] = str(self.comboOsType.currentText())
     submitDict['fileType'] = str(self.comboFileType.currentText())
-    submitDict['hostGroups'] = str(self.comboHostGroup.currentText())
+    submitDict['hostGroups'] = str(self.lineEditHostGroups.text())
     submitDict['renderer'] = str(self.comboRenderer.currentText())
     layers = str(self.lineEditLayer.text())
     submitDict['imageType'] = str(self.lineEditImageType.text())

@@ -5,6 +5,7 @@ import glob
 import os
 import sys
 import datetime
+import subprocess
 
 progPath =  sys.argv[0].split(os.sep)
 print progPath
@@ -15,6 +16,13 @@ else:
   cwd = os.path.abspath(os.getcwd())
   
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+
+scb = "selectCheckBox.py"
+
+selectCheckBoxCmd = cwd.rstrip(os.sep) + os.sep + scb
+selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
+
+
 import rbhusEditMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -55,7 +63,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.spinMinBatch.valueChanged.connect(self.getMinBatch)
     self.spinMaxBatch.valueChanged.connect(self.getMaxBatch)
     self.afterTimeEdit.dateTimeChanged.connect(self.afePrint)
-    self.comboHostGroup.currentIndexChanged.connect(self.hostGroupPrint)
+    self.pushSelectHostGroups.clicked.connect(self.hostGroupPrint)
     self.comboBatching.currentIndexChanged.connect(self.batchStatus)
     self.comboOsType.currentIndexChanged.connect(self.osTypesPrint)
     self.comboType.currentIndexChanged.connect(self.fileTypePrint)
@@ -171,7 +179,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       editDict["renderer"] = str(self.comboRenderer.currentText())
       self.db_renderer = 0
     if(self.db_hostgroup):
-      editDict["hostGroups"] = str(self.comboHostGroup.currentText())
+      editDict["hostGroups"] = str(self.lineEditHostGroups.text())
       self.db_hostgroup = 0
     if(self.db_filename):
       editDict["fileName"] = str(self.lineEditFileName.text().replace("\\","/"))
@@ -230,7 +238,12 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
   
   def hostGroupPrint(self):
-    print(self.comboHostGroup.currentText())
+    groups = rUtils.getHostGroups()
+    outGroups = subprocess.Popen([selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outGroups == ""):
+      outGroups = "default"
+    print(outGroups)
+    self.lineEditHostGroups.setText(_fromUtf8(outGroups))
     self.db_hostgroup = 1
   
   def osTypesPrint(self):
@@ -427,20 +440,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
   def setHostGroups(self):
     rows = rUtils.getHostGroups()
-    indx = 0
-    setIndx = 0  
-    self.comboHostGroup.clear()  
-    if(rows):
-      for row in rows:
-        self.comboHostGroup.addItem(_fromUtf8(row))
-        if(row.endswith(str(self.taskValues['hostGroups']))):
-          setIndx = indx
-        indx = indx + 1
-        
-      self.comboHostGroup.setCurrentIndex(setIndx)
-      return(1)
-    else:
-      return(0)
+    self.lineEditHostGroups.setText(self.taskValues['hostGroups'])
 
   
   

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>237</width>
+    <width>245</width>
     <height>364</height>
    </rect>
   </property>
@@ -76,8 +76,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>209</width>
-            <height>139</height>
+            <width>217</width>
+            <height>138</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout"/>
@@ -166,7 +166,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="pushApply">
         <property name="text">
          <string>apply</string>
         </property>

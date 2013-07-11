@@ -9,17 +9,14 @@ import argparse
 
 
 progPath =  sys.argv[0].split(os.sep)
-print progPath
 if(len(progPath) > 1):
   pwd = os.sep.join(progPath[0:-1])
   cwd = os.path.abspath(pwd)
 else:
   cwd = os.path.abspath(os.getcwd())
   
-print cwd
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 import selectCheckBoxMod
-print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import dbRbhus
 import constants
@@ -50,34 +47,80 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
     self.authL = auth.login()
     selectCheckBoxMod.Ui_selectCheckBox.setupUi(self,Form)
     
-    self.inList = args.inputlist.split(",")
-    self.defList = args.defaultlist.split(",")
+    self.inList = []
+    self.defList = []
+    self.updateLine = []
+    if(args.inputlist):
+      self.inList = args.inputlist.split(",")
+    if(args.defaultlist):
+      self.defList = args.defaultlist.split(",")
+      
     self.checkBoxes = {}
     self.updateCheckBoxes()
     self.updateSelected()
-      
+    self.pushApply.clicked.connect(self.pApply)
+    self.pushDeselect.clicked.connect(self.deselectall)
+    self.pushSelect.clicked.connect(self.selectall)
+    self.lineEditSearch.textChanged.connect(self.updateCheckBoxes)
+    self.pushClearSearch.clicked.connect(self.lineEditSearch.clear)
+    
+    
+  def pApply(self):
+    print(",".join(self.updateLine))
+    QtCore.QCoreApplication.instance().quit()
+    
+    
     
     
   def updateCheckBoxes(self):
+    findList = []
     for x in self.inList:
-      self.checkBoxes[x] = QtGui.QCheckBox(self.scrollAreaWidgetContents)
-      self.checkBoxes[x].setObjectName(_fromUtf8(x))
-      self.verticalLayout.addWidget(self.checkBoxes[x])
-      self.checkBoxes[x].setText(_fromUtf8(x))
-      self.checkBoxes[x].stateChanged.connect(self.updateSelected)
-      if(x in self.defList):
-        self.checkBoxes[x].setChecked(2)
+      if(x.find(str(self.lineEditSearch.text())) >= 0):
+        findList.append(x)
+    
+    
+    for x in self.inList:
+      try:
+        self.checkBoxes[x].setParent(None)
+        self.checkBoxes[x].deleteLater()
+        self.checkBoxes[x] = None
         
+        del(self.checkBoxes[x])
+      except:
+        pass
+      
+    if(findList):
+      for x in findList:
+        self.checkBoxes[x] = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBoxes[x].setObjectName(_fromUtf8(x))
+        self.verticalLayout.addWidget(self.checkBoxes[x])
+        self.checkBoxes[x].setText(_fromUtf8(x))
+        self.checkBoxes[x].stateChanged.connect(self.updateSelected)
+        if(x in self.defList):
+          self.checkBoxes[x].setChecked(2)
+    self.defList = []
+    
+    
         
+  def deselectall(self):
+    for x in self.inList:
+      self.checkBoxes[x].setChecked(0)
+        
+  
+  def selectall(self):
+    for x in self.inList:
+      self.checkBoxes[x].setChecked(2)
+  
+  
   def updateSelected(self):
-    updateLine = []
+    self.updateLine = []
     #self.plainTextEditSelected.setReadOnly(False)
     self.plainTextEditSelected.clear()
     for x in self.checkBoxes.keys():
       #print(x + " : "+ str(self.checkBoxes[x].isChecked()))
       if(self.checkBoxes[x].isChecked()):
-        updateLine.append(str(x))
-    self.plainTextEditSelected.setPlainText(_fromUtf8(", ".join(updateLine)))
+        self.updateLine.append(str(x))
+    self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(self.updateLine)))
     #self.plainTextEditSelected.setReadOnly(True)
       
         

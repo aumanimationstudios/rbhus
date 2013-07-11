@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'rbhusEditMod.ui'
+# Form implementation generated from reading ui file 'lib/rbhusEditMod.ui'
 #
-# Created: Wed Jun 12 12:29:54 2013
+# Created: Wed Jul 10 23:31:03 2013
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -408,14 +408,6 @@ class Ui_rbhusEdit(object):
     self.labelLayer.setSizePolicy(sizePolicy)
     self.labelLayer.setObjectName(_fromUtf8("labelLayer"))
     self.gridLayout_2.addWidget(self.labelLayer, 12, 0, 1, 1)
-    self.comboHostGroup = QtGui.QComboBox(self.groupBox_2)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.comboHostGroup.sizePolicy().hasHeightForWidth())
-    self.comboHostGroup.setSizePolicy(sizePolicy)
-    self.comboHostGroup.setObjectName(_fromUtf8("comboHostGroup"))
-    self.gridLayout_2.addWidget(self.comboHostGroup, 9, 1, 1, 1)
     self.comboType = QtGui.QComboBox(self.groupBox_2)
     self.comboType.setEnabled(True)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
@@ -466,7 +458,7 @@ class Ui_rbhusEdit(object):
     self.labelImageType.setObjectName(_fromUtf8("labelImageType"))
     self.gridLayout_2.addWidget(self.labelImageType, 3, 0, 1, 1)
     self.lineEditImageType = QtGui.QLineEdit(self.groupBox_2)
-    self.lineEditImageType.setEnabled(True)
+    self.lineEditImageType.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -475,6 +467,23 @@ class Ui_rbhusEdit(object):
     self.lineEditImageType.setToolTip(_fromUtf8(""))
     self.lineEditImageType.setObjectName(_fromUtf8("lineEditImageType"))
     self.gridLayout_2.addWidget(self.lineEditImageType, 3, 1, 1, 1)
+    self.lineEditHostGroups = QtGui.QLineEdit(self.groupBox_2)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.lineEditHostGroups.sizePolicy().hasHeightForWidth())
+    self.lineEditHostGroups.setSizePolicy(sizePolicy)
+    self.lineEditHostGroups.setReadOnly(True)
+    self.lineEditHostGroups.setObjectName(_fromUtf8("lineEditHostGroups"))
+    self.gridLayout_2.addWidget(self.lineEditHostGroups, 9, 1, 1, 1)
+    self.pushSelectHostGroups = QtGui.QPushButton(self.groupBox_2)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.pushSelectHostGroups.sizePolicy().hasHeightForWidth())
+    self.pushSelectHostGroups.setSizePolicy(sizePolicy)
+    self.pushSelectHostGroups.setObjectName(_fromUtf8("pushSelectHostGroups"))
+    self.gridLayout_2.addWidget(self.pushSelectHostGroups, 9, 2, 1, 1)
     self.verticalLayout.addWidget(self.groupBox_2)
     self.line = QtGui.QFrame(self.centralwidget)
     self.line.setFrameShape(QtGui.QFrame.HLine)
@@ -548,6 +557,9 @@ class Ui_rbhusEdit(object):
     self.labelImageType.setText(_translate("rbhusEdit", "imageType", None))
     self.lineEditImageType.setWhatsThis(_translate("rbhusEdit", "<html><head/><body><p>type of image. </p><p>eg: PNG, MULTIEXR etc . </p><p><span style=\" font-style:italic; text-decoration: underline;\">note : image type depends on the command line interface of the program</span></p></body></html>", None))
     self.lineEditImageType.setText(_translate("rbhusEdit", "default", None))
+    self.lineEditHostGroups.setToolTip(_translate("rbhusEdit", "comma seperated list of cameras to render", None))
+    self.lineEditHostGroups.setText(_translate("rbhusEdit", "default", None))
+    self.pushSelectHostGroups.setText(_translate("rbhusEdit", "select", None))
     self.pushCancel.setText(_translate("rbhusEdit", "reset", None))
     self.pushApply.setText(_translate("rbhusEdit", "apply", None))
 
