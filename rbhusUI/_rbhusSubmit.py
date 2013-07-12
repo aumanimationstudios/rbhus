@@ -116,7 +116,8 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   
   def printGroupSel(self):
     groups = rUtils.getHostGroups()
-    outGroups = subprocess.Popen([selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    
+    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     if(outGroups == ""):
       outGroups = "default"
     print(outGroups)
