@@ -42,7 +42,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
   def setupUi(self, Form):
     
-    self.task = rUtils.tasks(tId = sys.argv[1].rstrip().lstrip())
+    self.task = rUtils.tasks(tId = sys.argv[1].rstrip().lstrip().split(",")[-1])
     self.taskValues = self.task.taskDetails
     
     icon = QtGui.QIcon()
@@ -173,29 +173,12 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     if(self.db_hostgroup):
       editDict["hostGroups"] = str(self.lineEditHostGroups.text())
       self.db_hostgroup = 0
-    if(self.db_filename):
-      editDict["fileName"] = str(self.lineEditFileName.text().replace("\\","/"))
-      self.db_filename = 0
-    if(self.db_cam)  :
-      editDict["camera"] = str(self.lineEditCamera.text())
-      self.db_cam = 0
-    if(self.db_res):
-      editDict["resolution"] = str(self.lineEditResolution.text())
-    if(self.db_imagename):
-      editDict["outName"] = str(self.lineEditImageName.text())
-      self.db_imagename = 0
-    if(self.db_outputdir):
-      editDict["outDir"] = str(self.lineEditOutPutDir.text().replace("\\","/"))
-      self.db_outputdir = 0
     if(self.db_bfc):
       editDict["beforeFrameCmd"] = str(self.lineEditBfc.text().replace("\\","/"))
       self.db_bfc = 0
     if(self.db_afc):
       editDict["afterFrameCmd"] = str(self.lineEditAfc.text().replace("\\","/"))
       self.db_afc = 0
-    if(self.db_logbase):
-      editDict["logBase"] = str(self.lineEditLogbase.text().replace("\\","/"))
-      self.db_logbase = 0
     if(self.db_aftertime):
       editDict["afterTime"] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
     if(self.db_rerunthresh):
@@ -441,7 +424,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     try:
       conn = db.connRbhus()
       cursor = conn.cursor()
-      cursor.execute("update tasks set "+ fieldName +" = "+ fieldValue +" where id="+ str(sys.argv[1].rstrip().lstrip()))
+      cursor.execute("update tasks set "+ fieldName +" = "+ fieldValue +" where id="+ str(" or id=".join(a.split(","))))
       cursor.close()
       conn.close()
       print("updated "+ str(fieldName) +" with value "+ str(fieldValue))

@@ -60,10 +60,11 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
   
   def popupHost(self, pos):
     menu = QtGui.QMenu()
-    test1Action = menu.addAction("edit")
+    
     test2Action = menu.addAction("disable")
     test3Action = menu.addAction("enable")
     test4Action = menu.addAction("stop")
+    test1Action = menu.addAction("edit")
     
     
     action = menu.exec_(self.tableHost.mapToGlobal(pos))
