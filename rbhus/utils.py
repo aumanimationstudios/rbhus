@@ -33,6 +33,23 @@ def getHostGroups():
   else:
     return(0)
     
+def getDefaults(table="tasks"):
+  dbconn = dbRbhus.dbRbhus()
+  defs = {}
+  try:
+    rows = dbconn.execute("desc "+ table, dictionary=True)
+  except:
+    print(str(sys.exc_info()))
+    return(0)
+  for x in rows:
+    
+    if(x['Default']):
+      defs[x['Field']] = x['Default']
+    else:
+      defs[x['Field']] = ""
+  return(defs)
+  
+
 def getResTemplates():
   dbconn = dbRbhus.dbRbhus()
   try:

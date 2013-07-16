@@ -20,9 +20,15 @@ print cwd
 sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 
 rEc = "rbhusEdit.py"
+rEcM = "rbhusEditMulti.py"
   
 editTaskCmd = cwd.rstrip(os.sep) + os.sep + rEc
 editTaskCmd = editTaskCmd.replace("\\","/")
+
+editTaskMultiCmd = cwd.rstrip(os.sep) + os.sep + rEcM
+editTaskMultiCmd = editTaskMultiCmd.replace("\\","/")
+
+
 print editTaskCmd
 import rbhusListMod
 print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -253,12 +259,16 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       selTasks.append(x['id'].lstrip("0"))
     
     
-    if(selTasks):
-      for sT in selTasks:
-        try:
-          subprocess.Popen([sys.executable,editTaskCmd,str(sT)])
-        except:
-          print(str(sys.exc_info()))
+    if(len(selTasks) == 1):
+      try:
+        subprocess.Popen([sys.executable,editTaskCmd,str(selTasks[0])])
+      except:
+        print(str(sys.exc_info()))
+    elif(len(selTasks) > 1):
+      try:
+        subprocess.Popen([sys.executable,editTaskMultiCmd,str(",".join(selTasks[0]))])
+      except:
+        print(str(sys.exc_info()))
   
   def holdTask(self):
     selTasksDict = self.selectedTasks()

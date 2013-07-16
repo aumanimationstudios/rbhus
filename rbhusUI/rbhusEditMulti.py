@@ -42,14 +42,14 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
   def setupUi(self, Form):
     
-    self.task = rUtils.tasks(tId = sys.argv[1].rstrip().lstrip().split(",")[-1])
-    self.taskValues = self.task.taskDetails
+    
     
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     rbhusEditMultiMod.Ui_rbhusEdit.setupUi(self,Form)
+    self.taskDValues = rUtils.getDefaults("tasks")
     self.popEditItems()
     
     self.pushBfc.clicked.connect(self.selectBfc)
@@ -70,7 +70,6 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     self.lineEditAfc.textChanged.connect(self.reset_afc)
     self.lineEditBfc.textChanged.connect(self.reset_bfc)
     self.lineEditFrange.textChanged.connect(self.reset_fRange)
-    self.lineEditLogbase.textChanged.connect(self.reset_logbase)
     self.lineEditDescription.textChanged.connect(self.reset_desc)
     self.lineEditAfterTask.textChanged.connect(self.reset_afterTask)
     print self.afterTimeEdit.dateTime().toString()
@@ -100,6 +99,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     self.db_afterTask = 0
     self.db_layer = 0
     self.db_renderer = 0
+    
     
   def reset_variables(self):
     self.db_filetype = 0
@@ -164,51 +164,55 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
   def applyNew(self):
     editDict = {}
-    if(self.db_filetype):
-      editDict["fileType"] = str(self.comboType.currentText())
-      self.db_filetype = 0
-    if(self.db_renderer):
-      editDict["renderer"] = str(self.comboRenderer.currentText())
-      self.db_renderer = 0
-    if(self.db_hostgroup):
-      editDict["hostGroups"] = str(self.lineEditHostGroups.text())
-      self.db_hostgroup = 0
-    if(self.db_bfc):
-      editDict["beforeFrameCmd"] = str(self.lineEditBfc.text().replace("\\","/"))
-      self.db_bfc = 0
-    if(self.db_afc):
-      editDict["afterFrameCmd"] = str(self.lineEditAfc.text().replace("\\","/"))
-      self.db_afc = 0
-    if(self.db_aftertime):
-      editDict["afterTime"] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
-    if(self.db_rerunthresh):
-      editDict["rerunThresh"] = str(self.db_rerunthresh)
-      self.db_rerunthresh = 0
-    if(self.db_framerange):
-      editDict["fRange"] = str(self.lineEditFrange.text())
-      self.db_framerange = 0
-    if(self.db_priority):
-      editDict["priority"] = str(self.db_priority)
-      self.db_priority = 0
-    if(self.db_batch != -1):
-      editDict['batch'] = str(self.db_batch)
-    if(self.db_maxbatch):
-      editDict['maxBatch'] = str(self.db_maxbatch)
-    if(self.db_minbatch):
-      editDict['minBatch'] = str(self.db_minbatch)
-    if(self.db_desc):
-      editDict['description'] = str(self.db_desc)
-    if(self.db_os):
-      editDict['os'] = str(self.comboOsType.currentText())
-    if(self.db_afterTask):
-      editDict['afterTasks'] = str(self.lineEditAfterTask.text())
-    print(str(editDict))
-    try:
-      self.task.edit(editDict)
-    except:
-      print(str(sys.exc_info()))
+    for t in sys.argv[1].rstrip().lstrip().split(","):
+      self.task = rUtils.tasks(tId = t)
+      self.taskValues = self.task.taskDetails
+      if(self.db_filetype):
+        editDict["fileType"] = str(self.comboType.currentText())
+        self.db_filetype = 0
+      if(self.db_renderer):
+        editDict["renderer"] = str(self.comboRenderer.currentText())
+        self.db_renderer = 0
+      if(self.db_hostgroup):
+        editDict["hostGroups"] = str(self.lineEditHostGroups.text())
+        self.db_hostgroup = 0
+      if(self.db_bfc):
+        editDict["beforeFrameCmd"] = str(self.lineEditBfc.text().replace("\\","/"))
+        self.db_bfc = 0
+      if(self.db_afc):
+        editDict["afterFrameCmd"] = str(self.lineEditAfc.text().replace("\\","/"))
+        self.db_afc = 0
+      if(self.db_aftertime):
+        editDict["afterTime"] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
+      if(self.db_rerunthresh):
+        editDict["rerunThresh"] = str(self.db_rerunthresh)
+        self.db_rerunthresh = 0
+      if(self.db_framerange):
+        editDict["fRange"] = str(self.lineEditFrange.text())
+        self.db_framerange = 0
+      if(self.db_priority):
+        editDict["priority"] = str(self.db_priority)
+        self.db_priority = 0
+      if(self.db_batch != -1):
+        editDict['batch'] = str(self.db_batch)
+      if(self.db_maxbatch):
+        editDict['maxBatch'] = str(self.db_maxbatch)
+      if(self.db_minbatch):
+        editDict['minBatch'] = str(self.db_minbatch)
+      if(self.db_desc):
+        editDict['description'] = str(self.db_desc)
+      if(self.db_os):
+        editDict['os'] = str(self.comboOsType.currentText())
+      if(self.db_afterTask):
+        editDict['afterTasks'] = str(self.lineEditAfterTask.text())
+      print(str(editDict))
+      try:
+        self.task.edit(editDict)
+      except:
+        print(str(sys.exc_info()))
+        
+      self.taskValues = self.task.taskDetails
       
-    self.taskValues = self.task.taskDetails
     self.popEditItems()  
     
   
@@ -248,29 +252,21 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     print(self.afterTimeEdit.dateTime().time().second())
     
   def popEditItems(self):
-    if(self.taskValues):
-      self.lineEditFileName.setText(self.taskValues['fileName'])
-      self.lineEditOutPutDir.setText(self.taskValues['outDir'])
-      self.lineEditImageName.setText(self.taskValues['outName'])
-      self.lineEditFrange.setText(self.taskValues['fRange'])
-      self.lineEditLogbase.setText(self.taskValues['logBase'])
-      self.lineEditAfc.setText(self.taskValues['afterFrameCmd'])
-      self.lineEditCamera.setText(self.taskValues['camera'])
-      self.lineEditLayer.setText(self.taskValues['layer'])
-      self.lineEditResolution.setText(self.taskValues['resolution'])
-      self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'])
-      self.lineEditImageType.setText(self.taskValues['imageType'])
-      self.spinRerunThresh.setValue(self.taskValues['rerunThresh'])
-      self.spinMinBatch.setValue(self.taskValues['minBatch'])
-      self.spinMaxBatch.setValue(self.taskValues['maxBatch'])
-      self.spinPriority.setValue(self.taskValues['priority'])
-      self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
-      self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
-      self.lineEditDescription.setText(self.taskValues['description'])
-      self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
-      batchFF = self.taskValues['batch']
-      self.comboBatching.setCurrentIndex(batchFF)
-      batchAD = constants.batchStatus[batchFF]
+    if(self.taskDValues):
+      self.lineEditFrange.setText(self.taskDValues['fRange'])
+      self.lineEditAfc.setText(self.taskDValues['afterFrameCmd'])
+      self.lineEditBfc.setText(self.taskDValues['beforeFrameCmd'])
+      self.spinRerunThresh.setValue(int(self.taskDValues['rerunThresh']))
+      self.spinMinBatch.setValue(int(self.taskDValues['minBatch']))
+      self.spinMaxBatch.setValue(int(self.taskDValues['maxBatch']))
+      self.spinPriority.setValue(int(self.taskDValues['priority']))
+      #self.afterTimeEdit.setTime(QtCore.QTime(self.taskDValues['afterTime'].hour, self.taskDValues['afterTime'].minute, self.taskDValues['afterTime'].second))
+      #self.afterTimeEdit.setDate(QtCore.QDate(self.taskDValues['afterTime'].year, self.taskDValues['afterTime'].month, self.taskDValues['afterTime'].day))
+      self.lineEditDescription.setText(self.taskDValues['description'])
+      self.lineEditAfterTask.setText(self.taskDValues['afterTasks'])
+      batchFF = self.taskDValues['batch']
+      self.comboBatching.setCurrentIndex(int(batchFF))
+      batchAD = constants.batchStatus[int(batchFF)]
       self.setFileTypes()
       self.setHostGroups()
       self.setOsTypes()
@@ -348,8 +344,8 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       setIndx = 0
       for row in rows:
         self.comboType.addItem(_fromUtf8(row))
-        print(str(self.taskValues['fileType']))
-        if(row.endswith(str(self.taskValues['fileType']))):
+        print(str(self.taskDValues['fileType']))
+        if(row.endswith(str(self.taskDValues['fileType']))):
           setIndx = indx
         indx = indx + 1
       
@@ -368,8 +364,8 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       setIndx = 0
       for row in rows:
         self.comboOsType.addItem(_fromUtf8(row))
-        print(str(self.taskValues['os']))
-        if(row.endswith(str(self.taskValues['os']))):
+        print(str(self.taskDValues['os']))
+        if(row.endswith(str(self.taskDValues['os']))):
           setIndx = indx
         indx = indx + 1
       
@@ -387,7 +383,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     try:
       for x in renders[str(self.comboType.currentText())]:
         self.comboRenderer.addItem(_fromUtf8(x))
-        if(x.endswith(str(self.taskValues['renderer']))):
+        if(x.endswith(str(self.taskDValues['renderer']))):
           setIndx = indx
         indx = indx + 1
       self.comboRenderer.setCurrentIndex(setIndx)
@@ -402,8 +398,8 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       #setIndx = 0
       #for row in rows:
         #self.comboRenderer.addItem(_fromUtf8(row))
-        #print(str(self.taskValues['renderer']))
-        #if(row.endswith(str(self.taskValues['renderer']))):
+        #print(str(self.taskDValues['renderer']))
+        #if(row.endswith(str(self.taskDValues['renderer']))):
           #setIndx = indx
         #indx = indx + 1
       
@@ -415,7 +411,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
   def setHostGroups(self):
     rows = rUtils.getHostGroups()
-    self.lineEditHostGroups.setText(self.taskValues['hostGroups'])
+    self.lineEditHostGroups.setText(self.taskDValues['hostGroups'])
 
   
   
