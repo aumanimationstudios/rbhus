@@ -95,15 +95,17 @@ def getBestHost(activeTask):
     taskGroups = activeTask["hostGroups"].split(",")
     hostOss = freeHost["os"].split(",")
     taskOss = activeTask["os"].split(",")
-    inOSflag = 1
+    inOSflag = 0
     for tOs in taskOss:
-      if(tOs not in hostOss):
-        inOSflag = 0
+      if(tOs in hostOss):
+        inOSflag = 1
+        break
 
-    inGroupFlag = 1
+    inGroupFlag = 0
     for taskGroup in taskGroups:
-      if(taskGroup not in hostGroups):
-        inGroupFlag = 0
+      if(taskGroup in hostGroups):
+        inGroupFlag = 1
+        break
     if(inGroupFlag and inOSflag):
       if(freeHost['freeRam'] >= activeTask['minRam']):
         if(activeTask['threads'] == 0):
