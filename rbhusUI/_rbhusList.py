@@ -52,6 +52,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.authL = auth.login()
     self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","priority","submitTime","afterTime","status","description"]
     self.colNamesFrames = ["id","frameId","batchId","hostName","ram","sTime","eTime","runCount","status"]
+    self.colNamesFramesXtra = ["timeTaken"]
     
     
     self.selectedTaskList = []
@@ -543,9 +544,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     if(not rows):
       return()
-    for row in rows:
-      colCount = len(row)
-      break
+    colCount = len(self.colNamesFrames) + len(self.colNamesFramesXtra)
       
     self.tableFrames.setColumnCount(colCount)
     self.tableFrames.setRowCount(len(rows))
@@ -555,6 +554,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.tableFrames.setHorizontalHeaderItem(x, item)
     indx = 0
     for x in self.colNamesFrames:
+      self.tableFrames.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      indx = indx + 1
+    for x in self.colNamesFramesXtra:
       self.tableFrames.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
       indx = indx + 1
 
@@ -583,15 +585,40 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
+        
+        item = QtGui.QTableWidgetItem()
+        self.tableFrames.setItem(indx, colIndx, item)
+        self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        #print self.tableFrames.item(indx, colIndx).type()
+        colIndx = colIndx + 1
+        
+      for colName in self.colNamesFramesXtra:
+        if(colName == "timeTaken"):
+          item = QtGui.QTableWidgetItem()
+          self.tableFrames.setItem(indx, colIndx, item)
+          tT = 0
+          if(not row['sTime']):
+            tT = 0
+          elif(not row['eTime'] and row['sTime'] and (row['status'] == constants.framesRunning)):
+            tT = 0
+          elif(row['sTime'] >= row['eTime']):
+            tT = 0
+          else:
+            tT = row['eTime'] - row['sTime']
+          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(tT).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        
         item = QtGui.QTableWidgetItem()
         self.tableFrames.setItem(indx, colIndx, item)
         self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         #print self.tableFrames.item(indx, colIndx).type()
         colIndx = colIndx + 1
       indx = indx + 1
+      #print(row['eTime'] - row['sTime'])
 
     self.labelTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
-      
+    
     self.tableFrames.resizeColumnsToContents()
     self.tableFrames.setSortingEnabled(True)
   
