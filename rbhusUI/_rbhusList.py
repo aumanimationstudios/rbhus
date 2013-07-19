@@ -646,7 +646,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     rowsSelected = []
     for idx in self.tableFrames.selectionModel().selectedRows():
       rowsSelected.append(idx.row())
-    colCount = self.tableFrames.columnCount()
+    colCount = len(self.colNamesFrames)
     for row in rowsSelected:
       singleRow = {}
       for col in range(0,colCount):
