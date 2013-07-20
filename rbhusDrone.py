@@ -649,6 +649,46 @@ def execFrames(frameInfo,frameScrutiny):
     sys.exit(0)
 
 
+def rbhusLog(lframeInfo):
+  dbconnLog = dbRbhus.dbRbhusLog()
+  dbconn = dbRbhus.dbRbhus()
+  fIns = dbconn.getFrameInfo(lframeInfo['id'],lframeInfo['frameId'])
+  fIn = 0
+  tDelta = 0
+  if(fIns):
+    fIn = fIns[0]
+  if(fIn):
+    eT = fIn['eTime']
+    sT = fIn['sTime']
+    tDelta = int((eT - sT).total_seconds())
+  
+  try:
+    hLogRow = dbconnLog.execute("select * from tasksLog where (id="+ str(lframeInfo['id']) +" \
+                                 and projId="+ str(lframeInfo['projId']) +" \
+                                 and fileName='"+ str(lframeInfo['fileName']) +"' \
+                                 and camera='"+ str(lframeInfo['camera']) +"' 
+                                 and resolution='"+ str(lframeInfo['resolution']) +"' and date=date(now())",dictionary=True)
+    if(hLogRow):
+      dbconnLog.execute("update tasksLog set timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +" \
+                         where (id="+ str(lframeInfo['id']) +" \
+                         and fileName='"+ str(lframeInfo['fileName']) +"' and \
+                         camera='"+ str(lframeInfo['camera']) +"' and \
+                         resolution='"+ str(lframeInfo['resolution']) +"' and date=date(now())")
+    else:
+      dbconnLog.execute("insert into tasksLog \
+                         (id,projId,fileName,camera,resolution,date) \
+                         values ("+ str(lframeInfo['id']) +","+ \
+                         str(lframeInfo['projId']) +",'"+ \
+                         str(lframeInfo['fileName']) +"','"+ \
+                         str(lframeInfo['camera']) +"','"+ \
+                         str(lframeInfo['resolution']) +"',date(now()))")
+  except:
+    logClient.debug(str(sys.exc_info()))
+    return(0)
+  
+
+
+
 def washMyButt(taskid, frameid):
   buttFile = tempDir + os.sep + str(taskid).lstrip().rstrip() +"_"+ str(frameid).lstrip().rstrip() +".butt"
   try:

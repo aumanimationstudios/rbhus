@@ -15,6 +15,7 @@ tempDir = tempfile.gettempdir()
 dbHostname = "blues2"
 dbPort = "3306"
 dbDatabase = "rbhus"
+dbLogDatabase = "rbhusLog"
 
 try:
   dbHostname = os.environ['rbhus_dbHostname']
@@ -28,7 +29,10 @@ try:
   dbDatabase = os.environ['rbhus_dbDatabase']
 except:
   pass
-
+try:
+  dbLogDatabase = os.environ['rbhus_dbLogDatabase']
+except:
+  pass
 
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
@@ -45,6 +49,80 @@ modLogger.setLevel(logging.ERROR)
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
 LOG_FILENAME.setFormatter(BASIC_FORMAT)
 modLogger.addHandler(LOG_FILENAME)
+
+class dbRbhusLog:
+  """database querying class for rbhus"""
+  def __init__(self):
+    self.__conn = self._connRbhus()
+
+  def __del__(self):
+    self.__conn.close()
+    modLogger.debug("Db connection closed" +"\n")
+  
+  def _connDb(self,hostname,port,dbname):
+    try:
+      conn = MySQLdb.connect(host = hostname,port=port,db = dbname)
+      conn.autocommit(1)
+    except:
+      raise
+    return(conn)
+    
+  def _connRbhus(self):
+    while(1):
+      try:
+        con = self._connDb(hostname=dbHostname,port=int(dbPort),dbname=dbLogDatabase)
+        modLogger.debug("Db connected")
+        return(con)
+      except:
+        modLogger.error("Db not connected : "+ str(sys.exc_info()))
+      time.sleep(1)
+      
+       
+  def execute(self,query,dictionary=False):
+    while(1):
+      try:
+        if(dictionary):
+          cur = self.__conn.cursor(MySQLdb.cursors.DictCursor)
+        else:
+          cur = self.__conn.cursor()
+        cur.execute(query)
+        
+        if(dictionary):
+          try:
+            rows = cur.fetchall()
+          except:
+            modLogger.error("fetching failed : "+ str(sys.exc_info()))
+          
+          cur.close()
+          if(rows):
+            return(rows)
+          else:
+            return(0)
+        else:
+          cur.close()
+          return(1)
+      except:
+        modLogger.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
+        if(str(sys.exc_info()).find("OperationalError") >= 0):
+          try:
+            cur.close()
+          except:
+            pass
+          try:
+            self._conn.close()
+          except:
+            pass
+          self.__conn = self._connRbhus()
+          continue
+        else:
+          try:
+            cur.close()
+          except:
+            pass
+          raise
+
+
+
 
 class dbRbhus:
   """database querying class for rbhus"""
