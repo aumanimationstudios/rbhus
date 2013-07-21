@@ -449,6 +449,7 @@ def execFrames(frameInfo,frameScrutiny):
         time.sleep(0.5)
       washMyButt(frameInfo['id'],frameInfo['frameId'])
       db_conn.delBatchId(frameInfo['batchId'])
+      rbhusLog(frameInfo)
       sys.exit(0)
 
 
@@ -504,6 +505,7 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.2)
             washMyButt(frameInfo['id'],frameInfo['frameId'])
             db_conn.delBatchId(frameInfo['batchId'])
+            rbhusLog(frameInfo)
             sys.exit(0)
         time.sleep(1)
 
@@ -543,6 +545,7 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.2)
             washMyButt(frameInfo['id'],frameInfo['frameId'])
             db_conn.delBatchId(frameInfo['batchId'])
+            rbhusLog(frameInfo)
             sys.exit(0)
         time.sleep(1)
 
@@ -645,6 +648,7 @@ def execFrames(frameInfo,frameScrutiny):
       time.sleep(0.2)
     washMyButt(frameInfo['id'],frameInfo['frameId'])
     db_conn.delBatchId(frameInfo['batchId'])
+    rbhusLog(frameInfo)
     delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
     sys.exit(0)
 
@@ -655,6 +659,7 @@ def rbhusLog(lframeInfo):
   fIns = dbconn.getFrameInfo(lframeInfo['id'],lframeInfo['frameId'])
   fIn = 0
   tDelta = 0
+  hostname,ipAddr = getHostNameIP()
   if(fIns):
     fIn = fIns[0]
   if(fIn):
@@ -663,25 +668,43 @@ def rbhusLog(lframeInfo):
     tDelta = int((eT - sT).total_seconds())
   
   try:
-    hLogRow = dbconnLog.execute("select * from tasksLog where (id="+ str(lframeInfo['id']) +" \
+    tLogRow = dbconnLog.execute("select * from tasksLog where (id="+ str(lframeInfo['id']) +" \
                                  and projId="+ str(lframeInfo['projId']) +" \
                                  and fileName='"+ str(lframeInfo['fileName']) +"' \
                                  and camera='"+ str(lframeInfo['camera']) +"' 
                                  and resolution='"+ str(lframeInfo['resolution']) +"' and date=date(now())",dictionary=True)
-    if(hLogRow):
+    hLogRow = dbconnLog.execute("select * from hostLog where ( \
+                                 ip='"+ str(ipAddr) +"' and \
+                                 hostName='"+ str(hostname) +"' and \
+                                 date=date(now))",dictionary=True)
+    
+    if(tLogRow):
       dbconnLog.execute("update tasksLog set timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +" \
                          where (id="+ str(lframeInfo['id']) +" \
                          and fileName='"+ str(lframeInfo['fileName']) +"' and \
                          camera='"+ str(lframeInfo['camera']) +"' and \
-                         resolution='"+ str(lframeInfo['resolution']) +"' and date=date(now())")
+                         resolution='"+ str(lframeInfo['resolution']) +"' and \
+                         date=date(now())")
     else:
       dbconnLog.execute("insert into tasksLog \
-                         (id,projId,fileName,camera,resolution,date) \
+                         (id,projId,fileName,camera,resolution,date,timeSpentOnResource) \
                          values ("+ str(lframeInfo['id']) +","+ \
                          str(lframeInfo['projId']) +",'"+ \
                          str(lframeInfo['fileName']) +"','"+ \
                          str(lframeInfo['camera']) +"','"+ \
-                         str(lframeInfo['resolution']) +"',date(now()))")
+                         str(lframeInfo['resolution']) +"',date(now()),"+ \
+                         str(tDelta) +")")
+    if(hLogRow):
+      dbconnLog.execute("update hostLog set timeOnRender=timeOnRender+"+ str(tDelta) +", \
+                         totalJobs=totalJobs+1 \
+                         where (hostName='"+ str(hostname) +"' and \
+                         ip='"+ str(ipAddr) +"' and \
+                         date=date(now()))")
+    else:
+      dbconnLog.execute("insert into hostLog \
+                         (ip,hostName,timeOnRender,date,totalJobs) \
+                         values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now),1)")
+    return(1)
   except:
     logClient.debug(str(sys.exc_info()))
     return(0)
