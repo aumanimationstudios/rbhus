@@ -671,7 +671,7 @@ def rbhusLog(lframeInfo):
     tLogRow = dbconnLog.execute("select * from tasksLog where (id="+ str(lframeInfo['id']) +" \
                                  and projId="+ str(lframeInfo['projId']) +" \
                                  and fileName='"+ str(lframeInfo['fileName']).lstrip().rstrip() +"' \
-                                 and camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' 
+                                 and camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' \
                                  and resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and date=date(now())",dictionary=True)
     hLogRow = dbconnLog.execute("select * from hostLog where ( \
                                  ip='"+ str(ipAddr) +"' and \
