@@ -673,11 +673,13 @@ def rbhusLog(lframeInfo):
                                  and fileName='"+ str(lframeInfo['fileName']).lstrip().rstrip() +"' \
                                  and camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' \
                                  and resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and date=date(now())",dictionary=True)
+    logClient.debug("select tasksLog 1")
     hLogRow = dbconnLog.execute("select * from hostLog where ( \
                                  ip='"+ str(ipAddr) +"' and \
                                  hostName='"+ str(hostname) +"' and \
                                  date=date(now))",dictionary=True)
     
+    logClient.debug("select hostLog 1")
     if(tLogRow):
       dbconnLog.execute("update tasksLog set timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +" \
                          where (id="+ str(lframeInfo['id']) +" \
@@ -685,6 +687,7 @@ def rbhusLog(lframeInfo):
                          camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' and \
                          resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and \
                          date=date(now())")
+      logClient.debug("select tasksLog 2")
     else:
       dbconnLog.execute("insert into tasksLog \
                          (id,projId,fileName,camera,resolution,date,timeSpentOnResource) \
@@ -694,16 +697,19 @@ def rbhusLog(lframeInfo):
                          str(lframeInfo['camera']).lstrip().rstrip() +"','"+ \
                          str(lframeInfo['resolution']).lstrip().rstrip() +"',date(now()),"+ \
                          str(tDelta) +")")
+      logClient.debug("select tasksLog 3")
     if(hLogRow):
       dbconnLog.execute("update hostLog set timeOnRender=timeOnRender+"+ str(tDelta) +", \
                          totalJobs=totalJobs+1 \
                          where (hostName='"+ str(hostname) +"' and \
                          ip='"+ str(ipAddr) +"' and \
                          date=date(now()))")
+      logClient.debug("select hostsLog 2")
     else:
       dbconnLog.execute("insert into hostLog \
                          (ip,hostName,timeOnRender,date,totalJobs) \
                          values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now),1)")
+      logClient.debug("select hostsLog 3")     
     return(1)
   except:
     logClient.debug(str(sys.exc_info()))
