@@ -670,9 +670,9 @@ def rbhusLog(lframeInfo):
   try:
     tLogRow = dbconnLog.execute("select * from tasksLog where (id="+ str(lframeInfo['id']) +" \
                                  and projId="+ str(lframeInfo['projId']) +" \
-                                 and fileName='"+ str(lframeInfo['fileName']) +"' \
-                                 and camera='"+ str(lframeInfo['camera']) +"' 
-                                 and resolution='"+ str(lframeInfo['resolution']) +"' and date=date(now())",dictionary=True)
+                                 and fileName='"+ str(lframeInfo['fileName']).lstrip().rstrip() +"' \
+                                 and camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' 
+                                 and resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and date=date(now())",dictionary=True)
     hLogRow = dbconnLog.execute("select * from hostLog where ( \
                                  ip='"+ str(ipAddr) +"' and \
                                  hostName='"+ str(hostname) +"' and \
@@ -681,18 +681,18 @@ def rbhusLog(lframeInfo):
     if(tLogRow):
       dbconnLog.execute("update tasksLog set timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +" \
                          where (id="+ str(lframeInfo['id']) +" \
-                         and fileName='"+ str(lframeInfo['fileName']) +"' and \
-                         camera='"+ str(lframeInfo['camera']) +"' and \
-                         resolution='"+ str(lframeInfo['resolution']) +"' and \
+                         and fileName='"+ str(lframeInfo['fileName']).lstrip().rstrip() +"' and \
+                         camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' and \
+                         resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and \
                          date=date(now())")
     else:
       dbconnLog.execute("insert into tasksLog \
                          (id,projId,fileName,camera,resolution,date,timeSpentOnResource) \
                          values ("+ str(lframeInfo['id']) +","+ \
                          str(lframeInfo['projId']) +",'"+ \
-                         str(lframeInfo['fileName']) +"','"+ \
-                         str(lframeInfo['camera']) +"','"+ \
-                         str(lframeInfo['resolution']) +"',date(now()),"+ \
+                         str(lframeInfo['fileName']).lstrip().rstrip() +"','"+ \
+                         str(lframeInfo['camera']).lstrip().rstrip() +"','"+ \
+                         str(lframeInfo['resolution']).lstrip().rstrip() +"',date(now()),"+ \
                          str(tDelta) +")")
     if(hLogRow):
       dbconnLog.execute("update hostLog set timeOnRender=timeOnRender+"+ str(tDelta) +", \
