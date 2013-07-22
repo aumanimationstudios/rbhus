@@ -657,12 +657,11 @@ def rbhusLog(lframeInfo):
   dbconnLog = dbRbhus.dbRbhusLog()
   dbconn = dbRbhus.dbRbhus()
   fIns = dbconn.getFrameInfo(lframeInfo['id'],lframeInfo['frameId'])
-  print(fIns)
   fIn = 0
   tDelta = 0
   hostname,ipAddr = getHostNameIP()
   if(fIns):
-    fIn = fIns[0]
+    fIn = fIns
   if(fIn):
     eT = fIn['eTime']
     sT = fIn['sTime']
