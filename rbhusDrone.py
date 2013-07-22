@@ -657,6 +657,7 @@ def rbhusLog(lframeInfo):
   dbconnLog = dbRbhus.dbRbhusLog()
   dbconn = dbRbhus.dbRbhus()
   fIns = dbconn.getFrameInfo(lframeInfo['id'],lframeInfo['frameId'])
+  print(fIns)
   fIn = 0
   tDelta = 0
   hostname,ipAddr = getHostNameIP()
@@ -704,12 +705,12 @@ def rbhusLog(lframeInfo):
                          where (hostName='"+ str(hostname) +"' and \
                          ip='"+ str(ipAddr) +"' and \
                          date=date(now()))")
-      logClient.debug("select hostsLog 2")
+      logClient.debug("select hostLog 2")
     else:
       dbconnLog.execute("insert into hostLog \
                          (ip,hostName,timeOnRender,date,totalJobs) \
                          values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now),1)")
-      logClient.debug("select hostsLog 3")     
+      logClient.debug("select hostLog 3")     
     return(1)
   except:
     logClient.debug(str(sys.exc_info()))
