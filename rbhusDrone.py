@@ -683,6 +683,7 @@ def rbhusLog(lframeInfo):
     print(hLogRow)
     print(tLogRow)
     if(tLogRow):
+      logClient.debug("select tasksLog 2")
       dbconnLog.execute("update tasksLog set timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +" \
                          where (id="+ str(lframeInfo['id']) +" \
                          and fileName='"+ str(lframeInfo['fileName']).lstrip().rstrip() +"' and \
@@ -691,6 +692,7 @@ def rbhusLog(lframeInfo):
                          date=date(now()))")
       logClient.debug("select tasksLog 2")
     else:
+      logClient.debug("select tasksLog 3")
       dbconnLog.execute("insert into tasksLog \
                          (id,projId,fileName,camera,resolution,date,timeSpentOnResource) \
                          values ("+ str(lframeInfo['id']) +","+ \
@@ -702,6 +704,7 @@ def rbhusLog(lframeInfo):
       logClient.debug("select tasksLog 3")
     print("select punk")
     if(hLogRow):
+      logClient.debug("select hostLog 2")
       dbconnLog.execute("update hostLog set timeOnRender=timeOnRender+"+ str(tDelta) +", \
                          totalJobs=totalJobs+1 \
                          where (hostName='"+ str(hostname) +"' and \
@@ -709,6 +712,7 @@ def rbhusLog(lframeInfo):
                          date=date(now()))")
       logClient.debug("select hostLog 2")
     else:
+      logClient.debug("select hostLog 3")  
       dbconnLog.execute("insert into hostLog \
                          (ip,hostName,timeOnRender,date,totalJobs) \
                          values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now),1)")
