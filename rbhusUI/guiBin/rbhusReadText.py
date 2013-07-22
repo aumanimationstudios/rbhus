@@ -13,11 +13,11 @@ if(len(progPath) > 1):
 else:
   cwd = os.path.abspath(os.getcwd())
   
-sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 
 import rbhusTextReadMod
-sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 
 
 
@@ -32,6 +32,9 @@ class Ui_Form(rbhusTextReadMod.Ui_readText):
   def setupUi(self, Form):
     rbhusTextReadMod.Ui_readText.setupUi(self,Form)
     Form.setWindowTitle(textFile)
+    icon = QtGui.QIcon()
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    Form.setWindowIcon(icon)
     self.popText(textFile)
     
     self.timer = QtCore.QTimer()

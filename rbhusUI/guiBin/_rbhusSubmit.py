@@ -16,7 +16,7 @@ else:
   cwd = os.path.abspath(os.getcwd())
   
 print cwd
-sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 scb = "selectCheckBox.py"
 
@@ -24,8 +24,8 @@ selectCheckBoxCmd = cwd.rstrip(os.sep) + os.sep + scb
 selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
 
 import rbhusSubmitMod
-print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+print(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import dbRbhus
 import constants
 import utils as rUtils
@@ -42,7 +42,7 @@ except AttributeError:
 class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   def setupUi(self, Form):
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
     rbhusSubmitMod.Ui_rbhusSubmit.setupUi(self,Form)

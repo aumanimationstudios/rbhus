@@ -15,7 +15,7 @@ if(len(progPath) > 1):
 else:
   cwd = os.path.abspath(os.getcwd())
   
-sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 scb = "selectCheckBox.py"
 
@@ -24,8 +24,8 @@ selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
 
 
 import rbhusEditMod
-print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+print(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
 import constants
 import utils as rUtils
@@ -46,7 +46,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.taskValues = self.task.taskDetails
     
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     rbhusEditMod.Ui_rbhusEdit.setupUi(self,Form)

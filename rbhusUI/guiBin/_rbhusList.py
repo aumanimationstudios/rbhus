@@ -17,7 +17,7 @@ if(len(progPath) > 1):
 else:
   cwd = os.path.abspath(os.getcwd())
 print cwd  
-sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
+sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 rEc = "rbhusEdit.py"
 rEcM = "rbhusEditMulti.py"
@@ -31,8 +31,8 @@ editTaskMultiCmd = editTaskMultiCmd.replace("\\","/")
 
 print editTaskCmd
 import rbhusListMod
-print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+print(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
 import constants
 import auth
@@ -47,7 +47,7 @@ except AttributeError:
 class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def setupUi(self, Form):
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
     self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","priority","submitTime","afterTime","status","description"]
