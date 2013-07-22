@@ -672,12 +672,12 @@ def rbhusLog(lframeInfo):
                                  and projId="+ str(lframeInfo['projId']) +" \
                                  and fileName='"+ str(lframeInfo['fileName']).lstrip().rstrip() +"' \
                                  and camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' \
-                                 and resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and date=date(now())",dictionary=True)
+                                 and resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and date=date(now()))",dictionary=True)
     logClient.debug("select tasksLog 1")
     hLogRow = dbconnLog.execute("select * from hostLog where ( \
                                  ip='"+ str(ipAddr) +"' and \
                                  hostName='"+ str(hostname) +"' and \
-                                 date=date(now))",dictionary=True)
+                                 date=date(now())",dictionary=True)
     
     logClient.debug("select hostLog 1")
     if(tLogRow):
