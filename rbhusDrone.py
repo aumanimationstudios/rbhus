@@ -680,8 +680,6 @@ def rbhusLog(lframeInfo):
                                  date=date(now()))",dictionary=True)
     
     logClient.debug("select hostLog 1")
-    print(hLogRow)
-    print(tLogRow)
     if(tLogRow):
       logClient.debug("select tasksLog 2")
       dbconnLog.execute("update tasksLog set timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +" \
@@ -702,7 +700,6 @@ def rbhusLog(lframeInfo):
                          str(lframeInfo['resolution']).lstrip().rstrip() +"',date(now()),"+ \
                          str(tDelta) +")")
       logClient.debug("select tasksLog 3")
-    print("select punk")
     if(hLogRow):
       logClient.debug("select hostLog 2")
       dbconnLog.execute("update hostLog set timeOnRender=timeOnRender+"+ str(tDelta) +", \
@@ -714,8 +711,8 @@ def rbhusLog(lframeInfo):
     else:
       logClient.debug("select hostLog 3")  
       dbconnLog.execute("insert into hostLog \
-                         (ip,hostName,timeOnRender,date,totalJobs) \
-                         values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now),1)")
+                         (ip,hostName,timeOnRender,date) \
+                         values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now()))")
       logClient.debug("select hostLog 3")  
          
     return(1)
