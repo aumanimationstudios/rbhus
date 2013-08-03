@@ -599,6 +599,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           tT = 0
           if(not row['sTime']):
             tT = 0
+          if(not row['eTime']):
+            row['eTime'] = 0
+            
           elif(not row['eTime'] and row['sTime'] and (row['status'] == constants.framesRunning)):
             tT = 0
           elif(row['sTime'] >= row['eTime']):
