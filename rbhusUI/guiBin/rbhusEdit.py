@@ -15,11 +15,14 @@ if(len(progPath) > 1):
 else:
   cwd = os.path.abspath(os.getcwd())
   
+testPWD = os.path.dirname(os.path.realpath(__file__))
+print("RRR : "+ testPWD)
 sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+
 
 scb = "selectCheckBox.py"
 
-selectCheckBoxCmd = cwd.rstrip(os.sep) + os.sep + scb
+selectCheckBoxCmd = testPWD.rstrip(os.sep) + os.sep + scb
 selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
 
 
@@ -241,7 +244,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     groups = rUtils.getHostGroups()
     outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     if(outGroups == ""):
-      outGroups = "default"
+      return
     print(outGroups)
     self.lineEditHostGroups.setText(_fromUtf8(outGroups))
     self.db_hostgroup = 1

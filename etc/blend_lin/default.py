@@ -87,7 +87,7 @@ if(renderer != "default"):
   RENDERCMD = RENDERCMD +" -E "+ renderer
 RENDERCMD = RENDERCMD +" -t "+ rThreads
 
-defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False\nbpy.context.scene.render.use_overwrite = True"
+defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False\nbpy.context.scene.render.use_overwrite = True\nbpy.context.scene.render.use_simplify = False"
 dF = open(defaultF,"w")
 dF.writelines(defaultScripts)
 dF.flush()
