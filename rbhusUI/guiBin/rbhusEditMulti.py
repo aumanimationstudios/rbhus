@@ -7,25 +7,21 @@ import sys
 import datetime
 import subprocess
 
-progPath =  sys.argv[0].split(os.sep)
-print progPath
-if(len(progPath) > 1):
-  pwd = os.sep.join(progPath[0:-1])
-  cwd = os.path.abspath(pwd)
-else:
-  cwd = os.path.abspath(os.getcwd())
-  
-sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+dirSelf = os.path.dirname(os.path.realpath(__file__))
+print(dirSelf)
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+
 
 scb = "selectCheckBox.py"
 
-selectCheckBoxCmd = cwd.rstrip(os.sep) + os.sep + scb
+selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
 selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
 
 
+
 import rbhusEditMultiMod
-print(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
 import constants
 import utils as rUtils
@@ -45,7 +41,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
     
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     rbhusEditMultiMod.Ui_rbhusEdit.setupUi(self,Form)

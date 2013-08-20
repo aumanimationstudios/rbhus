@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.5.30, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.67, for pc-linux-gnu (x86_64)
 --
 -- Host: blues2    Database: rbhus
 -- ------------------------------------------------------
@@ -194,6 +194,7 @@ CREATE TABLE `hostResource` (
   `load1` float NOT NULL DEFAULT '0',
   `load5` float NOT NULL DEFAULT '0',
   `load10` float NOT NULL DEFAULT '0',
+  `cpuPercent` varchar(45) NOT NULL DEFAULT '0',
   `status` int(2) unsigned zerofill NOT NULL DEFAULT '01' COMMENT '1 - active(ready for rendering)\n2 - stopped(autoactive after a timeout)\n3 - forced off\n',
   PRIMARY KEY (`hostName`),
   KEY `fk_hostResource_1` (`hostName`),
@@ -310,7 +311,7 @@ CREATE TABLE `tasks` (
   KEY `fk_tasks_2` (`fileType`),
   CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=806 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
+) ENGINE=InnoDB AUTO_INCREMENT=1045 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -338,4 +339,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-07-05  9:44:52
+-- Dump completed on 2013-08-20 12:23:48

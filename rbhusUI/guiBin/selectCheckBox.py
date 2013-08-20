@@ -8,16 +8,13 @@ import re
 import argparse
 
 
-progPath =  sys.argv[0].split(os.sep)
-if(len(progPath) > 1):
-  pwd = os.sep.join(progPath[0:-1])
-  cwd = os.path.abspath(pwd)
-else:
-  cwd = os.path.abspath(os.getcwd())
-  
-sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+dirSelf = os.path.dirname(os.path.realpath(__file__))
+print(dirSelf)
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+
 import selectCheckBoxMod
-sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import dbRbhus
 import constants
 import utils as rUtils
@@ -42,7 +39,7 @@ except AttributeError:
 class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
   def setupUi(self, Form):
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
     selectCheckBoxMod.Ui_selectCheckBox.setupUi(self,Form)

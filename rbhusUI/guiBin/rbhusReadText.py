@@ -4,20 +4,13 @@ import os
 import sys
 
 
-progPath =  sys.argv[0].split(os.sep)
-textFile = sys.argv[1]
-print progPath
-if(len(progPath) > 1):
-  pwd = os.sep.join(progPath[0:-1])
-  cwd = os.path.abspath(pwd)
-else:
-  cwd = os.path.abspath(os.getcwd())
-  
-sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+dirSelf = os.path.dirname(os.path.realpath(__file__))
+print(dirSelf)
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 
 import rbhusTextReadMod
-sys.path.append(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 
 
 
@@ -33,7 +26,7 @@ class Ui_Form(rbhusTextReadMod.Ui_readText):
     rbhusTextReadMod.Ui_readText.setupUi(self,Form)
     Form.setWindowTitle(textFile)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.popText(textFile)
     
