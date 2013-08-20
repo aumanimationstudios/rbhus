@@ -214,9 +214,9 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
   
   def hostGroupPrint(self):
     groups = rUtils.getHostGroups()
-    outGroups = subprocess.Popen([selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     if(outGroups == ""):
-      outGroups = "default"
+      return
     print(outGroups)
     self.lineEditHostGroups.setText(_fromUtf8(outGroups))
     self.db_hostgroup = 1

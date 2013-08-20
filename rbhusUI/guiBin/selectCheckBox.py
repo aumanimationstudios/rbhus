@@ -9,7 +9,6 @@ import argparse
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
-print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 import selectCheckBoxMod

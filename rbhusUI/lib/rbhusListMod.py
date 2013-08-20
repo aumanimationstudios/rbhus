@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Mon Jul  8 10:51:24 2013
-#      by: PyQt4 UI code generator 4.10.2
+# Created: Tue Aug 20 15:25:52 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -227,7 +227,7 @@ class Ui_mainRbhusList(object):
     self.tableList.setPalette(palette)
     self.tableList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.tableList.setFrameShadow(QtGui.QFrame.Raised)
-    self.tableList.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+    self.tableList.setEditTriggers(QtGui.QAbstractItemView.DoubleClicked)
     self.tableList.setAlternatingRowColors(False)
     self.tableList.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableList.setVerticalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
@@ -466,7 +466,7 @@ class Ui_mainRbhusList(object):
     palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
     self.tableFrames.setPalette(palette)
     self.tableFrames.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-    self.tableFrames.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+    self.tableFrames.setEditTriggers(QtGui.QAbstractItemView.DoubleClicked)
     self.tableFrames.setAlternatingRowColors(False)
     self.tableFrames.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableFrames.setVerticalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)

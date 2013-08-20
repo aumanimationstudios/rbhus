@@ -8,27 +8,24 @@ import time
 import subprocess
 
 hName = socket.gethostname()
-progPath =  sys.argv[0].split(os.sep)
-print progPath
-if(len(progPath) > 1):
-  pwd = os.sep.join(progPath[0:-1])
-  cwd = os.path.abspath(pwd)
-else:
-  cwd = os.path.abspath(os.getcwd())
-  
-sys.path.append(cwd.rstrip(os.sep) + os.sep + "lib")
 
-if(sys.platform.find("win") >= 0):
-  rEc = "rbhusHostEdit.py"
-elif(sys.platform.find("linux") >= 0):
-  rEc = "rbhusHostEdit.py"
+
+dirSelf = os.path.dirname(os.path.realpath(__file__))
+print(dirSelf)
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+
+
   
-hostEditCmd = cwd.rstrip(os.sep) + os.sep + rEc
+sys.path.append(dirSelf.rstrip(os.sep) + os.sep + "lib")
+
+rEc = "rbhusHostEdit.py"
+  
+hostEditCmd = dirSelf.rstrip(os.sep) + os.sep + "guiBin" + os.sep + rEc
 
 print hostEditCmd
 import rbhusHostMod
-print(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-sys.path.append(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+print(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
 import dbRbhus
 import constants
@@ -45,7 +42,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusHostMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(cwd.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
     self.popTableHost()
