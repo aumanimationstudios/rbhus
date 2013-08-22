@@ -139,8 +139,9 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     print(self.comboFileType.currentText())
     renders = rUtils.getRenderers()
     self.comboRenderer.clear()
-    for x in renders[str(self.comboFileType.currentText())]:
-      self.comboRenderer.addItem(_fromUtf8(x))
+    if(self.comboFileType.currentText()):
+      for x in renders[str(self.comboFileType.currentText())]:
+        self.comboRenderer.addItem(_fromUtf8(x))
 
     
   
@@ -215,7 +216,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       self.lineEditCameras.setText(self.taskValues['camera'])
       self.lineEditLayer.setText(self.taskValues['layer'])
       self.lineEditRes.setText(self.taskValues['resolution'])
-      self.lineEditImageType.setText(self.taskValues['imageType'])
+      #self.lineEditImageType.setText(self.taskValues['imageType'])
       self.spinMinBatch.setValue(self.taskValues['minBatch'])
       self.spinMaxBatch.setValue(self.taskValues['maxBatch'])
       self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
