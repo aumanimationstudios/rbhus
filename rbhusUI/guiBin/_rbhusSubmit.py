@@ -39,6 +39,16 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
+    
+    self.taskValues = 0
+    try:
+      self.task = rUtils.tasks(tId = sys.argv[1].rstrip().lstrip())
+      self.taskValues = self.task.taskDetails
+    except:
+      pass
+    
+    
+    
     rbhusSubmitMod.Ui_rbhusSubmit.setupUi(self,Form)
     self.pushFileName.clicked.connect(self.selectFileName)
     self.pushOutDir.clicked.connect(self.selectOutDir)
@@ -49,6 +59,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
     self.comboFileType.currentIndexChanged.connect(self.fileTypePrint)
     self.comboOsType.currentIndexChanged.connect(self.osTypePrint)
+    self.comboRes.currentIndexChanged.connect(self.resetRes)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
     
     ostypes = rUtils.getOsTypes()
@@ -101,7 +112,8 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     except:
       pass
     self.comboRes.setCurrentIndex(ind)
-      
+    
+    self.popEditItems()
     
     
   def logout(self):
@@ -194,6 +206,97 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       self.afterTimeEdit.setEnabled(False)
   
       
+  def popEditItems(self):
+    if(self.taskValues):
+      self.lineEditFileName.setText(self.taskValues['fileName'])
+      #self.lineEditOutDir.setText(self.taskValues['outDir'])
+      #self.lineEditOutName.setText(self.taskValues['outName'])
+      self.lineEditFrange.setText(self.taskValues['fRange'])
+      self.lineEditCameras.setText(self.taskValues['camera'])
+      self.lineEditLayer.setText(self.taskValues['layer'])
+      self.lineEditRes.setText(self.taskValues['resolution'])
+      self.lineEditImageType.setText(self.taskValues['imageType'])
+      self.spinMinBatch.setValue(self.taskValues['minBatch'])
+      self.spinMaxBatch.setValue(self.taskValues['maxBatch'])
+      self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
+      self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
+      self.lineEditDescription.setText(self.taskValues['description'])
+      self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
+      batchFF = self.taskValues['batch']
+      self.comboBatching.setCurrentIndex(batchFF)
+      self.setTaskFileTypes()
+      self.setTaskHostGroups()
+      self.setTaskOsTypes()
+      return(1)
+    else:
+      return(0)
+      
+      
+  def setRenderer(self):
+    renders = rUtils.getRenderers()
+    self.comboRenderer.clear()
+    indx = 0
+    setIndx = 0
+    try:
+      for x in renders[str(self.comboFileType.currentText())]:
+        self.comboRenderer.addItem(_fromUtf8(x))
+        if(x.endswith(str(self.taskValues['renderer']))):
+          setIndx = indx
+        indx = indx + 1
+      self.comboRenderer.setCurrentIndex(setIndx)
+      return(1)
+    except:
+      return(0)
+   
+   
+   
+  def setTaskOsTypes(self):
+    rows = rUtils.getOsTypes()
+    self.comboOsType.clear()  
+    if(rows):
+      indx = 0
+      setIndx = 0
+      for row in rows:
+        self.comboOsType.addItem(_fromUtf8(row))
+        print(str(self.taskValues['os']))
+        if(row.endswith(str(self.taskValues['os']))):
+          setIndx = indx
+        indx = indx + 1
+      
+      self.comboOsType.setCurrentIndex(setIndx)
+      return(1)
+    else:
+      return(0)   
+  
+  
+  def setTaskHostGroups(self):
+    rows = rUtils.getHostGroups()
+    self.lineEditHostGroups.setText(self.taskValues['hostGroups'])    
+  
+  
+  def setTaskFileTypes(self):
+    rows = rUtils.getFileTypes()
+    self.comboFileType.clear()  
+    if(rows):
+      indx = 0
+      setIndx = 0
+      for row in rows:
+        self.comboFileType.addItem(_fromUtf8(row))
+        print(str(self.taskValues['fileType']))
+        if(row.endswith(str(self.taskValues['fileType']))):
+          setIndx = indx
+        indx = indx + 1
+      
+      self.comboFileType.setCurrentIndex(setIndx)
+      self.setRenderer()
+      return(1)
+    else:
+      return(0)
+  
+  
+  def resetRes(self):
+    self.lineEditRes.setText("default")
+  
   
   def submitTasks(self):
     resTemplates = rUtils.getResTemplates()

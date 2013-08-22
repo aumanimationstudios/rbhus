@@ -14,6 +14,7 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep 
 
 rEc = "rbhusEdit.py"
 rEcM = "rbhusEditMulti.py"
+rSubmit = "_rbhusSubmit.py"
   
 editTaskCmd = dirSelf.rstrip(os.sep) + os.sep + rEc
 editTaskCmd = editTaskCmd.replace("\\","/")
@@ -21,6 +22,8 @@ editTaskCmd = editTaskCmd.replace("\\","/")
 editTaskMultiCmd = dirSelf.rstrip(os.sep) + os.sep + rEcM
 editTaskMultiCmd = editTaskMultiCmd.replace("\\","/")
 
+submitCmd = dirSelf.rstrip(os.sep) + os.sep + rSubmit
+submitCmd = submitCmd.replace("\\","/")
 
 print editTaskCmd
 import rbhusListMod
@@ -132,6 +135,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test3Action = menu.addAction("rerun")
     test4Action = menu.addAction("edit")
     test5Action = menu.addAction("open dir")
+    test6Action = menu.addAction("copy/submit")
     
     action = menu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
@@ -144,6 +148,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.editTask()
     if(action == test5Action):
       self.previewTask()
+    if(action == test6Action):
+      self.copySubmit()
 
   def popupFrames(self, pos):
     selFramesDict = self.selectedFrames()
@@ -246,6 +252,23 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           return()    
     self.popTableFrames()
 
+  
+  def copySubmit(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    for x in selTasksDict:
+      selTasks.append(x['id'].lstrip("0"))
+    
+    
+    if(len(selTasks) == 1):
+      try:
+        subprocess.Popen([sys.executable,submitCmd,str(selTasks[0])])
+      except:
+        print(str(sys.exc_info()))
+    else:
+      print("wtf . cannot copy from multiple tasks!")
+  
+  
   def editTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
