@@ -252,6 +252,27 @@ class dbRbhus:
     return(rows)
     
     
+  def setTaskDoneTime(self.taskId):
+    try:
+      self.execute("UPDATE tasks SET doneTime=NOW() \
+                      WHERE id="+ str(taskId))
+    except:
+      modLogger.debug(str(sys.exc_info()))
+      return(0)
+    return(1)
+
+
+  def resetTaskDoneTime(self,taskId):
+    try:
+      self.execute("UPDATE tasks SET doneTime=\'0000-00-00 00:00:00\' \
+                      WHERE id="+ str(taskId))
+    except:
+      modLogger.debug(str(sys.exc_info()))
+      return(0)
+    return(1)
+  
+  
+  
   def delTask(self,taskId,auth=False):
     if(auth):
       try:

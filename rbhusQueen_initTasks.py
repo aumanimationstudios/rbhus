@@ -75,6 +75,8 @@ def getWaitingTasks(pendingTasks):
     time.sleep(1)
 
 
+  
+
 def initWaitingTasks(pendingTasks):
   setproctitle.setproctitle("rQ_set")
   db_conn = dbRbhus.dbRbhus()
@@ -91,6 +93,8 @@ def initWaitingTasks(pendingTasks):
       idTask = row['id']
       fRange = row['fRange']
       frames = []
+      
+      db_conn.resetTaskDoneTime(idTask)
 
       for a in fRange.split(","):
         frange = a.split(":")

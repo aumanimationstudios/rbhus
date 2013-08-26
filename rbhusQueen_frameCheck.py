@@ -94,6 +94,7 @@ def autoStopper():
     time.sleep(0.1)
 
 
+  
 def setCompletedTasks():
   db_conn = dbRbhus.dbRbhus()
   setproctitle.setproctitle("rQ_setCompletedTasks")
@@ -107,6 +108,8 @@ def setCompletedTasks():
           #logging.debug("active tasks wtf5 : "+ str(task['id']) +"\n\n")
         
           if(status >= 0):
+            if(status ==  constants.taskDone):
+              db_conn.setTaskDoneTime(task['id'])
             while(1):
               if(db_conn.setTaskStatus(task['id'],status)):
                 logging.debug("task "+ str(task['id']) +" status changed to : "+ str(status))
