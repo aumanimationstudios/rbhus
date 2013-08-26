@@ -254,7 +254,7 @@ class dbRbhus:
     
   def setTaskDoneTime(self,taskId):
     try:
-      self.execute("UPDATE tasks SET doneTime=NOW() \
+      self.execute("UPDATE tasks SET doneTime=IF(doneTime=\'0000-00-00 00:00:00\',NOW(),doneTime) \
                       WHERE id="+ str(taskId))
     except:
       modLogger.debug(str(sys.exc_info()))
