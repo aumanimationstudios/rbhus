@@ -252,7 +252,7 @@ class dbRbhus:
     return(rows)
     
     
-  def setTaskDoneTime(self.taskId):
+  def setTaskDoneTime(self,taskId):
     try:
       self.execute("UPDATE tasks SET doneTime=NOW() \
                       WHERE id="+ str(taskId))
