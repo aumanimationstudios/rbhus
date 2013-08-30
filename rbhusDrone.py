@@ -1227,7 +1227,7 @@ def getHostGroups(dbconn):
 
 def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
   while(1):
-    time.sleep(0.1)
+    time.sleep(1)
     if(sys.platform.find("linux") >=0):
       plat = "linux"
     elif(sys.platform.find("win") >= 0):
@@ -1235,39 +1235,15 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
 
     try:
       hostname,ipAddr = getHostNameIP()
-      logClient.debug("ipaddr : "+ str(ipAddr))
+      logClient.debug("trying to insert hostInfo")
 
       try:
-        rowss = dbconn.execute("SELECT * FROM hostInfo WHERE ip = \'" + ipAddr + "\'", dictionary=True)
-        logClient.debug("hostInfo : "+ str(rowss))
-        if(isinstance(rowss,int)):
-          rowss = []
-      except:
-        logClient.debug(str(sys.exc_info()))
-        continue
-      if(len(rowss) == 0):
-        logClient.debug("Hostname is new :)")
-        try:
-          dbconn.execute("INSERT INTO hostInfo \
-                        (hostName,groups,totalRam,totalCpus,totalSwap,ip,os) \
-                        VALUES ('" \
-                        + str(hostName) + "', '" \
-                        + str("default,"+ hostName) + "', " \
-                        + str(totalRam) + ", " \
-                        + str(totalCpus) + ", " \
-                        + str(totalSwap) + ", '" \
-                        + str(ipAddr) + "', '" \
-                        + str("default,"+ plat) +"')")
-        except:
-          logClient.debug(str(sys.exc_info()))
-      else:
-        logClient.debug(str(sys.exc_info()))
-        grps = 0
+        grps = []
         try:
           grps = getHostGroups(db_conn)
         except:
           logClient.debug(str(sys.exc_info()))
-
+  
         if(grps):
           try:
             grps.remove(hostName)
@@ -1280,78 +1256,62 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
           grps.append("default")
           grps.append(hostName)
 
-        try:
-          dbconn.execute("UPDATE hostInfo SET \
-                          totalRam='"+ str(totalRam) +"', \
-                          totalCpus='"+ str(totalCpus) +"', \
-                          totalSwap='"+ str(totalSwap) +"' ,\
-                          hostName='"+ str(hostName) +"' ,\
-                          os='"+ str("default,"+ plat) +"' ,\
-                          groups='"+ ",".join(grps) +"' \
-                          WHERE ip = \'"+ str(ipAddr) +"\'")
-        except:
-          logClient.debug(str(sys.exc_info()))
+        dbconn.execute("INSERT INTO hostInfo \
+                      (hostName,groups,totalRam,totalCpus,totalSwap,ip,os) \
+                      VALUES ('" \
+                      + str(hostName) + "', '" \
+                      + str("default,"+ hostName) + "', " \
+                      + str(totalRam) + ", " \
+                      + str(totalCpus) + ", " \
+                      + str(totalSwap) + ", '" \
+                      + str(ipAddr) + "', '" \
+                      + str("default,"+ plat) +"') \
+                        ON DUPLICATE KEY UPDATE \
+                        totalRam='"+ str(totalRam) +"', \
+                        totalCpus='"+ str(totalCpus) +"', \
+                        totalSwap='"+ str(totalSwap) +"' ,\
+                        hostName='"+ str(hostName) +"' ,\
+                        os='"+ str("default,"+ plat) +"' ,\
+                        groups='"+ ",".join(grps) +"'")
+      except:
+        logClient.debug(str(sys.exc_info()))
+      
 
 
       try:
-        rowss = dbconn.execute("SELECT * FROM hostResource WHERE ip = \'" + str(ipAddr) + "\'", dictionary=True)
-        if(isinstance(rowss,int)):
-          rowss = []
+        logClient.debug("trying to insert hostResource")
+        dbconn.execute("INSERT INTO hostResource (hostName,ip,freeCpus) VALUES (\'" \
+                      + hostName +"\',\'" \
+                      + ipAddr +"\'," \
+                      + str(totalCpus) +") \
+                        ON DUPLICATE KEY UPDATE \
+                        freeCpus=\'"+ str(totalCpus) +"\', \
+                        ip=\'"+ str(ipAddr) +"\'")
       except:
         logClient.debug(str(sys.exc_info()))
-      if(len(rowss) == 0):
-        try:
-          logClient.debug(" : Trying to insert hostResource")
-          dbconn.execute("INSERT INTO hostResource (hostName,ip,freeCpus) VALUES (\'"
-                        + hostName +"\',\'" \
-                        + ipAddr +"\'," \
-                        + str(totalCpus) +")")
-        except:
-          logClient.debug(str(sys.exc_info()))
-      else:
-        try:
-          logClient.debug(" : Trying to update hostResource")
-          dbconn.execute("UPDATE hostResource SET freeCpus=\'"+ str(totalCpus) +"\' WHERE ip=\'"+ str(ipAddr) +"\'")
-        except:
-          logClient.debug(str(sys.exc_info()))
-
-      try:
-        rowss = dbconn.execute("SELECT * FROM hostAlive WHERE ip=\'" + ipAddr + "\'", dictionary=True)
-        if(isinstance(rowss,int)):
-          rowss = []
-      except:
-        logClient.debug(str(sys.exc_info()))
-      if(len(rowss) == 0):
-        try:
-          logClient.debug(" : Trying to insert hostAlive")
-          dbconn.execute("INSERT INTO hostAlive (hostName,ip) VALUES (\'"+ str(hostName) +"\',\'"+ str(ipAddr) +"\')")
-        except:
-          logClient.debug(str(sys.exc_info()))
-          try:
-            logClient.dead(" : Trying to update hostAlive")
-            dbconn.execute("UPDATE hostAlive SET ip=\'"+ str(ipAddr) +"\' WHERE hostName=\'"+ str(hostName) +"\'")
-          except:
-            logClient.debug(str(sys.exc_info()))
-          
+      
 
 
       try:
-        rowss = dbconn.execute("SELECT * FROM hostEffectiveResource WHERE hostName=\'" + str(hostName) + "\'", dictionary=True)
-        if(isinstance(rowss,int)):
-          rowss = []
+        logClient.debug(" : Trying to insert hostAlive")
+        dbconn.execute("INSERT INTO hostAlive (hostName,ip) VALUES (\'" \
+                        + str(hostName) +"\',\'" \
+                        + str(ipAddr) +"\') \
+                          ON DUPLICATE KEY UPDATE \
+                          ip=\'"+ str(ipAddr) +"\'")
       except:
         logClient.debug(str(sys.exc_info()))
-      if(len(rowss) == 0):
-        try:
-          dbconn.execute("INSERT INTO hostEffectiveResource (hostName,ip) VALUES (\'"+ str(hostName) +"\',\'"+ str(ipAddr) +"\')")
-        except:
-          logClient.debug(str(sys.exc_info()))
-          try:
-            logClient.dead(" : Trying to update hostEffectiveResource")
-            dbconn.execute("UPDATE hostEffectiveResource SET ip=\'"+ str(ipAddr) +"\' WHERE hostName=\'"+ str(hostName) +"\'")
-          except:
-            logClient.debug(str(sys.exc_info()))
-      #upHostAliveStatus(hostName, 1)
+        
+
+
+      try:
+        dbconn.execute("INSERT INTO hostEffectiveResource (hostName,ip) VALUES (\'" \
+                        + str(hostName) +"\',\'" \
+                        + str(ipAddr) +"\') \
+                          ON DUPLICATE KEY UPDATE \
+                          ip=\'"+ str(ipAddr) +"\'")
+      except:
+        logClient.debug(str(sys.exc_info()))
       break
     except:
       logClient.debug(str(sys.exc_info()))
