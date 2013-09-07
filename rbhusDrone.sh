@@ -1,1 +1,1 @@
-/opt/rbhus/rbhusDrone.py &
+./rbhusDrone.py &
