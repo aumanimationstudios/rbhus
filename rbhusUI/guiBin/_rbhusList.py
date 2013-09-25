@@ -100,7 +100,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       for x in selTasksDict:
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
-        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir)
+        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,options=QtGui.QFileDialog.DontUseNativeDialog)
         if(fila):
           for fi in fila:
             if(sys.platform.find("win") >= 0):
@@ -117,7 +117,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for x in selFramesDict:
       tD = db_conn.getTaskDetails(x['id'])
       oDir = tD['outDir']
-      fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*")
+      print("*"+ str(x['frameId']).zfill(tD['pad']) +"*")
+      fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*",options=QtGui.QFileDialog.DontUseNativeDialog)
       if(fila):
         print(fila)
         for fi in fila:
