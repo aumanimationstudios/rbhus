@@ -31,7 +31,10 @@ class login():
       pass
     if(pFs):
       if((time.time() - createT.st_ctime)/60 >= 500):
-        os.remove(passwdF)
+	try:
+	  os.remove(passwdF)
+	except:
+	  print(str(sys.exc_info()))
         return(0)
       else:
         pf = open(passwdF,"r")

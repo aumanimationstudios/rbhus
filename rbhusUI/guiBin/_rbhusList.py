@@ -42,6 +42,19 @@ except AttributeError:
 
 class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def setupUi(self, Form):
+    rbhusListMod.Ui_mainRbhusList.setupUi(self,Form)
+    
+    self.username = None
+    self.userProjIds = []
+    try:
+      self.username = os.environ['rbhus_acl_user'].rstrip().lstrip()
+    except:
+      pass
+    try:
+      self.userProjIds = os.environ['rbhus_acl_projIds'].split()
+    except:
+      pass
+    
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
@@ -49,10 +62,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","priority","submitTime","doneTime","afterTime","status","description"]
     self.colNamesFrames = ["id","frameId","batchId","hostName","ram","sTime","eTime","runCount","status"]
     self.colNamesFramesXtra = ["timeTaken"]
-    
+    self.colNamesTaskXtra = ["pending"]
+    #self.checkTMine.setChecked(2)
     
     self.selectedTaskList = []
-    rbhusListMod.Ui_mainRbhusList.setupUi(self,Form)
+    
     QtCore.QObject.connect(self.pushRefresh, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableList)
     QtCore.QObject.connect(self.tableList, QtCore.SIGNAL(_fromUtf8("itemSelectionChanged()")), self.popTableFrames)
     QtCore.QObject.connect(self.checkAll, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
@@ -70,6 +84,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkTAutohold.clicked.connect(self.popTableList)
     self.checkTDone.clicked.connect(self.popTableList)
     self.checkTHold.clicked.connect(self.popTableList)
+    self.checkTMine.clicked.connect(self.popTableList)
     self.tableList.customContextMenuRequested.connect(self.popupTask)
     self.tableFrames.customContextMenuRequested.connect(self.popupFrames)
     #self.taskHold.clicked.connect(self.holdTask)
@@ -376,6 +391,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     cTHold = self.checkTHold.isChecked()
     cTAutohold = self.checkTAutohold.isChecked()
     cTAll = self.checkTAll.isChecked()
+    cTMine = self.checkTMine.isChecked()
     if(cTDone):
       statusToCheck.append(str(constants.taskDone))
     if(cTActive):
@@ -390,10 +406,16 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       conn = db.connRbhus()
       cursor = conn.cursor(db.dict)
       if(cTAll):
-        cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks")
+	if(cTMine):
+	  cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'")
+	else:
+	  cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks")
       else:
         statusCheck = " or status=".join(statusToCheck)
-        cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck)
+        if(cTMine):
+	  cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck +" and user='"+ str(self.username) +"'")
+	else:
+	  cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck)
         
       rows = cursor.fetchall()
       cursor.close()
@@ -404,9 +426,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       
     if(not rows):
       return()
-    for row in rows:
-      colCount = len(row)
-      break
+    colCount = len(self.colNamesTask) + len(self.colNamesTaskXtra)
       
     findRows = []
     for row in rows:
@@ -428,6 +448,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.tableList.setHorizontalHeaderItem(x, item)
     indx = 0
     for x in self.colNamesTask:
+      self.tableList.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      indx = indx + 1
+      
+    for x in self.colNamesTaskXtra:
       self.tableList.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
       indx = indx + 1
 
@@ -461,6 +485,23 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         self.tableList.setItem(indx, colIndx, item)
         self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
+      for colName in self.colNamesTaskXtra:
+        if(colName == "pending"):
+	  item = QtGui.QTableWidgetItem()
+	  self.tableList.setItem(indx, colIndx, item)
+	  totalPend = 0
+	  dbconn = dbRbhus.dbRbhus()
+	  pendFrames = dbconn.getUnassignedFrames(row['id'])
+	  if(pendFrames):
+	    totalPend = len(pendFrames) 
+	  self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(totalPend), None, QtGui.QApplication.UnicodeUTF8))
+	  colIndx = colIndx + 1
+	  continue
+	item = QtGui.QTableWidgetItem()
+        self.tableList.setItem(indx, colIndx, item)
+        self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        colIndx = colIndx + 1
+      
       indx = indx + 1
 
     self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
@@ -649,7 +690,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     rowsSelected = []
     for idx in self.tableList.selectionModel().selectedRows():
       rowsSelected.append(idx.row())
-    colCount = self.tableList.columnCount()
+    colCount = len(self.colNamesTask)
 
     for row in rowsSelected:
       singleRow = {}

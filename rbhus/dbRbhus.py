@@ -531,14 +531,19 @@ class dbRbhus:
     return(rows[0])
   
     
-  def getHostInfo(self,status):
+  def getHostInfo(self,status="ALL",hostName=None):
+    hostnameSqlWhere = ""
+    hostnameSqlAnd = ""
+    if(hostName):
+      hostnameSqlWhere = " where hostName='"+ str(hostName) +"'"
+      hostnameSqlAnd = " and hostName='"+ str(hostName) +"'"
     try:
       if(status == "ALL"):
-        rows = self.execute("SELECT * FROM hostInfo", dictionary=True)
+        rows = self.execute("SELECT * FROM hostInfo"+ str(hostnameSqlWhere), dictionary=True)
       elif(status == "ENABLED"):
-        rows = self.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoEnable), dictionary=True)
+        rows = self.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoEnable) + str(hostnameSqlAnd), dictionary=True)
       else:
-        rows = self.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable), dictionary=True)
+        rows = self.execute("SELECT * FROM hostInfo WHERE status="+ str(constants.hostInfoDisable) + str(hostnameSqlAnd), dictionary=True)
     except:
       modLogger.error(str(sys.exc_info()))
       return(0)
