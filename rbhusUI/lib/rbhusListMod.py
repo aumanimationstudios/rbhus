@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Wed Sep 25 23:17:03 2013
+# Created: Mon Oct  7 15:21:57 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,8 +27,8 @@ class Ui_mainRbhusList(object):
   def setupUi(self, mainRbhusList):
     mainRbhusList.setObjectName(_fromUtf8("mainRbhusList"))
     mainRbhusList.setWindowModality(QtCore.Qt.WindowModal)
-    mainRbhusList.resize(1150, 707)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+    mainRbhusList.resize(1116, 707)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(mainRbhusList.sizePolicy().hasHeightForWidth())
@@ -492,16 +492,6 @@ class Ui_mainRbhusList(object):
     self.horizontalLayout_7.addWidget(self.checkRefresh)
     spacerItem5 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_7.addItem(spacerItem5)
-    self.pushLogout = QtGui.QPushButton(self.dockWidgetContents_3)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.pushLogout.sizePolicy().hasHeightForWidth())
-    self.pushLogout.setSizePolicy(sizePolicy)
-    self.pushLogout.setObjectName(_fromUtf8("pushLogout"))
-    self.horizontalLayout_7.addWidget(self.pushLogout)
-    spacerItem6 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-    self.horizontalLayout_7.addItem(spacerItem6)
     self.pushRefresh = QtGui.QPushButton(self.dockWidgetContents_3)
     self.pushRefresh.setObjectName(_fromUtf8("pushRefresh"))
     self.horizontalLayout_7.addWidget(self.pushRefresh)
@@ -547,6 +537,5 @@ class Ui_mainRbhusList(object):
     self.labelTotal.setText(_translate("mainRbhusList", "0", None))
     self.tableFrames.setSortingEnabled(True)
     self.checkRefresh.setText(_translate("mainRbhusList", "autoRefresh", None))
-    self.pushLogout.setText(_translate("mainRbhusList", "logout", None))
     self.pushRefresh.setText(_translate("mainRbhusList", "refresh", None))
 

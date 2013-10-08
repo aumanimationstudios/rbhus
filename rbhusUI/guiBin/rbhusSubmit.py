@@ -71,7 +71,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.autoOutName.setIcon(icon)
     self.autoOutName.setIconSize(QtCore.QSize(12, 12))
     self.labelUser.setText(os.environ['rbhus_acl_user'])
-    self.pushLogout.clicked.connect(self.logout)
+    
     
     self.afterTimeEdit.setDateTime(QtCore.QDateTime.currentDateTime())
     #for group in groups:
@@ -116,9 +116,6 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.popEditItems()
     
     
-  def logout(self):
-    self.authL.logout()
-    sys.exit(0)
   
   def printGroupSel(self):
     groups = rUtils.getHostGroups()

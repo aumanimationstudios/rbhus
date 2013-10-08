@@ -240,11 +240,12 @@ def assignFramesToHost(hostDetail,taskDets, taskFrames, batchId):
   framesStr = " or frames.frameId=".join(str(x) for x in taskFrames)
   db_conn.execute("UPDATE hostResource \
                   SET freeCpus=freeCpus-"+ str(eThreads) +" \
-                  WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+                  WHERE ip=\""+ hostDetail['ip'] +"\"")
   db_conn.execute("UPDATE frames \
                   SET hostName=\""+ hostDetail['hostName'] +"\" , \
                   status=if(frameId="+ str(min(taskFrames)) +","+ str(constants.framesAssigned) +","+ str(constants.framesBatched) +"), \
                   runCount=runCount+1 , \
+                  ip='"+ str(hostDetail['ip']) +"' , \
                   batchId=\""+ str(batchId) +"\", \
                   fThreads="+ str(eThreads) +" \
                   WHERE (frames.frameId="+ framesStr +") \
@@ -267,7 +268,7 @@ def assignBatchToHost(hostDetail,taskDets, batchId):
 
   db_conn.execute("UPDATE hostResource \
                   SET freeCpus=freeCpus-"+ str(eThreads) +" \
-                  WHERE hostName=\""+ hostDetail['hostName'] +"\"")
+                  WHERE ip=\""+ hostDetail['ip'] +"\"")
   db_conn.execute("UPDATE batch \
                   SET host=\""+ hostDetail['ip'] +"\" , \
                   status="+ str(constants.framesAssigned) +", \
@@ -381,7 +382,9 @@ def scheduler():
               if(db_conn.resetFailedFrames(activeTask["id"])):
                 break
               time.sleep(1)
-    time.sleep(0.01)
+    else:
+      time.sleep(1)
+    time.sleep(0.1)
 
 
 

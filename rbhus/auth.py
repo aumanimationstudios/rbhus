@@ -28,13 +28,13 @@ class login():
       createT = os.stat(passwdF)
       pFs = 1
     except:
-      pass
+      print(str(sys.exc_info()))
     if(pFs):
       if((time.time() - createT.st_ctime)/60 >= 500):
-	try:
-	  os.remove(passwdF)
-	except:
-	  print(str(sys.exc_info()))
+        try:
+          os.remove(passwdF)
+        except:
+          print(str(sys.exc_info()))
         return(0)
       else:
         pf = open(passwdF,"r")
@@ -113,7 +113,7 @@ class login():
     print("\nexporting environment variables...\n")
     os.environ['rbhus_acl_user'] = self.username
     os.environ['rbhus_acl_projIds'] = ""
-    os.environ['rbhus_acl_admin'] = ""
+    os.environ['rbhus_acl_admin'] = "0"
     if(self.userAclProjIds):
       os.environ['rbhus_acl_projIds'] = os.environ['rbhus_acl_projIds'] + " ".join(self.userAclProjIds)
     if(self.rbhusAdminFlag):

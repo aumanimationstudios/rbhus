@@ -2,11 +2,14 @@
 from PyQt4 import QtCore, QtGui
 import os
 import sys
+import subprocess
+
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+
 
 
 import rbhusAuthMod
@@ -37,34 +40,26 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     rbhusAuthMod.Ui_MainWindowAuth.setupUi(self,Form)
     self.pushButton.clicked.connect(self.tryAuth)
     self.acl = auth.login()
-    
+
     if(sys.platform.find("linux") >= 0):
       self.acl.useEnvUser()
-      os.system("env |& grep -i rbhus_")
-      os.system("guiBin"+ os.sep +"_rbhusSubmit.py &")
+      subprocess.Popen([sys.executable,"guiBin"+ os.sep +"rbhusRender.py"])
       sys.exit(0)
       
     if(not clientPrefs['authentication']):
       self.acl.useEnvUser()
-      os.system("env |& grep -i rbhus_")
-      os.system("guiBin"+ os.sep +"_rbhusSubmit.py &")
+      subprocess.Popen([sys.executable,"guiBin"+ os.sep +"rbhusRender.py"])
       sys.exit(0)
       
     rms = self.acl.tryRememberMe()
     if(rms):
       print(str(self.acl.username))
-      os.system("env |& grep -i rbhus_")
-      os.system("guiBin"+ os.sep +"_rbhusSubmit.py &")
+      subprocess.Popen([sys.executable,"guiBin"+ os.sep +"rbhusRender.py"])
       sys.exit(0)
-      
     
   
   def center(self):
-    
-    qr = Form.frameGeometry()
-    cp = QtGui.QDesktopWidget().availableGeometry().center()
-    qr.moveCenter(cp)
-    Form.move(qr.topLeft())
+    Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
   
   def tryAuth(self):
     
@@ -73,15 +68,10 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     if(ret):
       print("VALID")
       print(str(self.acl.username))
-      os.system("env |& grep -i rbhus_")
-      if(sys.platform.find("win") >= 0):
-        os.system("guiBin"+ os.sep +"_rbhusSubmit.py &")
-      elif(sys.platform.find("linux") >= 0):
-        os.system("guiBin"+ os.sep +"_rbhusSubmit.py &")
+      subprocess.Popen([sys.executable,"guiBin"+ os.sep +"rbhusRender.py"])
     else:
       print("\n&*^*&^*%&$&^(*)(__)&*%^$#   .. :) !\n")
     sys.exit(0)
-      
     
 if __name__ == "__main__":
   app = QtGui.QApplication(sys.argv)

@@ -13,7 +13,10 @@ import rbhusTextReadMod
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 
 
-
+textFile = sys.argv[1]
+if(not textFile):
+  sys.exit(1)
+print(textFile)
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8

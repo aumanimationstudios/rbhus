@@ -91,6 +91,8 @@ def autoStopper():
             for x in framesThresh:
               db_conn.setFramesStatus(x['id'],x['frameId'],constants.framesAutoHold)
               logging.debug("Auto stopping frame  : "+ str(task['id']) +" "+ str(x['frameId']))
+    else:
+      time.sleep(1)
     time.sleep(0.1)
 
 
@@ -115,6 +117,8 @@ def setCompletedTasks():
                 logging.debug("task "+ str(task['id']) +" status changed to : "+ str(status))
                 break
               time.sleep(0.1)
+    else:
+      time.sleep(1)
     time.sleep(0.1)
     
     

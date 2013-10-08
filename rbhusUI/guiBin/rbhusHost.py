@@ -8,7 +8,7 @@ import time
 import subprocess
 
 hName = socket.gethostname()
-
+ipAddr = socket.gethostbyname(socket.gethostname()).strip()
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
@@ -20,17 +20,20 @@ sys.path.append(dirSelf.rstrip(os.sep) + os.sep + "lib")
 
 rEc = "rbhusHostEdit.py"
   
-hostEditCmd = dirSelf.rstrip(os.sep) + os.sep + "guiBin" + os.sep + rEc
+hostEditCmd = dirSelf.rstrip(os.sep) + os.sep + rEc
 
 print hostEditCmd
 import rbhusHostMod
 print(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-sys.path.append(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-import db
-import dbRbhus
-import constants
 
-dbconn = dbRbhus.dbRbhus()
+
+sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
+import db
+import constants
+import utils as rUtils
+import dbRbhus
+
+
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -44,6 +47,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
+    self.dbconn = dbRbhus.dbRbhus()
     self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
     self.popTableHost()
     #self.pushDisable.clicked.connect(self.hostDisable)
@@ -97,27 +101,20 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def hostStop(self):
     hosts = self.selectedHosts()
     for h in hosts:
-      try:
-        rFrames = dbconn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(h['hostInfo.hostName']) +"\'", dictionary=True)
-      except:
-        print(str(sys.exc_info()))
-        continue
-      if(rFrames):
-        for rF in rFrames:
-          dbconn.stopFrames(h['hostInfo.hostName'],rF['id'],rF['frameId'])
-          print(str(h['hostInfo.hostName']) +" : "+ str(rF['id']) +" : "+ str(rF['frameId']))
+      hst = rUtils.hosts(h['ip']) 
+      
           
           
   def hostLocalStop(self):
     self.hostLocalDisable()
     try:
-      rFrames = dbconn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(hName) +"\'", dictionary=True)
+      rFrames = self.dbconn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(hName) +"\'", dictionary=True)
     except:
       print(str(sys.exc_info()))
       return(0)
     if(rFrames):
       for rF in rFrames:
-        dbconn.stopFrames(hName,rF['id'],rF['frameId'])
+        self.dbconn.stopFrames(hName,rF['id'],rF['frameId'])
         print(str(hName) +" : "+ str(rF['id']) +" : "+ str(rF['frameId']))
     
    
@@ -128,13 +125,13 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     hosts =  self.selectedHosts()
     if(hosts):
       for h in hosts:
-        dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where hostName=\'"+ str(h['hostInfo.hostName']) +"\'")
+        self.dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where hostName=\'"+ str(h['hostInfo.hostName']) +"\'")
     self.popTableHost()
 
 
   def hostLocalEnable(self):
     try:
-      dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where hostName=\'"+ str(hName) +"\'")
+      self.dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where hostName=\'"+ str(hName) +"\'")
     except:
       print(str(sys.exc_info()))
     self.popTableHost()
@@ -145,12 +142,12 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     hosts = self.selectedHosts() 
     if(hosts):
       for h in hosts:
-        dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where hostName=\'"+ str(h['hostInfo.hostName']) +"\'")
+        self.dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where hostName=\'"+ str(h['hostInfo.hostName']) +"\'")
     self.popTableHost()
     
   def hostLocalDisable(self):
     try:
-      dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where hostName=\'"+ str(hName) +"\'")
+      self.dbconn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where hostName=\'"+ str(hName) +"\'")
     except:
       print(str(sys.exc_info()))
     self.popTableHost()
@@ -188,7 +185,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     colCount = 0
     
     try:
-      rows = dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource where hostInfo.hostName=hostAlive.hostName and hostAlive.hostName=hostResource.hostName", dictionary=True)
+      rows = self.dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource where hostInfo.hostName=hostAlive.hostName and hostAlive.hostName=hostResource.hostName", dictionary=True)
     except:
       print("Error connecting to db")
       return(0)
@@ -198,7 +195,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       
       
     try:
-      rowsRunning = dbconn.getRunningFrames()
+      rowsRunning = self.dbconn.getRunningFrames()
     except:
       print("Error getting running frames")
       return(0)

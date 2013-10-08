@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>699</width>
-    <height>670</height>
+    <width>633</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,13 +71,6 @@
       </property>
       <property name="maximum">
        <number>999999999</number>
-      </property>
-     </widget>
-    </item>
-    <item row="24" column="0">
-     <widget class="QPushButton" name="pushLogout">
-      <property name="text">
-       <string>logout</string>
       </property>
      </widget>
     </item>

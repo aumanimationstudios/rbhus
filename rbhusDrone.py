@@ -79,7 +79,11 @@ def getProcessLastKids(ppid,lastKids):
     logClient.debug(str(sys.exc_info()))
     return(0)
 
-  pidKids = pidDets.get_children(recursive=True)
+  try:
+    pidKids = pidDets.get_children(recursive=True)
+  except:
+    logClient.debug(str(sys.exc_info()))
+    return(0)
   if(pidKids):
     for pidKid in pidKids:
       lastKids.append(pidKid.pid)
@@ -382,7 +386,7 @@ def execFrames(frameInfo,frameScrutiny):
     os.environ['rbhus_runScript'] = runScript
 
 
-    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ frameInfo['batchId'] +".log"
+    logFile = str(frameInfo['logBase']).rstrip(os.sep) + os.sep + str(frameInfo['batchId']) +".log"
     try:
       db_conn.execute("update frames set logFile=\'"+ str(logFile) +"\' where batchId=\'"+ str(frameInfo['batchId']) +"\'")
     except:
@@ -459,7 +463,7 @@ def execFrames(frameInfo,frameScrutiny):
     logClient.debug("logFile : "+ str(logFile))
     try:
       logD = open(logFile,"a+",0)
-      logD.write("START \n"+ hostname +" : "+ time.asctime() +"\n")
+      logD.write("START : "+ str(frameInfo['batchId']) + " : "+ str(hostname) +" : "+ str(time.asctime()) +"\n")
       logD.write("FRAMES : "+ " ".join(batchedFrames) +"\n")
     except:
       pass
@@ -615,7 +619,8 @@ def execFrames(frameInfo,frameScrutiny):
     if(sys.platform.find("win") >= 0):
       killFrame(db_conn,frameInfo['id'],frameInfo['frameId'],pidfileLock,-1)
     try:
-      logD.write(hostname +" : "+ time.asctime() +"\nEND\n\n")
+      logD.write("FRAMES : "+ " ".join(batchedFrames) +"\n")
+      logD.write("END : "+ str(frameInfo['batchId']) + " : "+ str(hostname) +" : "+ str(time.asctime()) +"\n")
       logD.close()
     except:
       pass
@@ -1271,6 +1276,7 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
                         totalCpus='"+ str(totalCpus) +"', \
                         totalSwap='"+ str(totalSwap) +"' ,\
                         hostName='"+ str(hostName) +"' ,\
+                        ip='"+ str(ipAddr) +"' , \
                         os='"+ str("default,"+ plat) +"' ,\
                         groups='"+ ",".join(grps) +"'")
       except:

@@ -399,6 +399,7 @@ class dbRbhus:
   def getPotentHosts(self):
     try:
       rows = self.execute("SELECT hostInfo.hostName, \
+                            hostInfo.ip, \
                             hostInfo.totalCpus, \
                             hostResource.freeCpus, \
                             hostInfo.totalRam, \

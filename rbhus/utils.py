@@ -128,6 +128,90 @@ def getOsTypes():
   else:
     return(0)
 
+
+
+
+
+class hosts(object):
+  def __init__(self,hostIp = 0):
+    self.db_conn = dbRbhus.dbRbhus()
+    
+    self.hName = socket.gethostname()
+    self.ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+
+    self.username = None
+    self.userProjIds = []
+    try:
+      self.username = os.environ['rbhus_acl_user'].rstrip().lstrip()
+    except:
+      pass
+    try:
+      self.userProjIds = os.environ['rbhus_acl_projIds'].split()
+    except:
+      pass
+    try:
+      self.userAdmin = int(os.environ['rbhus_acl_admin'])
+    except:
+      pass
+    self.ip = hostIp
+    if(self.ip):
+      self.hostDetails = self._getHostDetails()
+    
+  def _getHostDetails(self):
+    try:
+      rows = self.db_conn.execute("select * from hostInfo, hostEffectiveResource, hostResource, hostAlive where (hostInfo.ip COLLATE utf8_unicode_ci = hostResource.ip) and (hostInfo.ip COLLATE utf8_unicode_ci =hostEffectiveResource.ip) and (hostInfo.ip COLLATE utf8_unicode_ci = hostAlive.ip) and (hostInfo.ip = '"+ str(self.ip) +"')",dictionary=True)
+      if(rows):
+        return(rows[-1])
+      else:
+        return(0)
+    except:
+      return(0)
+      
+  def stop(self):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == ipAddr)):
+      try:
+        rFrames = self.db_conn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(self.hostDetails['hostName']) +"\'", dictionary=True)
+      except:
+        print(str(sys.exc_info()))
+        return(0)
+      if(rFrames):
+        for rF in rFrames:
+          self.db_conn.stopFrames(self.hostDetails['hostName'],rF['id'],rF['frameId'])
+          print(str(self.hostDetails['hostName']) +" : "+ str(rF['id']) +" : "+ str(rF['frameId']))
+      return(1)
+    else:
+      print("Only local hosts can be stopped without admin rights!")
+      return(0)
+      
+  def enable(self):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == ipAddr)):
+      try:
+        self.db_conn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
+      except:
+        print(str(sys.exc_info()))
+        return(0)
+      return(1)
+    else:
+      print("Only local hosts can be enabled without admin rights!")
+      return(0)
+      
+  def disable(self):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == ipAddr)):
+      try:
+        self.db_conn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
+      except:
+        print(str(sys.exc_info()))
+        return(0)
+      return(1)
+    else:
+      print("Only local hosts can be enabled without admin rights!")
+      return(0)
+
+
+
+
+
+
 class tasks(object):
   def __init__(self, tId = 0):
     self.db_conn = dbRbhus.dbRbhus()
@@ -140,6 +224,10 @@ class tasks(object):
       pass
     try:
       self.userProjIds = os.environ['rbhus_acl_projIds'].split()
+    except:
+      pass
+    try:
+      self.userAdmin = int(os.environ['rbhus_acl_admin'])
     except:
       pass
     self.taskId = tId
@@ -201,7 +289,7 @@ class tasks(object):
     print(self.userProjIds)
     print(self.taskDetails['projId'])
     if(self.username):
-      if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds)):
+      if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds) or (self.userAdmin == 1)):
         print("user : "+ str(self.username) +" : allowed to edit")
       else:
         print("user : "+ str(self.username) +" : NOT allowed to edit")
@@ -238,6 +326,9 @@ class tasks(object):
             raise
         self.taskDetails = self._getTaskDetails(self.taskId)
         
+
+
+
         
 #if __name__ == "__main__":
   #b = {}

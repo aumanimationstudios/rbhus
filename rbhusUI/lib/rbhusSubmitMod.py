@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'lib/rbhusSubmitMod_revamp.ui'
+# Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Wed Jul 10 22:29:54 2013
-#      by: PyQt4 UI code generator 4.10.1
+# Created: Mon Oct  7 15:19:44 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_rbhusSubmit(object):
   def setupUi(self, rbhusSubmit):
     rbhusSubmit.setObjectName(_fromUtf8("rbhusSubmit"))
-    rbhusSubmit.resize(699, 670)
+    rbhusSubmit.resize(633, 650)
     self.centralwidget = QtGui.QWidget(rbhusSubmit)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -67,9 +67,6 @@ class Ui_rbhusSubmit(object):
     self.spinMaxBatch.setMaximum(999999999)
     self.spinMaxBatch.setObjectName(_fromUtf8("spinMaxBatch"))
     self.gridLayout.addWidget(self.spinMaxBatch, 21, 1, 1, 1)
-    self.pushLogout = QtGui.QPushButton(self.centralwidget)
-    self.pushLogout.setObjectName(_fromUtf8("pushLogout"))
-    self.gridLayout.addWidget(self.pushLogout, 24, 0, 1, 1)
     self.pushOutDir = QtGui.QPushButton(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
@@ -485,7 +482,6 @@ class Ui_rbhusSubmit(object):
     self.labelPrio.setText(_translate("rbhusSubmit", "priority", None))
     self.comboBatching.setItemText(0, _translate("rbhusSubmit", "deactive", None))
     self.comboBatching.setItemText(1, _translate("rbhusSubmit", "active", None))
-    self.pushLogout.setText(_translate("rbhusSubmit", "logout", None))
     self.pushOutDir.setText(_translate("rbhusSubmit", "open", None))
     self.label.setText(_translate("rbhusSubmit", "USER", None))
     self.labelLayer.setText(_translate("rbhusSubmit", "layers", None))
