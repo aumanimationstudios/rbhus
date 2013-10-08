@@ -111,7 +111,7 @@ def init():
   hostname,ipAddr = getHostNameIP()
   totalCpus = multiprocessing.cpu_count()
   totalMem = totalMemInfo()
-  ret = setHostInfo(db_conn,hostname,totalMem['MemTotal'],totalCpus,totalMem['SwapTotal'])
+  ret = setHostInfo(db_conn,totalMem['MemTotal'],totalCpus,totalMem['SwapTotal'])
   if(ret == 1):
     return(1)
   return(0)
@@ -125,13 +125,12 @@ def hostUpdater():
   logClient.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) +" : "+ "hostUpdater : "+ str(myPid))
   while(1):
     time.sleep(5)
-    hostname = socket.gethostname()
     try:
       freeMem = freeMeminfo()
       #logClient.debug("WTF0 : "+ str(freeMem))
       loads = loadAvg()
       #logClient.debug("WTF1 : "+ str(loads))
-      setHostResMem(hostname, db_conn,freeMem['MemFree'],freeMem['SwapFree'], loads[0], loads[1], loads[2])
+      setHostResMem(db_conn,freeMem['MemFree'],freeMem['SwapFree'], loads[0], loads[1], loads[2])
     except:
       logClient.debug(str(sys.exc_info()))
       continue
@@ -188,8 +187,9 @@ def getAssignedFrames(qAssigned):
     rows = 0
     try:
       rows = db_conn.execute("SELECT frames.frameId, frames.fThreads,frames.batchId, tasks.* FROM frames, tasks \
-                      WHERE frames.hostName=\'"+ str(hostname) +"\' \
+                      WHERE frames.hostName='"+ str(hostname) +"' \
                       AND tasks.id=frames.id \
+                      AND frames.ip='"+ str(ipAddr) +"' \
                       AND frames.status="+ str(constants.framesAssigned) +" \
                       ORDER BY frames.frameId", dictionary=True)
     except:
@@ -1230,7 +1230,7 @@ def getHostGroups(dbconn):
   else:
     return(0)
 
-def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
+def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
   while(1):
     time.sleep(1)
     if(sys.platform.find("linux") >=0):
@@ -1241,6 +1241,9 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
     try:
       hostname,ipAddr = getHostNameIP()
       logClient.debug("trying to insert hostInfo")
+      if(ipAddr == "127.0.0.1"):
+        time.sleep(5)
+        continue
 
       try:
         grps = []
@@ -1251,7 +1254,7 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
   
         if(grps):
           try:
-            grps.remove(hostName)
+            grps.remove(hostname)
           except:
             pass
           try:
@@ -1259,13 +1262,13 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
           except:
             pass
           grps.append("default")
-          grps.append(hostName)
+          grps.append(hostname)
 
         dbconn.execute("INSERT INTO hostInfo \
                       (hostName,groups,totalRam,totalCpus,totalSwap,ip,os) \
                       VALUES ('" \
-                      + str(hostName) + "', '" \
-                      + str("default,"+ hostName) + "', " \
+                      + str(hostname) + "', '" \
+                      + ",".join(grps) + "', " \
                       + str(totalRam) + ", " \
                       + str(totalCpus) + ", " \
                       + str(totalSwap) + ", '" \
@@ -1275,7 +1278,7 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
                         totalRam='"+ str(totalRam) +"', \
                         totalCpus='"+ str(totalCpus) +"', \
                         totalSwap='"+ str(totalSwap) +"' ,\
-                        hostName='"+ str(hostName) +"' ,\
+                        hostName='"+ str(hostname) +"' ,\
                         ip='"+ str(ipAddr) +"' , \
                         os='"+ str("default,"+ plat) +"' ,\
                         groups='"+ ",".join(grps) +"'")
@@ -1324,8 +1327,10 @@ def setHostInfo(dbconn,hostName,totalRam=0,totalCpus=0,totalSwap=0):
       pass
 
 
-def setHostResMem(hostName, dbconn,freeRam='0',freeSwap='0', load1='0', load5='0', load10='0'):
+def setHostResMem(dbconn,freeRam='0',freeSwap='0', load1='0', load5='0', load10='0'):
   hostname,ipAddr = getHostNameIP()
+  if(ipAddr == "127.0.0.1"):
+    return(0)
   try:
     dbconn.execute("UPDATE hostResource SET freeRam=\'" + str(freeRam) +"\' \
           , freeSwap=\'"+ str(freeSwap) +"\' \
@@ -1340,6 +1345,8 @@ def setHostResMem(hostName, dbconn,freeRam='0',freeSwap='0', load1='0', load5='0
 
 def setFreeCpus(frameInfo, dbconn):
   hostname,ipAddr = getHostNameIP()
+  if(ipAddr == "127.0.0.1"):
+    return(0)
   try:
     dbconn.execute("UPDATE hostResource SET freeCpus=freeCpus+"+ str(frameInfo['fThreads']) +" WHERE ip=\'"+ str(ipAddr) +"\'")
     logClient.debug(" : freeing CPUs : "+ str(hostname) +":"+ str(frameInfo['fThreads']))

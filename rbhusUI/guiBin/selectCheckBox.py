@@ -14,12 +14,7 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep 
 import selectCheckBoxMod
 
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
-import dbRbhus
-import constants
-import utils as rUtils
-import auth
 
-dbconn = dbRbhus.dbRbhus()
 parser = argparse.ArgumentParser()
 
 
@@ -37,12 +32,10 @@ except AttributeError:
 
 class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
   def setupUi(self, Form):
+    selectCheckBoxMod.Ui_selectCheckBox.setupUi(self,Form)
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
-    self.authL = auth.login()
-    selectCheckBoxMod.Ui_selectCheckBox.setupUi(self,Form)
-    
     self.inList = []
     self.defList = []
     self.updateLine = []
@@ -59,8 +52,15 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
     self.pushSelect.clicked.connect(self.selectall)
     self.lineEditSearch.textChanged.connect(self.updateCheckBoxes)
     self.pushClearSearch.clicked.connect(self.lineEditSearch.clear)
+    Form.closeEvent = self.closeEvent
+  
+  
+  def closeEvent(self,event):
+    print(",".join(self.updateLine))
+    event.accept()
     
-    
+  
+  
   def pApply(self):
     print(",".join(self.updateLine))
     QtCore.QCoreApplication.instance().quit()

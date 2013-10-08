@@ -217,13 +217,26 @@ def arrangedActiveTasks():
           arrangedTasks.append(task)
     #logging.debug("arrangeTasks :"+ str(arrangedTasks))
 
-
+    runFirst = []
+    reArrangedTasks = arrangedTasks
+    for x in arrangedTasks:
+      if(x['fastAssign'] == constants.fastAssignEnable):
+        try:
+          reArrangedTasks.remove(x)
+        except:
+          pass
+        runFirst.append(x)
+    runFirst.reverse()
+    for x in runFirst:
+      reArrangedTasks.insert(0,x)
+      
+        
     ##get the tasks arranged according to afterTasks shits
     #if(afterTasks):
       #for afterT in afterTasks.keys():
         #afterTid =
 
-    return(arrangedTasks)
+    return(reArrangedTasks)
   else:
     return(0)
 

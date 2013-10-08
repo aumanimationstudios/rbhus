@@ -1,5 +1,6 @@
 import sys
 import os
+import socket
 import MySQLdb
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -10,6 +11,7 @@ else:
 
 sys.path.append(cwd.rstrip(os.sep) + os.sep)
 import dbRbhus
+import constants
 
 
 
@@ -29,10 +31,35 @@ def getHostGroups():
         gtr[tr.rstrip().lstrip()] = 1
     for gt in gtr.keys():
       retRows.append(gt)
+      
+    aGroups = getHostGroupsActive()
+    aGroups.sort(reverse=True)
+    for x in aGroups:
+      try:
+        retRows.remove(x)
+      except:
+        pass
+      retRows.insert(0,x)
     return(retRows)
   else:
     return(0)
     
+
+def getHostGroupsActive():
+  dbconn = dbRbhus.dbRbhus()
+  retGroups = []
+  try:
+    rows = dbconn.execute("select gName from hostGroupsActive group by gName", dictionary=True)
+    if(rows):
+      for x in rows:
+        retGroups.append(x['gName'])
+      return(retGroups)
+    return(0)
+  except:
+    print("Error connecting to db 1")
+    return(0)
+  
+
 def getDefaults(table="tasks"):
   dbconn = dbRbhus.dbRbhus()
   defs = {}
@@ -136,8 +163,8 @@ class hosts(object):
   def __init__(self,hostIp = 0):
     self.db_conn = dbRbhus.dbRbhus()
     
-    self.hName = socket.gethostname()
-    self.ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+    self.MyHost = socket.gethostname()
+    self.MyIp = socket.gethostbyname(socket.gethostname()).strip()
 
     self.username = None
     self.userProjIds = []
@@ -154,6 +181,7 @@ class hosts(object):
     except:
       pass
     self.ip = hostIp
+    self.hostDetails = 0
     if(self.ip):
       self.hostDetails = self._getHostDetails()
     
@@ -167,8 +195,8 @@ class hosts(object):
     except:
       return(0)
       
-  def stop(self):
-    if(self.userAdmin or (str(self.hostDetails['ip']) == ipAddr)):
+  def hStop(self):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
       try:
         rFrames = self.db_conn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(self.hostDetails['hostName']) +"\'", dictionary=True)
       except:
@@ -183,30 +211,115 @@ class hosts(object):
       print("Only local hosts can be stopped without admin rights!")
       return(0)
       
-  def enable(self):
-    if(self.userAdmin or (str(self.hostDetails['ip']) == ipAddr)):
+  def hEnable(self):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
       try:
         self.db_conn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
       except:
         print(str(sys.exc_info()))
         return(0)
+      self.hostDetails = self._getHostDetails()
       return(1)
     else:
       print("Only local hosts can be enabled without admin rights!")
       return(0)
       
-  def disable(self):
-    if(self.userAdmin or (str(self.hostDetails['ip']) == ipAddr)):
+  def hDisable(self):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
       try:
         self.db_conn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
       except:
         print(str(sys.exc_info()))
         return(0)
+      self.hostDetails = self._getHostDetails()
       return(1)
     else:
       print("Only local hosts can be enabled without admin rights!")
       return(0)
-
+  
+  
+  def setGroups(self,nGroups):
+    tmpRow = nGroups.split(",")
+    try:
+      tmpRow.remove("default")
+    except:
+      pass
+    try:
+      tmpRow.remove(self.hostDetails['hostName'])
+    except:
+      pass
+    aGroups = getHostGroupsActive()
+    newGroups = ["default"]
+    newGroups.append(self.hostDetails['hostName'])
+    for tr in tmpRow:
+      if(tr not in aGroups):
+        print("hostGroup "+ str(tr) +" not a valid group")
+      else:
+        try:
+          newGroups.remove(tr)
+        except:
+          pass
+        newGroups.append(tr)
+    uGroups = {}
+    for x in newGroups:
+      uGroups[x] = 1
+    fGroups = uGroups.keys()
+    self.setHostData("hostInfo","groups","'"+ ",".join(fGroups) +"'")
+      
+      
+  def updateGroups(self,nGroups):
+    tmpRow = nGroups.split(",")
+    try:
+      tmpRow.remove("default")
+    except:
+      pass
+    try:
+      tmpRow.remove(self.hostDetails['hostName'])
+    except:
+      pass
+    aGroups = getHostGroupsActive()
+    newGroups = ["default"]
+    newGroups.append(self.hostDetails['hostName'])
+    
+    for tr in tmpRow:
+      if(tr not in aGroups):
+        print("hostGroup "+ str(tr) +" not a valid group")
+      else:
+        try:
+          newGroups.remove(tr)
+        except:
+          pass
+        newGroups.append(tr)
+        
+    oldGroups = self.hostDetails['groups'].split(",")
+    revampedGroups = []
+    for x in newGroups:
+      if(x in oldGroups):
+        print("hostGroup "+ str(tr) +" duplicate group")
+      else:
+        oldGroups.append(x)
+        
+    uGroups = {}
+    for x in oldGroups:
+      uGroups[x] = 1
+    fGroups = uGroups.keys()
+    self.setHostData("hostInfo","groups","'"+ ",".join(fGroups) +"'")
+    
+          
+  
+  
+  def setHostData(self,table,field,value):
+    if(self.userAdmin):
+      try:
+        self.db_conn.execute("update "+ str(table) +" set "+ str(field) +"="+ str(value) +" where ip='"+ str(self.hostDetails['ip']) +"'")
+      except:
+        print(str(sys.exc_info()))
+        return(0)
+      self.hostDetails = self._getHostDetails()
+      return(1)
+    else:
+      print("Only local hosts or a human with  admin rights can edit hosts data!")
+      return(0)
 
 
 
@@ -281,6 +394,17 @@ class tasks(object):
     except:
       self.taskId = 0
       raise
+  
+  
+  def fastAssign(self,enable=0):
+    if(self.userAdmin == 1):
+      try:
+        self.db_conn.execute("update tasks set fastAssign='" + str(enable) +"' where id='"+ str(self.taskId) +"'")
+        return(1)
+      except:
+        return(0)
+    else:
+      print("user : "+ str(self.username) +" : NOT allowed to edit")
   
   def edit(self,fieldDict):
     self.validFields = {}

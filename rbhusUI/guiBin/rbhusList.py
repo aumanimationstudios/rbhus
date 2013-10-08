@@ -33,6 +33,7 @@ import db
 import constants
 import auth
 import dbRbhus
+import utils as rUtils
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -155,6 +156,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test4Action = menu.addAction("edit")
     test5Action = menu.addAction("open dir")
     test6Action = menu.addAction("copy/submit")
+    test7Action = menu.addAction("fastAssign enable")
+    test8Action = menu.addAction("fastAssign disable")
     
     action = menu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
@@ -169,6 +172,28 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.previewTask()
     if(action == test6Action):
       self.copySubmit()
+    if(action == test7Action):
+      self.fastAssignFunc(e=1)
+    if(action == test8Action):
+      self.fastAssignFunc(e=0)
+      
+      
+  def fastAssignFunc(self,e=0):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    if(selTasksDict):
+      for x in selTasksDict:
+        selTasks.append(x['id'].lstrip("0"))
+      if(selTasks):
+        for x in selTasks:
+          tsks = rUtils.tasks(tId=x)
+          if(tsks):
+            tsks.fastAssign(enable=e)
+      return(1)
+    return(0)
+        
+        
+      
 
   def popupFrames(self, pos):
     selFramesDict = self.selectedFrames()

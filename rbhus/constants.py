@@ -23,6 +23,11 @@ taskStopped = 3
 taskAutoStopped = 5
 taskDone = 4
 
+#task table assign hack
+fastAssignEnable = 0
+fastAssignDisable = 1
+
+
 # batching 
 batchActive = 1
 batchDeactive = 0

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'rbhusHostEditMod.ui'
+# Form implementation generated from reading ui file 'rbhusHostEditMultiMod.ui'
 #
-# Created: Tue Oct  8 12:18:14 2013
+# Created: Tue Oct  8 15:52:45 2013
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_rbhusHostEdit(object):
   def setupUi(self, rbhusHostEdit):
     rbhusHostEdit.setObjectName(_fromUtf8("rbhusHostEdit"))
-    rbhusHostEdit.resize(503, 97)
+    rbhusHostEdit.resize(503, 78)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Minimum)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -42,14 +42,12 @@ class Ui_rbhusHostEdit(object):
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
     self.gridLayout.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
     self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-    self.labelImageName = QtGui.QLabel(self.centralwidget)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.labelImageName.sizePolicy().hasHeightForWidth())
-    self.labelImageName.setSizePolicy(sizePolicy)
-    self.labelImageName.setObjectName(_fromUtf8("labelImageName"))
-    self.gridLayout.addWidget(self.labelImageName, 0, 0, 1, 1)
+    self.lineEditGroups = QtGui.QLineEdit(self.centralwidget)
+    self.lineEditGroups.setObjectName(_fromUtf8("lineEditGroups"))
+    self.gridLayout.addWidget(self.lineEditGroups, 0, 1, 1, 1)
+    self.label = QtGui.QLabel(self.centralwidget)
+    self.label.setObjectName(_fromUtf8("label"))
+    self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
     self.horizontalLayout = QtGui.QHBoxLayout()
     self.horizontalLayout.setContentsMargins(-1, 10, -1, -1)
     self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
@@ -63,21 +61,7 @@ class Ui_rbhusHostEdit(object):
     self.pushApply.setSizePolicy(sizePolicy)
     self.pushApply.setObjectName(_fromUtf8("pushApply"))
     self.horizontalLayout.addWidget(self.pushApply)
-    self.gridLayout.addLayout(self.horizontalLayout, 2, 1, 1, 2)
-    self.spinCpu = QtGui.QSpinBox(self.centralwidget)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.spinCpu.sizePolicy().hasHeightForWidth())
-    self.spinCpu.setSizePolicy(sizePolicy)
-    self.spinCpu.setObjectName(_fromUtf8("spinCpu"))
-    self.gridLayout.addWidget(self.spinCpu, 0, 1, 1, 1)
-    self.label = QtGui.QLabel(self.centralwidget)
-    self.label.setObjectName(_fromUtf8("label"))
-    self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
-    self.lineEditGroups = QtGui.QLineEdit(self.centralwidget)
-    self.lineEditGroups.setObjectName(_fromUtf8("lineEditGroups"))
-    self.gridLayout.addWidget(self.lineEditGroups, 1, 1, 1, 1)
+    self.gridLayout.addLayout(self.horizontalLayout, 1, 1, 1, 2)
     self.pushReset = QtGui.QPushButton(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
@@ -85,10 +69,10 @@ class Ui_rbhusHostEdit(object):
     sizePolicy.setHeightForWidth(self.pushReset.sizePolicy().hasHeightForWidth())
     self.pushReset.setSizePolicy(sizePolicy)
     self.pushReset.setObjectName(_fromUtf8("pushReset"))
-    self.gridLayout.addWidget(self.pushReset, 2, 0, 1, 1)
+    self.gridLayout.addWidget(self.pushReset, 1, 0, 1, 1)
     self.pushSelect = QtGui.QPushButton(self.centralwidget)
     self.pushSelect.setObjectName(_fromUtf8("pushSelect"))
-    self.gridLayout.addWidget(self.pushSelect, 1, 2, 1, 1)
+    self.gridLayout.addWidget(self.pushSelect, 0, 2, 1, 1)
     rbhusHostEdit.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(rbhusHostEdit)
@@ -96,10 +80,8 @@ class Ui_rbhusHostEdit(object):
 
   def retranslateUi(self, rbhusHostEdit):
     rbhusHostEdit.setWindowTitle(_translate("rbhusHostEdit", "rbhusHostEdit", None))
-    self.labelImageName.setToolTip(_translate("rbhusHostEdit", "Effective Number of Cores to use for render", None))
-    self.labelImageName.setText(_translate("rbhusHostEdit", "eCpus", None))
-    self.pushApply.setText(_translate("rbhusHostEdit", "apply", None))
     self.label.setText(_translate("rbhusHostEdit", "groups", None))
+    self.pushApply.setText(_translate("rbhusHostEdit", "apply", None))
     self.pushReset.setText(_translate("rbhusHostEdit", "reset", None))
     self.pushSelect.setText(_translate("rbhusHostEdit", "select", None))
 

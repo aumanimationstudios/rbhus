@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusHostMod.ui'
 #
-# Created: Wed Jul 10 00:42:39 2013
-#      by: PyQt4 UI code generator 4.10.1
+# Created: Tue Oct  8 13:41:19 2013
+#      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(715, 399)
+    MainWindow.resize(813, 356)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -133,6 +133,10 @@ class Ui_MainWindow(object):
     self.gridLayout.addWidget(self.tableHost, 4, 0, 1, 1)
     self.horizontalLayout = QtGui.QHBoxLayout()
     self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+    self.LabelTotal = QtGui.QLabel(self.centralwidget)
+    self.LabelTotal.setLayoutDirection(QtCore.Qt.LeftToRight)
+    self.LabelTotal.setObjectName(_fromUtf8("LabelTotal"))
+    self.horizontalLayout.addWidget(self.LabelTotal)
     spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout.addItem(spacerItem1)
     self.LabelRunning = QtGui.QLabel(self.centralwidget)
@@ -151,5 +155,6 @@ class Ui_MainWindow(object):
     self.pushLocalEnable.setText(_translate("MainWindow", "ENABLE MY HOST", None))
     self.pushRefresh.setText(_translate("MainWindow", "refresh", None))
     self.tableHost.setSortingEnabled(True)
-    self.LabelRunning.setText(_translate("MainWindow", "runing : 3", None))
+    self.LabelTotal.setText(_translate("MainWindow", "total : 3", None))
+    self.LabelRunning.setText(_translate("MainWindow", "running : 3", None))
 
