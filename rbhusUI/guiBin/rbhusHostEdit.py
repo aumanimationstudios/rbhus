@@ -68,9 +68,17 @@ class Ui_Form(rbhusHostEditMod.Ui_rbhusHostEdit):
     groups = rUtils.getHostGroupsActive()
     
     outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
-    if(outGroups == ""):
-      outGroups = "default"
-    outGroups = outGroups + "," +  self.h.hostDetails['hostName']
+    #if(outGroups == ""):
+      #outGroups = "default"
+    try:
+      outGroups = ",".join(outGroups.split().remove(self.h.hostDetails['hostName']))
+    except:
+      pass
+    try:
+      outGroups = ",".join(outGroups.split().remove("default"))
+    except:
+      pass
+    outGroups = outGroups +","+ self.h.hostDetails['hostName']
     self.lineEditGroups.setText(_fromUtf8(outGroups))
     
     

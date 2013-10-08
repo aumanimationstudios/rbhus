@@ -56,7 +56,7 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
   
   
   def closeEvent(self,event):
-    print(",".join(self.updateLine))
+    print(",".join(self.defList))
     event.accept()
     
   
@@ -94,7 +94,7 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
         self.checkBoxes[x].stateChanged.connect(self.updateSelected)
         if(x in self.defList):
           self.checkBoxes[x].setChecked(2)
-    self.defList = []
+    #self.defList = []
     
     
         
