@@ -186,6 +186,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         selTasks.append(x['id'].lstrip("0"))
       if(selTasks):
         for x in selTasks:
+          print(x)
           tsks = rUtils.tasks(tId=x)
           if(tsks):
             tsks.fastAssign(enable=e)
@@ -314,19 +315,19 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     selTasks = []
     for x in selTasksDict:
       selTasks.append(x['id'].lstrip("0"))
-    
-    
-    if(len(selTasks) == 1):
+    if(len(selTasks) > 1):
+      try:
+        subprocess.Popen([sys.executable,editTaskMultiCmd,str(",".join(selTasks))])
+      except:
+        print(str(sys.exc_info()))
+    else:
       try:
         subprocess.Popen([sys.executable,editTaskCmd,str(selTasks[0])])
       except:
         print(str(sys.exc_info()))
-    elif(len(selTasks) > 1):
-      try:
-        subprocess.Popen([sys.executable,editTaskMultiCmd,str(",".join(selTasks[0]))])
-      except:
-        print(str(sys.exc_info()))
   
+
+
   def holdTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []

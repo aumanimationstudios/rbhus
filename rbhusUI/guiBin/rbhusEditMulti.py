@@ -159,36 +159,27 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
     
   def applyNew(self):
-    editDict = {}
     for t in sys.argv[1].rstrip().lstrip().split(","):
+      editDict = {}
       self.task = rUtils.tasks(tId = t)
-      self.taskValues = self.task.taskDetails
       if(self.db_filetype):
         editDict["fileType"] = str(self.comboType.currentText())
-        self.db_filetype = 0
       if(self.db_renderer):
         editDict["renderer"] = str(self.comboRenderer.currentText())
-        self.db_renderer = 0
       if(self.db_hostgroup):
         editDict["hostGroups"] = str(self.lineEditHostGroups.text())
-        self.db_hostgroup = 0
       if(self.db_bfc):
         editDict["beforeFrameCmd"] = str(self.lineEditBfc.text().replace("\\","/"))
-        self.db_bfc = 0
       if(self.db_afc):
         editDict["afterFrameCmd"] = str(self.lineEditAfc.text().replace("\\","/"))
-        self.db_afc = 0
       if(self.db_aftertime):
         editDict["afterTime"] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
       if(self.db_rerunthresh):
         editDict["rerunThresh"] = str(self.db_rerunthresh)
-        self.db_rerunthresh = 0
       if(self.db_framerange):
         editDict["fRange"] = str(self.lineEditFrange.text())
-        self.db_framerange = 0
       if(self.db_priority):
         editDict["priority"] = str(self.db_priority)
-        self.db_priority = 0
       if(self.db_batch != -1):
         editDict['batch'] = str(self.db_batch)
       if(self.db_maxbatch):
@@ -201,15 +192,14 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
         editDict['os'] = str(self.comboOsType.currentText())
       if(self.db_afterTask):
         editDict['afterTasks'] = str(self.lineEditAfterTask.text())
-      print(str(editDict))
+      print(editDict)
       try:
         self.task.edit(editDict)
       except:
         print(str(sys.exc_info()))
         
-      self.taskValues = self.task.taskDetails
       
-    self.popEditItems()  
+    #self.popEditItems()  
     
   
   def hostGroupPrint(self):
@@ -276,20 +266,16 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
   
   def getSpinRerunThresh(self):
     self.db_rerunthresh = self.spinRerunThresh.value()
-    print(self.db_rerunthresh)
     
     
   def getMinBatch(self):
     self.db_minbatch = self.spinMinBatch.value()
-    print(self.db_minbatch)
 
   def getMaxBatch(self):
     self.db_maxbatch = self.spinMaxBatch.value()
-    print(self.db_maxbatch)
     
   def getPriority(self):
     self.db_priority = self.spinPriority.value()
-    print(self.db_priority)
   
   def afterTimeEnable(self):
     cAT = self.checkAfterTime.isChecked()

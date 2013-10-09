@@ -1290,7 +1290,7 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
       try:
         logClient.debug("trying to insert hostResource")
         dbconn.execute("INSERT INTO hostResource (hostName,ip,freeCpus) VALUES (\'" \
-                      + hostName +"\',\'" \
+                      + hostname +"\',\'" \
                       + ipAddr +"\'," \
                       + str(totalCpus) +") \
                         ON DUPLICATE KEY UPDATE \
@@ -1304,7 +1304,7 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
       try:
         logClient.debug(" : Trying to insert hostAlive")
         dbconn.execute("INSERT INTO hostAlive (hostName,ip) VALUES (\'" \
-                        + str(hostName) +"\',\'" \
+                        + str(hostname) +"\',\'" \
                         + str(ipAddr) +"\') \
                           ON DUPLICATE KEY UPDATE \
                           ip=\'"+ str(ipAddr) +"\'")
@@ -1315,7 +1315,7 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
 
       try:
         dbconn.execute("INSERT INTO hostEffectiveResource (hostName,ip) VALUES (\'" \
-                        + str(hostName) +"\',\'" \
+                        + str(hostname) +"\',\'" \
                         + str(ipAddr) +"\') \
                           ON DUPLICATE KEY UPDATE \
                           ip=\'"+ str(ipAddr) +"\'")

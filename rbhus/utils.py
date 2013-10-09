@@ -427,21 +427,6 @@ class tasks(object):
         self.invalidFields[x] = fieldDict[x]
         
     if(self.validFields):
-      #try:
-        #taskAclList = os.environ['rbhus_acl_tasks'].rstrip().lstrip().split()
-      #except:
-        #return(0)
-        
-      #try:
-        #taskAclList.index('all')
-      #except:
-        #for validF in  self.validFields.keys():
-          #if(not str(validF) in taskAclList):
-            #try:
-              #del(self.validFields[validF])
-              #print("removing "+ str(validF) +" from editing since you are not qualified to use it :D .. ")
-            #except:
-              #print(str(sys.exc_info()))
       if(self.taskId):
         for x in self.validFields.keys():
           try:

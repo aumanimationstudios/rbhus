@@ -220,17 +220,22 @@ def arrangedActiveTasks():
     runFirst = []
     reArrangedTasks = arrangedTasks
     for x in arrangedTasks:
+      print(x['id'])
+    
+    for x in arrangedTasks:
       if(x['fastAssign'] == constants.fastAssignEnable):
         try:
           reArrangedTasks.remove(x)
         except:
           pass
         runFirst.append(x)
-    runFirst.reverse()
+    #runFirst.reverse()
     for x in runFirst:
       reArrangedTasks.insert(0,x)
       
         
+    for x in reArrangedTasks:
+      print(x['id'])
     ##get the tasks arranged according to afterTasks shits
     #if(afterTasks):
       #for afterT in afterTasks.keys():
@@ -328,6 +333,7 @@ def scheduler():
         afterTasks = {}
         for activeTask in activeTasks:
           if(activeTask["afterTasks"]):
+            print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
             ats = activeTask["afterTasks"].split(",")
             for at in ats:
               if(int(at) != 0):

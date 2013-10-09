@@ -24,8 +24,8 @@ taskAutoStopped = 5
 taskDone = 4
 
 #task table assign hack
-fastAssignEnable = 0
-fastAssignDisable = 1
+fastAssignEnable = 1
+fastAssignDisable = 0
 
 
 # batching 
