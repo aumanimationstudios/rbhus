@@ -64,24 +64,68 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.pushSubmit.clicked.connect(self.rbhusSubmit)
     self.pushHosts.clicked.connect(self.rbhusHost)
     self.pushLogout.clicked.connect(self.logout)
+    self.form = Form
+    
     
   def rbhusList(self):
-    subprocess.Popen([sys.executable,rbhuslistCmd])
-    return()
+    self.pushList.setText("opening")
+    p = QtCore.QProcess(parent=self.form)
+    self.pushList.setEnabled(False)
+    p.start(sys.executable,rbhuslistCmd.split())
+    p.finished.connect(self.rbhusListEnable)
+    p.started.connect(self.rbhusListWait)
+    
+  
+  def rbhusListWait(self):
+    self.pushList.setText("list open")
+  
+
+  def rbhusListEnable(self,exitStatus):
+    self.pushList.setText("list")
+    self.pushList.setEnabled(True)
   
   
   def rbhusSubmit(self):
-    subprocess.Popen([sys.executable,rbhusSubmitCmd])
-    return()
+    self.pushSubmit.setText("opening")
+    p = QtCore.QProcess(parent=self.form)
+    self.pushSubmit.setEnabled(False)
+    p.start(sys.executable,rbhusSubmitCmd.split())
+    p.finished.connect(self.rbhusSubmitEnable)
+    p.started.connect(self.rbhusSubmitWait)
     
+
+  def rbhusSubmitWait(self):
+    self.pushSubmit.setText("new open")
+  
+
+  def rbhusSubmitEnable(self,exitStatus):
+    self.pushSubmit.setText("new")
+    self.pushSubmit.setEnabled(True)
+
+
   def rbhusHost(self):
-    subprocess.Popen([sys.executable,rbhusHostCmd])
-    return()
+    self.pushHosts.setText("opening")
+    p = QtCore.QProcess(parent=self.form)
+    self.pushHosts.setEnabled(False)
+    p.start(sys.executable,rbhusHostCmd.split())
+    p.finished.connect(self.rbhusHostEnable)
+    p.started.connect(self.rbhusHostWait)
     
+
+  def rbhusHostWait(self):
+    self.pushHosts.setText("hosts open")
+  
+
+  def rbhusHostEnable(self,exitStatus):
+    self.pushHosts.setText("hosts")
+    self.pushHosts.setEnabled(True)
+    
+
   def logout(self):
     self.authL.logout()
     QtCore.QCoreApplication.instance().quit()
   
+
   def center(self):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
       

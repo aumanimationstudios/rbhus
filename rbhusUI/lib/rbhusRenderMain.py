@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusRenderMain.ui'
 #
-# Created: Mon Oct  7 14:53:15 2013
-#      by: PyQt4 UI code generator 4.9.6
+# Created: Wed Oct  9 08:43:25 2013
+#      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -123,6 +123,6 @@ class Ui_MainWindow(object):
     MainWindow.setWindowTitle(_translate("MainWindow", "Rbhus Render Management", None))
     self.pushList.setText(_translate("MainWindow", "list", None))
     self.pushHosts.setText(_translate("MainWindow", "hosts", None))
-    self.pushSubmit.setText(_translate("MainWindow", "submit", None))
+    self.pushSubmit.setText(_translate("MainWindow", "new", None))
     self.pushLogout.setText(_translate("MainWindow", "logout", None))
 
