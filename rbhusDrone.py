@@ -584,7 +584,7 @@ def execFrames(frameInfo,frameScrutiny):
         if(fInfo[0]['status'] == constants.framesHung):
           while(1):
             if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesRunning,db_conn) == 1):
-              logClient.debug("Break point MADNESS")
+              #logClient.debug("Break point MADNESS")
               break
             time.sleep(1)
       else:
@@ -1244,14 +1244,15 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
       if(ipAddr == "127.0.0.1"):
         time.sleep(5)
         continue
-
+      logClient.debug("step 1")
       try:
         grps = []
         try:
           grps = getHostGroups(db_conn)
         except:
           logClient.debug(str(sys.exc_info()))
-  
+        if(not grps):
+          grps = []
         if(grps):
           try:
             grps.remove(hostname)
@@ -1261,14 +1262,22 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
             grps.remove("default")
           except:
             pass
-          grps.append("default")
-          grps.append(hostname)
-
+        tgrps = grps
+        for x in grps:
+          if(not x):
+            try:
+              tgrps.remove(x)
+            except:
+              pass
+        
+        grps = tgrps    
+        grps.append("default")
+        grps.append(hostname)
         dbconn.execute("INSERT INTO hostInfo \
                       (hostName,groups,totalRam,totalCpus,totalSwap,ip,os) \
                       VALUES ('" \
                       + str(hostname) + "', '" \
-                      + ",".join(grps) + "', " \
+                      + str(",".join(grps)) + "', " \
                       + str(totalRam) + ", " \
                       + str(totalCpus) + ", " \
                       + str(totalSwap) + ", '" \
@@ -1281,9 +1290,11 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
                         hostName='"+ str(hostname) +"' ,\
                         ip='"+ str(ipAddr) +"' , \
                         os='"+ str("default,"+ plat) +"' ,\
-                        groups='"+ ",".join(grps) +"'")
+                        groups='"+ str(",".join(grps)) +"'")
       except:
+        logClient.debug("hostInfo update error")
         logClient.debug(str(sys.exc_info()))
+        sys.exit(1)
       
 
 
@@ -1297,7 +1308,9 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
                         freeCpus=\'"+ str(totalCpus) +"\', \
                         ip=\'"+ str(ipAddr) +"\'")
       except:
+        logClient.debug("hostResource update error")
         logClient.debug(str(sys.exc_info()))
+        sys.exit(1)
       
 
 
@@ -1309,8 +1322,9 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
                           ON DUPLICATE KEY UPDATE \
                           ip=\'"+ str(ipAddr) +"\'")
       except:
+        logClient.debug("hostAlive update error")
         logClient.debug(str(sys.exc_info()))
-        
+        sys.exit(1)
 
 
       try:
@@ -1320,7 +1334,9 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
                           ON DUPLICATE KEY UPDATE \
                           ip=\'"+ str(ipAddr) +"\'")
       except:
+        logClient.debug("hostEffectiveResource update error")
         logClient.debug(str(sys.exc_info()))
+        sys.exit(1)
       break
     except:
       logClient.debug(str(sys.exc_info()))

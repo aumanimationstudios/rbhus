@@ -82,7 +82,7 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.hostEnableAction = self.hostMenu.addAction("enable")
     self.hostDisableAction = self.hostMenu.addAction("stop")
     self.hostEnableAction.triggered.connect(self.hostDets.hEnable)
-    self.hostDisableAction.triggered.connect(self.hostDets.hStop)
+    self.hostDisableAction.triggered.connect(self.hostStop)
     self.hostOpen.triggered.connect(self.rbhusHost)
     
     
@@ -100,7 +100,10 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     event.ignore()
     self.form.setVisible(False) 
     
-    
+  def hostStop(self):
+    self.hostDets.hStop()
+    self.hostDets.hDisable()
+  
   def showMain(self,actReason):
     if(actReason == 2):
       self.form.setVisible(True)

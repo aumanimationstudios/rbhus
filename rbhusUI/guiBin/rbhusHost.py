@@ -109,11 +109,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     hosts = self.selectedHosts()
     for h in hosts:
       hst = rUtils.hosts(h['hostInfo.ip'])
-      a = hst.hStop()
-      if(a):
-        print("host stopped")
-      else:
-        print("host NOT stopped")
+      hst.hStop()
+      hst.hDisable()
     self.popTableHost()
     return(1)
       
@@ -142,12 +139,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     if(hosts):
       for h in hosts:
         hst = rUtils.hosts(h['hostInfo.ip'])
-        a = hst.hEnable()
-      if(a):
-        print("host enabled")
-      else:
-        print("host NOT enabled")
-    self.popTableHost()
+        hst.hEnable()
+      self.popTableHost()
     return(1)
 
 
