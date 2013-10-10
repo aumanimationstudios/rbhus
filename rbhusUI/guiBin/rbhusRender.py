@@ -65,12 +65,38 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.pushHosts.clicked.connect(self.rbhusHost)
     self.pushLogout.clicked.connect(self.logout)
     self.form = Form
+    self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg"))
+    self.trayIcon.show()
     
+    self.trayMenu = QtGui.QMenu()
+    self.listAction = self.trayMenu.addAction("list")
+    self.newAction = self.trayMenu.addAction("new")
+    self.hostAction = self.trayMenu.addAction("hosts")
+    self.quitAction = self.trayMenu.addAction("quit")
+    self.trayIcon.setContextMenu(self.trayMenu)
+    self.trayIcon.activated.connect(self.showMain)
+    self.listAction.triggered.connect(self.rbhusList)
+    self.newAction.triggered.connect(self.rbhusSubmit)
+    self.hostAction.triggered.connect(self.rbhusHost)
+    self.quitAction.triggered.connect(self.quitFunc)
+    self.form.closeEvent = self.closeEvent
+    
+    
+  def closeEvent(self,event):
+    QtGui.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray . Please quit from the tray icon if you really want to quit!")
+    event.ignore()
+    self.form.setVisible(False) 
+    
+    
+  def showMain(self,actReason):
+    if(actReason == 3):
+      self.form.setVisible(True)
     
   def rbhusList(self):
     self.pushList.setText("opening")
     p = QtCore.QProcess(parent=self.form)
     self.pushList.setEnabled(False)
+    self.listAction.setEnabled(False)
     p.start(sys.executable,rbhuslistCmd.split())
     p.finished.connect(self.rbhusListEnable)
     p.started.connect(self.rbhusListWait)
@@ -83,12 +109,14 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusListEnable(self,exitStatus):
     self.pushList.setText("list")
     self.pushList.setEnabled(True)
+    self.listAction.setEnabled(True)
   
   
   def rbhusSubmit(self):
     self.pushSubmit.setText("opening")
     p = QtCore.QProcess(parent=self.form)
     self.pushSubmit.setEnabled(False)
+    self.newAction.setEnabled(False)
     p.start(sys.executable,rbhusSubmitCmd.split())
     p.finished.connect(self.rbhusSubmitEnable)
     p.started.connect(self.rbhusSubmitWait)
@@ -101,12 +129,14 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusSubmitEnable(self,exitStatus):
     self.pushSubmit.setText("new")
     self.pushSubmit.setEnabled(True)
+    self.newAction.setEnabled(True)
 
 
   def rbhusHost(self):
     self.pushHosts.setText("opening")
     p = QtCore.QProcess(parent=self.form)
     self.pushHosts.setEnabled(False)
+    self.hostAction.setEnabled(False)
     p.start(sys.executable,rbhusHostCmd.split())
     p.finished.connect(self.rbhusHostEnable)
     p.started.connect(self.rbhusHostWait)
@@ -119,13 +149,17 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusHostEnable(self,exitStatus):
     self.pushHosts.setText("hosts")
     self.pushHosts.setEnabled(True)
+    self.hostAction.setEnabled(True)
     
 
   def logout(self):
     self.authL.logout()
     QtCore.QCoreApplication.instance().quit()
   
-
+  def quitFunc(self):
+    QtCore.QCoreApplication.instance().quit()
+  
+  
   def center(self):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
       
