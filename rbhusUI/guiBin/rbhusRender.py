@@ -89,7 +89,7 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     
     
   def showMain(self,actReason):
-    if(actReason == 3):
+    if(actReason == 2):
       self.form.setVisible(True)
     
   def rbhusList(self):
