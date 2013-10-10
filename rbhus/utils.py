@@ -180,10 +180,11 @@ class hosts(object):
       self.userAdmin = int(os.environ['rbhus_acl_admin'])
     except:
       pass
-    self.ip = hostIp
-    self.hostDetails = 0
-    if(self.ip):
-      self.hostDetails = self._getHostDetails()
+    if(hostIp):
+      self.ip = hostIp
+    else:
+      self.ip = self.MyIp
+    self.hostDetails = self._getHostDetails()
     
   def _getHostDetails(self):
     try:

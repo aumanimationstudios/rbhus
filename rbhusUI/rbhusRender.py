@@ -30,6 +30,7 @@ except AttributeError:
 
 class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   def setupUi(self, Form):
+    self.form = Form
     dbConn = dbRbhus.dbRbhus()
     clientPrefs = dbConn.getClientPrefs()
     icon = QtGui.QIcon()
@@ -43,19 +44,24 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
 
     if(sys.platform.find("linux") >= 0):
       self.acl.useEnvUser()
-      subprocess.Popen([sys.executable,"guiBin"+ os.sep +"rbhusRender.py"])
+      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
       sys.exit(0)
       
     if(not clientPrefs['authentication']):
       self.acl.useEnvUser()
-      subprocess.Popen([sys.executable,"guiBin"+ os.sep +"rbhusRender.py"])
+      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
       sys.exit(0)
       
     rms = self.acl.tryRememberMe()
     if(rms):
       print(str(self.acl.username))
-      subprocess.Popen([sys.executable,"guiBin"+ os.sep +"rbhusRender.py"])
+      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
       sys.exit(0)
+    
+  
+  def runCmd(self,cmd):
+    p = QtCore.QProcess(parent=self.form)
+    p.startDetached(sys.executable,cmd.split())
     
   
   def center(self):
@@ -68,7 +74,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     if(ret):
       print("VALID")
       print(str(self.acl.username))
-      subprocess.Popen([sys.executable,"guiBin"+ os.sep +"rbhusRender.py"])
+      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
     else:
       print("\n&*^*&^*%&$&^(*)(__)&*%^$#   .. :) !\n")
     sys.exit(0)

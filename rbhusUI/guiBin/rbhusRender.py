@@ -33,6 +33,7 @@ import db
 import constants
 import auth
 import dbRbhus
+import utils as rUtils
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -56,6 +57,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     except:
       pass
     
+    self.hostDets = rUtils.hosts()
+    
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
@@ -69,15 +72,24 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.trayIcon.show()
     
     self.trayMenu = QtGui.QMenu()
+    self.hostMenu = QtGui.QMenu()
     self.listAction = self.trayMenu.addAction("list")
     self.newAction = self.trayMenu.addAction("new")
     self.hostAction = self.trayMenu.addAction("hosts")
     self.quitAction = self.trayMenu.addAction("quit")
+    
+    self.hostEnableAction = self.hostMenu.addAction("enable")
+    self.hostDisableAction = self.hostMenu.addAction("stop")
+    self.hostEnableAction.triggered.connect(self.hostDets.hEnable)
+    self.hostDisableAction.triggered.connect(self.hostDets.hStop)
+    
+    
     self.trayIcon.setContextMenu(self.trayMenu)
     self.trayIcon.activated.connect(self.showMain)
     self.listAction.triggered.connect(self.rbhusList)
     self.newAction.triggered.connect(self.rbhusSubmit)
-    self.hostAction.triggered.connect(self.rbhusHost)
+    self.hostAction.setMenu(self.hostMenu)
+    #self.hostAction.triggered.connect(self.rbhusHost)
     self.quitAction.triggered.connect(self.quitFunc)
     self.form.closeEvent = self.closeEvent
     
