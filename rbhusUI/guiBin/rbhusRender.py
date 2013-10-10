@@ -78,10 +78,12 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.hostAction = self.trayMenu.addAction("hosts")
     self.quitAction = self.trayMenu.addAction("quit")
     
+    self.hostOpen = self.hostMenu.addAction("open")
     self.hostEnableAction = self.hostMenu.addAction("enable")
     self.hostDisableAction = self.hostMenu.addAction("stop")
     self.hostEnableAction.triggered.connect(self.hostDets.hEnable)
     self.hostDisableAction.triggered.connect(self.hostDets.hStop)
+    self.hostOpen.triggered.connect(self.rbhusHost)
     
     
     self.trayIcon.setContextMenu(self.trayMenu)
@@ -89,7 +91,6 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.listAction.triggered.connect(self.rbhusList)
     self.newAction.triggered.connect(self.rbhusSubmit)
     self.hostAction.setMenu(self.hostMenu)
-    #self.hostAction.triggered.connect(self.rbhusHost)
     self.quitAction.triggered.connect(self.quitFunc)
     self.form.closeEvent = self.closeEvent
     
