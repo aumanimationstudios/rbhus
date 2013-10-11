@@ -96,8 +96,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     
     
   def closeEvent(self,event):
-    QtGui.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray . Please quit from the tray icon if you really want to quit!")
     event.ignore()
+    QtGui.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray . Please quit from the tray icon if you really want to quit!")
     self.form.setVisible(False) 
     
   def hostStop(self):
