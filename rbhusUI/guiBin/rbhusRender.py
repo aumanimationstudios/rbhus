@@ -101,8 +101,9 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.form.setVisible(False) 
     
   def hostStop(self):
-    self.hostDets.hStop()
     self.hostDets.hDisable()
+    self.hostDets.hStop()
+    
   
   def showMain(self,actReason):
     if(actReason == 2):
