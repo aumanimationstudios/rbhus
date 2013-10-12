@@ -42,7 +42,7 @@ import inspect
 time.sleep(1)
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
-mainPidFile = tempDir + os.sep +"rbusClient.pids"
+mainPidFile = tempDir + os.sep +"rbhusDrone.pids"
 
 db_conn = dbRbhus.dbRbhus()
 
@@ -62,14 +62,17 @@ BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %
 LOG_FILENAME.setFormatter(BASIC_FORMAT)
 logClient.addHandler(LOG_FILENAME)
 
+if(os.path.exists(mainPidFile)):
+  logClient.debug("There is a copy of rbhusDrone already running")
+  sys.exit(0)
+
 def sigHandle(sigNum, frame):
   myPid = os.getpid()
   logClient.debug("signal handler called with "+ str(sigNum) +" signal")
   logClient.debug("my pid "+ str(myPid))
   # run this only if linux?! .. omfg .. i dont know !!!!
-  if(sys.platform.find("linux")):
-    logClient.debug("starting to kill processes")
-    killProcessKids(myPid)
+  logClient.debug("starting to kill processes")
+  killProcessKids(myPid)
   return(1)
 
 
@@ -104,6 +107,10 @@ def killProcessKids(ppid):
     for pidKid in pidKids:
       logClient.debug("killing kid "+ str(pidKid.pid))
       os.kill(int(pidKid.pid),9)
+  try:
+    os.remove(mainPidFile)
+  except:
+    pass
   os.kill(int(ppid),9)
 
 # Get the host info and update the database.
