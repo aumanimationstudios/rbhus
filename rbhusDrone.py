@@ -26,6 +26,7 @@ import signal
 import subprocess
 import psutil
 import re
+import hashlib
 if(sys.platform.find("linux") >= 0):
   import pwd
 
@@ -672,47 +673,30 @@ def rbhusLog(lframeInfo):
     sT = fIn['sTime']
     tDelta = int((eT - sT).total_seconds())
   
+  md5sum = hashlib.md5(frameInfo['fileName'])
+  
   try:
-    tLogRow = dbconnLog.execute("select * from tasksLog where (id="+ str(lframeInfo['id']) +" \
-                                 and projId="+ str(lframeInfo['projId']) +" \
-                                 and fileName='"+ str(lframeInfo['fileName']).lstrip().rstrip() +"' \
-                                 and camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' \
-                                 and resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and date=date(now()))",dictionary=True)
-    hLogRow = dbconnLog.execute("select * from hostLog where ( \
-                                 ip='"+ str(ipAddr) +"' and \
-                                 hostName='"+ str(hostname) +"' and \
-                                 date=date(now()))",dictionary=True)
-    
-    if(tLogRow):
-      dbconnLog.execute("update tasksLog set timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +" \
-                         where (id="+ str(lframeInfo['id']) +" \
-                         and fileName='"+ str(lframeInfo['fileName']).lstrip().rstrip() +"' and \
-                         camera='"+ str(lframeInfo['camera']).lstrip().rstrip() +"' and \
-                         resolution='"+ str(lframeInfo['resolution']).lstrip().rstrip() +"' and \
-                         date=date(now()))")
-    else:
-      dbconnLog.execute("insert into tasksLog \
-                         (id,projId,fileName,camera,resolution,date,timeSpentOnResource) \
-                         values ("+ str(lframeInfo['id']) +","+ \
-                         str(lframeInfo['projId']) +",'"+ \
-                         str(lframeInfo['fileName']).lstrip().rstrip() +"','"+ \
-                         str(lframeInfo['camera']).lstrip().rstrip() +"','"+ \
-                         str(lframeInfo['resolution']).lstrip().rstrip() +"',date(now()),"+ \
-                         str(tDelta) +")")
-    if(hLogRow):
-      dbconnLog.execute("update hostLog set timeOnRender=timeOnRender+"+ str(tDelta) +", \
-                         totalJobs=totalJobs+1 \
-                         where (hostName='"+ str(hostname) +"' and \
-                         ip='"+ str(ipAddr) +"' and \
-                         date=date(now()))")
-    else:
-      dbconnLog.execute("insert into hostLog \
-                         (ip,hostName,timeOnRender,date) \
-                         values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now()))")
-    return(1)
+    dbconnLog.execute("insert into tasksLog \
+                       (md5,projId,fileName,camera,resolution,date,timeSpentOnResource) \
+                       values ("+ str(md5sum.hexdigest()) +","+ \
+                       str(lframeInfo['projId']) +",'"+ \
+                       str(lframeInfo['fileName']).lstrip().rstrip() +"','"+ \
+                       str(lframeInfo['camera']).lstrip().rstrip() +"','"+ \
+                       str(lframeInfo['resolution']).lstrip().rstrip() +"',date(now()),"+ \
+                       str(tDelta) +") \
+                       on duplicate key update set \
+                       timeSpentOnResource=timeSpentOnResource+"+ str(tDelta))
   except:
     logClient.debug(str(sys.exc_info()))
-    return(0)
+  try:
+    dbconnLog.execute("insert into hostLog \
+                         (ip,timeOnRender,date) \
+                         values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now())) \
+                         on duplicate key update set \
+                         timeOnRender=timeOnRender+"+ str(tDelta) +", \
+                         totalJobs=totalJobs+1")
+  except:
+    logClient.debug(str(sys.exc_info()))
   
 
 
