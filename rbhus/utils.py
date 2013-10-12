@@ -401,11 +401,31 @@ class tasks(object):
     if(self.userAdmin == 1):
       try:
         self.db_conn.execute("update tasks set fastAssign='" + str(enable) +"' where id='"+ str(self.taskId) +"'")
+        self.taskDetails = self._getTaskDetails(self.taskId)
         return(1)
       except:
         return(0)
     else:
       print("user : "+ str(self.username) +" : NOT allowed to edit")
+      return(0)
+  
+  
+  def remove(self):
+    if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds) or (self.userAdmin == 1)):
+      try:
+        self.db_conn.execute("delete from tasks where \
+                             (id="+ str(taskId) +") and \
+                             (status != "+ str(constants.taskWaiting) +") and \
+                             (status != "+ str(constants.taskPending) +") and \
+                             (status != "+ str(constants.taskActive) +") and \
+                             ((select count(*) FROM frames where (id="+ str(self.taskId) +") and ((status="+ str(constants.framesRunning) +") or (status="+ str(constants.framesPending) +")))=0)")
+        return(1)
+      except:
+        return(0)
+    else:
+      print("user : "+ str(self.username) +" : NOT allowed to edit")
+      return(0)
+  
   
   def edit(self,fieldDict):
     self.validFields = {}

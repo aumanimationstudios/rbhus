@@ -72,7 +72,11 @@ def sigHandle(sigNum, frame):
   logClient.debug("my pid "+ str(myPid))
   # run this only if linux?! .. omfg .. i dont know !!!!
   logClient.debug("starting to kill processes")
-  killProcessKids(myPid)
+  try:
+    os.remove(mainPidFile)
+  except:
+    pass
+  clientQuit(myPid)
   return(1)
 
 
@@ -95,7 +99,7 @@ def getProcessLastKids(ppid,lastKids):
   return(1)
 
 
-def killProcessKids(ppid):
+def clientQuit(ppid):
   try:
     pidDets = psutil.Process(ppid)
   except:
@@ -106,12 +110,14 @@ def killProcessKids(ppid):
   if(pidKids):
     for pidKid in pidKids:
       logClient.debug("killing kid "+ str(pidKid.pid))
-      os.kill(int(pidKid.pid),9)
+      try:
+        os.kill(int(pidKid.pid),9)
+      except:
+        pass
   try:
-    os.remove(mainPidFile)
+    os.kill(int(ppid),9)
   except:
     pass
-  os.kill(int(ppid),9)
 
 # Get the host info and update the database.
 def init():
@@ -1084,7 +1090,7 @@ def getEffectiveDetails(db_conn):
 
 #If not used remove
 
-def atUrService():
+def atUrService(mainPid):
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_atUrService")
   db_conn = dbRbhus.dbRbhus()
@@ -1144,6 +1150,10 @@ def atUrService():
           logClient.debug(msg)
       else:
           logClient.debug(msg)
+    elif(msg == "CLIENTKILL"):
+      clientQuit(mainPid)
+      
+    
     while(1):
       try:
         clientSocket.close()
@@ -1386,7 +1396,7 @@ def mainFunc():
   p.append(runFramesProcess)
   runFramesProcess.start()
 
-  atUrServiceProcess = multiprocessing.Process(target=atUrService)
+  atUrServiceProcess = multiprocessing.Process(target=atUrService,args=(myPid,))
   p.append(atUrServiceProcess)
   atUrServiceProcess.start()
 
