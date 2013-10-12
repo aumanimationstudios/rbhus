@@ -345,7 +345,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     db_conn = dbRbhus.dbRbhus()
     if(selTasksDict):
       for x in selTasksDict:
-        xDel = db_conn.delTask(x['id'],auth=True)
+        print(x['id'])
+        t = rUtils.tasks(x['id'])
+        t.remove()
     self.popTableList()
     
       
