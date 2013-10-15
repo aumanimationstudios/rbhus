@@ -6,6 +6,7 @@ import socket
 import logging
 import tempfile
 import signal
+import subprocess
 import rbhus.dbRbhus as dbRbhus
 import rbhus.utils as rUtils
 if(sys.platform.find("linux") >= 0):
