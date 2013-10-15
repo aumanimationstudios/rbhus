@@ -78,6 +78,7 @@ def sigHandle(sigNum, frame):
   except:
     pass
   clientQuit(myPid)
+  sys.exit(0)
   
   
 
