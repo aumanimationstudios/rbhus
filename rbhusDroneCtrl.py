@@ -9,6 +9,7 @@ import signal
 import subprocess
 import rbhus.dbRbhus as dbRbhus
 import rbhus.utils as rUtils
+import rbhus.constants as constants
 if(sys.platform.find("linux") >= 0):
   import setproctitle
   setproctitle.setproctitle("rD")
@@ -46,7 +47,7 @@ def atUrService():
     try:
       hostName,ipAddr = rUtils.getLocalNameIP()
       serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      serverSocket.bind(("", 6661))
+      serverSocket.bind(("", constants.clientCtrlListenPort))
       serverSocket.listen(5)
       break
     except:
@@ -56,7 +57,7 @@ def atUrService():
 
   while(1):
     clientSocket, address = serverSocket.accept()
-    logClientCrtl.debug("I got a connection from "+ str(address))
+    
     data = ""
     data = clientSocket.recv(1024)
     data = data.rstrip()
@@ -67,7 +68,7 @@ def atUrService():
       msg, value = data.split(":")
     else:
       msg = data
-      
+    logClientCrtl.debug("I got a connection from "+ str(address) +" : "+ str(data))
     if(msg == "CLIENTKILL"):
       if(os.path.exists(pidOnlyFile)):
         pOf = open(pidOnlyFile,"r")
@@ -79,13 +80,30 @@ def atUrService():
             except:
               logClientCrtl.debug(str(sys.exc_info()))
               pass
-            
+    
+    if(msg == "RESTARTSYS"):
+      if(sys.platform.find("linux") >= 0):
+        try:
+          os.system("reboot >& /dev/null &")
+        except:
+          logClient.debug(msg)
+      elif(sys.platform.find("win") >= 0):
+        try:
+          os.system("shutdown /r /t 1")
+        except:
+          logClient.debug(msg)        
             
     if(msg == "CLIENTSTART"):
       if(sys.platform.find("linux") >= 0):
-        subprocess.Popen(str(rbhusMainDir +"rbhusDrone.py").split())
+        try:
+          subprocess.Popen(str(rbhusMainDir +"rbhusDrone.py").split())
+        except:
+          logClientCrtl.debug(str(sys.exc_info()))
       elif(sys.platform.find("win") >= 0):
-        subprocess.Popen(str("start C:/Python27/pythonw.exe "+ str(rbhusMainDir) +"rbhusDrone.py").split())
+        try:
+          subprocess.Popen(str("start C:/Python27/pythonw.exe "+ str(rbhusMainDir) +"rbhusDrone.py").split())
+        except:
+          logClientCrtl.debug(str(sys.exc_info()))
       
     
     while(1):

@@ -239,8 +239,7 @@ def getAssignedFrames(qAssigned):
             break
           except:
             logClient.debug("2 : "+ str(sys.exc_info()[1]))
-          time.sleep(1)
-        time.sleep(1)
+            time.sleep(1)
     time.sleep(1)
 
   sys.exit(0)
@@ -255,7 +254,6 @@ def runFrames(qRun,frameScrutiny):
   cpuAffi = []
   cpuMax = 0
   while(1):
-    time.sleep(1)
     hostEff = getEffectiveDetails(db_conn)
 
     totalPids = multiprocessing.cpu_count()
@@ -274,7 +272,6 @@ def runFrames(qRun,frameScrutiny):
     
 
     while(1):
-      time.sleep(1)
       a = 1
       if(len(processFrames) > 0):
         for i in range(0,len(processFrames)):
@@ -290,7 +287,6 @@ def runFrames(qRun,frameScrutiny):
         break
 
     while(1):
-      time.sleep(1)
       if(len(processFrames) >= totalPids):
         for i in range(0,len(processFrames)):
           if(processFrames[i].is_alive()):
@@ -305,7 +301,6 @@ def runFrames(qRun,frameScrutiny):
 
 
     while(1):
-      time.sleep(1)
       try:
         frameInfo = qRun.get(timeout=1)
         break
@@ -1113,7 +1108,7 @@ def getEffectiveDetails(db_conn):
 
 #If not used remove
 
-def atUrService(mainPid):
+def atUrService():
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_atUrService")
   db_conn = dbRbhus.dbRbhus()
@@ -1122,7 +1117,7 @@ def atUrService(mainPid):
     try:
       hostName,ipAddr = getHostNameIP()
       serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      serverSocket.bind(("", 6660))
+      serverSocket.bind(("", constants.clientListenPort))
       serverSocket.listen(5)
       break
     except:
@@ -1131,7 +1126,6 @@ def atUrService(mainPid):
 
   while(1):
     clientSocket, address = serverSocket.accept()
-    logClient.debug("I got a connection from "+ str(address))
     data = ""
     data = clientSocket.recv(1024)
     data = data.rstrip()
@@ -1142,6 +1136,7 @@ def atUrService(mainPid):
       msg, value = data.split(":")
     else:
       msg = data
+    logClient.debug("I got a connection from "+ str(address) +" : "+ str(data))
     if(msg == "ALIVE"):
       clientSocket.send("ALIVE")
     elif(msg == "MURDER"):
@@ -1154,17 +1149,7 @@ def atUrService(mainPid):
       #washMyButt(taskId,frameId)
       #delFramePidFile(0,taskId,frameId)
       
-    elif(msg == "RESTARTSYS"):
-      if(sys.platform.find("linux") >= 0):
-        try:
-          os.system("reboot >& /dev/null &")
-        except:
-          logClient.debug(msg)
-      elif(sys.platform.find("win") >= 0):
-        try:
-          os.system("shutdown /r /t 1")
-        except:
-          logClient.debug(msg)
+    
     elif(msg == "DELETE"):
       if(os.path.isfile(value)):
         try:
@@ -1422,7 +1407,7 @@ def mainFunc():
   p.append(runFramesProcess)
   runFramesProcess.start()
 
-  atUrServiceProcess = multiprocessing.Process(target=atUrService,args=(myPid,))
+  atUrServiceProcess = multiprocessing.Process(target=atUrService)
   p.append(atUrServiceProcess)
   atUrServiceProcess.start()
 
