@@ -254,7 +254,7 @@ def runFrames(qRun,frameScrutiny):
   cpuAffi = []
   cpuMax = 0
   while(1):
-    time.sleep(0.2)
+    time.sleep(1)
     hostEff = getEffectiveDetails(db_conn)
 
     totalPids = multiprocessing.cpu_count()
@@ -273,6 +273,7 @@ def runFrames(qRun,frameScrutiny):
     
 
     while(1):
+      time.sleep(1)
       a = 1
       if(len(processFrames) > 0):
         for i in range(0,len(processFrames)):
@@ -288,6 +289,7 @@ def runFrames(qRun,frameScrutiny):
         break
 
     while(1):
+      time.sleep(1)
       if(len(processFrames) >= totalPids):
         for i in range(0,len(processFrames)):
           if(processFrames[i].is_alive()):
@@ -299,10 +301,10 @@ def runFrames(qRun,frameScrutiny):
           break
       else:
         break
-      time.sleep(0.2)
 
 
     while(1):
+      time.sleep(1)
       try:
         frameInfo = qRun.get(timeout=1)
         break
@@ -341,6 +343,7 @@ def runFrames(qRun,frameScrutiny):
     processFrames[-1].start()
     
     while(1):
+      time.sleep(1)
       a = 1
       if(len(processFrames) > 0):
         for i in range(0,len(processFrames)):
