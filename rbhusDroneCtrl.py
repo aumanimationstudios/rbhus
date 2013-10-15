@@ -85,9 +85,9 @@ def atUrService():
             
     if(msg == "CLIENTSTART"):
       if(sys.platform.find("linux")):
-        os.system(rbhusMainDir +"rbhusDrone.py &")
+        subprocess.Popen(rbhusMainDir +"rbhusDrone.py".split())
       elif(sys.platform.find("win")):
-        os.system("start pythonw.exe "+ str(rbhusMainDir) +"rbhusDrone.py")
+        subprocess.Popen("start C:/Python27/pythonw.exe "+ str(rbhusMainDir) +"rbhusDrone.py".split())
       
     
     while(1):
