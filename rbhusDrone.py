@@ -982,6 +982,7 @@ def frameScrutinizer(frameScrutiny):
         break
       if(a):
         break
+    time.sleep(1)
   sys.exit(0)
 
 #this should inteligently snoop on any more pids that are spawned by the given pids
