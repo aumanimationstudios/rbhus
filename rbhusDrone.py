@@ -1419,13 +1419,15 @@ def mainFunc():
   p.append(runFramesProcess)
   runFramesProcess.start()
 
-  atUrServiceProcess = multiprocessing.Process(target=atUrService,args=(myPid,))
-  p.append(atUrServiceProcess)
-  atUrServiceProcess.start()
-
+  
   frameScrutinizerProcess = multiprocessing.Process(target=frameScrutinizer,args=(frameScrutiny,))
   p.append(frameScrutinizerProcess)
   frameScrutinizerProcess.start()
+  
+  
+  atUrServiceProcess = multiprocessing.Process(target=atUrService,args=(myPid,))
+  p.append(atUrServiceProcess)
+  atUrServiceProcess.start()
 
 
   mainPidD = open(mainPidFile,"w",0)
