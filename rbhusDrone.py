@@ -62,9 +62,9 @@ BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %
 LOG_FILENAME.setFormatter(BASIC_FORMAT)
 logClient.addHandler(LOG_FILENAME)
 
-if(os.path.exists(mainPidFile)):
-  logClient.debug("There is a copy of rbhusDrone already running")
-  sys.exit(0)
+#if(os.path.exists(mainPidFile)):
+  #logClient.debug("There is a copy of rbhusDrone already running")
+  #sys.exit(0)
 
 def sigHandle(sigNum, frame):
   myPid = os.getpid()
