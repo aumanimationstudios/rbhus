@@ -961,7 +961,7 @@ def frameScrutinizer(frameScrutiny):
 
     snoopFramesProcess.append(multiprocessing.Process(target=_snoopFrames,args=(frameDets,)))
     snoopFramesProcess[-1].start()
-    time.sleep(0.5)
+    time.sleep(1)
 
 
     while(1):
