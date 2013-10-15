@@ -71,10 +71,12 @@ def atUrService():
       if(os.path.exists(pidOnlyFile)):
         pOf = open(pidOnlyFile,"r")
         for x in pOf.readlines():
+          logClientCrtl.debug("trying to kill : "+ str(x))
           if(x):
             try:
               os.kill(int(x),signal.SIGTERM)
             except:
+              logClientCrtl.debug(str(sys.exc_info()))
               pass
       
     
