@@ -17,8 +17,10 @@ hostname,ipAddr = rUtils.getLocalNameIP()
 
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = logging.FileHandler('/var/log/rbhusClientCtrl.log')
+  rbhusMainDir = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/"
 elif(sys.platform.find("win") >=0):
   LOG_FILENAME = logging.FileHandler(tempDir + os.sep + "rbhusClientCtrl.log")
+  rbhusMainDir = "z:/pythonTestWindoze.DONOTDELETE/rbhus/"
   #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusClient_'+ hostname +'.log')
 
 
@@ -79,6 +81,13 @@ def atUrService():
             except:
               logClientCrtl.debug(str(sys.exc_info()))
               pass
+            
+            
+    if(msg == "CLIENTSTART"):
+      if(sys.platform.find("linux")):
+        os.system(rbhusMainDir +"rbhusDrone.py &")
+      elif(sys.platform.find("win")):
+        os.system("start pythonw.exe "+ str(rbhusMainDir) +"rbhusDrone.py")
       
     
     while(1):
