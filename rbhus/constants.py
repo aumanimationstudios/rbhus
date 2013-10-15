@@ -100,3 +100,6 @@ hostAliveStatus = {
 hostResourceActive = 1
 hostResourceStopped = 2
 hostResourceForcedOff = 3
+
+clientListenPort = 6660
+clientCtrlListenPort = 6661
