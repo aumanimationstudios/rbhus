@@ -72,7 +72,10 @@ def sigHandle(sigNum, frame):
   logClient.debug("my pid "+ str(myPid))
   # run this only if linux?! .. omfg .. i dont know !!!!
   logClient.debug("starting to kill processes")
-  
+  try:
+    os.remove(mainPidFile)
+  except:
+    pass
   clientQuit(myPid)
   
   
