@@ -75,11 +75,6 @@ def sigHandle(sigNum, frame):
   
   clientQuit(myPid)
   
-  try:
-    os.remove(mainPidFile)
-  except:
-    pass
-  sys.exit(0)
   
 
 def getProcessLastKids(ppid,lastKids):
@@ -124,12 +119,14 @@ def clientQuit(ppid):
     for x in lkids:
       try:
         os.kill(int(x),9)
+        logClient.debug("pid : "+ str(x) +" : killed")
       except:
         logClient.debug(str(sys.exc_info()))
   if(pparents):
     for x in pparents:
       try:
         os.kill(int(x),9)
+        logClient.debug("pid : "+ str(x) +" : killed")
       except:
         logClient.debug(str(sys.exc_info()))
   return()
@@ -1447,6 +1444,11 @@ def mainFunc():
       break
 
   time.sleep(10)
+  try:
+    os.remove(mainPidFile)
+  except:
+    pass
+  sys.exit(0)
 
 
 if __name__ == "__main__":
