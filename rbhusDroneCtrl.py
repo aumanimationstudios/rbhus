@@ -4,13 +4,14 @@ import os
 import time
 import socket
 import logging
+import tempfile
 import rbhus.dbRbhus as dbRbhus
 import rbhus.utils as rUtils
 if(sys.platform.find("linux") >= 0):
   import setproctitle
   setproctitle.setproctitle("rD")
 
-
+tempDir = tempfile.gettempdir()
 hostname,ipAddr = rUtils.getLocalNameIP()
 
 if(sys.platform.find("linux") >=0):
