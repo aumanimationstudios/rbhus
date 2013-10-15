@@ -1405,6 +1405,11 @@ def mainFunc():
   signal.signal(signal.SIGTERM,sigHandle)
   myPid = os.getpid()
   logClient.debug("Rbhus : "+ str(myPid))
+  
+  if(os.path.exists(mainPidFile)):
+    logClient.debug("rbhusDrone allready running . please check the do a proper cleanup before restarting")
+    sys.exit(1)
+  
   p = []
   init()
 
