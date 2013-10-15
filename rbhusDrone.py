@@ -74,6 +74,7 @@ def sigHandle(sigNum, frame):
   logClient.debug("starting to kill processes")
   try:
     os.remove(mainPidFile)
+    logClient.debug("removed mainPidFile")
   except:
     pass
   clientQuit(myPid)
@@ -121,14 +122,14 @@ def clientQuit(ppid):
   if(lkids):
     for x in lkids:
       try:
-        os.kill(int(x),9)
+        os.kill(int(x),signal.SIGTERM)
         logClient.debug("pid : "+ str(x) +" : killed")
       except:
         logClient.debug(str(sys.exc_info()))
   if(pparents):
     for x in pparents:
       try:
-        os.kill(int(x),9)
+        os.kill(int(x),signal.SIGTERM)
         logClient.debug("pid : "+ str(x) +" : killed")
       except:
         logClient.debug(str(sys.exc_info()))
