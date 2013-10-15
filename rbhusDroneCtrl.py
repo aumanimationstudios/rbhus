@@ -94,12 +94,13 @@ def atUrService():
           logClient.debug(msg)        
             
     if(msg == "CLIENTSTART"):
+      time.sleep(15)
       if(sys.platform.find("linux") >= 0):
         try:
           subprocess.Popen(str(rbhusMainDir +"rbhusDrone.py").split())
         except:
           logClientCrtl.debug(str(sys.exc_info()))
-      elif(sys.platform.find("win") >= 0):
+      if(sys.platform.find("win") >= 0):
         try:
           subprocess.Popen(str("start C:/Python27/pythonw.exe "+ str(rbhusMainDir) +"rbhusDrone.py").split())
         except:
