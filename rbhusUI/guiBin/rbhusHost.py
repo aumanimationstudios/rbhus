@@ -68,6 +68,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test3Action = menu.addAction("enable")
     test4Action = menu.addAction("stop")
     test1Action = menu.addAction("edit")
+    test5Action = menu.addAction("restart Rbhus")
     
     
     action = menu.exec_(self.tableHost.mapToGlobal(pos))
@@ -83,6 +84,9 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     if(action == test4Action):
       #print("test4")
       self.hostStop()
+    if(action == test5Action):
+      self.hostClientKill()
+      self.hostClientStart()
       
       
   def hostEdit(self):
@@ -103,8 +107,26 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
           subprocess.Popen([sys.executable,hostEditCmd,str(selHosts[0])])
         except:
           print(str(sys.exc_info()))
+
           
-          
+  def hostClientKill(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.killClient()
+    self.popTableHost()
+    return(1)
+
+  
+  def hostClientStart(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.startClient()
+    self.popTableHost()
+    return(1)
+
+
   def hostStop(self):
     hosts = self.selectedHosts()
     for h in hosts:
