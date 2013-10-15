@@ -1,1 +1,3 @@
 ./rbhusDrone.py &
+./rbhusDroneCtrl.py &
+

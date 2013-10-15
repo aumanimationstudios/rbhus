@@ -43,6 +43,7 @@ time.sleep(1)
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbhusDrone.pids"
+pidOnlyFile = tempDir + os.sep +"rbhusDroneMain.pid"
 
 db_conn = dbRbhus.dbRbhus()
 
@@ -75,6 +76,11 @@ def sigHandle(sigNum, frame):
   try:
     os.remove(mainPidFile)
     logClient.debug("removed mainPidFile")
+  except:
+    pass
+  try:
+    os.remove(pidOnlyFile)
+    logClient.debug("removed pidOnlyFile")
   except:
     pass
   clientQuit(myPid)
@@ -240,6 +246,7 @@ def getAssignedFrames(qAssigned):
           except:
             logClient.debug("2 : "+ str(sys.exc_info()[1]))
           time.sleep(1)
+        time.sleep(1)
     time.sleep(1)
 
   sys.exit(0)
@@ -254,7 +261,7 @@ def runFrames(qRun,frameScrutiny):
   cpuAffi = []
   cpuMax = 0
   while(1):
-    time.sleep(0.2)
+    time.sleep(1)
     hostEff = getEffectiveDetails(db_conn)
 
     totalPids = multiprocessing.cpu_count()
@@ -273,6 +280,7 @@ def runFrames(qRun,frameScrutiny):
     
 
     while(1):
+      time.sleep(1)
       a = 1
       if(len(processFrames) > 0):
         for i in range(0,len(processFrames)):
@@ -288,6 +296,7 @@ def runFrames(qRun,frameScrutiny):
         break
 
     while(1):
+      time.sleep(1)
       if(len(processFrames) >= totalPids):
         for i in range(0,len(processFrames)):
           if(processFrames[i].is_alive()):
@@ -299,10 +308,10 @@ def runFrames(qRun,frameScrutiny):
           break
       else:
         break
-      time.sleep(0.2)
 
 
     while(1):
+      time.sleep(1)
       try:
         frameInfo = qRun.get(timeout=1)
         break
@@ -341,6 +350,7 @@ def runFrames(qRun,frameScrutiny):
     processFrames[-1].start()
     
     while(1):
+      time.sleep(1)
       a = 1
       if(len(processFrames) > 0):
         for i in range(0,len(processFrames)):
@@ -978,7 +988,8 @@ def frameScrutinizer(frameScrutiny):
         break
       if(a):
         break
-
+    time.sleep(1)
+  sys.exit(0)
 
 #this should inteligently snoop on any more pids that are spawned by the given pids
 #
@@ -1149,7 +1160,7 @@ def atUrService(mainPid):
       #washMyButt(taskId,frameId)
       #delFramePidFile(0,taskId,frameId)
       
-    elif(msg == "RESTART"):
+    elif(msg == "RESTARTSYS"):
       if(sys.platform.find("linux") >= 0):
         try:
           os.system("reboot >& /dev/null &")
@@ -1168,8 +1179,6 @@ def atUrService(mainPid):
           logClient.debug(msg)
       else:
           logClient.debug(msg)
-    elif(msg == "CLIENTKILL"):
-      clientQuit(mainPid)
       
     
     while(1):
@@ -1430,7 +1439,13 @@ def mainFunc():
     except:
       print("Couldnt write mainPidFile : "+ str(sys.exc_info()))
   mainPidD.close()
-
+ 
+  mainOnlyD = open(pidOnlyFile,"w",0)
+  try:
+    mainOnlyD.write(str(myPid) +"\n")
+  except:
+    print("Couldnt write pidOnlyFile : "+ str(sys.exc_info()))
+  mainOnlyD.close()
 
 
   while(1):
@@ -1451,6 +1466,10 @@ def mainFunc():
   time.sleep(10)
   try:
     os.remove(mainPidFile)
+  except:
+    pass
+  try:
+    os.remove(pidOnlyFile)
   except:
     pass
   sys.exit(0)

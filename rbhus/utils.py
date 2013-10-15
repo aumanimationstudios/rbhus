@@ -135,6 +135,19 @@ def getRenderers():
   else:
     return(0)
     
+def getLocalNameIP():
+  while(1):
+    try:
+      hostname = socket.gethostname()
+      ipAddr = socket.gethostbyname(socket.gethostname()).strip()
+      return(hostname,ipAddr)
+    except:
+      print(str(sys.exc_info()))
+      time.sleep(1)
+
+
+
+
 def getOsTypes():
   dbconn = dbRbhus.dbRbhus()
   try:
@@ -186,6 +199,8 @@ class hosts(object):
       self.ip = self.MyIp
     self.hostDetails = self._getHostDetails()
     
+  
+  
   def _getHostDetails(self):
     try:
       rows = self.db_conn.execute("select * from hostInfo, hostEffectiveResource, hostResource, hostAlive where (hostInfo.ip COLLATE utf8_unicode_ci = hostResource.ip) and (hostInfo.ip COLLATE utf8_unicode_ci =hostEffectiveResource.ip) and (hostInfo.ip COLLATE utf8_unicode_ci = hostAlive.ip) and (hostInfo.ip = '"+ str(self.ip) +"')",dictionary=True)
