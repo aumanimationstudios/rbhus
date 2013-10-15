@@ -43,6 +43,7 @@ time.sleep(1)
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbhusDrone.pids"
+pidOnlyFile = tempDir + os.sep +"rbhusDroneMain.pid"
 
 db_conn = dbRbhus.dbRbhus()
 
@@ -75,6 +76,11 @@ def sigHandle(sigNum, frame):
   try:
     os.remove(mainPidFile)
     logClient.debug("removed mainPidFile")
+  except:
+    pass
+  try:
+    os.remove(pidOnlyFile)
+    logClient.debug("removed pidOnlyFile")
   except:
     pass
   clientQuit(myPid)
@@ -1154,7 +1160,7 @@ def atUrService(mainPid):
       #washMyButt(taskId,frameId)
       #delFramePidFile(0,taskId,frameId)
       
-    elif(msg == "RESTART"):
+    elif(msg == "RESTARTSYS"):
       if(sys.platform.find("linux") >= 0):
         try:
           os.system("reboot >& /dev/null &")
@@ -1173,8 +1179,6 @@ def atUrService(mainPid):
           logClient.debug(msg)
       else:
           logClient.debug(msg)
-    elif(msg == "CLIENTKILL"):
-      clientQuit(mainPid)
       
     
     while(1):
@@ -1419,15 +1423,13 @@ def mainFunc():
   p.append(runFramesProcess)
   runFramesProcess.start()
 
-  
-  frameScrutinizerProcess = multiprocessing.Process(target=frameScrutinizer,args=(frameScrutiny,))
-  p.append(frameScrutinizerProcess)
-  frameScrutinizerProcess.start()
-  
-  
   atUrServiceProcess = multiprocessing.Process(target=atUrService,args=(myPid,))
   p.append(atUrServiceProcess)
   atUrServiceProcess.start()
+
+  frameScrutinizerProcess = multiprocessing.Process(target=frameScrutinizer,args=(frameScrutiny,))
+  p.append(frameScrutinizerProcess)
+  frameScrutinizerProcess.start()
 
 
   mainPidD = open(mainPidFile,"w",0)
@@ -1437,7 +1439,13 @@ def mainFunc():
     except:
       print("Couldnt write mainPidFile : "+ str(sys.exc_info()))
   mainPidD.close()
-
+ 
+  mainOnlyD = open(pidOnlyFile,"w",0)
+  try:
+    mainOnlyD.write(str(myPid) +"\n")
+  except:
+    print("Couldnt write pidOnlyFile : "+ str(sys.exc_info()))
+  mainOnlyD.close()
 
 
   while(1):
@@ -1458,6 +1466,10 @@ def mainFunc():
   time.sleep(10)
   try:
     os.remove(mainPidFile)
+  except:
+    pass
+  try:
+    os.remove(pidOnlyFile)
   except:
     pass
   sys.exit(0)
