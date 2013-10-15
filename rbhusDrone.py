@@ -240,6 +240,7 @@ def getAssignedFrames(qAssigned):
           except:
             logClient.debug("2 : "+ str(sys.exc_info()[1]))
           time.sleep(1)
+        time.sleep(1)
     time.sleep(1)
 
   sys.exit(0)
