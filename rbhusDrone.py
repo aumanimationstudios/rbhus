@@ -72,13 +72,15 @@ def sigHandle(sigNum, frame):
   logClient.debug("my pid "+ str(myPid))
   # run this only if linux?! .. omfg .. i dont know !!!!
   logClient.debug("starting to kill processes")
+  
+  clientQuit(myPid)
+  
   try:
     os.remove(mainPidFile)
   except:
     pass
-  clientQuit(myPid)
-  return(1)
-
+  sys.exit(0)
+  
 
 def getProcessLastKids(ppid,lastKids):
   try:
@@ -99,25 +101,39 @@ def getProcessLastKids(ppid,lastKids):
   return(1)
 
 
-def clientQuit(ppid):
-  try:
-    pidDets = psutil.Process(ppid)
-  except:
-    logClient.debug(str(sys.exc_info()))
-    return(0)
+def getallkids(mpid,leafPids,branchPids):
+  mmpid = psutil.Process(int(mpid))
+  mylasts = mmpid.get_children()
+  if(not mylasts):
+    leafPids.append(mpid)
+    return()
+  else:
+    branchPids.append(mpid)
+    for x in mylasts:
+      getallkids(int(x.pid),leafPids,branchPids)
 
-  pidKids = pidDets.get_children(recursive=True)
-  if(pidKids):
-    for pidKid in pidKids:
-      logClient.debug("killing kid "+ str(pidKid.pid))
-      try:
-        os.kill(int(pidKid.pid),9)
-      except:
-        pass
+def clientQuit(ppid):
+  lkids = []
+  pparents = []
   try:
-    os.kill(int(ppid),9)
+    pparents.remove(ppid)
   except:
     pass
+  getallkids(ppid,lkids,pparents)
+  if(lkids):
+    for x in lkids:
+      try:
+        os.kill(int(x),9)
+      except:
+        logClient.debug(str(sys.exc_info()))
+  if(pparents):
+    for x in pparents:
+      try:
+        os.kill(int(x),9)
+      except:
+        logClient.debug(str(sys.exc_info()))
+  return()
+      
 
 # Get the host info and update the database.
 def init():

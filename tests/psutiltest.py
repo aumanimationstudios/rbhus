@@ -4,26 +4,29 @@ import sys
 import os
 
 pid = sys.argv[1]
-allkids = {}
-def getallkids(mpid,allkids):
+leafPids = []
+branchPids = []
+
+def getallkids(mpid,leafPids,branchPids):
   mmpid = psutil.Process(int(mpid))
   mylasts = mmpid.get_children()
   if(not mylasts):
-    print(mpid)
+    leafPids.append(mpid)
     return()
   else:
+    branchPids.append(mpid)
     for x in mylasts:
-      getallkids(int(x.pid),allkids)
+      getallkids(int(x.pid),leafPids,branchPids)
 
 
-getallkids(pid,allkids)
+getallkids(pid,leafPids,branchPids)
   
+print(leafPids)  
+print(":::::::::::::::")
+branchPids.reverse()
+print(branchPids)
+
+
 print("_______________")
 
-h = psutil.Process(int(pid))
-ah = h.get_children(recursive=True)
-for x in ah:
-  print(x.pid)
-    
-    
 
