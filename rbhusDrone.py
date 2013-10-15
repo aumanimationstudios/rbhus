@@ -21,6 +21,7 @@ import os
 import multiprocessing
 import socket
 import logging
+import logging.handlers
 import time
 import signal
 import subprocess
@@ -49,23 +50,16 @@ db_conn = dbRbhus.dbRbhus()
 
 
 if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = logging.FileHandler('/var/log/rbhusClient.log')
+  LOG_FILENAME = '/var/log/rbhusClient.log'
 elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = logging.FileHandler(tempDir + os.sep + str(hostname) +".log")
-  #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusClient_'+ hostname +'.log')
-
-
-#LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
+  LOG_FILENAME = tempDir + os.sep + "rbhusClient.log"
 logClient = logging.getLogger("logClient")
 logClient.setLevel(logging.DEBUG)
-
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(lineno)s - %(message)s")
-LOG_FILENAME.setFormatter(BASIC_FORMAT)
-logClient.addHandler(LOG_FILENAME)
+ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=2048, backupCount=3)
+ROTATE_FILENAME.setFormatter(BASIC_FORMAT)
+logClient.addHandler(ROTATE_FILENAME)
 
-#if(os.path.exists(mainPidFile)):
-  #logClient.debug("There is a copy of rbhusDrone already running")
-  #sys.exit(0)
 
 def sigHandle(sigNum, frame):
   myPid = os.getpid()

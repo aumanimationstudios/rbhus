@@ -4,6 +4,7 @@ import time
 import sys
 import constants
 import logging
+import logging.handlers
 import socket
 import os
 import tempfile
@@ -35,9 +36,9 @@ except:
   pass
 
 if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
+  LOG_FILENAME = '/var/log/rbhusDb_module.log'
 elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
+  LOG_FILENAME = tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log"
   #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
@@ -45,10 +46,11 @@ modLogger = logging.getLogger("modLogger")
 modLogger.setLevel(logging.ERROR)
 
 
-
+ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=2048, backupCount=3)
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
-LOG_FILENAME.setFormatter(BASIC_FORMAT)
-modLogger.addHandler(LOG_FILENAME)
+ROTATE_FILENAME.setFormatter(BASIC_FORMAT)
+#modLogger.addHandler(LOG_FILENAME)
+modLogger.addHandler(ROTATE_FILENAME)
 
 class dbRbhusLog:
   """database querying class for rbhus"""
