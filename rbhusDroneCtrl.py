@@ -17,21 +17,18 @@ tempDir = tempfile.gettempdir()
 hostname,ipAddr = rUtils.getLocalNameIP()
 
 if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = logging.FileHandler('/var/log/rbhusClientCtrl.log')
+  LOG_FILENAME = '/var/log/rbhusClientCtrl.log'
   rbhusMainDir = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/"
 elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = logging.FileHandler(tempDir + os.sep + "rbhusClientCtrl.log")
+  LOG_FILENAME = tempDir + os.sep + "rbhusClientCtrl.log"
   rbhusMainDir = "z:/pythonTestWindoze.DONOTDELETE/rbhus/"
-  #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusClient_'+ hostname +'.log')
-
-
-#LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
 logClientCrtl = logging.getLogger("logClientCrtl")
 logClientCrtl.setLevel(logging.DEBUG)
 
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(lineno)s - %(message)s")
-LOG_FILENAME.setFormatter(BASIC_FORMAT)
-logClientCrtl.addHandler(LOG_FILENAME)
+ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=2048, backupCount=3)
+ROTATE_FILENAME.setFormatter(BASIC_FORMAT)
+logClientCrtl.addHandler(ROTATE_FILENAME)
 
 
 
