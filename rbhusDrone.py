@@ -50,15 +50,15 @@ db_conn = dbRbhus.dbRbhus()
 
 
 if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = '/var/log/rbhusClient.log'
+  LOG_FILENAME = logging.FileHandler('/var/log/rbhusClient.log')
 elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = tempDir + os.sep + "rbhusClient.log"
+  LOG_FILENAME = logging.FileHandler(tempDir + os.sep + "rbhusClient.log")
 logClient = logging.getLogger("logClient")
 logClient.setLevel(logging.DEBUG)
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(lineno)s - %(message)s")
-ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=2048, backupCount=3)
-ROTATE_FILENAME.setFormatter(BASIC_FORMAT)
-logClient.addHandler(ROTATE_FILENAME)
+#ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=104857600, backupCount=3)
+LOG_FILENAME.setFormatter(BASIC_FORMAT)
+logClient.addHandler(LOG_FILENAME)
 
 
 def sigHandle(sigNum, frame):
@@ -507,7 +507,7 @@ def execFrames(frameInfo,frameScrutiny):
 
     retryThres = 5
     retryCount = 0
-    if(sys.platform.find("linux") >=0):
+    if(sys.platform.find("linux") >= 0):
       while(1):
         try:
           logD.write("/bin/su "+ frameInfo['user'] +" -c \'"+ runCmd +"\' "+ str(logD) +"\n\n")
@@ -544,7 +544,7 @@ def execFrames(frameInfo,frameScrutiny):
             sys.exit(0)
         time.sleep(1)
 
-    elif(sys.platform.find("win") >=0):
+    elif(sys.platform.find("win") >= 0):
       logClient.warning("PLATFORM : windoze!")
 
       logClient.debug(str(runCmd.split()))
@@ -682,52 +682,56 @@ def execFrames(frameInfo,frameScrutiny):
         logClient.debug("Break point FOUR")
         break
       time.sleep(0.2)
-    washMyButt(frameInfo['id'],frameInfo['frameId'])
-    db_conn.delBatchId(frameInfo['batchId'])
     rbhusLog(frameInfo)
+    washMyButt(frameInfo['id'],frameInfo['frameId'])
+    logClient.debug("WSB 10")
+    db_conn.delBatchId(frameInfo['batchId'])
+    logClient.debug("WSB 11")
     delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
+    logClient.debug("WSB 12")
     sys.exit(0)
 
 
 def rbhusLog(lframeInfo):
-  dbconnLog = dbRbhus.dbRbhusLog()
-  dbconn = dbRbhus.dbRbhus()
-  fIns = dbconn.getFrameInfo(lframeInfo['id'],lframeInfo['frameId'])
-  fIn = 0
-  tDelta = 0
-  hostname,ipAddr = getHostNameIP()
-  if(fIns):
-    fIn = fIns
-  if(fIn):
-    eT = fIn['eTime']
-    sT = fIn['sTime']
-    tDelta = int((eT - sT).total_seconds())
-  
-  md5sum = hashlib.md5(frameInfo['fileName'])
-  
   try:
-    dbconnLog.execute("insert into tasksLog \
-                       (md5,projId,fileName,camera,resolution,date,timeSpentOnResource) \
-                       values ("+ str(md5sum.hexdigest()) +","+ \
-                       str(lframeInfo['projId']) +",'"+ \
-                       str(lframeInfo['fileName']).lstrip().rstrip() +"','"+ \
-                       str(lframeInfo['camera']).lstrip().rstrip() +"','"+ \
-                       str(lframeInfo['resolution']).lstrip().rstrip() +"',date(now()),"+ \
-                       str(tDelta) +") \
-                       on duplicate key update set \
-                       timeSpentOnResource=timeSpentOnResource+"+ str(tDelta))
-  except:
-    logClient.debug(str(sys.exc_info()))
-  try:
-    dbconnLog.execute("insert into hostLog \
-                         (ip,timeOnRender,date) \
-                         values ('"+ str(ipAddr) +"','"+ str(hostname) +"',"+ str(tDelta) +",date(now())) \
+    dbconnLog = dbRbhus.dbRbhusLog()
+    dbconn = dbRbhus.dbRbhus()
+    fIns = dbconn.getFrameInfo(lframeInfo['id'],lframeInfo['frameId'])
+    fIn = 0
+    tDelta = 0
+    hostname,ipAddr = getHostNameIP()
+    if(fIns):
+      fIn = fIns
+    if(fIn):
+      eT = fIn['eTime']
+      sT = fIn['sTime']
+      tDelta = int((eT - sT).total_seconds())
+    
+    sha256 = hashlib.sha256(lframeInfo['fileName'])
+    try:
+      dbconnLog.execute("insert into tasksLog \
+                         (sha256,projId,fileName,date,timeSpentOnResource) \
+                         values ('"+ str(sha256.hexdigest()) +"',"+ \
+                         str(lframeInfo['projId']) +",'"+ \
+                         str(lframeInfo['fileName']).lstrip().rstrip() +"',date(now()),"+ \
+                         str(tDelta) +") \
                          on duplicate key update set \
-                         timeOnRender=timeOnRender+"+ str(tDelta) +", \
-                         totalJobs=totalJobs+1")
+                         timeSpentOnResource=timeSpentOnResource+"+ str(tDelta))
+    except:
+      logClient.debug(str(sys.exc_info()))
+    try:
+      dbconnLog.execute("insert into hostLog \
+                           (ip,timeOnRender,date) \
+                           values ('"+ str(ipAddr) +"',"+ str(tDelta) +",date(now())) \
+                           on duplicate key update set \
+                           timeOnRender=timeOnRender+"+ str(tDelta) +", \
+                           totalJobs=totalJobs+1")
+    except:
+      logClient.debug(str(sys.exc_info()))
+    return(1)
   except:
     logClient.debug(str(sys.exc_info()))
-  
+    return(0)
 
 
 
@@ -739,17 +743,25 @@ def washMyButt(taskid, frameid):
     logClient.debug(str(sys.exc_info()))
     return(0)
   for x in bfd.readlines():
-    logClient.debug(x.rstrip().lstrip())
-    try:
-      os.remove(x.rstrip().lstrip())
-    except:
-      logClient.debug(str(sys.exc_info()))
+    if(len(x) > 0):
+      try:
+        logClient.debug("washMyButt : : : "+ x.rstrip().lstrip())
+      except:
+        logClient.debug(str(sys.exc_info()))
+      try:
+        os.remove(x.rstrip().lstrip())
+      except:
+        logClient.debug(str(sys.exc_info()))
   try:
+    logClient.debug("WSB 1")
     bfd.close()
+    logClient.debug("WSB 2")
   except:
     logClient.debug(str(sys.exc_info()))
   try:
+    logClient.debug("WSB 3")
     os.remove(buttFile)
+    logClient.debug("WSB 4")
   except:
     logClient.debug(str(sys.exc_info()))
   return(1)
@@ -784,22 +796,27 @@ def writeFramePidFile(pidLock,taskId,frameId,pids):
   try:
     pidLock.acquire()
     try:
-      taskPidD = open(taskPidF,"r+")
-      for inPid in taskPidD.readlines():
-        pidDict[str(inPid).rstrip().lstrip()] = 0
+      try:
+        taskPidD = open(taskPidF,"r+")
+        for inPid in taskPidD.readlines():
+          if(inPid):
+            pidDict[str(inPid).rstrip().lstrip()] = 0
+        taskPidD.close()
+      except IOError:
+        pass
+  
+      for pid in pids:
+        if(str(pid).rstrip().lstrip() and str(pid).rstrip().lstrip() != str(os.getpid())):
+          pidDict[str(pid).rstrip().lstrip()] = 0
+  
+      taskPidD = open(taskPidF,"w")
+      if(pidDict):
+        for inPid in pidDict.keys():
+          if(inPid):
+            taskPidD.writelines(str(inPid) +"\n\r")
       taskPidD.close()
-    except IOError:
-      pass
-
-    for pid in pids:
-      if(str(pid).rstrip().lstrip() and str(pid).rstrip().lstrip() != str(os.getpid())):
-        pidDict[str(pid).rstrip().lstrip()] = 0
-
-    taskPidD = open(taskPidF,"w")
-    if(pidDict):
-      for inPid in pidDict.keys():
-        taskPidD.writelines(str(inPid) +"\n\r")
-    taskPidD.close()
+    except:
+      logClient.debug(str(sys.exc_info()))
     pidLock.release()
   except:
     logClient.debug(str(sys.exc_info()))
@@ -893,9 +910,11 @@ def killFrame(dbconn,taskId,frameId,pidLock = 0,statusAfterKill = -1):
       if(setFramesStatus(taskId,batchedFrames,statusAfterKill,dbconn) == 1):
         break
       time.sleep(0.5)
-      
+  logClient.debug("WSB 30")
   washMyButt(taskId,frameId)
-  db_conn.delBatchId(batchId)
+  logClient.debug("WSB 31")
+  dbconn.delBatchId(batchId)
+  logClient.debug("WSB 32")
   return(0)
 
 def getMainPids():

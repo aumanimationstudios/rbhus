@@ -49,6 +49,10 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
+    
+    self.timer = QtCore.QTimer()
+    self.timer.timeout.connect(self.popTableHost)
+    
     self.dbconn = dbRbhus.dbRbhus()
     self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostEffectiveResource.eCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
     self.popTableHost()
@@ -58,7 +62,23 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.pushLocalStop.clicked.connect(self.hostLocalStop)
     self.pushLocalEnable.clicked.connect(self.hostLocalEnable)
     self.tableHost.customContextMenuRequested.connect(self.popupHost)
+    self.checkRefresh.clicked.connect(self.timeCheck)
   
+  
+  
+  
+  def timeCheck(self):
+    cRefresh = self.checkRefresh.isChecked()
+    if(cRefresh):
+      self.startTimer()
+    else:
+      self.stopTimer()
+  
+  def startTimer(self):
+    self.timer.start(2000)
+
+  def stopTimer(self):
+    self.timer.stop()
   
   
   def popupHost(self, pos):
@@ -69,6 +89,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test4Action = menu.addAction("stop")
     test1Action = menu.addAction("edit")
     test5Action = menu.addAction("restart Rbhus")
+    test6Action = menu.addAction("kill Rbhus")
     
     
     action = menu.exec_(self.tableHost.mapToGlobal(pos))
@@ -87,6 +108,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     if(action == test5Action):
       self.hostClientKill()
       self.hostClientStart()
+    if(action == test6Action):
+      self.hostClientKill()
       
       
   def hostEdit(self):

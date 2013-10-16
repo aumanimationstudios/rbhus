@@ -226,6 +226,13 @@
        </spacer>
       </item>
       <item>
+       <widget class="QCheckBox" name="checkRefresh">
+        <property name="text">
+         <string>autorefresh</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushRefresh">
         <property name="text">
          <string>refresh</string>

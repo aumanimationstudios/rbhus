@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusHostMod.ui'
 #
-# Created: Tue Oct  8 13:41:19 2013
-#      by: PyQt4 UI code generator 4.10.2
+# Created: Tue Oct 15 23:32:07 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -108,6 +108,9 @@ class Ui_MainWindow(object):
     self.horizontalLayout_2.addWidget(self.pushLocalEnable)
     spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_2.addItem(spacerItem)
+    self.checkRefresh = QtGui.QCheckBox(self.centralwidget)
+    self.checkRefresh.setObjectName(_fromUtf8("checkRefresh"))
+    self.horizontalLayout_2.addWidget(self.checkRefresh)
     self.pushRefresh = QtGui.QPushButton(self.centralwidget)
     self.pushRefresh.setObjectName(_fromUtf8("pushRefresh"))
     self.horizontalLayout_2.addWidget(self.pushRefresh)
@@ -153,6 +156,7 @@ class Ui_MainWindow(object):
     MainWindow.setWindowTitle(_translate("MainWindow", "rbhusHost", None))
     self.pushLocalStop.setText(_translate("MainWindow", "STOP MY HOST", None))
     self.pushLocalEnable.setText(_translate("MainWindow", "ENABLE MY HOST", None))
+    self.checkRefresh.setText(_translate("MainWindow", "autorefresh", None))
     self.pushRefresh.setText(_translate("MainWindow", "refresh", None))
     self.tableHost.setSortingEnabled(True)
     self.LabelTotal.setText(_translate("MainWindow", "total : 3", None))

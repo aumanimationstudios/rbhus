@@ -36,9 +36,9 @@ except:
   pass
 
 if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = '/var/log/rbhusDb_module.log'
+  LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
 elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log"
+  LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
   #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
@@ -46,11 +46,11 @@ modLogger = logging.getLogger("modLogger")
 modLogger.setLevel(logging.ERROR)
 
 
-ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=2048, backupCount=3)
+#ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=104857600, backupCount=3)
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
-ROTATE_FILENAME.setFormatter(BASIC_FORMAT)
-#modLogger.addHandler(LOG_FILENAME)
-modLogger.addHandler(ROTATE_FILENAME)
+LOG_FILENAME.setFormatter(BASIC_FORMAT)
+modLogger.addHandler(LOG_FILENAME)
+#modLogger.addHandler(ROTATE_FILENAME)
 
 class dbRbhusLog:
   """database querying class for rbhus"""
@@ -106,6 +106,7 @@ class dbRbhusLog:
       except:
         modLogger.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
         if(str(sys.exc_info()).find("OperationalError") >= 0):
+          time.sleep(1)
           try:
             cur.close()
           except:
@@ -122,6 +123,7 @@ class dbRbhusLog:
           except:
             pass
           raise
+        
 
 
 
@@ -180,6 +182,7 @@ class dbRbhus:
       except:
         modLogger.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
         if(str(sys.exc_info()).find("OperationalError") >= 0):
+          time.sleep(1)
           try:
             cur.close()
           except:
@@ -196,6 +199,7 @@ class dbRbhus:
           except:
             pass
           raise
+        
         
   # returns an array of all the frames in the given batchId   
   def getBatchedFrames(self,batchId):
@@ -229,10 +233,11 @@ class dbRbhus:
   # returns an array of all the frames in the given batchId   
   def delBatchId(self,batchId):
     try:
-      self.execute("delete from batch where id=\""+ str(batchId) +"\"")
+      self.execute("delete from batch where id='"+ str(batchId) +"'")
+      modLogger.error("deleted batchId : "+ str(batchId))
       return(1)
     except:
-      modLogger.error("deleting batchId : "+ str(batchId))
+      modLogger.error("deleting failed batchId : "+ str(batchId))
       return(0)
 
   def getActiveTasks(self):

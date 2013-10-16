@@ -18,18 +18,18 @@ tempDir = tempfile.gettempdir()
 hostname,ipAddr = rUtils.getLocalNameIP()
 
 if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = '/var/log/rbhusClientCtrl.log'
+  LOG_FILENAME = logging.FileHandler('/var/log/rbhusClientCtrl.log')
   rbhusMainDir = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/"
 elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = tempDir + os.sep + "rbhusClientCtrl.log"
+  LOG_FILENAME = logging.FileHandler(tempDir + os.sep + "rbhusClientCtrl.log")
   rbhusMainDir = "z:/pythonTestWindoze.DONOTDELETE/rbhus/"
 logClientCrtl = logging.getLogger("logClientCrtl")
 logClientCrtl.setLevel(logging.DEBUG)
 
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(lineno)s - %(message)s")
-ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=2048, backupCount=3)
-ROTATE_FILENAME.setFormatter(BASIC_FORMAT)
-logClientCrtl.addHandler(ROTATE_FILENAME)
+#ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=20480, backupCount=3)
+LOG_FILENAME.setFormatter(BASIC_FORMAT)
+logClientCrtl.addHandler(LOG_FILENAME)
 
 
 
@@ -72,15 +72,43 @@ def atUrService():
     if(msg == "CLIENTKILL"):
       if(os.path.exists(pidOnlyFile)):
         pOf = open(pidOnlyFile,"r")
-        for x in pOf.readlines():
+        pOfiles = pOf.readlines()
+        pOfilestmp = []
+        pOf.close()
+        if(pOfiles):
+          for x in pOfiles:
+            pOfilestmp.append(x.rstrip().lstrip())
+        pOfiles = pOfilestmp
+        for x in pOfiles:
           logClientCrtl.debug("trying to kill : "+ str(x))
           if(x):
             try:
-              os.kill(int(x),signal.SIGTERM)
+              if(sys.platform.find("linux") >= 0):
+                try:
+                  os.kill(int(x),signal.SIGTERM)
+                  clientSocket.send("CLIENTKILLED")
+                except:
+                  clientSocket.send("CLIENTKILLFAILED")
+              if(sys.platform.find("win") >= 0):
+                os.system("taskkill /t /f /pid "+ str(x))
+                time.sleep(5)
+                try:
+                  os.remove(mainPidFile)
+                except:
+                  logClientCrtl.debug(str(sys.exc_info()))
+                try:
+                  os.remove(pidOnlyFile)
+                except:
+                  logClientCrtl.debug(str(sys.exc_info()))
+                clientSocket.send("CLIENTKILLED")
             except:
               logClientCrtl.debug(str(sys.exc_info()))
+              clientSocket.send("CLIENTKILLFAILED")
               pass
-    
+      
+      
+      
+      
     if(msg == "RESTARTSYS"):
       if(sys.platform.find("linux") >= 0):
         try:
@@ -102,9 +130,20 @@ def atUrService():
           logClientCrtl.debug(str(sys.exc_info()))
       if(sys.platform.find("win") >= 0):
         try:
-          subprocess.Popen(str("start C:/Python27/pythonw.exe "+ str(rbhusMainDir) +"rbhusDrone.py").split())
+          subprocess.Popen([sys.executable, str(rbhusMainDir) +"rbhusDrone.py"])
         except:
           logClientCrtl.debug(str(sys.exc_info()))
+          
+    if(msg == "CLEANUPPIDS"):
+      try:
+        os.remove(mainPidFile)
+      except:
+        logClientCrtl.debug(str(sys.exc_info()))
+      try:
+        os.remove(pidOnlyFile)
+      except:
+        logClientCrtl.debug(str(sys.exc_info()))
+      
       
     
     while(1):
