@@ -46,6 +46,12 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       self.taskValues = self.task.taskFields
     except:
       pass
+    if(len(sys.argv) == 2):
+      try:
+        self.task = rUtils.tasks(int(sys.argv[1]))
+        self.taskValues = self.task.taskDetails
+      except:
+        pass
     
     self.fileTypeDefs = rUtils.getFileTypesAll()
     
@@ -212,20 +218,24 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
   def popEditItems(self):
     if(self.taskValues):
-      #self.lineEditFileName.setText(self.taskValues['fileName'])
-      #self.lineEditOutDir.setText(self.taskValues['outDir'])
-      #self.lineEditOutName.setText(self.taskValues['outName'])
+      if(len(sys.argv) == 2):
+        self.lineEditFileName.setText(self.taskValues['fileName'])
+        self.lineEditOutDir.setText(self.taskValues['outDir'])
+        self.lineEditOutName.setText(self.taskValues['outName'])
+        self.lineEditImageType.setText(self.taskValues['imageType'])
+        self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
+        self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
+        self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
+        
       self.lineEditFrange.setText(self.taskValues['fRange'])
       self.lineEditCameras.setText(self.taskValues['camera'])
       self.lineEditLayer.setText(self.taskValues['layer'])
       self.lineEditRes.setText(self.taskValues['resolution'])
-      #self.lineEditImageType.setText(self.taskValues['imageType'])
+      
       self.spinMinBatch.setValue(int(self.taskValues['minBatch']))
       self.spinMaxBatch.setValue(int(self.taskValues['maxBatch']))
-      #self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
-      #self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
+      
       self.lineEditDescription.setText(self.taskValues['description'])
-      #self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
       batchFF = int(self.taskValues['batch'])
       self.comboBatching.setCurrentIndex(batchFF)
       self.setTaskFileTypes()
@@ -356,15 +366,24 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     submitDict['maxBatch'] = str(self.spinMaxBatch.value())
     submitDict['priority'] = str(p)
       
-    if((submitDict['fileType'] == "3dsmax") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
-      submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/afterFrame.py"
-      submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/beforeFrame.py"
-    elif((submitDict['fileType'] == "3dsmax2013") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
-      submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
-      submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"
-    elif((submitDict['fileType'] == "3dsmax2013_test") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
-      submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
-      submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"
+    
+    
+    
+    for x in self.fileTypeDefs:
+      if(x['fileType'] == submitDict['fileType']):
+        submitDict['afterFrameCmd'] = x['defAfterFrameCmd']
+        submitDict['beforeFrameCmd'] = x['defBeforeFrameCmd']
+    
+    
+    #if((submitDict['fileType'] == "3dsmax") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
+      #submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/afterFrame.py"
+      #submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/beforeFrame.py"
+    #elif((submitDict['fileType'] == "3dsmax2013") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
+      #submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
+      #submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"
+    #elif((submitDict['fileType'] == "3dsmax2013_test") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
+      #submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
+      #submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"
       
       
       

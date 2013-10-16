@@ -406,7 +406,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.stopTimer()
   
   def startTimer(self):
-    self.timer.start(2000)
+    self.timer.start(5000)
 
   def stopTimer(self):
     self.timer.stop()
@@ -569,39 +569,28 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
     selFramesDict = self.selectedFrames()
     selFrames = {}
-    print("yyy")
     for x in selFramesDict:
       try:
         selFrames[x['id']].append(x['frameId'])
       except:
         selFrames[x['id']] = []
         selFrames[x['id']].append(x['frameId'])
-      print("xxx: "+ str(x['id']) +" : "+ str(selFrames[x['id']]))
     
     selFramesTid = selFrames.keys()
-    
-    print("GGGG: "+ str(selFramesDict))
-    print("FFFF: "+ str(selFramesTid))
-    
-    
-    
-    
     self.tableFrames.clearContents()
     self.tableFrames.setSortingEnabled(False)
     self.tableFrames.resizeColumnsToContents()
     self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
     colCount = 0
-    
 
-    
-    
     selTasksDict = self.selectedTasks()
     selTasks = []
     db_conn = dbRbhus.dbRbhus()
     padDict = {}
     for x in selTasksDict:
       selTasks.append(x['id'])
-      padDict[re.sub("^0+","",x['id'])] = x['pad']
+      padDict[re.sub("^0+","",x['id'])] = 4
+      
     #print(padDict)  
     if(selTasks):
       ids = " or id = ".join(selTasks)
@@ -671,8 +660,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       return()
       
     
+    
+    
+    
+    
     findRows = []
     for row in rows:
+      
       sFlag = 0
       for colName in self.colNamesFrames:
         if(str(row[colName]).find(str(self.lineEditSearchFrames.text())) >= 0):
@@ -775,10 +769,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def selectedTasks(self):
     rowstask=[]
     rowsSelected = []
-    for idx in self.tableList.selectionModel().selectedRows():
+    rowsModel = self.tableList.selectionModel().selectedRows()
+    
+    for idx in rowsModel:
       rowsSelected.append(idx.row())
     colCount = len(self.colNamesTask)
-
     for row in rowsSelected:
       singleRow = {}
       for col in range(0,colCount):

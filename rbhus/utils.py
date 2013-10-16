@@ -405,7 +405,7 @@ class tasks(object):
       pass
     self.taskId = int(tId)
     if(tId):
-      self.taskDetails = self._getTaskDetails(tId)
+      self.taskDetails = self._getTaskDetails(int(tId))
       
   
   def _getTaskFields(self):
@@ -420,7 +420,7 @@ class tasks(object):
   
   def _getTaskDetails(self,tid):
     try:
-      rows = self.db_conn.execute("select * from tasks where id='"+ str(tid) +"'",dictionary=True)
+      rows = self.db_conn.execute("select * from tasks where id="+ str(int(tid)),dictionary=True)
       if(rows):
         return(rows[-1])
       else:
