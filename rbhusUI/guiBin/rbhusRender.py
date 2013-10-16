@@ -1,16 +1,16 @@
 #!/usr/bin/python
 from PyQt4 import QtCore, QtGui
-import glob
 import os
 import sys
-import socket
+import tempfile
 import time
-import subprocess
-import re
+
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+
+tempDir = tempfile.gettempdir()
 
 rL = "rbhusList.py"
 rS = "rbhusSubmit.py"
@@ -112,6 +112,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusList(self):
     self.pushList.setText("opening")
     p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusList.log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusList.err")
     self.pushList.setEnabled(False)
     self.listAction.setEnabled(False)
     p.start(sys.executable,rbhuslistCmd.split())
@@ -132,6 +134,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusSubmit(self):
     self.pushSubmit.setText("opening")
     p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusSubmit.log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusSubmit.err")
     self.pushSubmit.setEnabled(False)
     self.newAction.setEnabled(False)
     p.start(sys.executable,rbhusSubmitCmd.split())
@@ -152,6 +156,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusHost(self):
     self.pushHosts.setText("opening")
     p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusHost.log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusHost.err")
     self.pushHosts.setEnabled(False)
     self.hostAction.setEnabled(False)
     p.start(sys.executable,rbhusHostCmd.split())

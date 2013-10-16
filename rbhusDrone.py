@@ -684,11 +684,8 @@ def execFrames(frameInfo,frameScrutiny):
       time.sleep(0.2)
     rbhusLog(frameInfo)
     washMyButt(frameInfo['id'],frameInfo['frameId'])
-    logClient.debug("WSB 10")
     db_conn.delBatchId(frameInfo['batchId'])
-    logClient.debug("WSB 11")
     delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
-    logClient.debug("WSB 12")
     sys.exit(0)
 
 
@@ -743,25 +740,19 @@ def washMyButt(taskid, frameid):
     logClient.debug(str(sys.exc_info()))
     return(0)
   for x in bfd.readlines():
-    if(len(x) > 0):
-      try:
-        logClient.debug("washMyButt : : : "+ x.rstrip().lstrip())
-      except:
-        logClient.debug(str(sys.exc_info()))
+    if(len(x.rstrip().lstrip()) > 0):
+      logClient.debug("washMyButt : : : "+ x.rstrip().lstrip())
+      logClient.debug(str(sys.exc_info()))
       try:
         os.remove(x.rstrip().lstrip())
       except:
         logClient.debug(str(sys.exc_info()))
   try:
-    logClient.debug("WSB 1")
     bfd.close()
-    logClient.debug("WSB 2")
   except:
     logClient.debug(str(sys.exc_info()))
   try:
-    logClient.debug("WSB 3")
     os.remove(buttFile)
-    logClient.debug("WSB 4")
   except:
     logClient.debug(str(sys.exc_info()))
   return(1)

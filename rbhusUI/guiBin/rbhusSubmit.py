@@ -42,12 +42,12 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     
     self.taskValues = 0
     try:
-      self.task = rUtils.tasks(tId = sys.argv[1].rstrip().lstrip())
-      self.taskValues = self.task.taskDetails
+      self.task = rUtils.tasks()
+      self.taskValues = self.task.taskFields
     except:
       pass
     
-    
+    self.fileTypeDefs = rUtils.getFileTypesAll()
     
     rbhusSubmitMod.Ui_rbhusSubmit.setupUi(self,Form)
     self.pushFileName.clicked.connect(self.selectFileName)
@@ -57,7 +57,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.pushSubmit.clicked.connect(self.submitTasks)
     self.pushSelectHostGroups.clicked.connect(self.printGroupSel)
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
-    self.comboFileType.currentIndexChanged.connect(self.fileTypePrint)
+    self.comboFileType.currentIndexChanged.connect(self.fileTypeChanged)
     self.comboOsType.currentIndexChanged.connect(self.osTypePrint)
     self.comboRes.currentIndexChanged.connect(self.resetRes)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
@@ -116,6 +116,12 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.popEditItems()
     
     
+  def fileTypeChanged(self):
+    self.fileTypePrint()
+    self.setTaskOsTypes()
+    
+    self.setRenderer()
+  
   
   def printGroupSel(self):
     groups = rUtils.getHostGroups()
@@ -206,7 +212,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
   def popEditItems(self):
     if(self.taskValues):
-      self.lineEditFileName.setText(self.taskValues['fileName'])
+      #self.lineEditFileName.setText(self.taskValues['fileName'])
       #self.lineEditOutDir.setText(self.taskValues['outDir'])
       #self.lineEditOutName.setText(self.taskValues['outName'])
       self.lineEditFrange.setText(self.taskValues['fRange'])
@@ -214,13 +220,13 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       self.lineEditLayer.setText(self.taskValues['layer'])
       self.lineEditRes.setText(self.taskValues['resolution'])
       #self.lineEditImageType.setText(self.taskValues['imageType'])
-      self.spinMinBatch.setValue(self.taskValues['minBatch'])
-      self.spinMaxBatch.setValue(self.taskValues['maxBatch'])
-      self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
-      self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
+      self.spinMinBatch.setValue(int(self.taskValues['minBatch']))
+      self.spinMaxBatch.setValue(int(self.taskValues['maxBatch']))
+      #self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
+      #self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
       self.lineEditDescription.setText(self.taskValues['description'])
-      self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
-      batchFF = self.taskValues['batch']
+      #self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
+      batchFF = int(self.taskValues['batch'])
       self.comboBatching.setCurrentIndex(batchFF)
       self.setTaskFileTypes()
       self.setTaskHostGroups()
@@ -238,12 +244,15 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     try:
       for x in renders[str(self.comboFileType.currentText())]:
         self.comboRenderer.addItem(_fromUtf8(x))
-        if(x.endswith(str(self.taskValues['renderer']))):
-          setIndx = indx
+        for y in self.fileTypeDefs:
+          if(str(y['fileType']) == str(self.comboFileType.currentText())):
+            if(str(y['defRenderer']) == str(x)):
+              setIndx = indx
         indx = indx + 1
       self.comboRenderer.setCurrentIndex(setIndx)
       return(1)
     except:
+      print(str(sys.exc_info()))
       return(0)
    
    
@@ -256,11 +265,14 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       setIndx = 0
       for row in rows:
         self.comboOsType.addItem(_fromUtf8(row))
-        print(str(self.taskValues['os']))
-        if(row.endswith(str(self.taskValues['os']))):
+        defFileType = str(self.comboFileType.currentText())
+        defOs = str(self.taskValues['os'])
+        for x in self.fileTypeDefs:
+          if(x['fileType'] == defFileType):
+            defOs = x['defOs']
+        if(row.find(defOs) >= 0):
           setIndx = indx
         indx = indx + 1
-      
       self.comboOsType.setCurrentIndex(setIndx)
       return(1)
     else:

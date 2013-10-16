@@ -90,6 +90,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test1Action = menu.addAction("edit")
     test5Action = menu.addAction("restart Rbhus")
     test6Action = menu.addAction("kill Rbhus")
+    test7Action = menu.addAction("restart")
+    test8Action = menu.addAction("shutdown")
     
     
     action = menu.exec_(self.tableHost.mapToGlobal(pos))

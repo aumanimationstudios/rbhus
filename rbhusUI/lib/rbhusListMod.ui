@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1116</width>
+    <width>1084</width>
     <height>707</height>
    </rect>
   </property>
@@ -441,21 +441,15 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QPushButton" name="taskDelete">
+                <widget class="QPushButton" name="taskRefresh">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
-                 <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#ff0000;&quot;&gt;CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!</string>
-                 </property>
                  <property name="text">
-                  <string>delete</string>
+                  <string>refresh</string>
                  </property>
                  <property name="flat">
                   <bool>false</bool>
@@ -918,7 +912,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushRefresh">
+          <widget class="QPushButton" name="framesRefresh">
            <property name="text">
             <string>refresh</string>
            </property>

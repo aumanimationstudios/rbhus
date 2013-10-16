@@ -60,6 +60,19 @@ def getHostGroupsActive():
     return(0)
   
 
+
+def getFileTypesAll():
+  dbconn = dbRbhus.dbRbhus()
+  try:
+    rows = dbconn.execute("SELECT * FROM fileType", dictionary=True)
+    return(rows)
+  except:
+    print(str(sys.exc_info()))
+    return(0)
+
+
+
+
 def getDefaults(table="tasks"):
   dbconn = dbRbhus.dbRbhus()
   defs = {}
@@ -390,7 +403,7 @@ class tasks(object):
       self.userAdmin = int(os.environ['rbhus_acl_admin'])
     except:
       pass
-    self.taskId = tId
+    self.taskId = int(tId)
     if(tId):
       self.taskDetails = self._getTaskDetails(tId)
       
@@ -457,16 +470,19 @@ class tasks(object):
   
   
   def remove(self):
+    print("removing task : "+ str(self.taskId))
     if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds) or (self.userAdmin == 1)):
       try:
         self.db_conn.execute("delete from tasks where \
-                             (id="+ str(taskId) +") and \
+                             (id="+ str(self.taskId) +") and \
                              (status != "+ str(constants.taskWaiting) +") and \
                              (status != "+ str(constants.taskPending) +") and \
                              (status != "+ str(constants.taskActive) +") and \
                              ((select count(*) FROM frames where (id="+ str(self.taskId) +") and ((status="+ str(constants.framesRunning) +") or (status="+ str(constants.framesPending) +")))=0)")
+        print("removed task : "+ str(self.taskId))
         return(1)
       except:
+        print(str(sys.exc_info()))
         return(0)
     else:
       print("user : "+ str(self.username) +" : NOT allowed to edit")

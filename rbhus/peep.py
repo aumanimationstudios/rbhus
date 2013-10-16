@@ -4,10 +4,12 @@ import logging
 import socket
 import os
 import tempfile
-
-class peep:
+import random
+class peepServer:
   """listeners for processes to enable interprocess communication"""
   def __init__(self):
-    self._peep_socket = serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    self._peepServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    self._bind(("", constants.clientCtrlListenPort))
     
     

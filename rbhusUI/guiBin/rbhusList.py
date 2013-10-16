@@ -68,7 +68,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     self.selectedTaskList = []
     
-    QtCore.QObject.connect(self.pushRefresh, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableList)
+    QtCore.QObject.connect(self.framesRefresh, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
     QtCore.QObject.connect(self.tableList, QtCore.SIGNAL(_fromUtf8("itemSelectionChanged()")), self.popTableFrames)
     QtCore.QObject.connect(self.checkAll, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
     QtCore.QObject.connect(self.checkDone, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
@@ -92,8 +92,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     #self.taskRerun.clicked.connect(self.rerunTask)
     #self.taskActivate.clicked.connect(self.activateTask)
     #self.taskEdit.clicked.connect(self.editTask)
-    self.taskDelete.clicked.connect(self.delTask)
-    
+    #self.taskDelete.clicked.connect(self.delTask)
+    self.taskRefresh.clicked.connect(self.popTableList)
     #self.frameStop.clicked.connect(self.stopFrame)
     #self.frameRerun.clicked.connect(self.rerunFrame)
     #self.frameHold.clicked.connect(self.holdFrame)
@@ -109,7 +109,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.taskSearchTime = 0.0
   
   
-  
+  def taskItemSelected(self):
+    self.tableFrames.clearContents()
+    self.popTableFrames()
     
   def previewTask(self):
     selTasksDict = self.selectedTasks()
@@ -158,6 +160,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test6Action = menu.addAction("copy/submit")
     test7Action = menu.addAction("fastAssign enable")
     test8Action = menu.addAction("fastAssign disable")
+    test9Action = menu.addAction("delete")
     
     action = menu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
@@ -176,6 +179,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.fastAssignFunc(e=1)
     if(action == test8Action):
       self.fastAssignFunc(e=0)
+    if(action == test9Action):
+      self.delTask()
+      
       
       
   def fastAssignFunc(self,e=0):
@@ -345,8 +351,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     db_conn = dbRbhus.dbRbhus()
     if(selTasksDict):
       for x in selTasksDict:
-        print(x['id'])
-        t = rUtils.tasks(x['id'])
+        t = rUtils.tasks(str(x['id']).lstrip("0"))
         t.remove()
     self.popTableList()
     
@@ -409,9 +414,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def popTableList(self):
     QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
     
+    tSeletected = self.selectedTasks()
+    tSelect = []
+    if(tSeletected):
+      for x in tSeletected:
+        tSelect.append(x['id'])
+    
+    print(tSelect)
+    
     self.tableList.clearContents()
     self.tableList.setSortingEnabled(False)
     self.tableList.resizeColumnsToContents()
+    self.tableList.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
     colCount = 0
     
     statusToCheck = []
@@ -508,8 +522,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           item = QtGui.QTableWidgetItem()
           self.tableList.setItem(indx, colIndx, item)
           self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+          if(str(row[colName]).zfill(4) in tSelect):
+            self.tableList.selectRow(indx)
           colIndx = colIndx + 1
           continue
+        
         
         item = QtGui.QTableWidgetItem()
         self.tableList.setItem(indx, colIndx, item)
@@ -539,13 +556,44 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.tableList.setSortingEnabled(True)
     
     QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+    self.tableList.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+    #self.popTableFrames()
     
+    
+  def refresh(self):
+    self.popTableList()
+    self.popTableFrames()
+    
+  
   def popTableFrames(self):
     QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+    selFramesDict = self.selectedFrames()
+    selFrames = {}
+    print("yyy")
+    for x in selFramesDict:
+      try:
+        selFrames[x['id']].append(x['frameId'])
+      except:
+        selFrames[x['id']] = []
+        selFrames[x['id']].append(x['frameId'])
+      print("xxx: "+ str(x['id']) +" : "+ str(selFrames[x['id']]))
+    
+    selFramesTid = selFrames.keys()
+    
+    print("GGGG: "+ str(selFramesDict))
+    print("FFFF: "+ str(selFramesTid))
+    
+    
+    
+    
     self.tableFrames.clearContents()
     self.tableFrames.setSortingEnabled(False)
     self.tableFrames.resizeColumnsToContents()
+    self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
     colCount = 0
+    
+
+    
     
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -669,7 +717,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         if(colName == "id"):
           item = QtGui.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
-          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         if(colName == "frameId"):
@@ -678,7 +726,6 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
-        
         item = QtGui.QTableWidgetItem()
         self.tableFrames.setItem(indx, colIndx, item)
         self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
@@ -710,6 +757,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         #print self.tableFrames.item(indx, colIndx).type()
         colIndx = colIndx + 1
+        
+      if(str(row['id']).zfill(4) in selFramesTid):
+        if(str(row['frameId']).zfill(int(padDict[str(row['id'])])) in selFrames[str(row['id']).zfill(int(padDict[str(row['id'])]))]):
+          self.tableFrames.selectRow(indx)
       indx = indx + 1
       #print(row['eTime'] - row['sTime'])
 
@@ -718,6 +769,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.tableFrames.resizeColumnsToContents()
     self.tableFrames.setSortingEnabled(True)
     QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+    self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     
     
   def selectedTasks(self):

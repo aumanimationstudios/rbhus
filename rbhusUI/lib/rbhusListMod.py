@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Mon Oct  7 15:21:57 2013
-#      by: PyQt4 UI code generator 4.9.6
+# Created: Wed Oct 16 13:37:27 2013
+#      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -27,7 +27,7 @@ class Ui_mainRbhusList(object):
   def setupUi(self, mainRbhusList):
     mainRbhusList.setObjectName(_fromUtf8("mainRbhusList"))
     mainRbhusList.setWindowModality(QtCore.Qt.WindowModal)
-    mainRbhusList.resize(1116, 707)
+    mainRbhusList.resize(1084, 707)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -252,15 +252,15 @@ class Ui_mainRbhusList(object):
     self.horizontalLayout_5.setObjectName(_fromUtf8("horizontalLayout_5"))
     spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_5.addItem(spacerItem2)
-    self.taskDelete = QtGui.QPushButton(self.frame_6)
+    self.taskRefresh = QtGui.QPushButton(self.frame_6)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.taskDelete.sizePolicy().hasHeightForWidth())
-    self.taskDelete.setSizePolicy(sizePolicy)
-    self.taskDelete.setFlat(False)
-    self.taskDelete.setObjectName(_fromUtf8("taskDelete"))
-    self.horizontalLayout_5.addWidget(self.taskDelete)
+    sizePolicy.setHeightForWidth(self.taskRefresh.sizePolicy().hasHeightForWidth())
+    self.taskRefresh.setSizePolicy(sizePolicy)
+    self.taskRefresh.setFlat(False)
+    self.taskRefresh.setObjectName(_fromUtf8("taskRefresh"))
+    self.horizontalLayout_5.addWidget(self.taskRefresh)
     self.verticalLayout_12.addLayout(self.horizontalLayout_5)
     self.horizontalLayout_9.addLayout(self.verticalLayout_12)
     self.verticalLayout_3.addWidget(self.frame_6)
@@ -492,9 +492,9 @@ class Ui_mainRbhusList(object):
     self.horizontalLayout_7.addWidget(self.checkRefresh)
     spacerItem5 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_7.addItem(spacerItem5)
-    self.pushRefresh = QtGui.QPushButton(self.dockWidgetContents_3)
-    self.pushRefresh.setObjectName(_fromUtf8("pushRefresh"))
-    self.horizontalLayout_7.addWidget(self.pushRefresh)
+    self.framesRefresh = QtGui.QPushButton(self.dockWidgetContents_3)
+    self.framesRefresh.setObjectName(_fromUtf8("framesRefresh"))
+    self.horizontalLayout_7.addWidget(self.framesRefresh)
     self.verticalLayout_8.addLayout(self.horizontalLayout_7)
     self.horizontalLayout_2.addLayout(self.verticalLayout_8)
     self.dockWidgetFrames.setWidget(self.dockWidgetContents_3)
@@ -518,9 +518,9 @@ class Ui_mainRbhusList(object):
     self.label_2.setText(_translate("mainRbhusList", "total", None))
     self.labelTaskTotal.setText(_translate("mainRbhusList", "0", None))
     self.tableList.setSortingEnabled(True)
-    self.taskDelete.setToolTip(_translate("mainRbhusList", "<html><head/><body><p><span style=\" font-weight:600; text-decoration: underline; color:#ff0000;\">CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!</span></p></body></html>", None))
-    self.taskDelete.setStatusTip(_translate("mainRbhusList", "CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!", None))
-    self.taskDelete.setText(_translate("mainRbhusList", "delete", None))
+    self.taskRefresh.setToolTip(_translate("mainRbhusList", "<html><head/><body><p><span style=\" font-weight:600; text-decoration: underline; color:#ff0000;\">CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!</span></p></body></html>", None))
+    self.taskRefresh.setStatusTip(_translate("mainRbhusList", "CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!", None))
+    self.taskRefresh.setText(_translate("mainRbhusList", "refresh", None))
     self.label_5.setText(_translate("mainRbhusList", "FRAMES", None))
     self.checkAutohold.setText(_translate("mainRbhusList", "autohold", None))
     self.checkFailed.setText(_translate("mainRbhusList", "failed", None))
@@ -537,5 +537,5 @@ class Ui_mainRbhusList(object):
     self.labelTotal.setText(_translate("mainRbhusList", "0", None))
     self.tableFrames.setSortingEnabled(True)
     self.checkRefresh.setText(_translate("mainRbhusList", "autoRefresh", None))
-    self.pushRefresh.setText(_translate("mainRbhusList", "refresh", None))
+    self.framesRefresh.setText(_translate("mainRbhusList", "refresh", None))
 
