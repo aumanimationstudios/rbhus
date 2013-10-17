@@ -1231,7 +1231,7 @@ def freeMeminfo():
 def getHostGroups(dbconn):
   hostname,ipAddr = getHostNameIP()
   try:
-    rows = dbconn.execute("select groups from hostInfo where ip=\""+ str(ipAddr) +"\" group by groups", dictionary=True)
+    rows = dbconn.execute("select groups from hostInfo where ip='"+ str(ipAddr) +"' group by groups", dictionary=True)
   except:
     raise
   gtr = {}
@@ -1301,9 +1301,9 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
                       + str(ipAddr) + "', '" \
                       + str("default,"+ plat) +"') \
                         ON DUPLICATE KEY UPDATE \
-                        totalRam='"+ str(totalRam) +"', \
-                        totalCpus='"+ str(totalCpus) +"', \
-                        totalSwap='"+ str(totalSwap) +"' ,\
+                        totalRam="+ str(totalRam) +", \
+                        totalCpus="+ str(totalCpus) +", \
+                        totalSwap="+ str(totalSwap) +" ,\
                         hostName='"+ str(hostname) +"' ,\
                         ip='"+ str(ipAddr) +"' , \
                         os='"+ str("default,"+ plat) +"' ,\
@@ -1317,12 +1317,12 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
 
       try:
         logClient.debug("trying to insert hostResource")
-        dbconn.execute("INSERT INTO hostResource (hostName,ip,freeCpus) VALUES (\'" \
-                      + hostname +"\',\'" \
-                      + ipAddr +"\'," \
+        dbconn.execute("INSERT INTO hostResource (hostName,ip,freeCpus) VALUES ('" \
+                      + hostname +"','" \
+                      + ipAddr +"'," \
                       + str(totalCpus) +") \
                         ON DUPLICATE KEY UPDATE \
-                        freeCpus=\'"+ str(totalCpus) +"\', \
+                        freeCpus="+ str(totalCpus) +", \
                         ip=\'"+ str(ipAddr) +"\'")
       except:
         logClient.debug("hostResource update error")
@@ -1333,11 +1333,11 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
 
       try:
         logClient.debug(" : Trying to insert hostAlive")
-        dbconn.execute("INSERT INTO hostAlive (hostName,ip) VALUES (\'" \
-                        + str(hostname) +"\',\'" \
-                        + str(ipAddr) +"\') \
+        dbconn.execute("INSERT INTO hostAlive (hostName,ip) VALUES ('" \
+                        + str(hostname) +"','" \
+                        + str(ipAddr) +"') \
                           ON DUPLICATE KEY UPDATE \
-                          ip=\'"+ str(ipAddr) +"\'")
+                          ip='"+ str(ipAddr) +"'")
       except:
         logClient.debug("hostAlive update error")
         logClient.debug(str(sys.exc_info()))
@@ -1345,11 +1345,11 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
 
 
       try:
-        dbconn.execute("INSERT INTO hostEffectiveResource (hostName,ip) VALUES (\'" \
-                        + str(hostname) +"\',\'" \
-                        + str(ipAddr) +"\') \
+        dbconn.execute("INSERT INTO hostEffectiveResource (hostName,ip) VALUES ('" \
+                        + str(hostname) +"','" \
+                        + str(ipAddr) +"') \
                           ON DUPLICATE KEY UPDATE \
-                          ip=\'"+ str(ipAddr) +"\'")
+                          ip='"+ str(ipAddr) +"'")
       except:
         logClient.debug("hostEffectiveResource update error")
         logClient.debug(str(sys.exc_info()))
@@ -1365,12 +1365,12 @@ def setHostResMem(dbconn,freeRam='0',freeSwap='0', load1='0', load5='0', load10=
   if(ipAddr == "127.0.0.1"):
     return(0)
   try:
-    dbconn.execute("UPDATE hostResource SET freeRam=\'" + str(freeRam) +"\' \
-          , freeSwap=\'"+ str(freeSwap) +"\' \
-          , load1=\'"+ str(load1) +"\' \
-          , load5=\'"+ str(load5) +"\' \
-          , load10=\'"+ str(load10) +"\' \
-          WHERE ip=\'"+ str(ipAddr) +"\'")
+    dbconn.execute("UPDATE hostResource SET freeRam=" + str(freeRam) +" \
+          , freeSwap="+ str(freeSwap) +" \
+          , load1="+ str(load1) +" \
+          , load5="+ str(load5) +" \
+          , load10="+ str(load10) +" \
+          WHERE ip='"+ str(ipAddr) +"'")
   except:
     logClient.debug(str(sys.exc_info()))
     return(0)

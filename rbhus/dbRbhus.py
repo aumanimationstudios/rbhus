@@ -439,11 +439,22 @@ class dbRbhus:
   def getUnassignedFrames(self,taskId):
     try:
       rows = self.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
-                       WHERE tasks.id="+ str(taskId) +" \
+                       WHERE tasks.id="+ str(int(taskId)) +" \
                        AND frames.id= tasks.id \
                        AND frames.status="+ str(constants.framesUnassigned) +" \
                        AND (tasks.rerunThresh>frames.runCount OR tasks.rerunThresh=0) \
                        ORDER BY frames.frameId", dictionary=True)
+    except:
+      modLogger.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
+  
+  
+  def getUnassignedFramesCount(self,taskId):
+    try:
+      rows = self.execute("SELECT count(*) FROM frames \
+                       WHERE frames.id="+ str(int(taskId)) +" \
+                       AND frames.status="+ str(constants.framesUnassigned), dictionary=True)
     except:
       modLogger.error(str(sys.exc_info()))
       return(0)
