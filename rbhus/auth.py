@@ -4,6 +4,7 @@ import dbRbhus
 import os
 import tempfile
 import time
+import constants
 
 class login():
   def __init__(self):
@@ -132,8 +133,8 @@ class login():
     if(self.username):
       db_conn = dbRbhus.dbRbhus()
       try:
-        rows = db_conn.execute("select * from proj", dictionary=True)
-        adminRows = db_conn.execute("select * from admins", dictionary=True)
+        rows = db_conn.execute("select * from proj where status="+ str(constants.projActive), dictionary=True)
+        adminRows = db_conn.execute("select * from admins where user like '%"+ str(self.username) +"%'", dictionary=True)
         if(not isinstance(rows,int)):
           for x in rows:
             users = x['admins'].split()

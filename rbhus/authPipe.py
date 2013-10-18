@@ -3,11 +3,15 @@ import sys
 import os
 import tempfile
 import time
+import dbPipe
+import constantsPipe
+
 
 class login():
   def __init__(self):
     self.status = False
     self.userAclProjIds = []
+    self.userAclStages = {}
     self.username = None
     self.rbhusAdminFlag = 0
     try:
@@ -113,10 +117,17 @@ class login():
     os.environ['rbhusPipe_acl_user'] = self.username
     os.environ['rbhusPipe_acl_projIds'] = ""
     os.environ['rbhusPipe_acl_admin'] = "0"
+    os.environ['rbhusPipe_acl_stages'] = ""
+    stageEnv = []
     if(self.userAclProjIds):
-      os.environ['rbhusPipe_acl_projIds'] = os.environ['rbhusPipe_acl_projIds'] + " ".join(self.userAclProjIds)
+      os.environ['rbhusPipe_acl_projIds'] = " ".join(self.userAclProjIds)
     if(self.rbhusAdminFlag):
       os.environ['rbhusPipe_acl_admin'] = "1"
+    if(self.userAclStages):
+      for x in self.userAclStages.keys():
+        stageEnv.append((x) +":"+ ",".join(self.userAclStages[x]))
+      if(stageEnv):
+        os.environ['rbhusPipe_acl_stages'] = " ".join(stageEnv)
   
   def _unsetEnvs(self):
     self.status = False
@@ -126,24 +137,38 @@ class login():
     os.environ['rbhusPipe_acl_user'] = ""
     os.environ['rbhusPipe_acl_projIds'] = ""
     os.environ['rbhusPipe_acl_admin'] = ""
+    os.environ['rbhusPipe_acl_stages'] = ""
   
   def __getUserDets(self):
     if(self.username):
-      db_conn = dbRbhus.dbRbhus()
+      db_conn = dbPipe.dbPipe()
       try:
-        rows = db_conn.execute("select * from proj", dictionary=True)
-        adminRows = db_conn.execute("select * from admins", dictionary=True)
+        rows = db_conn.execute("select * from proj where admins like '%"+ str(self.username) +"%' and status="+ str(constantsPipe.projActive), dictionary=True)
+        adminRows = db_conn.execute("select * from admins where user like '%"+ str(self.username) +"%'", dictionary=True)
+        stageRows = db_conn.execute("select * from stages where admins like '%"+ str(self.username) +"%' and status="+ str(constantsPipe.projActive), dictionary=True)
         if(not isinstance(rows,int)):
           for x in rows:
             users = x['admins'].split()
             if(self.username in users):
-              print("appending project id : "+ str(x['id']))
-              self.userAclProjIds.append(str(x['id']))
+              print("appending project id : "+ str(x['projId']))
+              self.userAclProjIds.append(str(x['projId']))
         if(not isinstance(adminRows,int)):
           for x in adminRows:
             if(self.username == x['user']):
               self.rbhusAdminFlag = 1
               break
+        if(not isinstance(stageRows,int)):
+          for x in stageRows:
+            users = x['admins'].split()
+            if(self.username in users):
+              print("appending stage Type "+ str(x['name']) +"to project "+ str(x['projId']))
+              try:
+                self.userAclStages[int(x['projId'])].append(str(x['name']))
+              except:
+                self.userAclStages[int(x['projId'])] = []
+                self.userAclStages[int(x['projId'])].append(str(x['name']))
+          
+         
       except:
         print(str(sys.exc_info()))
       

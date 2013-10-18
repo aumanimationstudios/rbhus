@@ -103,3 +103,8 @@ hostResourceForcedOff = 3
 
 clientListenPort = 6660
 clientCtrlListenPort = 6661
+
+#proj table
+projActive = 1
+projDeactive = 0
+

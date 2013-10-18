@@ -31,8 +31,8 @@ except AttributeError:
 class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   def setupUi(self, Form):
     self.form = Form
-    dbConn = dbRbhus.dbRbhus()
-    clientPrefs = dbConn.getClientPrefs()
+    #dbConn = dbRbhus.dbRbhus()
+    #clientPrefs = dbConn.getClientPrefs()
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     
@@ -44,18 +44,18 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
 
     if(sys.platform.find("linux") >= 0):
       self.acl.useEnvUser()
-      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
+      self.runCmd("guiBin"+ os.sep +"rbhusPipe.py")
       sys.exit(0)
       
     if(not clientPrefs['authentication']):
       self.acl.useEnvUser()
-      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
+      self.runCmd("guiBin"+ os.sep +"rbhusPipe.py")
       sys.exit(0)
       
     rms = self.acl.tryRememberMe()
     if(rms):
       print(str(self.acl.username))
-      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
+      self.runCmd("guiBin"+ os.sep +"rbhusPipe.py")
       sys.exit(0)
     
   
