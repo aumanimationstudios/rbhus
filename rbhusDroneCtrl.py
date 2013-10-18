@@ -110,6 +110,7 @@ def atUrService():
       
       
     if(msg == "RESTARTSYS"):
+      time.sleep(5)
       if(sys.platform.find("linux") >= 0):
         try:
           os.system("reboot >& /dev/null &")

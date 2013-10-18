@@ -47,7 +47,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusHostMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     self.timer = QtCore.QTimer()
@@ -112,6 +112,10 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       self.hostClientStart()
     if(action == test6Action):
       self.hostClientKill()
+    if(action == test7Action):
+      self.hostRestart()
+    #if(action == test6Action):
+      #self.hostClientKill()
       
       
   def hostEdit(self):
@@ -142,6 +146,16 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.popTableHost()
     return(1)
 
+  
+  def hostRestart(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.killClient()
+      hst.restartSys()
+    self.popTableHost()
+    return(1)
+  
   
   def hostClientStart(self):
     hosts = self.selectedHosts()

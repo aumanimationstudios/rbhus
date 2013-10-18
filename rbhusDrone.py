@@ -707,24 +707,23 @@ def rbhusLog(lframeInfo):
     sha256 = hashlib.sha256(lframeInfo['fileName'])
     try:
       dbconnLog.execute("insert into tasksLog \
-                         (sha256,projId,fileName,date,timeSpentOnResource) \
+                         (sha256,projId,fileName,date,timeSpentOnResource,ip) \
                          values ('"+ str(sha256.hexdigest()) +"',"+ \
                          str(lframeInfo['projId']) +",'"+ \
                          str(lframeInfo['fileName']).lstrip().rstrip() +"',date(now()),"+ \
-                         str(tDelta) +") \
-                         on duplicate key update set \
-                         timeSpentOnResource=timeSpentOnResource+"+ str(tDelta))
+                         str(tDelta) +",'"+ str(ipAddr) +"') \
+                         on duplicate key \
+                         update timeSpentOnResource=timeSpentOnResource+"+ str(tDelta))
     except:
-      logClient.debug(str(sys.exc_info()))
+      logClient.debug("1 : "+ str(sys.exc_info()))
     try:
       dbconnLog.execute("insert into hostLog \
                            (ip,timeOnRender,date) \
                            values ('"+ str(ipAddr) +"',"+ str(tDelta) +",date(now())) \
-                           on duplicate key update set \
-                           timeOnRender=timeOnRender+"+ str(tDelta) +", \
-                           totalJobs=totalJobs+1")
+                           on duplicate key update \
+                           timeOnRender=timeOnRender+"+ str(tDelta) +",totalJobs=totalJobs+1")
     except:
-      logClient.debug(str(sys.exc_info()))
+      logClient.debug("2 : "+ str(sys.exc_info()))
     return(1)
   except:
     logClient.debug(str(sys.exc_info()))

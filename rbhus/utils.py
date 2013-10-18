@@ -352,6 +352,21 @@ class hosts(object):
       clientSocket.close()
   
   
+  def restartSys(self):
+    if(self.userAdmin):
+      clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      try:
+        clientSocket.settimeout(15)
+        clientSocket.connect((self.hostDetails['ip'],6661))
+      except:
+        print("cannot connect : "+ self.hostDetails['hostName'] +" : "+ str(sys.exc_info()))
+        try:
+          clientSocket.close()
+        except:
+          pass
+      clientSocket.send("RESTARTSYS")
+      clientSocket.close()
+  
   def startClient(self):
     if(self.userAdmin):
       clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

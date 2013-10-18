@@ -1,6 +1,5 @@
 import ldap
 import sys
-import dbPipe
 import os
 import tempfile
 import time
