@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeAdminPanelMod.ui'
 #
-# Created: Thu Oct 17 23:14:50 2013
+# Created: Fri Oct 18 23:12:58 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -104,7 +104,7 @@ class Ui_MainWindow(object):
     QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
   def retranslateUi(self, MainWindow):
-    MainWindow.setWindowTitle(_translate("MainWindow", "Rbhus Production Management", None))
+    MainWindow.setWindowTitle(_translate("MainWindow", "Rbhus Production Management- admin", None))
     self.pushBackup.setText(_translate("MainWindow", "backup", None))
     self.pushCreate.setText(_translate("MainWindow", "create", None))
     self.pushModify.setText(_translate("MainWindow", "modify", None))

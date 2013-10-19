@@ -17,7 +17,7 @@ print(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import db
 import constants
-import auth
+import authPipe
 import dbPipe
 
 
@@ -40,7 +40,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     self.center()
     rbhusAuthMod.Ui_MainWindowAuth.setupUi(self,Form)
     self.pushButton.clicked.connect(self.tryAuth)
-    self.acl = auth.login()
+    self.acl = authPipe.login()
 
     if(sys.platform.find("linux") >= 0):
       self.acl.useEnvUser()

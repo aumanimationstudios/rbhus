@@ -58,7 +58,10 @@ class dbPipe:
     self.__conn = self._connRbhus()
 
   def __del__(self):
-    self.__conn.close()
+    try:
+      self.__conn.close()
+    except:
+      modPipeLogger.error(str(sys.exc_info()))
     modPipeLogger.debug("Db connection closed" +"\n")
   
   def _connDb(self,hostname,port,dbname):
@@ -72,7 +75,7 @@ class dbPipe:
   def _connRbhus(self):
     while(1):
       try:
-        con = self._connDb(hostname=dbHostname,port=int(dbPort),dbname=dbLogDatabase)
+        con = self._connDb(hostname=dbHostname,port=int(dbPort),dbname=dbDatabase)
         modPipeLogger.debug("Db connected")
         return(con)
       except:

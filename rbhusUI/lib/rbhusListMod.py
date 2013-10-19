@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Wed Oct 16 13:37:27 2013
-#      by: PyQt4 UI code generator 4.10.2
+# Created: Fri Oct 18 22:29:45 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -518,8 +518,6 @@ class Ui_mainRbhusList(object):
     self.label_2.setText(_translate("mainRbhusList", "total", None))
     self.labelTaskTotal.setText(_translate("mainRbhusList", "0", None))
     self.tableList.setSortingEnabled(True)
-    self.taskRefresh.setToolTip(_translate("mainRbhusList", "<html><head/><body><p><span style=\" font-weight:600; text-decoration: underline; color:#ff0000;\">CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!</span></p></body></html>", None))
-    self.taskRefresh.setStatusTip(_translate("mainRbhusList", "CHECK MORE THAN 100 TIMES IF POSSIBLE BEFORE DELETING !!", None))
     self.taskRefresh.setText(_translate("mainRbhusList", "refresh", None))
     self.label_5.setText(_translate("mainRbhusList", "FRAMES", None))
     self.checkAutohold.setText(_translate("mainRbhusList", "autohold", None))

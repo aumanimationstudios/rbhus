@@ -57,8 +57,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     self.trayMenu = QtGui.QMenu()
     
-    self.quitAction = self.trayMenu.addAction("quit")
+    
     self.adminAction = self.trayMenu.addAction("admin")
+    self.quitAction = self.trayMenu.addAction("quit")
     self.quitAction.triggered.connect(self.quitFunc)
     self.adminAction.triggered.connect(self.rbhusPipeAdmin)
     
@@ -94,7 +95,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def closeEvent(self,event):
     event.ignore()
-    QtGui.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray . Please quit from the tray icon if you really want to quit!")
+    QtGui.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray .\nPlease quit from the tray icon if you really want to quit!")
     self.form.setVisible(False) 
     
    

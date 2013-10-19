@@ -28,6 +28,19 @@
       </property>
      </widget>
     </item>
+    <item row="7" column="0" colspan="2">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="labelName">
       <property name="sizePolicy">
@@ -42,7 +55,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit"/>
+     <widget class="QLineEdit" name="lineEditName"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="labelLibrary">
@@ -78,6 +91,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="whatsThis">
+       <string>directory to store the output data from file. eg : rendered output of lighting files.</string>
+      </property>
       <property name="text">
        <string>projdumpDisk</string>
       </property>
@@ -92,7 +108,7 @@
     <item row="3" column="1">
      <widget class="QComboBox" name="comboProjdump"/>
     </item>
-    <item row="7" column="0" colspan="2">
+    <item row="8" column="0" colspan="2">
      <widget class="Line" name="line">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -105,19 +121,6 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0" colspan="2">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="5" column="1">
      <widget class="QDateEdit" name="dateEditDue">
       <property name="calendarPopup">
@@ -125,7 +128,7 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0" colspan="2">
+    <item row="11" column="0" colspan="2">
      <widget class="QPushButton" name="pushCreate">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -138,7 +141,7 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="0" colspan="3">
+    <item row="10" column="0" colspan="3">
      <widget class="QCheckBox" name="checkBox">
       <property name="text">
        <string>rbhusRender intergration</string>
@@ -147,6 +150,16 @@
        <bool>true</bool>
       </property>
      </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="labelAdmin">
+      <property name="text">
+       <string>admins</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="lineEditAdmins"/>
     </item>
    </layout>
   </widget>

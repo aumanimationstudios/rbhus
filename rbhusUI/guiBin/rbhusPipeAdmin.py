@@ -3,19 +3,16 @@ from PyQt4 import QtCore, QtGui
 import glob
 import os
 import sys
-import datetime
-import re
-import subprocess
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
-scb = "selectCheckBox.py"
+scb = "rbhusPipeProjCreate.py"
 
-selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
-selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
+rppc = dirSelf.rstrip(os.sep) + os.sep + scb
+rppc = rppc.replace("\\","/")
 
 import rbhusPipeAdminPanelMod
 print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -41,6 +38,30 @@ class Ui_Form(rbhusPipeAdminPanelMod.Ui_MainWindow):
     self.center()
     
     
+  def rbhusPipeCreateProj(self):
+    self.pushCreate.setText("opening")
+    p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAdmin.log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeAdmin.err")
+    self.pushCreate.setEnabled(False)
+    self.adminAction.setEnabled(False)
+    p.start(sys.executable,rppc.split())
+    p.finished.connect(self.rppcEnable)
+    p.started.connect(self.rppcWait)
+    
+  
+  def rppcWait(self):
+    self.pushCreate.setText("admin open")
+  
+
+  def rppcEnable(self,exitStatus):
+    self.pushCreate.setText("ADMIN")
+    self.pushCreate.setEnabled(True)
+    self.adminAction.setEnabled(True)
+  
+  
+  
+  
   def center(self):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
     
