@@ -117,10 +117,10 @@ def setCompletedTasks():
               if(db_conn.setTaskStatus(task['id'],status)):
                 logging.debug("task "+ str(task['id']) +" status changed to : "+ str(status))
                 break
-              time.sleep(0.1)
+              time.sleep(0.5)
     else:
       time.sleep(1)
-    time.sleep(0.1)
+    time.sleep(0.5)
     
     
 if __name__=="__main__":
