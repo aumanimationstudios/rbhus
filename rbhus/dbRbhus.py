@@ -697,7 +697,7 @@ class dbRbhus:
         
       return(-2)
     except:
-      logging.error(str(sys.exc_info()))
+      logging.error(str(taskId) +" : "+ str(sys.exc_info()))
       return(-3)
 
       
