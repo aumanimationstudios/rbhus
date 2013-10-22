@@ -151,6 +151,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     hosts = self.selectedHosts()
     for h in hosts:
       hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.hStop()
       hst.killClient()
       hst.restartSys()
     self.popTableHost()

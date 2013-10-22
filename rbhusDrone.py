@@ -537,7 +537,7 @@ def execFrames(frameInfo,frameScrutiny):
             while(1):
               if(setFreeCpus(frameInfo, db_conn) ==  1):
                 break
-              time.sleep(0.2)
+              time.sleep(0.5)
             washMyButt(frameInfo['id'],frameInfo['frameId'])
             db_conn.delBatchId(frameInfo['batchId'])
             rbhusLog(frameInfo)
@@ -577,7 +577,7 @@ def execFrames(frameInfo,frameScrutiny):
             while(1):
               if(setFreeCpus(frameInfo, db_conn) ==  1):
                 break
-              time.sleep(0.2)
+              time.sleep(0.5)
             washMyButt(frameInfo['id'],frameInfo['frameId'])
             db_conn.delBatchId(frameInfo['batchId'])
             rbhusLog(frameInfo)
@@ -681,7 +681,7 @@ def execFrames(frameInfo,frameScrutiny):
       if(setFreeCpus(frameInfo, db_conn) ==  1):
         logClient.debug("Break point FOUR")
         break
-      time.sleep(0.2)
+      time.sleep(0.5)
     rbhusLog(frameInfo)
     washMyButt(frameInfo['id'],frameInfo['frameId'])
     db_conn.delBatchId(frameInfo['batchId'])
@@ -1115,6 +1115,19 @@ def getEffectiveDetails(db_conn):
 
 
 
+def singularity():
+  try:
+    hostName,ipAddr = getHostNameIP()
+    serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serverSocket.bind(("", constants.clientSingularityPort))
+    serverSocket.listen(5)
+    return(0)
+  except:
+    logClient.debug(str(sys.exc_info()))
+    sys.exit(1)
+
+
+
 #If not used remove
 
 def atUrService():
@@ -1394,10 +1407,11 @@ def mainFunc():
   myPid = os.getpid()
   logClient.debug("Rbhus : "+ str(myPid))
   
-  if(os.path.exists(mainPidFile)):
-    logClient.debug("rbhusDrone allready running . please check the do a proper cleanup before restarting")
-    sys.exit(1)
+  #if(os.path.exists(mainPidFile)):
+    #logClient.debug("rbhusDrone allready running . please check the do a proper cleanup before restarting")
+    #sys.exit(1)
   
+  singularity()
   p = []
   init()
 

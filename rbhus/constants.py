@@ -101,6 +101,8 @@ hostResourceActive = 1
 hostResourceStopped = 2
 hostResourceForcedOff = 3
 
+
+clientSingularityPort  = 6662
 clientListenPort = 6660
 clientCtrlListenPort = 6661
 
