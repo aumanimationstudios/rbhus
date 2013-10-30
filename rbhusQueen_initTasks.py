@@ -38,9 +38,11 @@ mainPidFile = tempDir + os.sep +"rbusServer.pids"
 
 setproctitle.setproctitle("rQ_initTasks")
 
-def getWaitingTasks(pendingTasks):
+def getWaitingTasks():
   setproctitle.setproctitle("rQ_get")
   db_conn = dbRbhus.dbRbhus()
+  initPool = multiprocessing.Pool(5)
+  
   while(1):
     rows = 0
     #logging.error("ROWS WTF2 : "+ str(rows))
@@ -52,116 +54,114 @@ def getWaitingTasks(pendingTasks):
       continue
     #logging.error("ROWS WTF3 : "+ str(rows))
     if(rows):
-      for row in rows:
-        if(row):
-          pendingTasks.put(row)
-          idTask = row['id']
-          #logging.debug("Adding task wtf: "+ str(row))
-          ##DO NOT REMOVE THE PENDING STATUS
-          while(1):
-            try:
-              db_conn.execute("UPDATE tasks SET status="+ str(constants.taskPending) +" WHERE (id = "+ str(idTask) +") and ( status = "+ str(constants.taskWaiting) +")")
-              #logging.debug("updating tasks table with pending status wtf4")
-              break
-            except:
-              logging.error("Screwed updating tasks table with pending status : "+ str(sys.exc_info()))
-              continue
-            time.sleep(0.1)
-
-          try:
-            db_conn.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
-          except:
-            logging.error("Screwed inserting into tasklog : "+ str(sys.exc_info()))
-          #time.sleep(0.1)
+      initPool.apply_async(initWaitingTasks,rows)
     time.sleep(1)
 
 
   
 
-def initWaitingTasks(pendingTasks):
+def initWaitingTasks(row):
   setproctitle.setproctitle("rQ_set")
   db_conn = dbRbhus.dbRbhus()
-  while(1):
-    row = {}
+  #while(1):
+    #row = {}
+  if(row):
+    idTask = row['id']
+    fRange = row['fRange']
+    frames = []
+    #logging.debug("Adding task wtf: "+ str(row))
+    ##DO NOT REMOVE THE PENDING STATUS
     while(1):
       try:
-        row = pendingTasks.get()
+        db_conn.execute("UPDATE tasks SET status="+ str(constants.taskPending) +" WHERE (id = "+ str(idTask) +") and ( status = "+ str(constants.taskWaiting) +")")
+        #logging.debug("updating tasks table with pending status wtf4")
         break
       except:
-        #logging.error("Screwed initWaitingTasks WTF1 : "+ str(sys.exc_info()))
-        time.sleep(0.2)
-    if(row):
-      idTask = row['id']
-      fRange = row['fRange']
-      frames = []
+        logging.error("Screwed updating tasks table with pending status : "+ str(sys.exc_info()))
+      time.sleep(0.1)
+
+    try:
+      db_conn.execute("INSERT INTO tasksLog (id) VALUES ("+ str(idTask) +")")
+    except:
+      logging.error("Screwed inserting into tasklog : "+ str(sys.exc_info()))
+    time.sleep(0.1)
+
+    
+    db_conn.resetTaskDoneTime(idTask)
+
+    for a in fRange.split(","):
+      frange = a.split(":")
+      pad = 1
+      Frange = frange[0]
+      if(len(frange) == 2):
+        pad = frange[1]
+      logging.debug("PAD : "+ str(pad))
+      logging.debug(str(int(Frange.split("-")[0])))
+      logging.debug(str(int(Frange.split("-")[-1]) + 1))
+      for b in range(int(Frange.split("-")[0]), int(Frange.split("-")[-1]) + 1, int(pad)):
+        frames.append(b)
+
+    tFrames = []
+    framesTable = 0
+    while(1):
+      try:
+        framesTable = db_conn.getAllFrames(idTask)
+        break
+      except:
+        pass
+      time.sleep(0.5)
+
+    if(framesTable):
+      for frameTable in framesTable:
+        tFrames.append(frameTable['frameId'])
+
+    tFramesSet = set(tFrames)
+    framesSet = set(frames)
+    forDelSet = tFramesSet.difference(framesSet)
+    if(forDelSet):
+      forDel = " or frameId=".join(str(x) for x in forDelSet)
+      try:
+        db_conn.execute("delete from frames where id="+ str(idTask) +" and (frameId="+ str(forDel) +")")
+      except:
+        logging.error("Screwed initWaitingTasks (Delete frames table (connection)) : "+ str(sys.exc_info()))
+ 
+    
+    values = 0
+    
+    for frame in frames:
+      if(not values):
+        values = "("+ str(idTask) +","+ str(frame) +")"
+      else:
+        values = values +","+"("+ str(idTask) +","+ str(frame) +")"
       
-      db_conn.resetTaskDoneTime(idTask)
-
-      for a in fRange.split(","):
-        frange = a.split(":")
-        pad = 1
-        Frange = frange[0]
-        if(len(frange) == 2):
-          pad = frange[1]
-        logging.debug("PAD : "+ str(pad))
-        logging.debug(str(int(Frange.split("-")[0])))
-        logging.debug(str(int(Frange.split("-")[-1]) + 1))
-        for b in range(int(Frange.split("-")[0]), int(Frange.split("-")[-1]) + 1, int(pad)):
-          frames.append(b)
-
-      tFrames = []
-      framesTable = 0
-      while(1):
-        try:
-          framesTable = db_conn.getAllFrames(idTask)
+      
+    while(1):
+      try:
+        db_conn.execute("INSERT INTO frames (id, frameId) VALUES "+ str(values) +" \
+                         on duplicate key update frameId=values(frameId)")
+        break
+      except:
+        logging.error("Screwed initWaitingTasks (Insert frames table (connection)) : "+ str(idTask) +" : "+ str(sys.exc_info()))
+        if(str(sys.exc_info()).find("IntegrityError") >= 0):
           break
-        except:
-          pass
-        time.sleep(0.5)
+      time.sleep(0.001)
 
-      if(framesTable):
-        for frameTable in framesTable:
-          tFrames.append(frameTable['frameId'])
-
-      tFramesSet = set(tFrames)
-      framesSet = set(frames)
-      forDelSet = tFramesSet.difference(framesSet)
-      for forDel in forDelSet:
-        while(1):
-          try:
-            db_conn.execute("DELETE FROM frames WHERE frames.id="+ str(idTask) +" AND frameId="+ str(forDel))
-            break
-          except:
-            logging.error("Screwed initWaitingTasks (Delete frames table (connection)) : "+ str(sys.exc_info()))
-          time.sleep(0.1)
-
-      for frame in frames:
-        while(1):
-          try:
-            db_conn.execute("INSERT INTO frames (id, frameId) VALUES ("+ str(idTask) +", "+ str(frame) +")")
-            break
-          except:
-            logging.error("Screwed initWaitingTasks (Insert frames table (connection)) : "+ str(idTask) +" : "+ str(sys.exc_info()))
-            if(str(sys.exc_info()).find("IntegrityError") >= 0):
-              break
-          time.sleep(0.001)
-
-      logging.debug("Initialized frames table")
-      while(1):
-        try:
-          db_conn.execute("UPDATE tasks SET status="+ str(constants.taskActive) +" WHERE id="+ str(idTask))
-          logging.debug("Updated task:"+ str(idTask) +" status to 2(active)")
-          break
-        except:
-          logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
-        time.sleep(0.01)
-    time.sleep(0.001)
+    logging.debug("Initialized frames table")
+    while(1):
+      try:
+        db_conn.execute("UPDATE tasks SET status="+ str(constants.taskActive) +" WHERE id="+ str(idTask))
+        logging.debug("Updated task:"+ str(idTask) +" status to 2(active)")
+        break
+      except:
+        logging.error("Screwed initWaitingTasks : "+ str(sys.exc_info()))
+      time.sleep(0.01)
+  time.sleep(0.001)
 
 
 def initTasks():
-  pendTasks = multiprocessing.Queue()
+  #pendTasks = multiprocessing.Queue()
   p = []
-  getWaitingTasks_proc = multiprocessing.Process(target=getWaitingTasks,args=(pendTasks,))
+  getWaitingTasks_proc = multiprocessing.Process(target=getWaitingTasks)
   p.append(getWaitingTasks_proc)
   getWaitingTasks_proc.start()
 
@@ -169,9 +169,9 @@ def initTasks():
   time.sleep(2)
 
 
-  initWaitingTasks_proc = multiprocessing.Process(target=initWaitingTasks,args=(pendTasks,))
-  p.append(initWaitingTasks_proc)
-  initWaitingTasks_proc.start()
+  ##initWaitingTasks_proc = multiprocessing.Process(target=initWaitingTasks,args=(pendTasks,))
+  ##p.append(initWaitingTasks_proc)
+  ##initWaitingTasks_proc.start()
 
   #pendTasks.close()
 

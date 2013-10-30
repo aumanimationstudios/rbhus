@@ -19,3 +19,4 @@
 projActive = 1
 projDeactive = 0
 
+projInitPort = 66610

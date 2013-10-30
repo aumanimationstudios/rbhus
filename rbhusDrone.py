@@ -484,6 +484,7 @@ def execFrames(frameInfo,frameScrutiny):
         time.sleep(0.5)
       washMyButt(frameInfo['id'],frameInfo['frameId'])
       db_conn.delBatchId(frameInfo['batchId'])
+      #db_conn.setTaskDone(frameInfo['id'])
       rbhusLog(frameInfo)
       sys.exit(0)
 
@@ -540,6 +541,7 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.5)
             washMyButt(frameInfo['id'],frameInfo['frameId'])
             db_conn.delBatchId(frameInfo['batchId'])
+            #db_conn.setTaskDone(frameInfo['id'])
             rbhusLog(frameInfo)
             sys.exit(0)
         time.sleep(1)
@@ -580,6 +582,7 @@ def execFrames(frameInfo,frameScrutiny):
               time.sleep(0.5)
             washMyButt(frameInfo['id'],frameInfo['frameId'])
             db_conn.delBatchId(frameInfo['batchId'])
+            #db_conn.setTaskDone(frameInfo['id'])
             rbhusLog(frameInfo)
             sys.exit(0)
         time.sleep(1)
@@ -685,6 +688,7 @@ def execFrames(frameInfo,frameScrutiny):
     rbhusLog(frameInfo)
     washMyButt(frameInfo['id'],frameInfo['frameId'])
     db_conn.delBatchId(frameInfo['batchId'])
+    #db_conn.setTaskDone(frameInfo['id'])
     delFramePidFile(pidfileLock,frameInfo['id'],frameInfo['frameId'])
     sys.exit(0)
 

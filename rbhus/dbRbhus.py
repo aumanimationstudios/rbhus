@@ -390,7 +390,10 @@ class dbRbhus:
     try:
       rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \
                       WHERE (tasks.id = tasksLog.id) \
-                      AND ((tasks.status != "+ str(constants.taskStopped) +") or (tasks.status != "+ str(constants.taskAutoStopped) +") or (tasks.status != "+ str(constants.taskWaiting) +")) \
+                      AND ((tasks.status != "+ str(constants.taskStopped) +") or \
+                      (tasks.status != "+ str(constants.taskAutoStopped) +") or \
+                      (tasks.status != "+ str(constants.taskWaiting) +") or \
+                      (tasks.status != "+ str(constants.taskDone) +")) \
                       ORDER BY tasks.priority DESC", dictionary=True)
     
       #THE BELOW LOGIC IS NONSENSE . this is a temp fix untill i find the right source of the problem
@@ -629,6 +632,18 @@ class dbRbhus:
     return(rows)
     
     
+  def setTaskDone(self,taskId):
+    try:
+      self.execute("update tasks set status="+ str(constants.taskDone) +",doneTime=IF(doneTime='0000-00-00 00:00:00',NOW(),doneTime) where \
+                    id="+ str(taskId) +" and status!="+ str(constants.taskDone) +" and \
+                    (select count(*) from frames where frames.id="+ str(taskId) +" and frames.status="+ str(constants.framesDone) +")=(select count(*) from frames where frames.id="+ str(taskId) +")")
+      return(1)
+    except:
+      logging.error(str(sys.exc_info()))
+      return(0)
+  
+  
+  
   def setTaskStatus(self,taskId,status):
     try:
       self.execute("UPDATE tasks SET status="+ str(status) +" WHERE id="+ str(taskId))

@@ -94,7 +94,7 @@ def autoStopper():
               logging.debug("Auto stopping frame  : "+ str(task['id']) +" "+ str(x['frameId']))
     else:
       time.sleep(1)
-    time.sleep(0.1)
+    time.sleep(0.5)
 
 
   
@@ -107,17 +107,7 @@ def setCompletedTasks():
     if(tasks):
       for task in tasks:
         if(task):
-          status = db_conn.checkTaskCompleted(task['id'])
-          #logging.debug("active tasks wtf5 : "+ str(task['id']) +"\n\n")
-        
-          if(status >= 0):
-            if(status ==  constants.taskDone):
-              db_conn.setTaskDoneTime(task['id'])
-            while(1):
-              if(db_conn.setTaskStatus(task['id'],status)):
-                logging.debug("task "+ str(task['id']) +" status changed to : "+ str(status))
-                break
-              time.sleep(0.5)
+          db_conn.setTaskDone(task['id'])
     else:
       time.sleep(1)
     time.sleep(0.5)

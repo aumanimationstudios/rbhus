@@ -220,8 +220,8 @@ def arrangedActiveTasks():
 
     runFirst = []
     reArrangedTasks = arrangedTasks
-    for x in arrangedTasks:
-      print(x['id'])
+    #for x in arrangedTasks:
+      #print(x['id'])
     
     for x in arrangedTasks:
       if(x['fastAssign'] == constants.fastAssignEnable):
@@ -235,9 +235,9 @@ def arrangedActiveTasks():
       reArrangedTasks.insert(0,x)
       
         
-    for x in reArrangedTasks:
-      print(x['id'])
-    ##get the tasks arranged according to afterTasks shits
+    #for x in reArrangedTasks:
+      #print(x['id'])
+    ###get the tasks arranged according to afterTasks shits
     #if(afterTasks):
       #for afterT in afterTasks.keys():
         #afterTid =
@@ -334,7 +334,7 @@ def scheduler():
         afterTasks = {}
         for activeTask in activeTasks:
           if(activeTask["afterTasks"]):
-            print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
+            #print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
             ats = activeTask["afterTasks"].split(",")
             for at in ats:
               if(int(at) != 0):
@@ -400,6 +400,12 @@ def scheduler():
           else:
             while(1):
               if(db_conn.resetFailedFrames(activeTask["id"])):
+                break
+              time.sleep(1)
+              
+            #check if task is done . 
+            while(1):
+              if(db_conn.setTaskDone(activeTask["id"])):
                 break
               time.sleep(1)
     else:

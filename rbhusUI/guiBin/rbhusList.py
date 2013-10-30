@@ -60,7 +60,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
-    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","priority","submitTime","doneTime","afterTime","status","description"]
+    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","priority","submitTime","doneTime","afterTime","status","batch","description"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status"]
     self.colNamesFramesXtra = ["timeTaken"]
     self.colNamesTaskXtra = ["pending"]
@@ -101,7 +101,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     #self.tableFrames.itemSelectionChanged.connect(self.stopFrame)
     self.timer = QtCore.QTimer()
     self.timerFramesRefresh = QtCore.QTimer()
-    self.timerFramesRefresh.timeout.connect(self.popTableFrames)
+    self.timerFramesRefresh.timeout.connect(self.refresh)
     
     self.timer.timeout.connect(self.popTableFrames)
     self.checkRefresh.clicked.connect(self.timeCheck)
@@ -340,7 +340,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     db_conn = dbRbhus.dbRbhus()
     if(selTasksDict):
       for x in selTasksDict:
-        db_conn.holdTask(x['id'],auth=True)
+        t = rUtils.tasks(str(x['id']).lstrip("0"))
+        t.holdTask()
     self.popTableList()
     
  
@@ -360,22 +361,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     selTasksDict = self.selectedTasks()
     selTasks = []
     for x in selTasksDict:
-      selTasks.append(x['id'])
-    if(selTasks):
-      ids = " or id = ".join(selTasks)
-    else:
-      return
-    ids = " or id=".join(selTasks)
-    print ids
-    try:
-      conn = db.connRbhus()
-      cursor = conn.cursor()
-      cursor.execute("update tasks set status = "+ str(constants.taskActive) +" where (id="+ ids +") and status != "+ str(constants.taskActive))
-      cursor.close()
-      conn.close()
-    except:
-      print("1 :Error connecting to db :"+ str(sys.exc_info()))
-      return()    
+      t = rUtils.tasks(str(x['id']).lstrip("0"))
+      t.activateTask()
     self.popTableList()
     
     
@@ -386,7 +373,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     db_conn = dbRbhus.dbRbhus()
     if(selTasksDict):
       for x in selTasksDict:
-        xRe = db_conn.rerunTask(x['id'],auth=True)
+        t = rUtils.tasks(str(x['id']).lstrip("0"))
+        t.rerunTask()
     self.popTableList()
     
 

@@ -484,6 +484,48 @@ class tasks(object):
       return(0)
   
   
+  def activateTask(self):
+    print("activating task : "+ str(self.taskId))
+    if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds) or (self.userAdmin == 1)):
+      try:
+        self.db_conn.execute("update tasks set status="+ str(constants.taskActive) +",doneTime='0000-00-00 00:00:00' where id="+ str(self.taskId) +" and status!="+ str(constants.taskActive))
+        return(1)
+      except:
+        print(str(sys.exc_info()))
+        return(0)
+    else:
+      print("user : "+ str(self.username) +" : NOT allowed to edit")
+      return(0)
+      
+      
+  def holdTask(self):
+    print("holding task : "+ str(self.taskId))
+    if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds) or (self.userAdmin == 1)):
+      try:
+        self.db_conn.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ str(self.taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +"))")
+        return(1)
+      except:
+        print(str(sys.exc_info()))
+        return(0)
+    else:
+      print("user : "+ str(self.username) +" : NOT allowed to edit")
+      return(0)
+  
+  
+  def rerunTask(self):
+    print("reruning task : "+ str(self.taskId))
+    if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds) or (self.userAdmin == 1)):
+      try:
+        self.db_conn.execute("update tasks set status = "+ str(constants.taskWaiting) +" where id="+ str(self.taskId))
+        return(1)
+      except:
+        print(str(sys.exc_info()))
+        return(0)
+    else:
+      print("user : "+ str(self.username) +" : NOT allowed to edit")
+      return(0)
+  
+  
   def remove(self):
     print("removing task : "+ str(self.taskId))
     if((self.username == self.taskDetails['user']) or (str(self.taskDetails['projId']) in self.userProjIds) or (self.userAdmin == 1)):

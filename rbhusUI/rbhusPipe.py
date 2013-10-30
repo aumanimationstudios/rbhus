@@ -47,10 +47,10 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
       self.runCmd("guiBin"+ os.sep +"rbhusPipe.py")
       sys.exit(0)
       
-    if(not clientPrefs['authentication']):
-      self.acl.useEnvUser()
-      self.runCmd("guiBin"+ os.sep +"rbhusPipe.py")
-      sys.exit(0)
+    #if(not clientPrefs['authentication']):
+      #self.acl.useEnvUser()
+      #self.runCmd("guiBin"+ os.sep +"rbhusPipe.py")
+      #sys.exit(0)
       
     rms = self.acl.tryRememberMe()
     if(rms):
@@ -74,7 +74,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     if(ret):
       print("VALID")
       print(str(self.acl.username))
-      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
+      self.runCmd("guiBin"+ os.sep +"rbhusPipe.py")
     else:
       print("\n&*^*&^*%&$&^(*)(__)&*%^$#   .. :) !\n")
     sys.exit(0)
