@@ -453,7 +453,7 @@ class tasks(object):
       return(0)
     for x in fieldDict.keys():
       if(self.taskFields.has_key(x)):
-        self.validFields[x] = fieldDict[x]
+        self.validFields[x] = fieldDict[x].rstrip().lstrip()
       else:
         self.invalidFields[x] = fieldDict[x]
     self.validFields_keys = [x for x in self.validFields.keys()]

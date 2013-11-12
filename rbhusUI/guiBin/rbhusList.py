@@ -101,9 +101,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     #self.tableFrames.itemSelectionChanged.connect(self.stopFrame)
     self.timer = QtCore.QTimer()
     self.timerFramesRefresh = QtCore.QTimer()
-    self.timerFramesRefresh.timeout.connect(self.refresh)
+    self.timerFramesRefresh.timeout.connect(self.popTableFrames)
     
-    self.timer.timeout.connect(self.popTableFrames)
+    self.timer.timeout.connect(self.refresh)
     self.checkRefresh.clicked.connect(self.timeCheck)
     self.lineEditSearch.returnPressed.connect(self.popTableList)
     self.lineEditSearchFrames.returnPressed.connect(self.popTableFrames)
