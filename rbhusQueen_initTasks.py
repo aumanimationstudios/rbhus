@@ -41,27 +41,28 @@ setproctitle.setproctitle("rQ_initTasks")
 def getWaitingTasks():
   setproctitle.setproctitle("rQ_get")
   db_conn = dbRbhus.dbRbhus()
-  initPool = multiprocessing.Pool(5)
   
   while(1):
     rows = 0
-    #logging.error("ROWS WTF2 : "+ str(rows))
+    logging.error("ROWS WTF2 : "+ str(rows))
     try:
       rows = db_conn.execute("SELECT * FROM tasks WHERE status="+ str(constants.taskWaiting), dictionary=True)
     except:
       logging.error("Screwed selecting waiting tasks : "+ str(sys.exc_info()))
       time.sleep(1)
       continue
-    #logging.error("ROWS WTF3 : "+ str(rows))
+    logging.error("ROWS WTF3 : "+ str(rows))
     if(rows):
-      initPool.apply_async(initWaitingTasks,rows)
+      for row in rows:
+        initWaitingTasks_proc = multiprocessing.Process(target=initWaitingTasks,args=(row,))
+        initWaitingTasks_proc.start()
     time.sleep(1)
 
 
   
 
 def initWaitingTasks(row):
-  setproctitle.setproctitle("rQ_set")
+  setproctitle.setproctitle("rQ_set : "+ str(row['id']))
   db_conn = dbRbhus.dbRbhus()
   #while(1):
     #row = {}
