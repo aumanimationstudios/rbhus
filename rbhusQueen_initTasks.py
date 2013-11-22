@@ -44,14 +44,14 @@ def getWaitingTasks():
   
   while(1):
     rows = 0
-    logging.error("ROWS WTF2 : "+ str(rows))
+    #logging.error("ROWS WTF2 : "+ str(rows))
     try:
       rows = db_conn.execute("SELECT * FROM tasks WHERE status="+ str(constants.taskWaiting), dictionary=True)
     except:
       logging.error("Screwed selecting waiting tasks : "+ str(sys.exc_info()))
       time.sleep(1)
       continue
-    logging.error("ROWS WTF3 : "+ str(rows))
+    #logging.error("ROWS WTF3 : "+ str(rows))
     if(rows):
       for row in rows:
         initWaitingTasks_proc = multiprocessing.Process(target=initWaitingTasks,args=(row,))
