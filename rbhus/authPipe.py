@@ -161,12 +161,12 @@ class login():
           for x in stageRows:
             users = x['admins'].split()
             if(self.username in users):
-              print("appending stage Type "+ str(x['name']) +"to project "+ str(x['projId']))
+              print("appending stage Type "+ str(x['type']) +"to project "+ str(x['projId']))
               try:
-                self.userAclStages[int(x['projId'])].append(str(x['name']))
+                self.userAclStages[int(x['projId'])].append(str(x['type']))
               except:
                 self.userAclStages[int(x['projId'])] = []
-                self.userAclStages[int(x['projId'])].append(str(x['name']))
+                self.userAclStages[int(x['projId'])].append(str(x['type']))
           
          
       except:
