@@ -2,6 +2,8 @@ import sys
 import os
 import socket
 import MySQLdb
+import multiprocessing
+
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
   pwd = os.sep.join(progPath[0:-1])
@@ -86,4 +88,11 @@ def setupProj(projType,projName,projOs,directory,admins,rbhusRender,rbhusRenderS
   except:
     print(str(sys.exc_info()))
     
-  
+  try:
+    if(cScript):
+      status = os.system("python -d '"+ str(cScript) +"'")
+  except:
+    print(str(sys.exc_info()))
+    
+    
+    
