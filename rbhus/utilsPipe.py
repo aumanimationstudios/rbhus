@@ -59,7 +59,7 @@ def getProjDefaults(self):
   except:
     return(0)
 
-def setupProj(projType,projName,projOs,directory,admins,rbhusRender,rbhusRenderServer,desc):
+def setupProj(projType,projName,projOs,directory,admins,rbhusRender,rbhusRenderServer,user,group,desc):
   dbconn = dbPipe.dbPipe()
   pTypes = getProjTypes()
   cScript = ""
@@ -75,8 +75,12 @@ def setupProj(projType,projName,projOs,directory,admins,rbhusRender,rbhusRenderS
   os.environ['rp_projRenderS_c'] = rbhusRenderServer
   os.environ['rp_projOs_c'] = projOs
   os.environ['rp_projDesc_c'] = desc
+  os.environ['rp_projAclUser_c'] = user
+  os.environ['rp_projAclGroup_c'] = group
+  
+  exportDirMaps(directory)
   try:
-    dbconn.execute("insert into proj (projName,directory,admins,os,projType,rbhusRenderIntergration,rbhusRenderServer,description) \
+    dbconn.execute("insert into proj (projName,directory,admins,os,projType,rbhusRenderIntergration,rbhusRenderServer,user,group,description) \
                     values ('"+ str(projName) +"', \
                     '"+ str(directory) +"', \
                     '"+ str(admins) +"', \
@@ -94,5 +98,17 @@ def setupProj(projType,projName,projOs,directory,admins,rbhusRender,rbhusRenderS
   except:
     print(str(sys.exc_info()))
     
-    
+
+def exportDirMaps(directory):
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("select * from dirMaps where directory='"+ str(directory) +"'", dictionary=True)
+  except:
+    print(str(sys.exc_info()))
+    return(0)
+  if(rows):
+    flds = rows[0].keys()
+    for f in flds:
+      os.environ['rp_dirMaps_'+ str(f).rstrip().lstrip()] = str(rows[0][f])
+    return(1)
     
