@@ -34,5 +34,9 @@ level2 = {'share':['bin','stageTemplates/stageType'],
 os.system("mount "+ diskServer +":"+ diskNfsExport.rstrip(os.sep) + os.sep +" "+ diskNfsMount)
 for x in level1:
   os.makedirs(diskNfsMount.rstrip(os.sep) + os.sep + x)
-  
+  try:
+    for y in level2[x]:
+      os.makedirs(diskNfsMount.rstrip(os.sep) + os.sep + x + os.sep + y)
+      
+      
   

@@ -3,6 +3,7 @@ import os
 import socket
 import MySQLdb
 import multiprocessing
+import pickle
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -14,6 +15,7 @@ else:
 sys.path.append(cwd.rstrip(os.sep) + os.sep)
 import dbPipe
 import constantsPipe
+
 
 
 
@@ -59,10 +61,55 @@ def getProjDefaults(self):
   except:
     return(0)
 
-def setupProj(projType,projName,projOs,directory,admins,rbhusRender,rbhusRenderServer,user,group,desc):
+
+def getAdmins():
+  dbconn = dbPipe.dbPipe()
+  adminUsers = []
+  try:
+    rows = dbconn.execute("select * from admins", dictionary=True)
+    if(rows):
+      for x in rows:
+        adminUsers.append(x['user'])
+    return(adminUsers)
+  except:
+    print(str(sys.exc_info()))
+    # easy to search like - if admin in getAdmins():
+    return(adminUsers)
+
+
+# createdUser should come from an env variable set by the authPipe module
+def createProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,description):
+  if(createdUser not in getAdmins()):
+    print("User not allowed to create projects")
+    return(0)
+  projDets = {}
+  projDets['projType'] = projType
+  projDets['projName'] = projName
+  projDets['os'] = os
+  projDets['directory'] = directory
+  projDets['admins'] = admins
+  projDets['rbhusRenderIntergration'] = rbhusRenderIntergration
+  projDets['rbhusRenderServer'] = rbhusRenderServer
+  projDets['aclUser'] = aclUser
+  projDets['aclGroup'] = aclGroup
+  projDets['createdUser'] = createdUser
+  projDets['description'] = description
+  servSoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  try:
+    servSoc.settimeout(15)
+    servSoc.connect((ipAddr,constantsPipe.projInitPort))
+  except:
+    print(str(sys.exc_info()))
+    
+  servSoc.send()
+
+
+#always called by the server
+def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,description):
   dbconn = dbPipe.dbPipe()
   pTypes = getProjTypes()
   cScript = ""
+  projId = 0
   for pT in pTypes:
     if(pT['type'] == projType):
       cScript = pT['scriptDir']
@@ -71,32 +118,40 @@ def setupProj(projType,projName,projOs,directory,admins,rbhusRender,rbhusRenderS
   os.environ['rp_projType_c'] = projType
   os.environ['rp_projDirectory_c'] = directory
   os.environ['rp_projAdmin_c'] = admins
-  os.environ['rp_projRender_c'] = rbhusRender
+  os.environ['rp_projRender_c'] = rbhusRenderIntergration
   os.environ['rp_projRenderS_c'] = rbhusRenderServer
-  os.environ['rp_projOs_c'] = projOs
-  os.environ['rp_projDesc_c'] = desc
-  os.environ['rp_projAclUser_c'] = user
-  os.environ['rp_projAclGroup_c'] = group
+  os.environ['rp_os_c'] = os
+  os.environ['rp_projDesc_c'] = description
+  os.environ['rp_projAclUser_c'] = aclUser
+  os.environ['rp_projAclGroup_c'] = aclGroup
   
   exportDirMaps(directory)
   try:
-    dbconn.execute("insert into proj (projName,directory,admins,os,projType,rbhusRenderIntergration,rbhusRenderServer,user,group,description) \
+    dbconn.execute("insert into proj (projName,directory,admins,os,projType,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,description) \
                     values ('"+ str(projName) +"', \
                     '"+ str(directory) +"', \
                     '"+ str(admins) +"', \
-                    '"+ str(projOs) +"', \
+                    '"+ str(os) +"', \
                     '"+ str(projType) +"', \
-                    '"+ str(rbhusRender) +"', \
+                    '"+ str(rbhusRenderIntergration) +"', \
                     '"+ str(rbhusRenderServer) +"', \
-                    '"+ str(desc) +"')")
+                    '"+ str(aclUser) +"', \
+                    '"+ str(aclGroup) +"', \
+                    '"+ str(createdUser) +"', \
+                    '"+ str(description) +"')")
+    ids = self.db_conn.execute("select last_insert_id()", dictionary = True)
+    projId = ids[0]['last_insert_id()']
   except:
     print(str(sys.exc_info()))
+    return(0)
     
   try:
     if(cScript):
       status = os.system("python -d '"+ str(cScript) +"'")
+      return(1)
   except:
     print(str(sys.exc_info()))
+    return(0)
     
 
 def exportDirMaps(directory):

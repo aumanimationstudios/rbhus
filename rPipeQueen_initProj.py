@@ -26,7 +26,9 @@ import setproctitle
 import tempfile
 import rbhus.dbPipe as dbPipe
 import rbhus.constantsPipe as constantsPipe
+import rbhus.utilsPipe as utilsPipe
 import multiprocessing
+import pickle
 
 
 def getHostNameIP():
@@ -47,7 +49,7 @@ def atUrService():
       try:
         hostName,ipAddr = getHostNameIP()
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        serverSocket.bind(("", constants.projInitPort))
+        serverSocket.bind(("", constantsPipe.projInitPort))
         serverSocket.listen(5)
         break
       except:
@@ -57,7 +59,7 @@ def atUrService():
     while(1):
       clientSocket, address = serverSocket.accept()
       data = ""
-      data = clientSocket.recv(1024)
+      data = clientSocket.recv(4096)
       data = data.rstrip()
       data = data.lstrip()
       msg = ""
@@ -68,27 +70,12 @@ def atUrService():
         msg = data
         
       if(msg == "CREATE"):
-        projId = int(value)
-        createProject(projId)
-
-
-def createProject(projId):
-  db_conn = dbPipe.dbPipe()
-  projDets = db_conn.execute("select * from proj where projId="+ str(projId),dictionary=True)
-  if(projDets):
-    projDet = projDets[-1]
-    if(sys.platform.find("win") >= 0):
-      dirMaps = db_conn.execute("select windowsMapping from dirMaps where directory='"+ str(projDet['directory']) +"'",dictionary=True)
-    if(sys.platform.find("linux") >= 0):
-      dirMaps = db_conn.execute("select linuxMapping from dirMaps where directory='"+ str(projDet['directory']) +"'",dictionary=True)
-    dirMap = dirMaps[-1][dirMaps[-1].keys()[-1]]
-    createScript = db_conn.execute("select createScript from projTypes where type='"+ str(projDet['type']) +"'",dictionary=True)
-    script = createScript[-1][createScript[-1].keys()[-1]]
-    os.system("python "+ script +" --directory "+ projDir)
+        projdets = pickle.loads(value)
+        utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['os'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntergration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['description'])
         
-    
-    
-    
+
+
+
     
   
   
