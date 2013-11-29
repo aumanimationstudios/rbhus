@@ -53,7 +53,7 @@ def getStageTypes():
 
 def getProjDefaults(self):
   try:
-    rows = self.db_conn.execute("desc tasks",dictionary=True)
+    rows = self.db_conn.execute("desc proj",dictionary=True)
     taskFieldss = {}
     for row in rows:
       taskFieldss[row['Field']] = row['Default']
@@ -78,7 +78,7 @@ def getAdmins():
 
 
 # createdUser should come from an env variable set by the authPipe module
-def createProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,description):
+def createProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,description):
   if(createdUser not in getAdmins()):
     print("User not allowed to create projects")
     return(0)
@@ -93,6 +93,7 @@ def createProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbh
   projDets['aclUser'] = aclUser
   projDets['aclGroup'] = aclGroup
   projDets['createdUser'] = createdUser
+  projDets['dueDate'] = dueDate
   projDets['description'] = description
   servSoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
@@ -100,12 +101,15 @@ def createProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbh
     servSoc.connect((ipAddr,constantsPipe.projInitPort))
   except:
     print(str(sys.exc_info()))
+    return(0)
     
-  servSoc.send()
+  servSoc.send("CREATE:"+ str(pickle.dumps(projDets)))
+  servSoc.close()
+  return(1)
 
 
 #always called by the server
-def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,description):
+def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,description):
   dbconn = dbPipe.dbPipe()
   pTypes = getProjTypes()
   cScript = ""
@@ -124,10 +128,12 @@ def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhu
   os.environ['rp_projDesc_c'] = description
   os.environ['rp_projAclUser_c'] = aclUser
   os.environ['rp_projAclGroup_c'] = aclGroup
-  
+  os.environ['rp_projDueDate_c'] = dueDate
+  os.environ['rp_projCreatedUser_c'] = createdUser
+
   exportDirMaps(directory)
   try:
-    dbconn.execute("insert into proj (projName,directory,admins,os,projType,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,description) \
+    dbconn.execute("insert into proj (projName,directory,admins,os,projType,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,createDate,description) \
                     values ('"+ str(projName) +"', \
                     '"+ str(directory) +"', \
                     '"+ str(admins) +"', \
@@ -138,6 +144,8 @@ def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhu
                     '"+ str(aclUser) +"', \
                     '"+ str(aclGroup) +"', \
                     '"+ str(createdUser) +"', \
+                    '"+ str(dueDate) +"', \
+                    now(), \
                     '"+ str(description) +"')")
     ids = self.db_conn.execute("select last_insert_id()", dictionary = True)
     projId = ids[0]['last_insert_id()']

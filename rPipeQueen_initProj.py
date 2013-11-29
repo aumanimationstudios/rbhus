@@ -60,6 +60,7 @@ def atUrService():
       clientSocket, address = serverSocket.accept()
       data = ""
       data = clientSocket.recv(4096)
+      clientSocket.close()
       data = data.rstrip()
       data = data.lstrip()
       msg = ""
@@ -70,9 +71,14 @@ def atUrService():
         msg = data
         
       if(msg == "CREATE"):
-        projdets = pickle.loads(value)
-        utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['os'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntergration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['description'])
+        admins = utilsPipe.getAdmins()
         
+        projdets = pickle.loads(value)
+        if(projdets['createdUser'] in admins):
+          utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['os'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntergration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['createdUser'],projdets['dueDate'],['description'])
+        else:
+          print("user "+ str(projdets['createdUser']) +" not allowed to create projects.")
+      
 
 
 
