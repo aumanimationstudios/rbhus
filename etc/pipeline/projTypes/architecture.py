@@ -34,26 +34,56 @@ desc = os.environ['rp_projDesc_c']
 diskServer = os.environ['rp_dirMaps_server']
 diskNfsExport = os.environ['rp_dirMaps_nfsServDir']
 diskNfsMount = os.environ['rp_dirMaps_nfsMountDir']
-
-level1 = ['share','library','output','dump']
-level2 = {'share':['bin','stageTemplates/stageType'],
-          'library':['assets'],
-          'output':['forClient']}
+projTypeLibrary = os.environ['rp_projTypes_libDir']
+projTypeShare = os.environ['rp_projTypes_shareDir']
+projTypeOutput = os.environ['rp_projTypes_outDir']
 
 
-os.system("mount "+ diskServer +":"+ diskNfsExport.rstrip(os.sep) + os.sep +" "+ diskNfsMount)
-for x in level1:
-  os.makedirs(diskNfsMount.rstrip(os.sep) + os.sep + projName + os.sep + x)
-  try:
-    for y in level2[x]:
-      os.makedirs(diskNfsMount.rstrip(os.sep) + os.sep + projName + os.sep + x + os.sep + y)
-  except:
-    print(str(sys.exc_info()))
+os.system("mount "+ diskServer +":"+ os.sep + diskNfsExport.rstrip(os.sep).lstrip(os.sep) + os.sep +" "+ os.sep + diskNfsMount.lstrip(os.sep))
+
+
+lib = projTypeLibrary.split(":")
+libdir = ""
+for x in lib:
+  if(re.search("^\$directory",x)):
+    libdir = libdir.rstrip(os.sep) + os.sep + diskNfsMount.lstrip(os.sep).rstrip(os.sep) 
+  elif(re.search("^\$projName",x)):
+    libdir = libdir.rstrip(os.sep) + os.sep + projName.lstrip(os.sep)
+  else:
+    libdir = libdir.rstrip(os.sep) + os.sep + x.lstrip(os.sep)
+if(libdir):
+  os.makedirs(libdir)
+
+share = projTypeShare.split(":")
+sharedir = ""
+for x in share:
+  if(re.search("^\$directory",x)):
+    sharedir = sharedir.rstrip(os.sep) + os.sep + diskNfsMount.lstrip(os.sep).rstrip(os.sep) 
+  elif(re.search("^\$projName",x)):
+    sharedir = sharedir.rstrip(os.sep) + os.sep + projName.lstrip(os.sep)
+  else:
+    sharedir = sharedir.rstrip(os.sep) + os.sep + x.lstrip(os.sep)
+if(sharedir):
+  os.makedirs(sharedir)
+
+
+output = projTypeOutput.split(":")
+outputdir = ""
+for x in output:
+  if(re.search("^\$directory",x)):
+    outputdir = outputdir.rstrip(os.sep) + os.sep + diskNfsMount.lstrip(os.sep).rstrip(os.sep) 
+  elif(re.search("^\$projName",x)):
+    outputdir = outputdir.rstrip(os.sep) + os.sep + projName.lstrip(os.sep)
+  else:
+    outputdir = outputdir.rstrip(os.sep) + os.sep + x.lstrip(os.sep)
+if(outputdir):
+  os.makedirs(outputdir)
+  
     
-  try:
-    os.system("chown -R "+ aclUser +":"+ aclGroup +" "+ diskNfsMount.rstrip(os.sep) + os.sep + projName)
-  except:
-    print(str(sys.exc_info()))
-      
+try:
+  os.system("chown -R "+ aclUser +":"+ aclGroup +" "+ diskNfsMount.rstrip(os.sep) + os.sep + projName)
+except:
+  print(str(sys.exc_info()))
+    
       
   

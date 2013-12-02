@@ -4,6 +4,7 @@ import socket
 import MySQLdb
 import multiprocessing
 import pickle
+import datetime
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -78,23 +79,24 @@ def getAdmins():
 
 
 # createdUser should come from an env variable set by the authPipe module
-def createProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,description):
+def createProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,description):
   if(createdUser not in getAdmins()):
     print("User not allowed to create projects")
     return(0)
+  pDefs = getProjDefaults()
+  now = datetime.datetime.now()
   projDets = {}
-  projDets['projType'] = projType
-  projDets['projName'] = projName
-  projDets['os'] = os
-  projDets['directory'] = directory
-  projDets['admins'] = admins
-  projDets['rbhusRenderIntergration'] = rbhusRenderIntergration
-  projDets['rbhusRenderServer'] = rbhusRenderServer
-  projDets['aclUser'] = aclUser
-  projDets['aclGroup'] = aclGroup
-  projDets['createdUser'] = createdUser
-  projDets['dueDate'] = dueDate
-  projDets['description'] = description
+  projDets['projType'] = projType if(projType) else pDefs['projType']
+  projDets['projName'] = projName if(projName) else pDefs['projName']
+  projDets['directory'] = directory if(directory) else pDefs['directory']
+  projDets['admins'] = admins if(admins) else pDefs['admins']
+  projDets['rbhusRenderIntergration'] = rbhusRenderIntergration if(rbhusRenderIntergration) else pDefs['rbhusRenderIntergration']
+  projDets['rbhusRenderServer'] = rbhusRenderServer if(rbhusRenderServer) else pDefs['rbhusRenderServer']
+  projDets['aclUser'] = aclUser if(aclUser) else pDefs['aclUser']
+  projDets['aclGroup'] = aclGroup if(aclGroup) else pDefs['aclGroup']
+  projDets['createdUser'] = createdUser if(createdUser) else pDefs['createdUser']
+  projDets['dueDate'] = dueDate if(dueDate) else str(now.year + 1) +"-"+ str(now.month) +"-"+ str(now.day) +" "+ str(now.hour) +"-"+ str(now.minute) +"-"+ str(now.second)
+  projDets['description'] = description if(description) else pDefs['description']
   servSoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
     servSoc.settimeout(15)
@@ -109,7 +111,7 @@ def createProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbh
 
 
 #always called by the server
-def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,description):
+def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,description):
   dbconn = dbPipe.dbPipe()
   pTypes = getProjTypes()
   cScript = ""
@@ -124,7 +126,6 @@ def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhu
   os.environ['rp_projAdmin_c'] = admins
   os.environ['rp_projRender_c'] = rbhusRenderIntergration
   os.environ['rp_projRenderS_c'] = rbhusRenderServer
-  os.environ['rp_os_c'] = os
   os.environ['rp_projDesc_c'] = description
   os.environ['rp_projAclUser_c'] = aclUser
   os.environ['rp_projAclGroup_c'] = aclGroup
@@ -132,12 +133,12 @@ def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhu
   os.environ['rp_projCreatedUser_c'] = createdUser
 
   exportDirMaps(directory)
+  exportProjTypes(projType)
   try:
-    dbconn.execute("insert into proj (projName,directory,admins,os,projType,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,createDate,description) \
+    dbconn.execute("insert into proj (projName,directory,admins,projType,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,createDate,description) \
                     values ('"+ str(projName) +"', \
                     '"+ str(directory) +"', \
                     '"+ str(admins) +"', \
-                    '"+ str(os) +"', \
                     '"+ str(projType) +"', \
                     '"+ str(rbhusRenderIntergration) +"', \
                     '"+ str(rbhusRenderServer) +"', \
@@ -163,15 +164,24 @@ def setupProj(projType,projName,os,directory,admins,rbhusRenderIntergration,rbhu
     
 
 def exportDirMaps(directory):
-  dbconn = dbPipe.dbPipe()
-  try:
-    rows = dbconn.execute("select * from dirMaps where directory='"+ str(directory) +"'", dictionary=True)
-  except:
-    print(str(sys.exc_info()))
-    return(0)
-  if(rows):
-    flds = rows[0].keys()
-    for f in flds:
-      os.environ['rp_dirMaps_'+ str(f).rstrip().lstrip()] = str(rows[0][f])
-    return(1)
-    
+  dirms = getDirMaps()
+  if(dirms):
+    for x in dirms:
+      if(x['directory'] == directory):
+        flds = x.keys()
+        for f in flds:
+          os.environ['rp_dirMaps_'+ str(f).rstrip().lstrip()] = str(x[f])
+        return(1)
+  return(0)
+
+
+def exportProjTypes(projType):
+  ptypes = getProjTypes()
+  if(ptypes):
+    for x in ptypes:
+      if(x['type'] == projType):
+        flds = x.keys()
+        for f in flds:
+          os.environ['rp_projTypes_'+ str(f).rstrip().lstrip()] = str(x[f])
+        return(1)
+  return(0)

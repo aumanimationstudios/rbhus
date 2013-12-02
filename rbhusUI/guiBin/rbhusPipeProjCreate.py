@@ -31,16 +31,48 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
+    
+    self.username = None
+    try:
+      self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
+    except:
+      pass
+    
     self.center()
     self.setProjTypes()
     self.setDirectory()
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
-    
+    self.pushCreate.clicked.connect(self.cProj)
     
     
   def center(self):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
+  
+  def cProj(self):
+    pType = self.comboProjType.currentText()
+    pName = self.lineEditName.text() if(self.lineEditName.text()) else None
+    pDir = self.comboDirectory.currentText() 
+    pDueDate = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
+    pAdmins = self.lineEditAdmins.text() if(self.lineEditAdmins.text()) else None
+    pAclUser = self.lineEditAclUser.text() if(self.lineEditAclUser.text()) else None
+    pAclGroup = self.lineEditAclGroup.text() if(self.lineEditAclGroup.text()) else None
+    pRI = 1 if(self.checkRI.isChecked()) else 0
+    pDesc = self.lineEditDesc.text() if(self.lineEditDesc.text()) else None
+    pCUser = self.username
+    utilsPipe.createProject(projType=pType,
+                            projName=pName,
+                            directory=pDir,
+                            admins=pAdmins,
+                            rbhusRenderIntergration=pRI,
+                            rbhusRenderServer=None,
+                            aclUser=pAclUser,
+                            aclGroup=pAclGroup,
+                            createdUser=pCUser,
+                            dueDate=pDueDate,
+                            description=pDesc)
+  
+  
   def setProjTypes(self):
     rows = utilsPipe.getProjTypes()
     self.comboProjType.clear()  

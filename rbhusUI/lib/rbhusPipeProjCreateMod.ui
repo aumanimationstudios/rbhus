@@ -15,56 +15,30 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="6" column="0">
-     <widget class="QLabel" name="labelAclUser">
-      <property name="toolTip">
-       <string>user owner of the project directory</string>
-      </property>
-      <property name="text">
-       <string>aclUser</string>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="0" colspan="2">
-     <widget class="QPushButton" name="pushCreate">
+    <item row="10" column="0" colspan="2">
+     <widget class="Line" name="line">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text">
-       <string>create</string>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="labelDue">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEditAclGroup">
+      <property name="toolTip">
+       <string>group owner of the project directory</string>
       </property>
       <property name="text">
-       <string>due date</string>
+       <string>artist</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="labelProj_2">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>projType</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0" colspan="2">
+    <item row="9" column="0" colspan="2">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -87,24 +61,34 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="lineEditAdmins"/>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEditName"/>
     </item>
-    <item row="4" column="1">
-     <widget class="QDateEdit" name="dateEditDue">
-      <property name="locale">
-       <locale language="English" country="India"/>
+    <item row="7" column="0">
+     <widget class="QLabel" name="labelAclGroup">
+      <property name="toolTip">
+       <string>group owner of the project directory</string>
       </property>
-      <property name="accelerated">
-       <bool>false</bool>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
+      <property name="text">
+       <string>aclGroup</string>
       </property>
      </widget>
     </item>
-    <item row="11" column="0" colspan="3">
-     <widget class="QCheckBox" name="checkBox">
+    <item row="0" column="0">
+     <widget class="QLabel" name="labelProj_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>projType</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="0" colspan="3">
+     <widget class="QCheckBox" name="checkRI">
       <property name="text">
        <string>rbhusRender intergration</string>
       </property>
@@ -113,16 +97,42 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="0" colspan="2">
-     <widget class="Line" name="line">
+    <item row="0" column="1">
+     <widget class="QComboBox" name="comboProjType"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="labelName">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+      <property name="text">
+       <string>name</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEditAdmins"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="labelDue">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>due date</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="labelAdmin">
+      <property name="text">
+       <string>admins</string>
       </property>
      </widget>
     </item>
@@ -142,52 +152,52 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="labelAdmin">
+    <item row="6" column="0">
+     <widget class="QLabel" name="labelAclUser">
+      <property name="toolTip">
+       <string>user owner of the project directory</string>
+      </property>
       <property name="text">
-       <string>admins</string>
+       <string>aclUser</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="labelName">
+    <item row="2" column="1">
+     <widget class="QComboBox" name="comboDirectory"/>
+    </item>
+    <item row="13" column="0" colspan="2">
+     <widget class="QPushButton" name="pushCreate">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="text">
-       <string>name</string>
+       <string>create</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="comboProjType"/>
+    <item row="4" column="1">
+     <widget class="QDateTimeEdit" name="dateEditDue"/>
     </item>
-    <item row="2" column="1">
-     <widget class="QComboBox" name="comboDirectory"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEditName"/>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="labelAclGroup">
+    <item row="8" column="0">
+     <widget class="QLabel" name="labelDesc">
       <property name="toolTip">
        <string>group owner of the project directory</string>
       </property>
       <property name="text">
-       <string>aclGroup</string>
+       <string>description</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
-     <widget class="QLineEdit" name="lineEditAclGroup">
+    <item row="8" column="1">
+     <widget class="QLineEdit" name="lineEditDesc">
       <property name="toolTip">
        <string>group owner of the project directory</string>
       </property>
       <property name="text">
-       <string>artist</string>
+       <string/>
       </property>
      </widget>
     </item>

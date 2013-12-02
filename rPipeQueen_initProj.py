@@ -75,7 +75,7 @@ def atUrService():
         
         projdets = pickle.loads(value)
         if(projdets['createdUser'] in admins):
-          utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['os'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntergration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['createdUser'],projdets['dueDate'],['description'])
+          utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntergration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['createdUser'],projdets['dueDate'],['description'])
         else:
           print("user "+ str(projdets['createdUser']) +" not allowed to create projects.")
       
