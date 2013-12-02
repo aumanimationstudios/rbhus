@@ -59,7 +59,6 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     pAclGroup = self.lineEditAclGroup.text() if(self.lineEditAclGroup.text()) else None
     pRI = 1 if(self.checkRI.isChecked()) else 0
     pDesc = self.lineEditDesc.text() if(self.lineEditDesc.text()) else None
-    pCUser = self.username
     utilsPipe.createProject(projType=pType,
                             projName=pName,
                             directory=pDir,
@@ -68,9 +67,10 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
                             rbhusRenderServer=None,
                             aclUser=pAclUser,
                             aclGroup=pAclGroup,
-                            createdUser=pCUser,
                             dueDate=pDueDate,
                             description=pDesc)
+    
+    
   
   
   def setProjTypes(self):

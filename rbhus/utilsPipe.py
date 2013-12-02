@@ -79,8 +79,8 @@ def getAdmins():
 
 
 # createdUser should come from an env variable set by the authPipe module
-def createProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,description):
-  if(createdUser not in getAdmins()):
+def createProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,dueDate,description):
+  if(os.environ['rbhusPipe_acl_user'] not in getAdmins()):
     print("User not allowed to create projects")
     return(0)
   pDefs = getProjDefaults()
@@ -94,7 +94,7 @@ def createProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusR
   projDets['rbhusRenderServer'] = rbhusRenderServer if(rbhusRenderServer) else pDefs['rbhusRenderServer']
   projDets['aclUser'] = aclUser if(aclUser) else pDefs['aclUser']
   projDets['aclGroup'] = aclGroup if(aclGroup) else pDefs['aclGroup']
-  projDets['createdUser'] = createdUser if(createdUser) else pDefs['createdUser']
+  projDets['createdUser'] = os.environ['rbhusPipe_acl_user']
   projDets['dueDate'] = dueDate if(dueDate) else str(now.year + 1) +"-"+ str(now.month) +"-"+ str(now.day) +" "+ str(now.hour) +"-"+ str(now.minute) +"-"+ str(now.second)
   projDets['description'] = description if(description) else pDefs['description']
   servSoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
