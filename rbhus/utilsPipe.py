@@ -52,14 +52,16 @@ def getStageTypes():
     return(0)
 
 
-def getProjDefaults(self):
+def getProjDefaults():
+  dbconn = dbPipe.dbPipe()
   try:
-    rows = self.db_conn.execute("desc proj",dictionary=True)
+    rows = dbconn.execute("desc proj",dictionary=True)
     taskFieldss = {}
     for row in rows:
       taskFieldss[row['Field']] = row['Default']
     return(taskFieldss)
   except:
+    print(str(sys.exc_info()))
     return(0)
 
 
@@ -97,15 +99,16 @@ def createProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusR
   projDets['createdUser'] = os.environ['rbhusPipe_acl_user']
   projDets['dueDate'] = dueDate if(dueDate) else str(now.year + 1) +"-"+ str(now.month) +"-"+ str(now.day) +" "+ str(now.hour) +"-"+ str(now.minute) +"-"+ str(now.second)
   projDets['description'] = description if(description) else pDefs['description']
+  
   servSoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
     servSoc.settimeout(15)
-    servSoc.connect((ipAddr,constantsPipe.projInitPort))
+    servSoc.connect((constantsPipe.projInitServer,constantsPipe.projInitPort))
   except:
-    print(str(sys.exc_info()))
+    print("utilsPipe createProj : "+ str(sys.exc_info()))
     return(0)
     
-  servSoc.send("CREATE:"+ str(pickle.dumps(projDets)))
+  servSoc.send(pickle.dumps(projDets))
   servSoc.close()
   return(1)
 
@@ -120,20 +123,22 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRe
     if(pT['type'] == projType):
       cScript = pT['scriptDir']
       
-  os.environ['rp_projName_c'] = projName
-  os.environ['rp_projType_c'] = projType
-  os.environ['rp_projDirectory_c'] = directory
-  os.environ['rp_projAdmin_c'] = admins
-  os.environ['rp_projRender_c'] = rbhusRenderIntergration
-  os.environ['rp_projRenderS_c'] = rbhusRenderServer
-  os.environ['rp_projDesc_c'] = description
-  os.environ['rp_projAclUser_c'] = aclUser
-  os.environ['rp_projAclGroup_c'] = aclGroup
-  os.environ['rp_projDueDate_c'] = dueDate
-  os.environ['rp_projCreatedUser_c'] = createdUser
+  os.environ['rp_projName_c'] = str(projName)
+  os.environ['rp_projType_c'] = str(projType)
+  os.environ['rp_projDirectory_c'] = str(directory)
+  os.environ['rp_projAdmin_c'] = str(admins)
+  os.environ['rp_projRender_c'] = str(rbhusRenderIntergration)
+  os.environ['rp_projRenderS_c'] = str(rbhusRenderServer)
+  os.environ['rp_projDesc_c'] = str(description)
+  os.environ['rp_projAclUser_c'] = str(aclUser)
+  os.environ['rp_projAclGroup_c'] = str(aclGroup)
+  os.environ['rp_projDueDate_c'] = str(dueDate)
+  os.environ['rp_projCreatedUser_c'] = str(createdUser)
 
   exportDirMaps(directory)
   exportProjTypes(projType)
+  print(description)
+  print(projName)
   try:
     dbconn.execute("insert into proj (projName,directory,admins,projType,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,createDate,description) \
                     values ('"+ str(projName) +"', \
@@ -146,9 +151,9 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRe
                     '"+ str(aclGroup) +"', \
                     '"+ str(createdUser) +"', \
                     '"+ str(dueDate) +"', \
-                    now(), \
+                    '"+ str(MySQLdb.Timestamp.now()) +"', \
                     '"+ str(description) +"')")
-    ids = self.db_conn.execute("select last_insert_id()", dictionary = True)
+    ids = dbconn.execute("select last_insert_id()", dictionary = True)
     projId = ids[0]['last_insert_id()']
   except:
     print(str(sys.exc_info()))

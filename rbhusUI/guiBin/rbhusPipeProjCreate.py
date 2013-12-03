@@ -50,16 +50,16 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
 
   
   def cProj(self):
-    pType = self.comboProjType.currentText()
-    pName = self.lineEditName.text() if(self.lineEditName.text()) else None
-    pDir = self.comboDirectory.currentText() 
+    pType = str(self.comboProjType.currentText())
+    pName = str(self.lineEditName.text()) if(self.lineEditName.text()) else None
+    pDir = str(self.comboDirectory.currentText())
     pDueDate = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-    pAdmins = self.lineEditAdmins.text() if(self.lineEditAdmins.text()) else None
-    pAclUser = self.lineEditAclUser.text() if(self.lineEditAclUser.text()) else None
-    pAclGroup = self.lineEditAclGroup.text() if(self.lineEditAclGroup.text()) else None
+    pAdmins = str(self.lineEditAdmins.text()) if(self.lineEditAdmins.text()) else None
+    pAclUser = str(self.lineEditAclUser.text()) if(self.lineEditAclUser.text()) else None
+    pAclGroup = str(self.lineEditAclGroup.text()) if(self.lineEditAclGroup.text()) else None
     pRI = 1 if(self.checkRI.isChecked()) else 0
-    pDesc = self.lineEditDesc.text() if(self.lineEditDesc.text()) else None
-    utilsPipe.createProject(projType=pType,
+    pDesc = str(self.lineEditDesc.text()) if(self.lineEditDesc.text()) else None
+    utilsPipe.createProj(projType=pType,
                             projName=pName,
                             directory=pDir,
                             admins=pAdmins,

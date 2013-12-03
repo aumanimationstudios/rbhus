@@ -47,7 +47,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.pushLogout.setText("logout : "+ str(self.username))
-    self.pushAdmin.clicked.connect(self.rbhusPipeAdmin)
     #self.pushSubmit.clicked.connect(self.rbhusSubmit)
     #self.pushHosts.clicked.connect(self.rbhusHost)
     self.pushLogout.clicked.connect(self.logout)
@@ -66,29 +65,29 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.trayIcon.setContextMenu(self.trayMenu)
     self.trayIcon.activated.connect(self.showMain)
     
+    self.actionNew_project.triggered.connect(self.rbhusPipeAdmin)
+    
+    
+    
+    
     self.form.closeEvent = self.closeEvent
+    
     
     
   
   def rbhusPipeAdmin(self):
-    self.pushAdmin.setText("opening")
     p = QtCore.QProcess(parent=self.form)
     p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAdmin.log")
     p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeAdmin.err")
-    self.pushAdmin.setEnabled(False)
+    self.actionNew_project.setEnabled(False)
     self.adminAction.setEnabled(False)
     p.start(sys.executable,rbhusPipeAdminCmd.split())
     p.finished.connect(self.rbhusPipeAdminEnable)
-    p.started.connect(self.rbhusPipeAdminWait)
     
-  
-  def rbhusPipeAdminWait(self):
-    self.pushAdmin.setText("admin open")
   
 
   def rbhusPipeAdminEnable(self,exitStatus):
-    self.pushAdmin.setText("ADMIN")
-    self.pushAdmin.setEnabled(True)
+    self.actionNew_project.setEnabled(True)
     self.adminAction.setEnabled(True)
   
   

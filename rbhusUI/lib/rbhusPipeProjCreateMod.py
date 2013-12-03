@@ -2,7 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeProjCreateMod.ui'
 #
-# Created by: PyQt4 UI code generator 4.10.3
+# Created: Mon Dec  2 22:50:13 2013
+#      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(263, 248)
+    MainWindow.resize(263, 286)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -139,6 +140,7 @@ class Ui_MainWindow(object):
     self.labelProj_2.setText(_translate("MainWindow", "projType", None))
     self.checkRI.setText(_translate("MainWindow", "rbhusRender intergration", None))
     self.labelName.setText(_translate("MainWindow", "name", None))
+    self.lineEditAdmins.setToolTip(_translate("MainWindow", "list of space separated usernames", None))
     self.labelDue.setText(_translate("MainWindow", "due date", None))
     self.labelAdmin.setText(_translate("MainWindow", "admins", None))
     self.labelDirectory.setWhatsThis(_translate("MainWindow", "directory to store the output data from file. eg : rendered output of lighting files.", None))

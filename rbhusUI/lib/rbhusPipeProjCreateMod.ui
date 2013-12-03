@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>263</width>
-    <height>248</height>
+    <height>286</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,7 +114,11 @@
      </widget>
     </item>
     <item row="5" column="1">
-     <widget class="QLineEdit" name="lineEditAdmins"/>
+     <widget class="QLineEdit" name="lineEditAdmins">
+      <property name="toolTip">
+       <string>list of space separated usernames</string>
+      </property>
+     </widget>
     </item>
     <item row="4" column="0">
      <widget class="QLabel" name="labelDue">

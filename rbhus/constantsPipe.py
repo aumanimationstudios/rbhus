@@ -19,4 +19,5 @@
 projActive = 1
 projDeactive = 0
 
-projInitPort = 66610
+projInitPort = 9666
+projInitServer = "192.168.1.198"

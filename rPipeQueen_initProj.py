@@ -29,6 +29,7 @@ import rbhus.constantsPipe as constantsPipe
 import rbhus.utilsPipe as utilsPipe
 import multiprocessing
 import pickle
+import socket
 
 
 def getHostNameIP():
@@ -43,42 +44,47 @@ def getHostNameIP():
 
 def atUrService():
   if(sys.platform.find("linux") >=0):
-      setproctitle.setproctitle("pD_atUrService")
-    print(str(os.getpid()) + ": atUrService func")
-    while(1):
-      try:
-        hostName,ipAddr = getHostNameIP()
-        serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        serverSocket.bind(("", constantsPipe.projInitPort))
-        serverSocket.listen(5)
-        break
-      except:
-        pass
-      time.sleep(1)
+    setproctitle.setproctitle("pD_atUrService")
+  print(str(os.getpid()) + ": atUrService func")
+  while(1):
+    try:
+      hostName,ipAddr = getHostNameIP()
+      serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      serverSocket.bind(("", constantsPipe.projInitPort))
+      serverSocket.listen(5)
+      break
+    except:
+      print("socket failed 1 : "+ str(sys.exc_info()))
+      pass
+    time.sleep(1)
   
-    while(1):
-      clientSocket, address = serverSocket.accept()
-      data = ""
-      data = clientSocket.recv(4096)
-      clientSocket.close()
-      data = data.rstrip()
-      data = data.lstrip()
-      msg = ""
-      value = ""
-      if(data.rfind(":") != -1):
-        msg, value = data.split(":")
-      else:
-        msg = data
-        
-      if(msg == "CREATE"):
-        admins = utilsPipe.getAdmins()
-        
-        projdets = pickle.loads(value)
-        if(projdets['createdUser'] in admins):
-          utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntergration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['createdUser'],projdets['dueDate'],['description'])
-        else:
-          print("user "+ str(projdets['createdUser']) +" not allowed to create projects.")
-      
+  while(1):
+    clientSocket, address = serverSocket.accept()
+    data = ""
+    data = clientSocket.recv(4096)
+    clientSocket.close()
+    #data = data.rstrip()
+    #data = data.lstrip()
+    #msg = ""
+    #value = ""
+    #if(data.rfind(":") != -1):
+      #msg, value = data.split(":")
+    #else:
+      #msg = data
+    #print(data)  
+    #if(msg == "CREATE"):
+    admins = utilsPipe.getAdmins()
+    
+    projdets = pickle.loads(data)
+    if(projdets['createdUser'] in admins):
+      utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntergration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['createdUser'],projdets['dueDate'],projdets['description'])
+    else:
+      print("user "+ str(projdets['createdUser']) +" not allowed to create projects.")
+  
+  
+  
+if __name__=='__main__':
+  atUrService()
 
 
 
