@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
+    <width>346</width>
     <height>386</height>
    </rect>
   </property>
@@ -487,8 +487,15 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QComboBox" name="comboBoxStage"/>
+       <item row="0" column="2">
+        <widget class="QLabel" name="labelSeq">
+         <property name="text">
+          <string>sequence</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboBoxNode"/>
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_2">
@@ -497,8 +504,21 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="comboBoxNode"/>
+       <item row="1" column="0">
+        <widget class="QComboBox" name="comboBoxStage"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="comboBoxSeq"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="labelSce">
+         <property name="text">
+          <string>scene</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QComboBox" name="comboBoxSce"/>
        </item>
       </layout>
      </widget>
@@ -544,8 +564,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>586</width>
-     <height>21</height>
+     <width>346</width>
+     <height>19</height>
     </rect>
    </property>
    <property name="palette">
@@ -981,7 +1001,7 @@
     <property name="title">
      <string>admin</string>
     </property>
-    <addaction name="actionNew_project"/>
+    <addaction name="actionTask_trak"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
@@ -989,9 +1009,9 @@
     </property>
     <addaction name="actionSet_project"/>
    </widget>
+   <addaction name="menuProject"/>
    <addaction name="menuAssets"/>
    <addaction name="menuAdmin"/>
-   <addaction name="menuProject"/>
   </widget>
   <action name="actionListMine">
    <property name="text">
@@ -1036,6 +1056,11 @@
   <action name="actionList_all">
    <property name="text">
     <string>list all</string>
+   </property>
+  </action>
+  <action name="actionTask_trak">
+   <property name="text">
+    <string>trak</string>
    </property>
   </action>
  </widget>

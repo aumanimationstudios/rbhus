@@ -5,6 +5,7 @@ import MySQLdb
 import multiprocessing
 import pickle
 import datetime
+import hashlib
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -190,3 +191,73 @@ def exportProjTypes(projType):
           os.environ['rp_projTypes_'+ str(f).rstrip().lstrip()] = str(x[f])
         return(1)
   return(0)
+
+
+def getProjDetails(projId=0,projName=""):
+  if(projId):
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("select * from proj where projId="+ str(projId), dictionary=True)
+    except:
+      print(str(sys.exc_info()))
+      return(0)
+    if(rows):
+      ret = {}
+      fs = rows[0].keys()
+      for x in fs:
+        ret[x] = rows[0][x]
+      return(ret)
+    
+  if(projName):
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("select * from proj where projName='"+ str(projId) +"'", dictionary=True)
+    except:
+      print(str(sys.exc_info()))
+      return(0)
+    if(rows):
+      ret = {}
+      fs = rows[0].keys()
+      for x in fs:
+        ret[x] = rows[0][x]
+      return(ret)
+
+    
+    
+
+
+def exportProj(projId=0,projName=""):
+  if(projId):
+    dets = getProjDetails(projId=projId)
+    for x in dets.keys():
+      os.environ['rp_proj_'+ str(x)] = dets[x]
+      return(1)
+  if(projName):
+    dets = getProjDetails(projName=projName)
+    for x in dets.keys():
+      os.environ['rp_proj_'+ str(x)] = dets[x]
+      return(1)
+  
+  
+  
+class assets(object):
+  def create(self,assDetDict):
+    
+    pass
+  
+  def details(self,assDetDict={},assId=0):
+    pass
+  
+  def openAsset(self,assId):
+    pass
+  
+  def links(self,assId):
+    pass
+  
+  def linkedTo(self,assId):
+    pass
+  
+  
+  
+  
+    
