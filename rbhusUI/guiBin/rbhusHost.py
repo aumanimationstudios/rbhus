@@ -287,9 +287,9 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       print("Error getting running frames")
       return(0)
     if(rowsRunning):
-      hostsRunning = [x['hostName'] for x in rowsRunning]
+      hostsRunning = {x['hostName'] for x in rowsRunning}
     else:
-      hostsRunning = []
+      hostsRunning = {}
     #print(hostsRunning)
     self.LabelRunning.setText(QtGui.QApplication.translate("Form", "RUNNING : "+ str(len(hostsRunning)), None, QtGui.QApplication.UnicodeUTF8))
       

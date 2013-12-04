@@ -119,7 +119,6 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRe
   dbconn = dbPipe.dbPipe()
   pTypes = getProjTypes()
   cScript = ""
-  projId = 0
   for pT in pTypes:
     if(pT['type'] == projType):
       cScript = pT['scriptDir']
@@ -154,8 +153,6 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRe
                     '"+ str(dueDate) +"', \
                     '"+ str(MySQLdb.Timestamp.now()) +"', \
                     '"+ str(description) +"')")
-    ids = dbconn.execute("select last_insert_id()", dictionary = True)
-    projId = ids[0]['last_insert_id()']
   except:
     print(str(sys.exc_info()))
     return(0)
@@ -193,21 +190,7 @@ def exportProjTypes(projType):
   return(0)
 
 
-def getProjDetails(projId=0,projName=""):
-  if(projId):
-    dbconn = dbPipe.dbPipe()
-    try:
-      rows = dbconn.execute("select * from proj where projId="+ str(projId), dictionary=True)
-    except:
-      print(str(sys.exc_info()))
-      return(0)
-    if(rows):
-      ret = {}
-      fs = rows[0].keys()
-      for x in fs:
-        ret[x] = rows[0][x]
-      return(ret)
-    
+def getProjDetails(projName):
   if(projName):
     dbconn = dbPipe.dbPipe()
     try:
@@ -226,12 +209,7 @@ def getProjDetails(projId=0,projName=""):
     
 
 
-def exportProj(projId=0,projName=""):
-  if(projId):
-    dets = getProjDetails(projId=projId)
-    for x in dets.keys():
-      os.environ['rp_proj_'+ str(x)] = dets[x]
-      return(1)
+def exportProj(projName):
   if(projName):
     dets = getProjDetails(projName=projName)
     for x in dets.keys():
@@ -239,11 +217,32 @@ def exportProj(projId=0,projName=""):
       return(1)
   
   
+def setupSequence(seqDict):
+  projName = seqDict['projName']
+  seqName = seqDict['sequenceName']
+  seqAdmins = seqDict['admins']
+  seqSFrame = seqDict['sFrame']
+  seqEFrame = seqDict['eFrame']
+  seqDescription = seqDict['description']
+  seqId = hashlib.sha256(projName +":"+ seqName)
+  
+  
+  
+
+  
   
 class assets(object):
-  def create(self,assDetDict):
+  def register(self,assDetDict):
+    projId = str(assDetDict['projName'])
+    seqId = str(assDetDict['sequenceName'])
+    sceneId = str(assDetDict['sceneName'])
+    stageType = str(assDetDict['stageType'])
+    assName = str(assDetDict['assName'])
+    nodeType = str(assDetDict['nodeType'])
+    fileType = str(assDetDict['fileType'])
+    aId = hashlib.sha256(projId +":"+ seqId +":"+ sceneId +":"+ stageType +":"+ assName +":"+ nodeType +":"+ fileType)
+    assId = aId.hexdigest()
     
-    pass
   
   def details(self,assDetDict={},assId=0):
     pass

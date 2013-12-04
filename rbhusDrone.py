@@ -1247,14 +1247,14 @@ def freeMeminfo():
 def getHostGroups(dbconn):
   hostname,ipAddr = getHostNameIP()
   try:
-    rows = dbconn.execute("select groups from hostInfo where ip='"+ str(ipAddr) +"' group by groups", dictionary=True)
+    rows = dbconn.execute("select groups from hostGroups where ip='"+ str(ipAddr) +"' group by groups", dictionary=True)
   except:
     raise
   gtr = {}
   retRows = []
   if(rows):
     for row in rows:
-      tmpRow = row['groups'].split(",")
+      tmpRow = row['groups'].split()
       for tr in tmpRow:
         gtr[tr.rstrip().lstrip()] = 1
     for gt in gtr.keys():
