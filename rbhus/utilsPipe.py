@@ -6,6 +6,8 @@ import multiprocessing
 import pickle
 import datetime
 import hashlib
+import logging
+import logging.handlers
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -19,6 +21,23 @@ import dbPipe
 import constantsPipe
 
 
+hostname = socket.gethostname()
+tempDir = os.path.abspath(tempfile.gettempdir())
+
+
+LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
+  #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
+
+#LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
+utilsPipeLogger = logging.getLogger("utilsPipeLogger")
+utilsPipeLogger.setLevel(logging.ERROR)
+
+
+#ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=104857600, backupCount=3)
+BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
+LOG_FILENAME.setFormatter(BASIC_FORMAT)
+utilsPipeLogger.addHandler(LOG_FILENAME)
+
 
 
 
@@ -28,10 +47,24 @@ def getDirMaps():
     rows = dbconn.execute("SELECT * FROM dirMaps", dictionary=True)
     return(rows)
   except:
-    print(str(sys.exc_info()))
+    utilsPipeLogger(str(sys.exc_info()))
     return(0)
   
  
+def getDirMapsDetails(directory):
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("SELECT * FROM dirMaps where directory='"+ str(directory) +"'", dictionary=True)
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
+  if(rows):
+    ret = {}
+    fs = rows[0].keys()
+    for x in fs:
+      ret[x] = rows[0][x]
+    return(ret)
+
  
 def getProjTypes():
   dbconn = dbPipe.dbPipe()
@@ -39,7 +72,7 @@ def getProjTypes():
     rows = dbconn.execute("SELECT * FROM projTypes", dictionary=True)
     return(rows)
   except:
-    print(str(sys.exc_info()))
+    utilsPipeLogger(str(sys.exc_info()))
     return(0)
   
   
@@ -49,7 +82,7 @@ def getStageTypes():
     rows = dbconn.execute("SELECT * FROM stageTypes", dictionary=True)
     return(rows)
   except:
-    print(str(sys.exc_info()))
+    utilsPipeLogger(str(sys.exc_info()))
     return(0)
 
 
@@ -62,7 +95,7 @@ def getProjDefaults():
       taskFieldss[row['Field']] = row['Default']
     return(taskFieldss)
   except:
-    print(str(sys.exc_info()))
+    utilsPipeLogger(str(sys.exc_info()))
     return(0)
 
 
@@ -76,7 +109,7 @@ def getAdmins():
         adminUsers.append(x['user'])
     return(adminUsers)
   except:
-    print(str(sys.exc_info()))
+    utilsPipeLogger(str(sys.exc_info()))
     # easy to search like - if admin in getAdmins():
     return(adminUsers)
 
@@ -84,7 +117,7 @@ def getAdmins():
 # createdUser should come from an env variable set by the authPipe module
 def createProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,dueDate,description):
   if(os.environ['rbhusPipe_acl_user'] not in getAdmins()):
-    print("User not allowed to create projects")
+    utilsPipeLogger("User not allowed to create projects")
     return(0)
   pDefs = getProjDefaults()
   now = datetime.datetime.now()
@@ -106,7 +139,7 @@ def createProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusR
     servSoc.settimeout(15)
     servSoc.connect((constantsPipe.projInitServer,constantsPipe.projInitPort))
   except:
-    print("utilsPipe createProj : "+ str(sys.exc_info()))
+    utilsPipeLogger("utilsPipe createProj : "+ str(sys.exc_info()))
     return(0)
     
   servSoc.send(pickle.dumps(projDets))
@@ -137,8 +170,8 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRe
 
   exportDirMaps(directory)
   exportProjTypes(projType)
-  print(description)
-  print(projName)
+  utilsPipeLogger(description)
+  utilsPipeLogger(projName)
   try:
     dbconn.execute("insert into proj (projName,directory,admins,projType,rbhusRenderIntergration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,createDate,description) \
                     values ('"+ str(projName) +"', \
@@ -154,7 +187,7 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRe
                     '"+ str(MySQLdb.Timestamp.now()) +"', \
                     '"+ str(description) +"')")
   except:
-    print(str(sys.exc_info()))
+    utilsPipeLogger(str(sys.exc_info()))
     return(0)
     
   try:
@@ -162,7 +195,7 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRe
       status = os.system("python -d '"+ str(cScript) +"'")
       return(1)
   except:
-    print(str(sys.exc_info()))
+    utilsPipeLogger(str(sys.exc_info()))
     return(0)
     
 
@@ -196,7 +229,7 @@ def getProjDetails(projName):
     try:
       rows = dbconn.execute("select * from proj where projName='"+ str(projId) +"'", dictionary=True)
     except:
-      print(str(sys.exc_info()))
+      utilsPipeLogger(str(sys.exc_info()))
       return(0)
     if(rows):
       ret = {}
@@ -218,15 +251,61 @@ def exportProj(projName):
   
   
 def setupSequence(seqDict):
-  projName = seqDict['projName']
-  seqName = seqDict['sequenceName']
-  seqAdmins = seqDict['admins']
-  seqSFrame = seqDict['sFrame']
-  seqEFrame = seqDict['eFrame']
-  seqDescription = seqDict['description']
+  projName = str(seqDict['projName'])
+  seqName = str(seqDict['sequenceName'])
   seqId = hashlib.sha256(projName +":"+ seqName)
   
+  projDets = getProjDetails(str(seqDict['projName']))
+  dirMapsDets = getDirMapsDetails(str(projDets['directory']))
   
+  dbconn = dbPipe.dbPipe()
+  try:
+    dbconn.execute("insert into sequence (sequenceId,projName,sequenceName,admins,sFrame,eFrame,createDate,dueDate,description) \
+                    values('" \
+                    + str(seqId) +"','" \
+                    + str(seqDict['projName']) +"','" \
+                    + str(seqDict['sequenceName']) +"','" \
+                    + str(seqDict['admins']) +"','" \
+                    + str(seqDict['sFrame']) +"','" \
+                    + str(seqDict['eFrame']) +"','" \
+                    + str(MySQLdb.Timestamp.now()) +"','" \
+                    + str(seqDict['dueDate']) +"','" \
+                    + str(seqDict['description']) +"')")
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
+  
+  if(sys.platform.find("linux") >= 0):
+    try:
+      os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqDict['projName'] +"/"+ seqDict['sequenceName'])
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+      return(0)
+    
+  if(sys.platform.find("win") >= 0):
+    try:
+      os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqDict['projName'] +"/"+ seqDict['sequenceName'])
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+      return(0)
+    
+      
+    
+  
+  
+def setupScene(sceDict):
+  sceneId = hashlib.sha256(str(sceDict['projName']) +":"+ str(sceDict['sequenceId']) +":"+ str(sceDict['sceneName']))
+  dbconn = dbPipe.dbPipe()
+  dbconn.execute("insert into scene (sceneId,projName,sequenceId,sceneName,admins,sFrame,eFrame,description) \
+                  values('" \
+                  + str(sceneId) +"','" \
+                  + str(sceDict['projName']) +"','" \
+                  + str(sceDict['sequenceId']) +"','" \
+                  + str(sceDict['sceneName']) +"','" \
+                  + str(sceDict['admins']) +"','" \
+                  + str(sceDict['sFrame']) +"','" \
+                  + str(sceDict['eFrame']) +"','" \
+                  + str(sceDict['description']) +"')")
   
 
   

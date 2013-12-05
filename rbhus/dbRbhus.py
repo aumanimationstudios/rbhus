@@ -11,7 +11,7 @@ import tempfile
 
 
 hostname = socket.gethostname()
-tempDir = tempfile.gettempdir()
+tempDir = os.path.abspath(tempfile.gettempdir())
 
 dbHostname = "blues2"
 dbPort = "3306"
@@ -35,10 +35,7 @@ try:
 except:
   pass
 
-if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
-elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
+LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
   #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
