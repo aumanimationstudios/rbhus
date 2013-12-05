@@ -260,7 +260,7 @@ def setupSequence(seqDict):
   
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("insert into sequence (sequenceId,projName,sequenceName,admins,sFrame,eFrame,createDate,dueDate,description) \
+    dbconn.execute("insert into sequence (sequenceId,projName,sequenceName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
                     values('" \
                     + str(seqId) +"','" \
                     + str(seqDict['projName']) +"','" \
@@ -270,6 +270,7 @@ def setupSequence(seqDict):
                     + str(seqDict['eFrame']) +"','" \
                     + str(MySQLdb.Timestamp.now()) +"','" \
                     + str(seqDict['dueDate']) +"','" \
+                    + str(seqDict['createdUser']) +"','" \
                     + str(seqDict['description']) +"')")
   except:
     utilsPipeLogger(str(sys.exc_info()))
@@ -280,15 +281,13 @@ def setupSequence(seqDict):
       os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqDict['projName'] +"/"+ seqDict['sequenceName'])
     except:
       utilsPipeLogger(str(sys.exc_info()))
-      return(0)
     
   if(sys.platform.find("win") >= 0):
     try:
       os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqDict['projName'] +"/"+ seqDict['sequenceName'])
     except:
       utilsPipeLogger(str(sys.exc_info()))
-      return(0)
-    
+  return(1)    
       
     
   
@@ -296,16 +295,36 @@ def setupSequence(seqDict):
 def setupScene(sceDict):
   sceneId = hashlib.sha256(str(sceDict['projName']) +":"+ str(sceDict['sequenceId']) +":"+ str(sceDict['sceneName']))
   dbconn = dbPipe.dbPipe()
-  dbconn.execute("insert into scene (sceneId,projName,sequenceId,sceneName,admins,sFrame,eFrame,description) \
-                  values('" \
-                  + str(sceneId) +"','" \
-                  + str(sceDict['projName']) +"','" \
-                  + str(sceDict['sequenceId']) +"','" \
-                  + str(sceDict['sceneName']) +"','" \
-                  + str(sceDict['admins']) +"','" \
-                  + str(sceDict['sFrame']) +"','" \
-                  + str(sceDict['eFrame']) +"','" \
-                  + str(sceDict['description']) +"')")
+  try:
+    dbconn.execute("insert into scene (sceneId,projName,sequenceId,sceneName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
+                    values('" \
+                    + str(sceneId) +"','" \
+                    + str(sceDict['projName']) +"','" \
+                    + str(sceDict['sequenceId']) +"','" \
+                    + str(sceDict['sceneName']) +"','" \
+                    + str(sceDict['admins']) +"','" \
+                    + str(sceDict['sFrame']) +"','" \
+                    + str(sceDict['eFrame']) +"','" \
+                    + str(MySQLdb.Timestamp.now()) +"','" \
+                    + str(sceDict['dueDate']) +"','" \
+                    + str(sceDict['createdUser']) +"','" \
+                    + str(sceDict['description']) +"')")
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
+  
+  if(sys.platform.find("linux") >= 0):
+    try:
+      os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ sceDict['projName'] +"/"+ sceDict['sequenceName'])
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+    
+  if(sys.platform.find("win") >= 0):
+    try:
+      os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ sceDict['projName'] +"/"+ sceDict['sequenceName'])
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+  return(1)    
   
 
   
