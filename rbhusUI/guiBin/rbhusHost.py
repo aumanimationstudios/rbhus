@@ -290,7 +290,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       hostsRunning = {x['hostName'] for x in rowsRunning}
     else:
       hostsRunning = {}
-    #print(hostsRunning)
+    if(hostsRunning):
+      hostsRunning = hostsRunning.intersection(hostsAll)
     self.LabelRunning.setText(QtGui.QApplication.translate("Form", "RUNNING : "+ str(len(hostsRunning)), None, QtGui.QApplication.UnicodeUTF8))
       
     if(not rows):

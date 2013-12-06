@@ -192,7 +192,7 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntergration,rbhusRe
     
   try:
     if(cScript):
-      status = os.system("python -d '"+ str(cScript) +"'")
+      status = os.system("python -d '"+ str(cScript).rstrip("/") +"/"+ projType +".py'")
       return(1)
   except:
     utilsPipeLogger(str(sys.exc_info()))
@@ -227,7 +227,25 @@ def getProjDetails(projName):
   if(projName):
     dbconn = dbPipe.dbPipe()
     try:
-      rows = dbconn.execute("select * from proj where projName='"+ str(projId) +"'", dictionary=True)
+      rows = dbconn.execute("select * from proj where projName='"+ str(projName) +"'", dictionary=True)
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+      return(0)
+    if(rows):
+      ret = {}
+      fs = rows[0].keys()
+      for x in fs:
+        ret[x] = rows[0][x]
+      return(ret)
+    
+
+    
+    
+def getSequenceDetails(seqId):
+  if(seqId):
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("select * from sequence where sequenceId='"+ str(seqId) +"'", dictionary=True)
     except:
       utilsPipeLogger(str(sys.exc_info()))
       return(0)
@@ -238,9 +256,6 @@ def getProjDetails(projName):
         ret[x] = rows[0][x]
       return(ret)
 
-    
-    
-
 
 def exportProj(projName):
   if(projName):
@@ -250,78 +265,78 @@ def exportProj(projName):
       return(1)
   
   
-def setupSequence(seqDict):
-  projName = str(seqDict['projName'])
-  seqName = str(seqDict['sequenceName'])
-  seqId = hashlib.sha256(projName +":"+ seqName)
+#def setupSequence(seqDict):
+  #projName = str(seqDict['projName'])
+  #seqName = str(seqDict['sequenceName'])
+  #seqId = hashlib.sha256(projName +":"+ seqName)
   
-  projDets = getProjDetails(str(seqDict['projName']))
-  dirMapsDets = getDirMapsDetails(str(projDets['directory']))
+  #projDets = getProjDetails(str(seqDict['projName']))
+  #dirMapsDets = getDirMapsDetails(str(projDets['directory']))
   
-  dbconn = dbPipe.dbPipe()
-  try:
-    dbconn.execute("insert into sequence (sequenceId,projName,sequenceName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
-                    values('" \
-                    + str(seqId) +"','" \
-                    + str(seqDict['projName']) +"','" \
-                    + str(seqDict['sequenceName']) +"','" \
-                    + str(seqDict['admins']) +"','" \
-                    + str(seqDict['sFrame']) +"','" \
-                    + str(seqDict['eFrame']) +"','" \
-                    + str(MySQLdb.Timestamp.now()) +"','" \
-                    + str(seqDict['dueDate']) +"','" \
-                    + str(seqDict['createdUser']) +"','" \
-                    + str(seqDict['description']) +"')")
-  except:
-    utilsPipeLogger(str(sys.exc_info()))
-    return(0)
+  #dbconn = dbPipe.dbPipe()
+  #try:
+    #dbconn.execute("insert into sequence (sequenceId,projName,sequenceName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
+                    #values('" \
+                    #+ str(seqId) +"','" \
+                    #+ str(seqDict['projName']) +"','" \
+                    #+ str(seqDict['sequenceName']) +"','" \
+                    #+ str(seqDict['admins']) +"','" \
+                    #+ str(seqDict['sFrame']) +"','" \
+                    #+ str(seqDict['eFrame']) +"','" \
+                    #+ str(MySQLdb.Timestamp.now()) +"','" \
+                    #+ str(seqDict['dueDate']) +"','" \
+                    #+ str(os.environ['rbhusPipe_acl_user']) +"','" \
+                    #+ str(seqDict['description']) +"')")
+  #except:
+    #utilsPipeLogger(str(sys.exc_info()))
+    #return(0)
   
-  if(sys.platform.find("linux") >= 0):
-    try:
-      os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqDict['projName'] +"/"+ seqDict['sequenceName'])
-    except:
-      utilsPipeLogger(str(sys.exc_info()))
+  #if(sys.platform.find("linux") >= 0):
+    #try:
+      #os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqDict['projName'] +"/"+ seqDict['sequenceName'])
+    #except:
+      #utilsPipeLogger(str(sys.exc_info()))
     
-  if(sys.platform.find("win") >= 0):
-    try:
-      os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqDict['projName'] +"/"+ seqDict['sequenceName'])
-    except:
-      utilsPipeLogger(str(sys.exc_info()))
-  return(1)    
+  #if(sys.platform.find("win") >= 0):
+    #try:
+      #os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqDict['projName'] +"/"+ seqDict['sequenceName'])
+    #except:
+      #utilsPipeLogger(str(sys.exc_info()))
+  #return(1)    
       
     
   
   
-def setupScene(sceDict):
-  sceneId = hashlib.sha256(str(sceDict['projName']) +":"+ str(sceDict['sequenceId']) +":"+ str(sceDict['sceneName']))
+def setupSequenceScene(seqSceDict):
   dbconn = dbPipe.dbPipe()
+  projDets = getProjDetails(str(seqSceDict['projName']))
+  dirMapsDets = getDirMapsDetails(str(projDets['directory']))
   try:
-    dbconn.execute("insert into scene (sceneId,projName,sequenceId,sceneName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
+    dbconn.execute("insert into sequenceScene (projName,sequenceName,sceneName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
                     values('" \
-                    + str(sceneId) +"','" \
-                    + str(sceDict['projName']) +"','" \
-                    + str(sceDict['sequenceId']) +"','" \
-                    + str(sceDict['sceneName']) +"','" \
-                    + str(sceDict['admins']) +"','" \
-                    + str(sceDict['sFrame']) +"','" \
-                    + str(sceDict['eFrame']) +"','" \
+                    + str(seqSceDict['projName']) +"','" \
+                    + str(seqSceDict['sequenceName']) +"','" \
+                    + str(seqSceDict['sceneName']) +"','" \
+                    + str(seqSceDict['admins']) +"','" \
+                    + str(seqSceDict['sFrame']) +"','" \
+                    + str(seqSceDict['eFrame']) +"','" \
                     + str(MySQLdb.Timestamp.now()) +"','" \
-                    + str(sceDict['dueDate']) +"','" \
-                    + str(sceDict['createdUser']) +"','" \
-                    + str(sceDict['description']) +"')")
+                    + str(seqSceDict['dueDate']) +"','" \
+                    + str(os.environ['rbhusPipe_acl_user']) +"','" \
+                    + str(seqSceDict['description']) +"')")
   except:
     utilsPipeLogger(str(sys.exc_info()))
     return(0)
   
   if(sys.platform.find("linux") >= 0):
     try:
-      os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ sceDict['projName'] +"/"+ sceDict['sequenceName'])
+      os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
     except:
       utilsPipeLogger(str(sys.exc_info()))
     
   if(sys.platform.find("win") >= 0):
     try:
-      os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ sceDict['projName'] +"/"+ sceDict['sequenceName'])
+      os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
     except:
       utilsPipeLogger(str(sys.exc_info()))
   return(1)    
@@ -331,14 +346,16 @@ def setupScene(sceDict):
   
 class assets(object):
   def register(self,assDetDict):
-    projId = str(assDetDict['projName'])
-    seqId = str(assDetDict['sequenceName'])
-    sceneId = str(assDetDict['sceneName'])
+    projName = str(assDetDict['projName'])
+    sequenceName = str(assDetDict['sequenceName'])
+    sceneName = str(assDetDict['sceneName'])
     stageType = str(assDetDict['stageType'])
     assName = str(assDetDict['assName'])
     nodeType = str(assDetDict['nodeType'])
     fileType = str(assDetDict['fileType'])
-    aId = hashlib.sha256(projId +":"+ seqId +":"+ sceneId +":"+ stageType +":"+ assName +":"+ nodeType +":"+ fileType)
+    if(int(assDetDict['library'])):
+      aId = hashlib.sha256(projName +":library:"+ )
+    aId = hashlib.sha256(projName +":"+ sequenceName +":"+ sceneName +":"+ stageType +":"+ assName +":"+ nodeType +":"+ fileType)
     assId = aId.hexdigest()
     
   
