@@ -353,10 +353,34 @@ class assets(object):
     assName = str(assDetDict['assName'])
     nodeType = str(assDetDict['nodeType'])
     fileType = str(assDetDict['fileType'])
+    assPath = ""
+    assId = ""
     if(int(assDetDict['library'])):
-      aId = hashlib.sha256(projName +":library:"+ )
-    aId = hashlib.sha256(projName +":"+ sequenceName +":"+ sceneName +":"+ stageType +":"+ assName +":"+ nodeType +":"+ fileType)
-    assId = aId.hexdigest()
+      if(not re.search("$default",str(assDetDict['stageType']))):
+        if(not re.search("$default",str(assDetDict['nodeType']))):
+          if(not re.search("$default",str(assDetDict['fileType']))):
+            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
+          else:
+            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName'])
+        else:
+          if(not re.search("$default",str(assDetDict['fileType']))):
+            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
+          else:
+            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['assName'])
+      else:
+        if(not re.search("$default",str(assDetDict['nodeType']))):
+          if(not re.search("$default",str(assDetDict['fileType']))):
+            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
+          else:
+            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName'])
+        else:
+          if(not re.search("$default",str(assDetDict['fileType']))):
+            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
+          else:
+            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['assName'])
+            
+            
+    
     
   
   def details(self,assDetDict={},assId=0):
