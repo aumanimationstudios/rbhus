@@ -86,10 +86,10 @@ def getStageTypes():
     return(0)
 
 
-def getProjDefaults():
+def getDefaults(table):
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("desc proj",dictionary=True)
+    rows = dbconn.execute("desc "+ str(table),dictionary=True)
     taskFieldss = {}
     for row in rows:
       taskFieldss[row['Field']] = row['Default']
@@ -318,79 +318,102 @@ def getFieldValue(table,field,fkey,fvalue):
 def getAbsPath(pipePath):
   pPaths = pipePath.split(":")
   projName = pPaths[0]
+  assDets = getAssDetails(assPath=pipePath)
   projDets = getProjDetails(projName)
-  projDirMapsDets = getDirMapsDetails(projDets['directory'])
-  
+  projDirMapsDets = getDirMapsDetails(assDets['directory'])
   absPath = ""
-  for x in pPaths:
-    if(re.search("^\$",x)):
-      if(absPath):
-        if(sys.platform.find("linux")):
-          absPath = absPath.rstrip("/") +"/"+ os.environ["rp_"+ str(x).lstrip("$")]
+  
+  if(sys.platform.find("linux") >= 0):
+    absPath = os.path.abspath(projDirMapsDets['linuxMapping'].rstrip("/") +"/"+ pipePath.lstrip("/"))
+  elif(sys.platform.find("win") >= 0):
+    absPath = os.path.abspath(projDirMapsDets['linuxMapping'].rstrip("/") +"/"+ pipePath.lstrip("/"))
+  return(absPath)
   
 
-def getAssDetails():
+def getAssDetails(assId="",assPath=""):
+  if(assId):
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("select * from assets where assetId='"+ str(assId) +"'", dictionary=True)
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+      return(0)
+    if(rows):
+      ret = {}
+      fs = rows[0].keys()
+      for x in fs:
+        ret[x] = rows[0][x]
+      return(ret)
+  if(assPath):
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("select * from assets where path='"+ str(assPath) +"'", dictionary=True)
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+      return(0)
+    if(rows):
+      ret = {}
+      fs = rows[0].keys()
+      for x in fs:
+        ret[x] = rows[0][x]
+      return(ret)
   
+def getAssTypes():
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("SELECT * FROM assetTypes", dictionary=True)
+    return(rows)
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
+
+def getAssTypesDetails(assType):
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("SELECT * FROM assetTypes where type='"+ str(assType) +"'", dictionary=True)
+    if(rows):
+      return(rows[0])
+    else:
+      return(0)
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
 
 
-class assets(object):
-  def register(self,assDetDict):
-    projName = str(assDetDict['projName'])
-    sequenceName = str(assDetDict['sequenceName'])
-    sceneName = str(assDetDict['sceneName'])
-    stageType = str(assDetDict['stageType'])
-    assName = str(assDetDict['assName'])
-    nodeType = str(assDetDict['nodeType'])
-    fileType = str(assDetDict['fileType'])
-    assPath = ""
-    assId = ""
-    if(assDetDict['assetType'] == "library"):
-      if(not re.search("$default",str(assDetDict['stageType']))):
-        if(not re.search("$default",str(assDetDict['nodeType']))):
-          if(not re.search("$default",str(assDetDict['fileType']))):
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
-          else:
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName'])
-        else:
-          if(not re.search("$default",str(assDetDict['fileType']))):
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
-          else:
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['assName'])
+def assRegister(self,assDetDict):
+  assPath = ""
+  assId = ""
+  
+  if(re.search("^default",str(assDetDict['assetType']))):
+    assPath = str(assDetDict['projName']) 
+  elif(re.search("^path",str(assDetDict['assetType']))):
+    assPath = str(assDetDict['projName']) +":"+ str(assDetDict['path'])
+  else:
+    assTypeDets = getAssTypesDetails(str(assDetDict['assetType']))
+    if(assTypeDets):
+      if(re.search("^default",str(assTypeDets['path']))):
+        assPath = str(assDetDict['projName'])
       else:
-        if(not re.search("$default",str(assDetDict['nodeType']))):
-          if(not re.search("$default",str(assDetDict['fileType']))):
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
-          else:
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName'])
-        else:
-          if(not re.search("$default",str(assDetDict['fileType']))):
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
-          else:
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['assName'])
-    elif(assDetDict['assetType'] == "output"):
-      if(not re.search("$default",str(assDetDict['stageType']))):
-        if(not re.search("$default",str(assDetDict['nodeType']))):
-          if(not re.search("$default",str(assDetDict['fileType']))):
-            assPath = str(assDetDict['projName']) +":output:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
-          else:
-            assPath = str(assDetDict['projName']) +":output:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName'])
-        else:
-          if(not re.search("$default",str(assDetDict['fileType']))):
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
-          else:
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['stageType']) +":"+ str(assDetDict['assName'])
-      else:
-        if(not re.search("$default",str(assDetDict['nodeType']))):
-          if(not re.search("$default",str(assDetDict['fileType']))):
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
-          else:
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['nodeType']) +":"+ str(assDetDict['assName'])
-        else:
-          if(not re.search("$default",str(assDetDict['fileType']))):
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['assName']) +":"+ str(assDetDict['fileType'])
-          else:
-            assPath = str(assDetDict['projName']) +":library:"+ str(assDetDict['assName'])
-            
+        assPath = str(assDetDict['projName']) +":"+ str(assTypeDets['path'])
+  if(assPath):
+    if(not re.search("^default",str(assDetDict['sequenceName']))):
+      assPath = assPath +":"+ str(assDetDict['sequenceName'])
+      if(not re.search("^default",str(assDetDict['sceneName']))):
+        assPath = assPath +":" + str(assDetDict['sceneName'])
+    if(not re.search("^default",str(assDetDict['stageType']))):
+      assPath = assPath +":" + str(assDetDict['stageType'])
+      if(not re.search("^default",str(assDetDict['nodeType']))):
+        assPath = assPath +":" + str(assDetDict['nodeType'])
+        
+    assPath = assPath +":" + str(assDetDict['assName'])
+    if(not re.search("^default",str(assDetDict['fileType']))): 
+      assPath = assPath +":" + str(assDetDict['fileType'])
+    assId = hashlib.sha256(assPath).hexdigest()
+    
+    
+    
+    
+          
             
     
     
