@@ -410,7 +410,27 @@ def assRegister(self,assDetDict):
       assPath = assPath +":" + str(assDetDict['fileType'])
     assId = hashlib.sha256(assPath).hexdigest()
     
-    
+    fieldsA = []
+    valuesA = []
+    for x in assDetDict.keys():
+      fieldsA.append(str(x))
+      valuesA.append("'"+ str(assDetDict[x]) +"'")
+    fs = "("+ ",".join(fieldsA) +")"
+    vs = "("+ ",".join(valuesA) +")"
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("insert into assets "+ fs +" values "+ vs)
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+      return(0)
+    try:
+      os.makedirs(getAbsPath(assPath))
+    except:
+      utilsPipeLogger(str(sys.exc_info()))
+      return(0)
+    return(1)
+  else:
+    return(0)
     
     
           
