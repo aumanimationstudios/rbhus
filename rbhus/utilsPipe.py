@@ -397,9 +397,11 @@ def assRegister(self,assDetDict):
         assPath = str(assDetDict['projName']) +":"+ str(assTypeDets['path'])
   if(assPath):
     if(not re.search("^default",str(assDetDict['sequenceName']))):
-      assPath = assPath +":"+ str(assDetDict['sequenceName'])
       if(not re.search("^default",str(assDetDict['sceneName']))):
-        assPath = assPath +":" + str(assDetDict['sceneName'])
+        assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
+      else:
+        utilsPipeLogger.debug("if sequenceName is given sceneName cannot be a default")
+        return(0)
     if(not re.search("^default",str(assDetDict['stageType']))):
       assPath = assPath +":" + str(assDetDict['stageType'])
       if(not re.search("^default",str(assDetDict['nodeType']))):
@@ -409,7 +411,8 @@ def assRegister(self,assDetDict):
     if(not re.search("^default",str(assDetDict['fileType']))): 
       assPath = assPath +":" + str(assDetDict['fileType'])
     assId = hashlib.sha256(assPath).hexdigest()
-    
+    assDetDict['assetId'] = assId
+    assDetDict['path'] = assPath
     fieldsA = []
     valuesA = []
     for x in assDetDict.keys():
