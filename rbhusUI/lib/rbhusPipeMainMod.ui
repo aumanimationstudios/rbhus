@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>346</width>
+    <width>497</width>
     <height>386</height>
    </rect>
   </property>
@@ -27,20 +27,66 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="2">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="0" column="0" colspan="5">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string/>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="0">
+        <widget class="QComboBox" name="comboBoxStage"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="labelSeq">
+         <property name="text">
+          <string>sequence</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="comboBoxSeq"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="labelSce">
+         <property name="text">
+          <string>scene</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QComboBox" name="comboBoxSce"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>nodeType</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>stageType</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboBoxNode"/>
+       </item>
+       <item row="1" column="4">
+        <widget class="QComboBox" name="comboFileType"/>
+       </item>
+       <item row="0" column="4">
+        <widget class="QLabel" name="labelFileType">
+         <property name="text">
+          <string>fileType</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
-    <item row="2" column="0" colspan="3">
+    <item row="6" column="0" colspan="5">
      <widget class="Line" name="line">
       <property name="enabled">
        <bool>true</bool>
@@ -59,56 +105,14 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0" colspan="3">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string/>
+    <item row="7" column="3">
+     <widget class="QPushButton" name="pushLogout">
+      <property name="text">
+       <string>logout</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>stageType</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="labelSeq">
-         <property name="text">
-          <string>sequence</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="comboBoxNode"/>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>nodeType</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QComboBox" name="comboBoxStage"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QComboBox" name="comboBoxSeq"/>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLabel" name="labelSce">
-         <property name="text">
-          <string>scene</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QComboBox" name="comboBoxSce"/>
-       </item>
-      </layout>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="7" column="0">
      <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -121,14 +125,7 @@
       </property>
      </spacer>
     </item>
-    <item row="3" column="1">
-     <widget class="QPushButton" name="pushLogout">
-      <property name="text">
-       <string>logout</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="3">
+    <item row="5" column="0" colspan="5">
      <widget class="QListWidget" name="listWidget">
       <item>
        <property name="text">
@@ -142,6 +139,46 @@
       </item>
      </widget>
     </item>
+    <item row="7" column="4">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="0" colspan="5">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>search</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -149,7 +186,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>346</width>
+     <width>497</width>
      <height>19</height>
     </rect>
    </property>
@@ -165,13 +202,14 @@
      <addaction name="actionAll"/>
     </widget>
     <addaction name="menuList"/>
-    <addaction name="actionNew_2"/>
+    <addaction name="actionNew"/>
    </widget>
    <widget class="QMenu" name="menuAdmin">
     <property name="title">
      <string>admin</string>
     </property>
     <addaction name="actionTask_trak"/>
+    <addaction name="actionNew_project"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
@@ -179,25 +217,17 @@
     </property>
     <addaction name="actionSet_project"/>
    </widget>
+   <widget class="QMenu" name="menuDebug">
+    <property name="title">
+     <string>debug</string>
+    </property>
+    <addaction name="actionList_env"/>
+   </widget>
    <addaction name="menuProject"/>
    <addaction name="menuAssets"/>
    <addaction name="menuAdmin"/>
+   <addaction name="menuDebug"/>
   </widget>
-  <action name="actionListMine">
-   <property name="text">
-    <string>listMine</string>
-   </property>
-  </action>
-  <action name="actionNew">
-   <property name="text">
-    <string>new</string>
-   </property>
-  </action>
-  <action name="actionSetProject">
-   <property name="text">
-    <string>setProject</string>
-   </property>
-  </action>
   <action name="actionMine">
    <property name="text">
     <string>mine</string>
@@ -208,14 +238,9 @@
     <string>all</string>
    </property>
   </action>
-  <action name="actionNew_2">
+  <action name="actionNew">
    <property name="text">
     <string>new</string>
-   </property>
-  </action>
-  <action name="actionNew_project">
-   <property name="text">
-    <string>new project</string>
    </property>
   </action>
   <action name="actionSet_project">
@@ -223,14 +248,19 @@
     <string>set project</string>
    </property>
   </action>
-  <action name="actionList_all">
-   <property name="text">
-    <string>list all</string>
-   </property>
-  </action>
   <action name="actionTask_trak">
    <property name="text">
     <string>trak</string>
+   </property>
+  </action>
+  <action name="actionNew_project">
+   <property name="text">
+    <string>new project</string>
+   </property>
+  </action>
+  <action name="actionList_env">
+   <property name="text">
+    <string>list env</string>
    </property>
   </action>
  </widget>

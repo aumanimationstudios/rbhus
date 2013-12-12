@@ -8,6 +8,7 @@ import datetime
 import hashlib
 import logging
 import logging.handlers
+import tempfile
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -307,7 +308,7 @@ def setupSequenceScene(seqSceDict):
 def getFieldValue(table,field,fkey,fvalue):
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("select "+ str(field) +" from "+ str(table) +" where +" str(fkey) +"='"+ str(fvalue) +"'",dictionary=True)
+    rows = dbconn.execute("select "+ str(field) +" from "+ str(table) +" where "+ str(fkey) +"='"+ str(fvalue) +"'",dictionary=True)
     return(rows)
   except:
     utilsPipeLogger(str(sys.exc_info()))

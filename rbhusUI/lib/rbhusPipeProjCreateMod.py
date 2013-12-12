@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeProjCreateMod.ui'
 #
-# Created: Mon Dec  2 22:50:13 2013
-#      by: PyQt4 UI code generator 4.10.2
+# Created by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -115,6 +114,7 @@ class Ui_MainWindow(object):
     self.pushCreate.setObjectName(_fromUtf8("pushCreate"))
     self.gridLayout.addWidget(self.pushCreate, 13, 0, 1, 2)
     self.dateEditDue = QtGui.QDateTimeEdit(self.centralwidget)
+    self.dateEditDue.setCalendarPopup(True)
     self.dateEditDue.setObjectName(_fromUtf8("dateEditDue"))
     self.gridLayout.addWidget(self.dateEditDue, 4, 1, 1, 1)
     self.labelDesc = QtGui.QLabel(self.centralwidget)

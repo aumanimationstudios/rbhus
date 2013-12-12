@@ -11,7 +11,7 @@ print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 tempDir = tempfile.gettempdir()
-rpA = "rbhusPipeAdmin.py"
+rpA = "rbhusPipeProjCreate.py"
 
   
 rbhusPipeAdminCmd = dirSelf.rstrip(os.sep) + os.sep + rpA
@@ -57,15 +57,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.trayMenu = QtGui.QMenu()
     
     
-    self.adminAction = self.trayMenu.addAction("admin")
     self.quitAction = self.trayMenu.addAction("quit")
     self.quitAction.triggered.connect(self.quitFunc)
-    self.adminAction.triggered.connect(self.rbhusPipeAdmin)
     
     self.trayIcon.setContextMenu(self.trayMenu)
     self.trayIcon.activated.connect(self.showMain)
     
-    self.actionNew_project.triggered.connect(self.rbhusPipeAdmin)
+    self.actionNew_project.triggered.connect(self.rbhusPipeProjCreate)
     
     
     
@@ -75,12 +73,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
   
-  def rbhusPipeAdmin(self):
+  def rbhusPipeProjCreate(self):
     p = QtCore.QProcess(parent=self.form)
-    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAdmin.log")
-    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeAdmin.err")
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeProjCreate.log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeProjCreate.err")
     self.actionNew_project.setEnabled(False)
-    self.adminAction.setEnabled(False)
     p.start(sys.executable,rbhusPipeAdminCmd.split())
     p.finished.connect(self.rbhusPipeAdminEnable)
     
@@ -88,8 +85,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def rbhusPipeAdminEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)
-    self.adminAction.setEnabled(True)
-  
+    
   
   
   def closeEvent(self,event):
