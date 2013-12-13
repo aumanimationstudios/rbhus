@@ -34,6 +34,7 @@ if(sys.platform.find("linux") >= 0):
 import pickle
 import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
+import rbhus.utils as rUtils
 if(sys.platform.find("linux") >= 0):
   import setproctitle
   setproctitle.setproctitle("rD")
@@ -1258,10 +1259,26 @@ def getHostGroups(dbconn):
       for tr in tmpRow:
         gtr[tr.rstrip().lstrip()] = 1
     for gt in gtr.keys():
-      retRows.append(gt)
+      if(gt):
+        retRows.append(gt)
     return(retRows)
   else:
     return(0)
+
+
+def getHostState(db_conn):
+  hostname,ipAddr = getHostNameIP()
+  try:
+    rows = db_conn.execute("select * from hostStates where ip='"+ str(ipAddr) +"'",dictionary=True)
+    if(rows):
+      return(rows[-1])
+    else:
+      return(0)
+  except:
+    logClient.debug(str(sys.exc_info()))
+    return(0)
+    
+  
 
 def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
   while(1):
@@ -1278,38 +1295,23 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
         time.sleep(5)
         continue
       logClient.debug("step 1")
+      oldState = getHostState(dbconn)
+      grps = []
+      oldstatus = constants.hostInfoDisable
+      if(oldState):
+        grps = oldState['groups'].split(",")
+        oldstatus = oldState['status']
       try:
-        grps = []
-        try:
-          grps = getHostGroups(db_conn)
-        except:
-          logClient.debug(str(sys.exc_info()))
-        if(not grps):
-          grps = []
-        if(grps):
-          try:
-            grps.remove(hostname)
-          except:
-            pass
-          try:
-            grps.remove("default")
-          except:
-            pass
-        tgrps = grps
-        for x in grps:
-          if(not x):
-            try:
-              tgrps.remove(x)
-            except:
-              pass
-        
-        grps = tgrps    
         grps.append("default")
         grps.append(hostname)
+        grps.append(str(totalCpus) +"-core")
+        grps = list(set(grps))
+        dbconn.execute("delete from hostInfo where ip='"+ str(ipAddr) +"'")
         dbconn.execute("INSERT INTO hostInfo \
-                      (hostName,groups,totalRam,totalCpus,totalSwap,ip,os) \
+                      (hostName,status,groups,totalRam,totalCpus,totalSwap,ip,os) \
                       VALUES ('" \
                       + str(hostname) + "', '" \
+                      + str(oldstatus) + "', '" \
                       + str(",".join(grps)) + "', " \
                       + str(totalRam) + ", " \
                       + str(totalCpus) + ", " \
@@ -1370,6 +1372,11 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
         logClient.debug("hostEffectiveResource update error")
         logClient.debug(str(sys.exc_info()))
         sys.exit(1)
+      try:
+        dbconn.execute("insert into hostStates (ip) values ('"+ str(ipAddr) +"')")
+      except:
+        logClient.debug("hostStates insert error")
+        logClient.debug(str(sys.exc_info()))
       break
     except:
       logClient.debug(str(sys.exc_info()))
@@ -1397,7 +1404,7 @@ def setFreeCpus(frameInfo, dbconn):
   if(ipAddr == "127.0.0.1"):
     return(0)
   try:
-    dbconn.execute("UPDATE hostResource SET freeCpus=freeCpus+"+ str(frameInfo['fThreads']) +" WHERE ip=\'"+ str(ipAddr) +"\'")
+    dbconn.execute("UPDATE hostResource SET freeCpus=IF((freeCpus+"+ str(frameInfo['fThreads']) +")>=totalCpus,totalCpus,freeCpus+"+ str(frameInfo['fThreads']) +") WHERE ip='"+ str(ipAddr) +"'")
     logClient.debug(" : freeing CPUs : "+ str(hostname) +":"+ str(frameInfo['fThreads']))
   except:
     logClient.debug(str(sys.exc_info()))

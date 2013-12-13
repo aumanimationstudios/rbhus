@@ -224,7 +224,9 @@ def exportProjTypes(projType):
   return(0)
 
 
-def getProjDetails(projName):
+
+#when you give the projName it returns a single dict else it returns an array of dict
+def getProjDetails(projName=None,status=None):
   if(projName):
     dbconn = dbPipe.dbPipe()
     try:
@@ -238,15 +240,37 @@ def getProjDetails(projName):
       for x in fs:
         ret[x] = rows[0][x]
       return(ret)
+  if(status):
+    if(status != "all")
+      dbconn = dbPipe.dbPipe()
+      try:
+        rows = dbconn.execute("select * from proj where status="+ str(status), dictionary=True)
+      except:
+        utilsPipeLogger(str(sys.exc_info()))
+        return(0)
+      return(rows)
+    else:
+      dbconn = dbPipe.dbPipe()
+      try:
+        rows = dbconn.execute("select * from proj", dictionary=True)
+      except:
+        utilsPipeLogger(str(sys.exc_info()))
+        return(0)
+      return(rows)
+  return(0)
+    
     
 
     
     
-def getSequenceDetails(seqId):
+def getSequenceSceneDetails(projName,sequence,scene):
   if(seqId):
     dbconn = dbPipe.dbPipe()
     try:
-      rows = dbconn.execute("select * from sequence where sequenceId='"+ str(seqId) +"'", dictionary=True)
+      rows = dbconn.execute("select * from sequenceScene where \
+                             projName='"+ str(projName) +"' \
+                             and sequenceName='"+ str(sequence) +"' \
+                             and sceneName='"+ str(scene) +"'", dictionary=True)
     except:
       utilsPipeLogger(str(sys.exc_info()))
       return(0)

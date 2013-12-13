@@ -211,6 +211,7 @@ class hosts(object):
     else:
       self.ip = self.MyIp
     self.hostDetails = self._getHostDetails()
+    self.hostGroupsPermanent = self._getHostGroupsPermanent()
     
   
   
@@ -219,6 +220,17 @@ class hosts(object):
       rows = self.db_conn.execute("select * from hostInfo, hostEffectiveResource, hostResource, hostAlive where (hostInfo.ip COLLATE utf8_unicode_ci = hostResource.ip) and (hostInfo.ip COLLATE utf8_unicode_ci =hostEffectiveResource.ip) and (hostInfo.ip COLLATE utf8_unicode_ci = hostAlive.ip) and (hostInfo.ip = '"+ str(self.ip) +"')",dictionary=True)
       if(rows):
         return(rows[-1])
+      else:
+        return(0)
+    except:
+      return(0)
+  
+  
+  def _getHostGroupsPermanent(self):
+    try:
+      rows = self.db_conn.execute("select groups from hostStates where ip='"+ str(self.ip) +"'",dictionary=True)
+      if(rows):
+        return(rows[-1]['groups'])
       else:
         return(0)
     except:
@@ -267,8 +279,11 @@ class hosts(object):
       return(0)
   
   
-  def setGroups(self,nGroups):
-    tmpRow = nGroups.split(",")
+  def setGroups(self,nGroups=None):
+    if(nGroups):
+      tmpRow = nGroups.split(",")
+    else:
+      tmpRow = []
     try:
       tmpRow.remove("default")
     except:
@@ -277,62 +292,61 @@ class hosts(object):
       tmpRow.remove(self.hostDetails['hostName'])
     except:
       pass
-    aGroups = getHostGroupsActive()
-    newGroups = ["default"]
-    newGroups.append(self.hostDetails['hostName'])
-    for tr in tmpRow:
-      if(tr not in aGroups):
-        print("hostGroup "+ str(tr) +" not a valid group")
-      else:
-        try:
-          newGroups.remove(tr)
-        except:
-          pass
-        newGroups.append(tr)
-    uGroups = {}
-    for x in newGroups:
-      uGroups[x] = 1
-    fGroups = uGroups.keys()
-    self.setHostData("hostInfo","groups","'"+ ",".join(fGroups) +"'")
-      
-      
-  def updateGroups(self,nGroups):
-    tmpRow = nGroups.split(",")
     try:
-      tmpRow.remove("default")
+      tmpRow.remove(str(self.hostDetails['totalCpus']) +"-core")
     except:
       pass
-    try:
-      tmpRow.remove(self.hostDetails['hostName'])
-    except:
-      pass
-    aGroups = getHostGroupsActive()
-    newGroups = ["default"]
-    newGroups.append(self.hostDetails['hostName'])
     
-    for tr in tmpRow:
-      if(tr not in aGroups):
-        print("hostGroup "+ str(tr) +" not a valid group")
-      else:
-        try:
-          newGroups.remove(tr)
-        except:
-          pass
-        newGroups.append(tr)
-        
-    oldGroups = self.hostDetails['groups'].split(",")
-    revampedGroups = []
-    for x in newGroups:
-      if(x in oldGroups):
-        print("hostGroup "+ str(tr) +" duplicate group")
-      else:
-        oldGroups.append(x)
-        
-    uGroups = {}
-    for x in oldGroups:
-      uGroups[x] = 1
-    fGroups = uGroups.keys()
+    aGroups = getHostGroupsActive()
+    newGroups = ["default"]
+    newGroups.append(self.hostDetails['hostName'])
+    newGroups.append(str(self.hostDetails['totalCpus']) +"-core")
+    invalidGroups = set.difference(set(tmpRow),set(aGroups))
+    validGroups = set.intersection(set(tmpRow),set(aGroups))
+    
+    if(invalidGroups):
+      print("hostGroups "+ ",".join(list(invalidGroups)) +" are not valid")
+    uGroups = set.union(set(validGroups),set(newGroups))
+    fGroups = list(uGroups)
+    pGroups = list(validGroups)
     self.setHostData("hostInfo","groups","'"+ ",".join(fGroups) +"'")
+    if(pGroups):
+      self.setHostData("hostStates","groups","'"+ ",".join(pGroups) +"'")
+      
+      
+  def updateGroups(self,nGroups=None):
+    if(nGroups):
+      tmpRow = nGroups.split(",")
+    else:
+      tmpRow = []
+    try:
+      tmpRow.remove("default")
+    except:
+      pass
+    try:
+      tmpRow.remove(self.hostDetails['hostName'])
+    except:
+      pass
+    try:
+      tmpRow.remove(str(self.hostDetails['totalCpus']) +"-core")
+    except:
+      pass
+    
+    aGroups = getHostGroupsActive()
+    newGroups = ["default"]
+    newGroups.append(self.hostDetails['hostName'])
+    newGroups.append(str(self.hostDetails['totalCpus']) +"-core")
+    invalidGroups = set.difference(set(tmpRow),set(aGroups))
+    validGroups = set.intersection(set(tmpRow),set(aGroups))
+    validOldGroups = set.intersection(set(self.hostDetails['groups'].split(",")),set(aGroups))
+    if(invalidGroups):
+      print("hostGroups "+ ",".join(list(invalidGroups)) +" are not valid")
+    uGroups = set.union(set(validGroups),set(newGroups),set(validOldGroups))
+    fGroups = list(uGroups)
+    pGroups = list(set.difference(set(uGroups),set(newGroups)))
+    self.setHostData("hostInfo","groups","'"+ ",".join(fGroups) +"'")
+    if(pGroups):
+      self.setHostData("hostStates","groups","'"+ ",".join(pGroups) +"'")
     
           
   
