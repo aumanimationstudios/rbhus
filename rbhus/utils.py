@@ -256,6 +256,7 @@ class hosts(object):
     if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
       try:
         self.db_conn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
+        self.db_conn.execute("update hostStates set status = "+ str(constants.hostInfoEnable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
       except:
         print(str(sys.exc_info()))
         return(0)
@@ -269,6 +270,7 @@ class hosts(object):
     if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
       try:
         self.db_conn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
+        self.db_conn.execute("update hostStates set status = "+ str(constants.hostInfoDisable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
       except:
         print(str(sys.exc_info()))
         return(0)
@@ -356,14 +358,15 @@ class hosts(object):
       try:
         clientSocket.settimeout(15)
         clientSocket.connect((self.hostDetails['ip'],6661))
+        clientSocket.send("CLIENTKILL")
+        clientSocket.close()
       except:
         print("cannot connect : "+ self.hostDetails['hostName'] +" : "+ str(sys.exc_info()))
         try:
           clientSocket.close()
         except:
           pass
-      clientSocket.send("CLIENTKILL")
-      clientSocket.close()
+      
   
   
   def restartSys(self):
@@ -372,14 +375,15 @@ class hosts(object):
       try:
         clientSocket.settimeout(15)
         clientSocket.connect((self.hostDetails['ip'],6661))
+        clientSocket.send("RESTARTSYS")
+        clientSocket.close()
       except:
         print("cannot connect : "+ self.hostDetails['hostName'] +" : "+ str(sys.exc_info()))
         try:
           clientSocket.close()
         except:
           pass
-      clientSocket.send("RESTARTSYS")
-      clientSocket.close()
+      
   
   def startClient(self):
     if(self.userAdmin):
@@ -387,14 +391,15 @@ class hosts(object):
       try:
         clientSocket.settimeout(15)
         clientSocket.connect((self.hostDetails['ip'],6661))
+        clientSocket.send("CLIENTSTART")
+        clientSocket.close()
       except:
         print("cannot connect : "+ self.hostDetails['hostName'] +" : "+ str(sys.exc_info()))
         try:
           clientSocket.close()
         except:
           pass
-      clientSocket.send("CLIENTSTART")
-      clientSocket.close()
+      
   
   
   def setHostData(self,table,field,value):

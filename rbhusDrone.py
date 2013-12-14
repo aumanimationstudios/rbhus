@@ -41,7 +41,7 @@ if(sys.platform.find("linux") >= 0):
 import tempfile
 import inspect
 
-time.sleep(1)
+time.sleep(30)
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbhusDrone.pids"
@@ -1404,7 +1404,7 @@ def setFreeCpus(frameInfo, dbconn):
   if(ipAddr == "127.0.0.1"):
     return(0)
   try:
-    dbconn.execute("UPDATE hostResource SET freeCpus=IF((freeCpus+"+ str(frameInfo['fThreads']) +")>=totalCpus,totalCpus,freeCpus+"+ str(frameInfo['fThreads']) +") WHERE ip='"+ str(ipAddr) +"'")
+    dbconn.execute("UPDATE hostResource SET freeCpus=IF((freeCpus+"+ str(frameInfo['fThreads']) +")>="+ str(multiprocessing.cpu_count()) +","+ str(multiprocessing.cpu_count()) +",freeCpus+"+ str(frameInfo['fThreads']) +") WHERE ip='"+ str(ipAddr) +"'")
     logClient.debug(" : freeing CPUs : "+ str(hostname) +":"+ str(frameInfo['fThreads']))
   except:
     logClient.debug(str(sys.exc_info()))
