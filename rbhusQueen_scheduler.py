@@ -196,8 +196,7 @@ def arrangedActiveTasks():
       runFrames = 0
       for activeTask in priorities[pKey]:
         runShit = taskRunFrames[activeTask["id"]]
-        if(runShit):
-          runFrames = runFrames + len(runShit)
+        runFrames = runFrames + runShit
       try:
         pcentPkeysRun[pKey] = (100 * float(runFrames)) / float(totalRunFrames)
       except:
@@ -235,7 +234,7 @@ def arrangedActiveTasks():
           return(0)
 
         if(completedShit):
-          numCompletedShit = len(completedShit)
+          numCompletedShit = completedShit
         else:
           numCompletedShit = 0
         percent = (100 * numCompletedShit) / numAllFrames
