@@ -502,7 +502,6 @@ class dbRbhus:
       rows = self.execute("SELECT frames.frameId, tasks.* FROM frames, tasks \
                       WHERE tasks.id="+ str(taskId) +" \
                       AND tasks.id=frames.id \
-                      AND tasks.status="+ str(constants.taskActive) +" \
                       AND frames.status !="+ str(constants.framesUnassigned) +" \
                       ORDER BY frames.frameId", dictionary=True)
     except:

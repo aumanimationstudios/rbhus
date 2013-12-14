@@ -126,6 +126,41 @@ def arrangedActiveTasks():
   afterTasks = {}
   #logging.debug("activeTasks :"+ str(activeTasks))
   if(activeTasks):
+    afterTasks = {}
+    for activeTask in activeTasks:
+      if(activeTask["afterTasks"]):
+        #print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
+        ats = activeTask["afterTasks"].split(",")
+        for at in ats:
+          if(int(at) != 0):
+            for actsk in activeTasks:
+              if(int(at) == int(actsk['id'])):
+                try:
+                  afterTasks[at.lstrip().rstrip()].append(activeTask)
+                except:
+                  afterTasks[at.lstrip().rstrip()] = []
+                  afterTasks[at.lstrip().rstrip()].append(activeTask)
+                break
+    if(afterTasks):
+      for ats in afterTasks.keys():
+        for ts in afterTasks[ats]:
+          if(ts == 0):
+            continue
+          try:
+            activeTasks.remove(ts)
+          except:
+            pass
+    
+    taskRunFrames = {}
+    for activeTask in activeTasks:
+      trf =  db_conn.getRunFrames(activeTask["id"])
+      if(trf):
+        taskRunFrames[activeTask["id"]] = len(trf)
+      else:
+        taskRunFrames[activeTask["id"]] = 0
+      
+    
+    
     #logging.debug("w1")
     for activeTask in activeTasks:
       try:
@@ -151,17 +186,16 @@ def arrangedActiveTasks():
     #logging.debug("pcentPkeys :" + str(pcentPkeys))
 
     pcentPkeysRun = {}
-    totalRunFrames = 0
-    for pKey in pKeys:
-      for activeTask in priorities[pKey]:
-        runShit = db_conn.getRunFrames(activeTask["id"])
-        if(runShit):
-          totalRunFrames = totalRunFrames + len(runShit)
+    totalRunFrames = sum([taskRunFrames[x] for x in taskRunFrames])
+    #for pKey in pKeys:
+      #for activeTask in priorities[pKey]:
+        #runShit = taskRunFrames[activeTask["id"]]
+        #totalRunFrames = totalRunFrames + len(runShit)
 
     for pKey in pKeys:
       runFrames = 0
       for activeTask in priorities[pKey]:
-        runShit = db_conn.getRunFrames(activeTask["id"])
+        runShit = taskRunFrames[activeTask["id"]]
         if(runShit):
           runFrames = runFrames + len(runShit)
       try:
@@ -192,7 +226,7 @@ def arrangedActiveTasks():
       pcent = {}
       for activeTask in priorities[pKey]:
         completedShit = 0
-        completedShit = db_conn.getRunFrames(activeTask["id"])
+        completedShit = taskRunFrames[activeTask["id"]]
         allFrames = 0
         allFrames = db_conn.getAllFrames(activeTask["id"])
         if(allFrames):
@@ -329,32 +363,32 @@ def scheduler():
     if(freeHosts):
       #logging.debug("f2")
       activeTasks = arrangedActiveTasks()
-      if(activeTasks):
-        #logging.debug("f3")
-        afterTasks = {}
-        for activeTask in activeTasks:
-          if(activeTask["afterTasks"]):
-            #print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
-            ats = activeTask["afterTasks"].split(",")
-            for at in ats:
-              if(int(at) != 0):
-                for actsk in activeTasks:
-                  if(int(at) == int(actsk['id'])):
-                    try:
-                      afterTasks[at.lstrip().rstrip()].append(activeTask)
-                    except:
-                      afterTasks[at.lstrip().rstrip()] = []
-                      afterTasks[at.lstrip().rstrip()].append(activeTask)
-                    break
-        if(afterTasks):
-          for ats in afterTasks.keys():
-            for ts in afterTasks[ats]:
-              if(ts == 0):
-                continue
-              try:
-                activeTasks.remove(ts)
-              except:
-                pass
+      #if(activeTasks):
+        ##logging.debug("f3")
+        #afterTasks = {}
+        #for activeTask in activeTasks:
+          #if(activeTask["afterTasks"]):
+            ##print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
+            #ats = activeTask["afterTasks"].split(",")
+            #for at in ats:
+              #if(int(at) != 0):
+                #for actsk in activeTasks:
+                  #if(int(at) == int(actsk['id'])):
+                    #try:
+                      #afterTasks[at.lstrip().rstrip()].append(activeTask)
+                    #except:
+                      #afterTasks[at.lstrip().rstrip()] = []
+                      #afterTasks[at.lstrip().rstrip()].append(activeTask)
+                    #break
+        #if(afterTasks):
+          #for ats in afterTasks.keys():
+            #for ts in afterTasks[ats]:
+              #if(ts == 0):
+                #continue
+              #try:
+                #activeTasks.remove(ts)
+              #except:
+                #pass
 
         for activeTask in activeTasks:
           taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
