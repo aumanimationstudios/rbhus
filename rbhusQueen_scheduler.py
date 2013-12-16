@@ -363,32 +363,6 @@ def scheduler():
       #logging.debug("f2")
       activeTasks = arrangedActiveTasks()
       if(activeTasks):
-        ##logging.debug("f3")
-        #afterTasks = {}
-        #for activeTask in activeTasks:
-          #if(activeTask["afterTasks"]):
-            ##print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
-            #ats = activeTask["afterTasks"].split(",")
-            #for at in ats:
-              #if(int(at) != 0):
-                #for actsk in activeTasks:
-                  #if(int(at) == int(actsk['id'])):
-                    #try:
-                      #afterTasks[at.lstrip().rstrip()].append(activeTask)
-                    #except:
-                      #afterTasks[at.lstrip().rstrip()] = []
-                      #afterTasks[at.lstrip().rstrip()].append(activeTask)
-                    #break
-        #if(afterTasks):
-          #for ats in afterTasks.keys():
-            #for ts in afterTasks[ats]:
-              #if(ts == 0):
-                #continue
-              #try:
-                #activeTasks.remove(ts)
-              #except:
-                #pass
-
         for activeTask in activeTasks:
           taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
           batchFlag = activeTask["batch"]

@@ -237,6 +237,7 @@ class dbRbhus:
       modLogger.error("deleting failed batchId : "+ str(batchId))
       return(0)
 
+  
   def getActiveTasks(self):
     try:
       rows = self.execute("SELECT tasks.*, tasksLog.lastHost FROM tasks, tasksLog \

@@ -60,7 +60,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
-    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","priority","submitTime","doneTime","afterTime","status","batch","description"]
+    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","priority","submitTime","doneTime","afterTime","status","batch","description","fastAssign"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status"]
     self.colNamesFramesXtra = ["timeTaken"]
     self.colNamesTaskXtra = ["pending"]
