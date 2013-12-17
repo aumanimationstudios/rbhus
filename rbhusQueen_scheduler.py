@@ -280,8 +280,10 @@ def arrangedActiveTasks():
       if(activeTask["afterTasks"]!="0"):
         afts = activeTask["afterTasks"].split(",")
         print(afts)
-        if(int(afts) in [int(x['id']) for x in reArrangedTasks]):
-          afterTasks.append(activeTask)
+        for af in afts:
+          if(int(af) in [int(x['id']) for x in reArrangedTasks]):
+            afterTasks.append(activeTask)
+            break
     if(afterTasks):
       for x in afterTasks:
         try:
