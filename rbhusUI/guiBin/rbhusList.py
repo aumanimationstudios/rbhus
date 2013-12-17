@@ -715,6 +715,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
+        if(colName == "ram"):
+          item = QtGui.QTableWidgetItem()
+          self.tableFrames.setItem(indx, colIndx, item)
+          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
         item = QtGui.QTableWidgetItem()
         self.tableFrames.setItem(indx, colIndx, item)
         self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
