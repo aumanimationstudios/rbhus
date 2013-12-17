@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusEditMultiMod.ui'
 #
-# Created: Thu Jul 11 21:29:05 2013
-#      by: PyQt4 UI code generator 4.10.1
+# Created: Mon Dec 16 22:28:24 2013
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -320,6 +320,9 @@ class Ui_rbhusEdit(object):
     self.labelMaxBatch.setSizePolicy(sizePolicy)
     self.labelMaxBatch.setObjectName(_fromUtf8("labelMaxBatch"))
     self.gridLayout_2.addWidget(self.labelMaxBatch, 15, 0, 1, 1)
+    self.checkSloppy = QtGui.QCheckBox(self.groupBox_2)
+    self.checkSloppy.setObjectName(_fromUtf8("checkSloppy"))
+    self.gridLayout_2.addWidget(self.checkSloppy, 7, 2, 1, 1)
     self.verticalLayout.addWidget(self.groupBox_2)
     self.line = QtGui.QFrame(self.centralwidget)
     self.line.setFrameShape(QtGui.QFrame.HLine)
@@ -383,6 +386,7 @@ class Ui_rbhusEdit(object):
     self.labelAfc.setText(_translate("rbhusEdit", "afc          ", None))
     self.labelRerunThresh.setText(_translate("rbhusEdit", "rerunThres", None))
     self.labelMaxBatch.setText(_translate("rbhusEdit", "maxBatch", None))
+    self.checkSloppy.setText(_translate("rbhusEdit", "sloppy", None))
     self.pushCancel.setText(_translate("rbhusEdit", "reset", None))
     self.pushApply.setText(_translate("rbhusEdit", "apply", None))
 

@@ -27,6 +27,9 @@ taskDone = 4
 fastAssignEnable = 1
 fastAssignDisable = 0
 
+afterTaskSloppyEnable = 1
+afterTaskSloppyDisable = 0
+
 
 # batching 
 batchActive = 1

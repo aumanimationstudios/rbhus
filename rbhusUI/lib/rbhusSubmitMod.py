@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Wed Oct 16 19:31:17 2013
-#      by: PyQt4 UI code generator 4.10.2
+# Created: Mon Dec 16 22:28:08 2013
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_rbhusSubmit(object):
   def setupUi(self, rbhusSubmit):
     rbhusSubmit.setObjectName(_fromUtf8("rbhusSubmit"))
-    rbhusSubmit.resize(565, 650)
+    rbhusSubmit.resize(576, 650)
     self.centralwidget = QtGui.QWidget(rbhusSubmit)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -472,6 +472,9 @@ class Ui_rbhusSubmit(object):
     self.comboFileType.setSizePolicy(sizePolicy)
     self.comboFileType.setObjectName(_fromUtf8("comboFileType"))
     self.gridLayout.addWidget(self.comboFileType, 2, 1, 1, 1)
+    self.checkSloppy = QtGui.QCheckBox(self.centralwidget)
+    self.checkSloppy.setObjectName(_fromUtf8("checkSloppy"))
+    self.gridLayout.addWidget(self.checkSloppy, 17, 2, 1, 1)
     rbhusSubmit.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(rbhusSubmit)
@@ -531,4 +534,5 @@ class Ui_rbhusSubmit(object):
     self.lineEditFileName.setWhatsThis(_translate("rbhusSubmit", "comma seperated list of files to render", None))
     self.labeRenderer.setText(_translate("rbhusSubmit", "renderer", None))
     self.labeFileType.setText(_translate("rbhusSubmit", "fileType", None))
+    self.checkSloppy.setText(_translate("rbhusSubmit", "sloppy", None))
 

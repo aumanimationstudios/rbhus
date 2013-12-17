@@ -126,30 +126,30 @@ def arrangedActiveTasks():
   afterTasks = {}
   #logging.debug("activeTasks :"+ str(activeTasks))
   if(activeTasks):
-    afterTasks = {}
-    for activeTask in activeTasks:
-      if(activeTask["afterTasks"]):
-        #print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
-        ats = activeTask["afterTasks"].split(",")
-        for at in ats:
-          if(int(at) != 0):
-            for actsk in activeTasks:
-              if(int(at) == int(actsk['id'])):
-                try:
-                  afterTasks[at.lstrip().rstrip()].append(activeTask)
-                except:
-                  afterTasks[at.lstrip().rstrip()] = []
-                  afterTasks[at.lstrip().rstrip()].append(activeTask)
-                break
-    if(afterTasks):
-      for ats in afterTasks.keys():
-        for ts in afterTasks[ats]:
-          if(ts == 0):
-            continue
-          try:
-            activeTasks.remove(ts)
-          except:
-            pass
+    #afterTasks = {}
+    #for activeTask in activeTasks:
+      #if(activeTask["afterTasks"]!="0"):
+        ##print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
+        #ats = activeTask["afterTasks"].split(",")
+        #for at in ats:
+          #if(int(at) != 0):
+            #for actsk in activeTasks:
+              #if(int(at) == int(actsk['id'])):
+                #try:
+                  #afterTasks[at.lstrip().rstrip()].append(activeTask)
+                #except:
+                  #afterTasks[at.lstrip().rstrip()] = []
+                  #afterTasks[at.lstrip().rstrip()].append(activeTask)
+                #break
+    #if(afterTasks):
+      #for ats in afterTasks.keys():
+        #for ts in afterTasks[ats]:
+          #if(ts == 0):
+            #continue
+          #try:
+            #activeTasks.remove(ts)
+          #except:
+            #pass
     
     taskRunFrames = {}
     for activeTask in activeTasks:
@@ -275,6 +275,22 @@ def arrangedActiveTasks():
       #for afterT in afterTasks.keys():
         #afterTid =
 
+    afterTasks = []
+    for activeTask in reArrangedTasks:
+      if(activeTask["afterTasks"]!="0"):
+        afts = activeTask["afterTasks"].split(",")
+        if(int(afts) in [int(x['id']) for x in reArrangedTasks]):
+          afterTasks.append(activeTask)
+    if(afterTasks):
+      for x in afterTasks:
+        try:
+          reArrangedTasks.remove(x)
+        except:
+          pass
+        if(x['afterTaskSloppy'] == constants.afterTaskSloppyEnable):
+          reArrangedTasks.append(x)
+      
+    
     return(reArrangedTasks)
   else:
     return(0)
@@ -353,7 +369,18 @@ def insertFramesInToBatchId(batchId,frameNo):
   return(1)
 
 
-
+def getMinMaxCpus():
+  try:
+    rows = db_conn.execute("select max(hostInfo.totalCpus),min(hostInfo.totalCpus) from hostInfo,hostAlive where hostInfo.ip= hostAlive.ip and hostAlive.status="+ str(constants.hostAliveAlive),dictionary=True)
+    if(rows):
+      try:
+        return(rows[0])
+      except:
+        logging.error("min max cpus failed : "+ str(sys.exc_info()))
+    return(0)
+  except:
+    logging.error("min max cpus failed : "+ str(sys.exc_info()))
+    return(0)
 
 def scheduler():
   while(1):
@@ -386,7 +413,7 @@ def scheduler():
               bestBatch = 1
               if(batchFlag == constants.batchActive):
                 bestBatch = int(totalTaskFrames)/int(totalFreeHosts)
-                
+                minMaxCpus = getMinMaxCpus()
                 if(bestBatch < minBatch):
                   bestBatch = minBatch
                 if(bestBatch > maxBatch):
@@ -416,8 +443,8 @@ def scheduler():
                 break
               time.sleep(1)
     else:
-      time.sleep(1)
-    time.sleep(0.1)
+      time.sleep(0.5)
+    time.sleep(0.2)
 
 
 

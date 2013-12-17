@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1084</width>
-    <height>707</height>
+    <width>1096</width>
+    <height>708</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -386,6 +386,9 @@
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
+               </property>
+               <property name="autoScrollMargin">
+                <number>16</number>
                </property>
                <property name="editTriggers">
                 <set>QAbstractItemView::DoubleClicked</set>

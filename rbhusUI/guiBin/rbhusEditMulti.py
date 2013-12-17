@@ -51,6 +51,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     self.pushBfc.clicked.connect(self.selectBfc)
     self.pushAfc.clicked.connect(self.selectAfc)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
+    self.checkSloppy.clicked.connect(self.sloppyEnable)
     self.spinRerunThresh.valueChanged.connect(self.getSpinRerunThresh)
     self.spinPriority.valueChanged.connect(self.getPriority)
     self.spinMinBatch.valueChanged.connect(self.getMinBatch)
@@ -95,7 +96,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     self.db_afterTask = 0
     self.db_layer = 0
     self.db_renderer = 0
-    
+    self.db_afterTaskSloppy = 0
     
   def reset_variables(self):
     self.db_filetype = 0
@@ -122,6 +123,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     self.db_afterTask = 0
     self.db_layer = 0
     self.db_renderer = 0
+    self.db_afterTaskSloppy = 0
     
   def reset_cam(self):
     self.db_cam = 1
@@ -192,6 +194,9 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
         editDict['os'] = str(self.comboOsType.currentText())
       if(self.db_afterTask):
         editDict['afterTasks'] = str(self.lineEditAfterTask.text())
+      if(self.db_afterTaskSloppy):
+        editDict['afterTaskSloppy'] = 1 & self.checkSloppy.isChecked()
+        
       print(editDict)
       try:
         self.task.edit(editDict)
@@ -250,6 +255,14 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       #self.afterTimeEdit.setDate(QtCore.QDate(self.taskDValues['afterTime'].year, self.taskDValues['afterTime'].month, self.taskDValues['afterTime'].day))
       self.lineEditDescription.setText(self.taskDValues['description'])
       self.lineEditAfterTask.setText(self.taskDValues['afterTasks'])
+      
+      self.checkSloppy.blockSignals(True)
+      if(self.taskValues['afterTaskSloppy'] == constants.afterTaskSloppyEnable):
+        self.checkSloppy.setChecked(True)
+      else:
+        self.checkSloppy.setChecked(False)
+      self.checkSloppy.blockSignals(False)
+      
       batchFF = self.taskDValues['batch']
       self.comboBatching.setCurrentIndex(int(batchFF))
       batchAD = constants.batchStatus[int(batchFF)]
@@ -285,6 +298,10 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     else:
       self.afterTimeEdit.setEnabled(False)
 
+  
+  def sloppyEnable(self):
+    self.db_afterTaskSloppy = 1
+  
   
   def selectFileName(self):
     fila = QtGui.QFileDialog.getOpenFileName()

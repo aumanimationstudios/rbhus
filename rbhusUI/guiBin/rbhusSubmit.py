@@ -335,7 +335,8 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       submitDict['resolution'] = str(self.lineEditRes.text())
     if(self.checkAfterTime.isChecked()):
       submitDict['afterTime'] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
-    
+    if(self.checkSloppy.isChecked()):
+      submitDict['afterTaskSloppy'] = constants.afterTaskSloppyEnable
     
     hE = self.checkHold.isChecked()
     if(hE):

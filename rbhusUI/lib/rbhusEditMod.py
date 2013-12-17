@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'lib/rbhusEditMod.ui'
+# Form implementation generated from reading ui file 'rbhusEditMod.ui'
 #
-# Created: Wed Jul 10 23:31:03 2013
-#      by: PyQt4 UI code generator 4.10.1
+# Created: Mon Dec 16 22:27:55 2013
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -484,6 +484,9 @@ class Ui_rbhusEdit(object):
     self.pushSelectHostGroups.setSizePolicy(sizePolicy)
     self.pushSelectHostGroups.setObjectName(_fromUtf8("pushSelectHostGroups"))
     self.gridLayout_2.addWidget(self.pushSelectHostGroups, 9, 2, 1, 1)
+    self.checkSloppy = QtGui.QCheckBox(self.groupBox_2)
+    self.checkSloppy.setObjectName(_fromUtf8("checkSloppy"))
+    self.gridLayout_2.addWidget(self.checkSloppy, 14, 2, 1, 1)
     self.verticalLayout.addWidget(self.groupBox_2)
     self.line = QtGui.QFrame(self.centralwidget)
     self.line.setFrameShape(QtGui.QFrame.HLine)
@@ -560,6 +563,7 @@ class Ui_rbhusEdit(object):
     self.lineEditHostGroups.setToolTip(_translate("rbhusEdit", "comma seperated list of cameras to render", None))
     self.lineEditHostGroups.setText(_translate("rbhusEdit", "default", None))
     self.pushSelectHostGroups.setText(_translate("rbhusEdit", "select", None))
+    self.checkSloppy.setText(_translate("rbhusEdit", "sloppy", None))
     self.pushCancel.setText(_translate("rbhusEdit", "reset", None))
     self.pushApply.setText(_translate("rbhusEdit", "apply", None))
 
