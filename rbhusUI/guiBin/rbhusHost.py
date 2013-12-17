@@ -54,7 +54,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.timer.timeout.connect(self.popTableHost)
     
     self.dbconn = dbRbhus.dbRbhus()
-    self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostEffectiveResource.eCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.load1","hostInfo.groups"]
+    self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostEffectiveResource.eCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.freeRam","hostResource.load1","hostInfo.groups"]
     self.popTableHost()
     #self.pushDisable.clicked.connect(self.hostDisable)
     #self.pushEnable.clicked.connect(self.hostEnable)
@@ -364,6 +364,18 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
           self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.hostAliveStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        
+        if(colName == "freeRam"):
+          self.tableHost.setItem(indx, colIndx, item)
+          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
+        
+        if(colName == "totalRam"):
+          self.tableHost.setItem(indx, colIndx, item)
+          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         

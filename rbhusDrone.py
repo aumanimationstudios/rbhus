@@ -1199,23 +1199,23 @@ def atUrService():
 # Return a dict of totalSwap and totalMem
 def totalMemInfo():
   memDetails = {}
-  if(sys.platform.find("linux") >=0):
-    meminfo = open("/proc/meminfo","r")
-    for x in meminfo.readlines():
-      if(x.find("MemTotal") != -1):
-        memDetails[x.rstrip().split(":")[0].strip().split()[0]] = x.rstrip().split(":")[1].strip().split()[0]
-      if(x.find("SwapTotal") != -1):
-        memDetails[x.rstrip().split(":")[0].strip().split()[0]] = x.rstrip().split(":")[1].strip().split()[0]
-    meminfo.close()
-  elif(sys.platform.find("win") >=0):
-    try:
-      memDetails["MemTotal"] = psutil.virtual_memory().total
-    except:
-      memDetails["MemTotal"] ='0'
-    try:
-      memDetails["SwapTotal"] = psutil.swap_memory().total
-    except:
-      memDetails["SwapTotal"] = '0'
+  #if(sys.platform.find("linux") >=0):
+    #meminfo = open("/proc/meminfo","r")
+    #for x in meminfo.readlines():
+      #if(x.find("MemTotal") != -1):
+        #memDetails[x.rstrip().split(":")[0].strip().split()[0]] = x.rstrip().split(":")[1].strip().split()[0]
+      #if(x.find("SwapTotal") != -1):
+        #memDetails[x.rstrip().split(":")[0].strip().split()[0]] = x.rstrip().split(":")[1].strip().split()[0]
+    #meminfo.close()
+  #elif(sys.platform.find("win") >=0):
+  try:
+    memDetails["MemTotal"] = psutil.virtual_memory().total
+  except:
+    memDetails["MemTotal"] ='0'
+  try:
+    memDetails["SwapTotal"] = psutil.swap_memory().total
+  except:
+    memDetails["SwapTotal"] = '0'
   logClient.debug(str(memDetails))
   return(memDetails)
 
@@ -1223,25 +1223,23 @@ def totalMemInfo():
 # Return a dict of freeSwap and freeMem
 def freeMeminfo():
   memDetails = {}
-  if(sys.platform.find("linux") >=0):
-    meminfo = open("/proc/meminfo","r")
-    for x in meminfo.readlines():
-      if(x.find("MemFree") != -1):
-        memDetails[x.rstrip().split(":")[0].strip().split()[0]] = x.rstrip().split(":")[1].strip().split()[0]
-      if(x.find("SwapFree") != -1):
-        memDetails[x.rstrip().split(":")[0].strip().split()[0]] = x.rstrip().split(":")[1].strip().split()[0]
-    meminfo.close()
-  elif(sys.platform.find("win") >=0):
-    try:
-      memDetails["MemFree"] = psutil.virtual_memory().free
-    except:
-      memDetails["MemFree"] = '0'
-    try:
-      memDetails["SwapFree"] = psutil.swap_memory().free
-    except:
-      memDetails["SwapFree"] = '0'
-
-
+  #if(sys.platform.find("linux") >=0):
+    #meminfo = open("/proc/meminfo","r")
+    #for x in meminfo.readlines():
+      #if(x.find("MemFree") != -1):
+        #memDetails[x.rstrip().split(":")[0].strip().split()[0]] = x.rstrip().split(":")[1].strip().split()[0]
+      #if(x.find("SwapFree") != -1):
+        #memDetails[x.rstrip().split(":")[0].strip().split()[0]] = x.rstrip().split(":")[1].strip().split()[0]
+    #meminfo.close()
+  #elif(sys.platform.find("win") >=0):
+  try:
+    memDetails["MemFree"] = psutil.virtual_memory().free
+  except:
+    memDetails["MemFree"] = '0'
+  try:
+    memDetails["SwapFree"] = psutil.swap_memory().free
+  except:
+    memDetails["SwapFree"] = '0'
   return(memDetails)
 
 
