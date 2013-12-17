@@ -34,13 +34,13 @@ runScript = os.environ['rbhus_runScript']
 camera = os.environ['rbhus_camera']
 res = os.environ['rbhus_resolution']
 
-runScript.split(os.sep)
+runScript.split("/")
 if(renExtArgs == "None"):
   renExtArgs = ""
 RENDERCMD = "/usr/local/bin/blender -noaudio -b \"" + str(fileName) +"\""
 RENDER_CMD = ""
 
-outputN = os.sep.join(runScript.split(os.sep)[0:-1]) + os.sep +"outputNodes.py"
+outputN = "/".join(runScript.split("/")[0:-1]) + "/" +"outputNodes.py"
 
 layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_layer.py"
 cameraF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_camera.py"
@@ -60,9 +60,9 @@ fr = " -f "+ fRs
 
 outFile = "default"
 if(outDir != "default"):
-  outFile = outDir.rstrip(os.sep) + os.sep
+  outFile = outDir.rstrip("/") + "/"
 if(outName != "default"):
-  outFile = outFile.rstrip(os.sep) + os.sep + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1]
+  outFile = outFile.rstrip("/") + "/" + ".".join(outName.split(".")[0:-1]) + "_" + "".rjust(int(pad),"#") + "." + outName.split(".")[-1]
 
 
 outputNoutF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_outputNodes.py"
@@ -71,19 +71,14 @@ wbd.flush()
 wbd.close()
 
 
-
-
-
-
-
 try:
   os.system("cp -a "+ outputN +" "+ outputNoutF +" >& /dev/null")
 except:
   pass
-#try:
-  #os.system("sed -i 's/renameOutputDir/"+"\\/".join(outDir.split(os.sep)) +"/' "+ outputNoutF +" >& /dev/null")
-#except:
-  #pass
+try:
+  os.system("sed -i 's/renameOutputDir/"+"\\/".join(outDir.split("/")) +"/' "+ outputNoutF +" >& /dev/null")
+except:
+  pass
 if(layer != "default"):
   try:
     os.system("sed -i 's/renameRenderLayer/"+ layer +"/' "+ outputNoutF +" >& /dev/null")
