@@ -257,7 +257,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       self.lineEditAfterTask.setText(self.taskDValues['afterTasks'])
       
       self.checkSloppy.blockSignals(True)
-      if(self.taskValues['afterTaskSloppy'] == constants.afterTaskSloppyEnable):
+      if(self.taskDValues['afterTaskSloppy'] == constants.afterTaskSloppyEnable):
         self.checkSloppy.setChecked(True)
       else:
         self.checkSloppy.setChecked(False)
