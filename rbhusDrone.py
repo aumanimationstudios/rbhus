@@ -1042,7 +1042,10 @@ def getProcessVmSize(pid):
   vmSizeRet = 0
   try:
     pidDets = psutil.Process(pid)
-    vmSizeRet = pidDets.get_memory_info().rss
+    if(sys.platform.find("win") >= 0):
+      vmSizeRet = pidDets.get_memory_info().rss + pidDets.get_memory_info().vms
+    if(sys.platform.find("linux") >= 0):
+      vmSizeRet = pidDets.get_memory_info().vms
   except:
     logClient.debug(str(sys.exc_info()))
   if(vmSizeRet < 0):
