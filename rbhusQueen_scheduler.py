@@ -279,6 +279,7 @@ def arrangedActiveTasks():
     for activeTask in reArrangedTasks:
       if(activeTask["afterTasks"]!="0"):
         afts = activeTask["afterTasks"].split(",")
+        print(afts)
         if(int(afts) in [int(x['id']) for x in reArrangedTasks]):
           afterTasks.append(activeTask)
     if(afterTasks):
