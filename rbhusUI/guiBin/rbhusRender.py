@@ -112,8 +112,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusList(self):
     self.pushList.setText("opening")
     p = QtCore.QProcess(parent=self.form)
-    p.setStandardOutputFile(tempDir + os.sep +"rbhusList.log")
-    p.setStandardErrorFile(tempDir + os.sep +"rbhusList.err")
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusList_"+ self.username +".log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusList_"+ self.username +".err")
     self.pushList.setEnabled(False)
     self.listAction.setEnabled(False)
     p.start(sys.executable,rbhuslistCmd.split())
@@ -134,8 +134,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusSubmit(self):
     self.pushSubmit.setText("opening")
     p = QtCore.QProcess(parent=self.form)
-    p.setStandardOutputFile(tempDir + os.sep +"rbhusSubmit.log")
-    p.setStandardErrorFile(tempDir + os.sep +"rbhusSubmit.err")
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusSubmit_"+ self.username +".log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusSubmit_"+ self.username +".err")
     self.pushSubmit.setEnabled(False)
     self.newAction.setEnabled(False)
     p.start(sys.executable,rbhusSubmitCmd.split())
@@ -156,8 +156,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusHost(self):
     self.pushHosts.setText("opening")
     p = QtCore.QProcess(parent=self.form)
-    p.setStandardOutputFile(tempDir + os.sep +"rbhusHost.log")
-    p.setStandardErrorFile(tempDir + os.sep +"rbhusHost.err")
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusHost_"+ self.username +".log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusHost_"+ self.username +".err")
     self.pushHosts.setEnabled(False)
     self.hostAction.setEnabled(False)
     p.start(sys.executable,rbhusHostCmd.split())

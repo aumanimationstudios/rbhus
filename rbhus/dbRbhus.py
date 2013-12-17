@@ -35,7 +35,12 @@ try:
 except:
   pass
 
-LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
+if(sys.platform.find("win") >= 0):
+  username = os.environ['USERNAME']
+if(sys.platform.find("linux") >= 0):
+  username = os.environ['USER']
+
+LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module_"+ username +"_"+ str(hostname) +".log")
   #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')

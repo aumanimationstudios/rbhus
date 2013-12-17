@@ -49,11 +49,15 @@ pidOnlyFile = tempDir + os.sep +"rbhusDroneMain.pid"
 
 db_conn = dbRbhus.dbRbhus()
 
+if(sys.platform.find("win") >= 0):
+  username = os.environ['USERNAME']
+if(sys.platform.find("linux") >= 0):
+  username = os.environ['USER']
 
-if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = logging.FileHandler('/var/log/rbhusClient.log')
-elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = logging.FileHandler(tempDir + os.sep + "rbhusClient.log")
+LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusClient_"+ username +"_"+ str(hostname) +".log")
+
+
+
 logClient = logging.getLogger("logClient")
 logClient.setLevel(logging.DEBUG)
 BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(lineno)s - %(message)s")

@@ -34,12 +34,12 @@ try:
   dbLogDatabase = os.environ['rbhusPipe_dbLogDatabase']
 except:
   pass
+if(sys.platform.find("win") >= 0):
+  username = os.environ['USERNAME']
+if(sys.platform.find("linux") >= 0):
+  username = os.environ['USER']
 
-if(sys.platform.find("linux") >=0):
-  LOG_FILENAME = logging.FileHandler('/var/log/rbhusPipeDb_module.log')
-elif(sys.platform.find("win") >=0):
-  LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipeDb_module.log")
-  #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
+LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_module_"+ username +"_"+ str(hostname) +".log")
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
 modPipeLogger = logging.getLogger("modPipeLogger")

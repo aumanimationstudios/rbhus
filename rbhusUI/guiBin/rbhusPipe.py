@@ -75,8 +75,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def rbhusPipeProjCreate(self):
     p = QtCore.QProcess(parent=self.form)
-    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeProjCreate.log")
-    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeProjCreate.err")
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeProjCreate_"+ self.username +".log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeProjCreate_"+ self.username +".err")
     self.actionNew_project.setEnabled(False)
     p.start(sys.executable,rbhusPipeAdminCmd.split())
     p.finished.connect(self.rbhusPipeAdminEnable)
