@@ -77,7 +77,7 @@ wbd.close()
 
 
 try:
-  os.system("cp -a "+ outputN +" "+ outputNoutF +" >& /dev/null")
+  #os.system("cp -a "+ outputN +" "+ outputNoutF +" >& /dev/null")
 except:
   pass
 try:
