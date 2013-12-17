@@ -76,11 +76,19 @@ wbd.close()
 
 
 
-
-os.system("cp -a "+ outputN +" "+ outputNoutF +" >& /dev/null")
-os.system("sed -i 's/renameOutputDir/"+"\\/".join(outDir.split(os.sep)) +"/' "+ outputNoutF +" >& /dev/null")
+try:
+  os.system("cp -a "+ outputN +" "+ outputNoutF +" >& /dev/null")
+except:
+  pass
+try:
+  os.system("sed -i 's/renameOutputDir/"+"\\/".join(outDir.split(os.sep)) +"/' "+ outputNoutF +" >& /dev/null")
+except:
+  pass
 if(layer != "default"):
-  os.system("sed -i 's/renameRenderLayer/"+ layer +"/' "+ outputNoutF +" >& /dev/null")
+  try:
+    os.system("sed -i 's/renameRenderLayer/"+ layer +"/' "+ outputNoutF +" >& /dev/null")
+  except:
+    pass
 
 
 if(renderer != "default"):
