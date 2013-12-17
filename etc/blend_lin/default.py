@@ -40,7 +40,7 @@ if(renExtArgs == "None"):
 RENDERCMD = "/usr/local/bin/blender -noaudio -b \"" + str(fileName) +"\""
 RENDER_CMD = ""
 
-outputN = "/".join(runScript.split("/")[0:-1]) + "/" +"outputNodes.py"
+outputN = "/"+ "/".join(runScript.split("/")[0:-1]) + "/" +"outputNodes.py"
 
 layerScF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_layer.py"
 cameraF = "/tmp/"+ str(taskId) +"_"+ str(frameId) +"_camera.py"
@@ -72,7 +72,7 @@ wbd.close()
 
 
 try:
-  os.system("cp -a "+ outputN +" "+ outputNoutF +" >& /dev/null")
+  os.system("cp -av "+ outputN +" "+ outputNoutF +" >& /dev/null")
 except:
   pass
 try:
