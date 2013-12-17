@@ -412,8 +412,14 @@ def scheduler():
 
               bestBatch = 1
               if(batchFlag == constants.batchActive):
-                bestBatch = int(totalTaskFrames)/int(totalFreeHosts)
+                
                 minMaxCpus = getMinMaxCpus()
+                maxCpu = int(minMaxCpus['max(hostInfo.totalCpus)'])
+                minCpu = int(minMaxCpus['min(hostInfo.totalCpus)'])
+                cpuRange = maxCpu - minCpu
+                batchRange = maxBatch - minBatch
+                bestBatch = (((int(assignedHost['totalCpus']) - minCpu)*batchRange)/cpuRange) + minBatch
+                
                 if(bestBatch < minBatch):
                   bestBatch = minBatch
                 if(bestBatch > maxBatch):
