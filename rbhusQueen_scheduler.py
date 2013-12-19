@@ -126,30 +126,6 @@ def arrangedActiveTasks():
   afterTasks = {}
   #logging.debug("activeTasks :"+ str(activeTasks))
   if(activeTasks):
-    #afterTasks = {}
-    #for activeTask in activeTasks:
-      #if(activeTask["afterTasks"]!="0"):
-        ##print(str(activeTask['id']) +":"+ str(activeTask['afterTasks']))
-        #ats = activeTask["afterTasks"].split(",")
-        #for at in ats:
-          #if(int(at) != 0):
-            #for actsk in activeTasks:
-              #if(int(at) == int(actsk['id'])):
-                #try:
-                  #afterTasks[at.lstrip().rstrip()].append(activeTask)
-                #except:
-                  #afterTasks[at.lstrip().rstrip()] = []
-                  #afterTasks[at.lstrip().rstrip()].append(activeTask)
-                #break
-    #if(afterTasks):
-      #for ats in afterTasks.keys():
-        #for ts in afterTasks[ats]:
-          #if(ts == 0):
-            #continue
-          #try:
-            #activeTasks.remove(ts)
-          #except:
-            #pass
     
     taskRunFrames = {}
     for activeTask in activeTasks:
@@ -168,11 +144,7 @@ def arrangedActiveTasks():
       except:
         priorities[activeTask["priority"]] = []
         priorities[activeTask["priority"]].append(activeTask)
-      #try:
-        #afterTasks[activeTask["afterTasks"]].append(activeTask["id"])
-      #except:
-        #afterTasks[activeTask["afterTasks"]] = []
-        #afterTasks[activeTask["afterTasks"]].append(activeTask["id"])
+
     pKeys = priorities.keys()
     pKeys.sort(reverse=True)
     #logging.debug("Sorted Keys :"+ str(pKeys))
@@ -187,11 +159,6 @@ def arrangedActiveTasks():
 
     pcentPkeysRun = {}
     totalRunFrames = sum([taskRunFrames[x] for x in taskRunFrames])
-    #for pKey in pKeys:
-      #for activeTask in priorities[pKey]:
-        #runShit = taskRunFrames[activeTask["id"]]
-        #totalRunFrames = totalRunFrames + len(runShit)
-
     for pKey in pKeys:
       runFrames = 0
       for activeTask in priorities[pKey]:
@@ -249,13 +216,30 @@ def arrangedActiveTasks():
         tasks = pcent[pcentKey]
         for task in tasks:
           arrangedTasks.append(task)
-    #logging.debug("arrangeTasks :"+ str(arrangedTasks))
+    #logging.debug("arrangedTasks :"+ str(arrangedTasks))
 
+      
+        
+    afterTasks = []
+    for activeTask in arrangedTasks:
+      if(activeTask["afterTasks"]!="0"):
+        afts = activeTask["afterTasks"].split(",")
+        print(afts)
+        for af in afts:
+          if(int(af) in [int(x['id']) for x in arrangedTasks]):
+            afterTasks.append(activeTask)
+            break
+    if(afterTasks):
+      for x in afterTasks:
+        try:
+          arrangedTasks.remove(x)
+        except:
+          pass
+        if(x['afterTaskSloppy'] == constants.afterTaskSloppyEnable):
+          arrangedTasks.append(x)
+      
     runFirst = []
     reArrangedTasks = arrangedTasks
-    #for x in arrangedTasks:
-      #print(x['id'])
-    
     for x in arrangedTasks:
       if(x['fastAssign'] == constants.fastAssignEnable):
         try:
@@ -263,36 +247,10 @@ def arrangedActiveTasks():
         except:
           pass
         runFirst.append(x)
-    #runFirst.reverse()
     for x in runFirst:
       reArrangedTasks.insert(0,x)
-      
-        
-    #for x in reArrangedTasks:
-      #print(x['id'])
-    ###get the tasks arranged according to afterTasks shits
-    #if(afterTasks):
-      #for afterT in afterTasks.keys():
-        #afterTid =
 
-    afterTasks = []
-    for activeTask in reArrangedTasks:
-      if(activeTask["afterTasks"]!="0"):
-        afts = activeTask["afterTasks"].split(",")
-        print(afts)
-        for af in afts:
-          if(int(af) in [int(x['id']) for x in reArrangedTasks]):
-            afterTasks.append(activeTask)
-            break
-    if(afterTasks):
-      for x in afterTasks:
-        try:
-          reArrangedTasks.remove(x)
-        except:
-          pass
-        if(x['afterTaskSloppy'] == constants.afterTaskSloppyEnable):
-          reArrangedTasks.append(x)
-      
+
     
     return(reArrangedTasks)
   else:
@@ -430,7 +388,7 @@ def scheduler():
                 if(bestBatch > totalTaskFrames):
                   bestBatch = totalTaskFrames
               taskFramesToAssign = []
-              print("bestBatch : "+ str(bestBatch) +" : "+ str(activeTask['id']) +" : "+ batchId)
+              print("bestBatch : "+ str(bestBatch) +" : "+ str(assignedHost['hostName']) +" : "+ str(assignedHost['totalCpus']) +" : "+ str(activeTask['id']))
               for bB in range(0,bestBatch):
                 print("insert into batch id : " + str(batchId) +" : "+ str(taskFrames[bB]['frameId']))
                 insertFramesInToBatchId(batchId,taskFrames[bB]['frameId'])
