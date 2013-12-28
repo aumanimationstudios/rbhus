@@ -247,6 +247,7 @@ def arrangedActiveTasks():
         except:
           pass
         runFirst.append(x)
+    runFirst.reverse()
     for x in runFirst:
       reArrangedTasks.insert(0,x)
 
