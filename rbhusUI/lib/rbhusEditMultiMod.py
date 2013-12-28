@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusEditMultiMod.ui'
 #
-# Created: Mon Dec 16 22:28:24 2013
+# Created: Wed Dec 25 16:02:46 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -63,7 +63,7 @@ class Ui_rbhusEdit(object):
     self.lineEditDescription.setObjectName(_fromUtf8("lineEditDescription"))
     self.gridLayout_2.addWidget(self.lineEditDescription, 16, 1, 1, 1)
     self.comboType = QtGui.QComboBox(self.groupBox_2)
-    self.comboType.setEnabled(True)
+    self.comboType.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -296,7 +296,7 @@ class Ui_rbhusEdit(object):
     self.spinRerunThresh.setObjectName(_fromUtf8("spinRerunThresh"))
     self.gridLayout_2.addWidget(self.spinRerunThresh, 11, 1, 1, 1)
     self.comboRenderer = QtGui.QComboBox(self.groupBox_2)
-    self.comboRenderer.setEnabled(True)
+    self.comboRenderer.setEnabled(False)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)

@@ -909,11 +909,11 @@ def killFrame(dbconn,taskId,frameId,pidLock = 0,statusAfterKill = -1):
       if(setFramesStatus(taskId,batchedFrames,statusAfterKill,dbconn) == 1):
         break
       time.sleep(0.5)
-  logClient.debug("WSB 30")
+  #logClient.debug("WSB 30")
   washMyButt(taskId,frameId)
-  logClient.debug("WSB 31")
+  #logClient.debug("WSB 31")
   dbconn.delBatchId(batchId)
-  logClient.debug("WSB 32")
+  #logClient.debug("WSB 32")
   return(0)
 
 def getMainPids():

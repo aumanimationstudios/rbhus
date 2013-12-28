@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusSubmitMod.ui'
 #
-# Created: Mon Dec 16 22:28:08 2013
+# Created: Wed Dec 25 17:26:25 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -95,23 +95,6 @@ class Ui_rbhusSubmit(object):
     self.comboPrio.addItem(_fromUtf8(""))
     self.comboPrio.addItem(_fromUtf8(""))
     self.gridLayout.addWidget(self.comboPrio, 19, 1, 1, 1)
-    self.lineEditImageType = QtGui.QLineEdit(self.centralwidget)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.lineEditImageType.sizePolicy().hasHeightForWidth())
-    self.lineEditImageType.setSizePolicy(sizePolicy)
-    self.lineEditImageType.setToolTip(_fromUtf8(""))
-    self.lineEditImageType.setObjectName(_fromUtf8("lineEditImageType"))
-    self.gridLayout.addWidget(self.lineEditImageType, 7, 1, 1, 1)
-    self.labelImageType = QtGui.QLabel(self.centralwidget)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.labelImageType.sizePolicy().hasHeightForWidth())
-    self.labelImageType.setSizePolicy(sizePolicy)
-    self.labelImageType.setObjectName(_fromUtf8("labelImageType"))
-    self.gridLayout.addWidget(self.labelImageType, 7, 0, 1, 1)
     self.horizontalLayout = QtGui.QHBoxLayout()
     self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
     self.comboRes = QtGui.QComboBox(self.centralwidget)
@@ -475,6 +458,22 @@ class Ui_rbhusSubmit(object):
     self.checkSloppy = QtGui.QCheckBox(self.centralwidget)
     self.checkSloppy.setObjectName(_fromUtf8("checkSloppy"))
     self.gridLayout.addWidget(self.checkSloppy, 17, 2, 1, 1)
+    self.labelImageType = QtGui.QLabel(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.labelImageType.sizePolicy().hasHeightForWidth())
+    self.labelImageType.setSizePolicy(sizePolicy)
+    self.labelImageType.setObjectName(_fromUtf8("labelImageType"))
+    self.gridLayout.addWidget(self.labelImageType, 5, 0, 1, 1)
+    self.comboImageType = QtGui.QComboBox(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.comboImageType.sizePolicy().hasHeightForWidth())
+    self.comboImageType.setSizePolicy(sizePolicy)
+    self.comboImageType.setObjectName(_fromUtf8("comboImageType"))
+    self.gridLayout.addWidget(self.comboImageType, 5, 1, 1, 1)
     rbhusSubmit.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(rbhusSubmit)
@@ -493,9 +492,6 @@ class Ui_rbhusSubmit(object):
     self.comboPrio.setItemText(0, _translate("rbhusSubmit", "low", None))
     self.comboPrio.setItemText(1, _translate("rbhusSubmit", "normal", None))
     self.comboPrio.setItemText(2, _translate("rbhusSubmit", "high", None))
-    self.lineEditImageType.setWhatsThis(_translate("rbhusSubmit", "<html><head/><body><p>type of image. </p><p>eg: PNG, MULTIEXR etc . </p><p><span style=\" font-style:italic; text-decoration: underline;\">note : image type depends on the command line interface of the program</span></p></body></html>", None))
-    self.lineEditImageType.setText(_translate("rbhusSubmit", "default", None))
-    self.labelImageType.setText(_translate("rbhusSubmit", "imageType", None))
     self.lineEditRes.setWhatsThis(_translate("rbhusSubmit", "<html><head/><body><p>frame range in the format</p><p>startframe-endframe:byframes</p><p>eg:</p><p>render frames from 1 to 100   : <span style=\" font-weight:600;\">1-100</span></p><p>render every 5th frame from 1 to 100   : <span style=\" font-weight:600;\">1-100:5</span></p><p>render 1 frame     :<span style=\" font-weight:600;\"> 1</span></p><p><br/></p><p><br/></p></body></html>", None))
     self.lineEditRes.setText(_translate("rbhusSubmit", "default", None))
     self.checkAfterTime.setText(_translate("rbhusSubmit", "enable", None))
@@ -535,4 +531,5 @@ class Ui_rbhusSubmit(object):
     self.labeRenderer.setText(_translate("rbhusSubmit", "renderer", None))
     self.labeFileType.setText(_translate("rbhusSubmit", "fileType", None))
     self.checkSloppy.setText(_translate("rbhusSubmit", "sloppy", None))
+    self.labelImageType.setText(_translate("rbhusSubmit", "imageType", None))
 

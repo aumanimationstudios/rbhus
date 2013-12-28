@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.1.70, for pc-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
 --
--- Host: bluepixels.in    Database: rbhusLog
+-- Host: blues2    Database: rbhusLog
 -- ------------------------------------------------------
 -- Server version	5.1.62-log
 
@@ -23,15 +23,13 @@ DROP TABLE IF EXISTS `hostLog`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostLog` (
-  `indx` int(128) NOT NULL AUTO_INCREMENT,
   `ip` varchar(92) COLLATE utf8_unicode_ci NOT NULL,
-  `hostName` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `timeOnRender` int(128) NOT NULL,
   `totalJobs` int(128) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`indx`),
+  PRIMARY KEY (`ip`,`date`),
   KEY `index1` (`date`)
-) ENGINE=InnoDB AUTO_INCREMENT=387 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,17 +40,15 @@ DROP TABLE IF EXISTS `tasksLog`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tasksLog` (
-  `indx` int(128) NOT NULL AUTO_INCREMENT,
-  `id` int(11) NOT NULL,
+  `sha256` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `date` date NOT NULL,
   `projId` int(11) NOT NULL DEFAULT '1',
   `fileName` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
   `timeSpentOnResource` int(128) NOT NULL DEFAULT '0' COMMENT 'in SECONDS only\n',
-  `resolution` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `camera` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
-  `date` date NOT NULL,
-  PRIMARY KEY (`indx`),
+  `ip` varchar(92) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`sha256`,`date`,`ip`),
   KEY `index1` (`date`)
-) ENGINE=InnoDB AUTO_INCREMENT=764 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Dont care about the output in this logdb\n';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Dont care about the output in this logdb\n';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -64,4 +60,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-12  7:31:07
+-- Dump completed on 2013-12-24 11:12:11

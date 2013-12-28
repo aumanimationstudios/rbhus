@@ -133,21 +133,29 @@ def getRenderers():
   dbconn = dbRbhus.dbRbhus()
   try:
     rows = dbconn.execute("select * from renderer", dictionary=True)
+    if(rows):
+      return(rows)
+    else:
+      return(0)
   except:
     print("Error connecting to db 2")
     return(0)
-  retRows = {}  
-  if(rows):
-    for row in rows:
-      try:
-        retRows[row['fileType']].append(row['renderer'])
-      except:
-        retRows[row['fileType']] = []
-        retRows[row['fileType']].append(row['renderer'])
-    return(retRows)
-  else:
+  
+
+def getImageTypes():
+  dbconn = dbRbhus.dbRbhus()
+  try:
+    rows = dbconn.execute("select * from imageTypes", dictionary=True)
+    if(rows):
+      return(rows)
+    else:
+      return(0)
+  except:
+    print("Error connecting to db 2")
     return(0)
-    
+
+
+
 def getLocalNameIP():
   while(1):
     try:

@@ -54,6 +54,9 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         pass
     
     self.fileTypeDefs = rUtils.getFileTypesAll()
+    self.renders = rUtils.getRenderers()
+    self.imageTypes = rUtils.getImageTypes()
+    
     
     rbhusSubmitMod.Ui_rbhusSubmit.setupUi(self,Form)
     self.pushFileName.clicked.connect(self.selectFileName)
@@ -122,11 +125,14 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.popEditItems()
     
     
+    
+    
   def fileTypeChanged(self):
-    self.fileTypePrint()
+    #self.fileTypePrint()
     self.setTaskOsTypes()
     
     self.setRenderer()
+    self.setImageTypes()
   
   
   def printGroupSel(self):
@@ -145,14 +151,18 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   
   
   def fileTypePrint(self):
-    print(self.comboFileType.currentText())
-    renders = rUtils.getRenderers()
+    #print(self.comboFileType.currentText())
     self.comboRenderer.clear()
     if(self.comboFileType.currentText()):
-      for x in renders[str(self.comboFileType.currentText())]:
-        self.comboRenderer.addItem(_fromUtf8(x))
+      for x in self.renders:
+        if(x['fileType'] == str(self.comboFileType.currentText())):
+          self.comboRenderer.addItem(_fromUtf8(x['renderer']))
+          
+        
 
     
+  
+  
   
   def osTypePrint(self):
     print(self.comboOsType.currentText())
@@ -194,7 +204,10 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
   def setOutName(self):
     outFile = str(self.lineEditFileName.text())
-    self.lineEditOutName.setText(".".join((outFile.replace("\\","/")).split("/")[-1].split(".")[0:-1]) +".png")
+    for x in self.imageTypes:
+      if(x['imageType'] == str(self.comboImageType.currentText())):
+        exten = x['extention']
+    self.lineEditOutName.setText(".".join((outFile.replace("\\","/")).split("/")[-1].split(".")[0:-1]) +"."+ exten)
     
   def setOutDir(self):
     outFile = str(self.lineEditFileName.text())
@@ -222,7 +235,6 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         self.lineEditFileName.setText(self.taskValues['fileName'])
         #self.lineEditOutDir.setText(self.taskValues['outDir'])
         self.lineEditOutName.setText(self.taskValues['outName'])
-        self.lineEditImageType.setText(self.taskValues['imageType'])
         self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
         self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
         self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
@@ -247,33 +259,52 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
       
   def setRenderer(self):
-    renders = rUtils.getRenderers()
     self.comboRenderer.clear()
     indx = 0
     setIndx = 0
     try:
-      for x in renders[str(self.comboFileType.currentText())]:
-        self.comboRenderer.addItem(_fromUtf8(x))
-        for y in self.fileTypeDefs:
-          if(str(y['fileType']) == str(self.comboFileType.currentText())):
-            if(str(y['defRenderer']) == str(x)):
-              setIndx = indx
-        indx = indx + 1
-      self.comboRenderer.setCurrentIndex(setIndx)
+      for x in self.renders:
+        if(x['fileType'] == str(self.comboFileType.currentText())):
+          self.comboRenderer.addItem(_fromUtf8(x['renderer']))
+          for y in self.fileTypeDefs:
+            if(str(y['fileType']) == str(self.comboFileType.currentText())):
+              if(str(y['defRenderer']) == str(x)):
+                setIndx = indx
+          indx = indx + 1
+        self.comboRenderer.setCurrentIndex(setIndx)
       return(1)
     except:
       print(str(sys.exc_info()))
       return(0)
    
-   
+  def setImageTypes(self):
+    self.comboImageType.clear()
+    indx = 0
+    setIndx = 0
+    try:
+      for x in self.imageTypes:
+        if(x['fileType'] == str(self.comboFileType.currentText())):
+          self.comboImageType.addItem(_fromUtf8(x['imageType']))
+          for y in self.fileTypeDefs:
+            if(str(y['fileType']) == str(self.comboFileType.currentText())):
+              if(str(y['defImageType']) == str(x)):
+                setIndx = indx
+          indx = indx + 1
+        self.comboImageType.setCurrentIndex(setIndx)
+      return(1)
+    except:
+      print(str(sys.exc_info()))
+      return(0)
    
   def setTaskOsTypes(self):
     rows = rUtils.getOsTypes()
-    self.comboOsType.clear()  
+    self.comboOsType.clear()
+    print(": 11 :")
     if(rows):
       indx = 0
       setIndx = 0
       for row in rows:
+        print(": 12 :")
         self.comboOsType.addItem(_fromUtf8(row))
         defFileType = str(self.comboFileType.currentText())
         defOs = str(self.taskValues['os'])
@@ -309,6 +340,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
       self.comboFileType.setCurrentIndex(setIndx)
       self.setRenderer()
+      self.setImageTypes()
       return(1)
     else:
       return(0)
@@ -348,7 +380,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     submitDict['hostGroups'] = str(self.lineEditHostGroups.text())
     submitDict['renderer'] = str(self.comboRenderer.currentText())
     layers = str(self.lineEditLayer.text())
-    submitDict['imageType'] = str(self.lineEditImageType.text())
+    submitDict['imageType'] = str(self.comboImageType.currentText())
     
     prios = str(self.comboPrio.currentText())
     if(prios == "low"):

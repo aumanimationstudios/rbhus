@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.1.70, for pc-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
 --
--- Host: bluepixels.in    Database: rbhus
+-- Host: blues2    Database: rbhus
 -- ------------------------------------------------------
 -- Server version	5.1.62-log
 
@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS `admins`;
 CREATE TABLE `admins` (
   `user` varchar(128) NOT NULL DEFAULT 'shrinidhi',
   PRIMARY KEY (`user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +77,7 @@ DROP TABLE IF EXISTS `clientPref`;
 CREATE TABLE `clientPref` (
   `authentication` int(1) NOT NULL DEFAULT '1' COMMENT '1 - enable authentication\n0 - disable authentication\n',
   PRIMARY KEY (`authentication`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,10 +88,13 @@ DROP TABLE IF EXISTS `fileType`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fileType` (
-  `fileType` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `fileType` varchar(128) NOT NULL,
   `defScript` varchar(1024) NOT NULL DEFAULT '0',
   `defAfterFrameCmd` varchar(1024) NOT NULL DEFAULT 'default',
   `defBeforeFrameCmd` varchar(1024) NOT NULL DEFAULT 'default',
+  `defOs` varchar(45) NOT NULL DEFAULT 'default',
+  `defRenderer` varchar(45) NOT NULL DEFAULT 'default',
+  `defImageType` varchar(45) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`fileType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -109,8 +112,8 @@ CREATE TABLE `frames` (
   `ram` bigint(32) NOT NULL DEFAULT '0',
   `sTime` datetime DEFAULT NULL,
   `eTime` datetime DEFAULT NULL,
-  `logFile` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `hostName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `logFile` varchar(2048) DEFAULT NULL,
+  `hostName` varchar(128) DEFAULT NULL,
   `ip` varchar(92) DEFAULT NULL,
   `runCount` int(2) NOT NULL DEFAULT '0',
   `fThreads` int(2) NOT NULL DEFAULT '0',
@@ -133,8 +136,8 @@ DROP TABLE IF EXISTS `hostAlive`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostAlive` (
-  `hostName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `ip` varchar(92) NOT NULL,
+  `hostName` varchar(128) NOT NULL,
+  `ip` varchar(92) DEFAULT NULL,
   `status` int(2) NOT NULL DEFAULT '1' COMMENT '0 - dead	\n1 - alive',
   PRIMARY KEY (`hostName`),
   KEY `fk_hostAlive_1` (`hostName`),
@@ -150,7 +153,7 @@ DROP TABLE IF EXISTS `hostEffectiveResource`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostEffectiveResource` (
-  `hostName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `hostName` varchar(128) NOT NULL,
   `ip` varchar(92) NOT NULL,
   `eCpus` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`hostName`),
@@ -169,7 +172,7 @@ DROP TABLE IF EXISTS `hostGroupsActive`;
 CREATE TABLE `hostGroupsActive` (
   `gName` varchar(45) NOT NULL,
   PRIMARY KEY (`gName`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,15 +183,15 @@ DROP TABLE IF EXISTS `hostInfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostInfo` (
-  `hostName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `hostName` varchar(128) NOT NULL,
   `totalRam` bigint(20) NOT NULL DEFAULT '0',
   `totalCpus` bigint(20) NOT NULL DEFAULT '0',
   `totalSwap` bigint(20) NOT NULL DEFAULT '0',
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - disable\n1 - enable',
-  `groups` varchar(1024) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `groups` varchar(1024) NOT NULL DEFAULT 'default',
   `weight` int(2) NOT NULL DEFAULT '1',
-  `ip` varchar(92) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
-  `os` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `ip` varchar(92) DEFAULT NULL,
+  `os` varchar(256) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`hostName`),
   UNIQUE KEY `ip_UNIQUE` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contains all the static info on a host';
@@ -202,7 +205,7 @@ DROP TABLE IF EXISTS `hostResource`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hostResource` (
-  `hostName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `hostName` varchar(128) NOT NULL,
   `ip` varchar(92) NOT NULL,
   `freeRam` bigint(20) NOT NULL DEFAULT '0',
   `freeCpus` bigint(20) NOT NULL DEFAULT '0',
@@ -219,6 +222,39 @@ CREATE TABLE `hostResource` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `hostStates`
+--
+
+DROP TABLE IF EXISTS `hostStates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hostStates` (
+  `ip` varchar(92) NOT NULL,
+  `groups` varchar(1024) NOT NULL DEFAULT 'default' COMMENT 'space separated list of groups that the ip belongs to',
+  `status` int(1) NOT NULL DEFAULT '0',
+  `weight` int(2) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `imageTypes`
+--
+
+DROP TABLE IF EXISTS `imageTypes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `imageTypes` (
+  `fileType` varchar(128) NOT NULL,
+  `imageType` varchar(45) NOT NULL DEFAULT 'default',
+  `extention` varchar(5) NOT NULL,
+  PRIMARY KEY (`fileType`,`imageType`),
+  KEY `fk_imageTypes_1_idx` (`fileType`),
+  CONSTRAINT `fk_imageTypes_1` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `proj`
 --
 
@@ -227,8 +263,9 @@ DROP TABLE IF EXISTS `proj`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `proj` (
   `id` int(11) NOT NULL,
-  `projName` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `admins` varchar(2048) NOT NULL,
+  `projName` varchar(128) NOT NULL,
+  `admins` varchar(4096) NOT NULL COMMENT 'space separated list of admin usernames\n',
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive\n1 - active\n',
   PRIMARY KEY (`id`),
   UNIQUE KEY `projName_UNIQUE` (`projName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -242,11 +279,11 @@ DROP TABLE IF EXISTS `renderer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `renderer` (
-  `fileType` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `renderer` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `fileType` varchar(128) NOT NULL,
+  `renderer` varchar(128) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`fileType`,`renderer`),
   KEY `fk_renderer_1` (`fileType`),
-  CONSTRAINT `fk_renderer_1` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_renderer_1` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -288,31 +325,31 @@ DROP TABLE IF EXISTS `tasks`;
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `projId` int(11) NOT NULL DEFAULT '1',
-  `description` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'rogue',
-  `user` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'shrinidhi',
-  `fileName` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `fileType` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'blend_lin',
-  `renderer` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `description` varchar(256) NOT NULL DEFAULT 'rogue',
+  `user` varchar(256) NOT NULL DEFAULT 'shrinidhi',
+  `fileName` varchar(2048) NOT NULL,
+  `fileType` varchar(128) NOT NULL DEFAULT 'blend_lin',
+  `renderer` varchar(128) NOT NULL DEFAULT 'default',
   `layer` varchar(128) NOT NULL DEFAULT 'default',
-  `renExtArgs` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default' COMMENT 'renderer specific extra options if required',
+  `renExtArgs` varchar(2048) NOT NULL DEFAULT 'default' COMMENT 'renderer specific extra options if required',
   `minRam` int(11) NOT NULL DEFAULT '1',
   `maxRam` int(11) NOT NULL DEFAULT '1',
-  `outDir` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
-  `outName` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `outDir` varchar(2048) NOT NULL DEFAULT 'default',
+  `outName` varchar(256) NOT NULL DEFAULT 'default',
   `imageType` varchar(128) NOT NULL DEFAULT 'default',
-  `logBase` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `logBase` varchar(2048) NOT NULL DEFAULT 'default',
   `pad` int(1) NOT NULL DEFAULT '4',
-  `fRange` varchar(1024) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
-  `hostGroups` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
-  `os` varchar(1024) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default' COMMENT 'Specify the Operating system type\n',
-  `afterTaskCmd` varchar(1024) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT 'default',
-  `beforeTaskCmd` varchar(1024) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT 'default',
-  `afterFrameCmd` varchar(1024) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT 'default',
-  `beforeFrameCmd` varchar(1024) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT 'default',
+  `fRange` varchar(1024) NOT NULL DEFAULT '1',
+  `hostGroups` varchar(256) NOT NULL DEFAULT 'default',
+  `os` varchar(1024) NOT NULL DEFAULT 'default' COMMENT 'Specify the Operating system type\n',
+  `afterTaskCmd` varchar(1024) DEFAULT 'default',
+  `beforeTaskCmd` varchar(1024) DEFAULT 'default',
+  `afterFrameCmd` varchar(1024) DEFAULT 'default',
+  `beforeFrameCmd` varchar(1024) DEFAULT 'default',
   `afterTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `afterTasks` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `afterFrame` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `rerunThresh` int(2) NOT NULL DEFAULT '5',
+  `afterTasks` varchar(2048) DEFAULT NULL,
+  `afterFrame` varchar(2048) DEFAULT NULL,
+  `rerunThresh` int(2) NOT NULL DEFAULT '15',
   `threads` int(2) NOT NULL DEFAULT '0',
   `priority` int(10) NOT NULL DEFAULT '1',
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - waiting(Waiting initialization for Frames tables)\n1 - pending(intermediate state between wait n active)\n2 - active\n3 - stopped\n4 - done(Only if all the frames are done )\n5 - autoStopped',
@@ -325,12 +362,13 @@ CREATE TABLE `tasks` (
   `resolution` varchar(45) NOT NULL DEFAULT 'default',
   `autoClean` int(1) NOT NULL DEFAULT '0',
   `fastAssign` int(1) NOT NULL DEFAULT '0' COMMENT 'keep this task for assignment first regardless of the priority.\n0 - disable\n1 - enable\n',
+  `afterTaskSloppy` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`projId`),
   KEY `fk_tasks_1` (`projId`),
   KEY `fk_tasks_2` (`fileType`),
   CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1252 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
+) ENGINE=InnoDB AUTO_INCREMENT=1694 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -358,4 +396,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-12  7:30:55
+-- Dump completed on 2013-12-24 11:12:03

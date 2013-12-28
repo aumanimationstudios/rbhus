@@ -495,8 +495,7 @@ class dbRbhus:
   def resetFailedFrames(self,taskId):
     try:  
       self.execute("UPDATE frames SET status="+ str(constants.framesUnassigned) +" WHERE id="+ str(taskId) +" \
-                      AND (status="+ str(constants.framesFailed) +" \
-                      OR status="+ str(constants.framesKilled) +")")
+                      AND (status="+ str(constants.framesFailed) +")")
     except:
       modLogger.error(str(sys.exc_info()))
       return(0)

@@ -380,12 +380,13 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     indx = 0
     setIndx = 0
     try:
-      for x in renders[str(self.comboType.currentText())]:
-        self.comboRenderer.addItem(_fromUtf8(x))
-        if(x.endswith(str(self.taskDValues['renderer']))):
-          setIndx = indx
-        indx = indx + 1
-      self.comboRenderer.setCurrentIndex(setIndx)
+      for x in renders:
+        if(x['fileType'] == str(self.comboType.currentText())):
+          self.comboRenderer.addItem(_fromUtf8(x['renderer']))
+          if(x.endswith(str(self.taskDValues['renderer']))):
+            setIndx = indx
+          indx = indx + 1
+        self.comboRenderer.setCurrentIndex(setIndx)
       return(1)
     except:
       return(0)

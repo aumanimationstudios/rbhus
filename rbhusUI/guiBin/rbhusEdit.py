@@ -38,14 +38,20 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
   def setupUi(self, Form):
     
-    self.task = rUtils.tasks(tId = sys.argv[1].rstrip().lstrip())
-    self.taskValues = self.task.taskDetails
-    
+        
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     rbhusEditMod.Ui_rbhusEdit.setupUi(self,Form)
+    
+    self.task = rUtils.tasks(tId = sys.argv[1].rstrip().lstrip())
+    self.taskValues = self.task.taskDetails
+    self.renders = rUtils.getRenderers()
+    self.imageTypes = rUtils.getImageTypes()
+
+    
+    
     self.popEditItems()
     
     self.pushFileName.clicked.connect(self.selectFileName)
@@ -64,6 +70,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.comboBatching.currentIndexChanged.connect(self.batchStatus)
     self.comboOsType.currentIndexChanged.connect(self.osTypesPrint)
     self.comboType.currentIndexChanged.connect(self.fileTypePrint)
+    self.comboImageType.currentIndexChanged.connect(self.imageTypePrint)
     self.comboRenderer.currentIndexChanged.connect(self.rendererPrint)
     self.pushApply.clicked.connect(self.applyNew)
     self.pushCancel.clicked.connect(self.popEditItems)
@@ -169,7 +176,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def reset_afterTask(self):
     self.db_afterTask = 1
     
-    
+  def reset_imageType(self):
+    self.db_imageType = 1
+  
   def applyNew(self):
     editDict = {}
     if(self.db_filetype):
@@ -229,6 +238,8 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       editDict['afterTasks'] = str(self.lineEditAfterTask.text())
     if(self.db_afterTaskSloppy):
       editDict['afterTaskSloppy'] = 1 & self.checkSloppy.isChecked()
+    if(self.db_imageType):
+      editDict['imageType'] = str(self.comboImageType.currentText())
       
     print(str(editDict))
     try:
@@ -257,9 +268,14 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     print(self.comboRenderer.currentText())
     self.db_renderer = 1
   
+  def imageTypePrint(self):
+    print(self.comboImageType.currentText())
+    self.db_imageType = 1
+  
   def fileTypePrint(self):
     print(self.comboType.currentText())
     self.setRenderer()
+    self.setImageType()
     self.db_filetype = 1
     
   def batchStatus(self):
@@ -287,7 +303,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       self.lineEditLayer.setText(self.taskValues['layer'])
       self.lineEditResolution.setText(self.taskValues['resolution'])
       self.lineEditBfc.setText(self.taskValues['beforeFrameCmd'])
-      self.lineEditImageType.setText(self.taskValues['imageType'])
+      #self.lineEditImageType.setText(self.taskValues['imageType'])
       self.spinRerunThresh.setValue(self.taskValues['rerunThresh'])
       self.spinMinBatch.setValue(self.taskValues['minBatch'])
       self.spinMaxBatch.setValue(self.taskValues['maxBatch'])
@@ -311,6 +327,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       self.setHostGroups()
       self.setOsTypes()
       #self.setRenderer()
+      self.setImageType()
       self.reset_variables()
       return(1)
     else:
@@ -418,20 +435,49 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       
       
   def setRenderer(self):
-    renders = rUtils.getRenderers()
     self.comboRenderer.clear()
     indx = 0
     setIndx = 0
     try:
-      for x in renders[str(self.comboType.currentText())]:
-        self.comboRenderer.addItem(_fromUtf8(x))
-        if(x.endswith(str(self.taskValues['renderer']))):
-          setIndx = indx
-        indx = indx + 1
+      for x in self.renders:
+        if(x['fileType'] == str(self.comboType.currentText())):
+          self.comboRenderer.addItem(_fromUtf8(x['renderer']))
+          if(x['renderer'] == str(self.taskValues['renderer'])):
+            setIndx = indx
+          indx = indx + 1
       self.comboRenderer.setCurrentIndex(setIndx)
       return(1)
     except:
       return(0)
+    
+  
+  def setImageType(self):
+    self.comboImageType.clear()
+    indx = 0
+    setIndx = 0
+    try:
+      for x in self.imageTypes:
+        if(x['fileType'] == str(self.comboType.currentText())):
+          self.comboImageType.addItem(_fromUtf8(x['imageType']))
+          if(x['imageType'] == str(self.taskValues['imageType'])):
+            setIndx = indx
+          indx = indx + 1
+      self.comboImageType.setCurrentIndex(setIndx)
+      return(1)
+    except:
+      return(0)
+  
+  
+  
+      #for x in renders[str(self.comboType.currentText())]:
+        #self.comboRenderer.addItem(_fromUtf8(x))
+        #if(x.endswith(str(self.taskValues['renderer']))):
+          #setIndx = indx
+        #indx = indx + 1
+      #self.comboRenderer.setCurrentIndex(setIndx)
+      #return(1)
+    #except:
+      #return(0)
       
     #rows = rUtils.getRenderers()
     #self.comboRenderer.clear()  

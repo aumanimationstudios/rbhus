@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.1.70, for pc-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
 --
 -- Host: blues2    Database: rbhusPipe
 -- ------------------------------------------------------
@@ -25,17 +25,23 @@ DROP TABLE IF EXISTS `admins`;
 CREATE TABLE `admins` (
   `user` varchar(128) NOT NULL DEFAULT 'shrinidhi',
   PRIMARY KEY (`user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `admins`
+-- Table structure for table `assetTypes`
 --
 
-LOCK TABLES `admins` WRITE;
-/*!40000 ALTER TABLE `admins` DISABLE KEYS */;
-/*!40000 ALTER TABLE `admins` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `assetTypes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `assetTypes` (
+  `type` varchar(45) NOT NULL,
+  `validStageTypes` varchar(1024) NOT NULL DEFAULT 'default',
+  `path` varchar(1024) NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `assets`
@@ -45,24 +51,46 @@ DROP TABLE IF EXISTS `assets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `assets` (
-  `id` int(128) NOT NULL AUTO_INCREMENT,
-  `path` varchar(4096) NOT NULL,
-  `sceneName` varchar(45) DEFAULT NULL,
-  `sequenceName` varchar(45) DEFAULT NULL,
-  `stageName` varchar(45) DEFAULT NULL,
-  `nodeName` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `assetId` varchar(64) NOT NULL,
+  `assName` varchar(45) NOT NULL,
+  `projName` varchar(128) NOT NULL,
+  `sequenceName` varchar(128) NOT NULL DEFAULT 'default',
+  `sceneName` varchar(128) NOT NULL DEFAULT 'default',
+  `stageType` varchar(45) NOT NULL DEFAULT 'default',
+  `nodeType` varchar(45) NOT NULL DEFAULT 'main',
+  `fileType` varchar(45) NOT NULL,
+  `directory` varchar(128) NOT NULL DEFAULT 'default',
+  `assetType` varchar(45) NOT NULL DEFAULT 'default',
+  `workers` varchar(4096) NOT NULL DEFAULT 'default',
+  `assignedWorker` varchar(45) NOT NULL DEFAULT 'default',
+  `versioning` int(1) NOT NULL DEFAULT '1' COMMENT '1 - enabled , 0 - disabled',
+  `pVersion` int(11) NOT NULL DEFAULT '0',
+  `importedAsses` longtext NOT NULL COMMENT 'better to store import data in a file in the respected path',
+  `createDate` datetime NOT NULL COMMENT 'create date',
+  `dueDate` datetime NOT NULL,
+  `publishVersion` int(11) DEFAULT NULL,
+  `publishPath` varchar(4096) DEFAULT NULL,
+  `description` varchar(1024) DEFAULT 'default',
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive, 1 - active',
+  `timeWorked` int(64) NOT NULL DEFAULT '0',
+  `groups` varchar(1024) NOT NULL DEFAULT 'default',
+  `locations` varchar(45) NOT NULL DEFAULT 'default',
+  `path` varchar(4096) NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`assetId`),
+  KEY `fk_assets_1_idx` (`projName`),
+  KEY `fk_assets_4_idx` (`fileType`),
+  KEY `fk_assets_5_idx` (`stageType`),
+  KEY `fk_assets_6_idx` (`nodeType`),
+  KEY `fk_assets_1_idx1` (`sequenceName`,`sceneName`),
+  KEY `fk_assets_1_idx2` (`directory`),
+  KEY `fk_assets_2_idx` (`assetType`),
+  CONSTRAINT `fk_assets_1` FOREIGN KEY (`directory`) REFERENCES `dirMaps` (`directory`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `fk_assets_2` FOREIGN KEY (`assetType`) REFERENCES `assetTypes` (`type`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `fk_assets_4` FOREIGN KEY (`fileType`) REFERENCES `fileTypes` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_assets_5` FOREIGN KEY (`stageType`) REFERENCES `stageTypes` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_assets_6` FOREIGN KEY (`nodeType`) REFERENCES `nodeTypes` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `assets`
---
-
-LOCK TABLES `assets` WRITE;
-/*!40000 ALTER TABLE `assets` DISABLE KEYS */;
-/*!40000 ALTER TABLE `assets` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `dirMaps`
@@ -81,49 +109,24 @@ CREATE TABLE `dirMaps` (
   `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive\n1 - active\n',
   `server` varchar(128) NOT NULL DEFAULT 'stor1',
   `nfsMountDir` varchar(128) NOT NULL DEFAULT 'default' COMMENT 'used to nfs mount the main dir during project setup .\n',
+  `nfsServDir` varchar(128) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`directory`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='all mounts are mounted by the system (OS)';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `dirMaps`
+-- Table structure for table `fileTypes`
 --
 
-LOCK TABLES `dirMaps` WRITE;
-/*!40000 ALTER TABLE `dirMaps` DISABLE KEYS */;
-INSERT INTO `dirMaps` VALUES ('stor1','/proj/','x:','','','',1,'stor1','default');
-/*!40000 ALTER TABLE `dirMaps` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `node`
---
-
-DROP TABLE IF EXISTS `node`;
+DROP TABLE IF EXISTS `fileTypes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `node` (
-  `name` varchar(45) NOT NULL,
-  `projId` int(11) NOT NULL,
-  `workers` varchar(8192) NOT NULL DEFAULT 'default',
-  `stage` varchar(128) NOT NULL,
-  `description` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`name`,`projId`,`stage`),
-  KEY `fk_node_1_idx` (`projId`),
-  KEY `fk_node_2_idx` (`stage`),
-  CONSTRAINT `fk_node_2` FOREIGN KEY (`stage`) REFERENCES `stageTypes` (`type`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_node_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`projId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='the directory should always be "type.name"';
+CREATE TABLE `fileTypes` (
+  `type` varchar(45) NOT NULL,
+  `scriptDir` varchar(45) NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `node`
---
-
-LOCK TABLES `node` WRITE;
-/*!40000 ALTER TABLE `node` DISABLE KEYS */;
-/*!40000 ALTER TABLE `node` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `nodeTypes`
@@ -133,20 +136,11 @@ DROP TABLE IF EXISTS `nodeTypes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `nodeTypes` (
-  `type` varchar(45) NOT NULL,
+  `type` varchar(45) NOT NULL DEFAULT 'default',
+  `scriptDir` varchar(4096) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `nodeTypes`
---
-
-LOCK TABLES `nodeTypes` WRITE;
-/*!40000 ALTER TABLE `nodeTypes` DISABLE KEYS */;
-INSERT INTO `nodeTypes` VALUES ('post'),('pre'),('prod');
-/*!40000 ALTER TABLE `nodeTypes` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `proj`
@@ -156,34 +150,27 @@ DROP TABLE IF EXISTS `proj`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `proj` (
-  `projId` int(11) NOT NULL AUTO_INCREMENT,
   `projName` varchar(128) NOT NULL DEFAULT 'default',
-  `directory` varchar(128) NOT NULL DEFAULT 'proj',
-  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive\n1 - active\n2 - initStart\n3 - initPending\ninitStart -> initPending -> active\n',
+  `directory` varchar(128) NOT NULL DEFAULT 'proj' COMMENT 'main directory from the dirMaps . ',
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - initStart\n1 - initPending\n2 - active\n3 - deactive\n\ninitStart -> initPending -> active\n',
   `admins` varchar(4096) NOT NULL DEFAULT 'shrinidhi' COMMENT 'list of space separated admin usernames\n',
-  `os` varchar(45) NOT NULL DEFAULT 'linux' COMMENT 'linux, win or mac',
-  `type` varchar(45) NOT NULL,
-  `rbhusRenderIntergration` int(1) NOT NULL DEFAULT '1',
+  `projType` varchar(45) NOT NULL,
+  `rbhusRenderIntegration` int(1) NOT NULL DEFAULT '1',
   `rbhusRenderServer` varchar(45) NOT NULL DEFAULT 'rbhusServer',
   `description` varchar(4096) NOT NULL DEFAULT 'wtf project',
-  PRIMARY KEY (`projId`),
-  UNIQUE KEY `proj_name_UNIQUE` (`projName`),
-  KEY `fk_proj_1_idx` (`type`),
+  `location` varchar(45) NOT NULL DEFAULT 'default',
+  `aclUser` varchar(45) NOT NULL DEFAULT 'kryptos',
+  `aclGroup` varchar(45) NOT NULL DEFAULT 'artist',
+  `createdUser` varchar(45) NOT NULL DEFAULT 'default' COMMENT 'user who created the project',
+  `dueDate` datetime NOT NULL,
+  `createDate` datetime NOT NULL,
+  PRIMARY KEY (`projName`),
+  KEY `fk_proj_1_idx` (`projType`),
   KEY `fk_proj_2_idx` (`directory`),
-  CONSTRAINT `fk_proj_1` FOREIGN KEY (`type`) REFERENCES `projTypes` (`type`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_proj_1` FOREIGN KEY (`projType`) REFERENCES `projTypes` (`type`) ON UPDATE CASCADE,
   CONSTRAINT `fk_proj_2` FOREIGN KEY (`directory`) REFERENCES `dirMaps` (`directory`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `proj`
---
-
-LOCK TABLES `proj` WRITE;
-/*!40000 ALTER TABLE `proj` DISABLE KEYS */;
-INSERT INTO `proj` VALUES (1,'pipeTest','stor1',1,'shrinidhi','linux','architecture',1,'rbhusServer','wtf project');
-/*!40000 ALTER TABLE `proj` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `projTypes`
@@ -193,21 +180,64 @@ DROP TABLE IF EXISTS `projTypes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `projTypes` (
-  `type` varchar(45) NOT NULL DEFAULT 'default',
-  `createScript` varchar(4096) NOT NULL DEFAULT 'default' COMMENT 'this script SHOULD take an argument for the directory of the project through --directory option . use argparse module in python',
+  `type` varchar(45) NOT NULL,
+  `scriptDir` varchar(4096) NOT NULL DEFAULT 'default' COMMENT 'this script SHOULD take arugments from environment variables',
+  `libDir` varchar(1024) NOT NULL DEFAULT 'default',
+  `shareDir` varchar(1024) NOT NULL DEFAULT 'default',
+  `outDir` varchar(1024) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `projTypes`
+-- Table structure for table `scene`
 --
 
-LOCK TABLES `projTypes` WRITE;
-/*!40000 ALTER TABLE `projTypes` DISABLE KEYS */;
-INSERT INTO `projTypes` VALUES ('architecture','/home/shrinidhi/bin/gitHub/pipeline/lib/dirpimp.py');
-/*!40000 ALTER TABLE `projTypes` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `scene`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `scene` (
+  `projName` varchar(128) NOT NULL,
+  `sequenceName` varchar(45) NOT NULL,
+  `sceneName` varchar(45) NOT NULL DEFAULT 'default',
+  `admins` varchar(45) DEFAULT NULL,
+  `sFrame` int(11) DEFAULT NULL,
+  `eFrame` int(11) DEFAULT NULL,
+  `description` varchar(1024) DEFAULT NULL,
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive, 1 - active, 2 - onhold ',
+  `createDate` datetime NOT NULL,
+  `dueDate` datetime NOT NULL,
+  `createdUser` varchar(45) NOT NULL,
+  PRIMARY KEY (`projName`,`sceneName`,`sequenceName`),
+  KEY `fk_scene_1_idx` (`projName`),
+  KEY `fk_scene_2_idx` (`sequenceName`),
+  CONSTRAINT `fk_scene_1` FOREIGN KEY (`projName`) REFERENCES `proj` (`projName`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sequenceScene`
+--
+
+DROP TABLE IF EXISTS `sequenceScene`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sequenceScene` (
+  `projName` varchar(128) NOT NULL,
+  `sequenceName` varchar(45) NOT NULL DEFAULT 'default',
+  `sceneName` varchar(45) NOT NULL DEFAULT 'default',
+  `admins` varchar(4096) NOT NULL DEFAULT 'shrinidhi',
+  `sFrame` int(11) DEFAULT NULL,
+  `eFrame` int(11) DEFAULT NULL,
+  `description` varchar(1024) DEFAULT NULL,
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive, 1 - active, 2 - onhold ',
+  `createDate` datetime NOT NULL,
+  `dueDate` datetime NOT NULL,
+  `createdUser` varchar(45) NOT NULL,
+  PRIMARY KEY (`projName`,`sequenceName`,`sceneName`),
+  KEY `fk_sequence_1_idx` (`projName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `stageTypes`
@@ -217,20 +247,13 @@ DROP TABLE IF EXISTS `stageTypes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stageTypes` (
-  `type` varchar(128) NOT NULL,
+  `type` varchar(45) NOT NULL,
+  `scriptDir` varchar(4096) NOT NULL DEFAULT 'default',
+  `admins` varchar(8192) NOT NULL DEFAULT 'shrinidhi',
+  `validNodeTypes` varchar(1024) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='define the main stages in production (general table)';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `stageTypes`
---
-
-LOCK TABLES `stageTypes` WRITE;
-/*!40000 ALTER TABLE `stageTypes` DISABLE KEYS */;
-INSERT INTO `stageTypes` VALUES ('anim'),('cmp'),('light'),('lookdev'),('model'),('paint'),('prelight'),('rig');
-/*!40000 ALTER TABLE `stageTypes` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `stages`
@@ -241,31 +264,14 @@ DROP TABLE IF EXISTS `stages`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stages` (
   `projId` int(11) NOT NULL,
-  `type` varchar(128) NOT NULL,
-  `name` varchar(128) NOT NULL,
-  `admins` varchar(4096) NOT NULL DEFAULT 'shrinidhi' COMMENT 'space separated usernames of stage admins\n',
-  `timeSpent` int(128) NOT NULL DEFAULT '0',
-  `workers` varchar(8192) NOT NULL DEFAULT 'default' COMMENT 'space separated list of usernames who will be working on this stage for the specific project\n',
-  `status` int(1) NOT NULL DEFAULT '1',
-  `os` varchar(45) NOT NULL DEFAULT 'linux' COMMENT 'win, linux or mac',
-  `path` varchar(2048) NOT NULL,
-  `description` varchar(4096) NOT NULL DEFAULT 'wtf stage',
-  PRIMARY KEY (`projId`,`type`,`name`),
-  KEY `fk_stages_1_idx` (`projId`),
-  KEY `fk_stages_2_idx` (`type`),
-  CONSTRAINT `fk_stages_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`projId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_stages_2` FOREIGN KEY (`type`) REFERENCES `stageTypes` (`type`) ON UPDATE CASCADE
+  `type` varchar(45) NOT NULL,
+  `admins` varchar(4096) NOT NULL DEFAULT 'shrinidhi',
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive , 1 - active',
+  PRIMARY KEY (`projId`,`type`),
+  KEY `fk_stages_1_idx` (`type`),
+  CONSTRAINT `fk_stages_1` FOREIGN KEY (`type`) REFERENCES `stageTypes` (`type`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `stages`
---
-
-LOCK TABLES `stages` WRITE;
-/*!40000 ALTER TABLE `stages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stages` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -276,4 +282,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-18  6:55:12
+-- Dump completed on 2013-12-24 11:12:20
