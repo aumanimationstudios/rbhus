@@ -19,7 +19,8 @@ hostname,ipAddr = rUtils.getLocalNameIP()
 
 if(sys.platform.find("linux") >=0):
   LOG_FILENAME = logging.FileHandler('/var/log/rbhusClientCtrl.log')
-  rbhusMainDir = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/"
+  #rbhusMainDir = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/"
+  rbhusMainDir = "/opt/rbhus/"
 elif(sys.platform.find("win") >=0):
   LOG_FILENAME = logging.FileHandler(tempDir + os.sep + "rbhusClientCtrl.log")
   rbhusMainDir = "z:/pythonTestWindoze.DONOTDELETE/rbhus/"
@@ -106,7 +107,12 @@ def atUrService():
               clientSocket.send("CLIENTKILLFAILED")
               pass
       
-      
+    if(msg == "UPDATE"):
+      if(sys.platform.find("linux") >= 0):
+        try:
+          os.system("cd /opt/rbhus/ ; git pull")
+        except:
+          logClient.debug(msg)
       
       
     if(msg == "RESTARTSYS"):
