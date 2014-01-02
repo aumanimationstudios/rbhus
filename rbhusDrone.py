@@ -1100,6 +1100,7 @@ def setFramesVmSize(frameInfo,vmSize,dbconn):
                     WHERE frameId="+ str(frameInfo['frameId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
+    logClient.debug(str(sys.exc_info()))
     return(0)
   return(1)
 
@@ -1110,6 +1111,7 @@ def setCpuEffeciency(frameInfo,cpuEff,dbconn):
                     WHERE frameId="+ str(frameInfo['frameId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
+    logClient.debug(str(sys.exc_info()))
     return(0)
   return(1)
 
