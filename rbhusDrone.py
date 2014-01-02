@@ -50,9 +50,15 @@ pidOnlyFile = tempDir + os.sep +"rbhusDroneMain.pid"
 db_conn = dbRbhus.dbRbhus()
 
 if(sys.platform.find("win") >= 0):
-  username = os.environ['USERNAME']
+  try:
+    username = os.environ['USERNAME']
+  except:
+    username = "nobody"
 if(sys.platform.find("linux") >= 0):
-  username = os.environ['USER']
+  try:
+    username = os.environ['USER']
+  except:
+    username = "nobody"
 
 LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusClient_"+ username +"_"+ str(hostname) +".log")
 
