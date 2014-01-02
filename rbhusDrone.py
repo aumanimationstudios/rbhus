@@ -1106,7 +1106,7 @@ def setFramesVmSize(frameInfo,vmSize,dbconn):
 
 def setCpuEffeciency(frameInfo,cpuEff,dbconn):
   try:
-    dbconn.execute("UPDATE frames SET effciency="+ str(cpuEff) +" \
+    dbconn.execute("UPDATE frames SET efficiency="+ str(cpuEff) +" \
                     WHERE frameId="+ str(frameInfo['frameId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
