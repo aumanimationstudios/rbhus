@@ -61,7 +61,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     Form.setWindowIcon(icon)
     self.authL = auth.login()
     self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","afterTaskSloppy","priority","submitTime","doneTime","afterTime","status","batch","description","fastAssign"]
-    self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status","fThreads"]
+    self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status","fThreads","efficiency"]
     self.colNamesFramesXtra = ["timeTaken"]
     self.colNamesTaskXtra = ["pending"]
     #self.checkTMine.setChecked(2)
