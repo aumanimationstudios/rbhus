@@ -1023,11 +1023,16 @@ def snoopFrames(fDets):
 
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
+    cpuEmax = 100 * frameInfo['fThreads']
+  elif(sys.platform.find("win") >= 0):
+    cpuEmax = 100
 
   maxMemUsed = 0
+  cpuE = 0
   logClient.debug(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
   try:
     while(1):
+      count = 1
       lastKids = []
       vmSize = 0
       getProcessLastKids(ProcessPid,lastKids)
@@ -1040,7 +1045,11 @@ def snoopFrames(fDets):
       else:
         break
       cpuEff = getCPUeffeciency(ProcessPid)
-      setCpuEffeciency(frameInfo,cpuEff,db_conn)
+      if(cpuEff):
+        cpuE = cpuE + cpuEff
+      cpuEE = cpuE/count
+      cpuEEE = (100*cpuEE)/cpuEmax
+      setCpuEffeciency(frameInfo,cpuEEE,db_conn)
       time.sleep(1)
     while(1):
       if(setFramesVmSize(frameInfo,maxMemUsed,db_conn) == 1):
