@@ -1050,6 +1050,7 @@ def snoopFrames(fDets):
       cpuEE = cpuE/count
       cpuEEE = (100*cpuEE)/cpuEmax
       setCpuEffeciency(frameInfo,cpuEEE,db_conn)
+      count = count + 1
       time.sleep(1)
     while(1):
       if(setFramesVmSize(frameInfo,maxMemUsed,db_conn) == 1):
