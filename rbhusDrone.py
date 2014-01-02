@@ -126,11 +126,12 @@ def getallkids(mpid,leafPids,branchPids):
 def clientQuit(ppid):
   lkids = []
   pparents = []
+  getallkids(ppid,lkids,pparents)
   try:
     pparents.remove(ppid)
   except:
     pass
-  getallkids(ppid,lkids,pparents)
+  
   if(lkids):
     for x in lkids:
       try:
@@ -1038,15 +1039,36 @@ def snoopFrames(fDets):
           maxMemUsed = vmSize
       else:
         break
-      time.sleep(5)
+      cpuEff = getCPUeffeciency(ProcessPid)
+      setCpuEffeciency(frameInfo,cpuEff,db_conn)
+      time.sleep(1)
     while(1):
-      if(setFramesVmSize(frameInfo,maxMemUsed, db_conn) == 1):
+      if(setFramesVmSize(frameInfo,maxMemUsed,db_conn) == 1):
         break
       time.sleep(1)
   except:
     logClient.debug(str(sys.exc_info()))
   sys.exit(0)
 
+
+def getCPUeffeciency(pid):
+  leafs = []
+  everythingelse = []
+  getallkids(pid,leafs,everythingelse)
+  cpu_percent = 0
+  if(leafs):
+    for x in leafs:
+      try:
+        p = psutil.Process(x)
+        cpu_percent = cpu_percent + int(p.get_cpu_percent(interval=1))
+      except:
+        logClient.debug(str(sys.exc_info()))
+        pass
+  return(cpu_percent)
+    
+    
+  
+  
 
 def getProcessVmSize(pid):
   vmSizeRet = 0
@@ -1063,7 +1085,7 @@ def getProcessVmSize(pid):
   return(vmSizeRet)
 
 
-def setFramesVmSize(frameInfo,vmSize, dbconn):
+def setFramesVmSize(frameInfo,vmSize,dbconn):
   try:
     dbconn.execute("UPDATE frames SET ram="+ str(vmSize) +" \
                     WHERE frameId="+ str(frameInfo['frameId']) +" \
@@ -1071,6 +1093,17 @@ def setFramesVmSize(frameInfo,vmSize, dbconn):
   except:
     return(0)
   return(1)
+
+
+def setCpuEffeciency(frameInfo,cpuEff,dbconn):
+  try:
+    dbconn.execute("UPDATE frames SET effciency="+ str(cpuEff) +" \
+                    WHERE frameId="+ str(frameInfo['frameId']) +" \
+                    AND id="+ str(frameInfo['id']))
+  except:
+    return(0)
+  return(1)
+
 
 
 def setFramesStime(frameInfo, dbconn):
