@@ -1029,10 +1029,11 @@ def snoopFrames(fDets):
 
   maxMemUsed = 0
   cpuE = 0
+  count = 1
   logClient.debug(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
   try:
     while(1):
-      count = 1
+      
       lastKids = []
       vmSize = 0
       getProcessLastKids(ProcessPid,lastKids)
