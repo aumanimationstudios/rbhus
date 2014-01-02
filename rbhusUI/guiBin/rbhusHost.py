@@ -90,6 +90,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test1Action = menu.addAction("edit")
     test5Action = menu.addAction("restart Rbhus")
     test6Action = menu.addAction("kill Rbhus")
+    test9Action = menu.addAction("update Rbhus")
     test7Action = menu.addAction("restart")
     test8Action = menu.addAction("shutdown")
     
@@ -114,6 +115,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       self.hostClientKill()
     if(action == test7Action):
       self.hostRestart()
+    if(action == test9Action):
+      self.hostUpdate()
     #if(action == test6Action):
       #self.hostClientKill()
       
@@ -175,7 +178,14 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.popTableHost()
     return(1)
       
-      
+  
+  def hostUpdate(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.updateClient()
+    self.popTableHost()
+    return(1)    
           
           
   def hostLocalStop(self):

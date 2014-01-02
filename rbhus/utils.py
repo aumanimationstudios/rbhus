@@ -273,6 +273,7 @@ class hosts(object):
     else:
       print("Only local hosts can be enabled without admin rights!")
       return(0)
+    
       
   def hDisable(self):
     if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
@@ -375,6 +376,21 @@ class hosts(object):
         except:
           pass
       
+  
+  def updateClient(self):
+    if(self.userAdmin):
+      clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      try:
+        clientSocket.settimeout(15)
+        clientSocket.connect((self.hostDetails['ip'],6661))
+        clientSocket.send("UPDATE")
+        clientSocket.close()
+      except:
+        print("cannot connect : "+ self.hostDetails['hostName'] +" : "+ str(sys.exc_info()))
+        try:
+          clientSocket.close()
+        except:
+          pass
   
   
   def restartSys(self):
