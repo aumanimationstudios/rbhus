@@ -1072,7 +1072,7 @@ def getCPUeffeciency(pid):
     for x in leafs:
       try:
         p = psutil.Process(x)
-        cpu_percent = cpu_percent + int(p.get_cpu_percent(interval=1))
+        cpu_percent = cpu_percent + int(p.get_cpu_percent(interval=2))
       except:
         logClient.debug(str(sys.exc_info()))
         pass
