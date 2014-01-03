@@ -1057,7 +1057,7 @@ def snoopFrames(fDets):
     while(1):
       if(setFramesVmSize(frameInfo,maxMemUsed,db_conn) == 1):
         break
-      time.sleep(1)
+      time.sleep(2)
   except:
     logClient.debug(str(sys.exc_info()))
   sys.exit(0)
