@@ -1235,7 +1235,13 @@ def atUrService():
       killFrame(db_conn,taskId,frameId,0,constants.framesKilled)
       #washMyButt(taskId,frameId)
       #delFramePidFile(0,taskId,frameId)
-      
+    elif(msg == "MURDERNHOLD"):
+      try:
+        taskId, frameId = value.split("%")
+      except:
+        continue
+      frameInfos = getFrameInfo(taskId, frameId, db_conn)
+      killFrame(db_conn,taskId,frameId,0,constants.framesHold)
     
     elif(msg == "DELETE"):
       if(os.path.isfile(value)):

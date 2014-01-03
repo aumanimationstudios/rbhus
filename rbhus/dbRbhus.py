@@ -489,7 +489,27 @@ class dbRbhus:
         clientSocket.close()
         return(1)
     return(0)  
-    
+  
+  
+  
+  def stopHoldFrames(self,hostIp, tId, fId):
+    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tryCount = 5 
+    while(tryCount):
+      time.sleep(1)
+      try:
+        clientSocket.connect((str(hostIp),6660))
+        clientSocket.settimeout(2)
+        clientSocket.send("MURDERNHOLD:"+ str(tId).lstrip("0") +"%"+ str(fId).lstrip("0"))
+        clientSocket.close()
+        break
+      except:
+        print(str(sys.exc_info()))
+        tryCount = tryCount - 1
+        clientSocket.close()
+        return(1)
+    return(0)  
+  
   # Get the total number of unassigned frames  
   def getTotalUnAsFrames(self):
     try:

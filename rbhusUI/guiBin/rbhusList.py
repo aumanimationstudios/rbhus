@@ -207,10 +207,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     menu = QtGui.QMenu()
     db_conn = dbRbhus.dbRbhus()
     test1Action = menu.addAction("check log")
-    test2Action = menu.addAction("stop/kill")
     test3Action = menu.addAction("hold")
     test4Action = menu.addAction("rerun")
     test5Action = menu.addAction("check frame")
+    test2Action = menu.addAction("kill")
+    test6Action = menu.addAction("kill/hold")
     
     action = menu.exec_(self.tableFrames.mapToGlobal(pos))
     if(action == test1Action):
@@ -230,7 +231,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.rerunFrame()
     if(action == test5Action):
       self.previewFrame()
-      
+    if(action == test6Action):
+      self.killHoldFrame()
   
   def stopFrame(self):
     selFramesDict = self.selectedFrames()
@@ -244,6 +246,17 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
     self.popTableFrames()
         
+  def killHoldFrame(self):
+    selFramesDict = self.selectedFrames()
+    selFrames = {}
+    db_conn = dbRbhus.dbRbhus()
+    for x in selFramesDict:
+      if(x['status'] == "running"):
+        print self.getHostIp(x['hostName'])
+        db_conn.stopHoldFrames(str(self.getHostIp(x['hostName'])),x['id'],x['frameId'])
+      else:
+        print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
+    self.popTableFrames()
   
   def rerunFrame(self):
     selFramesDict = self.selectedFrames()
