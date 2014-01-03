@@ -723,21 +723,22 @@ def rbhusLog(lframeInfo):
     sha256 = hashlib.sha256(lframeInfo['fileName'])
     try:
       dbconnLog.execute("insert into tasksLog \
-                         (sha256,projId,fileName,date,timeSpentOnResource,ip) \
+                         (sha256,projId,avgEfficiency,fileName,date,timeSpentOnResource,ip) \
                          values ('"+ str(sha256.hexdigest()) +"',"+ \
-                         str(lframeInfo['projId']) +",'"+ \
+                         str(lframeInfo['projId']) +","+ \
+                         str(lframeInfo['efficiency']) +",'"+ \
                          str(lframeInfo['fileName']).lstrip().rstrip() +"',date(now()),"+ \
                          str(tDelta) +",'"+ str(ipAddr) +"') \
                          on duplicate key \
-                         update timeSpentOnResource=timeSpentOnResource+"+ str(tDelta))
+                         update timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +",avgEfficiency=(avgEfficiency+"+ str(lframeInfo['efficiency']) +")/2")
     except:
       logClient.debug("1 : "+ str(sys.exc_info()))
     try:
       dbconnLog.execute("insert into hostLog \
-                           (ip,timeOnRender,date) \
-                           values ('"+ str(ipAddr) +"',"+ str(tDelta) +",date(now())) \
+                           (ip,timeOnRender,date,avgEfficiency) \
+                           values ('"+ str(ipAddr) +"',"+ str(tDelta) +",date(now()),"+ str(lframeInfo['efficiency']) +") \
                            on duplicate key update \
-                           timeOnRender=timeOnRender+"+ str(tDelta) +",totalJobs=totalJobs+1")
+                           timeOnRender=timeOnRender+"+ str(tDelta) +",totalJobs=totalJobs+1,avgEfficiency=(avgEfficiency+"+ str(lframeInfo['efficiency']) +")/2")
     except:
       logClient.debug("2 : "+ str(sys.exc_info()))
     return(1)
