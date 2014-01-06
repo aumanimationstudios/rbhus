@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Mon Dec 16 21:20:23 2013
-#      by: PyQt4 UI code generator 4.10.3
+# Created: Sun Jan  5 21:21:17 2014
+#      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -27,7 +27,7 @@ class Ui_mainRbhusList(object):
   def setupUi(self, mainRbhusList):
     mainRbhusList.setObjectName(_fromUtf8("mainRbhusList"))
     mainRbhusList.setWindowModality(QtCore.Qt.WindowModal)
-    mainRbhusList.resize(1096, 708)
+    mainRbhusList.resize(1116, 708)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -235,6 +235,9 @@ class Ui_mainRbhusList(object):
     self.tableList.setFrameShadow(QtGui.QFrame.Raised)
     self.tableList.setAutoScrollMargin(16)
     self.tableList.setEditTriggers(QtGui.QAbstractItemView.DoubleClicked)
+    self.tableList.setDragEnabled(False)
+    self.tableList.setDragDropMode(QtGui.QAbstractItemView.NoDragDrop)
+    self.tableList.setDefaultDropAction(QtCore.Qt.IgnoreAction)
     self.tableList.setAlternatingRowColors(False)
     self.tableList.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableList.setVerticalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)

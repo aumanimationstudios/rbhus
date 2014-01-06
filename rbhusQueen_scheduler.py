@@ -61,6 +61,7 @@ def getBestHost(activeTask):
   freeHosts = getFreeHosts()
   #logging.debug("free host : "+ str(freeHosts))
   #Try to giv to the last host that the task ran
+  print("trying to get a bestHost for "+ str(activeTask['id']))
   for freeHost in freeHosts:
     if(not activeTask['lastHost']):
       activeTask['lastHost'] = ""
@@ -351,7 +352,9 @@ def scheduler():
     if(freeHosts):
       #logging.debug("f2")
       activeTasks = arrangedActiveTasks()
+      print("_______________________________________________________________________________________________")
       if(activeTasks):
+        assigned = 0
         for activeTask in activeTasks:
           taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
           batchFlag = activeTask["batch"]
@@ -362,8 +365,8 @@ def scheduler():
             totalFreeHosts = len(freeHosts)
             totalTaskFrames = len(taskFrames)
             assignedHost = getBestHost(activeTask)
-            
             if(assignedHost):
+              print("got a bestHost for "+ str(activeTask['id']) +" : "+ str(assignedHost['hostName']))
               #Initialize batch id for the frame
               while(1):
                 try:
@@ -398,7 +401,9 @@ def scheduler():
               #assignBatchToHost(assignedHost, activeTask, batchId)  
               assignFramesToHost(assignedHost, activeTask, taskFramesToAssign, batchId)
               logging.debug("batchID : "+ str(batchId) +" : ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(activeTask["id"]) +" : "+ str(taskFramesToAssign))
+              assigned = 1
               break
+            print("no bestHost for "+ str(activeTask['id']))
           else:
             while(1):
               if(db_conn.resetFailedFrames(activeTask["id"])):

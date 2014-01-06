@@ -54,7 +54,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.timer.timeout.connect(self.popTableHost)
     
     self.dbconn = dbRbhus.dbRbhus()
-    self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostEffectiveResource.eCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.freeRam","hostResource.load1","hostInfo.groups"]
+    self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostEffectiveResource.eCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.freeRam","hostResource.load1","hostInfo.groups","hostInfo.weight"]
     self.popTableHost()
     #self.pushDisable.clicked.connect(self.hostDisable)
     #self.pushEnable.clicked.connect(self.hostEnable)

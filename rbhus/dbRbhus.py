@@ -432,11 +432,11 @@ class dbRbhus:
                             hostInfo.groups, \
                             hostInfo.os \
                       FROM hostResource, hostInfo, hostAlive, hostEffectiveResource \
-                      WHERE hostInfo.status = hostAlive.status \
+                      WHERE hostInfo.status=hostAlive.status \
                       AND hostAlive.status="+ str(constants.hostAliveAlive) +" \
-                      AND hostInfo.hostName = hostResource.hostName \
-                      AND hostResource.hostName = hostAlive.hostName \
-                      AND hostAlive.hostName = hostEffectiveResource.hostName \
+                      AND hostInfo.hostName=hostResource.hostName \
+                      AND hostResource.hostName=hostAlive.hostName \
+                      AND hostAlive.hostName=hostEffectiveResource.hostName \
                       ORDER BY hostInfo.weight DESC", dictionary=True)
       if(rows):
         if(not 'eCpus' in rows[0].keys()):

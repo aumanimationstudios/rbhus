@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1096</width>
+    <width>1116</width>
     <height>708</height>
    </rect>
   </property>
@@ -392,6 +392,15 @@
                </property>
                <property name="editTriggers">
                 <set>QAbstractItemView::DoubleClicked</set>
+               </property>
+               <property name="dragEnabled">
+                <bool>false</bool>
+               </property>
+               <property name="dragDropMode">
+                <enum>QAbstractItemView::NoDragDrop</enum>
+               </property>
+               <property name="defaultDropAction">
+                <enum>Qt::IgnoreAction</enum>
                </property>
                <property name="alternatingRowColors">
                 <bool>false</bool>
