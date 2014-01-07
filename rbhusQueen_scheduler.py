@@ -57,8 +57,8 @@ def getFreeHosts():
           freeHosts.append(hostDetails)
   return(freeHosts)
 
-def getBestHost(activeTask):
-  freeHosts = getFreeHosts()
+def getBestHost(activeTask,freeHosts):
+  #freeHosts = getFreeHosts()
   #logging.debug("free host : "+ str(freeHosts))
   #Try to giv to the last host that the task ran
   print("trying to get a bestHost for "+ str(activeTask['id']))
@@ -85,10 +85,19 @@ def getBestHost(activeTask):
           if(activeTask['threads'] == 0):
             if(freeHost['totalCpus'] - freeHost['freeCpus'] == 0):
               #logging.debug("free host : "+ str(freeHost))
+              try:
+                freeHosts.remove(freeHost)
+              except:
+                logging.error("removing freehost "+ str(freeHost['hostName']) +" : "+ str(sys.exc_info()))
               return(freeHost)
+            
           else:
             if((freeHost['freeCpus'] - activeTask['threads']) >= (freeHost['totalCpus'] - freeHost['eCpus'])):
               #logging.debug("free host : "+ str(freeHost))
+              try:
+                freeHosts.remove(freeHost)
+              except:
+                logging.error("removing freehost "+ str(freeHost['hostName']) +" : "+ str(sys.exc_info()))
               return(freeHost)
 
   #If no last host then find a new one :)
@@ -113,10 +122,18 @@ def getBestHost(activeTask):
         if(activeTask['threads'] == 0):
           if(freeHost['totalCpus'] - freeHost['freeCpus'] == 0):
             #logging.debug("free host : "+ str(freeHost))
+            try:
+              freeHosts.remove(freeHost)
+            except:
+              logging.error("removing freehost "+ str(freeHost['hostName']) +" : "+ str(sys.exc_info()))
             return(freeHost)
         else:
           if((freeHost['freeCpus'] - activeTask['threads']) >= (freeHost['totalCpus'] - freeHost['eCpus'])):
             #logging.debug("free host : "+ str(freeHost))
+            try:
+              freeHosts.remove(freeHost)
+            except:
+              logging.error("removing freehost "+ str(freeHost['hostName']) +" : "+ str(sys.exc_info()))
             return(freeHost)
   return(0)
 
@@ -364,7 +381,7 @@ def scheduler():
           if(taskFrames):
             totalFreeHosts = len(freeHosts)
             totalTaskFrames = len(taskFrames)
-            assignedHost = getBestHost(activeTask)
+            assignedHost = getBestHost(activeTask,freeHosts)
             if(assignedHost):
               print("got a bestHost for "+ str(activeTask['id']) +" : "+ str(assignedHost['hostName']))
               #Initialize batch id for the frame
@@ -394,10 +411,9 @@ def scheduler():
               taskFramesToAssign = []
               print("bestBatch : "+ str(bestBatch) +" : "+ str(assignedHost['hostName']) +" : "+ str(assignedHost['totalCpus']) +" : "+ str(activeTask['id']))
               for bB in range(0,bestBatch):
-                print("insert into batch id : " + str(batchId) +" : "+ str(taskFrames[bB]['frameId']))
+                print("batch id : " + str(batchId) +" : "+ str(taskFrames[bB]['frameId']))
                 insertFramesInToBatchId(batchId,taskFrames[bB]['frameId'])
                 taskFramesToAssign.append(taskFrames[bB]['frameId'])
-              logging.debug("f2") 
               #assignBatchToHost(assignedHost, activeTask, batchId)  
               assignFramesToHost(assignedHost, activeTask, taskFramesToAssign, batchId)
               logging.debug("batchID : "+ str(batchId) +" : ASSIGNED to "+ assignedHost["hostName"] +" : "+ str(activeTask["id"]) +" : "+ str(taskFramesToAssign))

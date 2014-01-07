@@ -159,7 +159,7 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     p.setStandardOutputFile(tempDir + os.sep +"rbhusHost_"+ self.username +".log")
     p.setStandardErrorFile(tempDir + os.sep +"rbhusHost_"+ self.username +".err")
     self.pushHosts.setEnabled(False)
-    self.hostAction.setEnabled(False)
+    self.hostOpen.setEnabled(False)
     p.start(sys.executable,rbhusHostCmd.split())
     p.finished.connect(self.rbhusHostEnable)
     p.started.connect(self.rbhusHostWait)
@@ -172,7 +172,7 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def rbhusHostEnable(self,exitStatus):
     self.pushHosts.setText("hosts")
     self.pushHosts.setEnabled(True)
-    self.hostAction.setEnabled(True)
+    self.hostOpen.setEnabled(True)
     
 
   def logout(self):
