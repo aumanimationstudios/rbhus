@@ -83,6 +83,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
   
   def popupHost(self, pos):
     menu = QtGui.QMenu()
+    systemMenu = QtGui.QMenu()
     
     test2Action = menu.addAction("disable")
     test3Action = menu.addAction("enable")
@@ -91,8 +92,11 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test5Action = menu.addAction("restart Rbhus")
     test6Action = menu.addAction("kill Rbhus")
     test9Action = menu.addAction("update Rbhus")
-    test7Action = menu.addAction("restart")
-    test8Action = menu.addAction("shutdown")
+    test11Action = menu.addAction("system")
+    test10Action = systemMenu.addAction("backup system")
+    test7Action = systemMenu.addAction("restart")
+    test8Action = systemMenu.addAction("shutdown")
+    test11Action.setMenu(systemMenu)
     
     
     action = menu.exec_(self.tableHost.mapToGlobal(pos))
