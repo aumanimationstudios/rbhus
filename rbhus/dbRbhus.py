@@ -611,6 +611,7 @@ class dbRbhus:
       self.execute("UPDATE frames SET status="+ str(statusReset) +" \
                       WHERE hostName=\""+ hostName +"\" AND ((status = "+ str(constants.framesPending) +") \
                       OR (status = "+ str(constants.framesAssigned) +") \
+                      OR (status = "+ str(constants.framesBatched) +") \
                       OR (status = "+ str(constants.framesRunning) +"))") 
       modLogger.debug("I CANT BELIVE I AM HERE for host : "+ str(hostName) +" : Resetting frame status to "+ constants.framesStatus[statusReset])
     except:
