@@ -1225,7 +1225,16 @@ def singularity():
     sys.exit(1)
   else:
     f = open(singular,"w")
-    f.close()
+    if(sys.platform.find("linux") >= 0):
+      import fcntl
+      flags = fcntl.LOCK_EX
+      fcntl.lockf(f,flags)
+      
+    if(sys.platform.find("win") >= 0):
+      import msvcrt
+      op = msvcrt.LK_LOCK
+      f.seek(0)
+      msvcrt.locking(f,op,1)
     return(0)
   
 

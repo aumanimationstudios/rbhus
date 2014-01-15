@@ -135,6 +135,10 @@ def CLEANUPPIDS(clientSocket):
     os.remove(pidOnlyFile)
   except:
     logClientCrtl.debug(str(sys.exc_info()))
+  try:
+    os.remove(singular)
+  except:
+    logClientCrtl.debug(str(sys.exc_info()))
   clientSocket.close()
 
 
