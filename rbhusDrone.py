@@ -180,6 +180,45 @@ def hostUpdater():
       continue
   sys.exit(0)
 
+
+def hostUpdaterSys():
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle("rD_hostUpdaterSys")
+  db_conn = dbRbhus.dbRbhus()
+  hostname,ipAddr = getHostNameIP()
+  myPid = os.getpid()
+  logClient.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) +" : "+ "hostUpdaterSys : "+ str(myPid))
+  while(1):
+    time.sleep(5)
+    try:
+      rows = db_conn.execute("select * from hostSystem where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'", dictionary=True)
+      if(rows):
+        hostdets = rows[-1]
+        if(hostdets['systemUpdateStatus'] == constants.hostSystemUpdateScheduled):
+          if(sys.platform.find("linux") >= 0):
+            db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateRunning) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+            os.environ['masterSystem'] = hostdets['masterSystem']
+            db_conn.execute("update hostSystem set sTimeUpdate=now() where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+            up = subprocess.Popen("/opt/rbhus/etc/system/linuxUpdate.py")
+            up.wait()
+            db_conn.execute("update hostSystem set eTimeUpdate=now() where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+            status = up.returncode
+            if(not status):
+              db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateDone) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+            else:
+              db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFailed) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+              
+              
+      
+      
+      
+    except:
+      logClient.debug(str(sys.exc_info()))
+      continue
+  sys.exit(0)
+
+
+
 def loadAvg():
   loads = ['0','0','0']
   if(sys.platform.find("linux") >=0):
@@ -1362,9 +1401,11 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
       oldState = getHostState(dbconn)
       grps = []
       oldstatus = constants.hostInfoDisable
+      oldweight = 1
       if(oldState):
         grps = oldState['groups'].split(",")
         oldstatus = oldState['status']
+        oldweight = oldState['weight']
       try:
         grps.append("default")
         grps.append(hostname)
@@ -1372,7 +1413,7 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
         grps = list(set(grps))
         dbconn.execute("delete from hostInfo where ip='"+ str(ipAddr) +"'")
         dbconn.execute("INSERT INTO hostInfo \
-                      (hostName,status,groups,totalRam,totalCpus,totalSwap,ip,os) \
+                      (hostName,status,groups,totalRam,totalCpus,totalSwap,ip,weight,os) \
                       VALUES ('" \
                       + str(hostname) + "', '" \
                       + str(oldstatus) + "', '" \
@@ -1381,11 +1422,13 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
                       + str(totalCpus) + ", " \
                       + str(totalSwap) + ", '" \
                       + str(ipAddr) + "', '" \
+                      + str(oldweight) + "', '" \
                       + str("default,"+ plat) +"') \
                         ON DUPLICATE KEY UPDATE \
                         totalRam="+ str(totalRam) +", \
                         totalCpus="+ str(totalCpus) +", \
                         totalSwap="+ str(totalSwap) +" ,\
+                        weight="+ str(oldweight) +" ,\
                         hostName='"+ str(hostname) +"' ,\
                         ip='"+ str(ipAddr) +"' , \
                         os='"+ str("default,"+ plat) +"' ,\
@@ -1438,6 +1481,11 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
         sys.exit(1)
       try:
         dbconn.execute("insert into hostStates (ip) values ('"+ str(ipAddr) +"')")
+      except:
+        logClient.debug("hostStates insert error")
+        logClient.debug(str(sys.exc_info()))
+      try:
+        dbconn.execute("insert into hostSystem (ip,hostName) values ('"+ str(ipAddr) +"','"+ str(hostname) +"')")
       except:
         logClient.debug("hostStates insert error")
         logClient.debug(str(sys.exc_info()))

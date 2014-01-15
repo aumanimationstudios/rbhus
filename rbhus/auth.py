@@ -12,6 +12,7 @@ class login():
     self.userAclProjIds = []
     self.username = None
     self.rbhusAdminFlag = 0
+    self.rbhusAdminSysFlag = 0
     try:
       self.ldaphost = os.environ['rbhus_ldapHost']
     except:
@@ -115,19 +116,24 @@ class login():
     os.environ['rbhus_acl_user'] = self.username
     os.environ['rbhus_acl_projIds'] = ""
     os.environ['rbhus_acl_admin'] = "0"
+    os.environ['rbhus_acl_adminSys'] = "0"
     if(self.userAclProjIds):
       os.environ['rbhus_acl_projIds'] = os.environ['rbhus_acl_projIds'] + " ".join(self.userAclProjIds)
     if(self.rbhusAdminFlag):
       os.environ['rbhus_acl_admin'] = "1"
+    if(self.rbhusAdminSysFlag):
+      os.environ['rbhus_acl_adminSys'] = "1"
   
   def _unsetEnvs(self):
     self.status = False
     self.username = None
     self.userAclProjIds = []
     self.rbhusAdminFlag = 0
+    self.rbhusAdminSysFlag = 0
     os.environ['rbhus_acl_user'] = ""
     os.environ['rbhus_acl_projIds'] = ""
     os.environ['rbhus_acl_admin'] = ""
+    os.environ['rbhus_acl_adminSys'] = ""
   
   def __getUserDets(self):
     if(self.username):
@@ -135,6 +141,7 @@ class login():
       try:
         rows = db_conn.execute("select * from proj where status="+ str(constants.projActive), dictionary=True)
         adminRows = db_conn.execute("select * from admins where user like '%"+ str(self.username) +"%'", dictionary=True)
+        adminRowsSys = db_conn.execute("select * from adminsSys where user like '%"+ str(self.username) +"%'", dictionary=True)
         if(not isinstance(rows,int)):
           for x in rows:
             users = x['admins'].split()
@@ -145,6 +152,11 @@ class login():
           for x in adminRows:
             if(self.username == x['user']):
               self.rbhusAdminFlag = 1
+              break
+        if(not isinstance(adminRowsSys,int)):
+          for x in adminRowsSys:
+            if(self.username == x['user']):
+              self.rbhusAdminSysFlag = 1
               break
       except:
         print(str(sys.exc_info()))

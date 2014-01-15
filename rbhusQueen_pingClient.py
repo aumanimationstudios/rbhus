@@ -45,22 +45,16 @@ def checkClientAlive():
   maxPids = 100
   pIds = []
   while(1):
-    logging.debug("WTF4")
     hostInfos = {}
     hostInfos = db_conn.getHostInfo(status="ALL")
-    logging.debug("WTF5 : "+ str(hostInfos))
     if(not hostInfos):
-      logging.debug("WTF6")
       continue
-    logging.debug("WTF7")
     if(len(pIds) > 0):
       while(1):
-        logging.debug("WTF0")
         for i in range(0,len(pIds)):
           if(pIds[i].is_alive()):
             pass
           else:
-            logging.debug("GONE1 -WTF3: "+ str(pIds[i].pid))
             del(pIds[i])
             break
         if(len(pIds) < maxPids):
@@ -70,7 +64,6 @@ def checkClientAlive():
         time.sleep(1)
     
     for hostInfo in hostInfos:
-      logging.debug("WTF3")
       hostName = hostInfo['hostName']
       ipAddr = hostInfo['ip']
       logging.debug("Pinging "+ hostName + " with ip : "+ str(ipAddr))
@@ -82,12 +75,10 @@ def checkClientAlive():
       
       if(len(pIds) >= maxPids):
         while(1):
-          logging.debug("WTF1")
           for i in range(0,len(pIds)):
             if(pIds[i].is_alive()):
               pass
             else:
-              logging.debug("GONE2 -WTF3: "+ str(pIds[i].pid))
               del(pIds[i])
               break
           if(len(pIds) < maxPids):
@@ -98,12 +89,10 @@ def checkClientAlive():
     
     if(len(pIds) > 0):      
       while(1):
-        logging.debug("WTF2")
         for i in range(0,len(pIds)):
           if(pIds[i].is_alive()):
             pass
           else:
-            logging.debug("GONE3 -WTF3: "+ str(pIds[i].pid))
             del(pIds[i])
             break
         if(len(pIds) < maxPids):

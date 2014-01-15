@@ -15,6 +15,19 @@
 ###
 
 
+dnsmasq = "blues0"
+
+hostSystemUpdateDisable = 0
+hostSystemUpdateScheduled = 1
+hostSystemUpdatePending = 2
+hostSystemUpdateRunning = 3
+hostSystemUpdateFail = 4
+hostSystemUpdateHung = 5
+hostSystemUpdateKilled = 6
+hostSystemUpdateDone = 7
+
+
+
 #task table
 taskWaiting = 0
 taskPending = 1

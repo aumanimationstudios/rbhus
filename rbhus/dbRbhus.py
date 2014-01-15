@@ -14,18 +14,46 @@ hostname = socket.gethostname()
 tempDir = os.path.abspath(tempfile.gettempdir())
 
 dbHostname = "blues2"
+dbLogHostname = "blues2"
+dbHostHostname = "blues2"
+
 dbPort = "3306"
+dbLogPort = "3306"
+dbHostPort = "3306"
+
+
 dbDatabase = "rbhus"
 dbLogDatabase = "rbhusLog"
+dbHostDatabase = "hosts"
 
 try:
   dbHostname = os.environ['rbhus_dbHostname']
 except:
   pass
 try:
+  dbLogHostname = os.environ['rbhus_dbLogHostname']
+except:
+  pass
+try:
+  dbHostHostname = os.environ['rbhus_dbHostHostname']
+except:
+  pass
+
+
+try:
   dbPort = os.environ['rbhus_dbPort']
 except:
   pass
+try:
+  dbLogPort = os.environ['rbhus_dbLogPort']
+except:
+  pass
+try:
+  dbHostPort = os.environ['rbhus_dbHostPort']
+except:
+  pass
+
+
 try:
   dbDatabase = os.environ['rbhus_dbDatabase']
 except:
@@ -34,6 +62,12 @@ try:
   dbLogDatabase = os.environ['rbhus_dbLogDatabase']
 except:
   pass
+try:
+  dbHostDatabase = os.environ['rbhus_dbHostDatabase']
+except:
+  pass
+
+
 
 
 
@@ -82,7 +116,7 @@ class dbRbhusLog:
   def _connRbhus(self):
     while(1):
       try:
-        con = self._connDb(hostname=dbHostname,port=int(dbPort),dbname=dbLogDatabase)
+        con = self._connDb(hostname=dbLogHostname,port=int(dbLogPort),dbname=dbLogDatabase)
         modLogger.debug("Db connected")
         return(con)
       except:
@@ -135,7 +169,77 @@ class dbRbhusLog:
           raise
         
 
+class dbRbhusHost:
+  """database querying class for rbhus"""
+  def __init__(self):
+    self.__conn = self._connRbhus()
 
+  def __del__(self):
+    self.__conn.close()
+    modLogger.debug("Db connection closed" +"\n")
+  
+  def _connDb(self,hostname,port,dbname):
+    try:
+      conn = MySQLdb.connect(host = hostname,port=port,db = dbname)
+      conn.autocommit(1)
+    except:
+      raise
+    return(conn)
+    
+  def _connRbhus(self):
+    while(1):
+      try:
+        con = self._connDb(hostname=dbHostHostname,port=int(dbHostPort),dbname=dbHostDatabase)
+        modLogger.debug("Db connected")
+        return(con)
+      except:
+        modLogger.error("Db not connected : "+ str(sys.exc_info()))
+      time.sleep(1)
+      
+       
+  def execute(self,query,dictionary=False):
+    while(1):
+      try:
+        if(dictionary):
+          cur = self.__conn.cursor(MySQLdb.cursors.DictCursor)
+        else:
+          cur = self.__conn.cursor()
+        cur.execute(query)
+        
+        if(dictionary):
+          try:
+            rows = cur.fetchall()
+          except:
+            modLogger.error("fetching failed : "+ str(sys.exc_info()))
+          
+          cur.close()
+          if(rows):
+            return(rows)
+          else:
+            return(0)
+        else:
+          cur.close()
+          return(1)
+      except:
+        modLogger.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
+        if(str(sys.exc_info()).find("OperationalError") >= 0):
+          time.sleep(1)
+          try:
+            cur.close()
+          except:
+            pass
+          try:
+            self._conn.close()
+          except:
+            pass
+          self.__conn = self._connRbhus()
+          continue
+        else:
+          try:
+            cur.close()
+          except:
+            pass
+          raise
 
 
 class dbRbhus:

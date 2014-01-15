@@ -14,6 +14,21 @@ import dbRbhus
 import constants
 
 
+def getSystemAdmins():
+  dbconn = dbPipe.dbPipe()
+  adminUsers = []
+  try:
+    rows = dbconn.execute("select * from adminsSys", dictionary=True)
+    if(rows):
+      for x in rows:
+        adminUsers.append(x['user'])
+    return(adminUsers)
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    # easy to search like - if admin in getAdmins():
+    return(adminUsers)
+
+
 
 def getHostGroups():
   dbconn = dbRbhus.dbRbhus()
@@ -212,6 +227,10 @@ class hosts(object):
       pass
     try:
       self.userAdmin = int(os.environ['rbhus_acl_admin'])
+    except:
+      pass
+    try:
+      self.userAdminSys = int(os.environ['rbhus_acl_adminSys'])
     except:
       pass
     if(hostIp):
