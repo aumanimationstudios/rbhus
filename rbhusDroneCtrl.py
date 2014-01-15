@@ -65,19 +65,19 @@ def CLIENTKILL(clientSocket):
           if(sys.platform.find("win") >= 0):
             os.system("taskkill /t /f /pid "+ str(x))
             time.sleep(5)
-            try:
-              os.remove(mainPidFile)
-            except:
-              logClientCrtl.debug(str(sys.exc_info()))
-            try:
-              os.remove(pidOnlyFile)
-            except:
-              logClientCrtl.debug(str(sys.exc_info()))
-            try:
-              os.remove(singular)
-            except:
-              logClientCrtl.debug(str(sys.exc_info()))
-            clientSocket.send("CLIENTKILLED")
+          try:
+            os.remove(mainPidFile)
+          except:
+            logClientCrtl.debug(str(sys.exc_info()))
+          try:
+            os.remove(pidOnlyFile)
+          except:
+            logClientCrtl.debug(str(sys.exc_info()))
+          try:
+            os.remove(singular)
+          except:
+            logClientCrtl.debug(str(sys.exc_info()))
+          clientSocket.send("CLIENTKILLED")
         except:
           logClientCrtl.debug(str(sys.exc_info()))
           clientSocket.send("CLIENTKILLFAILED")
@@ -113,6 +113,7 @@ def RESTARTSYS(clientSocket):
   
   
 def CLIENTSTART(clientSocket):
+  time.sleep(10)
   if(sys.platform.find("linux") >= 0):
     try:
       subprocess.Popen(str(rbhusMainDir +"rbhusDrone.py").split())
@@ -124,7 +125,7 @@ def CLIENTSTART(clientSocket):
     except:
       logClientCrtl.debug(str(sys.exc_info()))
   clientSocket.close()   
-  time.sleep(2)
+  
 
 
 def CLEANUPPIDS(clientSocket):
