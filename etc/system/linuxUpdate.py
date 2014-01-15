@@ -4,12 +4,6 @@ import sys
 import os
 import re
 
-p = os.popen("cat /etc/os-release","r")
-dets = p.readlines()
-
-for x in dets:
-  if(re.search('Gentoo$',x)):
-    gentooUpdate()
     
     
 def gentooUpdate():
@@ -48,6 +42,12 @@ def gentooUpdate():
     sys.exit(1)
     
   
+p = os.popen("cat /etc/os-release","r")
+dets = p.readlines()
+
+for x in dets:
+  if(re.search('Gentoo$',x)):
+    gentooUpdate()
   
   
   
