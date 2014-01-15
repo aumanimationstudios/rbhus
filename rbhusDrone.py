@@ -62,7 +62,7 @@ if(sys.platform.find("linux") >= 0):
 
 LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusClient_"+ username +"_"+ str(hostname) +".log")
 
-
+singular = tempDir + os.sep + "singularity"
 
 logClient = logging.getLogger("logClient")
 logClient.setLevel(logging.DEBUG)
@@ -1220,16 +1220,14 @@ def getEffectiveDetails(db_conn):
 
 
 def singularity():
-  try:
-    hostName,ipAddr = getHostNameIP()
-    serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serverSocket.bind((hostName, constants.clientSingularityPort))
-    serverSocket.listen(5)
-    return(0)
-  except:
-    logClient.debug(str(sys.exc_info()))
+  if(os.path.exists(singular)):
+    logClient.debug("CLIENT STILL RUNNING!")
     sys.exit(1)
-
+  else:
+    f = open(singular,"w")
+    f.close()
+    return(0)
+  
 
 
 #If not used remove

@@ -39,6 +39,8 @@ logClientCrtl.addHandler(LOG_FILENAME)
 
 mainPidFile = tempDir + os.sep +"rbhusDrone.pids"
 pidOnlyFile = tempDir + os.sep +"rbhusDroneMain.pid"
+singular = tempDir + os.sep + "singularity"
+
 
 def CLIENTKILL(clientSocket):
   if(os.path.exists(pidOnlyFile)):
@@ -69,6 +71,10 @@ def CLIENTKILL(clientSocket):
               logClientCrtl.debug(str(sys.exc_info()))
             try:
               os.remove(pidOnlyFile)
+            except:
+              logClientCrtl.debug(str(sys.exc_info()))
+            try:
+              os.remove(singular)
             except:
               logClientCrtl.debug(str(sys.exc_info()))
             clientSocket.send("CLIENTKILLED")
