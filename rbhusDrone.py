@@ -211,6 +211,7 @@ def hostUpdaterSys():
               
     except:
       logClient.debug(str(sys.exc_info()))
+      db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFailed) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
       continue
   sys.exit(0)
 
