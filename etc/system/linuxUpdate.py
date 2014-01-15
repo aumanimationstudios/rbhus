@@ -28,7 +28,16 @@ def gentooUpdate():
   syncSystemD = os.system("rsync -av rsync://"+ str(masterSystem) +"/etcsystemd /etc/systemd/ | tee -a /tmp/rbhusSystemUpdates")
   syncSystemDsys = os.system("rsync -av rsync://"+ str(masterSystem) +"/syssystemd /usr/lib/systemd/ | tee -a /tmp/rbhusSystemUpdates")
   syncRsyncD = os.system("rsync -av rsync://"+ str(masterSystem) +"/etcrsyncd /etc/ | tee -a /tmp/rbhusSystemUpdates")
+  syncKernels = os.system("rsync -av rsync://"+ str(masterSystem) +"/kernels /etc/kernels | tee -a /tmp/rbhusSystemUpdates")
   
+  if(not syncKernels):
+    os.system("mount /boot")
+    os.system("tar -xvf /etc/kernels/kernel -C /boot/")
+    os.system("tar -xvf /etc/kernels/modules -C /")
+    os.system("eclean -n 1")
+    os.system("umount -f /boot")
+  else:
+    sys.exit(1)
   if((not syncPortage) and (not syncSets) and (not syncLayman) and (not syncCbOverlay) and (not syncEtcPortage) and (not syncSystemD) and (not syncSystemDsys) and (not syncRsyncD)):
     emerge = os.system("emerge --deep -G @world | tee -a /tmp/rbhusSystemUpdates")
     if(not emerge):

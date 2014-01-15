@@ -185,6 +185,7 @@ def hostUpdaterSys():
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_hostUpdaterSys")
   db_conn = dbRbhus.dbRbhus()
+  db_log = dbRbhus.dbRbhusLog()
   hostname,ipAddr = getHostNameIP()
   myPid = os.getpid()
   logClient.debug(str(inspect.stack()[1][2]) +" : "+ str(inspect.stack()[1][3]) +" : "+ "hostUpdaterSys : "+ str(myPid))
@@ -204,14 +205,10 @@ def hostUpdaterSys():
             db_conn.execute("update hostSystem set eTimeUpdate=now() where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
             status = up.returncode
             if(not status):
-              db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateDone) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+              db_log.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateDone) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
             else:
               db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFailed) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
               
-              
-      
-      
-      
     except:
       logClient.debug(str(sys.exc_info()))
       continue
@@ -1552,6 +1549,10 @@ def mainFunc():
   hostUpdaterProcess = multiprocessing.Process(target=hostUpdater)
   p.append(hostUpdaterProcess)
   hostUpdaterProcess.start()
+  
+  hostUpdaterSysProcess = multiprocessing.Process(target=hostUpdaterSys)
+  p.append(hostUpdaterSysProcess)
+  hostUpdaterSysProcess.start()
 
   getAssignedFramesProcess = multiprocessing.Process(target=getAssignedFrames,args=(frameFcuk,))
   p.append(getAssignedFramesProcess)
