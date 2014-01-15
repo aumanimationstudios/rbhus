@@ -26,7 +26,7 @@ def gentooUpdate():
   
   if(not syncKernels):
     os.system("mount /boot")
-    os.system("tar -xvf /etc/kernels/kernel -C /boot/ | tee -a /tmp/rbhusSystemUpdates")
+    os.system("rsync -av /etc/kernels/boot/ /boot/ | tee -a /tmp/rbhusSystemUpdates")
     os.system("tar -xvf /etc/kernels/modules -C / | tee -a /tmp/rbhusSystemUpdates")
     os.system("eclean-kernel -n 1 | tee -a /tmp/rbhusSystemUpdates")
     
