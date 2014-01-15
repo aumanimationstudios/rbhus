@@ -41,7 +41,7 @@ if(sys.platform.find("linux") >= 0):
 import tempfile
 import inspect
 
-time.sleep(60)
+
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
 mainPidFile = tempDir + os.sep +"rbhusDrone.pids"
@@ -1535,6 +1535,7 @@ def mainFunc():
     #sys.exit(1)
   
   singularity()
+  time.sleep(60)
   p = []
   init()
 

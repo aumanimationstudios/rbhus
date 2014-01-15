@@ -76,6 +76,7 @@ def CLIENTKILL(clientSocket):
           logClientCrtl.debug(str(sys.exc_info()))
           clientSocket.send("CLIENTKILLFAILED")
           pass
+  clientSocket.close()
 
 def UPDATE(clientSocket):
   if(sys.platform.find("linux") >= 0):
@@ -83,6 +84,8 @@ def UPDATE(clientSocket):
       os.system("cd /opt/rbhus/ ; git pull")
     except:
       logClient.debug(msg)
+  clientSocket.close()
+  
 
 
 def RESTARTSYS(clientSocket):
@@ -97,6 +100,10 @@ def RESTARTSYS(clientSocket):
       os.system("shutdown /r /t 1")
     except:
       logClient.debug(msg)        
+  clientSocket.close()
+  
+  
+  
   
 def CLIENTSTART(clientSocket):
   time.sleep(15)
@@ -110,6 +117,8 @@ def CLIENTSTART(clientSocket):
       subprocess.Popen([sys.executable, str(rbhusMainDir) +"rbhusDrone.py"])
     except:
       logClientCrtl.debug(str(sys.exc_info()))
+  clientSocket.close()   
+   
 
 
 def CLEANUPPIDS(clientSocket):
@@ -121,6 +130,9 @@ def CLEANUPPIDS(clientSocket):
     os.remove(pidOnlyFile)
   except:
     logClientCrtl.debug(str(sys.exc_info()))
+  clientSocket.close()
+
+
 
 def atUrService():
   if(sys.platform.find("linux") >=0):
