@@ -29,7 +29,7 @@ def gentooUpdate():
     os.system("tar -xvf /etc/kernels/kernel -C /boot/ | tee -a /tmp/rbhusSystemUpdates")
     os.system("tar -xvf /etc/kernels/modules -C / | tee -a /tmp/rbhusSystemUpdates")
     os.system("eclean-kernel -n 1 | tee -a /tmp/rbhusSystemUpdates")
-    os.system("umount -f /boot | tee -a /tmp/rbhusSystemUpdates")
+    
   else:
     sys.exit(1)
   if((not syncPortage) and (not syncSets) and (not syncLayman) and (not syncCbOverlay) and (not syncEtcPortage) and (not syncSystemD) and (not syncSystemDsys) and (not syncRsyncD)):
