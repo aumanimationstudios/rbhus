@@ -193,7 +193,7 @@ def atUrService():
               #pass
       
     if(msg == "UPDATE"):
-      updateThread = threading.Thread(target=UPDATE,args(clientSocket))
+      updateThread = threading.Thread(target=UPDATE,args=(clientSocket))
       updateThread.start()
       #if(sys.platform.find("linux") >= 0):
         #try:
