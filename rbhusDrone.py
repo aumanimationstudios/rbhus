@@ -205,7 +205,7 @@ def hostUpdaterSys():
             db_conn.execute("update hostSystem set eTimeUpdate=now() where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
             status = up.returncode
             if(not status):
-              db_log.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateDone) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+              db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateDone) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
             else:
               db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFailed) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
               
