@@ -1,0 +1,16 @@
+#!/usr/bin/python
+import os
+import sys
+import subprocess
+import dbHosts
+import cConstants
+
+db_conn = dbHosts.dbHosts()
+cInfo = db_conn.getCloneInfo()
+
+if(cInfo):
+  a = subprocess.check_output("/usr/sbin/hwinfo --monitor |& grep Unique",shell=True)
+  b = a.split(":")[1].rstrip().lstrip()
+  print(b)
+  colorDir = cInfo['colorProfileDir'].rstrip(os.sep) + os.sep + b + os.sep
+  print(colorDir)

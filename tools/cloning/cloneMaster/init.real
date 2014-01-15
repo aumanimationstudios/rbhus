@@ -1,0 +1,106 @@
+#!/usr/bin/python
+import sys
+import os
+import dbHosts
+import cConstants
+
+
+def fortune():
+  print("\n\n\n")
+  a = os.popen("fortune science","r")
+  for x in a:
+    print(x)
+  print("\n\n\n")
+  a.close()
+  
+
+
+
+
+db_conn = dbHosts.dbHosts()
+cInfo = db_conn.getCloneInfo()
+
+devNode = "/dev/sda"
+cServer = "cloneMaster"
+cDir = "/crap/gentooOnesis"
+clone = 2 
+grubInstall = "/dev/sda"
+bootPart = "/dev/sda1"
+fortune()
+
+if(cInfo):
+  for x in cInfo.keys():
+    print(x +" : "+ str(cInfo[x]))
+  devNode = cInfo['cloneDisk']
+  cServer = cInfo['cloneServer']
+  cDir = cInfo['cloneDir']
+  clone = cInfo['clone']
+  grubInstall = cInfo['grubInstall']
+else:
+  sys.exit(0)
+  
+if(not clone):
+  sys.exit(0)
+cType = cConstants.cloneType[clone] 
+
+
+
+def getMacAddress():
+  for line in os.popen("ifconfig"): 
+    if line.find('Ether') > -1: 
+      mac = line.split()[4] 
+      return mac
+      
+
+
+maccy = getMacAddress()
+print(maccy.replace(":","-"))
+myPxebootDefault = "/mnt/pxeboot/default"
+myPxebootFile = "/mnt/pxeboot/01-"+ maccy.replace(":","-")
+myPxebootFlag = "/mnt/pxeboot/bootT-"+ maccy.replace(":","-") #If this file is present go to the next step of making filesystems on partitions
+
+
+
+os.system("env-update")
+os.system("source /etc/profile >& /dev/null")
+os.system("mkdir -p /mnt/gentoo/ >& /dev/null")
+os.system("mkdir -p /mnt/pxeboot/ >& /dev/null")
+os.system("mkdir -p /mnt/cloneMaster/ >& /dev/null")
+os.system("mount cloneMaster:/crap/gentooOnesis /mnt/gentoo >& /dev/null")
+os.system("mount cloneMaster:/cloneMaster /mnt/cloneMaster >& /dev/null")
+os.system("mount blues0:/srv/tftp/tftpboot/pxelinux.cfg /mnt/pxeboot/ >& /dev/null")
+os.system("umount -f "+ devNode +"* >& /dev/null")
+
+if(not os.path.exists(myPxebootFlag)):
+  os.system("fdisk "+ devNode +" < /mnt/cloneMaster/config/fdisk/fdisk.del."+ cType +" >& /dev/null")
+  os.system("fdisk "+ devNode +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".mkextended >& /dev/null")
+  os.system("fdisk "+ devNode +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".part >& /dev/null")
+  os.system("touch "+ myPxebootFlag)
+  os.system("cp -v "+ myPxebootDefault +" "+ myPxebootFile)
+  os.system("sed -i 's/default harddisk/default nfslove_new/g' "+ myPxebootFile +" >& /dev/null")
+  os.system("cd /;umount -fr /mnt/gentoo;umount -fr /mnt/pxeboot/ >& /dev/null")
+  os.system("reboot -f")
+else:
+  os.system("/mnt/cloneMaster/init.mkfs."+ cType +" "+ devNode +" >& /dev/null")
+  os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ devNode +" >& /dev/null")
+  
+  os.system("rsync -avHAX /mnt/gentoo/ /mnt/realroot/ --delete --exclude=root/livecd --compress")
+  
+  
+  os.system("mkdir -pv /mnt/realroot/crap/cache/fscache/ >& /dev/null")
+  os.system("mkdir -m 0777 -p /mnt/realroot/crap/cache/fscache/ >& /dev/null")
+  os.system("cd /")
+  os.system("rm -f "+ myPxebootFlag)
+  os.system("rm -f "+ myPxebootFile)
+  os.system("mount -t proc none /mnt/realroot/proc")
+  os.system("mount -o bind /dev /mnt/realroot/dev")
+  os.system("mount -o bind /sys /mnt/realroot/sys")
+#	os.system("mount /dev"+ devNode +"5 /mnt/realroot/boot")
+  os.system("echo \""+ grubInstall +"\" > /mnt/realroot/tmp/grub.disk")
+  
+  
+  
+  os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +" >& /dev/null")
+  os.system("cd /; cat /proc/mounts | grep -i realroot | gawk '{print $2}' | sort -ru | xargs umount -f ")
+  os.system("reboot -f")
+

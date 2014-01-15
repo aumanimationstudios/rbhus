@@ -1,0 +1,29 @@
+#!/bin/sh
+source ./update.client.dirs
+for I in $Idirs
+do
+	xdirs=$(eval "echo \$Xdirs_$I")
+	cmd="rsync -aXHAv cloneMaster:/crap/gentooOnesis/$I/ /$I/ --delete --rsh=rsh"
+	
+	if [ "$xdirs" ]; then
+		xclud=""
+		for X in $xdirs
+		do
+			xclud="${xclud} --exclude=${X}/"
+		done
+		cmd="$cmd $xclud"
+	fi
+	$cmd
+done
+
+mount /boot/
+bootupdatecmd="rsync -aXHAv cloneMaster:/crap/gentooOnesis/boot/ /boot/ --delete --rsh=rsh;rsync -aXHAv cloneMaster:/crap/gentooOnesis/lib64/modules/ /lib64/modules/ --delete --rsh=rsh;rsync -aXHAv cloneMaster:/crap/gentooOnesis/lib64/firmware/ /lib64/firmware/ --delete --rsh=rsh"
+$bootupdatecmd
+cat /proc/mounts > /etc/mtab
+grub2-install /dev/sda -f
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+
+
+
+

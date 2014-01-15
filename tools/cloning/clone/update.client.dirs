@@ -1,0 +1,6 @@
+#DO NOT PUT BOOT DIR HERE .. 
+#DO NOT PUT A SLASH AT THE END
+export Idirs="etc opt usr bin lib64 sbin var lib32"
+export Xdirs_var="cache log tmp spool run lock lib/layman"
+export Xdirs_usr="portage"
+export Xdirs_lib64="modules firmware"

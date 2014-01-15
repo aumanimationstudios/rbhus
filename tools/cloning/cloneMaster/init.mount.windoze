@@ -1,0 +1,6 @@
+#!/bin/bash
+devNode=$1
+mkdir -pv /mnt/realroot/
+mount ${devNode}7 /mnt/realroot/
+mkdir -pv /mnt/realroot/boot/
+mount ${devNode}5 /mnt/realroot/boot/

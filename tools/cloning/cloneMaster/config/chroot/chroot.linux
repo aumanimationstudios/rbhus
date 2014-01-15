@@ -1,0 +1,5 @@
+#cp -v /etc/fstab.windoze /etc/fstab
+env-update;source /etc/profile
+ln -s /proc/mounts /etc/mtab
+cat /tmp/grub.disk | xargs grub2-install -f 
+grub2-mkconfig -o /boot/grub2/grub.cfg

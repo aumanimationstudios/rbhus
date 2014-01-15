@@ -1,0 +1,10 @@
+#!/bin/bash
+devNode=$1
+mkfs.ext4 ${devNode}5
+#mkfs.ext4 ${devNode}2
+mkfs.ext4 ${devNode}7
+e2label ${devNode}5 bp_boot
+e2label ${devNode}7 bp_root
+mkswap -L bp_swap ${devNode}6
+swapon ${devNode}6
+

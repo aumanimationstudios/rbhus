@@ -1,0 +1,128 @@
+-- MySQL dump 10.13  Distrib 5.5.30, for Linux (x86_64)
+--
+-- Host: blues2    Database: hosts
+-- ------------------------------------------------------
+-- Server version	5.1.62-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `clonedb`
+--
+
+DROP TABLE IF EXISTS `clonedb`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clonedb` (
+  `ip` varchar(92) COLLATE utf8_unicode_ci NOT NULL,
+  `cloneServer` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'cloneMaster',
+  `cloneDir` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT '/crap/gentooOnesis/',
+  `clone` int(1) NOT NULL DEFAULT '0' COMMENT '0 - dont clone\n1 - clone (full linux)\n2 - clone (with windows dual boot)\n3 - update only\n\n\n',
+  `updateServer` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'cloneMaster',
+  `updateDir` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT '/crap/gentooUpdate',
+  `cloneDisk` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT '/dev/sda',
+  `grubInstall` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT '/dev/sda',
+  `saveCrap` int(1) NOT NULL DEFAULT '0' COMMENT '0 - do not save crap dir\n1 - save the crap dir\n',
+  `formatType` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'fdisk',
+  PRIMARY KEY (`ip`),
+  UNIQUE KEY `ip_UNIQUE` (`ip`),
+  KEY `fk_clonedb_2_idx` (`formatType`),
+  CONSTRAINT `fk_clonedb_2` FOREIGN KEY (`formatType`) REFERENCES `formatType` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_clonedb_1` FOREIGN KEY (`ip`) REFERENCES `main` (`ip`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `formatType`
+--
+
+DROP TABLE IF EXISTS `formatType`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `formatType` (
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gdisk' COMMENT 'gdisk - use gdisk\nfdisk - use fdisk \n',
+  `scriptPath` varchar(1024) COLLATE utf8_unicode_ci NOT NULL DEFAULT '/mnt/cloneMaster/gdisk/init',
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `main`
+--
+
+DROP TABLE IF EXISTS `main`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `main` (
+  `macc` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `ip` varchar(92) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `name` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `alias` varchar(2048) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `domain` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'bluepixels.in',
+  PRIMARY KEY (`macc`,`ip`),
+  UNIQUE KEY `ip_UNIQUE` (`ip`),
+  UNIQUE KEY `macc_UNIQUE` (`macc`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `partInfo`
+--
+
+DROP TABLE IF EXISTS `partInfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `partInfo` (
+  `ip` varchar(92) COLLATE utf8_unicode_ci NOT NULL,
+  `device` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `partNumber` int(2) NOT NULL,
+  `partSize` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `partType` int(1) NOT NULL DEFAULT '0' COMMENT '0 - none\n1 - extended\n2 - primary\n\n\n',
+  `bootFlag` int(1) NOT NULL DEFAULT '0',
+  `fsType` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ext4',
+  `label` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `formatFlag` int(1) NOT NULL DEFAULT '0' COMMENT '0 - do not format\n1 - format\n',
+  `mountDir` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`ip`,`device`,`partNumber`),
+  CONSTRAINT `fk_partInfo_1` FOREIGN KEY (`ip`) REFERENCES `main` (`ip`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `storageDevice`
+--
+
+DROP TABLE IF EXISTS `storageDevice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `storageDevice` (
+  `ip` varchar(92) COLLATE utf8_unicode_ci NOT NULL,
+  `device` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `formatType` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'gdisk',
+  PRIMARY KEY (`ip`,`device`),
+  KEY `fk_storageDevice_1_idx` (`ip`),
+  KEY `fk_storageDevice_2_idx` (`formatType`),
+  CONSTRAINT `fk_storageDevice_2` FOREIGN KEY (`formatType`) REFERENCES `formatType` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_storageDevice_1` FOREIGN KEY (`ip`) REFERENCES `main` (`ip`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-05-26 22:48:26
