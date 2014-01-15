@@ -193,7 +193,7 @@ def atUrService():
               #pass
       
     if(msg == "UPDATE"):
-      updateThread = threading.Thread(target=UPDATE,args=(clientSocket))
+      updateThread = threading.Thread(target=UPDATE,args=(clientSocket,))
       updateThread.start()
       #if(sys.platform.find("linux") >= 0):
         #try:
@@ -203,7 +203,7 @@ def atUrService():
       
       
     if(msg == "RESTARTSYS"):
-      restartThread = threading.Thread(target=RESTARTSYS,args=(clientSocket))
+      restartThread = threading.Thread(target=RESTARTSYS,args=(clientSocket,))
       restartThread.start()
       #time.sleep(5)
       #if(sys.platform.find("linux") >= 0):
@@ -218,7 +218,7 @@ def atUrService():
           #logClient.debug(msg)        
             
     if(msg == "CLIENTSTART"):
-      cstartThread = threading.Thread(target=CLIENTSTART,args=(clientSocket))
+      cstartThread = threading.Thread(target=CLIENTSTART,args=(clientSocket,))
       cstartThread.start()
       #time.sleep(15)
       #if(sys.platform.find("linux") >= 0):
@@ -233,7 +233,7 @@ def atUrService():
           #logClientCrtl.debug(str(sys.exc_info()))
           
     if(msg == "CLEANUPPIDS"):
-      cleanThread = threading.Thread(target=CLEANUPPIDS,args=(clientSocket))
+      cleanThread = threading.Thread(target=CLEANUPPIDS,args=(clientSocket,))
       cleanThread.start()
       #try:
         #os.remove(mainPidFile)
