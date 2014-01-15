@@ -1223,7 +1223,7 @@ def singularity():
   try:
     hostName,ipAddr = getHostNameIP()
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serverSocket.bind(("", constants.clientSingularityPort))
+    serverSocket.bind((hostName, constants.clientSingularityPort))
     serverSocket.listen(5)
     return(0)
   except:
