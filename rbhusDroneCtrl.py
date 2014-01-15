@@ -83,6 +83,7 @@ def CLIENTKILL(clientSocket):
           clientSocket.send("CLIENTKILLFAILED")
           pass
   clientSocket.close()
+  time.sleep(2)
 
 def UPDATE(clientSocket):
   if(sys.platform.find("linux") >= 0):
@@ -123,7 +124,7 @@ def CLIENTSTART(clientSocket):
     except:
       logClientCrtl.debug(str(sys.exc_info()))
   clientSocket.close()   
-   
+  time.sleep(2)
 
 
 def CLEANUPPIDS(clientSocket):
