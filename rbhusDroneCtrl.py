@@ -246,12 +246,12 @@ def atUrService():
       
       
     
-    while(1):
-      try:
-        clientSocket.close()
-        break
-      except:
-        pass
+    #while(1):
+      #try:
+        #clientSocket.close()
+        #break
+      #except:
+        #pass
     
       
       
