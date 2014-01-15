@@ -207,11 +207,11 @@ def hostUpdaterSys():
             if(not status):
               db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateDone) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
             else:
-              db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFailed) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+              db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFail) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
               
     except:
       logClient.debug(str(sys.exc_info()))
-      db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFailed) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
+      db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFail) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
       continue
   sys.exit(0)
 
