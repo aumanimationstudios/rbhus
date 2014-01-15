@@ -28,12 +28,12 @@ def gentooUpdate():
     os.system("mount /boot")
     os.system("rsync -av /etc/kernels/boot/ /boot/ | tee -a /tmp/rbhusSystemUpdates")
     os.system("tar -xvf /etc/kernels/modules -C / | tee -a /tmp/rbhusSystemUpdates")
-    os.system("grub-mkconfig -o /boot/grub/grub.cfg | tee -a /tmp/rbhusSystemUpdates")
+    os.system("grub2-mkconfig -o /boot/grub/grub.cfg | tee -a /tmp/rbhusSystemUpdates")
     
   else:
     sys.exit(1)
   if((not syncPortage) and (not syncSets) and (not syncLayman) and (not syncCbOverlay) and (not syncEtcPortage) and (not syncSystemD) and (not syncSystemDsys) and (not syncRsyncD)):
-    emerge = os.system("emerge --exclude sys-apps/baselayout --deep -G @world | tee -a /tmp/rbhusSystemUpdates")
+    emerge = os.system("emerge --exclude sys-apps/baselayout --deep -g @world | tee -a /tmp/rbhusSystemUpdates")
     if(not emerge):
       sys.exit(0)
     else:
