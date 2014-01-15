@@ -112,7 +112,6 @@ def RESTARTSYS(clientSocket):
   
   
 def CLIENTSTART(clientSocket):
-  time.sleep(15)
   if(sys.platform.find("linux") >= 0):
     try:
       subprocess.Popen(str(rbhusMainDir +"rbhusDrone.py").split())
