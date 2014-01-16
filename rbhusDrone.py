@@ -1539,7 +1539,7 @@ def mainFunc():
     #logClient.debug("rbhusDrone allready running . please check the do a proper cleanup before restarting")
     #sys.exit(1)
   
-  singularity()
+  #singularity()
   time.sleep(60)
   p = []
   init()
