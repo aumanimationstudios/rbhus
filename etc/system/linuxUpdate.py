@@ -33,7 +33,7 @@ def gentooUpdate():
     sys.exit(1)
   if((not syncPortage) and (not syncSets) and (not syncLayman) and (not syncCbOverlay) and (not syncEtcPortage) and (not syncSystemD) and (not syncSystemDsys) and (not syncRsyncD) and (not syncKernels) and (not syncModules)):
     emerge = os.system("emerge --exclude sys-apps/baselayout --deep -G @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-    systemd = os.system("systemctl enable acpid.service autofs.service NetworkManager.service NetworkManager-wait-online.service NetworkManager-dispatcher.service nfsd.service ntpd.service rpc-mountd.servicerpc-statd.service rpcbind.service rsyncd.service sensord.service sshd.service syslog-ng.service upower.service vixie-cron.servicexinetd.service")
+    systemd = os.system("systemctl enable lm_sensors.service lighttpd.service kdm.service acpid.service autofs.service NetworkManager.service NetworkManager-wait-online.service NetworkManager-dispatcher.service nfsd.service ntpd.service rpc-mountd.servicerpc-statd.service rpcbind.service rsyncd.service sensord.service sshd.service syslog-ng.service upower.service vixie-cron.servicexinetd.service")
     if(not emerge):
       sys.exit(0)
     else:
