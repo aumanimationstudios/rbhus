@@ -443,6 +443,9 @@ class hosts(object):
         except:
           pass
       
+  def updateSystem(self):
+    if(self.userAdminSys):
+      self.setHostData("hostSystem","systemUpdateStatus",constants.hostSystemUpdateScheduled)
   
   
   def setHostData(self,table,field,value):

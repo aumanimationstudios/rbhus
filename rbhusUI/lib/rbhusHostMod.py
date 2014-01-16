@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusHostMod.ui'
 #
-# Created: Tue Oct 15 23:32:07 2013
-#      by: PyQt4 UI code generator 4.9.6
+# Created: Thu Jan 16 07:36:46 2014
+#      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(813, 356)
+    MainWindow.resize(487, 597)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -114,8 +114,27 @@ class Ui_MainWindow(object):
     self.pushRefresh = QtGui.QPushButton(self.centralwidget)
     self.pushRefresh.setObjectName(_fromUtf8("pushRefresh"))
     self.horizontalLayout_2.addWidget(self.pushRefresh)
-    self.gridLayout.addLayout(self.horizontalLayout_2, 5, 0, 1, 2)
-    self.tableHost = QtGui.QTableWidget(self.centralwidget)
+    self.gridLayout.addLayout(self.horizontalLayout_2, 6, 0, 1, 2)
+    self.horizontalLayout = QtGui.QHBoxLayout()
+    self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+    self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 1)
+    self.tabWidget = QtGui.QTabWidget(self.centralwidget)
+    self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
+    self.tab = QtGui.QWidget()
+    self.tab.setObjectName(_fromUtf8("tab"))
+    self.gridLayout_2 = QtGui.QGridLayout(self.tab)
+    self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
+    self.LabelRunning = QtGui.QLabel(self.tab)
+    self.LabelRunning.setLayoutDirection(QtCore.Qt.LeftToRight)
+    self.LabelRunning.setObjectName(_fromUtf8("LabelRunning"))
+    self.gridLayout_2.addWidget(self.LabelRunning, 0, 2, 1, 1)
+    spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+    self.gridLayout_2.addItem(spacerItem1, 0, 1, 1, 1)
+    self.LabelTotal = QtGui.QLabel(self.tab)
+    self.LabelTotal.setLayoutDirection(QtCore.Qt.LeftToRight)
+    self.LabelTotal.setObjectName(_fromUtf8("LabelTotal"))
+    self.gridLayout_2.addWidget(self.LabelTotal, 0, 0, 1, 1)
+    self.tableHost = QtGui.QTableWidget(self.tab)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Expanding)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -124,32 +143,30 @@ class Ui_MainWindow(object):
     self.tableHost.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.tableHost.setLayoutDirection(QtCore.Qt.LeftToRight)
     self.tableHost.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+    self.tableHost.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+    self.tableHost.setAutoScroll(True)
     self.tableHost.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
     self.tableHost.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     self.tableHost.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableHost.setObjectName(_fromUtf8("tableHost"))
     self.tableHost.setColumnCount(0)
     self.tableHost.setRowCount(0)
-    self.tableHost.horizontalHeader().setCascadingSectionResizes(True)
+    self.tableHost.horizontalHeader().setCascadingSectionResizes(False)
+    self.tableHost.horizontalHeader().setDefaultSectionSize(2)
+    self.tableHost.horizontalHeader().setMinimumSectionSize(1)
     self.tableHost.horizontalHeader().setStretchLastSection(True)
+    self.tableHost.verticalHeader().setCascadingSectionResizes(False)
     self.tableHost.verticalHeader().setStretchLastSection(False)
-    self.gridLayout.addWidget(self.tableHost, 4, 0, 1, 1)
-    self.horizontalLayout = QtGui.QHBoxLayout()
-    self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-    self.LabelTotal = QtGui.QLabel(self.centralwidget)
-    self.LabelTotal.setLayoutDirection(QtCore.Qt.LeftToRight)
-    self.LabelTotal.setObjectName(_fromUtf8("LabelTotal"))
-    self.horizontalLayout.addWidget(self.LabelTotal)
-    spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-    self.horizontalLayout.addItem(spacerItem1)
-    self.LabelRunning = QtGui.QLabel(self.centralwidget)
-    self.LabelRunning.setLayoutDirection(QtCore.Qt.LeftToRight)
-    self.LabelRunning.setObjectName(_fromUtf8("LabelRunning"))
-    self.horizontalLayout.addWidget(self.LabelRunning)
-    self.gridLayout.addLayout(self.horizontalLayout, 0, 0, 1, 1)
+    self.gridLayout_2.addWidget(self.tableHost, 1, 0, 1, 3)
+    self.tabWidget.addTab(self.tab, _fromUtf8(""))
+    self.tab_2 = QtGui.QWidget()
+    self.tab_2.setObjectName(_fromUtf8("tab_2"))
+    self.tabWidget.addTab(self.tab_2, _fromUtf8(""))
+    self.gridLayout.addWidget(self.tabWidget, 0, 0, 1, 1)
     MainWindow.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(MainWindow)
+    self.tabWidget.setCurrentIndex(0)
     QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
   def retranslateUi(self, MainWindow):
@@ -158,7 +175,9 @@ class Ui_MainWindow(object):
     self.pushLocalEnable.setText(_translate("MainWindow", "ENABLE MY HOST", None))
     self.checkRefresh.setText(_translate("MainWindow", "autorefresh", None))
     self.pushRefresh.setText(_translate("MainWindow", "refresh", None))
-    self.tableHost.setSortingEnabled(True)
-    self.LabelTotal.setText(_translate("MainWindow", "total : 3", None))
     self.LabelRunning.setText(_translate("MainWindow", "running : 3", None))
+    self.LabelTotal.setText(_translate("MainWindow", "total : 3", None))
+    self.tableHost.setSortingEnabled(True)
+    self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Tab 1", None))
+    self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Tab 2", None))
 
