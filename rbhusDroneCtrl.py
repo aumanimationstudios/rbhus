@@ -59,8 +59,10 @@ def CLIENTKILL(clientSocket):
           if(sys.platform.find("linux") >= 0):
             try:
               os.kill(int(x),signal.SIGTERM)
+              logClientCrtl.debug("killed : "+ str(x))
               clientSocket.send("CLIENTKILLED")
             except:
+              logClientCrtl.debug("kill failed : "+ str(x))
               clientSocket.send("CLIENTKILLFAILED")
           if(sys.platform.find("win") >= 0):
             os.system("taskkill /t /f /pid "+ str(x))
@@ -77,9 +79,11 @@ def CLIENTKILL(clientSocket):
             os.remove(singular)
           except:
             logClientCrtl.debug(str(sys.exc_info()))
+          logClientCrtl.debug("CLIENTKILLED")
           clientSocket.send("CLIENTKILLED")
         except:
           logClientCrtl.debug(str(sys.exc_info()))
+          logClientCrtl.debug("CLIENTKILLFAILED")
           clientSocket.send("CLIENTKILLFAILED")
           pass
   clientSocket.close()
