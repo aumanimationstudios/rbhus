@@ -10,6 +10,6 @@ class peepServer:
   def __init__(self):
     
     self._peepServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    self._bind(("", constants.clientCtrlListenPort))
+    #self._bind(("", constants.clientCtrlListenPort))
     
     

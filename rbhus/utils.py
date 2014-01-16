@@ -385,7 +385,7 @@ class hosts(object):
       clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       try:
         clientSocket.settimeout(15)
-        clientSocket.connect((self.hostDetails['ip'],6661))
+        clientSocket.connect((self.hostDetails['ip'],constants.clientCtrlListenPort))
         clientSocket.send("CLIENTKILL")
         clientSocket.close()
       except:
@@ -401,7 +401,7 @@ class hosts(object):
       clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       try:
         clientSocket.settimeout(15)
-        clientSocket.connect((self.hostDetails['ip'],6661))
+        clientSocket.connect((self.hostDetails['ip'],constants.clientCtrlListenPort))
         clientSocket.send("UPDATE")
         clientSocket.close()
       except:
@@ -417,7 +417,7 @@ class hosts(object):
       clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       try:
         clientSocket.settimeout(15)
-        clientSocket.connect((self.hostDetails['ip'],6661))
+        clientSocket.connect((self.hostDetails['ip'],constants.clientCtrlListenPort))
         clientSocket.send("RESTARTSYS")
         clientSocket.close()
       except:
@@ -433,7 +433,7 @@ class hosts(object):
       clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       try:
         clientSocket.settimeout(15)
-        clientSocket.connect((self.hostDetails['ip'],6661))
+        clientSocket.connect((self.hostDetails['ip'],constants.clientCtrlListenPort))
         clientSocket.send("CLIENTSTART")
         clientSocket.close()
       except:

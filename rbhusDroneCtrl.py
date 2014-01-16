@@ -159,7 +159,8 @@ def atUrService():
       break
     except:
       logClientCrtl.debug(str(sys.exc_info()))
-      sys.exit(1)
+      if(str(sys.exc_info()).find('Address already in use') >= 0):
+        break
     time.sleep(1)
 
   while(1):
