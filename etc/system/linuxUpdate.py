@@ -23,16 +23,15 @@ def gentooUpdate():
   syncSystemDsys = os.system("rsync -av rsync://"+ str(masterSystem) +"/syssystemd /usr/lib/systemd/ |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   syncRsyncD = os.system("rsync -av rsync://"+ str(masterSystem) +"/etcrsyncd /etc/ |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   syncKernels = os.system("rsync -av rsync://"+ str(masterSystem) +"/kernels /etc/kernels |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-  
+  syncModules = os.system("rsync -av rsync://"+ str(masterSystem) +"/kernelmodules /lib/modules |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   if(not syncKernels):
     os.system("mount /boot")
     os.system("rsync -av /etc/kernels/boot/ /boot/ |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-    os.system("tar -xvf /etc/kernels/modules -C / |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
     os.system("grub2-mkconfig -o /boot/grub/grub.cfg |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
     
   else:
     sys.exit(1)
-  if((not syncPortage) and (not syncSets) and (not syncLayman) and (not syncCbOverlay) and (not syncEtcPortage) and (not syncSystemD) and (not syncSystemDsys) and (not syncRsyncD)):
+  if((not syncPortage) and (not syncSets) and (not syncLayman) and (not syncCbOverlay) and (not syncEtcPortage) and (not syncSystemD) and (not syncSystemDsys) and (not syncRsyncD) and (not syncKernels) and (not syncModules)):
     emerge = os.system("emerge --exclude sys-apps/baselayout --deep -g @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
     if(not emerge):
       sys.exit(0)
@@ -40,7 +39,7 @@ def gentooUpdate():
       sys.exit(1)
   else:
     sys.exit(1)
-    
+  sys.exit(0)  
   
 p = os.popen("cat /etc/os-release","r")
 dets = p.readlines()
