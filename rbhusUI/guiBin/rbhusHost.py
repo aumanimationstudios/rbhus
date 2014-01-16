@@ -123,8 +123,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       self.hostRestart()
     if(action == test9Action):
       self.hostUpdate()
-    #if(action == test6Action):
-      #self.hostClientKill()
+    if(action == test13Action):
+      self.hostSysUpdate()
       
       
   def hostEdit(self):

@@ -32,7 +32,7 @@ def gentooUpdate():
   else:
     sys.exit(1)
   if((not syncPortage) and (not syncSets) and (not syncLayman) and (not syncCbOverlay) and (not syncEtcPortage) and (not syncSystemD) and (not syncSystemDsys) and (not syncRsyncD) and (not syncKernels) and (not syncModules)):
-    emerge = os.system("emerge --exclude sys-apps/baselayout --deep -g @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+    emerge = os.system("emerge --exclude sys-apps/baselayout --deep -G @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
     if(not emerge):
       sys.exit(0)
     else:
