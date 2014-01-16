@@ -70,6 +70,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.comboOsType.currentIndexChanged.connect(self.osTypePrint)
     self.comboRes.currentIndexChanged.connect(self.resetRes)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
+    self.checkBatching.clicked.connect(self.batchingCheck)
     
     ostypes = rUtils.getOsTypes()
     ftypes = rUtils.getFileTypes()
@@ -123,10 +124,19 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     self.comboRes.setCurrentIndex(ind)
     
     self.popEditItems()
+    self.batchingCheck()
     
     
     
-    
+  def batchingCheck(self):
+    if(self.checkBatching.isChecked()):
+      self.spinMaxBatch.setEnabled(True)
+      self.spinMinBatch.setEnabled(True)
+    else:
+      self.spinMaxBatch.setEnabled(False)
+      self.spinMinBatch.setEnabled(False)
+  
+  
   def fileTypeChanged(self):
     #self.fileTypePrint()
     self.setTaskOsTypes()
@@ -249,7 +259,10 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       
       self.lineEditDescription.setText(self.taskValues['description'])
       batchFF = int(self.taskValues['batch'])
-      self.comboBatching.setCurrentIndex(batchFF)
+      if(batchFF):
+        self.checkBatching.setChecked(True)
+      else:
+        self.checkBatching.setChecked(False)
       self.setTaskFileTypes()
       self.setTaskHostGroups()
       self.setTaskOsTypes()
@@ -389,7 +402,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       p = 300
     if(prios == "normal"):
       p = 150
-    batchFlag = str(self.comboBatching.currentText())
+    batchFlag = ("active" if(self.checkBatching.isChecked()) else "deactive")
     if(batchFlag == "active"):
       submitDict['batch'] = str(constants.batchActive)
     else:
