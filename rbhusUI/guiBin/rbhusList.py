@@ -60,6 +60,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.form = Form
+    
+    self.dockWidgetTasks.setTitleBarWidget(self.titleBarWidgetTasks)
+    self.dockWidgetFrames.setTitleBarWidget(self.titleBarWidgetFrames)
     self.authL = auth.login()
     self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","afterTaskSloppy","priority","submitTime","doneTime","afterTime","status","batch","description","fastAssign"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status","fThreads","efficiency"]
@@ -113,7 +116,21 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.taskSearchTime = 0.0
   
   
+  
+  
+  #def report(self):
+    #selTasksDict = self.selectedTasks()
+    #selTasks = []
+    #for x in selTasksDict:
+      #pass
+    #db_conn = dbRbhus.dbRbhus()
+    #try:
+      #rows = db_conn.execute("select * from frames where id="+ str(x['id']), dictionary=True)
     
+  
+  
+  
+  
   def previewTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []

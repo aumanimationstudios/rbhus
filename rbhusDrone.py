@@ -1137,7 +1137,7 @@ def getProcessVmSize(pid):
 def setFramesVmSize(frameInfo,vmSize,dbconn):
   try:
     dbconn.execute("UPDATE frames SET ram="+ str(vmSize) +" \
-                    WHERE frameId="+ str(frameInfo['frameId']) +" \
+                    WHERE batchId="+ str(frameInfo['batchId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
     logClient.debug(str(sys.exc_info()))
@@ -1148,7 +1148,7 @@ def setFramesVmSize(frameInfo,vmSize,dbconn):
 def setCpuEffeciency(frameInfo,cpuEff,dbconn):
   try:
     dbconn.execute("UPDATE frames SET efficiency="+ str(cpuEff) +" \
-                    WHERE frameId="+ str(frameInfo['frameId']) +" \
+                    WHERE batchId="+ str(frameInfo['batchId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
     logClient.debug(str(sys.exc_info()))
@@ -1160,7 +1160,7 @@ def setCpuEffeciency(frameInfo,cpuEff,dbconn):
 def setFramesStime(frameInfo, dbconn):
   try:
     dbconn.execute("UPDATE frames SET sTime=NOW() \
-                    WHERE frameId="+ str(frameInfo['frameId']) +" \
+                    WHERE batchId="+ str(frameInfo['batchId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
     return(0)
@@ -1170,7 +1170,7 @@ def setFramesStime(frameInfo, dbconn):
 def setFramesEtime(frameInfo, dbconn):
   try:
     dbconn.execute("UPDATE frames SET eTime=NOW() \
-                    WHERE frameId="+ str(frameInfo['frameId']) +" \
+                    WHERE batchId="+ str(frameInfo['batchId']) +" \
                     AND id="+ str(frameInfo['id']))
   except:
     logClient.debug(str(sys.exc_info()))
