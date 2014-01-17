@@ -59,6 +59,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
+    self.form = Form
     self.authL = auth.login()
     self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","afterTaskSloppy","priority","submitTime","doneTime","afterTime","status","batch","description","fastAssign"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status","fThreads","efficiency"]
@@ -417,21 +418,15 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def stopTimer(self):
     self.timer.stop()
   
+  
   def popTableList(self):
-    QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-    
-    tSeletected = self.selectedTasks()
-    tSelect = []
-    if(tSeletected):
-      for x in tSeletected:
-        tSelect.append(x['id'])
-    
-    self.tableList.clearContents()
-    self.tableList.setSortingEnabled(False)
-    self.tableList.resizeColumnsToContents()
-    self.tableList.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-    colCount = 0
-    
+    self.ht = QtCore.QThread(parent=self.form)
+    self.ht.run = self.selectTasks
+    self.ht.finished.connect(self.popTableList_thread)
+    self.ht.start()
+  
+  
+  def selectTasks(self):
     statusToCheck = []
     cTDone = self.checkTDone.isChecked()
     cTActive = self.checkTActive.isChecked()
@@ -448,29 +443,84 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(cTAutohold):
       statusToCheck.append(str(constants.taskAutoStopped))
     
-    
+    db_conn = dbRbhus.dbRbhus()
+    rows = 0
     try:
-      conn = db.connRbhus()
-      cursor = conn.cursor(db.dict)
       if(cTAll):
         if(cTMine):
-          cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'")
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'",dictionary=True)
         else:
-          cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks")
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks",dictionary=True)
       else:
         statusCheck = " or status=".join(statusToCheck)
         if(cTMine):
-          cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck +" and user='"+ str(self.username) +"'")
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck +" and user='"+ str(self.username) +"'",dictionary=True)
         else:
-          cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck)
-        
-      rows = cursor.fetchall()
-      cursor.close()
-      conn.close()
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck,dictionary=True)
     except:
       print("Error connecting to db")
-      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-      return()
+    self.pendFrames = {}
+    if(rows):
+      for row in rows:
+        self.pendFrames[row['id']] = db_conn.getUnassignedFramesCount(row['id'])
+    self.selTasks = rows
+    
+  
+  
+  def popTableList_thread(self):
+    QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+    
+    tSeletected = self.selectedTasks()
+    tSelect = []
+    if(tSeletected):
+      for x in tSeletected:
+        tSelect.append(x['id'])
+    
+    self.tableList.clearContents()
+    self.tableList.setSortingEnabled(False)
+    self.tableList.resizeColumnsToContents()
+    self.tableList.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+    colCount = 0
+    rows = self.selTasks
+    #statusToCheck = []
+    #cTDone = self.checkTDone.isChecked()
+    #cTActive = self.checkTActive.isChecked()
+    #cTHold = self.checkTHold.isChecked()
+    #cTAutohold = self.checkTAutohold.isChecked()
+    #cTAll = self.checkTAll.isChecked()
+    #cTMine = self.checkTMine.isChecked()
+    #if(cTDone):
+      #statusToCheck.append(str(constants.taskDone))
+    #if(cTActive):
+      #statusToCheck.append(str(constants.taskActive))
+    #if(cTHold):
+      #statusToCheck.append(str(constants.taskStopped))
+    #if(cTAutohold):
+      #statusToCheck.append(str(constants.taskAutoStopped))
+    
+    
+    #try:
+      #conn = db.connRbhus()
+      #cursor = conn.cursor(db.dict)
+      #if(cTAll):
+        #if(cTMine):
+          #cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'")
+        #else:
+          #cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks")
+      #else:
+        #statusCheck = " or status=".join(statusToCheck)
+        #if(cTMine):
+          #cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck +" and user='"+ str(self.username) +"'")
+        #else:
+          #cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck)
+        
+      #rows = cursor.fetchall()
+      #cursor.close()
+      #conn.close()
+    #except:
+      #print("Error connecting to db")
+      #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+      #return()
     if(not rows):
       QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
       return()
@@ -541,9 +591,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           item = QtGui.QTableWidgetItem()
           self.tableList.setItem(indx, colIndx, item)
           totalPend = 0
-          dbconn = dbRbhus.dbRbhus()
-          pendFrames = dbconn.getUnassignedFramesCount(row['id'])
-          totalPend = pendFrames[-1]['count(*)'] 
+          #pendFrames = dbconn.getUnassignedFramesCount(row['id'])
+          totalPend = self.pendFrames[row['id']][-1]['count(*)'] 
           self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(totalPend), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
@@ -569,24 +618,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
   
   def popTableFrames(self):
-    print("popTableFrames called!")
-    QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-    selFramesDict = self.selectedFrames()
-    selFrames = {}
-    for x in selFramesDict:
-      try:
-        selFrames[x['id']].append(x['frameId'])
-      except:
-        selFrames[x['id']] = []
-        selFrames[x['id']].append(x['frameId'])
+    self.hf = QtCore.QThread(parent=self.form)
+    self.hf.run = self.selectFrames
+    self.hf.finished.connect(self.popTableFrames_thread)
+    self.hf.start()
     
-    selFramesTid = selFrames.keys()
-    self.tableFrames.clearContents()
-    self.tableFrames.setSortingEnabled(False)
-    self.tableFrames.resizeColumnsToContents()
-    self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-    colCount = 0
-
+  
+  def selectFrames(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
     db_conn = dbRbhus.dbRbhus()
@@ -635,36 +673,131 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     #print(statusToCheck)
     
-    
+    rows = []
     try:
-      rows = []
       if(cAll):
-        conn = db.connRbhus()
-        cursor = conn.cursor(db.dict)
-        cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where id = "+ ids)
-        rows = cursor.fetchall()
-        cursor.close()
-        conn.close()
+        rows = db_conn.execute("select "+ ",".join(self.colNamesFrames) +" from frames where id = "+ ids,dictionary=True)
       elif(statusToCheck):
         statusCheck = " or status=".join(statusToCheck)
-        conn = db.connRbhus()
-        cursor = conn.cursor(db.dict)
-        cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where (id = "+ ids +") and (status="+ statusCheck +")")
-        rows = cursor.fetchall()
-        cursor.close()
-        conn.close()
+        rows = db_conn.execute("select "+ ",".join(self.colNamesFrames) +" from frames where (id = "+ ids +") and (status="+ statusCheck +")",dictionary=True)
       else:
         #print("please check status")
         self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
         QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.timerFramesRefresh.stop()
-        return()
     except:
       print(str(sys.exc_info()))
       self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
       QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))    
       self.timerFramesRefresh.stop()
+    self.sFrames = rows 
+  
+  
+  def popTableFrames_thread(self):
+    print("popTableFrames called!")
+    QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+    self.tableFrames.clearContents()
+    self.tableFrames.setSortingEnabled(False)
+    self.tableFrames.resizeColumnsToContents()
+    self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+    
+    
+    rows = self.sFrames
+    if(not rows):
+      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
       return()
+    selFramesDict = self.selectedFrames()
+    selFrames = {}
+    for x in selFramesDict:
+      try:
+        selFrames[x['id']].append(x['frameId'])
+      except:
+        selFrames[x['id']] = []
+        selFrames[x['id']].append(x['frameId'])
+    
+    selFramesTid = selFrames.keys()
+    
+    colCount = 0
+    
+
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    #db_conn = dbRbhus.dbRbhus()
+    padDict = {}
+    for x in selTasksDict:
+      selTasks.append(x['id'])
+      padDict[re.sub("^0+","",x['id'])] = 4
+      
+    ##print(padDict)  
+    if(selTasks):
+      ids = " or id = ".join(selTasks)
+    else:
+      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+      self.timerFramesRefresh.stop()
+      return()
+    
+    #statusToCheck = []
+    #cDone = self.checkDone.isChecked()
+    #cAssigned = self.checkAssigned.isChecked()
+    #cUnassigned = self.checkUnassigned.isChecked()
+    #cRun = self.checkRunning.isChecked()
+    #cFailed = self.checkFailed.isChecked()
+    #cHold = self.checkHold.isChecked()
+    #cAutohold = self.checkAutohold.isChecked()
+    #cKilled = self.checkKilled.isChecked()
+    #cHung =  self.checkHung.isChecked()
+    #cAll = self.checkAll.isChecked()
+    #if(cDone):
+      #statusToCheck.append(str(constants.framesDone))
+    #if(cAssigned):
+      #statusToCheck.append(str(constants.framesAssigned))
+    #if(cRun):
+      #statusToCheck.append(str(constants.framesRunning))
+    #if(cFailed):
+      #statusToCheck.append(str(constants.framesFailed))
+    #if(cHold):
+      #statusToCheck.append(str(constants.framesHold))
+    #if(cAutohold):
+      #statusToCheck.append(str(constants.framesAutoHold))
+    #if(cKilled):
+      #statusToCheck.append(str(constants.framesKilled))
+    #if(cUnassigned):
+      #statusToCheck.append(str(constants.framesUnassigned))
+    #if(cHung):
+      #statusToCheck.append(str(constants.framesHung))
+    
+    ##print(statusToCheck)
+    
+    
+    #try:
+      #rows = []
+      #if(cAll):
+        #conn = db.connRbhus()
+        #cursor = conn.cursor(db.dict)
+        #cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where id = "+ ids)
+        #rows = cursor.fetchall()
+        #cursor.close()
+        #conn.close()
+      #elif(statusToCheck):
+        #statusCheck = " or status=".join(statusToCheck)
+        #conn = db.connRbhus()
+        #cursor = conn.cursor(db.dict)
+        #cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where (id = "+ ids +") and (status="+ statusCheck +")")
+        #rows = cursor.fetchall()
+        #cursor.close()
+        #conn.close()
+      #else:
+        ##print("please check status")
+        #self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+        #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        #self.timerFramesRefresh.stop()
+        #return()
+    #except:
+      #print(str(sys.exc_info()))
+      #self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+      #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))    
+      #self.timerFramesRefresh.stop()
+      #return()
       
     
     
