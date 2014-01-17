@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Sun Jan  5 21:21:17 2014
+# Created: Fri Jan 17 12:22:32 2014
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ class Ui_mainRbhusList(object):
   def setupUi(self, mainRbhusList):
     mainRbhusList.setObjectName(_fromUtf8("mainRbhusList"))
     mainRbhusList.setWindowModality(QtCore.Qt.WindowModal)
-    mainRbhusList.resize(1116, 708)
+    mainRbhusList.resize(1096, 739)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -39,9 +39,15 @@ class Ui_mainRbhusList(object):
     mainRbhusList.setDockNestingEnabled(True)
     self.centralwidget = QtGui.QWidget(mainRbhusList)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-    self.verticalLayout_5 = QtGui.QVBoxLayout(self.centralwidget)
-    self.verticalLayout_5.setObjectName(_fromUtf8("verticalLayout_5"))
-    self.dockWidgetTasks = QtGui.QDockWidget(self.centralwidget)
+    self.gridLayout_2 = QtGui.QGridLayout(self.centralwidget)
+    self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
+    self.tabWidget = QtGui.QTabWidget(self.centralwidget)
+    self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
+    self.tabList = QtGui.QWidget()
+    self.tabList.setObjectName(_fromUtf8("tabList"))
+    self.gridLayout = QtGui.QGridLayout(self.tabList)
+    self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
+    self.dockWidgetTasks = QtGui.QDockWidget(self.tabList)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -269,7 +275,17 @@ class Ui_mainRbhusList(object):
     self.horizontalLayout_9.addLayout(self.verticalLayout_12)
     self.verticalLayout_3.addWidget(self.frame_6)
     self.dockWidgetTasks.setWidget(self.dockWidgetContents_2)
-    self.verticalLayout_5.addWidget(self.dockWidgetTasks)
+    self.gridLayout.addWidget(self.dockWidgetTasks, 0, 0, 1, 1)
+    self.tabWidget.addTab(self.tabList, _fromUtf8(""))
+    self.tabReport = QtGui.QWidget()
+    self.tabReport.setObjectName(_fromUtf8("tabReport"))
+    self.gridLayout_3 = QtGui.QGridLayout(self.tabReport)
+    self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
+    self.plainTextEdit = QtGui.QPlainTextEdit(self.tabReport)
+    self.plainTextEdit.setObjectName(_fromUtf8("plainTextEdit"))
+    self.gridLayout_3.addWidget(self.plainTextEdit, 0, 0, 1, 1)
+    self.tabWidget.addTab(self.tabReport, _fromUtf8(""))
+    self.gridLayout_2.addWidget(self.tabWidget, 0, 0, 1, 1)
     mainRbhusList.setCentralWidget(self.centralwidget)
     self.dockWidgetFrames = QtGui.QDockWidget(mainRbhusList)
     self.dockWidgetFrames.setEnabled(True)
@@ -505,6 +521,7 @@ class Ui_mainRbhusList(object):
     mainRbhusList.addDockWidget(QtCore.Qt.DockWidgetArea(8), self.dockWidgetFrames)
 
     self.retranslateUi(mainRbhusList)
+    self.tabWidget.setCurrentIndex(0)
     QtCore.QMetaObject.connectSlotsByName(mainRbhusList)
 
   def retranslateUi(self, mainRbhusList):
@@ -523,6 +540,8 @@ class Ui_mainRbhusList(object):
     self.labelTaskTotal.setText(_translate("mainRbhusList", "0", None))
     self.tableList.setSortingEnabled(True)
     self.taskRefresh.setText(_translate("mainRbhusList", "refresh", None))
+    self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabList), _translate("mainRbhusList", "list", None))
+    self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabReport), _translate("mainRbhusList", "report", None))
     self.label_5.setText(_translate("mainRbhusList", "FRAMES", None))
     self.checkAutohold.setText(_translate("mainRbhusList", "autohold", None))
     self.checkFailed.setText(_translate("mainRbhusList", "failed", None))

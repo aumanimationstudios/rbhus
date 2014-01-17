@@ -423,10 +423,14 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.ht = QtCore.QThread(parent=self.form)
     self.ht.run = self.selectTasks
     self.ht.finished.connect(self.popTableList_thread)
+    self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
     self.ht.start()
   
   
   def selectTasks(self):
+    self.pendFrames = {}
+    self.selTasks = []
+    
     statusToCheck = []
     cTDone = self.checkTDone.isChecked()
     cTActive = self.checkTActive.isChecked()
@@ -459,16 +463,16 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck,dictionary=True)
     except:
       print("Error connecting to db")
-    self.pendFrames = {}
+    
     if(rows):
       for row in rows:
         self.pendFrames[row['id']] = db_conn.getUnassignedFramesCount(row['id'])
     self.selTasks = rows
-    
+    #self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
   
   
   def popTableList_thread(self):
-    QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+    #self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
     
     tSeletected = self.selectedTasks()
     tSelect = []
@@ -522,7 +526,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
       #return()
     if(not rows):
-      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+      self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       return()
     colCount = len(self.colNamesTask) + len(self.colNamesTaskXtra)
       
@@ -607,7 +611,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.tableList.resizeColumnsToContents()
     self.tableList.setSortingEnabled(True)
     
-    QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+    self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
     self.tableList.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     #self.popTableFrames()
     
