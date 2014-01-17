@@ -757,14 +757,14 @@ def rbhusLog(lframeInfo):
       sT = fIn['sTime']
       tDelta = int((eT - sT).total_seconds())
     
-    sha256 = hashlib.sha256(fIns['fileName'])
+    sha256 = hashlib.sha256(lframeInfo['fileName'])
     try:
       dbconnLog.execute("insert into tasksLog \
                          (sha256,projId,avgEfficiency,fileName,date,timeSpentOnResource,ip) \
                          values ('"+ str(sha256.hexdigest()) +"',"+ \
                          str(fIns['projId']) +","+ \
                          str(fIns['efficiency'] if(fIns['efficiency']) else 100) +",'"+ \
-                         str(fIns['fileName']).lstrip().rstrip() +"',date(now()),"+ \
+                         str(lframeInfo['fileName']).lstrip().rstrip() +"',date(now()),"+ \
                          str(tDelta) +",'"+ str(ipAddr) +"') \
                          on duplicate key \
                          update timeSpentOnResource=timeSpentOnResource+"+ str(tDelta) +",avgEfficiency=(avgEfficiency+"+ str(fIns['efficiency'] if(fIns['efficiency']) else 100) +")/2")
