@@ -625,6 +625,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.hf = QtCore.QThread(parent=self.form)
     self.hf.run = self.selectFrames
     self.hf.finished.connect(self.popTableFrames_thread)
+    self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
     self.hf.start()
     
   
@@ -696,7 +697,6 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   
   def popTableFrames_thread(self):
     print("popTableFrames called!")
-    QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
     self.tableFrames.clearContents()
     self.tableFrames.setSortingEnabled(False)
     self.tableFrames.resizeColumnsToContents()
@@ -705,7 +705,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     rows = self.sFrames
     if(not rows):
-      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+      self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       return()
     selFramesDict = self.selectedFrames()
     selFrames = {}
@@ -733,7 +733,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(selTasks):
       ids = " or id = ".join(selTasks)
     else:
-      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+      self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.timerFramesRefresh.stop()
       return()
     
@@ -818,7 +818,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     
     if(not rows):
-      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+      self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.timerFramesRefresh.stop()
       return()
     colCount = len(self.colNamesFrames) + len(self.colNamesFramesXtra)
