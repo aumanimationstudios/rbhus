@@ -641,7 +641,6 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(selTasks):
       ids = " or id = ".join(selTasks)
     else:
-      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.timerFramesRefresh.stop()
       return()
     
@@ -687,12 +686,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       else:
         #print("please check status")
         self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
-        QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.timerFramesRefresh.stop()
     except:
       print(str(sys.exc_info()))
       self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
-      QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))    
       self.timerFramesRefresh.stop()
     self.sFrames = rows 
   
