@@ -39,7 +39,15 @@ import socket
 
 hostsFile = "/etc/hosts"
 dnsmasqFile = "/etc/dnsmasq.conf"
+pxelinux = "/srv/tftp/tftpboot/pxelinux.cfg/"
+pxelinuxDefault = "/srv/tftp/tftpboot/pxelinux.cfg/default"
 
+def getPxeLabels():
+  l = os.popen("cat "+ str(pxelinuxDefault) +" | grep -i label | gawk '{print $2}'")
+  labels = [x.rstrip().lstrip() for x in l.readlines()]
+  l.close()
+  return(labels)
+  
 
 def getHostNameIP():
   while(1):

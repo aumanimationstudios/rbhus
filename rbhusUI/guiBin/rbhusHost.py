@@ -43,13 +43,16 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+
+
+
 class Ui_Form(rbhusHostMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusHostMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
-    
+    self.form = Form
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.popTableHost)
     
@@ -282,13 +285,38 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
 
     return(rowsHosts)
   
+  
+  
   def popTableHost(self):
+    self.ht = QtCore.QThread(parent=self.form)
+    self.ht.run = self.getSelectedInfo
+    self.ht.finished.connect(self.popTableHost_thread)
+    self.ht.start()
+    #ht.wait()
+    
+  
+  def getSelectedInfo(self):
+    try:
+      rows = self.dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource, hostEffectiveResource where hostInfo.hostName=hostAlive.hostName and hostInfo.hostName=hostResource.hostName and hostInfo.hostName=hostEffectiveResource.hostName", dictionary=True)
+    except:
+      print("Error connecting to db")
+    self.hostinfos = rows
+    #self.finished.emit(rows)
+  
+  
+  def popTableHost_thread(self):
+    rows = self.hostinfos
     rSelected = self.selectedHosts()
     hostSelected = []
     if(rSelected):
       for x in rSelected:
         hostSelected.append(x['hostInfo.hostName'])
     print(hostSelected)
+    #try:
+      #rows = self.dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource, hostEffectiveResource where hostInfo.hostName=hostAlive.hostName and hostInfo.hostName=hostResource.hostName and hostInfo.hostName=hostEffectiveResource.hostName", dictionary=True)
+    #except:
+      #print("Error connecting to db")
+      #return(0)
         
     self.tableHost.clearContents()
     self.tableHost.setSortingEnabled(False)
@@ -296,11 +324,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.tableHost.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
     colCount = 0
     
-    try:
-      rows = self.dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource, hostEffectiveResource where hostInfo.hostName=hostAlive.hostName and hostInfo.hostName=hostResource.hostName and hostInfo.hostName=hostEffectiveResource.hostName", dictionary=True)
-    except:
-      print("Error connecting to db")
-      return(0)
+    
     
     hostsAll = [x['hostName'] for x in rows]
     #print(hostsAll)
