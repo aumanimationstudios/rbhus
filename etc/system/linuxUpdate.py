@@ -28,8 +28,6 @@ def gentooUpdate():
     mountf = os.system("mount /boot")
     kernelf = os.system("rsync -av /etc/kernels/boot/ /boot/ |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
     grubf = os.system("grub2-mkconfig -o /boot/grub/grub.cfg |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-    if(mountf or kernelf or grubf):
-      sys.exit(1)
   else:
     sys.exit(1)
   if(syncPortage or syncSets or syncLayman or syncCbOverlay or syncEtcPortage or syncRsyncD or syncKernels or syncModules):
