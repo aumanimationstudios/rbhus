@@ -25,22 +25,22 @@ def gentooUpdate():
   syncKernels = os.system("rsync -av rsync://"+ str(masterSystem) +"/kernels /etc/kernels |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   syncModules = os.system("rsync -av rsync://"+ str(masterSystem) +"/kernelmodules /lib/modules |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   if(not syncKernels):
-    os.system("mount /boot")
-    os.system("rsync -av /etc/kernels/boot/ /boot/ |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-    os.system("grub2-mkconfig -o /boot/grub/grub.cfg |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-    
-  else:
-    sys.exit(1)
-  if((not syncPortage) and (not syncSets) and (not syncLayman) and (not syncCbOverlay) and (not syncEtcPortage) and (not syncSystemD) and (not syncSystemDsys) and (not syncRsyncD) and (not syncKernels) and (not syncModules)):
-    emerge = os.system("emerge --exclude sys-apps/baselayout --deep -G @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-    systemd = os.system("systemctl enable lm_sensors.service lighttpd.service kdm.service acpid.service autofs.service NetworkManager.service NetworkManager-wait-online.service NetworkManager-dispatcher.service nfsd.service ntpd.service rpc-mountd.servicerpc-statd.service rpcbind.service rsyncd.service sensord.service sshd.service syslog-ng.service upower.service vixie-cron.servicexinetd.service |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-    cleanup = os.system("rm -frv /etc/NetworkManager/dispatcher.d/50-local |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-    if(not emerge):
-      sys.exit(0)
-    else:
+    mountf = os.system("mount /boot")
+    kernelf = os.system("rsync -av /etc/kernels/boot/ /boot/ |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+    grubf = os.system("grub2-mkconfig -o /boot/grub/grub.cfg |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+    if(mountf or kernelf or grubf):
       sys.exit(1)
   else:
     sys.exit(1)
+  if(syncPortage or syncSets or syncLayman or syncCbOverlay or syncEtcPortage or syncSystemD or syncSystemDsys or syncRsyncD or syncKernels or syncModules)):
+    sys.exit(1)
+  emerge = os.system("emerge --exclude sys-apps/baselayout --deep -G @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+  systemd = os.system("systemctl enable lm_sensors.service lighttpd.service kdm.service acpid.service autofs.service NetworkManager.service NetworkManager-wait-online.service NetworkManager-dispatcher.service nfsd.service ntpd.service rpc-mountd.servicerpc-statd.service rpcbind.service rsyncd.service sensord.service sshd.service syslog-ng.service upower.service vixie-cron.servicexinetd.service |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+  cleanup = os.system("rm -frv /etc/NetworkManager/dispatcher.d/50-local |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+  if(emerge or systemd or cleanup):
+    sys.exit(0)
+  else:
+      sys.exit(1)
   sys.exit(0)  
   
 p = os.popen("cat /etc/os-release","r")
