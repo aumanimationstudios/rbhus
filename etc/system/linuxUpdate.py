@@ -32,7 +32,7 @@ def gentooUpdate():
   grubf = os.system("grub2-mkconfig -o /boot/grub/grub.cfg |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   
   emerge = os.system("emerge --exclude sys-apps/baselayout --deep -G @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-  systemd = os.system("systemctl enable lm_sensors.service lighttpd.service kdm.service acpid.service autofs.service NetworkManager.service NetworkManager-wait-online.service NetworkManager-dispatcher.service nfsd.service ntpd.service rpc-mountd.servicerpc-statd.service rpcbind.service rsyncd.service sensord.service sshd.service syslog-ng.service upower.service vixie-cron.servicexinetd.service |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+  systemd = os.system("env-update; source /etc/profile; systemctl enable lm_sensors.service lighttpd.service kdm.service acpid.service autofs.service NetworkManager.service NetworkManager-wait-online.service NetworkManager-dispatcher.service nfsd.service ntpd.service rpc-mountd.servicerpc-statd.service rpcbind.service rsyncd.service sensord.service sshd.service syslog-ng.service upower.service vixie-cron.servicexinetd.service |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   cleanup = os.system("rm -frv /etc/NetworkManager/dispatcher.d/50-local |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   if(emerge or systemd or cleanup):
     sys.exit(0)
