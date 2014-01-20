@@ -142,6 +142,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="mouseTracking">
+                  <bool>true</bool>
+                 </property>
                  <property name="title">
                   <string/>
                  </property>
@@ -239,7 +242,13 @@
                <item>
                 <widget class="QCheckBox" name="checkDateTask">
                  <property name="text">
-                  <string>dateView</string>
+                  <string/>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
                  </property>
                 </widget>
                </item>
@@ -380,7 +389,7 @@
                      </property>
                      <property name="sizeHint" stdset="0">
                       <size>
-                       <width>40</width>
+                       <width>10</width>
                        <height>20</height>
                       </size>
                      </property>
@@ -585,6 +594,12 @@
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
                      </property>
                      <property name="text">
                       <string/>
@@ -794,6 +809,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="mouseTracking">
+             <bool>true</bool>
+            </property>
             <property name="title">
              <string/>
             </property>
@@ -994,8 +1012,8 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
-             <height>20</height>
+             <width>10</width>
+             <height>10</height>
             </size>
            </property>
           </spacer>
@@ -1155,7 +1173,13 @@
          <item>
           <widget class="QCheckBox" name="checkRefresh">
            <property name="text">
-            <string>autoRefresh</string>
+            <string/>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
            </property>
           </widget>
          </item>

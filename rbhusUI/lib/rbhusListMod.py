@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Mon Jan 20 13:17:12 2014
+# Created: Mon Jan 20 16:26:46 2014
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -106,6 +106,7 @@ class Ui_mainRbhusList(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.groupBox_3.sizePolicy().hasHeightForWidth())
     self.groupBox_3.setSizePolicy(sizePolicy)
+    self.groupBox_3.setMouseTracking(True)
     self.groupBox_3.setTitle(_fromUtf8(""))
     self.groupBox_3.setFlat(False)
     self.groupBox_3.setCheckable(False)
@@ -155,6 +156,8 @@ class Ui_mainRbhusList(object):
     spacerItem1 = QtGui.QSpacerItem(10, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_3.addItem(spacerItem1)
     self.checkDateTask = QtGui.QCheckBox(self.titleBarWidgetTasks)
+    self.checkDateTask.setText(_fromUtf8(""))
+    self.checkDateTask.setIconSize(QtCore.QSize(20, 20))
     self.checkDateTask.setObjectName(_fromUtf8("checkDateTask"))
     self.horizontalLayout_3.addWidget(self.checkDateTask)
     self.horizontalLayout = QtGui.QHBoxLayout()
@@ -230,7 +233,7 @@ class Ui_mainRbhusList(object):
     self.lineEditSearch.setSizePolicy(sizePolicy)
     self.lineEditSearch.setObjectName(_fromUtf8("lineEditSearch"))
     self.horizontalLayout_11.addWidget(self.lineEditSearch)
-    spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
+    spacerItem3 = QtGui.QSpacerItem(10, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_11.addItem(spacerItem3)
     self.label_2 = QtGui.QLabel(self.frame_6)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
@@ -425,6 +428,7 @@ class Ui_mainRbhusList(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.groupBox_2.sizePolicy().hasHeightForWidth())
     self.groupBox_2.setSizePolicy(sizePolicy)
+    self.groupBox_2.setMouseTracking(True)
     self.groupBox_2.setTitle(_fromUtf8(""))
     self.groupBox_2.setFlat(False)
     self.groupBox_2.setCheckable(False)
@@ -535,7 +539,7 @@ class Ui_mainRbhusList(object):
     self.lineEditSearchFrames.setSizePolicy(sizePolicy)
     self.lineEditSearchFrames.setObjectName(_fromUtf8("lineEditSearchFrames"))
     self.horizontalLayout_6.addWidget(self.lineEditSearchFrames)
-    spacerItem8 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
+    spacerItem8 = QtGui.QSpacerItem(10, 10, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_6.addItem(spacerItem8)
     self.label_6 = QtGui.QLabel(self.dockWidgetContents_3)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
@@ -601,6 +605,8 @@ class Ui_mainRbhusList(object):
     self.horizontalLayout_7 = QtGui.QHBoxLayout()
     self.horizontalLayout_7.setObjectName(_fromUtf8("horizontalLayout_7"))
     self.checkRefresh = QtGui.QCheckBox(self.dockWidgetContents_3)
+    self.checkRefresh.setText(_fromUtf8(""))
+    self.checkRefresh.setIconSize(QtCore.QSize(20, 20))
     self.checkRefresh.setObjectName(_fromUtf8("checkRefresh"))
     self.horizontalLayout_7.addWidget(self.checkRefresh)
     spacerItem9 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
@@ -626,7 +632,6 @@ class Ui_mainRbhusList(object):
     self.checkTAutohold.setText(_translate("mainRbhusList", "autohold", None))
     self.checkTDone.setText(_translate("mainRbhusList", "done", None))
     self.checkTActive.setText(_translate("mainRbhusList", "active", None))
-    self.checkDateTask.setText(_translate("mainRbhusList", "dateView", None))
     self.label_3.setText(_translate("mainRbhusList", "from :", None))
     self.label_4.setText(_translate("mainRbhusList", "to :", None))
     self.radioSubmit.setText(_translate("mainRbhusList", "submitTime", None))
@@ -656,5 +661,4 @@ class Ui_mainRbhusList(object):
     self.label_6.setText(_translate("mainRbhusList", "total", None))
     self.labelTotal.setText(_translate("mainRbhusList", "0", None))
     self.tableFrames.setSortingEnabled(True)
-    self.checkRefresh.setText(_translate("mainRbhusList", "autoRefresh", None))
 

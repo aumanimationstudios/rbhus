@@ -58,9 +58,15 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     icon = QtGui.QIcon()
     iconRefresh = QtGui.QIcon()
+    iconTime = QtGui.QIcon()
+    iconDate = QtGui.QIcon()
+    iconTime.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_time.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    iconDate.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_go_to_today.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     self.taskRefresh.setIcon(iconRefresh)
     self.framesRefresh.setIcon(iconRefresh)
+    self.checkRefresh.setIcon(iconTime)
+    self.checkDateTask.setIcon(iconDate)
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.form = Form
