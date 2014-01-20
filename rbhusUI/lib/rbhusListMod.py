@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusListMod.ui'
 #
-# Created: Mon Jan 20 16:26:46 2014
+# Created: Mon Jan 20 17:30:52 2014
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -313,6 +313,7 @@ class Ui_mainRbhusList(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.taskRefresh.sizePolicy().hasHeightForWidth())
     self.taskRefresh.setSizePolicy(sizePolicy)
+    self.taskRefresh.setMinimumSize(QtCore.QSize(0, 0))
     self.taskRefresh.setText(_fromUtf8(""))
     self.taskRefresh.setAutoDefault(False)
     self.taskRefresh.setFlat(False)
@@ -604,13 +605,13 @@ class Ui_mainRbhusList(object):
     self.verticalLayout_8.addWidget(self.tableFrames)
     self.horizontalLayout_7 = QtGui.QHBoxLayout()
     self.horizontalLayout_7.setObjectName(_fromUtf8("horizontalLayout_7"))
+    spacerItem9 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
+    self.horizontalLayout_7.addItem(spacerItem9)
     self.checkRefresh = QtGui.QCheckBox(self.dockWidgetContents_3)
     self.checkRefresh.setText(_fromUtf8(""))
     self.checkRefresh.setIconSize(QtCore.QSize(20, 20))
     self.checkRefresh.setObjectName(_fromUtf8("checkRefresh"))
     self.horizontalLayout_7.addWidget(self.checkRefresh)
-    spacerItem9 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
-    self.horizontalLayout_7.addItem(spacerItem9)
     self.framesRefresh = QtGui.QPushButton(self.dockWidgetContents_3)
     self.framesRefresh.setText(_fromUtf8(""))
     self.framesRefresh.setObjectName(_fromUtf8("framesRefresh"))
