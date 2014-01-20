@@ -716,6 +716,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     rows = self.sFrames
     if(not rows):
       self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
+      self.tableFrames.setColumnCount(0)
+      self.tableFrames.setRowCount(0)
+      self.labelTotal.setText(QtGui.QApplication.translate("Form", "0", None, QtGui.QApplication.UnicodeUTF8))
+      self.timerFramesRefresh.stop()
       return()
     selFramesDict = self.selectedFrames()
     selFrames = {}
