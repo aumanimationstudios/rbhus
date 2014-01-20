@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1182</width>
-    <height>760</height>
+    <width>855</width>
+    <height>801</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,6 +38,12 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="tabPosition">
        <enum>QTabWidget::North</enum>
       </property>
@@ -85,6 +91,12 @@
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
              <widget class="QWidget" name="titleBarWidgetTasks" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
                 <spacer name="horizontalSpacer_4">
@@ -140,6 +152,19 @@
                   <bool>false</bool>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_9">
+                  <item row="0" column="4">
+                   <widget class="QCheckBox" name="checkTAll">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>ALL</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="0" column="3">
                    <widget class="QCheckBox" name="checkTHold">
                     <property name="sizePolicy">
@@ -150,6 +175,19 @@
                     </property>
                     <property name="text">
                      <string>hold</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QCheckBox" name="checkTAutohold">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>autohold</string>
                     </property>
                    </widget>
                   </item>
@@ -179,53 +217,128 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="2">
-                   <widget class="QCheckBox" name="checkTAutohold">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>autohold</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="4">
-                   <widget class="QCheckBox" name="checkTAll">
-                    <property name="font">
-                     <font>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>ALL</string>
-                    </property>
-                   </widget>
-                  </item>
                  </layout>
                 </widget>
                </item>
                <item>
-                <spacer name="horizontalSpacer_9">
+                <spacer name="horizontalSpacer_3">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::MinimumExpanding</enum>
+                 </property>
                  <property name="sizeHint" stdset="0">
                   <size>
-                   <width>630</width>
+                   <width>10</width>
                    <height>20</height>
                   </size>
                  </property>
                 </spacer>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkDateTask">
+                 <property name="text">
+                  <string>dateView</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QGroupBox" name="groupBoxTaskDate">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="title">
+                    <string/>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_4">
+                    <item row="1" column="5">
+                     <widget class="QDateEdit" name="dateEditTaskTo">
+                      <property name="calendarPopup">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <spacer name="horizontalSpacer_8">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLabel" name="label_3">
+                      <property name="text">
+                       <string>from :</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="4">
+                     <widget class="QLabel" name="label_4">
+                      <property name="text">
+                       <string>to :</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QDateEdit" name="dateEditTaskFrom">
+                      <property name="calendarPopup">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0" colspan="6">
+                     <layout class="QHBoxLayout" name="horizontalLayout_13">
+                      <item>
+                       <widget class="QRadioButton" name="radioSubmit">
+                        <property name="text">
+                         <string>submitTime</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QRadioButton" name="radioDone">
+                        <property name="text">
+                         <string>doneTime</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QRadioButton" name="radioAfter">
+                        <property name="text">
+                         <string>afterTime</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </widget>
             </item>
             <item>
              <widget class="QFrame" name="frame_6">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_9">
                <property name="sizeConstraint">
                 <enum>QLayout::SetNoConstraint</enum>
@@ -236,6 +349,12 @@
                   <layout class="QHBoxLayout" name="horizontalLayout_11">
                    <item>
                     <widget class="QLabel" name="labelSearch">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="text">
                       <string>search</string>
                      </property>
@@ -325,10 +444,22 @@
                  <item>
                   <widget class="QTableWidget" name="tableList">
                    <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="baseSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
                    </property>
                    <property name="palette">
                     <palette>
@@ -421,6 +552,12 @@
                    <attribute name="verticalHeaderCascadingSectionResizes">
                     <bool>true</bool>
                    </attribute>
+                   <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+                    <bool>true</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderStretchLastSection">
+                    <bool>false</bool>
+                   </attribute>
                   </widget>
                  </item>
                  <item>
@@ -429,6 +566,9 @@
                     <spacer name="horizontalSpacer">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::MinimumExpanding</enum>
                      </property>
                      <property name="sizeHint" stdset="0">
                       <size>
@@ -447,7 +587,10 @@
                       </sizepolicy>
                      </property>
                      <property name="text">
-                      <string>refresh</string>
+                      <string/>
+                     </property>
+                     <property name="autoDefault">
+                      <bool>false</bool>
                      </property>
                      <property name="flat">
                       <bool>false</bool>
@@ -559,7 +702,7 @@
     <bool>true</bool>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -586,10 +729,10 @@
     <bool>false</bool>
    </property>
    <property name="features">
-    <set>QDockWidget::NoDockWidgetFeatures</set>
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="allowedAreas">
-    <set>Qt::AllDockWidgetAreas</set>
+    <set>Qt::BottomDockWidgetArea|Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
@@ -806,11 +949,11 @@
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
+             <enum>QSizePolicy::MinimumExpanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
+              <width>10</width>
               <height>20</height>
              </size>
             </property>
@@ -920,6 +1063,12 @@
            <verstretch>1</verstretch>
           </sizepolicy>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="palette">
           <palette>
            <active>
@@ -990,6 +1139,15 @@
          <attribute name="verticalHeaderVisible">
           <bool>false</bool>
          </attribute>
+         <attribute name="verticalHeaderCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderStretchLastSection">
+          <bool>false</bool>
+         </attribute>
         </widget>
        </item>
        <item>
@@ -1006,6 +1164,9 @@
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::MinimumExpanding</enum>
+           </property>
            <property name="sizeHint" stdset="0">
             <size>
              <width>40</width>
@@ -1017,7 +1178,7 @@
          <item>
           <widget class="QPushButton" name="framesRefresh">
            <property name="text">
-            <string>refresh</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -1028,6 +1189,7 @@
     </layout>
    </widget>
   </widget>
+  <zorder>dockWidgetFrames</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -57,6 +57,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       pass
     
     icon = QtGui.QIcon()
+    iconRefresh = QtGui.QIcon()
+    iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.taskRefresh.setIcon(iconRefresh)
+    self.framesRefresh.setIcon(iconRefresh)
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.form = Form
@@ -90,30 +94,28 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkTDone.clicked.connect(self.popTableList)
     self.checkTHold.clicked.connect(self.popTableList)
     self.checkTMine.clicked.connect(self.popTableList)
+    self.checkDateTask.clicked.connect(self.checkDateTaskFunc)
+    self.radioAfter.clicked.connect(self.popTableList)
+    self.radioDone.clicked.connect(self.popTableList)
+    self.radioSubmit.clicked.connect(self.popTableList)
+    self.dateEditTaskFrom.dateChanged.connect(self.popTableList)
+    self.dateEditTaskTo.dateChanged.connect(self.popTableList)
     self.tableList.customContextMenuRequested.connect(self.popupTask)
     self.tableFrames.customContextMenuRequested.connect(self.popupFrames)
-    #self.taskHold.clicked.connect(self.holdTask)
-    #self.taskRerun.clicked.connect(self.rerunTask)
-    #self.taskActivate.clicked.connect(self.activateTask)
-    #self.taskEdit.clicked.connect(self.editTask)
-    #self.taskDelete.clicked.connect(self.delTask)
     self.taskRefresh.clicked.connect(self.popTableList)
-    #self.frameStop.clicked.connect(self.stopFrame)
-    #self.frameRerun.clicked.connect(self.rerunFrame)
-    #self.frameHold.clicked.connect(self.holdFrame)
-    
-    #self.tableFrames.itemSelectionChanged.connect(self.stopFrame)
     self.timer = QtCore.QTimer()
     self.timerFramesRefresh = QtCore.QTimer()
     self.timerFramesRefresh.timeout.connect(self.popTableFrames)
-    
     self.timer.timeout.connect(self.popTableFrames)
     self.checkRefresh.clicked.connect(self.timeCheck)
     self.lineEditSearch.returnPressed.connect(self.popTableList)
     self.lineEditSearchFrames.returnPressed.connect(self.popTableFrames)
     self.popTableList()
+    self.checkDateTaskFunc()
     self.labelUser.setText(os.environ['rbhus_acl_user'])
     self.taskSearchTime = 0.0
+    self.dateEditTaskFrom.setDate(QtCore.QDate.currentDate())
+    self.dateEditTaskTo.setDate(QtCore.QDate.currentDate())
   
   
   
@@ -128,6 +130,15 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       #rows = db_conn.execute("select * from frames where id="+ str(x['id']), dictionary=True)
     
   
+  def checkDateTaskFunc(self):
+    if(self.checkDateTask.isChecked()):
+      self.dateEditTaskFrom.setEnabled(True)
+      self.dateEditTaskTo.setEnabled(True)
+      self.groupBoxTaskDate.setVisible(True)
+    else:
+      self.dateEditTaskFrom.setEnabled(False)
+      self.dateEditTaskTo.setEnabled(False)
+      self.groupBoxTaskDate.setVisible(False)
   
   
   
@@ -455,6 +466,21 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     cTAutohold = self.checkTAutohold.isChecked()
     cTAll = self.checkTAll.isChecked()
     cTMine = self.checkTMine.isChecked()
+
+    timeS = ""
+    if(self.checkDateTask.isChecked()):
+      fromT = "'"+ str(self.dateEditTaskFrom.date().year()) +"-"+ str(self.dateEditTaskFrom.date().month()) +"-"+ str(self.dateEditTaskFrom.date().day()) +"'"
+      toT = "'"+ str(self.dateEditTaskTo.date().year()) +"-"+ str(self.dateEditTaskTo.date().month()) +"-"+ str(self.dateEditTaskTo.date().day()) +"'"
+      if(self.radioSubmit.isChecked()):
+        timeS = " and submitTime between "+ fromT +" and "+ toT
+      elif(self.radioDone.isChecked()):
+        timeS = " and doneTime between "+ fromT +" and "+ toT
+      elif(self.radioAfter.isChecked()):
+        timeS = " and afterTime between "+ fromT +" and "+ toT
+      
+      
+      
+      
     if(cTDone):
       statusToCheck.append(str(constants.taskDone))
     if(cTActive):
@@ -465,19 +491,19 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       statusToCheck.append(str(constants.taskAutoStopped))
     
     db_conn = dbRbhus.dbRbhus()
-    rows = 0
+    rows = []
     try:
       if(cTAll):
         if(cTMine):
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'",dictionary=True)
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS,dictionary=True)
         else:
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks",dictionary=True)
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS,dictionary=True)
       else:
         statusCheck = " or status=".join(statusToCheck)
         if(cTMine):
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck +" and user='"+ str(self.username) +"'",dictionary=True)
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck +" and user='"+ str(self.username) +"'"+ timeS,dictionary=True)
         else:
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck,dictionary=True)
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck + timeS,dictionary=True)
     except:
       print("Error connecting to db")
     
@@ -503,47 +529,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.tableList.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
     colCount = 0
     rows = self.selTasks
-    #statusToCheck = []
-    #cTDone = self.checkTDone.isChecked()
-    #cTActive = self.checkTActive.isChecked()
-    #cTHold = self.checkTHold.isChecked()
-    #cTAutohold = self.checkTAutohold.isChecked()
-    #cTAll = self.checkTAll.isChecked()
-    #cTMine = self.checkTMine.isChecked()
-    #if(cTDone):
-      #statusToCheck.append(str(constants.taskDone))
-    #if(cTActive):
-      #statusToCheck.append(str(constants.taskActive))
-    #if(cTHold):
-      #statusToCheck.append(str(constants.taskStopped))
-    #if(cTAutohold):
-      #statusToCheck.append(str(constants.taskAutoStopped))
     
-    
-    #try:
-      #conn = db.connRbhus()
-      #cursor = conn.cursor(db.dict)
-      #if(cTAll):
-        #if(cTMine):
-          #cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'")
-        #else:
-          #cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks")
-      #else:
-        #statusCheck = " or status=".join(statusToCheck)
-        #if(cTMine):
-          #cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck +" and user='"+ str(self.username) +"'")
-        #else:
-          #cursor.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck)
-        
-      #rows = cursor.fetchall()
-      #cursor.close()
-      #conn.close()
-    #except:
-      #print("Error connecting to db")
-      #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-      #return()
     if(not rows):
       self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
+      self.tableList.setColumnCount(0)
+      self.tableList.setRowCount(0)
+      self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
       return()
     colCount = len(self.colNamesTask) + len(self.colNamesTaskXtra)
       
@@ -587,14 +578,14 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.tableList.setVerticalHeaderItem(indx, item)
       colIndx = 0
       for colName in self.colNamesTask:
+        item = QtGui.QTableWidgetItem()
+        item.setToolTip(str(row['id']) +":"+ str(row['fileName']))
         if(colName == "status"):
-          item = QtGui.QTableWidgetItem()
           self.tableList.setItem(indx, colIndx, item)
           self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         if(colName == "id"):
-          item = QtGui.QTableWidgetItem()
           self.tableList.setItem(indx, colIndx, item)
           self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
           if(str(row[colName]).zfill(4) in tSelect):
@@ -603,21 +594,23 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           continue
         
         
-        item = QtGui.QTableWidgetItem()
         self.tableList.setItem(indx, colIndx, item)
         self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
       for colName in self.colNamesTaskXtra:
+        item = QtGui.QTableWidgetItem()
+        item.setToolTip(str(row['id']) +":"+ str(row['fileName']))
         if(colName == "pending"):
-          item = QtGui.QTableWidgetItem()
           self.tableList.setItem(indx, colIndx, item)
           totalPend = 0
           #pendFrames = dbconn.getUnassignedFramesCount(row['id'])
-          totalPend = self.pendFrames[row['id']][-1]['count(*)'] 
+          try:
+            totalPend = self.pendFrames[row['id']][-1]['count(*)'] 
+          except:
+            pass
           self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(totalPend), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
-        item = QtGui.QTableWidgetItem()
         self.tableList.setItem(indx, colIndx, item)
         self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
@@ -753,74 +746,6 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.timerFramesRefresh.stop()
       return()
-    
-    #statusToCheck = []
-    #cDone = self.checkDone.isChecked()
-    #cAssigned = self.checkAssigned.isChecked()
-    #cUnassigned = self.checkUnassigned.isChecked()
-    #cRun = self.checkRunning.isChecked()
-    #cFailed = self.checkFailed.isChecked()
-    #cHold = self.checkHold.isChecked()
-    #cAutohold = self.checkAutohold.isChecked()
-    #cKilled = self.checkKilled.isChecked()
-    #cHung =  self.checkHung.isChecked()
-    #cAll = self.checkAll.isChecked()
-    #if(cDone):
-      #statusToCheck.append(str(constants.framesDone))
-    #if(cAssigned):
-      #statusToCheck.append(str(constants.framesAssigned))
-    #if(cRun):
-      #statusToCheck.append(str(constants.framesRunning))
-    #if(cFailed):
-      #statusToCheck.append(str(constants.framesFailed))
-    #if(cHold):
-      #statusToCheck.append(str(constants.framesHold))
-    #if(cAutohold):
-      #statusToCheck.append(str(constants.framesAutoHold))
-    #if(cKilled):
-      #statusToCheck.append(str(constants.framesKilled))
-    #if(cUnassigned):
-      #statusToCheck.append(str(constants.framesUnassigned))
-    #if(cHung):
-      #statusToCheck.append(str(constants.framesHung))
-    
-    ##print(statusToCheck)
-    
-    
-    #try:
-      #rows = []
-      #if(cAll):
-        #conn = db.connRbhus()
-        #cursor = conn.cursor(db.dict)
-        #cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where id = "+ ids)
-        #rows = cursor.fetchall()
-        #cursor.close()
-        #conn.close()
-      #elif(statusToCheck):
-        #statusCheck = " or status=".join(statusToCheck)
-        #conn = db.connRbhus()
-        #cursor = conn.cursor(db.dict)
-        #cursor.execute("select "+ ",".join(self.colNamesFrames) +" from frames where (id = "+ ids +") and (status="+ statusCheck +")")
-        #rows = cursor.fetchall()
-        #cursor.close()
-        #conn.close()
-      #else:
-        ##print("please check status")
-        #self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
-        #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-        #self.timerFramesRefresh.stop()
-        #return()
-    #except:
-      #print(str(sys.exc_info()))
-      #self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
-      #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))    
-      #self.timerFramesRefresh.stop()
-      #return()
-      
-    
-    
-    
-    
     
     findRows = []
     for row in rows:
