@@ -296,8 +296,9 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     
   
   def getSelectedInfo(self):
+    db_conn = dbRbhus.dbRbhus()
     try:
-      rows = self.dbconn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource, hostEffectiveResource where hostInfo.hostName=hostAlive.hostName and hostInfo.hostName=hostResource.hostName and hostInfo.hostName=hostEffectiveResource.hostName", dictionary=True)
+      rows = db_conn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource, hostEffectiveResource where hostInfo.hostName=hostAlive.hostName and hostInfo.hostName=hostResource.hostName and hostInfo.hostName=hostEffectiveResource.hostName", dictionary=True)
     except:
       print("Error connecting to db")
     self.hostinfos = rows
