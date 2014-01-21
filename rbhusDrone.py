@@ -62,6 +62,9 @@ if(sys.platform.find("linux") >= 0):
 
 LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusClient_"+ username +"_"+ str(hostname) +".log")
 
+if(sys.platform.find("win") >= 0):
+  LOG_FILENAME = logging.FileHandler("x:/pythonTestWindoze.DONOTDELETE/logs/rbhusClient_"+ username +"_"+ str(hostname) +".log")
+
 singular = tempDir + os.sep + "singularity"
 
 logClient = logging.getLogger("logClient")
