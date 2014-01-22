@@ -478,11 +478,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       fromT = "'"+ str(self.dateEditTaskFrom.date().year()) +"-"+ str(self.dateEditTaskFrom.date().month()) +"-"+ str(self.dateEditTaskFrom.date().day()) +"'"
       toT = "'"+ str(self.dateEditTaskTo.date().year()) +"-"+ str(self.dateEditTaskTo.date().month()) +"-"+ str(self.dateEditTaskTo.date().day()) +"'"
       if(self.radioSubmit.isChecked()):
-        timeS = " and submitTime between "+ fromT +" and "+ toT
+        timeS = " and (submitTime between "+ fromT +" and "+ toT +")"
       elif(self.radioDone.isChecked()):
-        timeS = " and doneTime between "+ fromT +" and "+ toT
+        timeS = " and (doneTime between "+ fromT +" and "+ toT +")"
       elif(self.radioAfter.isChecked()):
-        timeS = " and afterTime between "+ fromT +" and "+ toT
+        timeS = " and (afterTime between "+ fromT +" and "+ toT +")"
       
       
       
@@ -502,14 +502,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       if(cTAll):
         if(cTMine):
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS,dictionary=True)
+          print("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS)
         else:
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS,dictionary=True)
+          print("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS)
       else:
         statusCheck = " or status=".join(statusToCheck)
         if(cTMine):
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck +" and user='"+ str(self.username) +"'"+ timeS,dictionary=True)
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'"+ timeS,dictionary=True)
+          print("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'"+ timeS)
         else:
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where status="+ statusCheck + timeS,dictionary=True)
+          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")"+ timeS,dictionary=True)
+          print("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")"+ timeS)
     except:
       print("Error connecting to db")
     

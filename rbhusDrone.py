@@ -63,7 +63,7 @@ if(sys.platform.find("linux") >= 0):
 LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusClient_"+ username +"_"+ str(hostname) +".log")
 
 if(sys.platform.find("win") >= 0):
-  LOG_FILENAME = logging.FileHandler("x:/pythonTestWindoze.DONOTDELETE/logs/rbhusClient_"+ username +"_"+ str(hostname) +".log")
+  LOG_FILENAME = logging.FileHandler("z:/pythonTestWindoze.DONOTDELETE/logs/rbhusClient_"+ username +"_"+ str(hostname) +".log")
 
 singular = tempDir + os.sep + "singularity"
 
@@ -154,7 +154,7 @@ def clientQuit(ppid):
 
 # Get the host info and update the database.
 def init():
-
+  checkHostNameDb()
   hostname,ipAddr = getHostNameIP()
   totalCpus = multiprocessing.cpu_count()
   totalMem = totalMemInfo()
@@ -163,6 +163,35 @@ def init():
     return(1)
   return(0)
 
+def getMacAddress(): 
+  mac = ""
+  if(sys.platform.find('win') >= 0): 
+    for line in os.popen("ipconfig /all"): 
+      if line.lstrip().startswith('Physical Address'): 
+        mac = line.split(':')[1].strip().replace('-',':') 
+        break 
+  else: 
+    for line in os.popen("ifconfig"): 
+      if line.find('Ether') > -1: 
+        mac = line.split()[4] 
+        break 
+  return(mac)
+
+
+def checkHostNameDb():
+  hdb = dbRbhus.dbRbhusHost()
+  maccy =  getMacAddress().lower()
+  try:
+    row = hdb.execute("select * from main where macc='"+ maccy +"'",dictionary=True)
+  except:
+    logClient.debug(str(sys.exc_info()))
+    return(0)
+  if(row):
+    det = row[-1]
+    realName = det['name']
+    if(sys.platform.find("win") >= 0):
+      os.system("wmic computersystem where name=\"%COMPUTERNAME%\" call rename name=\""+ str(realName) +"\"")
+    
 
 def hostUpdater():
   if(sys.platform.find("linux") >=0):

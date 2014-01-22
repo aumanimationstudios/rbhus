@@ -50,15 +50,15 @@ def gentooUpdate():
   
   emerge = os.system("emerge --exclude sys-apps/baselayout --deep -G @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   
-  for x in systemservices:
-    systemd = os.system("env-update; source /etc/profile; systemctl enable "+ str(x) +" |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-
-  cleanup = os.system("rm -frv /etc/NetworkManager/dispatcher.d/50-local |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
-  #if(emerge or systemd or cleanup):
-    #sys.exit(0)
-  #else:
-      #sys.exit(1)
-  sys.exit(0)  
+  if(not emerge):
+    for x in systemservices:
+      systemd = os.system("env-update; source /etc/profile; systemctl enable "+ str(x) +" |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+    sensord = os.system("yes | sensors-detect")
+    cleanup = os.system("rm -frv /etc/NetworkManager/dispatcher.d/50-local |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+    sys.exit(0)  
+  else:
+    sys.exit(1)
+  
   
 p = os.popen("cat /etc/os-release","r")
 dets = p.readlines()
