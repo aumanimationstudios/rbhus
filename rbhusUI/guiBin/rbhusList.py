@@ -56,6 +56,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     except:
       pass
     
+    self.form = Form
+    
+    
     icon = QtGui.QIcon()
     iconRefresh = QtGui.QIcon()
     iconTime = QtGui.QIcon()
@@ -69,7 +72,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkDateTask.setIcon(iconDate)
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
-    self.form = Form
+
+    self.taskThreads = []
     
     self.dockWidgetTasks.setTitleBarWidget(self.titleBarWidgetTasks)
     self.dockWidgetFrames.setTitleBarWidget(self.titleBarWidgetFrames)
@@ -122,18 +126,36 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.taskSearchTime = 0.0
     self.dateEditTaskFrom.setDate(QtCore.QDate.currentDate())
     self.dateEditTaskTo.setDate(QtCore.QDate.currentDate())
+    
   
   
   
   
-  #def report(self):
-    #selTasksDict = self.selectedTasks()
-    #selTasks = []
-    #for x in selTasksDict:
-      #pass
-    #db_conn = dbRbhus.dbRbhus()
-    #try:
-      #rows = db_conn.execute("select * from frames where id="+ str(x['id']), dictionary=True)
+  def report_thread(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    db_conn = dbRbhus.dbRbhus()
+    tids = []
+    doneFs = []
+    batchIds = []
+    hostNames = []
+    for x in selTasksDict:
+      try:
+        rows = db_conn.execute("select * from frames where id="+ str(x['id']), dictionary=True)
+      except:
+        return(0)
+      if(rows):
+        for row in rows:
+          if(row['status'] == constants.framesDone):
+            doneFs.append(row)
+        if(doneFs):
+          for dfs in doneFs:
+            try:
+              batchIds[dfs['batchId']].append(dfs)
+            except:
+              batchIds[dfs['batchId']] = []
+              batchIds[dfs['batchId']].append(dfs)
+    
     
   
   def checkDateTaskFunc(self):
@@ -454,11 +476,19 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   
   
   def popTableList(self):
-    self.ht = QtCore.QThread(parent=self.form)
-    self.ht.run = self.selectTasks
-    self.ht.finished.connect(self.popTableList_thread)
+    taskThread = QtCore.QThread(parent=self.form)
+    if(self.taskThreads):
+      for x in self.taskThreads:
+        if(x.isRunning()):
+          x.terminate()
+      self.taskThreads = []
+          
+      
+    taskThread.run = self.selectTasks
+    taskThread.finished.connect(self.popTableList_thread)
     self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
-    self.ht.start()
+    taskThread.start()
+    self.taskThreads.append(taskThread)
   
   
   def selectTasks(self):
@@ -504,18 +534,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       if(cTAll):
         if(cTMine):
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS,dictionary=True)
-          print("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS)
+          #print("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS)
         else:
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS,dictionary=True)
-          print("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS)
+          #print("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS)
       else:
         statusCheck = " or status=".join(statusToCheck)
         if(cTMine):
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'"+ timeS,dictionary=True)
-          print("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'"+ timeS)
+          #print("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'"+ timeS)
         else:
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")"+ timeS,dictionary=True)
-          print("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")"+ timeS)
+          #print("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")"+ timeS)
     except:
       print("Error connecting to db")
     
@@ -644,11 +674,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
   
   def popTableFrames(self):
-    self.hf = QtCore.QThread(parent=self.form)
-    self.hf.run = self.selectFrames
-    self.hf.finished.connect(self.popTableFrames_thread)
+    hf = QtCore.QThread(parent=self.form)
+    hf.run = self.selectFrames
+    hf.finished.connect(self.popTableFrames_thread)
     self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
-    self.hf.start()
+    hf.start()
     
   
   def selectFrames(self):
