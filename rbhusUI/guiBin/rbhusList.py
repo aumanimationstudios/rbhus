@@ -137,8 +137,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     db_conn = dbRbhus.dbRbhus()
     tids = []
     doneFs = []
+    pendingFs = []
     batchIds = []
-    hostNames = []
+    threadAvg = []
+    
     for x in selTasksDict:
       try:
         rows = db_conn.execute("select * from frames where id="+ str(x['id']), dictionary=True)
@@ -148,6 +150,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         for row in rows:
           if(row['status'] == constants.framesDone):
             doneFs.append(row)
+          else:
+            pendingFs.append(row)
         if(doneFs):
           for dfs in doneFs:
             try:
@@ -155,6 +159,15 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             except:
               batchIds[dfs['batchId']] = []
               batchIds[dfs['batchId']].append(dfs)
+            try:
+              threadAvg[dfs['fThreads']].append(dfs)
+            except:
+              threadAvg[dfs['fThreads']] = []
+              threadAvg[dfs['fThreads']].append(dfs)
+        
+          
+              
+              
     
     
   
