@@ -498,6 +498,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     db_conn = dbRbhus.dbRbhus()
     rows = []
+    if(not statusToCheck):
+      return(rows)
     try:
       if(cTAll):
         if(cTMine):
