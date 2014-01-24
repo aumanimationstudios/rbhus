@@ -41,6 +41,32 @@ hostsFile = "/etc/hosts"
 dnsmasqFile = "/etc/dnsmasq.conf"
 pxelinux = "/srv/tftp/tftpboot/pxelinux.cfg/"
 pxelinuxDefault = "/srv/tftp/tftpboot/pxelinux.cfg/default"
+pxelinuxLinux = "/srv/tftp/tftpboot/pxelinux.cfg/default.linux"
+
+def getCloneStatus():
+  dbconn = dbRbhus.dbRbhusHost()
+  try:
+    rows = dbconn.execute("select * from clonedb", dictionary=True)
+  except:
+    print(sys.exc_info())
+  try:
+    mainrows = dbconn.execute("select * from main", dictionary=True)
+  except:
+    print(sys.exc_info())
+    
+  maccy = {}  
+  
+  if(mainrows):
+    for mainrow in mainrows:
+      maccy[mainrow['ip']] = mainrow['macc']
+    
+  if(rows):
+    for row in rows:
+      if(row['clone'] == constants.cloneGrubUpdate):
+        if(row['cloneStatus'] == constants.cloneStatusInitiate):
+          os.system("cp -v "+ pxelinuxLinux +" "+ maccy[row['ip']])
+        
+
 
 def getPxeLabels():
   l = os.popen("cat "+ str(pxelinuxDefault) +" | grep -i label | gawk '{print $2}'")

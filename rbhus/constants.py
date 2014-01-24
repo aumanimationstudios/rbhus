@@ -27,6 +27,17 @@ hostSystemUpdateKilled = 6
 hostSystemUpdateDone = 7
 
 
+cloneDisable = 0
+cloneLinux = 1
+cloneLinuxWin = 2
+cloneGrubUpdate = 3
+
+cloneStatusInitiate = 0
+cloneStatusPending = 1
+cloneStatusRunning = 2
+cloneStatusDone = 3
+cloneStatusFail = 4
+
 
 #task table
 taskWaiting = 0
