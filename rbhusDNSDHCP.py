@@ -64,7 +64,10 @@ def getCloneStatus():
     for row in rows:
       if(row['clone'] == constants.cloneGrubUpdate):
         if(row['cloneStatus'] == constants.cloneStatusInitiate):
-          os.system("cp -v "+ pxelinuxLinux +" "+ maccy[row['ip']])
+          cpstatus = os.system("cp -v "+ pxelinuxLinux +" "+ maccy[row['ip']])
+          if(not cpstatus):
+            dbconn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusPending) +" where ip='"+ str(row['ip']) +"'")
+            
         
 
 

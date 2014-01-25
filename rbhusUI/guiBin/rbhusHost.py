@@ -94,6 +94,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     menu = QtGui.QMenu()
     systemMenu = QtGui.QMenu()
     rbhusMenu = QtGui.QMenu()
+    restartMenu = QtGui.QMenu()
     test2Action = menu.addAction("disable")
     test3Action = menu.addAction("enable")
     test4Action = menu.addAction("stop")
@@ -106,10 +107,13 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test13Action = systemMenu.addAction("update system")
     test10Action = systemMenu.addAction("backup system")
     test7Action = systemMenu.addAction("restart")
+    test14Action = restartMenu.addAction("default")
+    test15Action = restartMenu.addAction("windows")
+    test16Action = restartMenu.addAction("linux")
     test8Action = systemMenu.addAction("shutdown")
     test11Action.setMenu(systemMenu)
     test12Action.setMenu(rbhusMenu)
-    
+    test7Action.setMenu(restartMenu)
     action = menu.exec_(self.tableHost.mapToGlobal(pos))
     if(action == test1Action):
       #print("test1")
@@ -128,7 +132,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       self.hostClientStart()
     if(action == test6Action):
       self.hostClientKill()
-    if(action == test7Action):
+    if(action == test14Action):
       self.hostRestart()
     if(action == test9Action):
       self.hostUpdate()
