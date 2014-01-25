@@ -120,13 +120,14 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkRefresh.clicked.connect(self.timeCheck)
     self.lineEditSearch.returnPressed.connect(self.popTableList)
     self.lineEditSearchFrames.returnPressed.connect(self.popTableFrames)
-    self.popTableList()
+    
     self.checkDateTaskFunc()
     self.labelUser.setText(os.environ['rbhus_acl_user'])
     self.taskSearchTime = 0.0
     self.dateEditTaskFrom.setDate(QtCore.QDate.currentDate())
     self.dateEditTaskTo.setDate(QtCore.QDate.currentDate())
     
+    self.popTableList()
   
   
   
