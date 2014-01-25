@@ -1,48 +1,57 @@
 #!/usr/bin/python
 import sys
 import os
-import dbHosts
-import cConstants
+import dbRbhus
+import constants
+import socket
 
 
-def fortune():
-  print("\n\n\n")
-  a = os.popen("fortune science","r")
-  for x in a:
-    print(x)
-  print("\n\n\n")
-  a.close()
+
+
+myip = socket.gethostbyname(socket.gethostname())
+db_conn = dbRbhus.dbRbhusHost()
+try:
+  cInfo = db_conn.execute("select * clonedb where ip='"+ str(myip) +"'",dictionary=True)[-1]
+except:
+  print("failed aquiring system details")
+  sys.exit(1)
+
+# check if anything is initiated! . if not exit gracefully
+if(cInfo):
+  if(cInfo['cloneStatus'] != constants.cloneStatusInitiate):
+    print("nothing to do")
+    sys.exit(0)
+
+try:
+  db_conn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusRunning) +" where ip='"+ str(myip) +"'")
+except:
+  print("failed updating system details")
+  db_conn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusFail) +" where ip='"+ str(myip) +"'")
+  sys.exit(1)
+  
+
   
 
 
 
+clone = cInfo['clone']
 
-db_conn = dbHosts.dbHosts()
-cInfo = db_conn.getCloneInfo()
-
-devNode = "/dev/sda"
-cServer = "cloneMaster"
-cDir = "/crap/gentooOnesis"
-clone = 2 
-grubInstall = "/dev/sda"
-bootPart = "/dev/sda1"
-fortune()
-
-if(cInfo):
-  for x in cInfo.keys():
-    print(x +" : "+ str(cInfo[x]))
-  devNode = cInfo['cloneDisk']
-  cServer = cInfo['cloneServer']
-  cDir = cInfo['cloneDir']
-  clone = cInfo['clone']
-  grubInstall = cInfo['grubInstall']
-else:
-  sys.exit(0)
   
 if(not clone):
   sys.exit(0)
-cType = cConstants.cloneType[clone] 
+cType = constants.cloneType[clone] 
+if(cType == "grub"):
+  os.system("mount /boot")
+  defaultBoot = cInfo['bootDefault']
+  
 
+
+
+
+if(not os.path.exists(cInfo['cloneDisk'])):
+  db_conn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusFail) +" where ip='"+ str(myip) +"'")
+  sys.exit(1)
+  
 
 
 def getMacAddress():
@@ -55,7 +64,7 @@ def getMacAddress():
 
 maccy = getMacAddress()
 print(maccy.replace(":","-"))
-myPxebootDefault = "/mnt/pxeboot/default"
+myPxebootDefault = "/mnt/pxeboot/default.linux"
 myPxebootFile = "/mnt/pxeboot/01-"+ maccy.replace(":","-")
 myPxebootFlag = "/mnt/pxeboot/bootT-"+ maccy.replace(":","-") #If this file is present go to the next step of making filesystems on partitions
 
@@ -66,23 +75,22 @@ os.system("source /etc/profile >& /dev/null")
 os.system("mkdir -p /mnt/gentoo/ >& /dev/null")
 os.system("mkdir -p /mnt/pxeboot/ >& /dev/null")
 os.system("mkdir -p /mnt/cloneMaster/ >& /dev/null")
-os.system("mount cloneMaster:/crap/gentooOnesis /mnt/gentoo >& /dev/null")
-os.system("mount cloneMaster:/cloneMaster /mnt/cloneMaster >& /dev/null")
-os.system("mount blues0:/srv/tftp/tftpboot/pxelinux.cfg /mnt/pxeboot/ >& /dev/null")
-os.system("umount -f "+ devNode +"* >& /dev/null")
+os.system("mount "+ cInfo['cloneServer'] +":"+ cInfo['cloneDir'] +" /mnt/gentoo >& /dev/null")
+os.system("mount "+ cInfo['cloneServer'] +":"+ cInfo['cloneRootDir'] +" /mnt/cloneMaster >& /dev/null")
+os.system("mount "+ cInfo['tftpServer'] +":"+ cInfo['tftpDir'] +" /mnt/pxeboot/ >& /dev/null")
+os.system("umount -f "+ cInfo['cloneDisk'] +"* >& /dev/null")
 
 if(not os.path.exists(myPxebootFlag)):
-  os.system("fdisk "+ devNode +" < /mnt/cloneMaster/config/fdisk/fdisk.del."+ cType +" >& /dev/null")
-  os.system("fdisk "+ devNode +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".mkextended >& /dev/null")
-  os.system("fdisk "+ devNode +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".part >& /dev/null")
+  os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.del."+ cType +" >& /dev/null")
+  os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".mkextended >& /dev/null")
+  os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".part >& /dev/null")
   os.system("touch "+ myPxebootFlag)
   os.system("cp -v "+ myPxebootDefault +" "+ myPxebootFile)
-  os.system("sed -i 's/default harddisk/default nfslove_new/g' "+ myPxebootFile +" >& /dev/null")
   os.system("cd /;umount -fr /mnt/gentoo;umount -fr /mnt/pxeboot/ >& /dev/null")
   os.system("reboot -f")
 else:
-  os.system("/mnt/cloneMaster/init.mkfs."+ cType +" "+ devNode +" >& /dev/null")
-  os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ devNode +" >& /dev/null")
+  os.system("/mnt/cloneMaster/init.mkfs."+ cType +" "+ cInfo['cloneDisk'] +" >& /dev/null")
+  os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ cInfo['cloneDisk'] +" >& /dev/null")
   
   os.system("rsync -avHAX /mnt/gentoo/ /mnt/realroot/ --delete --exclude=root/livecd --compress")
   
@@ -95,8 +103,8 @@ else:
   os.system("mount -t proc none /mnt/realroot/proc")
   os.system("mount -o bind /dev /mnt/realroot/dev")
   os.system("mount -o bind /sys /mnt/realroot/sys")
-#	os.system("mount /dev"+ devNode +"5 /mnt/realroot/boot")
-  os.system("echo \""+ grubInstall +"\" > /mnt/realroot/tmp/grub.disk")
+#	os.system("mount /dev"+ cInfo['cloneDisk'] +"5 /mnt/realroot/boot")
+  os.system("echo \""+ cInfo['grubInstall'] +"\" > /mnt/realroot/tmp/grub.disk")
   
   
   

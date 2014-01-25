@@ -43,7 +43,7 @@ pxelinux = "/srv/tftp/tftpboot/pxelinux.cfg/"
 pxelinuxDefault = "/srv/tftp/tftpboot/pxelinux.cfg/default"
 pxelinuxLinux = "/srv/tftp/tftpboot/pxelinux.cfg/default.linux"
 
-def getCloneStatus():
+def getSetCloneStatus():
   dbconn = dbRbhus.dbRbhusHost()
   try:
     rows = dbconn.execute("select * from clonedb", dictionary=True)
@@ -64,7 +64,7 @@ def getCloneStatus():
     for row in rows:
       if(row['clone'] == constants.cloneGrubUpdate):
         if(row['cloneStatus'] == constants.cloneStatusInitiate):
-          cpstatus = os.system("cp -v "+ pxelinuxLinux +" "+ maccy[row['ip']])
+          cpstatus = os.system("cp -v "+ pxelinuxLinux +" "+ pxelinux +"01-"+ "-".join(maccy[row['ip']].split(":")))
           if(not cpstatus):
             dbconn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusPending) +" where ip='"+ str(row['ip']) +"'")
             
