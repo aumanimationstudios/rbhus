@@ -369,7 +369,7 @@ def scheduler():
     if(freeHosts):
       #logging.debug("f2")
       activeTasks = arrangedActiveTasks()
-      print("_______________________________________________________________________________________________")
+      #print("_______________________________________________________________________________________________")
       if(activeTasks):
         assigned = 0
         for activeTask in activeTasks:
