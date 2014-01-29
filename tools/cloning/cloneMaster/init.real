@@ -42,7 +42,11 @@ if(not clone):
 cType = constants.cloneType[clone] 
 if(cType == "grub"):
   os.system("mount /boot")
-  defaultBoot = cInfo['bootDefault']
+  
+  if(cInfo['bootDefault'] == "linux"):
+    mountboot = os.system("mount /boot")
+    if(mountboot == 0):
+      
   
 
 

@@ -495,7 +495,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       for x in self.taskThreads:
         if(x.isRunning()):
           x.terminate()
+          print("terminating :"+ str(x))
       self.taskThreads = []
+      #time.sleep(0.5)
           
       
     taskThread.run = self.selectTasks
