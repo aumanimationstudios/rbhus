@@ -44,8 +44,13 @@ if(cType == "grub"):
   os.system("mount /boot")
   
   if(cInfo['bootDefault'] == "linux"):
-    mountboot = os.system("mount /boot")
-    if(mountboot == 0):
+    os.system("mount /boot")
+    menus = os.popen("grep ^menuentry /boot/grub/grub.cfg | gawk -F \"'\" '{print $2}'","r")
+    menuenties = [x.rstrip().lstrip() for x in menus.readlines()]
+    for x in menuenties:
+      if(x.lower().find(cInfo['bootDefault']) >= 0):
+        if(os.system("grep -i \"set default=\\\"0\\\"\" /boot/grub/grub.cfg") == 0):
+    
       
   
 

@@ -491,20 +491,27 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   
   def popTableList(self):
     taskThread = QtCore.QThread(parent=self.form)
-    if(self.taskThreads):
-      for x in self.taskThreads:
-        if(x.isRunning()):
-          x.terminate()
-          print("terminating :"+ str(x))
-      self.taskThreads = []
+    #if(self.taskThreads):
+      #tTs = self.taskThreads
+      #for x in tTs:
+        #if(x.isRunning()):
+          #x.terminate()
+          #try:
+            #self.taskThreads.remove(x)
+          #except:
+            #print(str(sys.exc_info()))
+          #print("terminating :"+ str(x))
+      #self.taskThreads = []
       #time.sleep(0.5)
           
       
     taskThread.run = self.selectTasks
     taskThread.finished.connect(self.popTableList_thread)
     self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
+    self.groupBoxTask.setEnabled(False)
+    self.groupBoxTaskDate.setEnabled(False)
     taskThread.start()
-    self.taskThreads.append(taskThread)
+    #self.taskThreads.append(taskThread)
   
   
   def selectTasks(self):
@@ -569,6 +576,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       for row in rows:
         self.pendFrames[row['id']] = db_conn.getUnassignedFramesCount(row['id'])
     self.selTasks = rows
+    
     #self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
   
   
@@ -593,6 +601,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.tableList.setColumnCount(0)
       self.tableList.setRowCount(0)
       self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+      self.groupBoxTask.setEnabled(True)
+      self.groupBoxTaskDate.setEnabled(True)
       return()
     colCount = len(self.colNamesTask) + len(self.colNamesTaskXtra)
       
@@ -681,6 +691,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     
     self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
     self.tableList.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+    self.groupBoxTask.setEnabled(True)
+    self.groupBoxTaskDate.setEnabled(True)
     #self.popTableFrames()
     
     
