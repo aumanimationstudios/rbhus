@@ -100,13 +100,13 @@ def checkClientAlive():
         if(not pIds):
           break
         time.sleep(1)
-    time.sleep(35)
+    time.sleep(10)
     
 
 def pingClientProcess(client,ipAddr):
   setproctitle.setproctitle("rQ_ping_"+ str(client))
   db_conn = dbRbhus.dbRbhus()
-  status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
+  status = os.system("ping -c 1 -W 10 "+ str(ipAddr) +" >& /dev/null")
   pingstatus = 0
   sockstatus = 0
   if(status == 0):
@@ -122,7 +122,7 @@ def pingClientProcess(client,ipAddr):
 
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
-    clientSocket.settimeout(15)
+    clientSocket.settimeout(10)
     clientSocket.connect((ipAddr,6660))
     logging.debug("Connected to "+ client)
     sockstatus = 1

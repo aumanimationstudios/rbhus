@@ -41,15 +41,21 @@ if(not clone):
   sys.exit(0)
 cType = constants.cloneType[clone] 
 if(cType == "grub"):
-  os.system("mount /boot")
-  
-  if(cInfo['bootDefault'] == "linux"):
-    os.system("mount /boot")
-    menus = os.popen("grep ^menuentry /boot/grub/grub.cfg | gawk -F \"'\" '{print $2}'","r")
-    menuenties = [x.rstrip().lstrip() for x in menus.readlines()]
-    for x in menuenties:
-      if(x.lower().find(cInfo['bootDefault']) >= 0):
-        if(os.system("grep -i \"set default=\\\"0\\\"\" /boot/grub/grub.cfg") == 0):
+  os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ cInfo['cloneDisk'] +" >& /dev/null")
+  if(os.path.exists("/mnt/realroot/boot/grub/grub.default")):
+    os.system("cp -a /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
+  else:
+    os.system("cp -a /mnt/realroot/boot/grub.cfg /mnt/realroot/boot/grub/grub.default")
+    
+  menus = os.popen("grep ^menuentry /mnt/realroot/boot/grub/grub.cfg | gawk -F \"'\" '{print $2}'","r")
+  menuenties = [x.rstrip().lstrip() for x in menus.readlines()]
+  for x in menuenties:
+    if(x.lower().find(cInfo['bootDefault']) >= 0):
+      if(os.system("grep -i \"set default=\\\"0\\\"\" /mnt/realroot/boot/grub/grub.cfg") == 0):
+        orig = open("/mnt/realroot/boot/grub/grub.cfg","r")
+        
+          
+
     
       
   
