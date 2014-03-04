@@ -31,6 +31,15 @@ cloneDisable = 0
 cloneLinux = 1
 cloneLinuxWin = 2
 cloneGrubUpdate = 3
+cloneType = {
+  0 : False,
+  1 : "linux",
+  2 : "windoze",
+  3 : "grub"
+}
+
+
+
 
 cloneStatusInitiate = 0
 cloneStatusPending = 1

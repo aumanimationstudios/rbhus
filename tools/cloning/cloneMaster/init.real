@@ -16,22 +16,37 @@ except:
   print("failed aquiring system details")
   sys.exit(1)
 
+
+def updateCloneStatus(status):
+  dbconn = dbRbhus.dbRbhusHost()
+  try:
+    dbconn.execute("update clonedb set cloneStatus="+ str(status) +" where ip='"+ str(myip) +"'")
+  except:
+    print("failed updating cloneStatus to "+ str(status))
+    sys.exit(1)
+
+def getMacAddress():
+  for line in os.popen("ifconfig"): 
+    if line.find('Ether') > -1: 
+      mac = line.split()[4] 
+      return mac
+
+updateCloneStatus(constants.cloneStatusRunning)
+
+
 # check if anything is initiated! . if not exit gracefully
 if(cInfo):
   if(cInfo['cloneStatus'] != constants.cloneStatusInitiate):
     print("nothing to do")
     sys.exit(0)
 
-try:
-  db_conn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusRunning) +" where ip='"+ str(myip) +"'")
-except:
-  print("failed updating system details")
-  db_conn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusFail) +" where ip='"+ str(myip) +"'")
+  
+
+  
+  
+if(not os.path.exists(cInfo['cloneDisk'])):
+  updateCloneStatus(constants.cloneStatusFail)
   sys.exit(1)
-  
-
-  
-
 
 
 clone = cInfo['clone']
@@ -43,9 +58,9 @@ cType = constants.cloneType[clone]
 if(cType == "grub"):
   os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ cInfo['cloneDisk'] +" >& /dev/null")
   if(os.path.exists("/mnt/realroot/boot/grub/grub.default")):
-    os.system("cp -a /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
+    os.system("cp -af /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
   else:
-    os.system("cp -a /mnt/realroot/boot/grub.cfg /mnt/realroot/boot/grub/grub.default")
+    os.system("cp -af /mnt/realroot/boot/grub.cfg /mnt/realroot/boot/grub/grub.default")
     
   menus = os.popen("grep ^menuentry /mnt/realroot/boot/grub/grub.cfg | gawk -F \"'\" '{print $2}'","r")
   menuenties = [x.rstrip().lstrip() for x in menus.readlines()]
@@ -53,27 +68,21 @@ if(cType == "grub"):
     if(x.lower().find(cInfo['bootDefault']) >= 0):
       if(os.system("grep -i \"set default=\\\"0\\\"\" /mnt/realroot/boot/grub/grub.cfg") == 0):
         orig = open("/mnt/realroot/boot/grub/grub.cfg","r")
-        
+        dupli = open("/mnt/realroot/boot/grub/grub.cfg.setdefault","w")
+        for y in orig.readlines():
+          if(y.find("set default=\"0\"") >= 0):
+            y.replace("set default=\"0\"","set default=\""+ str(x) +"\"")
+          dupli.write(y)
           
-
-    
-      
-  
-
-
+        os.system("cp -af /mnt/realroot/boot/grub/grub.cfg.setdefault /mnt/realroot/boot/grub/grub.cfg")
+      break
+  updateCloneStatus(constants.cloneStatusDone)
+  sys.exit(0)
 
 
-if(not os.path.exists(cInfo['cloneDisk'])):
-  db_conn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusFail) +" where ip='"+ str(myip) +"'")
-  sys.exit(1)
-  
 
 
-def getMacAddress():
-  for line in os.popen("ifconfig"): 
-    if line.find('Ether') > -1: 
-      mac = line.split()[4] 
-      return mac
+
       
 
 
