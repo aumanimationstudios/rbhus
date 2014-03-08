@@ -67,7 +67,27 @@ def getSetCloneStatus():
           cpstatus = os.system("cp -v "+ pxelinuxLinux +" "+ pxelinux +"01-"+ "-".join(maccy[row['ip']].split(":")))
           if(not cpstatus):
             dbconn.execute("update clonedb set cloneStatus="+ str(constants.cloneStatusPending) +" where ip='"+ str(row['ip']) +"'")
+            if(row['restartFlag'] == constants.restartImmidiate):
+              restartSys(row['ip'])
             
+            
+
+def restartSys(hostIp):
+  clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  stat = 1
+  try:
+    clientSocket.settimeout(15)
+    clientSocket.connect(str(hostIp),constants.clientCtrlListenPort))
+    clientSocket.send("RESTARTSYS")
+    clientSocket.close()
+  except:
+    print("cannot connect : "+ row['ip'] +" : "+ str(sys.exc_info()))
+    stat = 0    
+  try:
+    clientSocket.close()
+  except:
+    pass
+  return(stat)
         
 
 
@@ -88,49 +108,61 @@ def getHostNameIP():
       time.sleep(1)
 
 
-def atUrService():
-  if(sys.platform.find("linux") >=0):
-    setproctitle.setproctitle("DNSMASQ_atUrService")
-  print(str(os.getpid()) + ": atUrService func")
+def checkForUpdates():
   while(1):
-    try:
-      hostName,ipAddr = getHostNameIP()
-      serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      serverSocket.bind(("", constantsPipe.projInitPort))
-      serverSocket.listen(5)
-      break
-    except:
-      print("socket failed 1 : "+ str(sys.exc_info()))
-      pass
-    time.sleep(1)
+    getSetCloneStatus()
+    time.sleep(2)
   
-  while(1):
-    clientSocket, address = serverSocket.accept()
-    data = ""
-    data = clientSocket.recv(4096)
-    clientSocket.close()
-    #data = data.rstrip()
-    #data = data.lstrip()
-    #msg = ""
-    #value = ""
-    #if(data.rfind(":") != -1):
-      #msg, value = data.split(":")
-    #else:
-      #msg = data
-    #print(data)  
-    #if(msg == "CREATE"):
-    admins = rUtils.getAdmins()
+
+
+#def atUrService():
+  #if(sys.platform.find("linux") >=0):
+    #setproctitle.setproctitle("DNSMASQ_atUrService")
+  #print(str(os.getpid()) + ": atUrService func")
+  #while(1):
+    #try:
+      #hostName,ipAddr = getHostNameIP()
+      #serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      #serverSocket.bind(("", constants.serverDNSDHCPPort))
+      #serverSocket.listen(5)
+      #break
+    #except:
+      #print("socket failed 1 : "+ str(sys.exc_info()))
+      #pass
+    #time.sleep(1)
+  
+  #while(1):
+    #clientSocket, address = serverSocket.accept()
+    #data = ""
+    #data = clientSocket.recv(4096)
+    #clientSocket.close()
+    ##data = data.rstrip()
+    ##data = data.lstrip()
+    ##msg = ""
+    ##value = ""
+    ##if(data.rfind(":") != -1):
+      ##msg, value = data.split(":")
+    ##else:
+      ##msg = data
+    ##print(data)  
+    ##if(msg == "CREATE"):
+    #admins = rUtils.getSystemAdmins()
     
-    hostDets = pickle.loads(data)
-    if(hostDets['createdUser'] in admins):
-      utilsPipe.setupProj(hostDets['projType'],hostDets['projName'],hostDets['directory'],hostDets['admins'],hostDets['rbhusRenderIntergration'],hostDets['rbhusRenderServer'],hostDets['aclUser'],hostDets['aclGroup'],hostDets['createdUser'],hostDets['dueDate'],hostDets['description'])
-    else:
-      print("user "+ str(hostDets['createdUser']) +" not allowed to create projects.")
+    #hostDets = pickle.loads(data)
+    #if(hostDets['user'] in admins):
+      #if(hostDets['COMMAND'] == "initiate"):
+        
+        
+        
+          
+        
+    #else:
+      #print("user "+ str(hostDets['user']) +" not allowed to create projects.")
   
   
   
 if __name__=='__main__':
-  atUrService()
+  checkForUpdates()
 
 
 

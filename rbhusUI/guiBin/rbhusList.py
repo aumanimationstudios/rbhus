@@ -607,6 +607,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     colCount = len(self.colNamesTask) + len(self.colNamesTaskXtra)
       
     findRows = []
+    
     for row in rows:
       sFlag = 0
       for colName in self.colNamesTask:
@@ -614,7 +615,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           sFlag = 1
       if(sFlag):
         findRows.append(row)
-    rows = findRows   
+    rows = findRows
      
     
     self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8)) 

@@ -1,4 +1,3 @@
-#cp -v /etc/fstab.windoze /etc/fstab
 env-update;source /etc/profile
 ln -s /proc/mounts /etc/mtab
 cat /tmp/grub.disk | gawk '{print "dd if="$1" of=~/first_63_sectors bs=512 count=63"}' | sh -v
