@@ -30,25 +30,34 @@ hostSystemUpdateDone = 7
 restartImmidiate = 0
 restartNextTime = 1
 
-cloneDisable = 0
-cloneLinux = 1
-cloneLinuxWin = 2
-cloneGrubUpdate = 3
+cloneTypeDisable = 0
+cloneTypeLinux = 1
+cloneTypeLinuxWin = 2
 cloneType = {
   0 : False,
   1 : "linux",
   2 : "linuxWin",
-  3 : "grub"
+}
+
+cloneDisable = 0
+cloneClone = 1
+cloneGrubUpdate = 2
+cloneNetboot = 3
+
+clone = {
+  0 : False,
+  1 : "clone",
+  2 : "grubUpdate",
+  3 : "netboot"
 }
 
 
-
-
-cloneStatusInitiate = 0
-cloneStatusPending = 1
-cloneStatusRunning = 2
-cloneStatusDone = 3
-cloneStatusFail = 4
+cloneStatusDisable = 0
+cloneStatusInitiate = 1
+cloneStatusPending = 2
+cloneStatusRunning = 3
+cloneStatusDone = 4
+cloneStatusFail = 5
 
 
 #task table

@@ -11,7 +11,7 @@ import socket
 myip = socket.gethostbyname(socket.gethostname())
 db_conn = dbRbhus.dbRbhusHost()
 try:
-  cInfo = db_conn.execute("select * clonedb where ip='"+ str(myip) +"'",dictionary=True)[-1]
+  cInfo = db_conn.execute("select * from clonedb where ip='"+ str(myip) +"'",dictionary=True)[-1]
 except:
   print("failed aquiring system details : "+ str(sys.exc_info()))
   sys.exit(1)
@@ -20,7 +20,10 @@ if(not cInfo):
   print("no host info available . quitting management process")
   sys.exit(0)
 
+cloneType = cInfo['cloneType']
+cType = constants.cloneType[cloneType] 
 clone = cInfo['clone']
+
 if(not clone):
   sys.exit(0)
 
@@ -42,12 +45,18 @@ def getMacAddress():
 
 def updateGrub():
   os.system("echo \""+ cInfo['grubInstall'] +"\" > /mnt/realroot/tmp/grub.disk")
-  os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +" >& /dev/null")
+  os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +"")
+
+
+def mountSysPaths():
+  os.system("mount -t proc none /mnt/realroot/proc")
+  os.system("mount -o bind /dev /mnt/realroot/dev")
+  os.system("mount -o bind /sys /mnt/realroot/sys")
 
 
 # check if anything is initiated! . if not exit gracefully
 
-if(cInfo['cloneStatus'] != constants.cloneStatusInitiate):
+if(cInfo['cloneStatus'] != constants.cloneStatusPending):
   print("nothing to do")
   sys.exit(0)
 
@@ -67,28 +76,28 @@ print(maccy.replace(":","-"))
 myPxebootDefault = "/mnt/pxeboot/default.linux"
 myPxebootFile = "/mnt/pxeboot/01-"+ maccy.replace(":","-")
 myPxebootFlag = "/mnt/pxeboot/bootT-"+ maccy.replace(":","-") #If this file is present go to the next step of making filesystems on partitions
-os.system("mkdir -p /mnt/gentoo/ >& /dev/null")
-os.system("mkdir -p /mnt/pxeboot/ >& /dev/null")
-os.system("mkdir -p /mnt/cloneMaster/ >& /dev/null")
-os.system("mount "+ cInfo['cloneServer'] +":"+ cInfo['cloneDir'] +" /mnt/gentoo >& /dev/null")
-os.system("mount "+ cInfo['cloneServer'] +":"+ cInfo['cloneRootDir'] +" /mnt/cloneMaster >& /dev/null")
-os.system("mount "+ cInfo['tftpServer'] +":"+ cInfo['tftpDir'] +" /mnt/pxeboot/ >& /dev/null")
-os.system("umount -f "+ cInfo['cloneDisk'] +"* >& /dev/null")
+os.system("mkdir -p /mnt/gentoo/")
+os.system("mkdir -p /mnt/pxeboot/")
+os.system("mkdir -p /mnt/cloneMaster/")
+os.system("mount "+ cInfo['cloneServer'] +":"+ cInfo['cloneDir'] +" /mnt/gentoo")
+os.system("mount "+ cInfo['cloneServer'] +":"+ cInfo['cloneRootDir'] +" /mnt/cloneMaster")
+os.system("mount "+ cInfo['tftpServer'] +":"+ cInfo['tftpDir'] +" /mnt/pxeboot/")
+os.system("umount -f "+ cInfo['cloneDisk'] +"*")
 
 
 
-cType = constants.cloneType[clone] 
-if(cType == "grub"):
-  mountsys = os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ cInfo['cloneDisk'] +" >& /dev/null")
+if(clone == constants.cloneGrubUpdate):
+  mountsys = os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ cInfo['cloneDisk'] +"")
+  mountSysPaths()
   if(mountsys != 0):
     print("problem mounting system dirs")
-    os.system("rm -f "+ str(myPxebootFile))
+    os.system("rm -fv "+ str(myPxebootFile))
     os.system("reboot -f")
   updateGrub()
   if(os.path.exists("/mnt/realroot/boot/grub/grub.default")):
     os.system("cp -af /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
   else:
-    os.system("cp -af /mnt/realroot/boot/grub.cfg /mnt/realroot/boot/grub/grub.default")
+    os.system("cp -af /mnt/realroot/boot/grub/grub.cfg /mnt/realroot/boot/grub/grub.default")
     
   menus = os.popen("grep ^menuentry /mnt/realroot/boot/grub/grub.cfg | gawk -F \"'\" '{print $2}'","r")
   menuenties = [x.rstrip().lstrip() for x in menus.readlines()]
@@ -106,30 +115,28 @@ if(cType == "grub"):
   updateCloneStatus(constants.cloneStatusDone)
   os.system("rm -f "+ str(myPxebootFile))
   os.system("reboot -f")
-elif(cType == "linuxWin"):
+elif(clone == constants.cloneClone):
   if(not os.path.exists(myPxebootFlag)):
-    os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.del."+ cType +" >& /dev/null")
-    os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".mkextended >& /dev/null")
-    os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".part >& /dev/null")
+    os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.del."+ cType +"")
+    os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".mkextended")
+    os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.init."+ cType +".part")
     os.system("touch "+ myPxebootFlag)
     os.system("cp -v "+ myPxebootDefault +" "+ myPxebootFile)
-    os.system("cd /;umount -fr /mnt/gentoo;umount -fr /mnt/pxeboot/ >& /dev/null")
+    os.system("cd /;umount -fr /mnt/gentoo;umount -fr /mnt/pxeboot/")
     os.system("reboot -f")
   else:
-    os.system("/mnt/cloneMaster/init.mkfs."+ cType +" "+ cInfo['cloneDisk'] +" >& /dev/null")
-    os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ cInfo['cloneDisk'] +" >& /dev/null")
+    os.system("/mnt/cloneMaster/init.mkfs."+ cType +" "+ cInfo['cloneDisk'] +"")
+    os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ cInfo['cloneDisk'] +"")
     os.system("rsync -avHAX /mnt/gentoo/ /mnt/realroot/ --delete --exclude=root/livecd --compress")
-    os.system("mkdir -pv /mnt/realroot/crap/cache/fscache/ >& /dev/null")
-    os.system("mkdir -m 0777 -p /mnt/realroot/crap/cache/fscache/ >& /dev/null")
+    os.system("mkdir -pv /mnt/realroot/crap/cache/fscache/")
+    os.system("mkdir -m 0777 -p /mnt/realroot/crap/cache/fscache/")
     os.system("cd /")
     os.system("rm -f "+ myPxebootFlag)
     os.system("rm -f "+ str(myPxebootFile))
-    os.system("mount -t proc none /mnt/realroot/proc")
-    os.system("mount -o bind /dev /mnt/realroot/dev")
-    os.system("mount -o bind /sys /mnt/realroot/sys")
+    mountSysPaths()
   #	os.system("mount /dev"+ cInfo['cloneDisk'] +"5 /mnt/realroot/boot")
     os.system("echo \""+ cInfo['grubInstall'] +"\" > /mnt/realroot/tmp/grub.disk")
-    os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +" >& /dev/null")
+    os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +"")
     os.system("cd /; cat /proc/mounts | grep -i realroot | gawk '{print $2}' | sort -ru | xargs umount -f ")
     os.system("rm -f "+ str(myPxebootFile))
     os.system("reboot -f")
