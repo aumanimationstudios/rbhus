@@ -77,7 +77,7 @@ def restartSys(hostIp):
   stat = 1
   try:
     clientSocket.settimeout(15)
-    clientSocket.connect((str(hostIp),str(constants.clientCtrlListenPort)))
+    clientSocket.connect((str(hostIp),constants.clientCtrlListenPort))
     clientSocket.send("RESTARTSYS")
     clientSocket.close()
   except:
