@@ -13,7 +13,7 @@ db_conn = dbRbhus.dbRbhusHost()
 try:
   cInfo = db_conn.execute("select * clonedb where ip='"+ str(myip) +"'",dictionary=True)[-1]
 except:
-  print("failed aquiring system details")
+  print("failed aquiring system details : "+ str(sys.exc_info()))
   sys.exit(1)
 
 if(not cInfo):
@@ -30,7 +30,7 @@ def updateCloneStatus(status):
   try:
     dbconn.execute("update clonedb set cloneStatus="+ str(status) +" where ip='"+ str(myip) +"'")
   except:
-    print("failed updating cloneStatus to "+ str(status))
+    print("failed updating cloneStatus to "+ str(status) +" : "+ str(sys.exc_info()))
     sys.exit(1)
 
 def getMacAddress():
