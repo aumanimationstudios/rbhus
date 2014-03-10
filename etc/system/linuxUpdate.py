@@ -32,8 +32,8 @@ def gentooUpdate():
   os.system("echo \"exit status = "+ str(syncKernels) +"\" |& tee -a /tmp/rbhusSystemUpdates")
   syncModules = os.system("rsync -av rsync://"+ str(masterSystem) +"/kernelmodules /lib/modules |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   os.system("echo \"exit status = "+ str(syncModules) +"\" |& tee -a /tmp/rbhusSystemUpdates")
-  if(syncPortage or syncSets or syncLayman or syncCbOverlay or syncEtcPortage or syncRsyncD or syncKernels or syncModules):
-    sys.exit(1)
+  #if(syncPortage or syncSets or syncLayman or syncCbOverlay or syncEtcPortage or syncRsyncD or syncKernels or syncModules):
+    #sys.exit(1)
   
   mountf = os.system("mount /boot")
   kernelf = os.system("rsync -av /etc/kernels/boot/ /boot/ |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
