@@ -81,7 +81,7 @@ def restartSys(hostIp):
     clientSocket.send("RESTARTSYS")
     clientSocket.close()
   except:
-    print("cannot connect : "+ row['ip'] +" : "+ str(sys.exc_info()))
+    print("cannot connect : "+ hostIp +" : "+ str(sys.exc_info()))
     stat = 0    
   try:
     clientSocket.close()

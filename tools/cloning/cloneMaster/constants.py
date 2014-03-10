@@ -27,6 +27,9 @@ hostSystemUpdateKilled = 6
 hostSystemUpdateDone = 7
 
 
+restartImmidiate = 0
+restartNextTime = 1
+
 cloneDisable = 0
 cloneLinux = 1
 cloneLinuxWin = 2
@@ -34,7 +37,7 @@ cloneGrubUpdate = 3
 cloneType = {
   0 : False,
   1 : "linux",
-  2 : "windoze",
+  2 : "linuxWin",
   3 : "grub"
 }
 
@@ -141,6 +144,7 @@ hostResourceForcedOff = 3
 clientSingularityPort  = 6662
 clientListenPort = 6660
 clientCtrlListenPort = 6661
+serverDNSDHCPPort = 6663
 
 #proj table
 projActive = 1
