@@ -1,0 +1,4 @@
+env-update;source /etc/profile
+ln -s /proc/mounts /etc/mtab
+cat /tmp/grub.setDefault | gawk '{print "grub2-set-default \""$0"\""}' | sh -v
+grub2-mkconfig -o /boot/grub/grub.cfg

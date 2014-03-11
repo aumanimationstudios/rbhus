@@ -45,8 +45,14 @@ def getMacAddress():
 
 def updateGrub():
   os.system("echo \""+ cInfo['grubInstall'] +"\" > /mnt/realroot/tmp/grub.disk")
+  os.system("cp -avf /mnt/cloneMaster/config/grub /mnt/realroot/etc/default/")
   os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +"")
 
+
+def grubSetDefault(title):
+  os.system("echo \""+ title +"\" > /mnt/realroot/tmp/grub.setDefault")
+  os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot.grubSetDefault")
+  
 
 def mountSysPaths():
   os.system("mount -t proc none /mnt/realroot/proc")
@@ -94,24 +100,16 @@ if(clone == constants.cloneGrubUpdate):
     os.system("rm -fv "+ str(myPxebootFile))
     os.system("reboot -f")
   updateGrub()
-  if(os.path.exists("/mnt/realroot/boot/grub/grub.default")):
-    os.system("cp -avf /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
-  else:
-    os.system("cp -avf /mnt/realroot/boot/grub/grub.cfg /mnt/realroot/boot/grub/grub.default")
+  #if(os.path.exists("/mnt/realroot/boot/grub/grub.default")):
+    #os.system("cp -avf /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
+  #else:
+    #os.system("cp -avf /mnt/realroot/boot/grub/grub.cfg /mnt/realroot/boot/grub/grub.default")
     
   menus = os.popen("grep ^menuentry /mnt/realroot/boot/grub/grub.cfg | gawk -F \"'\" '{print $2}'","r")
   menuenties = [x.rstrip().lstrip() for x in menus.readlines()]
   for x in menuenties:
     if(x.lower().find(cInfo['bootDefault']) >= 0):
-      if(os.system("grep -i \"set default=\\\"0\\\"\" /mnt/realroot/boot/grub/grub.cfg") == 0):
-        orig = open("/mnt/realroot/boot/grub/grub.cfg","r")
-        dupli = open("/mnt/realroot/boot/grub/grub.cfg.setdefault","w")
-        for y in orig.readlines():
-          if(y.find("set default=\"0\"") >= 0):
-            y = y.replace("set default=\"0\"","set default=\""+ str(x) +"\"")
-          dupli.write(y)
-        os.system("cp -avf /mnt/realroot/boot/grub/grub.cfg.setdefault /mnt/realroot/boot/grub/grub.cfg")
-        os.system("chmod 600 /mnt/realroot/boot/grub/grub.cfg")
+      grubSetDefault(x)
       break
   updateCloneStatus(constants.cloneStatusDone)
   os.system("rm -f "+ str(myPxebootFile))
