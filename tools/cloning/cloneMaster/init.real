@@ -95,9 +95,9 @@ if(clone == constants.cloneGrubUpdate):
     os.system("reboot -f")
   updateGrub()
   if(os.path.exists("/mnt/realroot/boot/grub/grub.default")):
-    os.system("cp -af /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
+    os.system("cp -avf /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
   else:
-    os.system("cp -af /mnt/realroot/boot/grub/grub.cfg /mnt/realroot/boot/grub/grub.default")
+    os.system("cp -avf /mnt/realroot/boot/grub/grub.cfg /mnt/realroot/boot/grub/grub.default")
     
   menus = os.popen("grep ^menuentry /mnt/realroot/boot/grub/grub.cfg | gawk -F \"'\" '{print $2}'","r")
   menuenties = [x.rstrip().lstrip() for x in menus.readlines()]
@@ -108,13 +108,13 @@ if(clone == constants.cloneGrubUpdate):
         dupli = open("/mnt/realroot/boot/grub/grub.cfg.setdefault","w")
         for y in orig.readlines():
           if(y.find("set default=\"0\"") >= 0):
-            y.replace("set default=\"0\"","set default=\""+ str(x) +"\"")
+            y = y.replace("set default=\"0\"","set default=\""+ str(x) +"\"")
           dupli.write(y)
-        os.system("cp -af /mnt/realroot/boot/grub/grub.cfg.setdefault /mnt/realroot/boot/grub/grub.cfg")
+        os.system("cp -avf /mnt/realroot/boot/grub/grub.cfg.setdefault /mnt/realroot/boot/grub/grub.cfg")
       break
   updateCloneStatus(constants.cloneStatusDone)
   os.system("rm -f "+ str(myPxebootFile))
-  os.system("reboot -f")
+  os.system("sync;reboot -f")
 elif(clone == constants.cloneClone):
   if(not os.path.exists(myPxebootFlag)):
     os.system("fdisk "+ cInfo['cloneDisk'] +" < /mnt/cloneMaster/config/fdisk/fdisk.del."+ cType +"")
@@ -123,7 +123,7 @@ elif(clone == constants.cloneClone):
     os.system("touch "+ myPxebootFlag)
     os.system("cp -v "+ myPxebootDefault +" "+ myPxebootFile)
     os.system("cd /;umount -fr /mnt/gentoo;umount -fr /mnt/pxeboot/")
-    os.system("reboot -f")
+    os.system("sync;reboot -f")
   else:
     os.system("/mnt/cloneMaster/init.mkfs."+ cType +" "+ cInfo['cloneDisk'] +"")
     os.system("/mnt/cloneMaster/init.mount."+ cType +" "+ cInfo['cloneDisk'] +"")
@@ -139,5 +139,5 @@ elif(clone == constants.cloneClone):
     os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +"")
     os.system("cd /; cat /proc/mounts | grep -i realroot | gawk '{print $2}' | sort -ru | xargs umount -f ")
     os.system("rm -f "+ str(myPxebootFile))
-    os.system("reboot -f")
+    os.system("sync;reboot -f")
 
