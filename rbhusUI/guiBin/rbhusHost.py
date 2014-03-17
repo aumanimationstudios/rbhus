@@ -61,7 +61,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.form = Form
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.popTableHost)
-    
+    self.hostinfos = []
+    self.cloneinfos = []
     self.dbconn = dbRbhus.dbRbhus()
     self.colNamesHost = ["hostInfo.ip","hostInfo.hostName","hostInfo.totalRam","hostInfo.totalCpus","hostEffectiveResource.eCpus","hostInfo.status as status","hostInfo.os","hostAlive.status as alive","hostResource.freeCpus","hostResource.freeRam","hostResource.load1","hostInfo.groups","hostInfo.weight"]
     self.popTableHost()
@@ -115,17 +116,18 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test12Action.setMenu(rbhusMenu)
     test7Action.setMenu(restartMenu)
     action = menu.exec_(self.tableHost.mapToGlobal(pos))
+    
+    if(action == test15Action):
+      self.hostRestartToWindows()
+    if(action == test16Action):
+      self.hostRestartToLinux()
     if(action == test1Action):
-      #print("test1")
       self.hostEdit()
     if(action == test2Action):
-      #print("test2")
       self.hostDisable()
     if(action == test3Action):
-      #print("test3")
       self.hostEnable()
     if(action == test4Action):
-      #print("test4")
       self.hostStop()
     if(action == test5Action):
       self.hostClientKill()
@@ -168,6 +170,23 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.popTableHost()
     return(1)
 
+  def hostRestartToWindows(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.changeBootLoader("windows")
+    self.popTableHost()
+    return(1)
+    
+  
+  def hostRestartToLinux(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.changeBootLoader("linux")
+    self.popTableHost()
+    return(1)
+  
   
   def hostRestart(self):
     hosts = self.selectedHosts()
@@ -307,11 +326,15 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
   
   def getSelectedInfo(self):
     db_conn = dbRbhus.dbRbhus()
+    hdb = dbRbhus.dbRbhusHost()
     try:
       rows = db_conn.execute("select "+ ",".join(self.colNamesHost) +" from hostInfo, hostAlive, hostResource, hostEffectiveResource where hostInfo.hostName=hostAlive.hostName and hostInfo.hostName=hostResource.hostName and hostInfo.hostName=hostEffectiveResource.hostName", dictionary=True)
+      hostsSys = hdb.execute("select main.macc from clonedb,main where clonedb.ip=main.ip",dictionary=True)
     except:
       print("Error connecting to db")
     self.hostinfos = rows
+    self.cloneinfos = hostsSys
+    print(hostsSys)
     #self.finished.emit(rows)
   
   
@@ -338,7 +361,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     
     
     hostsAll = [x['hostName'] for x in rows]
-    #print(hostsAll)
+    print(hostsAll)
       
       
     try:

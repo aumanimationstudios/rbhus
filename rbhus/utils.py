@@ -211,6 +211,8 @@ def getOsTypes():
 class hosts(object):
   def __init__(self,hostIp = 0):
     self.db_conn = dbRbhus.dbRbhus()
+    self.hdb = dbRbhus.dbRbhusHost()
+
     
     self.MyHost = socket.gethostname()
     self.MyIp = socket.gethostbyname(socket.gethostname()).strip()
@@ -448,10 +450,32 @@ class hosts(object):
       self.setHostData("hostSystem","systemUpdateStatus",constants.hostSystemUpdateScheduled)
   
   
+  def changeBootLoader(self,bootTo):
+    if(self.userAdminSys):
+      self.setHostDbData("clonedb","clone",constants.cloneGrubUpdate)
+      self.setHostDbData("clonedb","bootDefault","\""+ bootTo +"\"")
+      self.setHostDbData("clonedb","cloneStatus",constants.cloneStatusInitiate)
+      
+      
+  
+  
   def setHostData(self,table,field,value):
     if(self.userAdmin):
       try:
         self.db_conn.execute("update "+ str(table) +" set "+ str(field) +"="+ str(value) +" where ip='"+ str(self.hostDetails['ip']) +"'")
+      except:
+        print(str(sys.exc_info()))
+        return(0)
+      self.hostDetails = self._getHostDetails()
+      return(1)
+    else:
+      print("Only local hosts or a human with  admin rights can edit hosts data!")
+      return(0)
+    
+  def setHostDbData(self,table,field,value):
+    if(self.userAdminSys):
+      try:
+        self.hdb.execute("update "+ str(table) +" set "+ str(field) +"="+ str(value) +" where ip='"+ str(self.hostDetails['ip']) +"'")
       except:
         print(str(sys.exc_info()))
         return(0)

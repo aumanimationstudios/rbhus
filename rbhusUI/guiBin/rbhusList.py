@@ -517,7 +517,6 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def selectTasks(self):
     self.pendFrames = {}
     self.selTasks = []
-    
     statusToCheck = []
     cTDone = self.checkTDone.isChecked()
     cTActive = self.checkTActive.isChecked()
@@ -525,7 +524,6 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     cTAutohold = self.checkTAutohold.isChecked()
     cTAll = self.checkTAll.isChecked()
     cTMine = self.checkTMine.isChecked()
-
     timeS = ""
     if(self.checkDateTask.isChecked()):
       fromT = "'"+ str(self.dateEditTaskFrom.date().year()) +"-"+ str(self.dateEditTaskFrom.date().month()) +"-"+ str(self.dateEditTaskFrom.date().day()) +"'"
@@ -536,10 +534,6 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         timeS = " and (doneTime between "+ fromT +" and "+ toT +")"
       elif(self.radioAfter.isChecked()):
         timeS = " and (afterTime between "+ fromT +" and "+ toT +")"
-      
-      
-      
-      
     if(cTDone):
       statusToCheck.append(str(constants.taskDone))
     if(cTActive):
@@ -548,29 +542,23 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       statusToCheck.append(str(constants.taskStopped))
     if(cTAutohold):
       statusToCheck.append(str(constants.taskAutoStopped))
-    
+    print("FUCK U 4")
     db_conn = dbRbhus.dbRbhus()
     rows = []
-    if(not statusToCheck):
-      return(rows)
     try:
       if(cTAll):
         if(cTMine):
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS,dictionary=True)
-          #print("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS)
         else:
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS,dictionary=True)
-          #print("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS)
       else:
         statusCheck = " or status=".join(statusToCheck)
         if(cTMine):
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'"+ timeS,dictionary=True)
-          #print("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'"+ timeS)
         else:
           rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")"+ timeS,dictionary=True)
-          #print("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")"+ timeS)
     except:
-      print("Error connecting to db")
+      print("Error connecting to db "+ str(sys.exc_info()))
     
     if(rows):
       for row in rows:
