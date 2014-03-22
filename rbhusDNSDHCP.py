@@ -60,6 +60,7 @@ def getSetCloneStatus():
     for mainrow in mainrows:
       maccy[mainrow['ip']] = mainrow['macc']
     
+  print(maccy)
   if(rows):
     for row in rows:
       print(row)
