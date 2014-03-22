@@ -114,6 +114,7 @@ def checkForUpdates():
       time.sleep(2)
     except:
       print(str(sys.exc_info()))
+      time.sleep(1)
   
 
 
