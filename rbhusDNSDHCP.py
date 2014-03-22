@@ -54,16 +54,19 @@ def getSetCloneStatus():
   except:
     print(sys.exc_info())
     
+  
+  
   maccy = {}  
   
   if(mainrows):
     for mainrow in mainrows:
       maccy[mainrow['ip']] = mainrow['macc']
+      print(mainrow)
     
-  print(maccy)
+  for x in maccy:
+    print(x +":"+ maccy[x])
   if(rows):
     for row in rows:
-      print(row)
       if(row['cloneStatus'] == constants.cloneStatusInitiate):
         #cpstatus = os.system("cp -v "+ pxelinuxLinux +" "+ pxelinux +"01-"+ "-".join(maccy[row['ip']].split(":")))
         print("cp -v "+ pxelinuxLinux +" "+ pxelinux +"01-"+ "-".join(maccy[row['ip']].split(":")))
