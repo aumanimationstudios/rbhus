@@ -44,18 +44,18 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
 
     if(sys.platform.find("linux") >= 0):
       self.acl.useEnvUser()
-      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
+      self.runCmd(dirSelf.rstrip(os.sep) + os.sep +"guiBin"+ os.sep +"rbhusRender.py")
       sys.exit(0)
       
     if(not clientPrefs['authentication']):
       self.acl.useEnvUser()
-      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
+      self.runCmd(dirSelf.rstrip(os.sep) + os.sep +"guiBin"+ os.sep +"rbhusRender.py")
       sys.exit(0)
       
     rms = self.acl.tryRememberMe()
     if(rms):
       print(str(self.acl.username))
-      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
+      self.runCmd(dirSelf.rstrip(os.sep) + os.sep +"guiBin"+ os.sep +"rbhusRender.py")
       sys.exit(0)
     
   
@@ -74,7 +74,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     if(ret):
       print("VALID")
       print(str(self.acl.username))
-      self.runCmd("guiBin"+ os.sep +"rbhusRender.py")
+      self.runCmd(dirSelf.rstrip(os.sep) + os.sep +"guiBin"+ os.sep +"rbhusRender.py")
     else:
       print("\n&*^*&^*%&$&^(*)(__)&*%^$#   .. :) !\n")
     sys.exit(0)

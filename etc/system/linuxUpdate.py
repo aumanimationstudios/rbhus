@@ -56,7 +56,7 @@ def gentooUpdate():
                     'vixie-cron.service', 
                     'xinetd.service']
   
-  emerge = os.system("emerge --exclude sys-apps/baselayout --deep -G @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
+  emerge = os.system("emerge --exclude sys-apps/baselayout --deep -GK @world |& tee -a /tmp/rbhusSystemUpdates ; test ${PIPESTATUS[0]} -eq 0")
   
   if(not emerge):
     for x in systemservices:

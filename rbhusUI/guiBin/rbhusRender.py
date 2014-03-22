@@ -67,7 +67,11 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.pushSubmit.clicked.connect(self.rbhusSubmit)
     self.pushHosts.clicked.connect(self.rbhusHost)
     self.pushLogout.clicked.connect(self.logout)
+    
     self.form = Form
+    self.wFlag = self.form.windowFlags()
+    
+    
     self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg"))
     self.trayIcon.show()
     
@@ -92,13 +96,20 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.newAction.triggered.connect(self.rbhusSubmit)
     self.hostAction.setMenu(self.hostMenu)
     self.quitAction.triggered.connect(self.quitFunc)
-    self.form.closeEvent = self.closeEvent
+    self.form.hideEvent = self.hideEventt
     
     
-  def closeEvent(self,event):
-    event.ignore()
-    QtGui.QMessageBox.information(self.form,"QUITING?","Minimizing to Tray . Please quit from the tray icon if you really want to quit!")
-    self.form.setVisible(False) 
+    
+    
+  def hideEventt(self,event):
+    #event.ignore()
+    self.form.setVisible(False)
+    #self.form.setWindowState(QtCore.Qt.WindowMinimized)
+    
+    self.form.setWindowFlags(self.wFlag & QtCore.Qt.Tool)
+    #self.form.hide()
+    
+    
     
   def hostStop(self):
     self.hostDets.hDisable()
@@ -108,6 +119,7 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
   def showMain(self,actReason):
     if(actReason == 2):
       self.form.setVisible(True)
+      self.form.setWindowFlags(self.wFlag)
     
   def rbhusList(self):
     self.pushList.setText("opening")

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>245</width>
-    <height>364</height>
+    <width>267</width>
+    <height>488</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -76,8 +76,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>217</width>
-            <height>138</height>
+            <width>239</width>
+            <height>245</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout"/>
@@ -92,6 +92,40 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::MinimumExpanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkSaveDefault">
+          <property name="text">
+           <string>save as default</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushApply">
+          <property name="text">
+           <string>apply</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item>
        <widget class="QPlainTextEdit" name="plainTextEditSelected">
         <property name="sizePolicy">
@@ -142,33 +176,6 @@
        <widget class="QPushButton" name="pushSelect">
         <property name="text">
          <string>select all</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="5" column="0" colspan="4">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::MinimumExpanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushApply">
-        <property name="text">
-         <string>apply</string>
         </property>
        </widget>
       </item>

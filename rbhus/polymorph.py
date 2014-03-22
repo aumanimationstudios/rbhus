@@ -11,7 +11,7 @@ class _versionInfo:
 
 class polymorph:
   def __init__(self,pathName):
-    self._rsync = '/usr/bin/rsync'
+    #self._rsync = '/usr/bin/rsync'
     self._initPath = os.path.abspath(pathName)+ os.sep
     self._pmBaseDir = self._initPath + ".pm"
     self._pmVerDir = self._pmBaseDir + os.sep +"v"+ os.sep

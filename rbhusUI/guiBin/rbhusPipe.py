@@ -68,7 +68,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     
-    self.form.closeEvent = self.closeEvent
+    #self.form.closeEvent = self.closeEvent
+    self.form.hideEvent = self.hideEvent
+    
     
     
     
@@ -93,11 +95,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     QtGui.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray .\nPlease quit from the tray icon if you really want to quit!")
     self.form.setVisible(False) 
     
+  def hideEvent(self,event):
+    #event.ignore()
+    self.form.setVisible(False) 
+    self.form.setWindowFlags(self.wFlag & QtCore.Qt.Tool)
+    
    
   
   def showMain(self,actReason):
     if(actReason == 2):
       self.form.setVisible(True)
+      self.form.setWindowFlags(self.wFlag)
     
 
   def logout(self):
