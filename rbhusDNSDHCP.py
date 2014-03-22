@@ -109,10 +109,10 @@ def getHostNameIP():
 
 def checkForUpdates():
   while(1):
-    try:
+    #try:
       getSetCloneStatus()
       time.sleep(2)
-    except:
+    #except:
       print(str(sys.exc_info()))
       time.sleep(1)
   
