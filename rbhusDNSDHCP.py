@@ -109,8 +109,11 @@ def getHostNameIP():
 
 def checkForUpdates():
   while(1):
-    getSetCloneStatus()
-    time.sleep(2)
+    try:
+      getSetCloneStatus()
+      time.sleep(2)
+    except:
+      print(str(sys.exc_info()))
   
 
 
@@ -162,6 +165,7 @@ def checkForUpdates():
   
 if __name__=='__main__':
   checkForUpdates()
+  
 
 
 

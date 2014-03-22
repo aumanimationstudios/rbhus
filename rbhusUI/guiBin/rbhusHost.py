@@ -187,6 +187,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     for h in hosts:
       hst = rUtils.hosts(h['hostInfo.ip'])
       hst.cloneFull()
+      hst.restartSys()
     self.popTableHost()
     return(1)
   
