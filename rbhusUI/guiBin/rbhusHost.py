@@ -111,6 +111,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test14Action = restartMenu.addAction("default")
     test15Action = restartMenu.addAction("windows")
     test16Action = restartMenu.addAction("linux")
+    test17Action = restartMenu.addAction("clone")
     test8Action = systemMenu.addAction("shutdown")
     test11Action.setMenu(systemMenu)
     test12Action.setMenu(rbhusMenu)
@@ -119,6 +120,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     
     if(action == test15Action):
       self.hostRestartToWindows()
+    if(action == test17Action):
+      self.restartToClone()
     if(action == test16Action):
       self.hostRestartToLinux()
     if(action == test1Action):
@@ -178,6 +181,14 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.popTableHost()
     return(1)
     
+  
+  def restartToClone(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.cloneFull()
+    self.popTableHost()
+    return(1)
   
   def hostRestartToLinux(self):
     hosts = self.selectedHosts()

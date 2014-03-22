@@ -457,6 +457,12 @@ class hosts(object):
       self.setHostDbData("clonedb","cloneStatus",constants.cloneStatusInitiate)
       
       
+  def cloneFull(self):
+    if(self.userAdminSys):
+      self.setHostDbData("clonedb","clone",constants.cloneClone)
+      self.setHostDbData("clonedb","cloneStatus",constants.cloneStatusInitiate)
+      
+  
   
   
   def setHostData(self,table,field,value):
