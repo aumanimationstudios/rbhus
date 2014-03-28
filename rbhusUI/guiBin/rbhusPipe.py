@@ -12,10 +12,11 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep 
 
 tempDir = tempfile.gettempdir()
 rpA = "rbhusPipeProjCreate.py"
+rpAss = "rbhusPipeAssetCreate.py"
 
   
-rbhusPipeAdminCmd = dirSelf.rstrip(os.sep) + os.sep + rpA
-
+rbhusPipeProjCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpA
+rbhusPipeAssetCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpAss
 import rbhusPipeMainMod
 print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -51,6 +52,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.pushHosts.clicked.connect(self.rbhusHost)
     self.pushLogout.clicked.connect(self.logout)
     self.form = Form
+    self.wFlag = self.form.windowFlags()
     self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg"))
     self.trayIcon.show()
     
@@ -64,6 +66,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.trayIcon.activated.connect(self.showMain)
     
     self.actionNew_project.triggered.connect(self.rbhusPipeProjCreate)
+    self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
     
     
     
@@ -80,15 +83,25 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeProjCreate_"+ self.username +".log")
     p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeProjCreate_"+ self.username +".err")
     self.actionNew_project.setEnabled(False)
-    p.start(sys.executable,rbhusPipeAdminCmd.split())
-    p.finished.connect(self.rbhusPipeAdminEnable)
+    p.start(sys.executable,rbhusPipeProjCreateCmd.split())
+    p.finished.connect(self.rbhusPipeProjCreateEnable)
+    
+    
+  def rbhusPipeAssetCreate(self):
+    p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAssetCreate_"+ self.username +".log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeAssetCreate_"+ self.username +".err")
+    self.pushNewAsset.setEnabled(False)
+    p.start(sys.executable,rbhusPipeAssetCreateCmd.split())
+    p.finished.connect(self.rbhusPipeAssCreateEnable)
     
   
 
-  def rbhusPipeAdminEnable(self,exitStatus):
+  def rbhusPipeProjCreateEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)
     
-  
+  def rbhusPipeAssCreateEnable(self,exitStatus):
+    self.pushNewAsset.setEnabled(True)
   
   def closeEvent(self,event):
     event.ignore()

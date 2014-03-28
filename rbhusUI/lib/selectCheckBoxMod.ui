@@ -111,13 +111,6 @@
          </spacer>
         </item>
         <item>
-         <widget class="QCheckBox" name="checkSaveDefault">
-          <property name="text">
-           <string>save as default</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="pushApply">
           <property name="text">
            <string>apply</string>

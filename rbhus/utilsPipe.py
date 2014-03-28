@@ -67,21 +67,119 @@ def getDirMapsDetails(directory):
     return(ret)
 
  
-def getProjTypes():
+def getProjTypes(ptype=None):
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("SELECT * FROM projTypes", dictionary=True)
-    return(rows)
+    if(ptype):
+      rows = dbconn.execute("SELECT * FROM projTypes where type='"+ str(ptype) +"'", dictionary=True)
+      if(rows):
+        return(rows[0])
+      else:
+        return(0)
+    else:
+      rows = dbconn.execute("SELECT * FROM projTypes", dictionary=True)
+      if(rows):
+        return(rows)
+      else:
+        return(0)
   except:
     utilsPipeLogger(str(sys.exc_info()))
     return(0)
   
   
-def getStageTypes():
+def getStageTypes(stype=None):
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("SELECT * FROM stageTypes", dictionary=True)
-    return(rows)
+    if(stype):
+      rows = dbconn.execute("SELECT * FROM stageTypes where type='"+ str(stype) +"'", dictionary=True)
+      if(rows):
+        return(rows[0])
+      else:
+        return(0)
+    else:
+      rows = dbconn.execute("SELECT * FROM stageTypes", dictionary=True)
+      if(rows):
+        return(rows)
+      else:
+        return(0)
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
+
+
+def getNodeTypes(ntype=None):
+  dbconn = dbPipe.dbPipe()
+  try:
+    if(ntype):
+      rows = dbconn.execute("SELECT * FROM nodeTypes where type='"+ str(ntype) +"'", dictionary=True)
+      if(rows):
+        return(rows[0])
+      else:
+        return(0)
+    else:
+      rows = dbconn.execute("SELECT * FROM nodeTypes", dictionary=True)
+      if(rows):
+        return(rows)
+      else:
+        return(0)
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
+
+
+def getFileTypes(ftype=None):
+  dbconn = dbPipe.dbPipe()
+  try:
+    if(ftype):
+      rows = dbconn.execute("SELECT * FROM fileTypes where type='"+ str(stype) +"'", dictionary=True)
+      if(rows):
+        return(rows[0])
+      else:
+        return(0)
+    else:
+      rows = dbconn.execute("SELECT * FROM fileTypes", dictionary=True)
+      if(rows):
+        return(rows)
+      else:
+        return(0)
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
+
+
+def getAssTypes(atype=None):
+  dbconn = dbPipe.dbPipe()
+  try:
+    if(atype):
+      rows = dbconn.execute("SELECT * FROM assetTypes where type='"+ str(atype) +"'", dictionary=True)
+      if(rows):
+        return(rows[0])
+      else:
+        return(0)
+    else:
+      rows = dbconn.execute("SELECT * FROM assetTypes", dictionary=True)
+      if(rows):
+        return(rows)
+      else:
+        return(0)
+  except:
+    utilsPipeLogger(str(sys.exc_info()))
+    return(0)
+
+
+def getSequenceScenes(proj=None,seq=None,sce=None):
+  dbconn = dbPipe.dbPipe()
+  try:
+    if(proj and seq):
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"'", dictionary=True)
+    elif(proj and sce):
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sceneName='"+ str(sce) +"'", dictionary=True)
+    else:
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"'", dictionary=True)
+    if(rows):
+      return(rows)
+    else:
+      return(0)
   except:
     utilsPipeLogger(str(sys.exc_info()))
     return(0)
@@ -241,7 +339,7 @@ def getProjDetails(projName=None,status=None):
         ret[x] = rows[0][x]
       return(ret)
   if(status):
-    if(status != "all")
+    if(status != "all"):
       dbconn = dbPipe.dbPipe()
       try:
         rows = dbconn.execute("select * from proj where status="+ str(status), dictionary=True)
@@ -259,28 +357,6 @@ def getProjDetails(projName=None,status=None):
       return(rows)
   return(0)
     
-    
-
-    
-    
-def getSequenceSceneDetails(projName,sequence,scene):
-  if(seqId):
-    dbconn = dbPipe.dbPipe()
-    try:
-      rows = dbconn.execute("select * from sequenceScene where \
-                             projName='"+ str(projName) +"' \
-                             and sequenceName='"+ str(sequence) +"' \
-                             and sceneName='"+ str(scene) +"'", dictionary=True)
-    except:
-      utilsPipeLogger(str(sys.exc_info()))
-      return(0)
-    if(rows):
-      ret = {}
-      fs = rows[0].keys()
-      for x in fs:
-        ret[x] = rows[0][x]
-      return(ret)
-
 
 def exportProj(projName):
   if(projName):
@@ -383,43 +459,26 @@ def getAssDetails(assId="",assPath=""):
         ret[x] = rows[0][x]
       return(ret)
   
-def getAssTypes():
-  dbconn = dbPipe.dbPipe()
-  try:
-    rows = dbconn.execute("SELECT * FROM assetTypes", dictionary=True)
-    return(rows)
-  except:
-    utilsPipeLogger(str(sys.exc_info()))
-    return(0)
-
-def getAssTypesDetails(assType):
-  dbconn = dbPipe.dbPipe()
-  try:
-    rows = dbconn.execute("SELECT * FROM assetTypes where type='"+ str(assType) +"'", dictionary=True)
-    if(rows):
-      return(rows[0])
-    else:
-      return(0)
-  except:
-    utilsPipeLogger(str(sys.exc_info()))
-    return(0)
-
 
 def assRegister(self,assDetDict):
-  assPath = ""
+  assPath = str(assDetDict['projName'])
   assId = ""
-  
+  projDets = getProjDetails(projName = str(assDetDict['projName']))
+  projTypes = getProjTypes()
+  projTypeDets = {}
+  for z in projTypes:
+    if(z['type'] == projDets['projType']):
+      projTypeDets = {}
   if(re.search("^default",str(assDetDict['assetType']))):
-    assPath = str(assDetDict['projName']) 
-  elif(re.search("^path",str(assDetDict['assetType']))):
-    assPath = str(assDetDict['projName']) +":"+ str(assDetDict['path'])
+    pass 
   else:
-    assTypeDets = getAssTypesDetails(str(assDetDict['assetType']))
+    assTypeDets = getAssTypes(str(assDetDict['assetType']))
     if(assTypeDets):
-      if(re.search("^default",str(assTypeDets['path']))):
-        assPath = str(assDetDict['projName'])
-      else:
-        assPath = str(assDetDict['projName']) +":"+ str(assTypeDets['path'])
+      for p in assTypeDets['path'].split(":"):
+        if(re.search("^\$",str(p))):
+          assPath = assPath +":"+ os.environ["rp_"+ str(p).lstrip("$")]
+        else:
+          assPath = assPath +":"+ p
   if(assPath):
     if(not re.search("^default",str(assDetDict['sequenceName']))):
       if(not re.search("^default",str(assDetDict['sceneName']))):

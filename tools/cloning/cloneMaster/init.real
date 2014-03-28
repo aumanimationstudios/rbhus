@@ -56,14 +56,14 @@ def grubSetDefault(title):
 
 def mountSysPaths():
   os.system("mount -t proc none /mnt/realroot/proc")
-  os.system("mount -o bind /dev /mnt/realroot/dev")
-  os.system("mount -o bind /sys /mnt/realroot/sys")
+  os.system("mount --rbind /dev /mnt/realroot/dev")
+  os.system("mount --rbind /sys /mnt/realroot/sys")
 
 
 # check if anything is initiated! . if not exit gracefully
 
-if(cInfo['cloneStatus'] != constants.cloneStatusPending):
-  print("nothing to do")
+if((cInfo['cloneStatus'] != constants.cloneStatusPending) and (cInfo['cloneStatus'] != constants.cloneStatusRunning)):
+  print("nothing to do") 
   sys.exit(0)
 
 updateCloneStatus(constants.cloneStatusRunning)
@@ -138,5 +138,6 @@ elif(clone == constants.cloneClone):
     os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +"")
     os.system("cd /; cat /proc/mounts | grep -i realroot | gawk '{print $2}' | sort -ru | xargs umount -f ")
     os.system("rm -f "+ str(myPxebootFile))
+    updateCloneStatus(constants.cloneStatusDone)
     os.system("sync;reboot -f")
 

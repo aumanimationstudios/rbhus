@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>498</width>
+    <width>594</width>
     <height>386</height>
    </rect>
   </property>
@@ -27,66 +27,37 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="5">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string/>
+    <item row="7" column="0" colspan="5">
+     <widget class="QListWidget" name="listWidget">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="QComboBox" name="comboBoxStage"/>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="labelSeq">
-         <property name="text">
-          <string>sequence</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QComboBox" name="comboBoxSeq"/>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLabel" name="labelSce">
-         <property name="text">
-          <string>scene</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QComboBox" name="comboBoxSce"/>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>nodeType</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>stageType</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="comboBoxNode"/>
-       </item>
-       <item row="1" column="4">
-        <widget class="QComboBox" name="comboFileType"/>
-       </item>
-       <item row="0" column="4">
-        <widget class="QLabel" name="labelFileType">
-         <property name="text">
-          <string>fileType</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <item>
+       <property name="text">
+        <string>test</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>test2</string>
+       </property>
+      </item>
      </widget>
     </item>
-    <item row="6" column="0" colspan="5">
+    <item row="9" column="4">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="8" column="0" colspan="5">
      <widget class="Line" name="line">
       <property name="enabled">
        <bool>true</bool>
@@ -105,14 +76,140 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="3">
+    <item row="9" column="3">
      <widget class="QPushButton" name="pushLogout">
       <property name="text">
        <string>logout</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
+    <item row="2" column="0" colspan="5">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="3" column="2">
+        <widget class="QComboBox" name="comboBoxSeq"/>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="labelSeq">
+         <property name="text">
+          <string>sequence</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>stageType</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QComboBox" name="comboBoxStage"/>
+       </item>
+       <item row="3" column="3">
+        <widget class="QComboBox" name="comboBoxSce"/>
+       </item>
+       <item row="2" column="4">
+        <widget class="QLabel" name="labelFileType">
+         <property name="text">
+          <string>fileType</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="QComboBox" name="comboFileType"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>nodeType</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="comboBoxNode"/>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLabel" name="labelSce">
+         <property name="text">
+          <string>scene</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="5">
+        <widget class="QComboBox" name="comboAssType"/>
+       </item>
+       <item row="2" column="5">
+        <widget class="QLabel" name="labelAssType">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>assType</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="5">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="pushNewAsset">
+        <property name="text">
+         <string>new</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_2">
+        <property name="text">
+         <string>mine</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton">
+        <property name="text">
+         <string>all</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="placeholderText">
+         <string>search</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="9" column="0">
      <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -125,63 +222,6 @@
       </property>
      </spacer>
     </item>
-    <item row="5" column="0" colspan="5">
-     <widget class="QListWidget" name="listWidget">
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
-      </property>
-      <item>
-       <property name="text">
-        <string>test</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>test2</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="7" column="4">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="0" colspan="5">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>search</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -189,36 +229,23 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>498</width>
+     <width>594</width>
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuAssets">
-    <property name="title">
-     <string>assets</string>
-    </property>
-    <widget class="QMenu" name="menuList">
-     <property name="title">
-      <string>list</string>
-     </property>
-     <addaction name="actionMine"/>
-     <addaction name="actionAll"/>
-    </widget>
-    <addaction name="menuList"/>
-    <addaction name="actionNew"/>
-   </widget>
    <widget class="QMenu" name="menuAdmin">
     <property name="title">
      <string>admin</string>
     </property>
     <addaction name="actionTask_trak"/>
-    <addaction name="actionNew_project"/>
+    <addaction name="actionNew_seq_scn"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
      <string>project</string>
     </property>
     <addaction name="actionSet_project"/>
+    <addaction name="actionNew_project"/>
    </widget>
    <widget class="QMenu" name="menuDebug">
     <property name="title">
@@ -227,7 +254,6 @@
     <addaction name="actionList_env"/>
    </widget>
    <addaction name="menuProject"/>
-   <addaction name="menuAssets"/>
    <addaction name="menuAdmin"/>
    <addaction name="menuDebug"/>
   </widget>
@@ -239,11 +265,6 @@
   <action name="actionAll">
    <property name="text">
     <string>all</string>
-   </property>
-  </action>
-  <action name="actionNew">
-   <property name="text">
-    <string>new</string>
    </property>
   </action>
   <action name="actionSet_project">
@@ -264,6 +285,11 @@
   <action name="actionList_env">
    <property name="text">
     <string>list env</string>
+   </property>
+  </action>
+  <action name="actionNew_seq_scn">
+   <property name="text">
+    <string>new seq/scn</string>
    </property>
   </action>
  </widget>
