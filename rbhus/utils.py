@@ -415,7 +415,7 @@ class hosts(object):
   
   
   def restartSys(self):
-    if(self.userAdmin):
+    if(self.userAdminSys):
       clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       try:
         clientSocket.settimeout(15)
@@ -430,6 +430,23 @@ class hosts(object):
           pass
       
   
+  def shutdownSys(self):
+    if(self.userAdminSys):
+      clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      try:
+        clientSocket.settimeout(15)
+        clientSocket.connect((self.hostDetails['ip'],constants.clientCtrlListenPort))
+        clientSocket.send("SHUTDOWNSYS")
+        clientSocket.close()
+      except:
+        print("cannot connect : "+ self.hostDetails['hostName'] +" : "+ str(sys.exc_info()))
+        try:
+          clientSocket.close()
+        except:
+          pass
+
+
+
   def startClient(self):
     if(self.userAdmin):
       clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -450,15 +467,18 @@ class hosts(object):
       self.setHostData("hostSystem","systemUpdateStatus",constants.hostSystemUpdateScheduled)
   
   
-  def changeBootLoader(self,bootTo):
+  def changeBootLoader(self,bootTo,when=constants.restartNextTime):
     if(self.userAdminSys):
+      self.setHostDbData("clonedb","restartFlag",when)
       self.setHostDbData("clonedb","clone",constants.cloneGrubUpdate)
       self.setHostDbData("clonedb","bootDefault","\""+ bootTo +"\"")
       self.setHostDbData("clonedb","cloneStatus",constants.cloneStatusInitiate)
       
       
-  def cloneFull(self):
+      
+  def cloneFull(self,when=constants.restartNextTime):
     if(self.userAdminSys):
+      self.setHostDbData("clonedb","restartFlag",when)
       self.setHostDbData("clonedb","clone",constants.cloneClone)
       self.setHostDbData("clonedb","cloneStatus",constants.cloneStatusInitiate)
       

@@ -96,6 +96,19 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     systemMenu = QtGui.QMenu()
     rbhusMenu = QtGui.QMenu()
     restartMenu = QtGui.QMenu()
+    
+    restartTypeMenuL = QtGui.QMenu()
+    rNowL = restartTypeMenuL.addAction("now")
+    rNextL = restartTypeMenuL.addAction("next reboot")
+    
+    restartTypeMenuW = QtGui.QMenu()
+    rNowW = restartTypeMenuW.addAction("now")
+    rNextW = restartTypeMenuW.addAction("next reboot")
+    
+    restartTypeMenuC = QtGui.QMenu()
+    rNowC = restartTypeMenuC.addAction("now")
+    rNextC = restartTypeMenuC.addAction("next reboot")
+    
     test2Action = menu.addAction("disable")
     test3Action = menu.addAction("enable")
     test4Action = menu.addAction("stop")
@@ -110,20 +123,34 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     test7Action = systemMenu.addAction("restart")
     test14Action = restartMenu.addAction("default")
     test15Action = restartMenu.addAction("windows")
+    test15Action.setMenu(restartTypeMenuW)
     test16Action = restartMenu.addAction("linux")
+    test16Action.setMenu(restartTypeMenuL)
     test17Action = restartMenu.addAction("clone")
+    test17Action.setMenu(restartTypeMenuC)
     test8Action = systemMenu.addAction("shutdown")
     test11Action.setMenu(systemMenu)
     test12Action.setMenu(rbhusMenu)
     test7Action.setMenu(restartMenu)
     action = menu.exec_(self.tableHost.mapToGlobal(pos))
     
-    if(action == test15Action):
-      self.hostRestartToWindows()
-    if(action == test17Action):
-      self.restartToClone()
-    if(action == test16Action):
-      self.hostRestartToLinux()
+    if(action == rNowW):
+      self.hostRestartToWindows(when=constants.restartImmidiate)
+    if(action == rNextW):
+      self.hostRestartToWindows(when=constants.restartNextTime)
+      
+    if(action == rNowC):
+      self.restartToClone(when=constants.restartImmidiate)
+    if(action == rNextC):
+      self.restartToClone(when=constants.restartNextTime)
+      
+    if(action == rNowL):
+      self.hostRestartToLinux(when=constants.restartImmidiate)
+    if(action == rNextL):
+      self.hostRestartToLinux(when=constants.restartNextTime)
+    
+      
+      
     if(action == test1Action):
       self.hostEdit()
     if(action == test2Action):
@@ -143,6 +170,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       self.hostUpdate()
     if(action == test13Action):
       self.hostSysUpdate()
+    if(action == test8Action):
+      self.hostShutdown()
       
       
   def hostEdit(self):
@@ -173,21 +202,20 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.popTableHost()
     return(1)
 
-  def hostRestartToWindows(self):
+  def hostRestartToWindows(self,when=constants.restartNextTime):
     hosts = self.selectedHosts()
     for h in hosts:
       hst = rUtils.hosts(h['hostInfo.ip'])
-      hst.changeBootLoader("windows")
+      hst.changeBootLoader("windows",when)
     self.popTableHost()
     return(1)
     
   
-  def restartToClone(self):
+  def restartToClone(self,when=constants.restartNextTime):
     hosts = self.selectedHosts()
     for h in hosts:
       hst = rUtils.hosts(h['hostInfo.ip'])
-      hst.cloneFull()
-      hst.restartSys()
+      hst.cloneFull(when)
     self.popTableHost()
     return(1)
   
@@ -210,6 +238,18 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.popTableHost()
     return(1)
   
+
+  def hostShutdown(self):
+    hosts = self.selectedHosts()
+    for h in hosts:
+      hst = rUtils.hosts(h['hostInfo.ip'])
+      hst.hStop()
+      hst.killClient()
+      hst.shutdownSys()
+    self.popTableHost()
+    return(1)
+
+
   
   def hostClientStart(self):
     hosts = self.selectedHosts()

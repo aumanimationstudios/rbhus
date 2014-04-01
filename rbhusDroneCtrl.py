@@ -103,17 +103,33 @@ def RESTARTSYS(clientSocket):
   time.sleep(5)
   if(sys.platform.find("linux") >= 0):
     try:
-      os.system("reboot >& /dev/null &")
+      os.system("sync ; reboot -f >& /dev/null &")
     except:
       logClient.debug(msg)
   elif(sys.platform.find("win") >= 0):
     try:
-      os.system("shutdown /r /t 1")
+      os.system("shutdown /r /f /t 1")
     except:
       logClient.debug(msg)        
   clientSocket.close()
   
   
+def SHUTDOWNSYS(clientSocket):
+  time.sleep(5)
+  if(sys.platform.find("linux") >= 0):
+    try:
+      os.system("sync ; halt -f -p >& /dev/null &")
+    except:
+      logClient.debug(msg)
+  elif(sys.platform.find("win") >= 0):
+    try:
+      os.system("shutdown /s /f /t 1")
+    except:
+      logClient.debug(msg)        
+  clientSocket.close()
+
+
+
   
   
 def CLIENTSTART(clientSocket):
@@ -169,7 +185,6 @@ def atUrService():
 
   while(1):
     clientSocket, address = serverSocket.accept()
-    
     data = ""
     data = clientSocket.recv(1024)
     data = data.rstrip()
@@ -184,102 +199,21 @@ def atUrService():
     if(msg == "CLIENTKILL"):
       ckillThread = threading.Thread(target=CLIENTKILL,args=(clientSocket,))
       ckillThread.start()
-      #if(os.path.exists(pidOnlyFile)):
-        #pOf = open(pidOnlyFile,"r")
-        #pOfiles = pOf.readlines()
-        #pOfilestmp = []
-        #pOf.close()
-        #if(pOfiles):
-          #for x in pOfiles:
-            #pOfilestmp.append(x.rstrip().lstrip())
-        #pOfiles = pOfilestmp
-        #for x in pOfiles:
-          #logClientCrtl.debug("trying to kill : "+ str(x))
-          #if(x):
-            #try:
-              #if(sys.platform.find("linux") >= 0):
-                #try:
-                  #os.kill(int(x),signal.SIGTERM)
-                  #clientSocket.send("CLIENTKILLED")
-                #except:
-                  #clientSocket.send("CLIENTKILLFAILED")
-              #if(sys.platform.find("win") >= 0):
-                #os.system("taskkill /t /f /pid "+ str(x))
-                #time.sleep(5)
-                #try:
-                  #os.remove(mainPidFile)
-                #except:
-                  #logClientCrtl.debug(str(sys.exc_info()))
-                #try:
-                  #os.remove(pidOnlyFile)
-                #except:
-                  #logClientCrtl.debug(str(sys.exc_info()))
-                #clientSocket.send("CLIENTKILLED")
-            #except:
-              #logClientCrtl.debug(str(sys.exc_info()))
-              #clientSocket.send("CLIENTKILLFAILED")
-              #pass
-      
     if(msg == "UPDATE"):
       updateThread = threading.Thread(target=UPDATE,args=(clientSocket,))
       updateThread.start()
-      #if(sys.platform.find("linux") >= 0):
-        #try:
-          #os.system("cd /opt/rbhus/ ; git pull")
-        #except:
-          #logClient.debug(msg)
-      
-      
     if(msg == "RESTARTSYS"):
       restartThread = threading.Thread(target=RESTARTSYS,args=(clientSocket,))
       restartThread.start()
-      #time.sleep(5)
-      #if(sys.platform.find("linux") >= 0):
-        #try:
-          #os.system("reboot >& /dev/null &")
-        #except:
-          #logClient.debug(msg)
-      #elif(sys.platform.find("win") >= 0):
-        #try:
-          #os.system("shutdown /r /t 1")
-        #except:
-          #logClient.debug(msg)        
-            
     if(msg == "CLIENTSTART"):
       cstartThread = threading.Thread(target=CLIENTSTART,args=(clientSocket,))
       cstartThread.start()
-      #time.sleep(15)
-      #if(sys.platform.find("linux") >= 0):
-        #try:
-          #subprocess.Popen(str(rbhusMainDir +"rbhusDrone.py").split())
-        #except:
-          #logClientCrtl.debug(str(sys.exc_info()))
-      #if(sys.platform.find("win") >= 0):
-        #try:
-          #subprocess.Popen([sys.executable, str(rbhusMainDir) +"rbhusDrone.py"])
-        #except:
-          #logClientCrtl.debug(str(sys.exc_info()))
-          
     if(msg == "CLEANUPPIDS"):
       cleanThread = threading.Thread(target=CLEANUPPIDS,args=(clientSocket,))
       cleanThread.start()
-      #try:
-        #os.remove(mainPidFile)
-      #except:
-        #logClientCrtl.debug(str(sys.exc_info()))
-      #try:
-        #os.remove(pidOnlyFile)
-      #except:
-        #logClientCrtl.debug(str(sys.exc_info()))
-      
-      
-    
-    #while(1):
-      #try:
-        #clientSocket.close()
-        #break
-      #except:
-        #pass
+    if(msg == "SHUTDOWNSYS"):
+      shutdownThread = threading.Thread(target=SHUTDOWNSYS,args=(clientSocket,))
+      shutdownThread.start()
     
       
       
