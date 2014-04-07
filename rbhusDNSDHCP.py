@@ -117,52 +117,6 @@ def checkForUpdates():
       print(str(sys.exc_info()))
     time.sleep(2)
   
-
-
-#def atUrService():
-  #if(sys.platform.find("linux") >=0):
-    #setproctitle.setproctitle("DNSMASQ_atUrService")
-  #print(str(os.getpid()) + ": atUrService func")
-  #while(1):
-    #try:
-      #hostName,ipAddr = getHostNameIP()
-      #serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      #serverSocket.bind(("", constants.serverDNSDHCPPort))
-      #serverSocket.listen(5)
-      #break
-    #except:
-      #print("socket failed 1 : "+ str(sys.exc_info()))
-      #pass
-    #time.sleep(1)
-  
-  #while(1):
-    #clientSocket, address = serverSocket.accept()
-    #data = ""
-    #data = clientSocket.recv(4096)
-    #clientSocket.close()
-    ##data = data.rstrip()
-    ##data = data.lstrip()
-    ##msg = ""
-    ##value = ""
-    ##if(data.rfind(":") != -1):
-      ##msg, value = data.split(":")
-    ##else:
-      ##msg = data
-    ##print(data)  
-    ##if(msg == "CREATE"):
-    #admins = rUtils.getSystemAdmins()
-    
-    #hostDets = pickle.loads(data)
-    #if(hostDets['user'] in admins):
-      #if(hostDets['COMMAND'] == "initiate"):
-        
-        
-        
-          
-        
-    #else:
-      #print("user "+ str(hostDets['user']) +" not allowed to create projects.")
-  
   
   
 if __name__=='__main__':

@@ -9,6 +9,7 @@ import hashlib
 import logging
 import logging.handlers
 import tempfile
+import subprocess
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -22,16 +23,33 @@ import dbPipe
 import constantsPipe
 
 
+if(sys.platform.find("win") >= 0):
+  try:
+    username = os.environ['USERNAME']
+  except:
+    username = "nobody"
+if(sys.platform.find("linux") >= 0):
+  try:
+    username = os.environ['USER']
+  except:
+    username = "nobody"
+
+
+
+
+
+
+
 hostname = socket.gethostname()
 tempDir = os.path.abspath(tempfile.gettempdir())
 
 
-LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusDb_module"+ str(hostname) +".log")
+LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_utilsPipe_module_"+ username +"_"+ str(hostname) +".log")
   #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
 utilsPipeLogger = logging.getLogger("utilsPipeLogger")
-utilsPipeLogger.setLevel(logging.ERROR)
+utilsPipeLogger.setLevel(logging.DEBUG)
 
 
 #ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=104857600, backupCount=3)
@@ -48,7 +66,7 @@ def getDirMaps():
     rows = dbconn.execute("SELECT * FROM dirMaps", dictionary=True)
     return(rows)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   
  
@@ -57,7 +75,7 @@ def getDirMapsDetails(directory):
   try:
     rows = dbconn.execute("SELECT * FROM dirMaps where directory='"+ str(directory) +"'", dictionary=True)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   if(rows):
     ret = {}
@@ -83,7 +101,7 @@ def getProjTypes(ptype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   
   
@@ -103,7 +121,7 @@ def getStageTypes(stype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -123,7 +141,7 @@ def getNodeTypes(ntype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -143,7 +161,7 @@ def getFileTypes(ftype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -163,17 +181,17 @@ def getAssTypes(atype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
 
 
-def getSequenceScenes(proj=None,seq=None,sce=None):
+def getSequenceScenes(proj,seq=None,sce=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(proj and seq):
       rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"'", dictionary=True)
-    elif(proj and sce):
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sceneName='"+ str(sce) +"'", dictionary=True)
+    elif(proj and seq and sce):
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sceneName='"+ str(sce) +"' and sequenceName='"+ str(seq) +"'", dictionary=True)
     else:
       rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"'", dictionary=True)
     if(rows):
@@ -181,7 +199,7 @@ def getSequenceScenes(proj=None,seq=None,sce=None):
     else:
       return(0)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -194,7 +212,7 @@ def getDefaults(table):
       taskFieldss[row['Field']] = row['Default']
     return(taskFieldss)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -208,7 +226,7 @@ def getAdmins():
         adminUsers.append(x['user'])
     return(adminUsers)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     # easy to search like - if admin in getAdmins():
     return(adminUsers)
 
@@ -216,9 +234,9 @@ def getAdmins():
 # createdUser should come from an env variable set by the authPipe module
 def createProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRenderServer,aclUser,aclGroup,dueDate,description):
   if(os.environ['rbhusPipe_acl_user'] not in getAdmins()):
-    utilsPipeLogger("User not allowed to create projects")
+    utilsPipeLogger.debug("User not allowed to create projects")
     return(0)
-  pDefs = getProjDefaults()
+  pDefs = getDefaults("proj")
   now = datetime.datetime.now()
   projDets = {}
   projDets['projType'] = projType if(projType) else pDefs['projType']
@@ -238,7 +256,7 @@ def createProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRe
     servSoc.settimeout(15)
     servSoc.connect((constantsPipe.projInitServer,constantsPipe.projInitPort))
   except:
-    utilsPipeLogger("utilsPipe createProj : "+ str(sys.exc_info()))
+    utilsPipeLogger.debug("utilsPipe createProj : "+ str(sys.exc_info()))
     return(0)
     
   servSoc.send(pickle.dumps(projDets))
@@ -269,8 +287,9 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
 
   exportDirMaps(directory)
   exportProjTypes(projType)
-  utilsPipeLogger(description)
-  utilsPipeLogger(projName)
+  utilsPipeLogger.debug(description)
+  utilsPipeLogger.debug(projName)
+  utilsPipeLogger.debug(cScript)
   try:
     dbconn.execute("insert into proj (projName,directory,admins,projType,rbhusRenderIntegration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,createDate,description) \
                     values ('"+ str(projName) +"', \
@@ -286,15 +305,21 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
                     '"+ str(MySQLdb.Timestamp.now()) +"', \
                     '"+ str(description) +"')")
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
     
   try:
     if(cScript):
+      dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusRunning) +" where projName='"+ str(projName) +"'")
+      utilsPipeLogger.debug("python -d '"+ str(cScript).rstrip("/") +"/"+ projType +".py'")
       status = os.system("python -d '"+ str(cScript).rstrip("/") +"/"+ projType +".py'")
+      if(status != 0):
+        dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusFailed) +" where projName='"+ str(projName) +"'")
+      else:
+        dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusDone) +" where projName='"+ str(projName) +"'")
       return(1)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
     
 
@@ -330,7 +355,7 @@ def getProjDetails(projName=None,status=None):
     try:
       rows = dbconn.execute("select * from proj where projName='"+ str(projName) +"'", dictionary=True)
     except:
-      utilsPipeLogger(str(sys.exc_info()))
+      utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
     if(rows):
       ret = {}
@@ -338,13 +363,13 @@ def getProjDetails(projName=None,status=None):
       for x in fs:
         ret[x] = rows[0][x]
       return(ret)
-  if(status):
+  elif(status):
     if(status != "all"):
       dbconn = dbPipe.dbPipe()
       try:
         rows = dbconn.execute("select * from proj where status="+ str(status), dictionary=True)
       except:
-        utilsPipeLogger(str(sys.exc_info()))
+        utilsPipeLogger.debug(str(sys.exc_info()))
         return(0)
       return(rows)
     else:
@@ -352,7 +377,7 @@ def getProjDetails(projName=None,status=None):
       try:
         rows = dbconn.execute("select * from proj", dictionary=True)
       except:
-        utilsPipeLogger(str(sys.exc_info()))
+        utilsPipeLogger.debug(str(sys.exc_info()))
         return(0)
       return(rows)
   return(0)
@@ -362,8 +387,10 @@ def exportProj(projName):
   if(projName):
     dets = getProjDetails(projName=projName)
     for x in dets.keys():
-      os.environ['rp_proj_'+ str(x)] = dets[x]
-      return(1)
+      os.environ['rp_proj_'+ str(x)] = str(dets[x])
+    exportProjTypes(dets['projType'])
+    exportDirMaps(dets['directory'])
+  
   
   
 
@@ -388,20 +415,20 @@ def setupSequenceScene(seqSceDict):
                     + str(os.environ['rbhusPipe_acl_user']) +"','" \
                     + str(seqSceDict['description']) +"')")
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   
   if(sys.platform.find("linux") >= 0):
     try:
       os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
     except:
-      utilsPipeLogger(str(sys.exc_info()))
+      utilsPipeLogger.debug(str(sys.exc_info()))
     
   if(sys.platform.find("win") >= 0):
     try:
       os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
     except:
-      utilsPipeLogger(str(sys.exc_info()))
+      utilsPipeLogger.debug(str(sys.exc_info()))
   return(1)    
   
 
@@ -411,7 +438,7 @@ def getFieldValue(table,field,fkey,fvalue):
     rows = dbconn.execute("select "+ str(field) +" from "+ str(table) +" where "+ str(fkey) +"='"+ str(fvalue) +"'",dictionary=True)
     return(rows)
   except:
-    utilsPipeLogger(str(sys.exc_info()))
+    utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   
 # take in a pipe type path eg :  $table_field:test: 
@@ -437,7 +464,7 @@ def getAssDetails(assId="",assPath=""):
     try:
       rows = dbconn.execute("select * from assets where assetId='"+ str(assId) +"'", dictionary=True)
     except:
-      utilsPipeLogger(str(sys.exc_info()))
+      utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
     if(rows):
       ret = {}
@@ -450,7 +477,7 @@ def getAssDetails(assId="",assPath=""):
     try:
       rows = dbconn.execute("select * from assets where path='"+ str(assPath) +"'", dictionary=True)
     except:
-      utilsPipeLogger(str(sys.exc_info()))
+      utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
     if(rows):
       ret = {}
@@ -508,12 +535,12 @@ def assRegister(self,assDetDict):
     try:
       rows = dbconn.execute("insert into assets "+ fs +" values "+ vs)
     except:
-      utilsPipeLogger(str(sys.exc_info()))
+      utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
     try:
       os.makedirs(getAbsPath(assPath))
     except:
-      utilsPipeLogger(str(sys.exc_info()))
+      utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
     return(1)
   else:

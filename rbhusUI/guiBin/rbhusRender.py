@@ -97,6 +97,8 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.hostAction.setMenu(self.hostMenu)
     self.quitAction.triggered.connect(self.quitFunc)
     self.form.hideEvent = self.hideEventt
+    self.form.closeEvent = self.closeEventt
+    self.processes = []
     
     
     
@@ -110,7 +112,14 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     #self.form.hide()
     
     
+  def closeEventt(self,event):
+    event.ignore()
+    self.closeRunning()
+    event.accept()
     
+    
+  
+  
   def hostStop(self):
     self.hostDets.hDisable()
     self.hostDets.hStop()
@@ -131,6 +140,7 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     p.start(sys.executable,rbhuslistCmd.split())
     p.finished.connect(self.rbhusListEnable)
     p.started.connect(self.rbhusListWait)
+    self.processes.append(p)
     
   
   def rbhusListWait(self):
@@ -153,12 +163,23 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     p.start(sys.executable,rbhusSubmitCmd.split())
     p.finished.connect(self.rbhusSubmitEnable)
     p.started.connect(self.rbhusSubmitWait)
-    
+    self.processes.append(p)
 
   def rbhusSubmitWait(self):
     self.pushSubmit.setText("new open")
   
 
+  def closeRunning(self):
+    if(self.processes):
+      for x in self.processes:
+        if(x.state() == QtCore.QProcess.NotRunning):
+          self.processes.remove(x)
+    if(self.processes):
+      for x in self.processes:
+        if(x.state() == QtCore.QProcess.Running):
+          x.terminate()
+          
+  
   def rbhusSubmitEnable(self,exitStatus):
     self.pushSubmit.setText("new")
     self.pushSubmit.setEnabled(True)
@@ -175,6 +196,7 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     p.start(sys.executable,rbhusHostCmd.split())
     p.finished.connect(self.rbhusHostEnable)
     p.started.connect(self.rbhusHostWait)
+    self.processes.append(p)
     
 
   def rbhusHostWait(self):

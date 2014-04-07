@@ -18,8 +18,6 @@
 # SERVER!!!!!!!!
 import sys
 import os
-import logging
-import logging.handlers
 import time
 import signal
 import setproctitle
@@ -30,7 +28,8 @@ import rbhus.utilsPipe as utilsPipe
 import multiprocessing
 import pickle
 import socket
-
+import logging
+import logging.handlers
 
 def getHostNameIP():
   while(1):
@@ -63,21 +62,12 @@ def atUrService():
     data = ""
     data = clientSocket.recv(4096)
     clientSocket.close()
-    #data = data.rstrip()
-    #data = data.lstrip()
-    #msg = ""
-    #value = ""
-    #if(data.rfind(":") != -1):
-      #msg, value = data.split(":")
-    #else:
-      #msg = data
-    #print(data)  
-    #if(msg == "CREATE"):
     admins = utilsPipe.getAdmins()
     
     projdets = pickle.loads(data)
+    print(projdets)
     if(projdets['createdUser'] in admins):
-      utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntergration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['createdUser'],projdets['dueDate'],projdets['description'])
+      utilsPipe.setupProj(projdets['projType'],projdets['projName'],projdets['directory'],projdets['admins'],projdets['rbhusRenderIntegration'],projdets['rbhusRenderServer'],projdets['aclUser'],projdets['aclGroup'],projdets['createdUser'],projdets['dueDate'],projdets['description'])
     else:
       print("user "+ str(projdets['createdUser']) +" not allowed to create projects.")
   

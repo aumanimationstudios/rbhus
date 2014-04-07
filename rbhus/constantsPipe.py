@@ -21,3 +21,18 @@ projDeactive = 0
 
 projInitPort = 9666
 projInitServer = "192.168.1.198"
+
+
+createStatusInit = 0
+createStatusPending = 1
+createStatusRunning = 2
+createStatusDone = 3
+createStatusFailed = 4
+
+createStatus = {
+  0 : "Initiating",
+  1 : "Pending",
+  2 : "creating",
+  3 : "done",
+  4 : "failed"
+}

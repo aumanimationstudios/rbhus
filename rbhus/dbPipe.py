@@ -39,7 +39,7 @@ if(sys.platform.find("win") >= 0):
 if(sys.platform.find("linux") >= 0):
   username = os.environ['USER']
 
-LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_module_"+ username +"_"+ str(hostname) +".log")
+LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_dbPipe_module_"+ username +"_"+ str(hostname) +".log")
 
 #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
 modPipeLogger = logging.getLogger("modPipeLogger")

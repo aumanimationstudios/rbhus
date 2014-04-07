@@ -10,7 +10,7 @@ print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 
-import rbhusPipeProjCreateMod
+import rbhusPipeSeqSceCreateMod
 print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import dbPipe
@@ -25,13 +25,13 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
-class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
+class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
   def setupUi(self, Form):
-    rbhusPipeProjCreateMod.Ui_MainWindow.setupUi(self,Form)
+    rbhusPipeSeqSceCreateMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
-    
+    self.form = Form
     self.dbpipe = dbPipe.dbPipe()
     self.username = None
     try:
@@ -40,18 +40,48 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
       pass
     
     self.center()
-    self.setProjTypes()
-    self.setDirectory()
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
-    self.pushCreate.clicked.connect(self.cProj)
+    #self.pushCreate.clicked.connect(self.cProj)
     
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.updateStatus)
     self.timer.start(100)
     self.wtf = "new"
     
+    self.lineEditProjName.setText(os.environ['rp_proj_projName'])
     
     
+    
+  def modelChanged(self):
+    modelSelected = self.comboModel.currentText()
+    stageSelected = str(self.comboStage.currentText()).rstrip().lstrip()
+    Form.setWindowTitle(modelSelected +"::"+ stageSelected)
+    print(str(modelSelected))
+    if(str(modelSelected) == "__NEW__"):
+      nDir = self.inputDiag()
+      if(nDir and (nDir != "__NEW__") and (nDir != "")):
+        projSelected = str(self.comboProj.currentText()).rstrip().lstrip()
+        filePath = "/proj/"+ projSelected +"/library/model/"+ nDir
+        if(not os.path.exists(filePath)):
+          os.makedirs(filePath,0777)
+        else:
+          print("Model dir already available!")
+        projSelected = self.comboProj.currentText()
+        self.updateModel(projSelected,focus=nDir)
+  
+  
+  
+  
+  def inputDiag(self, title="New File Name"):
+    fS = QtGui.QWidget()
+    fS.setGeometry(300, 300, 350, 80)
+    fS.setWindowTitle('New File Name')
+    text, ok = QtGui.QInputDialog.getText(fS, 'New', 'Enter Name:')
+    if(ok):
+      print(str(text))
+      return(str(text))
+    else:
+      return(0)
     
     
   def center(self):
@@ -59,35 +89,17 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
 
   
   def updateStatus(self):
-    if(self.lineEditName.text()):
-      pDets = utilsPipe.getProjDetails(projName=str(self.lineEditName.text()))
+    if((str(self.comboSequence.currentText()) != "__NEW__") and (str(self.comboScene.currentText()) != "__NEW__")):
+      pDets = utilsPipe.getSequenceScenes(projName=str(os.environ['rp_proj_projName']))
       if(pDets):
-        self.wtf = constantsPipe.createStatus[pDets['createStatus']]
+        for p in pDets:
+          if((p['sequenceName'] == str(self.comboSequence.currentText())) and (p['sceneName'] == str(self.comboScene.currentText()))):
+            self.wtf = constantsPipe.createStatus[p['createStatus']]
       else:
         self.wtf = "new"
     self.statusBar.showMessage("status : "+ str(self.wtf))
   
-  def cProj(self):
-    pType = str(self.comboProjType.currentText())
-    pName = str(self.lineEditName.text()) if(self.lineEditName.text()) else None
-    pDir = str(self.comboDirectory.currentText())
-    pDueDate = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-    pAdmins = str(self.lineEditAdmins.text()) if(self.lineEditAdmins.text()) else None
-    pAclUser = str(self.lineEditAclUser.text()) if(self.lineEditAclUser.text()) else None
-    pAclGroup = str(self.lineEditAclGroup.text()) if(self.lineEditAclGroup.text()) else None
-    pRI = 1 if(self.checkRI.isChecked()) else 0
-    pDesc = str(self.lineEditDesc.text()) if(self.lineEditDesc.text()) else None
-    self.wtf = "connecting"
-    utilsPipe.createProj(projType=pType,
-                            projName=pName,
-                            directory=pDir,
-                            admins=pAdmins,
-                            rbhusRenderIntegration=pRI,
-                            rbhusRenderServer=None,
-                            aclUser=pAclUser,
-                            aclGroup=pAclGroup,
-                            dueDate=pDueDate,
-                            description=pDesc)
+  
     
     
   

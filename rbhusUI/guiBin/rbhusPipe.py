@@ -4,6 +4,7 @@ import os
 import sys
 import tempfile
 import time
+import subprocess
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
@@ -13,17 +14,26 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep 
 tempDir = tempfile.gettempdir()
 rpA = "rbhusPipeProjCreate.py"
 rpAss = "rbhusPipeAssetCreate.py"
-
-  
+srb = "selectRadioBox.py"
+rpS = "rbhusPipeSeqSceCreate.py"  
 rbhusPipeProjCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpA
 rbhusPipeAssetCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpAss
+rbhusPipeSeqSceCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpS
+
+
+
+
+selectRadioBoxCmd = dirSelf.rstrip(os.sep) + os.sep + srb
+selectRadioBoxCmd = selectRadioBoxCmd.replace("\\","/")
+
+
 import rbhusPipeMainMod
 print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import constantsPipe
 import authPipe
 import dbPipe
-import utils as rUtils
+import utilsPipe
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -66,6 +76,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.trayIcon.activated.connect(self.showMain)
     
     self.actionNew_project.triggered.connect(self.rbhusPipeProjCreate)
+    self.actionSet_project.triggered.connect(self.rbhusPipeSetProject)
+    self.actionNew_seq_scn.triggered.connect(self.rbhusPipeSeqSceCreate)
     self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
     
     
@@ -73,10 +85,47 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     #self.form.closeEvent = self.closeEvent
     self.form.hideEvent = self.hideEvent
+    self.setStageTypes()
+    self.setNodeTypes()
     
     
     
+  def setStageTypes(self):
+    rows = utilsPipe.getStageTypes()
+    self.comboStageType.clear()  
+    if(rows):
+      for row in rows:
+        self.comboStageType.addItem(_fromUtf8(row['type']))
+      return(1)
+    return(0)     
+  
+  
+  def setSequence(self):
+    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
+    self.comboSequence.clear()  
+    seq = {}
+    if(rows):
+      for row in rows:
+        if(row['projName'] == os.environ['rp_proj_projName']):
+          seq[row['sequenceName']] = 1
+      if(seq):
+        for x in seq.keys():
+          self.comboSequence.addItem(_fromUtf8(x))
+      return(1)
+    return(0)     
     
+  
+  def setNodeTypes(self):
+    rows = utilsPipe.getNodeTypes()
+    self.comboNodeType.clear()  
+    if(rows):
+      for row in rows:
+        self.comboNodeType.addItem(_fromUtf8(row['type']))
+      return(1)
+    return(0)     
+  
+  
+  
   
   def rbhusPipeProjCreate(self):
     p = QtCore.QProcess(parent=self.form)
@@ -87,6 +136,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     p.finished.connect(self.rbhusPipeProjCreateEnable)
     
     
+  
+  def rbhusPipeSeqSceCreate(self):
+    p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeSeqSceCreate_"+ self.username +".log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeSeqSceCreate_"+ self.username +".err")
+    self.actionNew_seq_scn.setEnabled(False)
+    p.start(sys.executable,rbhusPipeSeqSceCreateCmd.split())
+    p.finished.connect(self.rbhusPipeSeqSceCreateEnable)
+  
+  
+  
   def rbhusPipeAssetCreate(self):
     p = QtCore.QProcess(parent=self.form)
     p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAssetCreate_"+ self.username +".log")
@@ -96,12 +156,36 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     p.finished.connect(self.rbhusPipeAssCreateEnable)
     
   
-
+  
+  def rbhusPipeSetProject(self):
+    projNames = []
+    projects = utilsPipe.getProjDetails(status="all")
+    for x in projects:
+      projNames.append(x['projName'])
+      
+    
+    projN = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(projNames)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    print(projN)
+    if(not projN):
+      return(0)
+    utilsPipe.exportProj(projN)
+    self.form.setWindowTitle(projN)
+    self.actionSet_project.setText("set project ("+ projN +")")
+    for x in os.environ.keys():
+      if(x.find("rp_") >= 0):
+        print(x +":"+ str(os.environ[x]))
+      
+    self.setSequence()
+  
   def rbhusPipeProjCreateEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)
     
   def rbhusPipeAssCreateEnable(self,exitStatus):
     self.pushNewAsset.setEnabled(True)
+  
+  def rbhusPipeSeqSceCreateEnable(self,exitStatus):
+    self.actionNew_seq_scn.setEnabled(True)
+  
   
   def closeEvent(self,event):
     event.ignore()

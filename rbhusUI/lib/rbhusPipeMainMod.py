@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod.ui'
 #
-# Created: Fri Mar 28 11:08:38 2014
+# Created: Thu Apr  3 12:01:03 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -65,21 +65,21 @@ class Ui_MainWindow(object):
     self.groupBox.setObjectName(_fromUtf8("groupBox"))
     self.gridLayout_2 = QtGui.QGridLayout(self.groupBox)
     self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-    self.comboBoxSeq = QtGui.QComboBox(self.groupBox)
-    self.comboBoxSeq.setObjectName(_fromUtf8("comboBoxSeq"))
-    self.gridLayout_2.addWidget(self.comboBoxSeq, 3, 2, 1, 1)
+    self.comboSequence = QtGui.QComboBox(self.groupBox)
+    self.comboSequence.setObjectName(_fromUtf8("comboSequence"))
+    self.gridLayout_2.addWidget(self.comboSequence, 3, 2, 1, 1)
     self.labelSeq = QtGui.QLabel(self.groupBox)
     self.labelSeq.setObjectName(_fromUtf8("labelSeq"))
     self.gridLayout_2.addWidget(self.labelSeq, 2, 2, 1, 1)
     self.label = QtGui.QLabel(self.groupBox)
     self.label.setObjectName(_fromUtf8("label"))
     self.gridLayout_2.addWidget(self.label, 2, 0, 1, 1)
-    self.comboBoxStage = QtGui.QComboBox(self.groupBox)
-    self.comboBoxStage.setObjectName(_fromUtf8("comboBoxStage"))
-    self.gridLayout_2.addWidget(self.comboBoxStage, 3, 0, 1, 1)
-    self.comboBoxSce = QtGui.QComboBox(self.groupBox)
-    self.comboBoxSce.setObjectName(_fromUtf8("comboBoxSce"))
-    self.gridLayout_2.addWidget(self.comboBoxSce, 3, 3, 1, 1)
+    self.comboStageType = QtGui.QComboBox(self.groupBox)
+    self.comboStageType.setObjectName(_fromUtf8("comboStageType"))
+    self.gridLayout_2.addWidget(self.comboStageType, 3, 0, 1, 1)
+    self.comboScene = QtGui.QComboBox(self.groupBox)
+    self.comboScene.setObjectName(_fromUtf8("comboScene"))
+    self.gridLayout_2.addWidget(self.comboScene, 3, 3, 1, 1)
     self.labelFileType = QtGui.QLabel(self.groupBox)
     self.labelFileType.setObjectName(_fromUtf8("labelFileType"))
     self.gridLayout_2.addWidget(self.labelFileType, 2, 4, 1, 1)
@@ -89,9 +89,9 @@ class Ui_MainWindow(object):
     self.label_2 = QtGui.QLabel(self.groupBox)
     self.label_2.setObjectName(_fromUtf8("label_2"))
     self.gridLayout_2.addWidget(self.label_2, 2, 1, 1, 1)
-    self.comboBoxNode = QtGui.QComboBox(self.groupBox)
-    self.comboBoxNode.setObjectName(_fromUtf8("comboBoxNode"))
-    self.gridLayout_2.addWidget(self.comboBoxNode, 3, 1, 1, 1)
+    self.comboNodeType = QtGui.QComboBox(self.groupBox)
+    self.comboNodeType.setObjectName(_fromUtf8("comboNodeType"))
+    self.gridLayout_2.addWidget(self.comboNodeType, 3, 1, 1, 1)
     self.labelSce = QtGui.QLabel(self.groupBox)
     self.labelSce.setObjectName(_fromUtf8("labelSce"))
     self.gridLayout_2.addWidget(self.labelSce, 2, 3, 1, 1)
@@ -183,7 +183,7 @@ class Ui_MainWindow(object):
     self.labelFileType.setText(_translate("MainWindow", "fileType", None))
     self.label_2.setText(_translate("MainWindow", "nodeType", None))
     self.labelSce.setText(_translate("MainWindow", "scene", None))
-    self.labelAssType.setText(_translate("MainWindow", "assType", None))
+    self.labelAssType.setText(_translate("MainWindow", "assetType", None))
     self.pushNewAsset.setText(_translate("MainWindow", "new", None))
     self.radioButton_2.setText(_translate("MainWindow", "mine", None))
     self.radioButton.setText(_translate("MainWindow", "all", None))

@@ -90,7 +90,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="3" column="2">
-        <widget class="QComboBox" name="comboBoxSeq"/>
+        <widget class="QComboBox" name="comboSequence"/>
        </item>
        <item row="2" column="2">
         <widget class="QLabel" name="labelSeq">
@@ -107,10 +107,10 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QComboBox" name="comboBoxStage"/>
+        <widget class="QComboBox" name="comboStageType"/>
        </item>
        <item row="3" column="3">
-        <widget class="QComboBox" name="comboBoxSce"/>
+        <widget class="QComboBox" name="comboScene"/>
        </item>
        <item row="2" column="4">
         <widget class="QLabel" name="labelFileType">
@@ -130,7 +130,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QComboBox" name="comboBoxNode"/>
+        <widget class="QComboBox" name="comboNodeType"/>
        </item>
        <item row="2" column="3">
         <widget class="QLabel" name="labelSce">
@@ -151,7 +151,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>assType</string>
+          <string>assetType</string>
          </property>
         </widget>
        </item>

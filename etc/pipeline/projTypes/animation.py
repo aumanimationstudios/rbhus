@@ -29,8 +29,6 @@ try:
 except:
   pass
 print(cwd)
-sys.exit()
-
 
 
 
@@ -53,12 +51,12 @@ projTypeOutput = os.environ['rp_projTypes_outDir']
 try:
   os.makedirs(diskNfsMount)
 except:
-  pass
+  print("0 : "+ str(sys.exc_info()))
 
 try:
   os.system("mount "+ diskServer +":"+ os.sep + diskNfsExport.rstrip(os.sep).lstrip(os.sep) + os.sep +" "+ os.sep + diskNfsMount.lstrip(os.sep))
 except:
-  print(str(sys.exc_info()))
+  print("1 : "+ str(sys.exc_info()))
   sys.exit(1)
 
 
@@ -72,8 +70,9 @@ for x in lib:
 if(libdir):
   try:
     os.makedirs(libdir)
+    print(libdir)
   except:
-    pass
+    print("2 : "+ str(sys.exc_info()))
   
 
 share = projTypeShare.split(":")
@@ -86,9 +85,10 @@ for x in share:
 if(sharedir):
   try:
     os.makedirs(sharedir)
+    print(sharedir)
   except:
-    pass
-
+    print("3 : "+ str(sys.exc_info()))
+    
 
 output = projTypeOutput.split(":")
 outputdir = diskNfsMount.rstrip(os.sep)
@@ -100,15 +100,16 @@ for x in output:
 if(outputdir):
   try:
     os.makedirs(outputdir)
+    print(outputdir)
   except:
-    pass
+    print(str(sys.exc_info()))
   
     
 try:
   os.system("chown -R "+ aclUser +":"+ aclGroup +" "+ diskNfsMount.rstrip(os.sep) + os.sep + projName)
 except:
   print(str(sys.exc_info()))
-  
+  sys.exit(1)
   
 os.system("umount -f "+ str(diskNfsMount))
 sys.exit(0)

@@ -2,7 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeProjCreateMod.ui'
 #
-# Created by: PyQt4 UI code generator 4.10.3
+# Created: Thu Apr  3 12:00:50 2014
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(263, 286)
+    MainWindow.resize(263, 295)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -125,6 +126,9 @@ class Ui_MainWindow(object):
     self.lineEditDesc.setObjectName(_fromUtf8("lineEditDesc"))
     self.gridLayout.addWidget(self.lineEditDesc, 8, 1, 1, 1)
     MainWindow.setCentralWidget(self.centralwidget)
+    self.statusBar = QtGui.QStatusBar(MainWindow)
+    self.statusBar.setObjectName(_fromUtf8("statusBar"))
+    MainWindow.setStatusBar(self.statusBar)
 
     self.retranslateUi(MainWindow)
     QtCore.QMetaObject.connectSlotsByName(MainWindow)

@@ -28,6 +28,7 @@ import rbhus.dbRbhus as dbRbhus
 import rbhus.constants as constants
 import multiprocessing
 import socket
+import subprocess
 
 LOG_FILENAME = '/var/log/rbhusQueen_pingClient.log'
 logging.BASIC_FORMAT = "%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
@@ -100,13 +101,14 @@ def checkClientAlive():
         if(not pIds):
           break
         time.sleep(1)
-    time.sleep(30)
+    time.sleep(16)
     
 
 def pingClientProcess(client,ipAddr):
   setproctitle.setproctitle("rQ_ping_"+ str(client))
   db_conn = dbRbhus.dbRbhus()
-  status = os.system("ping -c 1 -W 15 "+ str(ipAddr) +" >& /dev/null")
+  p = subprocess.Popen(["ping","-c","1","-W","8",str(ipAddr)],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+  status = p.wait()
   pingstatus = 0
   sockstatus = 0
   if(status == 0):
@@ -122,7 +124,7 @@ def pingClientProcess(client,ipAddr):
 
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
-    clientSocket.settimeout(15)
+    clientSocket.settimeout(8)
     clientSocket.connect((ipAddr,6660))
     logging.debug("Connected to "+ client)
     sockstatus = 1
