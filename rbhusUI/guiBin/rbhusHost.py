@@ -219,11 +219,11 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.popTableHost()
     return(1)
   
-  def hostRestartToLinux(self):
+  def hostRestartToLinux(self,when=constants.restartNextTime):
     hosts = self.selectedHosts()
     for h in hosts:
       hst = rUtils.hosts(h['hostInfo.ip'])
-      hst.changeBootLoader("linux")
+      hst.changeBootLoader("linux",when)
     self.popTableHost()
     return(1)
   
