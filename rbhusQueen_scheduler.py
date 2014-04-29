@@ -48,13 +48,22 @@ def getFreeHosts():
   #logging.debug("potentHosts : "+ str(potentHosts))
   if(potentHosts):
     for hostDetails in potentHosts:
+      loadThreshold = 0 
+      if(hostDetails['os'].find("linux") >= 0):
+        loadThreshold = hostDetails["totalCpus"] - 1
+      elif(hostDetails['os'].find("win") >= 0):
+        loadThreshold = 90
       if(hostDetails["eCpus"] == 0):
         hostDetails["eCpus"] = hostDetails["totalCpus"]
         if((hostDetails["freeCpus"] <= hostDetails["totalCpus"]) and (hostDetails["freeCpus"] > 0)):
-          freeHosts.append(hostDetails)
+          if((100 * float(hostDetails['freeRam']) / float(hostDetails['totalRam'])) >= 60): 
+            if(hostDetails['load1'] <= loadThreshold):
+              freeHosts.append(hostDetails)
       elif(hostDetails['eCpus'] != 0):
         if((hostDetails["totalCpus"] - hostDetails["freeCpus"]) < hostDetails["eCpus"]):
-          freeHosts.append(hostDetails)
+          if((100 * float(hostDetails['freeRam']) / float(hostDetails['totalRam'])) >= 60): 
+            if(hostDetails['load1'] <= loadThreshold):
+              freeHosts.append(hostDetails)
   return(freeHosts)
 
 def getBestHost(activeTask,freeHosts):

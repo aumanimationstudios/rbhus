@@ -290,6 +290,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     print(self.afterTimeEdit.dateTime().time().hour())
     print(self.afterTimeEdit.dateTime().time().minute())
     print(self.afterTimeEdit.dateTime().time().second())
+    self.db_aftertime = 1
     
   def popEditItems(self):
     if(self.taskValues):
@@ -356,9 +357,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     cAT = self.checkAfterTime.isChecked()
     if(cAT):
       self.afterTimeEdit.setEnabled(True)
-      self.db_aftertime = 1
     else:
       self.afterTimeEdit.setEnabled(False)
+      self.db_aftertime = 0
 
   def sloppyEnable(self):
       self.db_afterTaskSloppy = 1

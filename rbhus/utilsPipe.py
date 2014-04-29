@@ -188,10 +188,10 @@ def getAssTypes(atype=None):
 def getSequenceScenes(proj,seq=None,sce=None):
   dbconn = dbPipe.dbPipe()
   try:
-    if(proj and seq):
+    if(proj and seq and (not sce)):
       rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"'", dictionary=True)
     elif(proj and seq and sce):
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sceneName='"+ str(sce) +"' and sequenceName='"+ str(seq) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' and sceneName='"+ str(sce) +"'", dictionary=True)
     else:
       rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"'", dictionary=True)
     if(rows):
@@ -402,7 +402,7 @@ def setupSequenceScene(seqSceDict):
   projDets = getProjDetails(str(seqSceDict['projName']))
   dirMapsDets = getDirMapsDetails(str(projDets['directory']))
   try:
-    dbconn.execute("insert into sequenceScene (projName,sequenceName,sceneName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
+    dbconn.execute("insert into sequenceScenes (projName,sequenceName,sceneName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
                     values('" \
                     + str(seqSceDict['projName']) +"','" \
                     + str(seqSceDict['sequenceName']) +"','" \
@@ -418,17 +418,46 @@ def setupSequenceScene(seqSceDict):
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   
+  dbconn.execute("update sequenceScenes \
+                  set createStatus="+ str(constantsPipe.createStatusRunning) +" \
+                  where projName='"+ str(seqSceDict['projName']) +"' \
+                  and sequenceName='"+ str(seqSceDict['sequenceName']) +"' \
+                  and sceneName='"+ str(seqSceDict['sceneName']) +"'")
+  
+  
   if(sys.platform.find("linux") >= 0):
     try:
       os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
+      dbconn.execute("update sequenceScenes \
+                      set createStatus="+ str(constantsPipe.createStatusDone) +" \
+                      where projName='"+ str(seqSceDict['projName']) +"' \
+                      and sequenceName='"+ str(seqSceDict['sequenceName']) +"' \
+                      and sceneName='"+ str(seqSceDict['sceneName']) +"'")
     except:
+      dbconn.execute("update sequenceScenes \
+                      set createStatus="+ str(constantsPipe.createStatusFailed) +" \
+                      where projName='"+ str(seqSceDict['projName']) +"' \
+                      and sequenceName='"+ str(seqSceDict['sequenceName']) +"' \
+                      and sceneName='"+ str(seqSceDict['sceneName']) +"'")
       utilsPipeLogger.debug(str(sys.exc_info()))
+      return(0)
     
   if(sys.platform.find("win") >= 0):
     try:
       os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
+      dbconn.execute("update sequenceScenes \
+                      set createStatus="+ str(constantsPipe.createStatusDone) +" \
+                      where projName='"+ str(seqSceDict['projName']) +"' \
+                      and sequenceName='"+ str(seqSceDict['sequenceName']) +"' \
+                      and sceneName='"+ str(seqSceDict['sceneName']) +"'")
     except:
+      dbconn.execute("update sequenceScenes \
+                      set createStatus="+ str(constantsPipe.createStatusFailed) +" \
+                      where projName='"+ str(seqSceDict['projName']) +"' \
+                      and sequenceName='"+ str(seqSceDict['sequenceName']) +"' \
+                      and sceneName='"+ str(seqSceDict['sceneName']) +"'")
       utilsPipeLogger.debug(str(sys.exc_info()))
+      return(0)
   return(1)    
   
 

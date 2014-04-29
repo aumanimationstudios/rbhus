@@ -3,11 +3,26 @@ from PyQt4 import QtCore, QtGui
 import glob
 import os
 import sys
+import tempfile
+import subprocess
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+
+
+tempDir = tempfile.gettempdir()
+srb = "selectRadioBox.py"
+
+
+
+
+selectRadioBoxCmd = dirSelf.rstrip(os.sep) + os.sep + srb
+selectRadioBoxCmd = selectRadioBoxCmd.replace("\\","/")
+
+
+
 
 
 import rbhusPipeSeqSceCreateMod
@@ -41,34 +56,50 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
     
     self.center()
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
-    #self.pushCreate.clicked.connect(self.cProj)
-    
-    self.timer = QtCore.QTimer()
-    self.timer.timeout.connect(self.updateStatus)
-    self.timer.start(100)
-    self.wtf = "new"
-    
+    self.pushCreate.clicked.connect(self.createSeqScn)
+    self.pushSelectSeq.clicked.connect(self.rbhusPipeSeqSet)
     self.lineEditProjName.setText(os.environ['rp_proj_projName'])
     
     
+    self.timer = QtCore.QTimer()
+    self.timer.timeout.connect(self.updateStatus)
+    self.timer.start(1000)
+    self.wtf = ""
     
-  def modelChanged(self):
-    modelSelected = self.comboModel.currentText()
-    stageSelected = str(self.comboStage.currentText()).rstrip().lstrip()
-    Form.setWindowTitle(modelSelected +"::"+ stageSelected)
-    print(str(modelSelected))
-    if(str(modelSelected) == "__NEW__"):
-      nDir = self.inputDiag()
-      if(nDir and (nDir != "__NEW__") and (nDir != "")):
-        projSelected = str(self.comboProj.currentText()).rstrip().lstrip()
-        filePath = "/proj/"+ projSelected +"/library/model/"+ nDir
-        if(not os.path.exists(filePath)):
-          os.makedirs(filePath,0777)
-        else:
-          print("Model dir already available!")
-        projSelected = self.comboProj.currentText()
-        self.updateModel(projSelected,focus=nDir)
+    
+    
+  def createSeqScn(self):
+    seqScnDict = {}
+    seqScnDict['projName'] = os.environ['rp_proj_projName']
+    if(not self.lineEditSequenceName.text()):
+      return(0)
+    seqScnDict['sequenceName'] = str(self.lineEditSequenceName.text())
+    if(not self.lineEditSceneName.text()):
+      return(0)
+    seqScnDict['sceneName'] = str(self.lineEditSceneName.text())
+    seqScnDict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
+    seqScnDict['sFrame'] = str(self.spinStartFrame.value())
+    seqScnDict['eFrame'] = str(self.spinEndFrame.value())
+    seqScnDict['admins'] = str(self.lineEditAdmins.text())
+    seqScnDict['description'] = str(self.lineEditDesc.text())
+    utilsPipe.setupSequenceScene(seqScnDict)
   
+  
+  def rbhusPipeSeqSet(self):
+    seqs = utilsPipe.getSequenceScenes(os.environ["rp_proj_projName"])
+    uniqSeq = {}
+    if(seqs):
+      for x in seqs:
+        uniqSeq[x['sequenceName']] = 1
+    if(uniqSeq):
+      seqNames = uniqSeq.keys()
+      seqToDisp = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(seqNames)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+      print(seqToDisp)
+      self.lineEditSequenceName.setText(seqToDisp)
+      return(1)
+    else:
+      return(0)
+    
   
   
   
@@ -89,15 +120,16 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
 
   
   def updateStatus(self):
-    if((str(self.comboSequence.currentText()) != "__NEW__") and (str(self.comboScene.currentText()) != "__NEW__")):
-      pDets = utilsPipe.getSequenceScenes(projName=str(os.environ['rp_proj_projName']))
-      if(pDets):
-        for p in pDets:
-          if((p['sequenceName'] == str(self.comboSequence.currentText())) and (p['sceneName'] == str(self.comboScene.currentText()))):
-            self.wtf = constantsPipe.createStatus[p['createStatus']]
+    newStatus = utilsPipe.getSequenceScenes(os.environ["rp_proj_projName"],seq=str(self.lineEditSequenceName.text()),sce=str(self.lineEditSceneName.text()))
+    if(newStatus):
+      if(len(newStatus) > 0):
+        self.wtf = constantsPipe.createStatus[newStatus[-1]['createStatus']]
       else:
         self.wtf = "new"
+    else:
+      self.wtf = "new"
     self.statusBar.showMessage("status : "+ str(self.wtf))
+    newStatus = 0
   
   
     
