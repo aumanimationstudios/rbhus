@@ -69,7 +69,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     self.lineEditFrange.textChanged.connect(self.reset_fRange)
     self.lineEditDescription.textChanged.connect(self.reset_desc)
     self.lineEditAfterTask.textChanged.connect(self.reset_afterTask)
-    print self.afterTimeEdit.dateTime().toString()
+    self.afterTimeEdit.setDateTime(QtCore.QDateTime.currentDateTime())
     
     
     self.db_filetype = 0

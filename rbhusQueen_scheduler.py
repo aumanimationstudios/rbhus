@@ -56,12 +56,12 @@ def getFreeHosts():
       if(hostDetails["eCpus"] == 0):
         hostDetails["eCpus"] = hostDetails["totalCpus"]
         if((hostDetails["freeCpus"] <= hostDetails["totalCpus"]) and (hostDetails["freeCpus"] > 0)):
-          if((100 * float(hostDetails['freeRam']) / float(hostDetails['totalRam'])) >= 60): 
+          if((100 * float(hostDetails['freeRam']) / float(hostDetails['totalRam'])) >= 10): 
             if(hostDetails['load1'] <= loadThreshold):
               freeHosts.append(hostDetails)
       elif(hostDetails['eCpus'] != 0):
         if((hostDetails["totalCpus"] - hostDetails["freeCpus"]) < hostDetails["eCpus"]):
-          if((100 * float(hostDetails['freeRam']) / float(hostDetails['totalRam'])) >= 60): 
+          if((100 * float(hostDetails['freeRam']) / float(hostDetails['totalRam'])) >= 10): 
             if(hostDetails['load1'] <= loadThreshold):
               freeHosts.append(hostDetails)
   return(freeHosts)

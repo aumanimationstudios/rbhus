@@ -1,0 +1,8 @@
+#!/usr/bin/python
+
+import os
+
+if(os.path.exists("/etc/firstboot")):
+  os.system("yes | sensors-detect")
+  os.system("rm -fv /etc/firstboot")
+ 

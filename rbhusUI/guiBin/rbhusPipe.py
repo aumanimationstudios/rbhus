@@ -53,6 +53,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       pass
     
     
+    iconRefresh = QtGui.QIcon()
+    iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.assRefresh.setIcon(iconRefresh)
+    
     
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -79,6 +83,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionSet_project.triggered.connect(self.rbhusPipeSetProject)
     self.actionNew_seq_scn.triggered.connect(self.rbhusPipeSeqSceCreate)
     self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
+    self.comboSequence.currentIndexChanged.connect(self.setScene)
     
     
     
@@ -87,7 +92,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.form.hideEvent = self.hideEvent
     self.setStageTypes()
     self.setNodeTypes()
-    
+    self.setFileTypes()
+    self.setAssTypes()
     
     
   def setStageTypes(self):
@@ -98,6 +104,30 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         self.comboStageType.addItem(_fromUtf8(row['type']))
       return(1)
     return(0)     
+  
+  
+  
+ 
+  
+  
+  def setScene(self):
+    seqName = str(self.comboSequence.currentText())
+    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
+    self.comboScene.clear()
+    scenes = {}
+    if(rows):
+      for x in rows:
+        scenes[x['sceneName']] = 1
+    if(scenes):
+      for x in scenes:
+        self.comboScene.addItem(_fromUtf8(x))
+    return(1)
+        
+        
+      
+    
+    
+    
   
   
   def setSequence(self):
@@ -125,6 +155,25 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     return(0)     
   
   
+  def setFileTypes(self):
+    rows = utilsPipe.getFileTypes()
+    self.comboFileType.clear()  
+    if(rows):
+      for row in rows:
+        self.comboFileType.addItem(_fromUtf8(row['type']))
+      return(1)
+    return(0)
+  
+  
+  def setAssTypes(self):
+    rows = utilsPipe.getAssTypes()
+    self.comboAssType.clear()  
+    if(rows):
+      for row in rows:
+        self.comboAssType.addItem(_fromUtf8(row['type']))
+      return(1)
+    return(0)
+  
   
   
   def rbhusPipeProjCreate(self):
@@ -136,6 +185,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     p.finished.connect(self.rbhusPipeProjCreateEnable)
     
     
+  
+  def listAssets(self):
+    self.listWidget.setSortingEnabled(True)
+    self.listWidget.clear()
+    asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
+    print(asses)
+    if(asses):
+      for x in range(0,len(asses)):
+        item = QtGui.QListWidgetItem()
+        item.setText(asses[x]['path'])
+        self.listWidget.addItem(item)
+        
+    
+    
+  
   
   def rbhusPipeSeqSceCreate(self):
     p = QtCore.QProcess(parent=self.form)
@@ -176,6 +240,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         print(x +":"+ str(os.environ[x]))
       
     self.setSequence()
+    self.listAssets()
   
   def rbhusPipeProjCreateEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)

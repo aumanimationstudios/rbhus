@@ -10,6 +10,7 @@ import logging
 import logging.handlers
 import tempfile
 import subprocess
+import re
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -307,6 +308,15 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
+  
+  seqScnDict = {}
+  seqScnDict['sequenceName'] = "default"
+  seqScnDict['projName'] = str(projName)
+  seqScnDict['sceneName'] = "default"
+  seqScnDict['createdUser'] = str(createdUser)
+  
+  setupSequenceScene(seqScnDict)
+  
     
   try:
     if(cScript):
@@ -401,19 +411,26 @@ def setupSequenceScene(seqSceDict):
   dbconn = dbPipe.dbPipe()
   projDets = getProjDetails(str(seqSceDict['projName']))
   dirMapsDets = getDirMapsDetails(str(projDets['directory']))
+  seqKeys = seqSceDict.keys()
+  seqValues = ["'"+ seqSceDict[x] +"'" for x in seqKeys]
+  seqKeys.append("createDate")
+  seqValues.append("'"+ str(MySQLdb.Timestamp.now()) +"'")
+  
+  
+  if(not seqSceDict.has_key("createdUser")):
+    try:
+      seqValues.append("'"+ os.environ['rbhusPipe_acl_user'] +"'")
+      seqKeys.append("createdUser")
+    except:
+      print("createdUser not given for seq scn")
+      return(0)
+  
+    
+    
+    
   try:
-    dbconn.execute("insert into sequenceScenes (projName,sequenceName,sceneName,admins,sFrame,eFrame,createDate,dueDate,createdUser,description) \
-                    values('" \
-                    + str(seqSceDict['projName']) +"','" \
-                    + str(seqSceDict['sequenceName']) +"','" \
-                    + str(seqSceDict['sceneName']) +"','" \
-                    + str(seqSceDict['admins']) +"','" \
-                    + str(seqSceDict['sFrame']) +"','" \
-                    + str(seqSceDict['eFrame']) +"','" \
-                    + str(MySQLdb.Timestamp.now()) +"','" \
-                    + str(seqSceDict['dueDate']) +"','" \
-                    + str(os.environ['rbhusPipe_acl_user']) +"','" \
-                    + str(seqSceDict['description']) +"')")
+    dbconn.execute("insert into sequenceScenes ("+ ",".join(seqKeys) +") \
+                    values("+ ",".join(seqValues) +")")
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
@@ -441,10 +458,15 @@ def setupSequenceScene(seqSceDict):
                       and sceneName='"+ str(seqSceDict['sceneName']) +"'")
       utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
+  
+  
     
   if(sys.platform.find("win") >= 0):
     try:
-      os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
+      if((seqSceDict['sequenceName'] == "default") or (seqSceDict['sceneName'] == "default")):
+        pass
+      else:
+        os.makedirs(dirMapsDets['windowsMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
       dbconn.execute("update sequenceScenes \
                       set createStatus="+ str(constantsPipe.createStatusDone) +" \
                       where projName='"+ str(seqSceDict['projName']) +"' \
@@ -487,6 +509,7 @@ def getAbsPath(pipePath):
   return(absPath)
   
 
+
 def getAssDetails(assId="",assPath=""):
   if(assId):
     dbconn = dbPipe.dbPipe()
@@ -516,15 +539,24 @@ def getAssDetails(assId="",assPath=""):
       return(ret)
   
 
-def assRegister(self,assDetDict):
+def getProjAsses(projName):
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"'", dictionary=True)
+    return(rows)
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  
+
+
+def assRegister(assDetDict):
   assPath = str(assDetDict['projName'])
   assId = ""
-  projDets = getProjDetails(projName = str(assDetDict['projName']))
-  projTypes = getProjTypes()
-  projTypeDets = {}
-  for z in projTypes:
-    if(z['type'] == projDets['projType']):
-      projTypeDets = {}
+  dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
+  assDetDict['createDate'] = str(MySQLdb.Timestamp.now())
+  assDetDict['createdUser']  = os.environ['rbhusPipe_acl_user']
+  
   if(re.search("^default",str(assDetDict['assetType']))):
     pass 
   else:
@@ -560,6 +592,8 @@ def assRegister(self,assDetDict):
       valuesA.append("'"+ str(assDetDict[x]) +"'")
     fs = "("+ ",".join(fieldsA) +")"
     vs = "("+ ",".join(valuesA) +")"
+    
+    utilsPipeLogger.debug(assDetDict)
     dbconn = dbPipe.dbPipe()
     try:
       rows = dbconn.execute("insert into assets "+ fs +" values "+ vs)
@@ -567,11 +601,17 @@ def assRegister(self,assDetDict):
       utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
     try:
-      os.makedirs(getAbsPath(assPath))
+      if(sys.platform.find("windows") >= 0):
+        corePath = dirMapsDets['windowsMapping'] + assPath.replace(":","/")
+      else:
+        corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
+      utilsPipeLogger.debug(corePath)
+      os.makedirs(corePath)
+      
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
-    return(1)
+    return(assDetDict['assetId'])
   else:
     return(0)
     

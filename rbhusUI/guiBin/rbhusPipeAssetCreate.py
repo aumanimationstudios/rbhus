@@ -50,9 +50,16 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     
     self.center()
     #self.setProjTypes()
-    self.setDirectory()
+    self.comboSequence.currentIndexChanged.connect(self.setScene)
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
     self.pushCreate.clicked.connect(self.cAss)
+    self.setDirectory()
+    self.setAssTypes()
+    self.setFileTypes()
+    self.setNodeTypes()
+    self.setSequence()
+    self.setStageTypes()
+    
     
     
   def center(self):
@@ -74,20 +81,12 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict['description'] = str(self.lineEditDesc.text())
     assdict['fileType'] = str(self.comboFileType.currentText())
     
+    utilsPipe.assRegister(assdict)
+    
     
     
     
   
-  
-  def setProjTypes(self):
-    rows = utilsPipe.getProjTypes()
-    self.comboProjType.clear()  
-    if(rows):
-      for row in rows:
-        self.comboProjType.addItem(_fromUtf8(row['type']))
-      
-      return(1)
-    return(0)     
   
   
   def setDirectory(self):
@@ -100,6 +99,84 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     return(0)
     
     
+  def setStageTypes(self):
+    rows = utilsPipe.getStageTypes()
+    self.comboStageType.clear()  
+    if(rows):
+      for row in rows:
+        self.comboStageType.addItem(_fromUtf8(row['type']))
+      return(1)
+    return(0)     
+  
+  
+  
+ 
+  
+  
+  def setScene(self):
+    seqName = str(self.comboSequence.currentText())
+    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
+    self.comboScene.clear()
+    scenes = {}
+    if(rows):
+      for x in rows:
+        scenes[x['sceneName']] = 1
+    if(scenes):
+      for x in scenes:
+        self.comboScene.addItem(_fromUtf8(x))
+    return(1)
+        
+        
+      
+    
+    
+    
+  
+  
+  def setSequence(self):
+    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
+    self.comboSequence.clear()  
+    seq = {}
+    if(rows):
+      for row in rows:
+        if(row['projName'] == os.environ['rp_proj_projName']):
+          seq[row['sequenceName']] = 1
+      if(seq):
+        for x in seq.keys():
+          self.comboSequence.addItem(_fromUtf8(x))
+      return(1)
+    return(0)     
+    
+  
+  def setNodeTypes(self):
+    rows = utilsPipe.getNodeTypes()
+    self.comboNodeType.clear()  
+    if(rows):
+      for row in rows:
+        self.comboNodeType.addItem(_fromUtf8(row['type']))
+      return(1)
+    return(0)     
+  
+  
+  def setFileTypes(self):
+    rows = utilsPipe.getFileTypes()
+    self.comboFileType.clear()  
+    if(rows):
+      for row in rows:
+        self.comboFileType.addItem(_fromUtf8(row['type']))
+      return(1)
+    return(0)
+  
+  
+  def setAssTypes(self):
+    rows = utilsPipe.getAssTypes()
+    self.comboAssType.clear()  
+    if(rows):
+      for row in rows:
+        self.comboAssType.addItem(_fromUtf8(row['type']))
+      return(1)
+    return(0)
+  
   def setDefaults(self):
     defs = utilsPipe.getProjDefaults()
     

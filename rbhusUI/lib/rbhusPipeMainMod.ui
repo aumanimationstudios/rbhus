@@ -27,25 +27,8 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="7" column="0" colspan="5">
-     <widget class="QListWidget" name="listWidget">
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
-      </property>
-      <item>
-       <property name="text">
-        <string>test</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>test2</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="9" column="4">
-     <spacer name="horizontalSpacer_2">
+    <item row="9" column="1" colspan="5">
+     <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -57,33 +40,7 @@
       </property>
      </spacer>
     </item>
-    <item row="8" column="0" colspan="5">
-     <widget class="Line" name="line">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
-      <property name="lineWidth">
-       <number>1</number>
-      </property>
-      <property name="midLineWidth">
-       <number>3</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="3">
-     <widget class="QPushButton" name="pushLogout">
-      <property name="text">
-       <string>logout</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="5">
+    <item row="2" column="0" colspan="8">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string/>
@@ -158,7 +115,56 @@
       </layout>
      </widget>
     </item>
-    <item row="4" column="0" colspan="5">
+    <item row="8" column="0" colspan="8">
+     <widget class="Line" name="line">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="midLineWidth">
+       <number>3</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="8">
+     <widget class="QListWidget" name="listWidget">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+      <item>
+       <property name="text">
+        <string>test</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>test2</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="9" column="7">
+     <widget class="QPushButton" name="assRefresh">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="8">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="pushNewAsset">
@@ -171,6 +177,9 @@
        <widget class="QRadioButton" name="radioButton_2">
         <property name="text">
          <string>mine</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -210,17 +219,36 @@
      </layout>
     </item>
     <item row="9" column="0">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+     <widget class="QPushButton" name="pushLogout">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="sizeHint" stdset="0">
+      <property name="text">
+       <string>logout</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="6">
+     <widget class="QCheckBox" name="checkRefresh">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="iconSize">
        <size>
-        <width>40</width>
+        <width>20</width>
         <height>20</height>
        </size>
       </property>
-     </spacer>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -230,7 +258,7 @@
      <x>0</x>
      <y>0</y>
      <width>594</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdmin">
