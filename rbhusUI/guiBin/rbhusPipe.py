@@ -62,8 +62,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.pushLogout.setText("logout : "+ str(self.username))
-    #self.pushSubmit.clicked.connect(self.rbhusSubmit)
-    #self.pushHosts.clicked.connect(self.rbhusHost)
     self.pushLogout.clicked.connect(self.logout)
     self.form = Form
     self.wFlag = self.form.windowFlags()
@@ -71,6 +69,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.trayIcon.show()
     
     self.trayMenu = QtGui.QMenu()
+    
+    
     
     
     self.quitAction = self.trayMenu.addAction("quit")
@@ -88,6 +88,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     
+    
     #self.form.closeEvent = self.closeEvent
     self.form.hideEvent = self.hideEvent
     self.setStageTypes()
@@ -95,7 +96,60 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.setFileTypes()
     self.setAssTypes()
     
+    # set up the right-click context menu for listWidget
+    self.listWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+    self.listWidget.customContextMenuRequested.connect(self.popupAss)
     
+  
+  def popupAss(self, pos):
+    menu = QtGui.QMenu()
+    openFileAction = menu.addAction("open file")
+    openFolderAction = menu.addAction("open folder")
+    newFolderAction = menu.addAction("new folder")
+    assEditAction = menu.addAction("edit")
+    assDeleteAction = menu.addAction("delete")
+    
+    action = menu.exec_(self.listWidget.mapToGlobal(pos))
+    if(action == openFileAction):
+      self.openFileAss()
+    if(action == openFolderAction):
+      self.openFolderAss()
+    if(action == newFolderAction):
+      self.newFolderAss()
+    if(action == assEditAction):
+      self.editAss()
+    if(action == assDeleteAction):
+      self.delAss()
+  
+  
+  
+  def openFileAss(self):
+    listAsses = self.listWidget.selectedItems()
+    
+    for x in listAsses:
+      print(x.text())
+    print(listAsses)
+    
+  
+  def openFolderAss(self):
+    pass
+  
+  
+  def newFolderAss(self):
+    pass
+  
+  
+  def editAss(self):
+    pass
+  
+  
+  def delAss(self):
+    pass
+  
+  
+  
+  
+  
   def setStageTypes(self):
     rows = utilsPipe.getStageTypes()
     self.comboStageType.clear()  
@@ -187,7 +241,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   def listAssets(self):
-    self.listWidget.setSortingEnabled(True)
     self.listWidget.clear()
     asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
     print(asses)
