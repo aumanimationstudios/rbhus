@@ -11,6 +11,8 @@ import logging.handlers
 import tempfile
 import subprocess
 import re
+import shutil
+
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -357,6 +359,12 @@ def exportProjTypes(projType):
   return(0)
 
 
+def exportAsset(assDets):
+  for x in assDets:
+    os.environ['rp_assets_'+ str(x).rstrip().lstrip()] = str(assDets[x])
+  return(1)
+  
+
 
 #when you give the projName it returns a single dict else it returns an array of dict
 def getProjDetails(projName=None,status=None):
@@ -495,18 +503,32 @@ def getFieldValue(table,field,fkey,fvalue):
 # take in a pipe type path eg :  $table_field:test: 
 # first and second should be $proj_directory:$proj_projName
 def getAbsPath(pipePath):
-  pPaths = pipePath.split(":")
-  projName = pPaths[0]
-  assDets = getAssDetails(assPath=pipePath)
-  projDets = getProjDetails(projName)
-  projDirMapsDets = getDirMapsDetails(assDets['directory'])
-  absPath = ""
   
+  
+  absPath = []
+  absPathArray = pipePath.split(":")
+  for x in absPathArray:
+    if(re.search("^\$",str(x))):
+      absPath.append(os.environ["rp_"+ str(x).lstrip("$")])
+    else:
+      absPath.append(str(x))
+  
+  projName = absPath[0]
+  projDets = getProjDetails(projName)
+  assDets = getAssDetails(assPath=pipePath)
+  if(assDets):
+    projDirMapsDets = getDirMapsDetails(assDets['directory'])
+  else:
+    projDirMapsDets = getDirMapsDetails(projDets['directory'])
+    
+  
+  absPathRet = ""
   if(sys.platform.find("linux") >= 0):
-    absPath = os.path.abspath(projDirMapsDets['linuxMapping'].rstrip("/") +"/"+ pipePath.lstrip("/"))
+    absPathRet = os.path.abspath(projDirMapsDets['linuxMapping'].rstrip("/") +"/"+ ":".join(absPath).replace(":","/").lstrip("/"))
   elif(sys.platform.find("win") >= 0):
-    absPath = os.path.abspath(projDirMapsDets['linuxMapping'].rstrip("/") +"/"+ pipePath.lstrip("/"))
-  return(absPath)
+    absPath = os.path.abspath(projDirMapsDets['windowsMapping'].rstrip("/") +"/"+ ":".join(absPath).replace(":","/").lstrip("/"))
+  return(absPathRet)
+  
   
 
 
@@ -524,6 +546,7 @@ def getAssDetails(assId="",assPath=""):
       for x in fs:
         ret[x] = rows[0][x]
       return(ret)
+    return(0)
   if(assPath):
     dbconn = dbPipe.dbPipe()
     try:
@@ -537,6 +560,7 @@ def getAssDetails(assId="",assPath=""):
       for x in fs:
         ret[x] = rows[0][x]
       return(ret)
+    return(0)
   
 
 def getProjAsses(projName):
@@ -621,19 +645,103 @@ def assRegister(assDetDict):
     
     
   
-  def details(self,assDetDict={},assId=0):
-    pass
+def assDetails(assDetDict={},assId=0):
+  pass
+
+def assOpen(assId):
+  pass
+
+def assLinks(assId):
+  pass
+
+def assLinkedTo(assId):
+  pass
+
+
+def makeFileType(assId=None,assPath=None):
+  dbconn = dbPipe.dbPipe()
+  if(assId):
+    assdets = getAssDetails(assId=str(assId))
+    dirMapsDets = getDirMapsDetails(assdets['directory'])
+    try:
+      if(sys.platform.find("windows") >= 0):
+        corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
+        #os.system("rmdir "+ str() +" /s /q")
+      else:
+        corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
+        #os.system("rm -frv "+ str(corePath))
+      utilsPipeLogger.debug(corePath)
+    except:
+      utilsPipeLogger.debug(str(sys.exc_info()))
+      return(0)
+    try:
+      #dbconn.execute("delete from assets where assetId='"+ str(assId) +"'")
+      utilsPipeLogger.debug("cooking asset assetId = "+ str(assId) +" : done")
+    except:
+      utilsPipeLogger.debug("cooking asset assetId = "+ str(assId) +" : failed")
+  elif(assPath):
+    assdets = getAssDetails(assPath=str(assPath))
+    dirMapsDets = getDirMapsDetails(assdets['directory'])
+    try:
+      if(sys.platform.find("windows") >= 0):
+        corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
+        #os.system("rmdir "+ str() +" /s /q")
+      else:
+        corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
+        #os.system("rm -frv "+ str(corePath))
+      utilsPipeLogger.debug(corePath)
+    except:
+      utilsPipeLogger.debug(str(sys.exc_info()))
+      return(0)
+    try:
+      #dbconn.execute("delete from assets where path='"+ str(assPath) +"'")
+      utilsPipeLogger.debug("cooking asset path = "+ str(assPath) +" : done")
+    except:
+      utilsPipeLogger.debug("cooking asset path = "+ str(assPath) +" : failed")
   
-  def openAsset(self,assId):
-    pass
   
-  def links(self,assId):
-    pass
-  
-  def linkedTo(self,assId):
-    pass
-  
-  
+
+def assDelete(assId=None,assPath=None):
+  dbconn = dbPipe.dbPipe()
+  if(assId):
+    assdets = getAssDetails(assId=str(assId))
+    dirMapsDets = getDirMapsDetails(assdets['directory'])
+    try:
+      if(sys.platform.find("windows") >= 0):
+        corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
+        os.system("rmdir "+ str() +" /s /q")
+      else:
+        corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
+        os.system("rm -frv "+ str(corePath))
+      utilsPipeLogger.debug(corePath)
+    except:
+      utilsPipeLogger.debug(str(sys.exc_info()))
+      return(0)
+    try:
+      dbconn.execute("delete from assets where assetId='"+ str(assId) +"'")
+      utilsPipeLogger.debug("deleting asset assetId = "+ str(assId) +" : done")
+    except:
+      utilsPipeLogger.debug("deleting asset assetId = "+ str(assId) +" : failed")
+  elif(assPath):
+    assdets = getAssDetails(assPath=str(assPath))
+    dirMapsDets = getDirMapsDetails(assdets['directory'])
+    try:
+      if(sys.platform.find("windows") >= 0):
+        corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
+        os.system("rmdir "+ str() +" /s /q")
+      else:
+        corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
+        os.system("rm -frv "+ str(corePath))
+      utilsPipeLogger.debug(corePath)
+    except:
+      utilsPipeLogger.debug(str(sys.exc_info()))
+      return(0)
+    try:
+      dbconn.execute("delete from assets where path='"+ str(assPath) +"'")
+      utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : done")
+    except:
+      utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : failed")
+    
   
   
     

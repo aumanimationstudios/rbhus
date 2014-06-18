@@ -157,7 +157,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_2">
+       <widget class="QRadioButton" name="radioMineAss">
         <property name="text">
          <string>mine</string>
         </property>
@@ -167,7 +167,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton">
+       <widget class="QRadioButton" name="radioAllAss">
         <property name="text">
          <string>all</string>
         </property>

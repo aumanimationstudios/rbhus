@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod.ui'
 #
-# Created: Mon May 26 21:51:35 2014
+# Created: Thu May 29 21:11:42 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -110,13 +110,13 @@ class Ui_MainWindow(object):
     self.pushNewAsset = QtGui.QPushButton(self.centralwidget)
     self.pushNewAsset.setObjectName(_fromUtf8("pushNewAsset"))
     self.horizontalLayout.addWidget(self.pushNewAsset)
-    self.radioButton_2 = QtGui.QRadioButton(self.centralwidget)
-    self.radioButton_2.setChecked(True)
-    self.radioButton_2.setObjectName(_fromUtf8("radioButton_2"))
-    self.horizontalLayout.addWidget(self.radioButton_2)
-    self.radioButton = QtGui.QRadioButton(self.centralwidget)
-    self.radioButton.setObjectName(_fromUtf8("radioButton"))
-    self.horizontalLayout.addWidget(self.radioButton)
+    self.radioMineAss = QtGui.QRadioButton(self.centralwidget)
+    self.radioMineAss.setChecked(True)
+    self.radioMineAss.setObjectName(_fromUtf8("radioMineAss"))
+    self.horizontalLayout.addWidget(self.radioMineAss)
+    self.radioAllAss = QtGui.QRadioButton(self.centralwidget)
+    self.radioAllAss.setObjectName(_fromUtf8("radioAllAss"))
+    self.horizontalLayout.addWidget(self.radioAllAss)
     spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout.addItem(spacerItem1)
     self.lineEdit = QtGui.QLineEdit(self.centralwidget)
@@ -197,8 +197,8 @@ class Ui_MainWindow(object):
     self.labelSce.setText(_translate("MainWindow", "scene", None))
     self.labelAssType.setText(_translate("MainWindow", "assetType", None))
     self.pushNewAsset.setText(_translate("MainWindow", "new", None))
-    self.radioButton_2.setText(_translate("MainWindow", "mine", None))
-    self.radioButton.setText(_translate("MainWindow", "all", None))
+    self.radioMineAss.setText(_translate("MainWindow", "mine", None))
+    self.radioAllAss.setText(_translate("MainWindow", "all", None))
     self.lineEdit.setPlaceholderText(_translate("MainWindow", "search", None))
     self.pushLogout.setText(_translate("MainWindow", "logout", None))
     self.listWidget.setSortingEnabled(True)

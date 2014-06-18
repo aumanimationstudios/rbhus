@@ -15,11 +15,12 @@ tempDir = tempfile.gettempdir()
 rpA = "rbhusPipeProjCreate.py"
 rpAss = "rbhusPipeAssetCreate.py"
 srb = "selectRadioBox.py"
-rpS = "rbhusPipeSeqSceCreate.py"  
+rpS = "rbhusPipeSeqSceCreate.py" 
+fileSelect = "fileSelectUI.py"
 rbhusPipeProjCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpA
 rbhusPipeAssetCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpAss
 rbhusPipeSeqSceCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpS
-
+fileSelectCmd = dirSelf.rstrip(os.sep) + os.sep + fileSelect
 
 
 
@@ -84,12 +85,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionNew_seq_scn.triggered.connect(self.rbhusPipeSeqSceCreate)
     self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
     self.comboSequence.currentIndexChanged.connect(self.setScene)
+    self.assRefresh.clicked.connect(self.listAssets)
     
+    self.comboStageType.currentIndexChanged.connect(self.listAssets)
+    self.comboNodeType.currentIndexChanged.connect(self.listAssets)
+    self.comboScene.currentIndexChanged.connect(self.listAssets)
+    self.comboAssType.currentIndexChanged.connect(self.listAssets)
+    self.comboFileType.currentIndexChanged.connect(self.listAssets)
+    
+    
+    self.radioAllAss.toggled.connect(self.listAssets)
+    self.radioMineAss.toggled.connect(self.listAssets)
     
     
     
     
     #self.form.closeEvent = self.closeEvent
+    self.rbhusPipeSetProjDefault()
     self.form.hideEvent = self.hideEvent
     self.setStageTypes()
     self.setNodeTypes()
@@ -100,6 +112,25 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.listWidget.customContextMenuRequested.connect(self.popupAss)
     
+    
+    self.timer = QtCore.QTimer()
+    self.timer.timeout.connect(self.updateAll)
+    self.checkRefresh.clicked.connect(self.timeCheck)
+  
+  def timeCheck(self):
+    cRefresh = self.checkRefresh.isChecked()
+    if(cRefresh):
+      self.startTimer()
+    else:
+      self.stopTimer()
+  
+  def startTimer(self):
+    self.timer.start(5000)
+
+  def stopTimer(self):
+    self.timer.stop()
+  
+  
   
   def popupAss(self, pos):
     menu = QtGui.QMenu()
@@ -108,6 +139,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     newFolderAction = menu.addAction("new folder")
     assEditAction = menu.addAction("edit")
     assDeleteAction = menu.addAction("delete")
+    assCopyNew = menu.addAction("copy/new")
     
     action = menu.exec_(self.listWidget.mapToGlobal(pos))
     if(action == openFileAction):
@@ -120,20 +152,50 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.editAss()
     if(action == assDeleteAction):
       self.delAss()
+    if(action == assCopyNew):
+      self.copyNewAss()
+      
+      
+  def copyNewAss(self):
+    pass
+    
   
   
   
   def openFileAss(self):
     listAsses = self.listWidget.selectedItems()
+    fcmd = fileSelectCmd
+    if(listAsses and (len(listAsses) == 1)):
+      x = str(listAsses[0].text())
+      fcmd = fcmd +" "+ utilsPipe.getAbsPath(x)
+      print(fcmd)
+      p = QtCore.QProcess(parent=self.form)
+      p.setStandardOutputFile(tempDir + os.sep +"rbhusOpenFileAss_"+ self.username +".log")
+      p.setStandardErrorFile(tempDir + os.sep +"rbhusOpenFileAss_"+ self.username +".err")
+      p.start(sys.executable,fcmd.split())
+      
+      
+      
+      #f = os.popen("python "+ cwd +"/lib/fileSelectUI.py \""+ filePath +"\"")
+      #elif(typeSelected == "maya"):
+  #f = os.popen("python "+ cwd +"/lib/fileSelectUI.py \""+ filePath +"\"")
+      #fileSelected = f.readline().rstrip().lstrip()  
+      
+      
+      
     
-    for x in listAsses:
-      print(x.text())
-    print(listAsses)
-    
-  
   def openFolderAss(self):
-    pass
-  
+    listAsses = self.listWidget.selectedItems()
+    
+    if(listAsses and (len(listAsses) == 1)):
+      x = str(listAsses[0].text())
+      p = utilsPipe.getAbsPath(x)
+      if(p):
+        fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
+        if(fila):
+          print(str(fila[0]))
+        
+   
   
   def newFolderAss(self):
     pass
@@ -144,24 +206,38 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   def delAss(self):
-    pass
-  
+    listAsses = self.listWidget.selectedItems()
+    
+    for x in listAsses:
+      if(str(x.text())):
+        utilsPipe.assDelete(assPath=str(x.text()))
+        
+    self.listAssets()
   
   
   
   
   def setStageTypes(self):
     rows = utilsPipe.getStageTypes()
+    defStage = utilsPipe.getDefaults("stageTypes")
+    try:
+      present = str(self.comboStageType.currentText())
+    except:
+      present = None
     self.comboStageType.clear()  
+    indx = 0
+    foundIndx = -1
     if(rows):
       for row in rows:
         self.comboStageType.addItem(_fromUtf8(row['type']))
+        if(defStage['type']):
+          if(defStage['type'] == row['type']):
+            foundIndx = indx
+        indx = indx + 1
+      if(foundIndx != -1):
+        self.comboStageType.setCurrentIndex(foundIndx)
       return(1)
     return(0)     
-  
-  
-  
- 
   
   
   def setScene(self):
@@ -176,12 +252,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       for x in scenes:
         self.comboScene.addItem(_fromUtf8(x))
     return(1)
-        
-        
-      
-    
-    
-    
   
   
   def setSequence(self):
@@ -201,32 +271,100 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def setNodeTypes(self):
     rows = utilsPipe.getNodeTypes()
+    defStage = utilsPipe.getDefaults("nodeTypes")
+    try:
+      present = str(self.comboNodeType.currentText())
+    except:
+      present = None
     self.comboNodeType.clear()  
+    indx = 0
+    foundIndx = -1
     if(rows):
       for row in rows:
         self.comboNodeType.addItem(_fromUtf8(row['type']))
+        if(defStage['type']):
+          if(defStage['type'] == row['type']):
+            foundIndx = indx
+        indx = indx + 1
+      if(foundIndx != -1):
+        self.comboNodeType.setCurrentIndex(foundIndx)
       return(1)
     return(0)     
   
   
+  
+    #self.comboNodeType.clear()  
+    #if(rows):
+      #for row in rows:
+        #self.comboNodeType.addItem(_fromUtf8(row['type']))
+      #return(1)
+    #return(0)     
+  
+  
   def setFileTypes(self):
     rows = utilsPipe.getFileTypes()
+    defStage = utilsPipe.getDefaults("fileTypes")
+    try:
+      present = str(self.comboFileType.currentText())
+    except:
+      present = None
     self.comboFileType.clear()  
+    indx = 0
+    foundIndx = -1
     if(rows):
       for row in rows:
         self.comboFileType.addItem(_fromUtf8(row['type']))
+        if(defStage['type']):
+          if(defStage['type'] == row['type']):
+            foundIndx = indx
+        indx = indx + 1
+      if(foundIndx != -1):
+        self.comboFileType.setCurrentIndex(foundIndx)
       return(1)
-    return(0)
+    return(0)     
+    
+    
+    
+    
+    #rows = utilsPipe.getFileTypes()
+    #self.comboFileType.clear()  
+    #if(rows):
+      #for row in rows:
+        #self.comboFileType.addItem(_fromUtf8(row['type']))
+      #return(1)
+    #return(0)
   
   
   def setAssTypes(self):
     rows = utilsPipe.getAssTypes()
+    defStage = utilsPipe.getDefaults("assetTypes")
+    try:
+      present = str(self.comboAssType.currentText())
+    except:
+      present = None
     self.comboAssType.clear()  
+    indx = 0
+    foundIndx = -1
     if(rows):
       for row in rows:
         self.comboAssType.addItem(_fromUtf8(row['type']))
+        if(defStage['type']):
+          if(defStage['type'] == row['type']):
+            foundIndx = indx
+        indx = indx + 1
+      if(foundIndx != -1):
+        self.comboAssType.setCurrentIndex(foundIndx)
       return(1)
-    return(0)
+    return(0)     
+  
+  
+    #rows = utilsPipe.getAssTypes()
+    #self.comboAssType.clear()  
+    #if(rows):
+      #for row in rows:
+        #self.comboAssType.addItem(_fromUtf8(row['type']))
+      #return(1)
+    #return(0)
   
   
   
@@ -242,14 +380,129 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def listAssets(self):
     self.listWidget.clear()
-    asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
-    print(asses)
+    try:
+      asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
+    except:
+      return(0)
+    #print(asses)
     if(asses):
       for x in range(0,len(asses)):
-        item = QtGui.QListWidgetItem()
-        item.setText(asses[x]['path'])
-        self.listWidget.addItem(item)
-        
+        stageTypeAss = 0
+        nodeTypeAss = 0
+        seqAss = 0
+        scnAss = 0
+        fileTypeAss = 0
+        assTypeAss = 0
+        if(self.radioMineAss.isChecked()):
+#          print("test1")
+#          print(asses[x]['createdUser'])
+          
+          
+          if(asses[x]['createdUser'] == self.username):
+            
+            if(str(self.comboStageType.currentText()) != "default"):
+              if(str(self.comboStageType.currentText()) == str(asses[x]['stageType'])):
+                stageTypeAss = 1
+            else:
+              stageTypeAss = 1
+            
+            if(str(self.comboNodeType.currentText()) != "default"):
+              if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
+                nodeTypeAss = 1
+            else:
+              nodeTypeAss = 1
+            #yesAss = 0
+            
+            if(str(self.comboSequence.currentText()) != "default"):
+              if(str(self.comboSequence.currentText()) == str(asses[x]['sequenceName'])):
+                seqAss = 1
+            else:
+              seqAss = 1
+              
+            if(str(self.comboScene.currentText()) != "default"):
+              if(str(self.comboScene.currentText()) == str(asses[x]['sceneName'])):
+                scnAss = 1
+            else:
+              scnAss = 1
+              
+            if(str(self.comboNodeType.currentText()) != "default"):
+              if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
+                nodeTypeAss = 1
+            else:
+              nodeTypeAss = 1
+              
+            if(str(self.comboFileType.currentText()) != "default"):
+              if(str(self.comboFileType.currentText()) == str(asses[x]['fileType'])):
+                fileTypeAss = 1
+            else:
+              fileTypeAss = 1
+              
+            if(str(self.comboAssType.currentText()) != "default"):
+              if(str(self.comboAssType.currentText()) == str(asses[x]['assetType'])):
+                assTypeAss = 1
+            else:
+              assTypeAss = 1
+              
+              
+              
+                
+#            print("test2")
+            if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
+              item = QtGui.QListWidgetItem()
+              item.setText(asses[x]['path'])
+              self.listWidget.addItem(item)
+        elif(self.radioAllAss.isChecked()):
+          if(str(self.comboStageType.currentText()) != "default"):
+            if(str(self.comboStageType.currentText()) == str(asses[x]['stageType'])):
+              stageTypeAss = 1
+          else:
+            stageTypeAss = 1
+            
+          if(str(self.comboNodeType.currentText()) != "default"):
+            if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
+              nodeTypeAss = 1
+          else:
+            nodeTypeAss = 1
+            #yesAss = 0
+            
+          if(str(self.comboSequence.currentText()) != "default"):
+            if(str(self.comboSequence.currentText()) == str(asses[x]['sequenceName'])):
+              seqAss = 1
+          else:
+            seqAss = 1
+            
+          if(str(self.comboScene.currentText()) != "default"):
+            if(str(self.comboScene.currentText()) == str(asses[x]['sceneName'])):
+              scnAss = 1
+          else:
+            scnAss = 1
+            
+          if(str(self.comboNodeType.currentText()) != "default"):
+            if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
+              nodeTypeAss = 1
+          else:
+            nodeTypeAss = 1
+            
+          if(str(self.comboFileType.currentText()) != "default"):
+            if(str(self.comboFileType.currentText()) == str(asses[x]['fileType'])):
+              fileTypeAss = 1
+          else:
+            fileTypeAss = 1
+            
+          if(str(self.comboAssType.currentText()) != "default"):
+            if(str(self.comboAssType.currentText()) == str(asses[x]['assetType'])):
+              assTypeAss = 1
+          else:
+            assTypeAss = 1
+            
+            
+            
+              
+#          print("test2")
+          if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
+            item = QtGui.QListWidgetItem()
+            item.setText(asses[x]['path'])
+            self.listWidget.addItem(item)
     
     
   
@@ -274,17 +527,51 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   
+  def rbhusPipeSetProjDefault(self):
+    from os.path import expanduser
+    home = expanduser("~")
+    projFile = 0
+    if(os.path.exists(home.rstrip(os.sep) + os.sep +"projSet.default")):
+      projFile = open(home.rstrip(os.sep) + os.sep +"projSet.default","r")
+    
+    if(projFile):
+      for x in projFile.readlines():
+        if(x):
+          utilsPipe.exportProj(x)
+          self.form.setWindowTitle(x)
+          self.actionSet_project.setText("set project ("+ x +")")
+          for y in os.environ.keys():
+            if(y.find("rp_") >= 0):
+              print(y +":"+ str(os.environ[y]))
+            
+          self.setSequence()
+          self.listAssets()
+          break
+        
+    
+  
   def rbhusPipeSetProject(self):
+    
+    
+    from os.path import expanduser
+    home = expanduser("~")
+    projFile = open(home.rstrip(os.sep) + os.sep +"projSet.default","w")
+    
+    
+    
     projNames = []
     projects = utilsPipe.getProjDetails(status="all")
     for x in projects:
       projNames.append(x['projName'])
-      
-    
     projN = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(projNames)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     print(projN)
     if(not projN):
       return(0)
+    
+    
+    projFile.writelines(projN)
+    projFile.close()
+    
     utilsPipe.exportProj(projN)
     self.form.setWindowTitle(projN)
     self.actionSet_project.setText("set project ("+ projN +")")
@@ -297,6 +584,19 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def rbhusPipeProjCreateEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)
+    self.updateAll()
+  
+  
+  
+  def updateAll(self):
+    self.setStageTypes()
+    self.setAssTypes()
+    self.setFileTypes()
+    self.setNodeTypes()
+    self.setSequence()
+    self.setScene()
+    self.setAssTypes()
+    self.listAssets()
     
   def rbhusPipeAssCreateEnable(self,exitStatus):
     self.pushNewAsset.setEnabled(True)
