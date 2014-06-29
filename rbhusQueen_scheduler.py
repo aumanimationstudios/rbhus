@@ -253,8 +253,11 @@ def arrangedActiveTasks():
         afts = activeTask["afterTasks"].split(",")
         print(afts)
         for af in afts:
-          if(int(af) in [int(x['id']) for x in arrangedTasks]):
-            afterTasks.append(activeTask)
+          try:
+            if(int(af) in [int(x['id']) for x in arrangedTasks]):
+              afterTasks.append(activeTask)
+              break
+          except:
             break
     if(afterTasks):
       for x in afterTasks:

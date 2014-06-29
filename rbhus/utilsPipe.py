@@ -152,7 +152,7 @@ def getFileTypes(ftype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(ftype):
-      rows = dbconn.execute("SELECT * FROM fileTypes where type='"+ str(stype) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM fileTypes where type='"+ str(ftype) +"'", dictionary=True)
       if(rows):
         return(rows[0])
       else:
@@ -631,6 +631,9 @@ def assRegister(assDetDict):
         corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
       utilsPipeLogger.debug(corePath)
       os.makedirs(corePath)
+      templateFile = getTemplateFile(assDetDict,dirMapsDets)
+      if(templateFile):
+        shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ str(assDetDict['assName']) +"."+ templateFile.split("/")[-1])
       
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))
@@ -657,48 +660,48 @@ def assLinks(assId):
 def assLinkedTo(assId):
   pass
 
-
-def makeFileType(assId=None,assPath=None):
-  dbconn = dbPipe.dbPipe()
-  if(assId):
-    assdets = getAssDetails(assId=str(assId))
-    dirMapsDets = getDirMapsDetails(assdets['directory'])
-    try:
-      if(sys.platform.find("windows") >= 0):
-        corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
-        #os.system("rmdir "+ str() +" /s /q")
-      else:
-        corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
-        #os.system("rm -frv "+ str(corePath))
-      utilsPipeLogger.debug(corePath)
-    except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
-      return(0)
-    try:
-      #dbconn.execute("delete from assets where assetId='"+ str(assId) +"'")
-      utilsPipeLogger.debug("cooking asset assetId = "+ str(assId) +" : done")
-    except:
-      utilsPipeLogger.debug("cooking asset assetId = "+ str(assId) +" : failed")
-  elif(assPath):
-    assdets = getAssDetails(assPath=str(assPath))
-    dirMapsDets = getDirMapsDetails(assdets['directory'])
-    try:
-      if(sys.platform.find("windows") >= 0):
-        corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
-        #os.system("rmdir "+ str() +" /s /q")
-      else:
-        corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
-        #os.system("rm -frv "+ str(corePath))
-      utilsPipeLogger.debug(corePath)
-    except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
-      return(0)
-    try:
-      #dbconn.execute("delete from assets where path='"+ str(assPath) +"'")
-      utilsPipeLogger.debug("cooking asset path = "+ str(assPath) +" : done")
-    except:
-      utilsPipeLogger.debug("cooking asset path = "+ str(assPath) +" : failed")
+def getTemplateFile(assdets = {},dirmapdets = {}):
+  filetypedets = {}
+  tempMain = ""
+  dirs = []
+  if(sys.platform.find("windows") >= 0):
+    tempMain = dirmapdets['windowsMapping'] +"/"+ assdets['projName'] +"/share/template"
+  elif(sys.platform.find("linux") >= 0):
+    tempMain = dirmapdets['linuxMapping'] +"/"+ assdets['projName'] +"/share/template"
+  dirs.append(tempMain)
+     
+  if(assdets['stageType'] != "default"):
+    stageTempDir = tempMain +"/"+ assdets['stageType']
+  else:
+    stageTempDir = tempMain 
+  dirs.append(stageTempDir)
+  if(assdets['nodeType'] != "default"):
+    nodeTempDir = stageTempDir +"/"+ assdets['nodeType']
+  else:
+    nodeTempDir = stageTempDir 
+  dirs.append(nodeTempDir)
+  if(assdets['fileType'] != "default"):
+    fileTempDir = nodeTempDir +"/"+ assdets['fileType']
+    filetypedets = getFileTypes(assdets['fileType'])
+  else:
+    fileTempDir = nodeTempDir
+  dirs.append(fileTempDir)
   
+  
+  while(dirs):
+    currTempDir = dirs.pop()
+    if(filetypedets):
+      fileTempFile = currTempDir +"/template."+ filetypedets['extension']
+      utilsPipeLogger.debug(str(fileTempFile))
+      if(os.path.exists(fileTempFile)):
+        return(fileTempFile)
+  return(0)
+      
+        
+    
+
+    
+    
   
 
 def assDelete(assId=None,assPath=None):
