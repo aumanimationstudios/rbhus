@@ -18,8 +18,17 @@ progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
   pwd = os.sep.join(progPath[0:-1])
   cwd = os.path.abspath(pwd)
+  print("utilsPipe 1: "+ str(cwd))
 else:
   cwd = os.path.abspath(os.getcwd())
+
+
+etcpathtmp = cwd.split(os.sep)[0:-2]
+etcpathtmp.append("rbhus")
+etcpathtmp.append("etc")
+etcpath = os.sep.join(etcpathtmp)
+print("utilsPipe 1: "+ str(etcpath))
+
 
 sys.path.append(cwd.rstrip(os.sep) + os.sep)
 import dbPipe
@@ -127,6 +136,13 @@ def getStageTypes(stype=None):
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
 
+
+def getValidNodes(stype):
+  pass
+  
+  
+  
+  
 
 def getNodeTypes(ntype=None):
   dbconn = dbPipe.dbPipe()
@@ -419,6 +435,14 @@ def setupSequenceScene(seqSceDict):
   dbconn = dbPipe.dbPipe()
   projDets = getProjDetails(str(seqSceDict['projName']))
   dirMapsDets = getDirMapsDetails(str(projDets['directory']))
+  defaultSeq = {}
+  defaultSeq['projName'] = str(seqSceDict['projName'])
+  defaultSeq['sequenceName'] = str(seqSceDict['sequenceName'])
+  defaultSeq['sceneName'] = "default"
+  
+  defKeys = defaultSeq.keys()
+  defValues = ["'"+ defaultSeq[x] +"'" for x in defKeys]
+  
   seqKeys = seqSceDict.keys()
   seqValues = ["'"+ seqSceDict[x] +"'" for x in seqKeys]
   seqKeys.append("createDate")
@@ -434,6 +458,11 @@ def setupSequenceScene(seqSceDict):
       return(0)
   
     
+  try:
+    dbconn.execute("insert into sequenceScenes ("+ ",".join(defKeys) +") \
+                    values("+ ",".join(defValues) +")")
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
     
     
   try:
@@ -442,6 +471,9 @@ def setupSequenceScene(seqSceDict):
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
+  
+  
+ 
   
   dbconn.execute("update sequenceScenes \
                   set createStatus="+ str(constantsPipe.createStatusRunning) +" \
@@ -452,7 +484,10 @@ def setupSequenceScene(seqSceDict):
   
   if(sys.platform.find("linux") >= 0):
     try:
-      os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'])
+      if((seqSceDict['sequenceName'] == "default") or (seqSceDict['sceneName'] == "default")):
+        pass
+      else:
+        os.makedirs(dirMapsDets['linuxMapping'].rstrip("/") +"/"+ seqSceDict['projName'] +"/"+ seqSceDict['sequenceName'] +"/"+ seqSceDict['sceneName'],0775)
       dbconn.execute("update sequenceScenes \
                       set createStatus="+ str(constantsPipe.createStatusDone) +" \
                       where projName='"+ str(seqSceDict['projName']) +"' \
@@ -503,8 +538,6 @@ def getFieldValue(table,field,fkey,fvalue):
 # take in a pipe type path eg :  $table_field:test: 
 # first and second should be $proj_directory:$proj_projName
 def getAbsPath(pipePath):
-  
-  
   absPath = []
   absPathArray = pipePath.split(":")
   for x in absPathArray:
@@ -514,19 +547,24 @@ def getAbsPath(pipePath):
       absPath.append(str(x))
   
   projName = absPath[0]
+  print("getAbsPath 1: "+ str(projName))
+  
   projDets = getProjDetails(projName)
+  print("getAbsPath 2: "+ str(projDets))
+  
   assDets = getAssDetails(assPath=pipePath)
+  print("getAbsPath 3: "+ str(projDets))
   if(assDets):
     projDirMapsDets = getDirMapsDetails(assDets['directory'])
   else:
     projDirMapsDets = getDirMapsDetails(projDets['directory'])
     
-  
+  print("getAbsPath 4: "+ str(projDirMapsDets))
   absPathRet = ""
   if(sys.platform.find("linux") >= 0):
     absPathRet = os.path.abspath(projDirMapsDets['linuxMapping'].rstrip("/") +"/"+ ":".join(absPath).replace(":","/").lstrip("/"))
   elif(sys.platform.find("win") >= 0):
-    absPath = os.path.abspath(projDirMapsDets['windowsMapping'].rstrip("/") +"/"+ ":".join(absPath).replace(":","/").lstrip("/"))
+    absPathRet = os.path.abspath(projDirMapsDets['windowsMapping'].rstrip("/") +"/"+ ":".join(absPath).replace(":","/").lstrip("/"))
   return(absPathRet)
   
   
@@ -598,12 +636,18 @@ def assRegister(assDetDict):
       else:
         utilsPipeLogger.debug("if sequenceName is given sceneName cannot be a default")
         return(0)
+    
+    if(assDetDict.has_key('assName')):
+      assPath = assPath +":" + str(assDetDict['assName'])
+      
     if(not re.search("^default",str(assDetDict['stageType']))):
       assPath = assPath +":" + str(assDetDict['stageType'])
       if(not re.search("^default",str(assDetDict['nodeType']))):
         assPath = assPath +":" + str(assDetDict['nodeType'])
-        
-    assPath = assPath +":" + str(assDetDict['assName'])
+    
+    
+    
+      
     if(not re.search("^default",str(assDetDict['fileType']))): 
       assPath = assPath +":" + str(assDetDict['fileType'])
     assId = hashlib.sha256(assPath).hexdigest()
@@ -625,15 +669,15 @@ def assRegister(assDetDict):
       utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
     try:
-      if(sys.platform.find("windows") >= 0):
+      if(sys.platform.find("win") >= 0):
         corePath = dirMapsDets['windowsMapping'] + assPath.replace(":","/")
       else:
         corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
       utilsPipeLogger.debug(corePath)
-      os.makedirs(corePath)
+      os.makedirs(corePath,0775)
       templateFile = getTemplateFile(assDetDict,dirMapsDets)
       if(templateFile):
-        shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ str(assDetDict['assName']) +"."+ templateFile.split("/")[-1])
+        shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ str(assDetDict['assName']) +"_000."+ templateFile.split(".")[-1])
       
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))
@@ -664,7 +708,7 @@ def getTemplateFile(assdets = {},dirmapdets = {}):
   filetypedets = {}
   tempMain = ""
   dirs = []
-  if(sys.platform.find("windows") >= 0):
+  if(sys.platform.find("win") >= 0):
     tempMain = dirmapdets['windowsMapping'] +"/"+ assdets['projName'] +"/share/template"
   elif(sys.platform.find("linux") >= 0):
     tempMain = dirmapdets['linuxMapping'] +"/"+ assdets['projName'] +"/share/template"
@@ -672,11 +716,15 @@ def getTemplateFile(assdets = {},dirmapdets = {}):
      
   if(assdets['stageType'] != "default"):
     stageTempDir = tempMain +"/"+ assdets['stageType']
+    if(not os.path.exists(stageTempDir)):
+      stageTempDir = tempMain
   else:
     stageTempDir = tempMain 
   dirs.append(stageTempDir)
   if(assdets['nodeType'] != "default"):
     nodeTempDir = stageTempDir +"/"+ assdets['nodeType']
+    if(not os.path.exists(nodeTempDir)):
+      nodeTempDir = tempMain
   else:
     nodeTempDir = stageTempDir 
   dirs.append(nodeTempDir)
@@ -699,7 +747,49 @@ def getTemplateFile(assdets = {},dirmapdets = {}):
       
         
     
-
+def openAssetCmd(assdets ={},filename = None):
+  dirmapdets = getDirMapsDetails(assdets['directory'])
+  filetypedets = None
+  runCmd = None
+  binPaths = None
+  binMain = None
+  dirs = []
+  exeAss = None
+  pathAss = None
+  runProc = None
+  if(sys.platform.find("win") >= 0):
+    binMain = dirmapdets['windowsMapping'] +"/"+ assdets['projName'] +"/share/bin"
+    exeAss = "windowsCmd"
+    pathAss = "windowsPath"
+  elif(sys.platform.find("linux") >= 0):
+    binMain = dirmapdets['linuxMapping'] +"/"+ assdets['projName'] +"/share/bin"
+    exeAss = "linuxCmd"
+    pathAss = "linuxPath"
+  dirs.append(binMain)
+  
+  if(assdets['fileType'] != "default"):
+    filetypedets = getFileTypes(assdets['fileType'])
+    binDir = binMain +"/"+ assdets['fileType']
+    
+    runCmd = binDir +"/"+ filetypedets[exeAss]
+    if(os.path.exists(runCmd)):
+      runProc = runCmd +" "+ filename
+      return(runProc)
+    else:
+      binPaths = filetypedets[pathAss].split("##")
+      for x in binPaths:
+        if(x != "default"):
+          print(x)
+          absBinPath = getAbsPath(x)
+          if(absBinPath):
+            runCmd = absBinPath +"/"+ filetypedets[exeAss]
+            if(os.path.exists(runCmd)):
+              runProc = runCmd +" "+ filename
+              return(runProc)
+        else:
+          return(filetypedets[exeAss] +" "+ filename)
+  else:
+    return(0)
     
     
   
@@ -710,7 +800,7 @@ def assDelete(assId=None,assPath=None):
     assdets = getAssDetails(assId=str(assId))
     dirMapsDets = getDirMapsDetails(assdets['directory'])
     try:
-      if(sys.platform.find("windows") >= 0):
+      if(sys.platform.find("win") >= 0):
         corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
         os.system("rmdir "+ str() +" /s /q")
       else:
@@ -729,7 +819,7 @@ def assDelete(assId=None,assPath=None):
     assdets = getAssDetails(assPath=str(assPath))
     dirMapsDets = getDirMapsDetails(assdets['directory'])
     try:
-      if(sys.platform.find("windows") >= 0):
+      if(sys.platform.find("win") >= 0):
         corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
         os.system("rmdir "+ str() +" /s /q")
       else:

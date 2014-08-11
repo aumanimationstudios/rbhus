@@ -54,10 +54,11 @@ class Ui_Form(object):
     
   def getFiles(self):
     files = glob.glob(sys.argv[1].rstrip("/") +"/*")
-    for f in files:
-      if(os.path.isfile(f)):
-        fS = QtGui.QListWidgetItem(_fromUtf8(f.split("/")[-1]))
-        self.listWidget.addItem(fS)
+    if(files):
+      for f in files:
+        if(os.path.isfile(f)):
+          fS = QtGui.QListWidgetItem(_fromUtf8(f.split("/")[-1]))
+          self.listWidget.addItem(fS)
       
       
   def center(self):

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeAssetCreateMod.ui'
 #
-# Created: Wed May 21 15:17:25 2014
+# Created: Fri Jul 11 21:25:25 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(358, 367)
+    MainWindow.resize(272, 367)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -117,9 +117,6 @@ class Ui_MainWindow(object):
     self.lineEditWorkers = QtGui.QLineEdit(self.centralwidget)
     self.lineEditWorkers.setObjectName(_fromUtf8("lineEditWorkers"))
     self.gridLayout.addWidget(self.lineEditWorkers, 11, 1, 1, 1)
-    self.lineEditAssName = QtGui.QLineEdit(self.centralwidget)
-    self.lineEditAssName.setObjectName(_fromUtf8("lineEditAssName"))
-    self.gridLayout.addWidget(self.lineEditAssName, 0, 1, 1, 2)
     self.labelFileType = QtGui.QLabel(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
     sizePolicy.setHorizontalStretch(0)
@@ -163,6 +160,23 @@ class Ui_MainWindow(object):
     self.comboDirectory = QtGui.QComboBox(self.centralwidget)
     self.comboDirectory.setObjectName(_fromUtf8("comboDirectory"))
     self.gridLayout.addWidget(self.comboDirectory, 2, 1, 1, 2)
+    self.lineEditAssName = QtGui.QLineEdit(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.lineEditAssName.sizePolicy().hasHeightForWidth())
+    self.lineEditAssName.setSizePolicy(sizePolicy)
+    self.lineEditAssName.setObjectName(_fromUtf8("lineEditAssName"))
+    self.gridLayout.addWidget(self.lineEditAssName, 0, 1, 1, 1)
+    self.checkAssName = QtGui.QCheckBox(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.checkAssName.sizePolicy().hasHeightForWidth())
+    self.checkAssName.setSizePolicy(sizePolicy)
+    self.checkAssName.setText(_fromUtf8(""))
+    self.checkAssName.setObjectName(_fromUtf8("checkAssName"))
+    self.gridLayout.addWidget(self.checkAssName, 0, 2, 1, 1)
     MainWindow.setCentralWidget(self.centralwidget)
     self.statusBar = QtGui.QStatusBar(MainWindow)
     self.statusBar.setObjectName(_fromUtf8("statusBar"))

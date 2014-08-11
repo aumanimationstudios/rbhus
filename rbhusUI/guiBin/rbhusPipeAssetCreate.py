@@ -53,22 +53,34 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     self.comboSequence.currentIndexChanged.connect(self.setScene)
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
     self.pushCreate.clicked.connect(self.cAss)
+    self.checkAssName.clicked.connect(self.enableAssName)
+    
+    
     self.setDirectory()
     self.setAssTypes()
     self.setFileTypes()
     self.setNodeTypes()
     self.setSequence()
     self.setStageTypes()
+    self.enableAssName()
     
     
     
   def center(self):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
+  def enableAssName(self):
+    if(self.checkAssName.isChecked()):
+      self.lineEditAssName.setEnabled(True)
+    else:
+      self.lineEditAssName.setEnabled(False)
+
   
   def cAss(self):
     assdict = {}
-    assdict['assName'] = str(self.lineEditAssName.text())
+    if(self.lineEditAssName.text()):
+      assdict['assName'] = str(self.lineEditAssName.text())
+      
     assdict['assetType'] = str(self.comboAssType.currentText())
     assdict['projName'] = os.environ['rp_proj_projName']
     assdict['directory'] = str(self.comboDirectory.currentText())

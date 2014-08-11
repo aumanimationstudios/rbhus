@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'selectRadioBoxMod.ui'
 #
-# Created: Mon Mar 24 15:23:01 2014
+# Created: Thu Jul  3 22:09:00 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_selectRadioBox(object):
   def setupUi(self, selectRadioBox):
     selectRadioBox.setObjectName(_fromUtf8("selectRadioBox"))
-    selectRadioBox.resize(267, 487)
+    selectRadioBox.resize(269, 487)
     self.centralwidget = QtGui.QWidget(selectRadioBox)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -39,9 +39,6 @@ class Ui_selectRadioBox(object):
     self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
     spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_2.addItem(spacerItem)
-    self.checkSaveDefault = QtGui.QCheckBox(self.centralwidget)
-    self.checkSaveDefault.setObjectName(_fromUtf8("checkSaveDefault"))
-    self.horizontalLayout_2.addWidget(self.checkSaveDefault)
     self.pushApply = QtGui.QPushButton(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
@@ -90,7 +87,7 @@ class Ui_selectRadioBox(object):
     self.scrollArea.setWidgetResizable(True)
     self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
     self.scrollAreaWidgetContents = QtGui.QWidget()
-    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 239, 315))
+    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 241, 315))
     self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
     self.verticalLayout = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
     self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -115,7 +112,6 @@ class Ui_selectRadioBox(object):
 
   def retranslateUi(self, selectRadioBox):
     selectRadioBox.setWindowTitle(_translate("selectRadioBox", "MainWindow", None))
-    self.checkSaveDefault.setText(_translate("selectRadioBox", "save as default", None))
     self.pushApply.setText(_translate("selectRadioBox", "apply", None))
     self.plainTextEditSelected.setPlainText(_translate("selectRadioBox", "rwst", None))
     self.label.setText(_translate("selectRadioBox", "search", None))

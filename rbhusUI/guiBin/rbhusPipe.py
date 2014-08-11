@@ -35,6 +35,7 @@ import constantsPipe
 import authPipe
 import dbPipe
 import utilsPipe
+import pyperclip
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -57,6 +58,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     iconRefresh = QtGui.QIcon()
     iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     self.assRefresh.setIcon(iconRefresh)
+    self.filterRefresh.setIcon(iconRefresh)
     
     
     icon = QtGui.QIcon()
@@ -85,7 +87,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionNew_seq_scn.triggered.connect(self.rbhusPipeSeqSceCreate)
     self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
     self.comboSequence.currentIndexChanged.connect(self.setScene)
-    self.assRefresh.clicked.connect(self.listAssets)
+    self.assRefresh.clicked.connect(self.updateAll)
     
     self.comboStageType.currentIndexChanged.connect(self.listAssets)
     self.comboNodeType.currentIndexChanged.connect(self.listAssets)
@@ -98,11 +100,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.radioMineAss.toggled.connect(self.listAssets)
     
     
+    self.lineEditSearch.returnPressed.connect(self.listAssets)
+    
+    self.checkBoxFilter.clicked.connect(self.checkFilerFunc)
     
     
     #self.form.closeEvent = self.closeEvent
+    self.checkFilerFunc()
     self.rbhusPipeSetProjDefault()
     self.form.hideEvent = self.hideEvent
+    self.form.closeEvent = self.hideEvent
     self.setStageTypes()
     self.setNodeTypes()
     self.setFileTypes()
@@ -131,23 +138,29 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.timer.stop()
   
   
-  
+  def checkFilerFunc(self):
+    if(self.checkBoxFilter.isChecked()):
+      self.groupBoxFilter.setVisible(True)
+    else:
+      self.groupBoxFilter.setVisible(False)
+    
   def popupAss(self, pos):
     menu = QtGui.QMenu()
     openFileAction = menu.addAction("open file")
     openFolderAction = menu.addAction("open folder")
-    newFolderAction = menu.addAction("new folder")
+    #newFolderAction = menu.addAction("new folder")
     assEditAction = menu.addAction("edit")
-    assDeleteAction = menu.addAction("delete")
+    assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyNew = menu.addAction("copy/new")
+    assDeleteAction = menu.addAction("delete")
     
     action = menu.exec_(self.listWidget.mapToGlobal(pos))
     if(action == openFileAction):
       self.openFileAss()
     if(action == openFolderAction):
       self.openFolderAss()
-    if(action == newFolderAction):
-      self.newFolderAss()
+    if(action == assCopyToClip):
+      self.copyPathToClip()
     if(action == assEditAction):
       self.editAss()
     if(action == assDeleteAction):
@@ -160,7 +173,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     pass
     
   
-  
+  def copyPathToClip(self):
+    listAsses = self.listWidget.selectedItems()
+    if(listAsses and (len(listAsses) == 1)):
+      x = str(listAsses[0].text())
+      abspath =  utilsPipe.getAbsPath(x)
+      pyperclip.copy(abspath)
+      
   
   def openFileAss(self):
     listAsses = self.listWidget.selectedItems()
@@ -170,9 +189,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       fcmd = fcmd +" "+ utilsPipe.getAbsPath(x)
       print(fcmd)
       p = QtCore.QProcess(parent=self.form)
-      p.setStandardOutputFile(tempDir + os.sep +"rbhusOpenFileAss_"+ self.username +".log")
+      #p.setStandardOutputFile(tempDir + os.sep +"rbhusOpenFileAss_"+ self.username +".log")
       p.setStandardErrorFile(tempDir + os.sep +"rbhusOpenFileAss_"+ self.username +".err")
       p.start(sys.executable,fcmd.split())
+      p.waitForFinished()
+      filename = str(p.readAllStandardOutput()).rstrip().lstrip()
+      if(filename):
+        assdets = utilsPipe.getAssDetails(assPath=x)
+        runCmd = utilsPipe.openAssetCmd(assdets,filename)
+        print("wtf1 : "+ str(runCmd))
+        fileTypeDets = None
+        if(runCmd):
+          runCmd = runCmd.rstrip().lstrip()
+          subprocess.Popen(runCmd,shell=True)
+        else:
+          import webbrowser
+          webbrowser.open(filename)
+      
       
       
       
@@ -190,10 +223,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(listAsses and (len(listAsses) == 1)):
       x = str(listAsses[0].text())
       p = utilsPipe.getAbsPath(x)
-      if(p):
+      if(os.path.exists(p)):
         fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
+        print(fila)
         if(fila):
           print(str(fila[0]))
+          filename = str(fila[0])
+          assdets = utilsPipe.getAssDetails(assPath=x)
+          runCmd = utilsPipe.openAssetCmd(assdets,filename)
+          if(runCmd):
+            runCmd = runCmd.rstrip().lstrip()
+            subprocess.Popen(runCmd,shell=True)
+          else:
+            import webbrowser
+            webbrowser.open(filename)
+          
         
    
   
@@ -230,7 +274,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         self.comboStageType.addItem(_fromUtf8(row['type']))
-        if(defStage['type']):
+        if(present):
+          if(row['type'] == present):
+            foundIndx = indx
+        else:
           if(defStage['type'] == row['type']):
             foundIndx = indx
         indx = indx + 1
@@ -243,28 +290,52 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setScene(self):
     seqName = str(self.comboSequence.currentText())
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
+    try:
+      present = str(self.comboScene.currentText())
+    except:
+      present = None
     self.comboScene.clear()
     scenes = {}
+    indx =  0
+    foundIndx = -1
+
     if(rows):
       for x in rows:
         scenes[x['sceneName']] = 1
     if(scenes):
       for x in scenes:
+        if(x == present):
+          foundIndx = indx
         self.comboScene.addItem(_fromUtf8(x))
+        indx = indx + 1
+    if(foundIndx != -1):
+      self.comboScene.setCurrentIndex(foundIndx)
     return(1)
   
   
   def setSequence(self):
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
+    try:
+      present = str(self.comboSequence.currentText())
+    except:
+      present = None
     self.comboSequence.clear()  
     seq = {}
+    indx =  0
+    foundIndx = -1
     if(rows):
       for row in rows:
         if(row['projName'] == os.environ['rp_proj_projName']):
           seq[row['sequenceName']] = 1
       if(seq):
         for x in seq.keys():
+          if(x == present):
+            foundIndx = indx
           self.comboSequence.addItem(_fromUtf8(x))
+          indx = indx + 1
+        if(foundIndx != -1):
+          self.comboSequence.setCurrentIndex(foundIndx)
+          
       return(1)
     return(0)     
     
@@ -282,7 +353,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         self.comboNodeType.addItem(_fromUtf8(row['type']))
-        if(defStage['type']):
+        if(present):
+          if(row['type'] == present):
+            foundIndx = indx
+        else:
           if(defStage['type'] == row['type']):
             foundIndx = indx
         indx = indx + 1
@@ -314,7 +388,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         self.comboFileType.addItem(_fromUtf8(row['type']))
-        if(defStage['type']):
+        if(present):
+          if(row['type'] == present):
+            foundIndx = indx
+        else:
           if(defStage['type'] == row['type']):
             foundIndx = indx
         indx = indx + 1
@@ -348,7 +425,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         self.comboAssType.addItem(_fromUtf8(row['type']))
-        if(defStage['type']):
+        if(present):
+          if(row['type'] == present):
+            foundIndx = indx
+        else:
           if(defStage['type'] == row['type']):
             foundIndx = indx
         indx = indx + 1
@@ -385,8 +465,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     except:
       return(0)
     #print(asses)
+    searchItems = str(self.lineEditSearch.text())
+    print("search : "+ str(searchItems))
     if(asses):
       for x in range(0,len(asses)):
+        if(searchItems):
+          if(not (str(asses[x]['path']).find(searchItems) >= 0)):
+            continue
+          
         stageTypeAss = 0
         nodeTypeAss = 0
         seqAss = 0
@@ -551,8 +637,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   def rbhusPipeSetProject(self):
-    
-    
     from os.path import expanduser
     home = expanduser("~")
     projFile = open(home.rstrip(os.sep) + os.sep +"projSet.default","w")
@@ -603,6 +687,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def rbhusPipeSeqSceCreateEnable(self,exitStatus):
     self.actionNew_seq_scn.setEnabled(True)
+    self.updateAll()
+    
   
   
   def closeEvent(self,event):
@@ -611,9 +697,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.form.setVisible(False) 
     
   def hideEvent(self,event):
-    #event.ignore()
+    
     self.form.setVisible(False) 
     self.form.setWindowFlags(self.wFlag & QtCore.Qt.Tool)
+    event.ignore()
     
    
   

@@ -529,11 +529,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       fromT = "'"+ str(self.dateEditTaskFrom.date().year()) +"-"+ str(self.dateEditTaskFrom.date().month()) +"-"+ str(self.dateEditTaskFrom.date().day()) +"'"
       toT = "'"+ str(self.dateEditTaskTo.date().year()) +"-"+ str(self.dateEditTaskTo.date().month()) +"-"+ str(self.dateEditTaskTo.date().day()) +"'"
       if(self.radioSubmit.isChecked()):
-        timeS = " and (submitTime between "+ fromT +" and "+ toT +")"
+        timeS = "(submitTime between "+ fromT +" and "+ toT +")"
       elif(self.radioDone.isChecked()):
-        timeS = " and (doneTime between "+ fromT +" and "+ toT +")"
+        timeS = "(doneTime between "+ fromT +" and "+ toT +")"
       elif(self.radioAfter.isChecked()):
-        timeS = " and (afterTime between "+ fromT +" and "+ toT +")"
+        timeS = "(afterTime between "+ fromT +" and "+ toT +")"
     if(cTDone):
       statusToCheck.append(str(constants.taskDone))
     if(cTActive):
@@ -542,21 +542,32 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       statusToCheck.append(str(constants.taskStopped))
     if(cTAutohold):
       statusToCheck.append(str(constants.taskAutoStopped))
-    print("FUCK U 4")
     db_conn = dbRbhus.dbRbhus()
     rows = []
     try:
       if(cTAll):
         if(cTMine):
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'"+ timeS,dictionary=True)
+          if(timeS):
+            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"' and "+ timeS,dictionary=True)
+          else:
+            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where user='"+ str(self.username) +"'",dictionary=True)
         else:
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks"+ timeS,dictionary=True)
+          if(timeS):
+            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where "+ timeS,dictionary=True)
+          else:
+            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks",dictionary=True)
       else:
         statusCheck = " or status=".join(statusToCheck)
         if(cTMine):
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'"+ timeS,dictionary=True)
+          if(timeS):
+            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"' and "+ timeS,dictionary=True)
+          else:
+            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'",dictionary=True)
         else:
-          rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")"+ timeS,dictionary=True)
+          if(timeS):
+            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and "+ timeS,dictionary=True)
+          else:
+            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")",dictionary=True)
     except:
       print("Error connecting to db "+ str(sys.exc_info()))
     

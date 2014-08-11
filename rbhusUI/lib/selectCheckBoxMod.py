@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'lib/selectCheckBoxMod.ui'
+# Form implementation generated from reading ui file 'selectCheckBoxMod.ui'
 #
-# Created: Wed Jul 10 21:50:48 2013
-#      by: PyQt4 UI code generator 4.10.1
+# Created: Thu Jul  3 22:08:23 2014
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_selectCheckBox(object):
   def setupUi(self, selectCheckBox):
     selectCheckBox.setObjectName(_fromUtf8("selectCheckBox"))
-    selectCheckBox.resize(245, 364)
+    selectCheckBox.resize(267, 488)
     self.centralwidget = QtGui.QWidget(selectCheckBox)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -70,7 +70,7 @@ class Ui_selectCheckBox(object):
     self.scrollArea.setWidgetResizable(True)
     self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
     self.scrollAreaWidgetContents = QtGui.QWidget()
-    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 217, 138))
+    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 239, 245))
     self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
     self.verticalLayout = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
     self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -80,6 +80,14 @@ class Ui_selectCheckBox(object):
     self.verticalLayout_3 = QtGui.QVBoxLayout()
     self.verticalLayout_3.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
     self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
+    self.horizontalLayout_2 = QtGui.QHBoxLayout()
+    self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+    spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
+    self.horizontalLayout_2.addItem(spacerItem)
+    self.pushApply = QtGui.QPushButton(self.centralwidget)
+    self.pushApply.setObjectName(_fromUtf8("pushApply"))
+    self.horizontalLayout_2.addWidget(self.pushApply)
+    self.verticalLayout_3.addLayout(self.horizontalLayout_2)
     self.plainTextEditSelected = QtGui.QPlainTextEdit(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     sizePolicy.setHorizontalStretch(0)
@@ -96,20 +104,12 @@ class Ui_selectCheckBox(object):
     self.pushDeselect = QtGui.QPushButton(self.centralwidget)
     self.pushDeselect.setObjectName(_fromUtf8("pushDeselect"))
     self.horizontalLayout.addWidget(self.pushDeselect)
-    spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-    self.horizontalLayout.addItem(spacerItem)
+    spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+    self.horizontalLayout.addItem(spacerItem1)
     self.pushSelect = QtGui.QPushButton(self.centralwidget)
     self.pushSelect.setObjectName(_fromUtf8("pushSelect"))
     self.horizontalLayout.addWidget(self.pushSelect)
     self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 4)
-    self.horizontalLayout_2 = QtGui.QHBoxLayout()
-    self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-    spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
-    self.horizontalLayout_2.addItem(spacerItem1)
-    self.pushApply = QtGui.QPushButton(self.centralwidget)
-    self.pushApply.setObjectName(_fromUtf8("pushApply"))
-    self.horizontalLayout_2.addWidget(self.pushApply)
-    self.gridLayout.addLayout(self.horizontalLayout_2, 5, 0, 1, 4)
     selectCheckBox.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(selectCheckBox)
@@ -119,8 +119,8 @@ class Ui_selectCheckBox(object):
     selectCheckBox.setWindowTitle(_translate("selectCheckBox", "MainWindow", None))
     self.label.setText(_translate("selectCheckBox", "search", None))
     self.pushClearSearch.setText(_translate("selectCheckBox", "clear", None))
+    self.pushApply.setText(_translate("selectCheckBox", "apply", None))
     self.plainTextEditSelected.setPlainText(_translate("selectCheckBox", "rwst", None))
     self.pushDeselect.setText(_translate("selectCheckBox", "deselect all", None))
     self.pushSelect.setText(_translate("selectCheckBox", "select all", None))
-    self.pushApply.setText(_translate("selectCheckBox", "apply", None))
 
