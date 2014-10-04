@@ -43,6 +43,19 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+class ImageWidget(QtGui.QWidget):
+  def __init__(self, imagePath, parent):
+    super(ImageWidget, self).__init__(parent)
+    self.picture = QtGui.QPixmap(imagePath)
+    self.picture  = self.picture.scaledToHeight(32,0)
+
+  def paintEvent(self, event):
+    painter = QtGui.QPainter(self)
+    painter.drawPixmap(0, 0, self.picture)
+
+
+
+
 class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
@@ -59,6 +72,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     self.assRefresh.setIcon(iconRefresh)
     self.filterRefresh.setIcon(iconRefresh)
+    
+    self.iconDanger = QtGui.QIcon()
+    self.iconDanger.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     
     
     icon = QtGui.QIcon()
@@ -103,6 +119,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.lineEditSearch.returnPressed.connect(self.listAssets)
     
     self.checkBoxFilter.clicked.connect(self.checkFilerFunc)
+    self.checkCase.clicked.connect(self.listAssets)
+    self.checkWords.clicked.connect(self.listAssets)
     
     
     #self.form.closeEvent = self.closeEvent
@@ -115,9 +133,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.setFileTypes()
     self.setAssTypes()
     
-    # set up the right-click context menu for listWidget
-    self.listWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-    self.listWidget.customContextMenuRequested.connect(self.popupAss)
+    # set up the right-click context menu for tableWidget
+    self.tableWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+    self.tableWidget.customContextMenuRequested.connect(self.popupAss)
     
     
     self.timer = QtCore.QTimer()
@@ -152,9 +170,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyNew = menu.addAction("copy/new")
+    assCreatePrev = menu.addAction("create preview")
     assDeleteAction = menu.addAction("delete")
     
-    action = menu.exec_(self.listWidget.mapToGlobal(pos))
+    action = menu.exec_(self.tableWidget.mapToGlobal(pos))
     if(action == openFileAction):
       self.openFileAss()
     if(action == openFolderAction):
@@ -174,7 +193,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   def copyPathToClip(self):
-    listAsses = self.listWidget.selectedItems()
+    listAsses = self.tableWidget.selectedItems()
     if(listAsses and (len(listAsses) == 1)):
       x = str(listAsses[0].text())
       abspath =  utilsPipe.getAbsPath(x)
@@ -182,7 +201,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       
   
   def openFileAss(self):
-    listAsses = self.listWidget.selectedItems()
+    listAsses = self.tableWidget.selectedItems()
     fcmd = fileSelectCmd
     if(listAsses and (len(listAsses) == 1)):
       x = str(listAsses[0].text())
@@ -218,7 +237,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       
     
   def openFolderAss(self):
-    listAsses = self.listWidget.selectedItems()
+    listAsses = self.tableWidget.selectedItems()
     
     if(listAsses and (len(listAsses) == 1)):
       x = str(listAsses[0].text())
@@ -250,13 +269,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   def delAss(self):
-    listAsses = self.listWidget.selectedItems()
-    
-    for x in listAsses:
-      if(str(x.text())):
-        utilsPipe.assDelete(assPath=str(x.text()))
+    wtf = self.messageBox()
+    if(wtf):
+      listAsses = self.tableWidget.selectedItems()
+      for x in listAsses:
+        if(str(x.text())):
+          utilsPipe.assDelete(assPath=str(x.text()))
         
-    self.listAssets()
+      self.listAssets()
   
   
   
@@ -445,7 +465,26 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         #self.comboAssType.addItem(_fromUtf8(row['type']))
       #return(1)
     #return(0)
-  
+  def messageBox(self):
+    msgbox = QtGui.QMessageBox()
+    
+    msgbox.setText("DELETE?!?!?!\nDo you want to really delete this asset?!")
+    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger_128.png")))
+    #noBut = QtGui.QPushButton("cancel")
+    #yesBut = QtGui.QPushButton("yes")
+    yesBut = msgbox.addButton("yes",QtGui.QMessageBox.YesRole)
+    noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
+    msgbox.setDefaultButton(noBut)
+    msgbox.exec_()
+    if(msgbox.clickedButton() == yesBut):
+      return(1)
+    else:
+      return(0)
+    
+    #if(ok == QtGui.QMessageBox.Yes):
+      #return(1)
+    #else:
+      #return(0)
   
   
   def rbhusPipeProjCreate(self):
@@ -459,7 +498,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   def listAssets(self):
-    self.listWidget.clear()
+    colNames = ['asset','preview']
+    assesList = []
+    self.tableWidget.clear()
     try:
       asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
     except:
@@ -470,8 +511,20 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(asses):
       for x in range(0,len(asses)):
         if(searchItems):
-          if(not (str(asses[x]['path']).find(searchItems) >= 0)):
-            continue
+          if(self.checkCase.isChecked()):
+            if(self.checkWords.isChecked()):
+              if(not (str(asses[x]['assName']).lower() == searchItems.lower())):
+                continue
+            else:
+              if(not (str(asses[x]['assName']).lower().find(searchItems.lower()) >= 0)):
+                continue
+          else:
+            if(self.checkWords.isChecked()):
+              if(not (str(asses[x]['assName']) == searchItems)):
+                continue
+            else:
+              if(not (str(asses[x]['assName']).find(searchItems) >= 0)):
+                continue
           
         stageTypeAss = 0
         nodeTypeAss = 0
@@ -534,9 +587,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
                 
 #            print("test2")
             if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
-              item = QtGui.QListWidgetItem()
-              item.setText(asses[x]['path'])
-              self.listWidget.addItem(item)
+              assesList.append(asses[x]['path'])
+              #item = QtGui.QListWidgetItem()
+              #item.setText(asses[x]['path'])
+              #self.tableWidget.addItem(item)
         elif(self.radioAllAss.isChecked()):
           if(str(self.comboStageType.currentText()) != "default"):
             if(str(self.comboStageType.currentText()) == str(asses[x]['stageType'])):
@@ -585,11 +639,40 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             
               
 #          print("test2")
-          if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
-            item = QtGui.QListWidgetItem()
-            item.setText(asses[x]['path'])
-            self.listWidget.addItem(item)
-    
+          if(stageTypeAs/proj/andePirki_ep0001/library/naaee/naaeeDog.jpegs and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
+            assesList.append(asses[x]['path'])
+            
+            #item = QtGui.QListWidgetItem()
+            #item.setText(asses[x]['path'])
+            #self.tableWidget.addItem(item)
+    if(assesList):
+      self.tableWidget.setColumnCount(len(colNames))
+      self.tableWidget.setRowCount(len(assesList))
+      for x in range(0,len(colNames)):
+        item = QtGui.QTableWidgetItem()
+        item.setText(str(colNames[x]))
+        self.tableWidget.setHorizontalHeaderItem(x, item)
+      for x in range(0,len(assesList)):
+        item = QtGui.QTableWidgetItem()
+        item.setText(str(assesList[x]))
+        self.tableWidget.setItem(x,0,item)
+        
+        
+        prevItem = ImageWidget("/proj/andePirki_ep0001/library/naaee/naaeeDog.jpeg",self.tableWidget)
+        prevItem.setToolTip('<img src="/proj/andePirki_ep0001/library/naaee/naaeeDog.jpeg" height="128"/>')
+        #prevItem.adjustSize()
+        #prev = QtGui.QBrush()
+        #prev.setStyle(1)
+        #prev.setTexture(QtGui.QPixmap("/proj/andePirki_ep0001/library/naaee/naaeeDog.jpeg"))
+        #prevItem.setBackground(prev)
+        self.tableWidget.setCellWidget(x,1,prevItem)
+        
+        
+        
+      self.tableWidget.resizeColumnsToContents()
+      self.tableWidget.setSortingEnabled(True)
+        
+      
     
   
   

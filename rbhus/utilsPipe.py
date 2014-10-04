@@ -634,8 +634,9 @@ def assRegister(assDetDict):
       if(not re.search("^default",str(assDetDict['sceneName']))):
         assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
       else:
-        utilsPipeLogger.debug("if sequenceName is given sceneName cannot be a default")
-        return(0)
+	assPath = assPath +":"+ str(assDetDict['sequenceName'])
+#        utilsPipeLogger.debug("if sequenceName is given sceneName cannot be a default")
+#       return(0)
     
     if(assDetDict.has_key('assName')):
       assPath = assPath +":" + str(assDetDict['assName'])
@@ -739,7 +740,7 @@ def getTemplateFile(assdets = {},dirmapdets = {}):
   while(dirs):
     currTempDir = dirs.pop()
     if(filetypedets):
-      fileTempFile = currTempDir +"/template."+ filetypedets['extension']
+      fileTempFile = currTempDir +"/template."+ filetypedets['extension'].split(",")[0]
       utilsPipeLogger.debug(str(fileTempFile))
       if(os.path.exists(fileTempFile)):
         return(fileTempFile)
@@ -770,13 +771,16 @@ def openAssetCmd(assdets ={},filename = None):
   if(assdets['fileType'] != "default"):
     filetypedets = getFileTypes(assdets['fileType'])
     binDir = binMain +"/"+ assdets['fileType']
-    
+    validExtenstions = filetypedets['extension'].split(",")
+    fileExt = filename.split(".")[-1]
+    if(fileExt not in validExtenstions):
+      return(0)
     runCmd = binDir +"/"+ filetypedets[exeAss]
     if(os.path.exists(runCmd)):
       runProc = runCmd +" "+ filename
       return(runProc)
     else:
-      binPaths = filetypedets[pathAss].split("##")
+      binPaths = filetypedets[pathAss].split(",")
       for x in binPaths:
         if(x != "default"):
           print(x)

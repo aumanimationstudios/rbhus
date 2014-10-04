@@ -3,6 +3,7 @@ from PyQt4 import QtCore, QtGui
 import glob
 import os
 import sys
+import time
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
@@ -27,6 +28,7 @@ except AttributeError:
 
 class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   def setupUi(self, Form):
+    self.form = Form
     rbhusPipeAssetCreateMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -92,8 +94,9 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict['assignedWorker'] = str(self.lineEditWorkers.text())
     assdict['description'] = str(self.lineEditDesc.text())
     assdict['fileType'] = str(self.comboFileType.currentText())
-    
+    self.centralwidget.setEnabled(False)
     utilsPipe.assRegister(assdict)
+    self.centralwidget.setEnabled(True)
     
     
     

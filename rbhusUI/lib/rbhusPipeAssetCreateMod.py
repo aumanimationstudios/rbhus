@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeAssetCreateMod.ui'
 #
-# Created: Fri Jul 11 21:25:25 2014
-#      by: PyQt4 UI code generator 4.10.3
+# Created: Thu Aug 21 17:48:42 2014
+#      by: PyQt4 UI code generator 4.11.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,6 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
+    MainWindow.setEnabled(True)
     MainWindow.resize(272, 367)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -169,12 +170,14 @@ class Ui_MainWindow(object):
     self.lineEditAssName.setObjectName(_fromUtf8("lineEditAssName"))
     self.gridLayout.addWidget(self.lineEditAssName, 0, 1, 1, 1)
     self.checkAssName = QtGui.QCheckBox(self.centralwidget)
+    self.checkAssName.setEnabled(True)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.checkAssName.sizePolicy().hasHeightForWidth())
     self.checkAssName.setSizePolicy(sizePolicy)
     self.checkAssName.setText(_fromUtf8(""))
+    self.checkAssName.setChecked(False)
     self.checkAssName.setObjectName(_fromUtf8("checkAssName"))
     self.gridLayout.addWidget(self.checkAssName, 0, 2, 1, 1)
     MainWindow.setCentralWidget(self.centralwidget)
@@ -186,7 +189,7 @@ class Ui_MainWindow(object):
     QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
   def retranslateUi(self, MainWindow):
-    MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+    MainWindow.setWindowTitle(_translate("MainWindow", "Create Asset", None))
     self.labelStageType.setText(_translate("MainWindow", "stageType", None))
     self.labelDue.setText(_translate("MainWindow", "due date", None))
     self.labelAdmin.setText(_translate("MainWindow", "user", None))

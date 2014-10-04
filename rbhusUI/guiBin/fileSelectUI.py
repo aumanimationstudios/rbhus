@@ -41,7 +41,7 @@ class Ui_Form(object):
 
 
   def retranslateUi(self, Form):
-    Form.setWindowTitle(QtGui.QApplication.translate("Form", "template", None, QtGui.QApplication.UnicodeUTF8))
+    Form.setWindowTitle(QtGui.QApplication.translate("Form", sys.argv[1], None, QtGui.QApplication.UnicodeUTF8))
     self.listWidget.setSortingEnabled(True)
     
     
