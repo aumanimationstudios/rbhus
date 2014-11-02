@@ -81,7 +81,31 @@ def getDirMaps():
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   
- 
+
+def getTags(projName="",assPath="",assId=""):
+  dbconn = dbPipe.dbPipe()
+  if(projName):
+    try:
+      rows = dbconn.execute("SELECT tags FROM assets WHERE projName='"+ projName +"'", dictionary=True)
+      if(rows):
+        #print(rows)
+        tags = {}
+        for x in rows:
+          t = x['tags'].split(",")
+          for b in t:
+            tags[b] = 1
+        retags = []
+        for y in tags.keys():
+          retags.append(y)
+        return(retags)
+    except:
+      utilsPipeLogger.debug(str(sys.exc_info()))
+      return(0)
+  return(0)
+  
+
+
+
 def getDirMapsDetails(directory):
   dbconn = dbPipe.dbPipe()
   try:
@@ -547,19 +571,19 @@ def getAbsPath(pipePath):
       absPath.append(str(x))
   
   projName = absPath[0]
-  print("getAbsPath 1: "+ str(projName))
+  #print("getAbsPath 1: "+ str(projName))
   
   projDets = getProjDetails(projName)
-  print("getAbsPath 2: "+ str(projDets))
+  #print("getAbsPath 2: "+ str(projDets))
   
   assDets = getAssDetails(assPath=pipePath)
-  print("getAbsPath 3: "+ str(projDets))
+  #print("getAbsPath 3: "+ str(projDets))
   if(assDets):
     projDirMapsDets = getDirMapsDetails(assDets['directory'])
   else:
     projDirMapsDets = getDirMapsDetails(projDets['directory'])
     
-  print("getAbsPath 4: "+ str(projDirMapsDets))
+  #print("getAbsPath 4: "+ str(projDirMapsDets))
   absPathRet = ""
   if(sys.platform.find("linux") >= 0):
     absPathRet = os.path.abspath(projDirMapsDets['linuxMapping'].rstrip("/") +"/"+ ":".join(absPath).replace(":","/").lstrip("/"))
@@ -611,6 +635,17 @@ def getProjAsses(projName):
     return(0)
   
 
+def getUsers():
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("select * from users", dictionary=True)
+    #print([row['id'] for row in rows])
+    return([row['id'] for row in rows])
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  
+
 
 def assRegister(assDetDict):
   assPath = str(assDetDict['projName'])
@@ -643,8 +678,8 @@ def assRegister(assDetDict):
       
     if(not re.search("^default",str(assDetDict['stageType']))):
       assPath = assPath +":" + str(assDetDict['stageType'])
-      if(not re.search("^default",str(assDetDict['nodeType']))):
-        assPath = assPath +":" + str(assDetDict['nodeType'])
+    if(not re.search("^default",str(assDetDict['nodeType']))):
+      assPath = assPath +":" + str(assDetDict['nodeType'])
     
     
     
@@ -688,7 +723,31 @@ def assRegister(assDetDict):
     return(0)
     
     
-          
+
+def assEdit(asspath="",assid="",assdict={}):
+  dbvalues = []
+  if(assdict):
+    for k in assdict:
+      dbvalues.append(str(k) +"=\""+ str(assdict[k]) +"\"")
+      
+  if(dbvalues):
+    dbconn = dbPipe.dbPipe()
+    if(assid):
+      try:
+        dbconn.execute("update assets set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
+      except:
+        utilsPipeLogger.debug(str(sys.exc_info()))
+        return(0)
+    elif(asspath):
+      try:
+        dbconn.execute("update assets set "+ ",".join(dbvalues) +" where path=\""+ str(asspath) +"\"")
+      except:
+        utilsPipeLogger.debug(str(sys.exc_info()))
+        return(0)
+    return(1)
+  return(0)
+    
+    
             
     
     

@@ -4,11 +4,21 @@ import glob
 import os
 import sys
 import time
+import subprocess
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
+
+
+scb = "selectCheckBox.py"
+srb = "selectRadioBox.py"
+selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
+selectRadioBoxCmd = dirSelf.rstrip(os.sep) + os.sep + srb
+
+
+
 
 
 import rbhusPipeAssetCreateMod
@@ -54,17 +64,23 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     #self.setProjTypes()
     self.comboSequence.currentIndexChanged.connect(self.setScene)
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
+    self.comboStageType.currentIndexChanged.connect(self.setNodeTypes)
     self.pushCreate.clicked.connect(self.cAss)
+    self.pushTags.clicked.connect(self.setTags)
+    self.pushUsers.clicked.connect(self.setUsers)
+    self.pushNodes.clicked.connect(self.setNodes)
     self.checkAssName.clicked.connect(self.enableAssName)
+    self.checkAssign.clicked.connect(self.setAssignedWorker)
     
     
     self.setDirectory()
     self.setAssTypes()
     self.setFileTypes()
-    self.setNodeTypes()
+    #self.setNodeTypes()
     self.setSequence()
     self.setStageTypes()
     self.enableAssName()
+    self.setAssignedWorker()
     
     
     
@@ -76,32 +92,61 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       self.lineEditAssName.setEnabled(True)
     else:
       self.lineEditAssName.setEnabled(False)
+  
+  
+  def setAssignedWorker(self):
+    if(self.checkAssign.isChecked()):
+      self.lineEditWorkers.setText(str(self.username))
+      self.lineEditWorkers.setEnabled(False)
+      self.pushUsers.setEnabled(False)
+    else:
+      self.lineEditWorkers.setEnabled(True)
+      self.pushUsers.setEnabled(True)
+      
 
   
   def cAss(self):
     assdict = {}
-    if(self.lineEditAssName.text()):
-      assdict['assName'] = str(self.lineEditAssName.text())
+    ntypes = str(self.lineEditNodes.text()).split(",")
+    for x in ntypes:
+      if(self.lineEditAssName.text()):
+        assdict['assName'] = str(self.lineEditAssName.text())
       
-    assdict['assetType'] = str(self.comboAssType.currentText())
-    assdict['projName'] = os.environ['rp_proj_projName']
-    assdict['directory'] = str(self.comboDirectory.currentText())
-    assdict['nodeType'] = str(self.comboNodeType.currentText())
-    assdict['stageType'] = str(self.comboStageType.currentText())
-    assdict['sequenceName'] = str(self.comboSequence.currentText())
-    assdict['sceneName'] = str(self.comboScene.currentText())
-    assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-    assdict['assignedWorker'] = str(self.lineEditWorkers.text())
-    assdict['description'] = str(self.lineEditDesc.text())
-    assdict['fileType'] = str(self.comboFileType.currentText())
-    self.centralwidget.setEnabled(False)
-    utilsPipe.assRegister(assdict)
-    self.centralwidget.setEnabled(True)
+      assdict['assetType'] = str(self.comboAssType.currentText())
+      assdict['projName'] = os.environ['rp_proj_projName']
+      assdict['directory'] = str(self.comboDirectory.currentText())
+      assdict['nodeType'] = x
+      assdict['stageType'] = str(self.comboStageType.currentText())
+      assdict['sequenceName'] = str(self.comboSequence.currentText())
+      assdict['sceneName'] = str(self.comboScene.currentText())
+      assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
+      assdict['assignedWorker'] = str(self.lineEditWorkers.text())
+      assdict['description'] = str(self.lineEditDesc.text())
+      assdict['fileType'] = str(self.comboFileType.currentText())
+      assdict['tags'] = str(self.lineEditTags.text())
+      assdict['fRange'] = str(self.lineEditFRange.text())
+      self.centralwidget.setEnabled(False)
+      utilsPipe.assRegister(assdict)
+      self.centralwidget.setEnabled(True)
     
     
     
     
+  def setTags(self):
+    tags = utilsPipe.getTags(projName=os.environ['rp_proj_projName'])
+    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str(self.lineEditTags.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outTags == ""):
+      outTags = "default"
+    self.lineEditTags.setText(_fromUtf8(outTags))
   
+  
+  
+  def setUsers(self):
+    users = utilsPipe.getUsers()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outUsers == ""):
+      outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
+    self.lineEditWorkers.setText(_fromUtf8(outUsers))
   
   
   def setDirectory(self):
@@ -164,13 +209,18 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     
   
   def setNodeTypes(self):
-    rows = utilsPipe.getNodeTypes()
-    self.comboNodeType.clear()  
-    if(rows):
-      for row in rows:
-        self.comboNodeType.addItem(_fromUtf8(row['type']))
-      return(1)
-    return(0)     
+    rowsStage = utilsPipe.getStageTypes(stype=str(self.comboStageType.currentText()))
+    print(rowsStage)
+    stageDefNodes = rowsStage['validNodeTypes']
+    self.lineEditNodes.setText(stageDefNodes)
+    return(1)
+  
+  def setNodes(self):
+    ntypes = [str(x['type']) for x in utilsPipe.getNodeTypes()]
+    outNodes = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(ntypes),"-d",str(self.lineEditNodes.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outNodes == ""):
+      outNodes = str(self.lineEditNodes.text())
+    self.lineEditNodes.setText(_fromUtf8(outNodes))
   
   
   def setFileTypes(self):

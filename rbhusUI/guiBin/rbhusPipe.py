@@ -5,6 +5,7 @@ import sys
 import tempfile
 import time
 import subprocess
+import math
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
@@ -14,11 +15,17 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep 
 tempDir = tempfile.gettempdir()
 rpA = "rbhusPipeProjCreate.py"
 rpAss = "rbhusPipeAssetCreate.py"
+rpAssEdit = "rbhusPipeAssetEdit.py"
 srb = "selectRadioBox.py"
 rpS = "rbhusPipeSeqSceCreate.py" 
 fileSelect = "fileSelectUI.py"
+scb = "selectCheckBox.py"
+
+selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
+#selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
 rbhusPipeProjCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpA
 rbhusPipeAssetCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpAss
+rbhusPipeAssetEditCmd = dirSelf.rstrip(os.sep) + os.sep + rpAssEdit
 rbhusPipeSeqSceCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpS
 fileSelectCmd = dirSelf.rstrip(os.sep) + os.sep + fileSelect
 
@@ -52,7 +59,9 @@ class ImageWidget(QtGui.QWidget):
   def paintEvent(self, event):
     painter = QtGui.QPainter(self)
     painter.drawPixmap(0, 0, self.picture)
-
+    
+    
+    
 
 
 
@@ -61,6 +70,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
     self.authL = authPipe.login()
     self.username = None
+    self.listAssTimeOld = time.time()
     self.center()
     try:
       self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
@@ -80,6 +90,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
+    
+    
+    
+    
+    
     self.pushLogout.setText("logout : "+ str(self.username))
     self.pushLogout.clicked.connect(self.logout)
     self.form = Form
@@ -141,6 +156,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.updateAll)
     self.checkRefresh.clicked.connect(self.timeCheck)
+    
+  
+  def resizeEvent(self,event):
+    self.overlay.resize(event.size())
+    event.accept()
+  
+  
   
   def timeCheck(self):
     cRefresh = self.checkRefresh.isChecked()
@@ -166,11 +188,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     menu = QtGui.QMenu()
     openFileAction = menu.addAction("open file")
     openFolderAction = menu.addAction("open folder")
-    #newFolderAction = menu.addAction("new folder")
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyNew = menu.addAction("copy/new")
     assCreatePrev = menu.addAction("create preview")
+    assRender = menu.addAction("submit to render")
     assDeleteAction = menu.addAction("delete")
     
     action = menu.exec_(self.tableWidget.mapToGlobal(pos))
@@ -186,6 +208,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.delAss()
     if(action == assCopyNew):
       self.copyNewAss()
+    
       
       
   def copyNewAss(self):
@@ -194,7 +217,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def copyPathToClip(self):
     listAsses = self.tableWidget.selectedItems()
-    if(listAsses and (len(listAsses) == 1)):
+    print(listAsses)
+    if(listAsses):
       x = str(listAsses[0].text())
       abspath =  utilsPipe.getAbsPath(x)
       pyperclip.copy(abspath)
@@ -202,8 +226,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def openFileAss(self):
     listAsses = self.tableWidget.selectedItems()
+    print(listAsses)
     fcmd = fileSelectCmd
-    if(listAsses and (len(listAsses) == 1)):
+    if(listAsses):
       x = str(listAsses[0].text())
       fcmd = fcmd +" "+ utilsPipe.getAbsPath(x)
       print(fcmd)
@@ -238,9 +263,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   def openFolderAss(self):
     listAsses = self.tableWidget.selectedItems()
-    
-    if(listAsses and (len(listAsses) == 1)):
+    if(listAsses): # and (len(listAsses) == 1)
       x = str(listAsses[0].text())
+      print(x)
       p = utilsPipe.getAbsPath(x)
       if(os.path.exists(p)):
         fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
@@ -498,8 +523,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   def listAssets(self):
-    colNames = ['asset','preview']
+    #print(str((time.time() - self.listAssTimeOld)))
+    #if((time.time() - self.listAssTimeOld) < 1.0):
+      #return(0)
+    #self.listAssTimeOld = time.time()
+    colNames = ['asset','assigned','preview']
     assesList = []
+    assesNames = {}
     self.tableWidget.clear()
     try:
       asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
@@ -513,18 +543,34 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         if(searchItems):
           if(self.checkCase.isChecked()):
             if(self.checkWords.isChecked()):
-              if(not (str(asses[x]['assName']).lower() == searchItems.lower())):
-                continue
+              if(self.checkTags.isChecked()):
+                if(not (str(asses[x]['tags']).lower() == searchItems.lower())):
+                  continue
+              else:
+                if(not (str(asses[x]['assName']).lower() == searchItems.lower())):
+                  continue
             else:
-              if(not (str(asses[x]['assName']).lower().find(searchItems.lower()) >= 0)):
-                continue
+              if(self.checkTags.isChecked()):
+                if(not (str(asses[x]['tags']).lower().find(searchItems.lower()) >= 0)):
+                  continue
+              else:
+                if(not (str(asses[x]['assName']).lower().find(searchItems.lower()) >= 0)):
+                  continue
           else:
             if(self.checkWords.isChecked()):
-              if(not (str(asses[x]['assName']) == searchItems)):
-                continue
+              if(self.checkTags.isChecked()):
+                if(not (str(asses[x]['tags']) == searchItems)):
+                  continue
+              else:
+                if(not (str(asses[x]['assName']) == searchItems)):
+                  continue
             else:
-              if(not (str(asses[x]['assName']).find(searchItems) >= 0)):
-                continue
+              if(self.checkTags.isChecked()):
+                if(not (str(asses[x]['tags']).find(searchItems) >= 0)):
+                  continue
+              else:
+                if(not (str(asses[x]['assName']).find(searchItems) >= 0)):
+                  continue
           
         stageTypeAss = 0
         nodeTypeAss = 0
@@ -564,11 +610,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             else:
               scnAss = 1
               
-            if(str(self.comboNodeType.currentText()) != "default"):
-              if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
-                nodeTypeAss = 1
-            else:
-              nodeTypeAss = 1
+            #if(str(self.comboNodeType.currentText()) != "default"):
+              #if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
+                #nodeTypeAss = 1
+            #else:
+              #nodeTypeAss = 1
               
             if(str(self.comboFileType.currentText()) != "default"):
               if(str(self.comboFileType.currentText()) == str(asses[x]['fileType'])):
@@ -588,6 +634,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 #            print("test2")
             if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
               assesList.append(asses[x]['path'])
+              assesNames[asses[x]['path']] = asses[x]
               #item = QtGui.QListWidgetItem()
               #item.setText(asses[x]['path'])
               #self.tableWidget.addItem(item)
@@ -617,11 +664,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           else:
             scnAss = 1
             
-          if(str(self.comboNodeType.currentText()) != "default"):
-            if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
-              nodeTypeAss = 1
-          else:
-            nodeTypeAss = 1
+          #if(str(self.comboNodeType.currentText()) != "default"):
+            #if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
+              #nodeTypeAss = 1
+          #else:
+            #nodeTypeAss = 1
             
           if(str(self.comboFileType.currentText()) != "default"):
             if(str(self.comboFileType.currentText()) == str(asses[x]['fileType'])):
@@ -639,8 +686,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             
               
 #          print("test2")
-          if(stageTypeAs/proj/andePirki_ep0001/library/naaee/naaeeDog.jpegs and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
+          if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
             assesList.append(asses[x]['path'])
+            assesNames[asses[x]['path']] = asses[x]
             
             #item = QtGui.QListWidgetItem()
             #item.setText(asses[x]['path'])
@@ -655,23 +703,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       for x in range(0,len(assesList)):
         item = QtGui.QTableWidgetItem()
         item.setText(str(assesList[x]))
+        assAbsPath = utilsPipe.getAbsPath(str(assesList[x]))
         self.tableWidget.setItem(x,0,item)
         
+        itemTag = QtGui.QTableWidgetItem()
+        itemTag.setText(str(assesNames[assesList[x]]['assignedWorker']))
+        self.tableWidget.setItem(x,1,itemTag)
         
-        prevItem = ImageWidget("/proj/andePirki_ep0001/library/naaee/naaeeDog.jpeg",self.tableWidget)
-        prevItem.setToolTip('<img src="/proj/andePirki_ep0001/library/naaee/naaeeDog.jpeg" height="128"/>')
-        #prevItem.adjustSize()
-        #prev = QtGui.QBrush()
-        #prev.setStyle(1)
-        #prev.setTexture(QtGui.QPixmap("/proj/andePirki_ep0001/library/naaee/naaeeDog.jpeg"))
-        #prevItem.setBackground(prev)
-        self.tableWidget.setCellWidget(x,1,prevItem)
+        
+        if(os.path.exists(assAbsPath +"/"+ assesNames[assesList[x]]['assName'] +".png")):
+          prevItem = ImageWidget(assAbsPath +"/"+ assesNames[assesList[x]]['assName'] +".png",self.tableWidget)
+          prevItem.setToolTip('<img src="'+ assAbsPath +"/"+ assesNames[assesList[x]]['assName'] +".png"+'" height="192"/>')
+          self.tableWidget.setCellWidget(x,2,prevItem)
         
         
         
       self.tableWidget.resizeColumnsToContents()
       self.tableWidget.setSortingEnabled(True)
-        
       
     
   
