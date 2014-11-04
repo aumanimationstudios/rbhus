@@ -69,8 +69,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
     self.authL = authPipe.login()
+    self.rbhusAssetEditCmdMod = ""
     self.username = None
     self.listAssTimeOld = time.time()
+    self.default = False
+    self.considerFilter = False
     self.center()
     try:
       self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
@@ -117,14 +120,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionSet_project.triggered.connect(self.rbhusPipeSetProject)
     self.actionNew_seq_scn.triggered.connect(self.rbhusPipeSeqSceCreate)
     self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
-    self.comboSequence.currentIndexChanged.connect(self.setScene)
-    self.assRefresh.clicked.connect(self.updateAll)
-    
-    self.comboStageType.currentIndexChanged.connect(self.listAssets)
-    self.comboNodeType.currentIndexChanged.connect(self.listAssets)
-    self.comboScene.currentIndexChanged.connect(self.listAssets)
-    self.comboAssType.currentIndexChanged.connect(self.listAssets)
-    self.comboFileType.currentIndexChanged.connect(self.listAssets)
+    self.filterRefresh.clicked.connect(self.resetFilterDefault)
+    self.assRefresh.clicked.connect(self.listAssets)
+    #self.comboSequence.currentIndexChanged.connect(self.setScene)
+    #self.comboStageType.currentIndexChanged.connect(self.listAssets)
+    #self.comboNodeType.currentIndexChanged.connect(self.listAssets)
+    #self.comboScene.currentIndexChanged.connect(self.listAssets)
+    #self.comboAssType.currentIndexChanged.connect(self.listAssets)
+    #self.comboFileType.currentIndexChanged.connect(self.listAssets)
     
     
     self.radioAllAss.toggled.connect(self.listAssets)
@@ -143,10 +146,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.rbhusPipeSetProjDefault()
     self.form.hideEvent = self.hideEvent
     self.form.closeEvent = self.hideEvent
-    self.setStageTypes()
-    self.setNodeTypes()
-    self.setFileTypes()
-    self.setAssTypes()
     
     # set up the right-click context menu for tableWidget
     self.tableWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
@@ -154,13 +153,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     self.timer = QtCore.QTimer()
-    self.timer.timeout.connect(self.updateAll)
+    self.timer.timeout.connect(self.listAssets)
     self.checkRefresh.clicked.connect(self.timeCheck)
     
-  
-  def resizeEvent(self,event):
-    self.overlay.resize(event.size())
-    event.accept()
+    self.updateAll()
+    
   
   
   
@@ -181,8 +178,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def checkFilerFunc(self):
     if(self.checkBoxFilter.isChecked()):
       self.groupBoxFilter.setVisible(True)
+      self.considerFilter  = True
     else:
       self.groupBoxFilter.setVisible(False)
+      self.considerFilter = False
     
   def popupAss(self, pos):
     menu = QtGui.QMenu()
@@ -289,14 +288,24 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     pass
   
   
-  def editAss(self):
-    pass
+  
+  def selectedAsses(self):
+    rowstask=[]
+    rowsSelected = []
+    rowsModel = self.tableWidget.selectionModel().selectedRows()
+    
+    for idx in rowsModel:
+      rowsSelected.append(idx.row())
+    for row in rowsSelected:
+      rowstask.append(str(self.tableWidget.item(row,0).text()))
+    return(rowstask)
   
   
   def delAss(self):
     wtf = self.messageBox()
     if(wtf):
       listAsses = self.tableWidget.selectedItems()
+      
       for x in listAsses:
         if(str(x.text())):
           utilsPipe.assDelete(assPath=str(x.text()))
@@ -304,13 +313,26 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.listAssets()
   
   
-  
+  def editAss(self):
+    listAsses = self.selectedAsses()
+    print(listAsses)
+    if(listAsses):
+      self.rbhusAssetEditCmdMod = rbhusPipeAssetEditCmd +" -p "+ ",".join(listAsses)
+      print(self.rbhusAssetEditCmdMod)
+      self.rbhusPipeAssetEdit()
+    #for x in listAsses:
+      #if(str(x)):
+        #print(str(x))
+      
   
   def setStageTypes(self):
     rows = utilsPipe.getStageTypes()
     defStage = utilsPipe.getDefaults("stageTypes")
     try:
-      present = str(self.comboStageType.currentText())
+      if(self.default):
+        present = None
+      else:
+        present = str(self.comboStageType.currentText())
     except:
       present = None
     self.comboStageType.clear()  
@@ -336,7 +358,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     seqName = str(self.comboSequence.currentText())
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
     try:
-      present = str(self.comboScene.currentText())
+      if(self.default):
+        present = None
+      else:
+        present = str(self.comboScene.currentText())
     except:
       present = None
     self.comboScene.clear()
@@ -361,7 +386,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setSequence(self):
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
     try:
-      present = str(self.comboSequence.currentText())
+      if(self.default):
+        present = None
+      else:
+        present = str(self.comboSequence.currentText())
     except:
       present = None
     self.comboSequence.clear()  
@@ -389,7 +417,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     rows = utilsPipe.getNodeTypes()
     defStage = utilsPipe.getDefaults("nodeTypes")
     try:
-      present = str(self.comboNodeType.currentText())
+      if(self.default):
+        present = None
+      else:
+        present = str(self.comboNodeType.currentText())
     except:
       present = None
     self.comboNodeType.clear()  
@@ -424,7 +455,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     rows = utilsPipe.getFileTypes()
     defStage = utilsPipe.getDefaults("fileTypes")
     try:
-      present = str(self.comboFileType.currentText())
+      if(self.default):
+        present = None
+      else:
+        present = str(self.comboFileType.currentText())
     except:
       present = None
     self.comboFileType.clear()  
@@ -461,7 +495,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     rows = utilsPipe.getAssTypes()
     defStage = utilsPipe.getDefaults("assetTypes")
     try:
-      present = str(self.comboAssType.currentText())
+      if(self.default):
+        present = None
+      else:
+        present = str(self.comboAssType.currentText())
     except:
       present = None
     self.comboAssType.clear()  
@@ -533,14 +570,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.tableWidget.clear()
     try:
       asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
+      print("reload 1")
     except:
+      print("reload 1 failed")
       return(0)
     #print(asses)
     searchItems = str(self.lineEditSearch.text())
     print("search : "+ str(searchItems))
     if(asses):
       for x in range(0,len(asses)):
+        
         if(searchItems):
+          print("reload 2")
           if(self.checkCase.isChecked()):
             if(self.checkWords.isChecked()):
               if(self.checkTags.isChecked()):
@@ -579,25 +620,71 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         fileTypeAss = 0
         assTypeAss = 0
         if(self.radioMineAss.isChecked()):
-#          print("test1")
-#          print(asses[x]['createdUser'])
-          
-          
+          print("reload 3")
+
           if(asses[x]['createdUser'] == self.username):
             
+            if(self.considerFilter):
+
+              if(str(self.comboStageType.currentText()) != "default"):
+                if(str(self.comboStageType.currentText()) == str(asses[x]['stageType'])):
+                  stageTypeAss = 1
+              else:
+                stageTypeAss = 1
+              
+              if(str(self.comboNodeType.currentText()) != "default"):
+                if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
+                  nodeTypeAss = 1
+              else:
+                nodeTypeAss = 1
+              
+              if(str(self.comboSequence.currentText()) != "default"):
+                if(str(self.comboSequence.currentText()) == str(asses[x]['sequenceName'])):
+                  seqAss = 1
+              else:
+                seqAss = 1
+                
+              if(str(self.comboScene.currentText()) != "default"):
+                if(str(self.comboScene.currentText()) == str(asses[x]['sceneName'])):
+                  scnAss = 1
+              else:
+                scnAss = 1
+                
+              if(str(self.comboFileType.currentText()) != "default"):
+                if(str(self.comboFileType.currentText()) == str(asses[x]['fileType'])):
+                  fileTypeAss = 1
+              else:
+                fileTypeAss = 1
+                
+              if(str(self.comboAssType.currentText()) != "default"):
+                if(str(self.comboAssType.currentText()) == str(asses[x]['assetType'])):
+                  assTypeAss = 1
+              else:
+                assTypeAss = 1
+            else:
+              assesList.append(asses[x]['path'])
+              assesNames[asses[x]['path']] = asses[x]
+            
+            if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
+              assesList.append(asses[x]['path'])
+              assesNames[asses[x]['path']] = asses[x]
+
+        elif(self.radioAllAss.isChecked()):
+          
+          if(self.considerFilter):
+
             if(str(self.comboStageType.currentText()) != "default"):
               if(str(self.comboStageType.currentText()) == str(asses[x]['stageType'])):
                 stageTypeAss = 1
             else:
               stageTypeAss = 1
-            
+                
             if(str(self.comboNodeType.currentText()) != "default"):
               if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
                 nodeTypeAss = 1
             else:
               nodeTypeAss = 1
-            #yesAss = 0
-            
+              
             if(str(self.comboSequence.currentText()) != "default"):
               if(str(self.comboSequence.currentText()) == str(asses[x]['sequenceName'])):
                 seqAss = 1
@@ -610,12 +697,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             else:
               scnAss = 1
               
-            #if(str(self.comboNodeType.currentText()) != "default"):
-              #if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
-                #nodeTypeAss = 1
-            #else:
-              #nodeTypeAss = 1
-              
             if(str(self.comboFileType.currentText()) != "default"):
               if(str(self.comboFileType.currentText()) == str(asses[x]['fileType'])):
                 fileTypeAss = 1
@@ -627,72 +708,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
                 assTypeAss = 1
             else:
               assTypeAss = 1
-              
-              
-              
-                
-#            print("test2")
-            if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
-              assesList.append(asses[x]['path'])
-              assesNames[asses[x]['path']] = asses[x]
-              #item = QtGui.QListWidgetItem()
-              #item.setText(asses[x]['path'])
-              #self.tableWidget.addItem(item)
-        elif(self.radioAllAss.isChecked()):
-          if(str(self.comboStageType.currentText()) != "default"):
-            if(str(self.comboStageType.currentText()) == str(asses[x]['stageType'])):
-              stageTypeAss = 1
           else:
-            stageTypeAss = 1
-            
-          if(str(self.comboNodeType.currentText()) != "default"):
-            if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
-              nodeTypeAss = 1
-          else:
-            nodeTypeAss = 1
-            #yesAss = 0
-            
-          if(str(self.comboSequence.currentText()) != "default"):
-            if(str(self.comboSequence.currentText()) == str(asses[x]['sequenceName'])):
-              seqAss = 1
-          else:
-            seqAss = 1
-            
-          if(str(self.comboScene.currentText()) != "default"):
-            if(str(self.comboScene.currentText()) == str(asses[x]['sceneName'])):
-              scnAss = 1
-          else:
-            scnAss = 1
-            
-          #if(str(self.comboNodeType.currentText()) != "default"):
-            #if(str(self.comboNodeType.currentText()) == str(asses[x]['nodeType'])):
-              #nodeTypeAss = 1
-          #else:
-            #nodeTypeAss = 1
-            
-          if(str(self.comboFileType.currentText()) != "default"):
-            if(str(self.comboFileType.currentText()) == str(asses[x]['fileType'])):
-              fileTypeAss = 1
-          else:
-            fileTypeAss = 1
-            
-          if(str(self.comboAssType.currentText()) != "default"):
-            if(str(self.comboAssType.currentText()) == str(asses[x]['assetType'])):
-              assTypeAss = 1
-          else:
-            assTypeAss = 1
-            
-            
-            
-              
-#          print("test2")
+            assesList.append(asses[x]['path'])  
+            assesNames[asses[x]['path']] = asses[x]
           if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
             assesList.append(asses[x]['path'])
             assesNames[asses[x]['path']] = asses[x]
-            
-            #item = QtGui.QListWidgetItem()
-            #item.setText(asses[x]['path'])
-            #self.tableWidget.addItem(item)
+          
     if(assesList):
       self.tableWidget.setColumnCount(len(colNames))
       self.tableWidget.setRowCount(len(assesList))
@@ -710,10 +732,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         itemTag.setText(str(assesNames[assesList[x]]['assignedWorker']))
         self.tableWidget.setItem(x,1,itemTag)
         
-        
-        if(os.path.exists(assAbsPath +"/"+ assesNames[assesList[x]]['assName'] +".png")):
-          prevItem = ImageWidget(assAbsPath +"/"+ assesNames[assesList[x]]['assName'] +".png",self.tableWidget)
-          prevItem.setToolTip('<img src="'+ assAbsPath +"/"+ assesNames[assesList[x]]['assName'] +".png"+'" height="192"/>')
+        if(assesNames[assesList[x]]['assName'] == "default"):
+          previewName = "preview"
+        else:
+          previewName = assesNames[assesList[x]]['assName']
+        if(os.path.exists(assAbsPath +"/"+ previewName +".png")):
+          prevItem = ImageWidget(assAbsPath +"/"+ previewName +".png",self.tableWidget)
+          prevItem.setToolTip('<img src="'+ assAbsPath +"/"+ previewName +".png"+'" height="192"/>')
           self.tableWidget.setCellWidget(x,2,prevItem)
         
         
@@ -741,6 +766,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.pushNewAsset.setEnabled(False)
     p.start(sys.executable,rbhusPipeAssetCreateCmd.split())
     p.finished.connect(self.rbhusPipeAssCreateEnable)
+    
+    
+  def rbhusPipeAssetEdit(self):
+    p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAssetEdit_"+ self.username +".log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeAssetEdit_"+ self.username +".err")
+    p.start(sys.executable,self.rbhusAssetEditCmdMod.split())
+    p.finished.connect(self.listAssets)
     
   
   
@@ -813,6 +846,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.setAssTypes()
     self.listAssets()
     
+  
+  def resetFilterDefault(self):
+    self.default = True
+    self.setStageTypes()
+    self.setAssTypes()
+    self.setFileTypes()
+    self.setNodeTypes()
+    self.setSequence()
+    self.setScene()
+    self.setAssTypes()
+    self.default = False
+  
   def rbhusPipeAssCreateEnable(self,exitStatus):
     self.pushNewAsset.setEnabled(True)
   

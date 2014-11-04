@@ -14,8 +14,9 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep 
 
 
 scb = "selectCheckBox.py"
-
+srb = "selectRadioBox.py"
 selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
+selectRadioBoxCmd = dirSelf.rstrip(os.sep) + os.sep + srb
 
 
 
@@ -83,56 +84,119 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     
     self.center()
     #self.setProjTypes()
-    self.comboSequence.currentIndexChanged.connect(self.setScene)
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
-    self.pushCreate.clicked.connect(self.cAss)
+    self.pushEdit.clicked.connect(self.eAss)
     self.pushTags.clicked.connect(self.setTags)
-    self.checkAssName.clicked.connect(self.enableAssName)
+    self.pushUsers.clicked.connect(self.setUsers)
+    self.checkTags.clicked.connect(self.enableTags)
+    self.checkFRange.clicked.connect(self.enableFRange)
+    self.checkDueDate.clicked.connect(self.enableDueDate)
+    self.checkAssign.clicked.connect(self.enableAssignTo)
+    self.checkDesc.clicked.connect(self.enableDesc)
+    self.checkAssignSelf.clicked.connect(self.setAssignedWorker)
+    self.enableAssignTo()
+    self.enableDesc()
+    self.enableDueDate()
+    self.enableFRange()
+    self.enableTags()
     
     
-    self.setDirectory()
-    self.setAssTypes()
-    self.setFileTypes()
-    self.setNodeTypes()
-    self.setSequence()
-    self.setStageTypes()
-    self.enableAssName()
     
     
     
   def center(self):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
-  def enableAssName(self):
-    if(self.checkAssName.isChecked()):
-      self.lineEditAssName.setEnabled(True)
+  
+  def enableTags(self):
+    if(self.checkTags.isChecked()):
+      self.lineEditTags.setEnabled(True)
     else:
-      self.lineEditAssName.setEnabled(False)
+      self.lineEditTags.setEnabled(False)
+      
+  def enableFRange(self):
+    if(self.checkFRange.isChecked()):
+      self.lineEditFRange.setEnabled(True)
+    else:
+      self.lineEditFRange.setEnabled(False)
+
+
+  def enableDueDate(self):
+    if(self.checkDueDate.isChecked()):
+      self.dateEditDue.setEnabled(True)
+    else:
+      self.dateEditDue.setEnabled(False)
+      
+      
+  def enableAssignTo(self):
+    if(self.checkAssign.isChecked()):
+      self.lineEditWorkers.setEnabled(True)
+      self.checkAssignSelf.setEnabled(True)
+      self.pushUsers.setEnabled(True)
+    else:
+      self.lineEditWorkers.setEnabled(False)
+      self.checkAssignSelf.setEnabled(False)
+      self.pushUsers.setEnabled(False)
+      
+  def enableDesc(self):
+    if(self.checkDesc.isChecked()):
+      self.lineEditDesc.setEnabled(True)
+    else:
+      self.lineEditDesc.setEnabled(False)
+
+
+      
+
 
   
+  def setAssignedWorker(self):
+    if(self.checkAssignSelf.isChecked()):
+      self.lineEditWorkers.setText(str(self.username))
+  
+  
+  def setUsers(self):
+    users = utilsPipe.getUsers()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outUsers == ""):
+      outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
+    self.lineEditWorkers.setText(_fromUtf8(outUsers))
+  
+  
   def eAss(self):
+    if(not self.project in os.environ['rbhusPipe_acl_projIds'].split()):
+      print("user not allowed to edit . not an admin")
+      return(0)
     if(self.idList):
       for xid in self.idList:
         assdict = {}
-        assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-        assdict['assignedWorker'] = str(self.lineEditWorkers.text())
-        assdict['description'] = str(self.lineEditDesc.text())
-        assdict['tags'] = str(self.lineEditTags.text())
-        assdict['fRange'] = str(self.lineEditFRange.text())
-        self.centralwidget.setEnabled(False)
-        utilsPipe.assEdit(assid = xid , assdict=assdict)
-     if(self.pathList):
+        if(self.checkDueDate.isChecked()):
+          assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
+        if(self.checkAssign.isChecked()):
+          assdict['assignedWorker'] = str(self.lineEditWorkers.text())
+        if(self.checkDesc.isChecked()):
+          assdict['description'] = str(self.lineEditDesc.text())
+        if(self.checkTags.isChecked()):
+          assdict['tags'] = str(self.lineEditTags.text())
+        if(self.checkFRange.isChecked()):
+          assdict['fRange'] = str(self.lineEditFRange.text())
+        if(assdict):
+          utilsPipe.assEdit(assid = xid , assdict=assdict)
+    if(self.pathList):
       for xpath in self.pathList:
         assdict = {}
-        assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-        assdict['assignedWorker'] = str(self.lineEditWorkers.text())
-        assdict['description'] = str(self.lineEditDesc.text())
-        assdict['tags'] = str(self.lineEditTags.text())
-        assdict['fRange'] = str(self.lineEditFRange.text())
-        self.centralwidget.setEnabled(False)
-        utilsPipe.assEdit(asspath = xpath , assdict=assdict)
-    self.centralwidget.setEnabled(True)
-    
+        if(self.checkDueDate.isChecked()):
+          assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
+        if(self.checkAssign.isChecked()):
+          assdict['assignedWorker'] = str(self.lineEditWorkers.text())
+        if(self.checkDesc.isChecked()):
+          assdict['description'] = str(self.lineEditDesc.text())
+        if(self.checkTags.isChecked()):
+          assdict['tags'] = str(self.lineEditTags.text())
+        if(self.checkFRange.isChecked()):
+          assdict['fRange'] = str(self.lineEditFRange.text())
+        if(assdict):
+          utilsPipe.assEdit(asspath = xpath , assdict=assdict)
+    return(1)
     
     
     
@@ -148,98 +212,6 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
   
   
   
-  def setDirectory(self):
-    dirs = utilsPipe.getDirMaps()
-    self.comboDirectory.clear()
-    if(dirs):
-      for d in dirs:
-        self.comboDirectory.addItem(_fromUtf8(d['directory']))
-      return(1)
-    return(0)
-    
-    
-  def setStageTypes(self):
-    rows = utilsPipe.getStageTypes()
-    self.comboStageType.clear()  
-    if(rows):
-      for row in rows:
-        self.comboStageType.addItem(_fromUtf8(row['type']))
-      return(1)
-    return(0)     
-  
-  
-  
- 
-  
-  
-  def setScene(self):
-    seqName = str(self.comboSequence.currentText())
-    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
-    self.comboScene.clear()
-    scenes = {}
-    if(rows):
-      for x in rows:
-        scenes[x['sceneName']] = 1
-    if(scenes):
-      for x in scenes:
-        self.comboScene.addItem(_fromUtf8(x))
-    return(1)
-        
-        
-      
-    
-    
-    
-  
-  
-  def setSequence(self):
-    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
-    self.comboSequence.clear()  
-    seq = {}
-    if(rows):
-      for row in rows:
-        if(row['projName'] == os.environ['rp_proj_projName']):
-          seq[row['sequenceName']] = 1
-      if(seq):
-        for x in seq.keys():
-          self.comboSequence.addItem(_fromUtf8(x))
-      return(1)
-    return(0)     
-    
-  
-  def setNodeTypes(self):
-    rowsStage = utilsPipe.getStageTypes(stype=str(self.comboStageType.currentText()))
-    print(rowsStage)
-    stageDefNodes = rowsStage['validNodeTypes']
-    self.lineEditNodes.setText(stageDefNodes)
-    return(1)
-  
-  def setNodes(self):
-    ntypes = [str(x['type']) for x in utilsPipe.getNodeTypes()]
-    outNodes = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(ntypes),"-d",str(self.lineEditNodes.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
-    if(outNodes == ""):
-      outNodes = str(self.lineEditNodes.text())
-    self.lineEditNodes.setText(_fromUtf8(outNodes))  
-  
-  
-  def setFileTypes(self):
-    rows = utilsPipe.getFileTypes()
-    self.comboFileType.clear()  
-    if(rows):
-      for row in rows:
-        self.comboFileType.addItem(_fromUtf8(row['type']))
-      return(1)
-    return(0)
-  
-  
-  def setAssTypes(self):
-    rows = utilsPipe.getAssTypes()
-    self.comboAssType.clear()  
-    if(rows):
-      for row in rows:
-        self.comboAssType.addItem(_fromUtf8(row['type']))
-      return(1)
-    return(0)
   
   def setDefaults(self):
     defs = utilsPipe.getProjDefaults()

@@ -143,9 +143,9 @@ class login():
     if(self.username):
       db_conn = dbPipe.dbPipe()
       try:
-        rows = db_conn.execute("select * from proj where admins like '%"+ str(self.username) +"%' and status="+ str(constantsPipe.projActive), dictionary=True)
-        adminRows = db_conn.execute("select * from admins where user like '%"+ str(self.username) +"%'", dictionary=True)
-        stageRows = db_conn.execute("select * from stages where admins like '%"+ str(self.username) +"%' and status="+ str(constantsPipe.projActive), dictionary=True)
+        rows = db_conn.execute("select * from proj where admins REGEXP '[[:<:]]"+ str(self.username) +"[[:>:]]' and status="+ str(constantsPipe.projActive), dictionary=True)
+        adminRows = db_conn.execute("select * from admins where user REGEXP '[[:<:]]"+ str(self.username) +"[[:>:]]'", dictionary=True)
+        stageRows = db_conn.execute("select * from stages where admins REGEXP '[[:<:]]"+ str(self.username) +"[[:>:]]' and status="+ str(constantsPipe.projActive), dictionary=True)
         if(not isinstance(rows,int)):
           for x in rows:
             users = x['admins'].split()

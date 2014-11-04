@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeAssetCreateMod.ui'
 #
-# Created: Sat Nov  1 20:34:40 2014
+# Created: Sun Nov  2 21:03:03 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -169,10 +169,10 @@ class Ui_MainWindow(object):
     self.pushTags = QtGui.QPushButton(self.centralwidget)
     self.pushTags.setObjectName(_fromUtf8("pushTags"))
     self.gridLayout.addWidget(self.pushTags, 14, 4, 1, 1)
-    self.checkAssign = QtGui.QCheckBox(self.centralwidget)
-    self.checkAssign.setChecked(True)
-    self.checkAssign.setObjectName(_fromUtf8("checkAssign"))
-    self.gridLayout.addWidget(self.checkAssign, 12, 2, 1, 1)
+    self.checkAssignSelf = QtGui.QCheckBox(self.centralwidget)
+    self.checkAssignSelf.setChecked(True)
+    self.checkAssignSelf.setObjectName(_fromUtf8("checkAssignSelf"))
+    self.gridLayout.addWidget(self.checkAssignSelf, 12, 2, 1, 1)
     self.pushUsers = QtGui.QPushButton(self.centralwidget)
     self.pushUsers.setEnabled(False)
     self.pushUsers.setObjectName(_fromUtf8("pushUsers"))
@@ -243,7 +243,7 @@ class Ui_MainWindow(object):
     self.labelTags.setToolTip(_translate("MainWindow", "group owner of the project directory", None))
     self.labelTags.setText(_translate("MainWindow", "tags", None))
     self.pushTags.setText(_translate("MainWindow", "select", None))
-    self.checkAssign.setText(_translate("MainWindow", "self", None))
+    self.checkAssignSelf.setText(_translate("MainWindow", "self", None))
     self.pushUsers.setText(_translate("MainWindow", "select", None))
     self.lineEditTags.setToolTip(_translate("MainWindow", "group owner of the project directory", None))
     self.lineEditTags.setText(_translate("MainWindow", "default", None))

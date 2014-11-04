@@ -729,7 +729,7 @@ def assEdit(asspath="",assid="",assdict={}):
   if(assdict):
     for k in assdict:
       dbvalues.append(str(k) +"=\""+ str(assdict[k]) +"\"")
-      
+  print(dbvalues)
   if(dbvalues):
     dbconn = dbPipe.dbPipe()
     if(assid):

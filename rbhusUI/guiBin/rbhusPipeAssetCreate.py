@@ -70,7 +70,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     self.pushUsers.clicked.connect(self.setUsers)
     self.pushNodes.clicked.connect(self.setNodes)
     self.checkAssName.clicked.connect(self.enableAssName)
-    self.checkAssign.clicked.connect(self.setAssignedWorker)
+    self.checkAssignSelf.clicked.connect(self.setAssignedWorker)
     
     
     self.setDirectory()
@@ -95,7 +95,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   
   
   def setAssignedWorker(self):
-    if(self.checkAssign.isChecked()):
+    if(self.checkAssignSelf.isChecked()):
       self.lineEditWorkers.setText(str(self.username))
       self.lineEditWorkers.setEnabled(False)
       self.pushUsers.setEnabled(False)
