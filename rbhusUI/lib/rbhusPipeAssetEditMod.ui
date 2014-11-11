@@ -17,6 +17,9 @@
    <string>Edit Asset</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="11" column="0" colspan="6">
      <spacer name="verticalSpacer">

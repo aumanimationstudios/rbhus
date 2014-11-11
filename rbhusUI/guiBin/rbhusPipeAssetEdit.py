@@ -163,11 +163,10 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
   
   
   def eAss(self):
-    if(not self.project in os.environ['rbhusPipe_acl_projIds'].split()):
-      print("user not allowed to edit . not an admin")
-      return(0)
+    self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     if(self.idList):
       for xid in self.idList:
+        assdets = utilsPipe.getAssDetails(assId=xid)
         assdict = {}
         if(self.checkDueDate.isChecked()):
           assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
@@ -179,10 +178,17 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           assdict['tags'] = str(self.lineEditTags.text())
         if(self.checkFRange.isChecked()):
           assdict['fRange'] = str(self.lineEditFRange.text())
+          
+        if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username)):
+          print("user not allowed to edit . not an admin or an asset founder!!")
+          self.cetralwidget.setCursor(QtCore.Qt.ArrowCursor)
+          return(0)
+
         if(assdict):
           utilsPipe.assEdit(assid = xid , assdict=assdict)
     if(self.pathList):
       for xpath in self.pathList:
+        assdets = utilsPipe.getAssDetails(assPath=xpath)
         assdict = {}
         if(self.checkDueDate.isChecked()):
           assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
@@ -194,8 +200,15 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           assdict['tags'] = str(self.lineEditTags.text())
         if(self.checkFRange.isChecked()):
           assdict['fRange'] = str(self.lineEditFRange.text())
+          
+        if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username)):
+          print("user not allowed to edit . not an admin or an asset founder!!")
+          self.cetralwidget.setCursor(QtCore.Qt.ArrowCursor)
+          return(0)
+        
         if(assdict):
           utilsPipe.assEdit(asspath = xpath , assdict=assdict)
+    self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     return(1)
     
     

@@ -573,7 +573,7 @@ def getAbsPath(pipePath):
   projName = absPath[0]
   #print("getAbsPath 1: "+ str(projName))
   
-  projDets = getProjDetails(projName)
+  
   #print("getAbsPath 2: "+ str(projDets))
   
   assDets = getAssDetails(assPath=pipePath)
@@ -581,6 +581,7 @@ def getAbsPath(pipePath):
   if(assDets):
     projDirMapsDets = getDirMapsDetails(assDets['directory'])
   else:
+    projDets = getProjDetails(projName)
     projDirMapsDets = getDirMapsDetails(projDets['directory'])
     
   #print("getAbsPath 4: "+ str(projDirMapsDets))
@@ -652,7 +653,7 @@ def assRegister(assDetDict):
   assId = ""
   dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
   assDetDict['createDate'] = str(MySQLdb.Timestamp.now())
-  assDetDict['createdUser']  = os.environ['rbhusPipe_acl_user']
+  assDetDict['createdUser']  = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
   
   if(re.search("^default",str(assDetDict['assetType']))):
     pass 

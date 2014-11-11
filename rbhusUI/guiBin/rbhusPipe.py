@@ -60,20 +60,116 @@ class ImageWidget(QtGui.QWidget):
     painter = QtGui.QPainter(self)
     painter.drawPixmap(0, 0, self.picture)
     
+
+
+
+class ImagePlayer(QtGui.QWidget):
+  def __init__(self, filename, parent):
+    super(ImagePlayer,self).__init__(parent)
+    self.parent = parent
+
+    # Load the file into a QMovie
+    self.movie = QtGui.QMovie(filename, QtCore.QByteArray(), parent)
+    #self.movie = self.movie.scaledToHeight(100,100)
+    self.newSize = QtCore.QSize(100,100)
+    self.movie.setScaledSize(self.newSize)
+    #size = self.movie.scaledSize()
+    #self.setGeometry((parent.width())/2,(parent.height())/2,200,200)
+
+    self.movie_screen = QtGui.QLabel()
+    # Make label fit the gif
+    self.movie_screen.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+    #self.movie_screen.setGeometry((self.width())/2,(self.height())/2,self.width(),self.height())
+    #print(parent.geometry().width())
+    #print(parent.geometry().height())
+    #print("FUCKKKKKKKKKKKKKKKKKKKKKKKK")
+    #self.movie_screen.setGeometry(parent.width()/2,parent.height()/2,100,100)
+    #self.setGeometry(parent.geometry())
+    self.movie_screen.setAlignment(QtCore.Qt.AlignCenter)
+    #self.setAlignment(QtCore.Qt.AlignCenter)
+    
+
+    
+
+    # Add the QMovie object to the label
+    self.movie.setCacheMode(QtGui.QMovie.CacheAll)
+    self.movie.setSpeed(100)
+    self.movie_screen.setMovie(self.movie)
+    
+    
+    # Create the layout
+    main_layout = QtGui.QVBoxLayout()
+    
+    main_layout.addWidget(self.movie_screen)
+    #self.addWidget(self.movie_screen)
+    self.setLayout(main_layout)
+    
+    self.movie.start()
+    #self.movie_screen.setAlignment(QtCore.Qt.AlignCenter)
+    #self.movie.adjustSize()
+    #self.move(parent.frameSize().width(),parent.frameSize().height())
+    
+  def resizeEvent(self, event):
+    #print(self.parent.geometry().width())
+    #print(self.parent.geometry().height())
+    #print("FUCKKKKKKKKKKKKKKKKKKKKKKKK")
+    self.move((self.parent.geometry().width()-100)/2,(self.parent.geometry().height()-100)/2)
+    #self.movie_screen.setGeometry(parent.width()/2,parent.height()/2,100,100)
+    #print(self.parent.geometry().x())
+    #self.setGeometry(self.parent.geometry())
+    
+    
+    
+    
+class Worker(QtCore.QObject):
+  finished = QtCore.pyqtSignal()
+  dataReady = QtCore.pyqtSignal(tuple,dict)
+  
+  def __init__(self):
+    super(Worker, self).__init__()
+    self.asses = ()
+    self.absdict = {}
+    print("init worker thread")
+  
+  #def terminateEvent(self):
+    #print("holy cow . quiting!!")
+    #if(self.asses or self.absdict):
+      #self.finished.emit()
+    #else:
+      #self.dataReady.emit(self.asses,self.absdict)
+    
+  def getAsses(self):
+    print("in get asses")
+    try:
+      self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
+      if(self.asses):
+        for x in range(0,len(self.asses)):
+          self.absdict[self.asses[x]['path']] = utilsPipe.getAbsPath(self.asses[x]['path'])
+    except:
+      print(str(sys.exc_info()))
+    self.dataReady.emit(self.asses,self.absdict)
+    self.finished.emit()
+    print("out get asses")
     
     
 
+  
 
 
 class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
+    self.form = Form
     self.authL = authPipe.login()
     self.rbhusAssetEditCmdMod = ""
     self.username = None
     self.listAssTimeOld = time.time()
     self.default = False
     self.considerFilter = False
+    self.assList = None
+    self.absPathList = {}
+    self.getAssesLock = False
+    self.hf = None
     self.center()
     try:
       self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
@@ -84,7 +180,19 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     iconRefresh = QtGui.QIcon()
     iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     self.assRefresh.setIcon(iconRefresh)
-    self.filterRefresh.setIcon(iconRefresh)
+    
+
+    iconCancel = QtGui.QIcon()
+    iconCancel.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.pushResetAsset.setIcon(iconCancel)
+    self.pushResetSeq.setIcon(iconCancel)
+    self.pushResetStage.setIcon(iconCancel)
+    self.pushResetScene.setIcon(iconCancel)
+    self.pushResetNode.setIcon(iconCancel)
+    self.pushResetAsset.setIcon(iconCancel)
+    self.pushResetFile.setIcon(iconCancel)
+    self.filterRefresh.setIcon(iconCancel)
+
     
     self.iconDanger = QtGui.QIcon()
     self.iconDanger.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -94,13 +202,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
-    
+    self.timerAssetsRefresh = QtCore.QTimer()
+    self.timerAssetsRefresh.timeout.connect(self.listAssetsTimed)
     
     
     
     self.pushLogout.setText("logout : "+ str(self.username))
     self.pushLogout.clicked.connect(self.logout)
-    self.form = Form
+    
     self.wFlag = self.form.windowFlags()
     self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg"))
     self.trayIcon.show()
@@ -122,27 +231,47 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
     self.filterRefresh.clicked.connect(self.resetFilterDefault)
     self.assRefresh.clicked.connect(self.listAssets)
-    #self.comboSequence.currentIndexChanged.connect(self.setScene)
-    #self.comboStageType.currentIndexChanged.connect(self.listAssets)
-    #self.comboNodeType.currentIndexChanged.connect(self.listAssets)
-    #self.comboScene.currentIndexChanged.connect(self.listAssets)
-    #self.comboAssType.currentIndexChanged.connect(self.listAssets)
-    #self.comboFileType.currentIndexChanged.connect(self.listAssets)
     
+    self.comboSequence.currentIndexChanged.connect(self.setScene)
+    self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    
+    self.comboStageType.currentIndexChanged.connect(self.listAssets)
+    self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    
+    self.comboNodeType.currentIndexChanged.connect(self.listAssets)
+    self.comboNodeType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    
+    self.comboScene.currentIndexChanged.connect(self.listAssets)
+    self.comboScene.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    
+    
+    self.comboAssType.currentIndexChanged.connect(self.listAssets)
+    self.comboAssType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    
+    self.comboFileType.currentIndexChanged.connect(self.listAssets)
+    self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     
     self.radioAllAss.toggled.connect(self.listAssets)
     self.radioMineAss.toggled.connect(self.listAssets)
     
     
     self.lineEditSearch.returnPressed.connect(self.listAssets)
+    self.lineEditSearch.textChanged.connect(self.listAssets)
+  
     
-    self.checkBoxFilter.clicked.connect(self.checkFilerFunc)
+    self.checkBoxFilter.clicked.connect(self.checkFilterFunc)
     self.checkCase.clicked.connect(self.listAssets)
     self.checkWords.clicked.connect(self.listAssets)
     
     
     #self.form.closeEvent = self.closeEvent
-    self.checkFilerFunc()
+   
+    
+    self.loadingGif = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/loading.gif"
+    self.loader = ImagePlayer(self.loadingGif,parent=self.tableWidget)
+    self.loader.hide()
+    
+    
     self.rbhusPipeSetProjDefault()
     self.form.hideEvent = self.hideEvent
     self.form.closeEvent = self.hideEvent
@@ -156,8 +285,22 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.timer.timeout.connect(self.listAssets)
     self.checkRefresh.clicked.connect(self.timeCheck)
     
-    self.updateAll()
+    self.checkFilterFunc()
+    #self.updateAll()
+    #self.listAssetsTimed()
     
+  
+  
+  def listAssets(self):
+    #self.listAssetsTimed()
+    
+    print("list assets called")
+    if(self.timerAssetsRefresh.isActive()):
+      self.timerAssetsRefresh.stop()
+      self.timerAssetsRefresh.start(500)
+    else:
+      self.timerAssetsRefresh.start(500)
+  
   
   
   
@@ -175,13 +318,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.timer.stop()
   
   
-  def checkFilerFunc(self):
+  def checkFilterFunc(self):
     if(self.checkBoxFilter.isChecked()):
       self.groupBoxFilter.setVisible(True)
       self.considerFilter  = True
+      self.updateAll()
     else:
       self.groupBoxFilter.setVisible(False)
       self.considerFilter = False
+      self.updateAll()
     
   def popupAss(self, pos):
     menu = QtGui.QMenu()
@@ -559,29 +704,60 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
   
-  def listAssets(self):
+  def listAssetsTimed(self):
+    if(self.hf):
+      if(self.hf.isRunning()):
+        return(0)
+    print("in get asses timed 1")
+    self.loader.show()
+    self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
+    self.hf = QtCore.QThread(parent=self.tableWidget)
+    print("in get asses timed 2")  
+    assget = Worker()
+    assget.moveToThread(self.hf)
+    assget.dataReady.connect(self.listAssets_thread)
+    
+    print("in get asses timed 3")
+    self.hf.setTerminationEnabled(True)
+    self.hf.started.connect(assget.getAsses)
+    self.hf.run = assget.getAsses
+    self.hf.start()
+    
+    
+    print("in get asses timed 4")
+    
+  
+  
+  
+  
+
+
+
+  
+  def listAssets_thread(self,asslist,assdict):
     #print(str((time.time() - self.listAssTimeOld)))
     #if((time.time() - self.listAssTimeOld) < 1.0):
       #return(0)
     #self.listAssTimeOld = time.time()
+    print("list ass thread called")
+    selAsses = self.selectedAsses()
     colNames = ['asset','assigned','preview']
     assesList = []
     assesNames = {}
     self.tableWidget.clear()
-    try:
-      asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
-      print("reload 1")
-    except:
-      print("reload 1 failed")
-      return(0)
-    #print(asses)
+    self.tableWidget.clearContents()
+    self.tableWidget.setSortingEnabled(False)
+    self.tableWidget.resizeColumnsToContents()
+    self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+    
+    asses = asslist
     searchItems = str(self.lineEditSearch.text())
     print("search : "+ str(searchItems))
     if(asses):
       for x in range(0,len(asses)):
         
         if(searchItems):
-          print("reload 2")
+          #print("reload 2")
           if(self.checkCase.isChecked()):
             if(self.checkWords.isChecked()):
               if(self.checkTags.isChecked()):
@@ -620,7 +796,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         fileTypeAss = 0
         assTypeAss = 0
         if(self.radioMineAss.isChecked()):
-          print("reload 3")
+          #print("reload 3")
 
           if(asses[x]['createdUser'] == self.username):
             
@@ -725,8 +901,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       for x in range(0,len(assesList)):
         item = QtGui.QTableWidgetItem()
         item.setText(str(assesList[x]))
-        assAbsPath = utilsPipe.getAbsPath(str(assesList[x]))
+        assAbsPath = assdict[assesList[x]]
         self.tableWidget.setItem(x,0,item)
+        
+        if(assesList[x] in selAsses):
+          self.tableWidget.selectRow(x)
         
         itemTag = QtGui.QTableWidgetItem()
         itemTag.setText(str(assesNames[assesList[x]]['assignedWorker']))
@@ -743,9 +922,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         
         
         
-      self.tableWidget.resizeColumnsToContents()
-      self.tableWidget.setSortingEnabled(True)
-      
+    self.tableWidget.resizeColumnsToContents()
+    self.tableWidget.setSortingEnabled(True)
+    
+    self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
+    self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+    self.timerAssetsRefresh.stop()
     
   
   
@@ -794,8 +976,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             if(y.find("rp_") >= 0):
               print(y +":"+ str(os.environ[y]))
             
-          self.setSequence()
-          self.listAssets()
+          self.updateAll()
+          #self.listAssets()
           break
         
     
@@ -827,9 +1009,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(x.find("rp_") >= 0):
         print(x +":"+ str(os.environ[x]))
       
-    self.setSequence()
-    self.listAssets()
-  
+    self.updateAll()
+    
+    
   def rbhusPipeProjCreateEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)
     self.updateAll()

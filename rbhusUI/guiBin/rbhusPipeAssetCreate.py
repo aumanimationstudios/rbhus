@@ -106,6 +106,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
 
   
   def cAss(self):
+    self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     assdict = {}
     ntypes = str(self.lineEditNodes.text()).split(",")
     for x in ntypes:
@@ -128,7 +129,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       self.centralwidget.setEnabled(False)
       utilsPipe.assRegister(assdict)
       self.centralwidget.setEnabled(True)
-    
+    self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     
     
     
