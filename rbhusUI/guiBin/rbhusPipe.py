@@ -70,26 +70,12 @@ class ImagePlayer(QtGui.QWidget):
 
     # Load the file into a QMovie
     self.movie = QtGui.QMovie(filename, QtCore.QByteArray(), parent)
-    #self.movie = self.movie.scaledToHeight(100,100)
     self.newSize = QtCore.QSize(100,100)
     self.movie.setScaledSize(self.newSize)
-    #size = self.movie.scaledSize()
-    #self.setGeometry((parent.width())/2,(parent.height())/2,200,200)
 
     self.movie_screen = QtGui.QLabel()
-    # Make label fit the gif
     self.movie_screen.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
-    #self.movie_screen.setGeometry((self.width())/2,(self.height())/2,self.width(),self.height())
-    #print(parent.geometry().width())
-    #print(parent.geometry().height())
-    #print("FUCKKKKKKKKKKKKKKKKKKKKKKKK")
-    #self.movie_screen.setGeometry(parent.width()/2,parent.height()/2,100,100)
-    #self.setGeometry(parent.geometry())
     self.movie_screen.setAlignment(QtCore.Qt.AlignCenter)
-    #self.setAlignment(QtCore.Qt.AlignCenter)
-    
-
-    
 
     # Add the QMovie object to the label
     self.movie.setCacheMode(QtGui.QMovie.CacheAll)
@@ -99,24 +85,13 @@ class ImagePlayer(QtGui.QWidget):
     
     # Create the layout
     main_layout = QtGui.QVBoxLayout()
-    
     main_layout.addWidget(self.movie_screen)
-    #self.addWidget(self.movie_screen)
     self.setLayout(main_layout)
     
     self.movie.start()
-    #self.movie_screen.setAlignment(QtCore.Qt.AlignCenter)
-    #self.movie.adjustSize()
-    #self.move(parent.frameSize().width(),parent.frameSize().height())
     
   def resizeEvent(self, event):
-    #print(self.parent.geometry().width())
-    #print(self.parent.geometry().height())
-    #print("FUCKKKKKKKKKKKKKKKKKKKKKKKK")
     self.move((self.parent.geometry().width()-100)/2,(self.parent.geometry().height()-100)/2)
-    #self.movie_screen.setGeometry(parent.width()/2,parent.height()/2,100,100)
-    #print(self.parent.geometry().x())
-    #self.setGeometry(self.parent.geometry())
     
     
     
@@ -235,7 +210,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.comboSequence.currentIndexChanged.connect(self.setScene)
     self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     
-    self.comboStageType.currentIndexChanged.connect(self.listAssets)
+    self.comboStageType.view().pressed.connect(self.handleItemPressedForCombo)
+    #self.comboStageType.view().itemChanged.connect(self.handleItemPressedForCombo)
     self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     
     self.comboNodeType.currentIndexChanged.connect(self.listAssets)
@@ -286,15 +262,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.checkRefresh.clicked.connect(self.timeCheck)
     
     self.checkFilterFunc()
+    self.centralwidget.resizeEvent  = self.resizeEvent
+    self.tableWidget.resizeEvent = self.resizeEvent
     #self.updateAll()
     #self.listAssetsTimed()
     
   
   
+  def resizeEvent(self,event):
+    self.loader.resizeEvent(event)
+    
+  
   def listAssets(self):
     #self.listAssetsTimed()
     
-    print("list assets called")
+    #print("list assets called")
     if(self.timerAssetsRefresh.isActive()):
       self.timerAssetsRefresh.stop()
       self.timerAssetsRefresh.start(500)
@@ -322,11 +304,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(self.checkBoxFilter.isChecked()):
       self.groupBoxFilter.setVisible(True)
       self.considerFilter  = True
-      self.updateAll()
+      #self.updateAll()
     else:
       self.groupBoxFilter.setVisible(False)
       self.considerFilter = False
-      self.updateAll()
+      #self.updateAll()
     
   def popupAss(self, pos):
     menu = QtGui.QMenu()
@@ -483,9 +465,19 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.comboStageType.clear()  
     indx = 0
     foundIndx = -1
+    
+    model = QtGui.QStandardItemModel(len(defStage),1)
+    
     if(rows):
       for row in rows:
-        self.comboStageType.addItem(_fromUtf8(row['type']))
+        item = QtGui.QStandardItem(row['type'])
+        item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
+        #item.setCheckable(True)
+        model.setItem(indx,0,item)
+        
+        
+        #self.comboStageType.addItem(_fromUtf8(row['type']))
         if(present):
           if(row['type'] == present):
             foundIndx = indx
@@ -493,12 +485,28 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           if(defStage['type'] == row['type']):
             foundIndx = indx
         indx = indx + 1
+      self.comboStageType.setModel(model)
       if(foundIndx != -1):
         self.comboStageType.setCurrentIndex(foundIndx)
       return(1)
     return(0)     
   
-  
+  def handleItemPressedForCombo(self, index):
+    selectedStages = []
+    
+    if(self.comboStageType.model().item(index.row()).checkState() != 0):
+      self.comboStageType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
+    else:
+      self.comboStageType.model().item(index.row()).setCheckState(QtCore.Qt.Checked)
+    
+    for i in range(0,self.comboStageType.model().rowCount()):
+      if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
+        selectedStages.append(str(self.comboStageType.model().item(i).text()))
+      
+    print("EVENT CALLED : "+ str(index.row()))
+    self.comboStageType.setEditText(",".join(selectedStages))
+        
+            
   def setScene(self):
     seqName = str(self.comboSequence.currentText())
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
@@ -928,6 +936,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     self.timerAssetsRefresh.stop()
+    self.loader.hide()
     
   
   
