@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod.ui'
 #
-# Created: Sat Nov  8 22:39:54 2014
+# Created: Tue Nov 11 23:46:42 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
     MainWindow.setWindowModality(QtCore.Qt.WindowModal)
-    MainWindow.resize(909, 621)
+    MainWindow.resize(931, 612)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Maximum)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -58,6 +58,11 @@ class Ui_MainWindow(object):
     self.assRefresh.setObjectName(_fromUtf8("assRefresh"))
     self.gridLayout.addWidget(self.assRefresh, 13, 4, 1, 1)
     self.tableWidget = QtGui.QTableWidget(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
+    self.tableWidget.setSizePolicy(sizePolicy)
     palette = QtGui.QPalette()
     brush = QtGui.QBrush(QtGui.QColor(176, 176, 176))
     brush.setStyle(QtCore.Qt.SolidPattern)
@@ -141,6 +146,7 @@ class Ui_MainWindow(object):
     self.labelAssType.setObjectName(_fromUtf8("labelAssType"))
     self.gridLayout_2.addWidget(self.labelAssType, 1, 1, 1, 1)
     self.comboStageType = QtGui.QComboBox(self.groupBoxFilter)
+    self.comboStageType.setEnabled(True)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -148,6 +154,7 @@ class Ui_MainWindow(object):
     self.comboStageType.setSizePolicy(sizePolicy)
     self.comboStageType.setEditable(True)
     self.comboStageType.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
+    self.comboStageType.setFrame(True)
     self.comboStageType.setObjectName(_fromUtf8("comboStageType"))
     self.gridLayout_2.addWidget(self.comboStageType, 6, 1, 1, 1)
     self.label = QtGui.QLabel(self.groupBoxFilter)
@@ -354,7 +361,7 @@ class Ui_MainWindow(object):
     self.gridLayout.addWidget(self.checkRefresh, 13, 3, 1, 1)
     MainWindow.setCentralWidget(self.centralwidget)
     self.menuBar = QtGui.QMenuBar(MainWindow)
-    self.menuBar.setGeometry(QtCore.QRect(0, 0, 909, 21))
+    self.menuBar.setGeometry(QtCore.QRect(0, 0, 931, 21))
     self.menuBar.setObjectName(_fromUtf8("menuBar"))
     self.menuAdmin = QtGui.QMenu(self.menuBar)
     self.menuAdmin.setObjectName(_fromUtf8("menuAdmin"))

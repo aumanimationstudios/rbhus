@@ -122,9 +122,10 @@ class Worker(QtCore.QObject):
           self.absdict[self.asses[x]['path']] = utilsPipe.getAbsPath(self.asses[x]['path'])
     except:
       print(str(sys.exc_info()))
-    self.dataReady.emit(self.asses,self.absdict)
+    
     self.finished.emit()
     print("out get asses")
+    self.dataReady.emit(self.asses,self.absdict)
     
     
 
@@ -177,8 +178,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
-    self.timerAssetsRefresh = QtCore.QTimer()
-    self.timerAssetsRefresh.timeout.connect(self.listAssetsTimed)
+    #self.timerAssetsRefresh = QtCore.QTimer()
+    #self.timerAssetsRefresh.timeout.connect(self.listAssetsTimed)
     
     
     
@@ -210,9 +211,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.comboSequence.currentIndexChanged.connect(self.setScene)
     self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     
-    self.comboStageType.view().pressed.connect(self.handleItemPressedForCombo)
+    
+    self.comboStageType.editTextChanged.connect(self.listAssets)
+    self.comboStageType.view().activated.connect(self.handleItemPressedForCombo)
+    #self.comboStageType.view().event = self.comboStageTypeEvent
+    #self.comboStageType.view().clicked.connect(self.handleItemPressedForCombo)
     #self.comboStageType.view().itemChanged.connect(self.handleItemPressedForCombo)
     self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    self.pushResetStage.clicked.connect(self.setStageTypes)
+    
     
     self.comboNodeType.currentIndexChanged.connect(self.listAssets)
     self.comboNodeType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -273,15 +280,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.loader.resizeEvent(event)
     
   
+  def comboStageTypeEvent(self,event):
+    print(event)
+  
   def listAssets(self):
-    #self.listAssetsTimed()
+    self.listAssetsTimed()
     
     #print("list assets called")
-    if(self.timerAssetsRefresh.isActive()):
-      self.timerAssetsRefresh.stop()
-      self.timerAssetsRefresh.start(500)
-    else:
-      self.timerAssetsRefresh.start(500)
+    #if(self.timerAssetsRefresh.isActive()):
+      #self.timerAssetsRefresh.stop()
+      #self.timerAssetsRefresh.start(500)
+    #else:
+      #self.timerAssetsRefresh.start(500)
   
   
   
@@ -304,11 +314,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(self.checkBoxFilter.isChecked()):
       self.groupBoxFilter.setVisible(True)
       self.considerFilter  = True
-      #self.updateAll()
+      self.listAssets()
     else:
       self.groupBoxFilter.setVisible(False)
       self.considerFilter = False
-      #self.updateAll()
+      self.listAssets()
     
   def popupAss(self, pos):
     menu = QtGui.QMenu()
@@ -471,33 +481,55 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
-        item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        item.setFlags(QtCore.Qt.ItemIsUserCheckable)
+        #item.setFlags(QtCore.Qt.NoItemFlags)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         #item.setCheckable(True)
         model.setItem(indx,0,item)
+        abrush = QtGui.QBrush()
+        color = QtGui.QColor()
+        color.setAlpha(0)
+        abrush.setColor(color)
+        model.item(indx).setForeground(abrush)
         
         
         #self.comboStageType.addItem(_fromUtf8(row['type']))
-        if(present):
-          if(row['type'] == present):
-            foundIndx = indx
-        else:
-          if(defStage['type'] == row['type']):
-            foundIndx = indx
+        #if(present):
+          #if(row['type'] == present):
+            #foundIndx = indx
+        #else:
+          #if(defStage['type'] == row['type']):
+            #foundIndx = indx
         indx = indx + 1
       self.comboStageType.setModel(model)
-      if(foundIndx != -1):
-        self.comboStageType.setCurrentIndex(foundIndx)
+      #if(foundIndx != -1):
+      self.comboStageType.setEditText(defStage['type'])
       return(1)
     return(0)     
+  
+  
   
   def handleItemPressedForCombo(self, index):
     selectedStages = []
     
     if(self.comboStageType.model().item(index.row()).checkState() != 0):
       self.comboStageType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
+      #self.comboStageType.model().item(index.row()).setEnabled(False)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setAlpha(0)
+      abrush.setColor(color)
+      self.comboStageType.model().item(index.row()).setForeground(abrush)
     else:
       self.comboStageType.model().item(index.row()).setCheckState(QtCore.Qt.Checked)
+      #self.comboStageType.model().item(index.row()).setEnabled(True)
+      abrush = self.comboStageType.model().item(index.row()).background()
+      color = QtGui.QColor()
+      color.setGreen(10)
+      color.setBlue(125)
+      color.setRed(225)
+      abrush.setColor(color)
+      self.comboStageType.model().item(index.row()).setForeground(abrush)
     
     for i in range(0,self.comboStageType.model().rowCount()):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
@@ -713,26 +745,27 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   def listAssetsTimed(self):
+    self.loader.show()
     if(self.hf):
       if(self.hf.isRunning()):
         return(0)
-    print("in get asses timed 1")
-    self.loader.show()
+    #print("in get asses timed 1")
+    
     self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
     self.hf = QtCore.QThread(parent=self.tableWidget)
-    print("in get asses timed 2")  
+    #print("in get asses timed 2")  
     assget = Worker()
     assget.moveToThread(self.hf)
     assget.dataReady.connect(self.listAssets_thread)
     
-    print("in get asses timed 3")
+    #print("in get asses timed 3")
     self.hf.setTerminationEnabled(True)
     self.hf.started.connect(assget.getAsses)
     self.hf.run = assget.getAsses
     self.hf.start()
     
     
-    print("in get asses timed 4")
+    #print("in get asses timed 4")
     
   
   
@@ -811,7 +844,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             if(self.considerFilter):
 
               if(str(self.comboStageType.currentText()) != "default"):
-                if(str(self.comboStageType.currentText()) == str(asses[x]['stageType'])):
+                if(str(asses[x]['stageType']) in str(self.comboStageType.currentText()).split(",")):
                   stageTypeAss = 1
               else:
                 stageTypeAss = 1
@@ -858,7 +891,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           if(self.considerFilter):
 
             if(str(self.comboStageType.currentText()) != "default"):
-              if(str(self.comboStageType.currentText()) == str(asses[x]['stageType'])):
+              if(str(asses[x]['stageType']) in str(self.comboStageType.currentText()).split(",")):
                 stageTypeAss = 1
             else:
               stageTypeAss = 1
@@ -935,7 +968,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-    self.timerAssetsRefresh.stop()
+    #self.timerAssetsRefresh.stop()
     self.loader.hide()
     
   
