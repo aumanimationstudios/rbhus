@@ -211,18 +211,27 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.comboSequence.currentIndexChanged.connect(self.setScene)
     self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     
-    
+    slineedit = self.comboStageType.lineEdit()
+    slineedit.setEnabled(False)
     self.comboStageType.editTextChanged.connect(self.listAssets)
-    self.comboStageType.view().activated.connect(self.handleItemPressedForCombo)
-    #self.comboStageType.view().event = self.comboStageTypeEvent
-    #self.comboStageType.view().clicked.connect(self.handleItemPressedForCombo)
-    #self.comboStageType.view().itemChanged.connect(self.handleItemPressedForCombo)
+    self.comboStageType.view().activated.connect(self.pressedStageType)
     self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetStage.clicked.connect(self.setStageTypes)
     
-    
-    self.comboNodeType.currentIndexChanged.connect(self.listAssets)
+    nlineedit = self.comboNodeType.lineEdit()
+    nlineedit.setEnabled(False)
+    self.comboNodeType.editTextChanged.connect(self.listAssets)
+    self.comboNodeType.view().activated.connect(self.pressedNodeType)
     self.comboNodeType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    self.pushResetNode.clicked.connect(self.setNodeTypes)
+    
+    
+    seqlineedit = self.comboSequence.lineEdit()
+    seqlineedit.setEnabled(False)
+    self.comboSequence.editTextChanged.connect(self.listAssets)
+    self.comboSequence.view().activated.connect(self.pressedSequence)
+    self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    self.pushResetSeq.clicked.connect(self.setSequence)
     
     self.comboScene.currentIndexChanged.connect(self.listAssets)
     self.comboScene.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -465,16 +474,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setStageTypes(self):
     rows = utilsPipe.getStageTypes()
     defStage = utilsPipe.getDefaults("stageTypes")
-    try:
-      if(self.default):
-        present = None
-      else:
-        present = str(self.comboStageType.currentText())
-    except:
-      present = None
     self.comboStageType.clear()  
     indx = 0
-    foundIndx = -1
     
     model = QtGui.QStandardItemModel(len(defStage),1)
     
@@ -482,34 +483,22 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
         item.setFlags(QtCore.Qt.ItemIsUserCheckable)
-        #item.setFlags(QtCore.Qt.NoItemFlags)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
-        #item.setCheckable(True)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
         color = QtGui.QColor()
         color.setAlpha(0)
         abrush.setColor(color)
         model.item(indx).setForeground(abrush)
-        
-        
-        #self.comboStageType.addItem(_fromUtf8(row['type']))
-        #if(present):
-          #if(row['type'] == present):
-            #foundIndx = indx
-        #else:
-          #if(defStage['type'] == row['type']):
-            #foundIndx = indx
         indx = indx + 1
       self.comboStageType.setModel(model)
-      #if(foundIndx != -1):
       self.comboStageType.setEditText(defStage['type'])
       return(1)
     return(0)     
   
   
   
-  def handleItemPressedForCombo(self, index):
+  def pressedStageType(self, index):
     selectedStages = []
     
     if(self.comboStageType.model().item(index.row()).checkState() != 0):
@@ -523,7 +512,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     else:
       self.comboStageType.model().item(index.row()).setCheckState(QtCore.Qt.Checked)
       #self.comboStageType.model().item(index.row()).setEnabled(True)
-      abrush = self.comboStageType.model().item(index.row()).background()
+      abrush = QtGui.QBrush()
       color = QtGui.QColor()
       color.setGreen(10)
       color.setBlue(125)
@@ -535,7 +524,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboStageType.model().item(i).text()))
       
-    print("EVENT CALLED : "+ str(index.row()))
+    #print("EVENT CALLED : "+ str(index.row()))
     self.comboStageType.setEditText(",".join(selectedStages))
         
             
@@ -581,59 +570,133 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     seq = {}
     indx =  0
     foundIndx = -1
-    if(rows):
-      for row in rows:
-        if(row['projName'] == os.environ['rp_proj_projName']):
-          seq[row['sequenceName']] = 1
-      if(seq):
-        for x in seq.keys():
-          if(x == present):
-            foundIndx = indx
-          self.comboSequence.addItem(_fromUtf8(x))
-          indx = indx + 1
-        if(foundIndx != -1):
-          self.comboSequence.setCurrentIndex(foundIndx)
-          
+    
+    for row in rows:
+      seq[row['sequenceName']] = 1
+    
+    model = QtGui.QStandardItemModel(len(seq),1)
+    
+    if(seq):
+      for row in seq.keys():
+        item = QtGui.QStandardItem(row)
+        item.setFlags(QtCore.Qt.ItemIsUserCheckable)
+        item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
+        model.setItem(indx,0,item)
+        abrush = QtGui.QBrush()
+        color = QtGui.QColor()
+        color.setAlpha(0)
+        abrush.setColor(color)
+        model.item(indx).setForeground(abrush)
+        indx = indx + 1
+      self.comboSequence.setModel(model)
+      self.comboSequence.setEditText("default")
       return(1)
     return(0)     
+  
     
+    #if(rows):
+      #for row in rows:
+        #if(row['projName'] == os.environ['rp_proj_projName']):
+          #seq[row['sequenceName']] = 1
+      #if(seq):
+        #for x in seq.keys():
+          #if(x == present):
+            #foundIndx = indx
+          #self.comboSequence.addItem(_fromUtf8(x))
+          #indx = indx + 1
+        #if(foundIndx != -1):
+          #self.comboSequence.setCurrentIndex(foundIndx)
+          
+      #return(1)
+    #return(0)     
+  
+  
+  def pressedSequence(self, index):
+    selectedStages = []
+    
+    if(self.comboSequence.model().item(index.row()).checkState() != 0):
+      self.comboSequence.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
+      #self.comboStageType.model().item(index.row()).setEnabled(False)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setAlpha(0)
+      abrush.setColor(color)
+      self.comboSequence.model().item(index.row()).setForeground(abrush)
+    else:
+      self.comboSequence.model().item(index.row()).setCheckState(QtCore.Qt.Checked)
+      #self.comboStageType.model().item(index.row()).setEnabled(True)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setGreen(10)
+      color.setBlue(125)
+      color.setRed(225)
+      abrush.setColor(color)
+      self.comboSequence.model().item(index.row()).setForeground(abrush)
+    
+    for i in range(0,self.comboSequence.model().rowCount()):
+      if(self.comboSequence.model().item(i).checkState() == QtCore.Qt.Checked):
+        selectedStages.append(str(self.comboSequence.model().item(i).text()))
+      
+    #print("EVENT CALLED : "+ str(index.row()))
+    self.comboSequence.setEditText(",".join(selectedStages))
+  
   
   def setNodeTypes(self):
     rows = utilsPipe.getNodeTypes()
     defStage = utilsPipe.getDefaults("nodeTypes")
-    try:
-      if(self.default):
-        present = None
-      else:
-        present = str(self.comboNodeType.currentText())
-    except:
-      present = None
     self.comboNodeType.clear()  
     indx = 0
-    foundIndx = -1
+    
+    model = QtGui.QStandardItemModel(len(defStage),1)
+    
     if(rows):
       for row in rows:
-        self.comboNodeType.addItem(_fromUtf8(row['type']))
-        if(present):
-          if(row['type'] == present):
-            foundIndx = indx
-        else:
-          if(defStage['type'] == row['type']):
-            foundIndx = indx
+        item = QtGui.QStandardItem(row['type'])
+        item.setFlags(QtCore.Qt.ItemIsUserCheckable)
+        item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
+        model.setItem(indx,0,item)
+        abrush = QtGui.QBrush()
+        color = QtGui.QColor()
+        color.setAlpha(0)
+        abrush.setColor(color)
+        model.item(indx).setForeground(abrush)
         indx = indx + 1
-      if(foundIndx != -1):
-        self.comboNodeType.setCurrentIndex(foundIndx)
+      self.comboNodeType.setModel(model)
+      self.comboNodeType.setEditText(defStage['type'])
       return(1)
     return(0)     
   
   
   
-    #self.comboNodeType.clear()  
-    #if(rows):
-      #for row in rows:
-        #self.comboNodeType.addItem(_fromUtf8(row['type']))
-      #return(1)
-    #return(0)     
+  def pressedNodeType(self, index):
+    selectedStages = []
+    
+    if(self.comboNodeType.model().item(index.row()).checkState() != 0):
+      self.comboNodeType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
+      #self.comboStageType.model().item(index.row()).setEnabled(False)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setAlpha(0)
+      abrush.setColor(color)
+      self.comboNodeType.model().item(index.row()).setForeground(abrush)
+    else:
+      self.comboNodeType.model().item(index.row()).setCheckState(QtCore.Qt.Checked)
+      #self.comboStageType.model().item(index.row()).setEnabled(True)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setGreen(10)
+      color.setBlue(125)
+      color.setRed(225)
+      abrush.setColor(color)
+      self.comboNodeType.model().item(index.row()).setForeground(abrush)
+    
+    for i in range(0,self.comboStageType.model().rowCount()):
+      if(self.comboNodeType.model().item(i).checkState() == QtCore.Qt.Checked):
+        selectedStages.append(str(self.comboNodeType.model().item(i).text()))
+      
+    #print("EVENT CALLED : "+ str(index.row()))
+    self.comboNodeType.setEditText(",".join(selectedStages))
+  
   
   
   def setFileTypes(self):
