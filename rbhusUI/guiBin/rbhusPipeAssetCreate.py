@@ -220,8 +220,9 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   
   def setNodes(self):
     ntypes = [str(x['type']) for x in utilsPipe.getNodeTypes()]
-    print(sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-d",str(self.lineEditNodes.text()).rstrip().lstrip())
-    outNodes = subprocess.Popen([sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-d",str(self.lineEditNodes.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    ftypes = [str(x['type']) for x in utilsPipe.getFileTypes()]
+    print(sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-d",",".join(ftypes))
+    outNodes = subprocess.Popen([sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-d",",".join(ftypes)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     
     if(outNodes == ""):
       outNodes = str(self.lineEditNodes.text())

@@ -108,6 +108,7 @@ class ImagePlayer(QtGui.QWidget):
     
 class Worker(QtCore.QObject):
   finished = QtCore.pyqtSignal()
+  dataPending = QtCore.pyqtSignal()
   dataReady = QtCore.pyqtSignal(tuple,dict)
   
   def __init__(self):
@@ -124,6 +125,7 @@ class Worker(QtCore.QObject):
       #self.dataReady.emit(self.asses,self.absdict)
     
   def getAsses(self):
+    self.dataPending.emit()
     print("in get asses")
     self.asses = ()
     self.absdict = {}
@@ -220,21 +222,20 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.filterRefresh.clicked.connect(self.resetFilterDefault)
     self.assRefresh.clicked.connect(self.listAssets)
     
-    self.comboSequence.currentIndexChanged.connect(self.setScene)
-    self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    
     
     slineedit = self.comboStageType.lineEdit()
     slineedit.setEnabled(False)
     self.comboStageType.editTextChanged.connect(self.listAssets)
     self.comboStageType.view().activated.connect(self.pressedStageType)
-    self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    #self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetStage.clicked.connect(self.setStageTypes)
     
     nlineedit = self.comboNodeType.lineEdit()
     nlineedit.setEnabled(False)
     self.comboNodeType.editTextChanged.connect(self.listAssets)
     self.comboNodeType.view().activated.connect(self.pressedNodeType)
-    self.comboNodeType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    #self.comboNodeType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetNode.clicked.connect(self.setNodeTypes)
     
     
@@ -242,7 +243,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     seqlineedit.setEnabled(False)
     self.comboSequence.editTextChanged.connect(self.setSeqSce)
     self.comboSequence.view().activated.connect(self.pressedSequence)
-    self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    #self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetSeq.clicked.connect(self.setSequence)
     
     
@@ -250,7 +251,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     scelineedit.setEnabled(False)
     self.comboScene.editTextChanged.connect(self.listAssets)
     self.comboScene.view().activated.connect(self.pressedScene)
-    self.comboScene.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    #self.comboScene.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetScene.clicked.connect(self.setScene)
     
     
@@ -258,16 +259,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     filelineedit.setEnabled(False)
     self.comboFileType.editTextChanged.connect(self.listAssets)
     self.comboFileType.view().activated.connect(self.pressedScene)
-    self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetFile.clicked.connect(self.setFileTypes)
     
     
     self.comboAssType.currentIndexChanged.connect(self.listAssets)
-    self.comboAssType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    #self.comboAssType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetAsset.clicked.connect(self.setAssTypes)
     
     self.comboFileType.currentIndexChanged.connect(self.listAssets)
-    self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     
     self.radioAllAss.toggled.connect(self.listAssets)
     self.radioMineAss.toggled.connect(self.listAssets)
@@ -890,7 +891,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   def listAssetsTimed(self):
-    self.loader.show()
+    
     if(self.hf):
       if(self.hf.isRunning()):
         return(0)
@@ -902,6 +903,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     assget = Worker()
     assget.moveToThread(self.hf)
     assget.dataReady.connect(self.listAssets_thread)
+    assget.dataPending.connect(self.loader.show)
     
     #print("in get asses timed 3")
     self.hf.setTerminationEnabled(True)
@@ -986,7 +988,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         if(self.radioMineAss.isChecked()):
           #print("reload 3")
 
-          if(asses[x]['createdUser'] == self.username || asses[x]['assignedWorker'] == self.username):
+          if(asses[x]['createdUser'] == self.username or asses[x]['assignedWorker'] == self.username):
             
             if(self.considerFilter):
 

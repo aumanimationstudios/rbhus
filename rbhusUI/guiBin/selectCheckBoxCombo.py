@@ -36,6 +36,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
+    self.form = Form
     self.inList = []
     self.inDict = {}
     self.defList = []
@@ -96,7 +97,28 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
     if(findList):
       #model = QtGui.QStandardItemModel(len(findList),1)
       for x in findList:
+        indx = 0
         groupBox = QtGui.QGroupBox(self.scrollAreaWidgetContents)
+        comboBox = QtGui.QComboBox(groupBox)
+        model = QtGui.QStandardItemModel(len(self.defList),1)
+        model.setParent(comboBox)
+        
+        for row in self.defList:
+          item = QtGui.QStandardItem(row)
+          item.setFlags(QtCore.Qt.ItemIsUserCheckable)
+          item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
+          model.setItem(indx,0,item)
+          abrush = QtGui.QBrush()
+          color = QtGui.QColor()
+          color.setAlpha(0)
+          abrush.setColor(color)
+          model.item(indx).setForeground(abrush)
+          indx = indx + 1
+        
+        
+        
+        
+        
         #groupBox.setObjectName(_fromUtf8("groupBox"))
         gridLayout_2 = QtGui.QGridLayout(groupBox)
         #gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
@@ -107,17 +129,26 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         sizePolicy.setHeightForWidth(checkBox.sizePolicy().hasHeightForWidth())
         checkBox.setSizePolicy(sizePolicy)
         checkBox.setText(_fromUtf8(""))
-        #checkBox.setObjectName(_fromUtf8("checkBox"))
+        comboBox.setObjectName(_fromUtf8(x))
         gridLayout_2.addWidget(checkBox, 0, 0, 1, 1)
-        comboBox = QtGui.QComboBox(groupBox)
+        
         comboBox.setEditable(True)
         comboBox.lineEdit().setEnabled(False)
+        comboBox.setModel(model)
+        comboBox.setEditText("default")
+        
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(comboBox.sizePolicy().hasHeightForWidth())
         comboBox.setSizePolicy(sizePolicy)
-        #comboBox.setObjectName(_fromUtf8("comboBox"))
+        
+        
+    
+        #comboBox.pressedFileType = pressedFileType
+        
+        
+        comboBox.setObjectName(_fromUtf8(x))
         gridLayout_2.addWidget(comboBox, 0, 1, 1, 1)
 
 
@@ -125,11 +156,42 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         self.checkBoxes[x][0].setTitle(_fromUtf8(x))
         self.verticalLayout.addWidget(self.checkBoxes[x][0])
         self.checkBoxes[x][1].stateChanged.connect(self.updateSelected)
+        self.checkBoxes[x][2].editTextChanged.connect(self.updateSelected)
+        self.checkBoxes[x][2].view().activated.connect(lambda index, x=x : self.pressedFileType(index,self.checkBoxes[x][2]))
+        #print(self.checkBoxes[x][2].objectName())
         if(x in self.defList):
           self.checkBoxes[x][1].setChecked(2)
     #self.defList = []
     
+  def pressedFileType(self,*args):
+    selectedStages = []
+    index = args[0]
+    father = args[1]
+    if(father.model().item(index.row()).checkState() != 0):
+      father.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
+      #self.comboStageType.model().item(index.row()).setEnabled(False)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setAlpha(0)
+      abrush.setColor(color)
+      father.model().item(index.row()).setForeground(abrush)
+    else:
+      father.model().item(index.row()).setCheckState(QtCore.Qt.Checked)
+      #self.comboStageType.model().item(index.row()).setEnabled(True)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setGreen(10)
+      color.setBlue(125)
+      color.setRed(225)
+      abrush.setColor(color)
+      father.model().item(index.row()).setForeground(abrush)
     
+    for i in range(0,father.model().rowCount()):
+      if(father.model().item(i).checkState() == QtCore.Qt.Checked):
+        selectedStages.append(str(father.model().item(i).text()))
+      
+    ##print("EVENT CALLED : "+ str(index.row()))
+    father.setEditText(",".join(selectedStages))
         
   def deselectall(self):
     for x in self.inList:
