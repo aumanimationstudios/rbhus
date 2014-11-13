@@ -94,6 +94,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         pass
       
     if(findList):
+      #model = QtGui.QStandardItemModel(len(findList),1)
       for x in findList:
         groupBox = QtGui.QGroupBox(self.scrollAreaWidgetContents)
         #groupBox.setObjectName(_fromUtf8("groupBox"))
@@ -109,6 +110,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         #checkBox.setObjectName(_fromUtf8("checkBox"))
         gridLayout_2.addWidget(checkBox, 0, 0, 1, 1)
         comboBox = QtGui.QComboBox(groupBox)
+        comboBox.setEditable(True)
+        comboBox.lineEdit().setEnabled(False)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

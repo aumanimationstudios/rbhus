@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod.ui'
 #
-# Created: Tue Nov 11 23:46:42 2014
+# Created: Wed Nov 12 23:03:21 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -64,10 +64,10 @@ class Ui_MainWindow(object):
     sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
     self.tableWidget.setSizePolicy(sizePolicy)
     palette = QtGui.QPalette()
-    brush = QtGui.QBrush(QtGui.QColor(176, 176, 176))
+    brush = QtGui.QBrush(QtGui.QColor(220, 220, 220))
     brush.setStyle(QtCore.Qt.SolidPattern)
     palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-    brush = QtGui.QBrush(QtGui.QColor(176, 176, 176))
+    brush = QtGui.QBrush(QtGui.QColor(220, 220, 220))
     brush.setStyle(QtCore.Qt.SolidPattern)
     palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
     brush = QtGui.QBrush(QtGui.QColor(244, 244, 244))
@@ -121,6 +121,7 @@ class Ui_MainWindow(object):
     sizePolicy.setHeightForWidth(self.comboNodeType.sizePolicy().hasHeightForWidth())
     self.comboNodeType.setSizePolicy(sizePolicy)
     self.comboNodeType.setEditable(True)
+    self.comboNodeType.setMaxVisibleItems(10)
     self.comboNodeType.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
     self.comboNodeType.setObjectName(_fromUtf8("comboNodeType"))
     self.gridLayout_2.addWidget(self.comboNodeType, 6, 3, 1, 1)
@@ -131,6 +132,7 @@ class Ui_MainWindow(object):
     sizePolicy.setHeightForWidth(self.comboScene.sizePolicy().hasHeightForWidth())
     self.comboScene.setSizePolicy(sizePolicy)
     self.comboScene.setEditable(True)
+    self.comboScene.setMaxVisibleItems(10)
     self.comboScene.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
     self.comboScene.setObjectName(_fromUtf8("comboScene"))
     self.gridLayout_2.addWidget(self.comboScene, 4, 3, 1, 1)
@@ -153,6 +155,7 @@ class Ui_MainWindow(object):
     sizePolicy.setHeightForWidth(self.comboStageType.sizePolicy().hasHeightForWidth())
     self.comboStageType.setSizePolicy(sizePolicy)
     self.comboStageType.setEditable(True)
+    self.comboStageType.setMaxVisibleItems(10)
     self.comboStageType.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
     self.comboStageType.setFrame(True)
     self.comboStageType.setObjectName(_fromUtf8("comboStageType"))
@@ -167,6 +170,7 @@ class Ui_MainWindow(object):
     sizePolicy.setHeightForWidth(self.comboFileType.sizePolicy().hasHeightForWidth())
     self.comboFileType.setSizePolicy(sizePolicy)
     self.comboFileType.setEditable(True)
+    self.comboFileType.setMaxVisibleItems(10)
     self.comboFileType.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
     self.comboFileType.setDuplicatesEnabled(False)
     self.comboFileType.setFrame(True)
@@ -182,6 +186,7 @@ class Ui_MainWindow(object):
     sizePolicy.setHeightForWidth(self.comboSequence.sizePolicy().hasHeightForWidth())
     self.comboSequence.setSizePolicy(sizePolicy)
     self.comboSequence.setEditable(True)
+    self.comboSequence.setMaxVisibleItems(10)
     self.comboSequence.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
     self.comboSequence.setObjectName(_fromUtf8("comboSequence"))
     self.gridLayout_2.addWidget(self.comboSequence, 4, 1, 1, 1)
@@ -208,6 +213,7 @@ class Ui_MainWindow(object):
     sizePolicy.setHeightForWidth(self.comboAssType.sizePolicy().hasHeightForWidth())
     self.comboAssType.setSizePolicy(sizePolicy)
     self.comboAssType.setEditable(True)
+    self.comboAssType.setMaxVisibleItems(10)
     self.comboAssType.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
     self.comboAssType.setObjectName(_fromUtf8("comboAssType"))
     self.gridLayout_2.addWidget(self.comboAssType, 2, 1, 1, 1)

@@ -76,9 +76,9 @@
          <colorrole role="Base">
           <brush brushstyle="SolidPattern">
            <color alpha="255">
-            <red>176</red>
-            <green>176</green>
-            <blue>176</blue>
+            <red>220</red>
+            <green>220</green>
+            <blue>220</blue>
            </color>
           </brush>
          </colorrole>
@@ -87,9 +87,9 @@
          <colorrole role="Base">
           <brush brushstyle="SolidPattern">
            <color alpha="255">
-            <red>176</red>
-            <green>176</green>
-            <blue>176</blue>
+            <red>220</red>
+            <green>220</green>
+            <blue>220</blue>
            </color>
           </brush>
          </colorrole>
@@ -211,6 +211,9 @@
          <property name="editable">
           <bool>true</bool>
          </property>
+         <property name="maxVisibleItems">
+          <number>10</number>
+         </property>
          <property name="insertPolicy">
           <enum>QComboBox::InsertAlphabetically</enum>
          </property>
@@ -226,6 +229,9 @@
          </property>
          <property name="editable">
           <bool>true</bool>
+         </property>
+         <property name="maxVisibleItems">
+          <number>10</number>
          </property>
          <property name="insertPolicy">
           <enum>QComboBox::InsertAlphabetically</enum>
@@ -266,6 +272,9 @@
          <property name="editable">
           <bool>true</bool>
          </property>
+         <property name="maxVisibleItems">
+          <number>10</number>
+         </property>
          <property name="insertPolicy">
           <enum>QComboBox::InsertAlphabetically</enum>
          </property>
@@ -291,6 +300,9 @@
          </property>
          <property name="editable">
           <bool>true</bool>
+         </property>
+         <property name="maxVisibleItems">
+          <number>10</number>
          </property>
          <property name="insertPolicy">
           <enum>QComboBox::InsertAlphabetically</enum>
@@ -320,6 +332,9 @@
          </property>
          <property name="editable">
           <bool>true</bool>
+         </property>
+         <property name="maxVisibleItems">
+          <number>10</number>
          </property>
          <property name="insertPolicy">
           <enum>QComboBox::InsertAlphabetically</enum>
@@ -366,6 +381,9 @@
          </property>
          <property name="editable">
           <bool>true</bool>
+         </property>
+         <property name="maxVisibleItems">
+          <number>10</number>
          </property>
          <property name="insertPolicy">
           <enum>QComboBox::InsertAlphabetically</enum>
