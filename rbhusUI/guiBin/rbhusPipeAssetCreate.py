@@ -213,16 +213,26 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   
   def setNodeTypes(self):
     rowsStage = utilsPipe.getStageTypes(stype=str(self.comboStageType.currentText()))
+    rowsNodes = utilsPipe.getNodeTypes()
+    
     print(rowsStage)
-    stageDefNodes = rowsStage['validNodeTypes']
-    self.lineEditNodes.setText(stageDefNodes)
+    stageDefNodes = rowsStage['validNodeTypes'].split(",")
+    editNodes = []
+    for sdf in stageDefNodes:
+      for rn in rowsNodes:
+        if(sdf == rn['type']):
+          editNodes.append(sdf +"#"+"%".join(rn['defaultFileType'].split(",")))
+          
+    self.lineEditNodes.setText(",".join(editNodes))
     return(1)
   
   def setNodes(self):
     ntypes = [str(x['type']) for x in utilsPipe.getNodeTypes()]
     ftypes = [str(x['type']) for x in utilsPipe.getFileTypes()]
-    print(sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-d",",".join(ftypes))
-    outNodes = subprocess.Popen([sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-d",",".join(ftypes)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    
+    defNodes =[str(df.split("#")[0]) for df in self.lineEditNodes.text().split(",")]
+    print(sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes))
+    outNodes = subprocess.Popen([sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",",".join(defNodes)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     
     if(outNodes == ""):
       outNodes = str(self.lineEditNodes.text())

@@ -20,7 +20,9 @@ parser = argparse.ArgumentParser()
 
 
 parser.add_argument("-i","--input",dest='inputlist',help='comma seperated input list')
-parser.add_argument("-d","--default",dest='defaultlist',help='comma seperated default checked list')
+parser.add_argument("-c","--combolist",dest='combolist',help='comma seperated list for comboBox')
+parser.add_argument("-d","--defaultlist",dest='defaultlist',help='comma seperated list of input list to be selected by default')
+
 args = parser.parse_args()
 
 
@@ -39,7 +41,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
     self.form = Form
     self.inList = []
     self.inDict = {}
-    self.defList = []
+    self.defCombo = []
     self.updateLine = []
     if(args.inputlist):
       self.inList = args.inputlist.split(",")
@@ -48,8 +50,10 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         if(len(dets) > 1):
           self.inDict[dets[0]] = dets[1].split("%")
         else:
-          self.inDict[dets[0]] = None
+          self.inDict[dets[0]] = []
       
+    if(args.combolist):
+      self.defCombo = args.combolist.split(",")
     if(args.defaultlist):
       self.defList = args.defaultlist.split(",")
       
@@ -65,7 +69,10 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
   
   
   def closeEvent(self,event):
-    print(",".join(self.defList))
+    #finalblow = []
+    #for x in self.defList:
+      #finalblow.append(x +"#"+"%".join(self.inDict[x]))
+    #print(",".join(finalblow))
     event.accept()
     
   
@@ -79,12 +86,12 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
     
   def updateCheckBoxes(self):
     findList = []
-    for x in self.inList:
+    for x in self.inDict.keys():
       if(x.find(str(self.lineEditSearch.text())) >= 0):
         findList.append(x)
     
     
-    for x in self.inList:
+    for x in self.inDict.keys():
       try:
         self.checkBoxes[x][0].setParent(None)
         self.checkBoxes[x][0].deleteLater()
@@ -100,10 +107,10 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         indx = 0
         groupBox = QtGui.QGroupBox(self.scrollAreaWidgetContents)
         comboBox = QtGui.QComboBox(groupBox)
-        model = QtGui.QStandardItemModel(len(self.defList),1)
+        model = QtGui.QStandardItemModel(len(self.defCombo),1)
         model.setParent(comboBox)
         
-        for row in self.defList:
+        for row in self.defCombo:
           item = QtGui.QStandardItem(row)
           item.setFlags(QtCore.Qt.ItemIsUserCheckable)
           item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
@@ -135,7 +142,10 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         comboBox.setEditable(True)
         comboBox.lineEdit().setEnabled(False)
         comboBox.setModel(model)
-        comboBox.setEditText("default")
+        if(self.inDict[x]):
+          comboBox.setEditText(",".join(self.inDict[x]))
+        else:
+          comboBox.setEditText("default")
         
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -161,7 +171,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         #print(self.checkBoxes[x][2].objectName())
         if(x in self.defList):
           self.checkBoxes[x][1].setChecked(2)
-    #self.defList = []
+    #self.defCombo = []
     
   def pressedFileType(self,*args):
     selectedStages = []
@@ -210,7 +220,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
     for x in self.checkBoxes.keys():
       #print(x + " : "+ str(self.checkBoxes[x].isChecked()))
       if(self.checkBoxes[x][1].isChecked()):
-        self.updateLine.append(str(x))
+
+        self.updateLine.append(str(x) +"#"+ "%".join(str(self.checkBoxes[x][2].currentText()).split(",")))
     self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(self.updateLine)))
     #self.plainTextEditSelected.setReadOnly(True)
       
