@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>397</width>
-    <height>423</height>
+    <height>381</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -180,6 +180,9 @@
       <property name="text">
        <string>default</string>
       </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
     <item row="3" column="0">
@@ -258,6 +261,9 @@
       </property>
       <property name="toolTip">
        <string>list of space separated usernames</string>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
     </item>

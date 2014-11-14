@@ -225,14 +225,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     slineedit = self.comboStageType.lineEdit()
-    slineedit.setEnabled(False)
+    slineedit.setReadOnly(False)
     self.comboStageType.editTextChanged.connect(self.listAssets)
     self.comboStageType.view().activated.connect(self.pressedStageType)
     #self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetStage.clicked.connect(self.setStageTypes)
     
     nlineedit = self.comboNodeType.lineEdit()
-    nlineedit.setEnabled(False)
+    nlineedit.setReadOnly(False)
     self.comboNodeType.editTextChanged.connect(self.listAssets)
     self.comboNodeType.view().activated.connect(self.pressedNodeType)
     #self.comboNodeType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -240,7 +240,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     seqlineedit = self.comboSequence.lineEdit()
-    seqlineedit.setEnabled(False)
+    seqlineedit.setReadOnly(False)
     self.comboSequence.editTextChanged.connect(self.setSeqSce)
     self.comboSequence.view().activated.connect(self.pressedSequence)
     #self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -248,7 +248,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     scelineedit = self.comboScene.lineEdit()
-    scelineedit.setEnabled(False)
+    scelineedit.setReadOnly(False)
     self.comboScene.editTextChanged.connect(self.listAssets)
     self.comboScene.view().activated.connect(self.pressedScene)
     #self.comboScene.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -256,7 +256,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     filelineedit = self.comboFileType.lineEdit()
-    filelineedit.setEnabled(False)
+    filelineedit.setReadOnly(False)
     self.comboFileType.editTextChanged.connect(self.listAssets)
     self.comboFileType.view().activated.connect(self.pressedScene)
     #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -557,7 +557,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         selectedStages.append(str(self.comboStageType.model().item(i).text()))
       
     #print("EVENT CALLED : "+ str(index.row()))
-    self.comboStageType.setEditText(",".join(selectedStages))
+    if(selectedStages):
+      self.comboStageType.setEditText(",".join(selectedStages))
+    else:
+      self.comboStageType.setEditText("default")
         
             
   def setScene(self):
@@ -619,7 +622,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         selectedStages.append(str(self.comboScene.model().item(i).text()))
       
     #print("EVENT CALLED : "+ str(index.row()))
-    self.comboScene.setEditText(",".join(selectedStages))
+    if(selectedStages):
+      self.comboScene.setEditText(",".join(selectedStages))
+    else:
+      self.comboScene.setEditText("default")
   
   
   def setSequence(self):
@@ -703,7 +709,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         selectedStages.append(str(self.comboSequence.model().item(i).text()))
       
     #print("EVENT CALLED : "+ str(index.row()))
-    self.comboSequence.setEditText(",".join(selectedStages))
+    if(selectedStages):
+      self.comboSequence.setEditText(",".join(selectedStages))
+    else:
+      self.comboSequence.setEditText("default")
   
   
   def setNodeTypes(self):
@@ -759,7 +768,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         selectedStages.append(str(self.comboNodeType.model().item(i).text()))
       
     #print("EVENT CALLED : "+ str(index.row()))
-    self.comboNodeType.setEditText(",".join(selectedStages))
+    if(selectedStages):
+      self.comboNodeType.setEditText(",".join(selectedStages))
+    else:
+      self.comboNodeType.setEditText("default")
   
   
   
@@ -816,7 +828,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         selectedStages.append(str(self.comboFileType.model().item(i).text()))
       
     #print("EVENT CALLED : "+ str(index.row()))
-    self.comboFileType.setEditText(",".join(selectedStages))
+    if(selectedStages):
+      self.comboFileType.setEditText(",".join(selectedStages))
+    else:
+      self.comboFileType.setEditText("default")
     
     
     

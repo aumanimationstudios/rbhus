@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeAssetCreateMod.ui'
 #
-# Created: Fri Nov 14 10:22:35 2014
+# Created: Fri Nov 14 10:42:56 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
     MainWindow.setEnabled(True)
-    MainWindow.resize(397, 423)
+    MainWindow.resize(397, 381)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
@@ -113,6 +113,7 @@ class Ui_MainWindow(object):
     self.lineEditFRange.setObjectName(_fromUtf8("lineEditFRange"))
     self.gridLayout.addWidget(self.lineEditFRange, 9, 1, 1, 4)
     self.lineEditNodes = QtGui.QLineEdit(self.centralwidget)
+    self.lineEditNodes.setReadOnly(True)
     self.lineEditNodes.setObjectName(_fromUtf8("lineEditNodes"))
     self.gridLayout.addWidget(self.lineEditNodes, 8, 1, 1, 3)
     self.labelAssType = QtGui.QLabel(self.centralwidget)
@@ -153,6 +154,7 @@ class Ui_MainWindow(object):
     self.gridLayout.addWidget(self.pushCreate, 16, 0, 1, 5)
     self.lineEditWorkers = QtGui.QLineEdit(self.centralwidget)
     self.lineEditWorkers.setEnabled(False)
+    self.lineEditWorkers.setReadOnly(True)
     self.lineEditWorkers.setObjectName(_fromUtf8("lineEditWorkers"))
     self.gridLayout.addWidget(self.lineEditWorkers, 11, 1, 1, 1)
     self.labelSequence = QtGui.QLabel(self.centralwidget)
