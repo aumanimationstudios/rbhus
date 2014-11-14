@@ -195,13 +195,17 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
       color.setRed(225)
       abrush.setColor(color)
       father.model().item(index.row()).setForeground(abrush)
-    
+    changes = False
     for i in range(0,father.model().rowCount()):
       if(father.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(father.model().item(i).text()))
+        changes = True
       
     ##print("EVENT CALLED : "+ str(index.row()))
-    father.setEditText(",".join(selectedStages))
+    if(changes):
+      father.setEditText(",".join(selectedStages))
+    else:
+      father.setEditText("default")
         
   def deselectall(self):
     for x in self.inList:

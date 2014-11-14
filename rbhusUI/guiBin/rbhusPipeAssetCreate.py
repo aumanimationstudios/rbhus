@@ -77,7 +77,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     
     self.setDirectory()
     self.setAssTypes()
-    self.setFileTypes()
+    #self.setFileTypes()
     #self.setNodeTypes()
     self.setSequence()
     self.setStageTypes()
@@ -118,18 +118,24 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       assdict['assetType'] = str(self.comboAssType.currentText())
       assdict['projName'] = os.environ['rp_proj_projName']
       assdict['directory'] = str(self.comboDirectory.currentText())
-      assdict['nodeType'] = x
+      assdict['nodeType'] = x.split("#")[0]
       assdict['stageType'] = str(self.comboStageType.currentText())
       assdict['sequenceName'] = str(self.comboSequence.currentText())
       assdict['sceneName'] = str(self.comboScene.currentText())
       assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
       assdict['assignedWorker'] = str(self.lineEditWorkers.text())
       assdict['description'] = str(self.lineEditDesc.text())
-      assdict['fileType'] = str(self.comboFileType.currentText())
+      
       assdict['tags'] = str(self.lineEditTags.text())
       assdict['fRange'] = str(self.lineEditFRange.text())
       self.centralwidget.setEnabled(False)
-      utilsPipe.assRegister(assdict)
+      if(len(x.split("#")) > 1):
+        for ft in (x.split("#")[1]).split("%"):
+          assdict['fileType'] = ft
+          utilsPipe.assRegister(assdict)
+      else:
+        assdict['fileType'] = "default"
+        utilsPipe.assRegister(assdict)
       self.centralwidget.setEnabled(True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     
@@ -239,14 +245,14 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     self.lineEditNodes.setText(_fromUtf8(outNodes))
   
   
-  def setFileTypes(self):
-    rows = utilsPipe.getFileTypes()
-    self.comboFileType.clear()  
-    if(rows):
-      for row in rows:
-        self.comboFileType.addItem(_fromUtf8(row['type']))
-      return(1)
-    return(0)
+  #def setFileTypes(self):
+    #rows = utilsPipe.getFileTypes()
+    #self.comboFileType.clear()  
+    #if(rows):
+      #for row in rows:
+        #self.comboFileType.addItem(_fromUtf8(row['type']))
+      #return(1)
+    #return(0)
   
   
   def setAssTypes(self):
