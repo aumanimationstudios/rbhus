@@ -225,14 +225,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     slineedit = self.comboStageType.lineEdit()
-    slineedit.setReadOnly(False)
+    slineedit.setReadOnly(True)
     self.comboStageType.editTextChanged.connect(self.listAssets)
     self.comboStageType.view().activated.connect(self.pressedStageType)
     #self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetStage.clicked.connect(self.setStageTypes)
     
     nlineedit = self.comboNodeType.lineEdit()
-    nlineedit.setReadOnly(False)
+    nlineedit.setReadOnly(True)
     self.comboNodeType.editTextChanged.connect(self.listAssets)
     self.comboNodeType.view().activated.connect(self.pressedNodeType)
     #self.comboNodeType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -240,7 +240,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     seqlineedit = self.comboSequence.lineEdit()
-    seqlineedit.setReadOnly(False)
+    seqlineedit.setReadOnly(True)
     self.comboSequence.editTextChanged.connect(self.setSeqSce)
     self.comboSequence.view().activated.connect(self.pressedSequence)
     #self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -248,7 +248,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     scelineedit = self.comboScene.lineEdit()
-    scelineedit.setReadOnly(False)
+    scelineedit.setReadOnly(True)
     self.comboScene.editTextChanged.connect(self.listAssets)
     self.comboScene.view().activated.connect(self.pressedScene)
     #self.comboScene.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
@@ -256,7 +256,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     
     filelineedit = self.comboFileType.lineEdit()
-    filelineedit.setReadOnly(False)
+    filelineedit.setReadOnly(True)
     self.comboFileType.editTextChanged.connect(self.listAssets)
     self.comboFileType.view().activated.connect(self.pressedScene)
     #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)

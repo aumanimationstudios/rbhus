@@ -140,7 +140,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         gridLayout_2.addWidget(checkBox, 0, 0, 1, 1)
         
         comboBox.setEditable(True)
-        comboBox.lineEdit().setEnabled(False)
+        comboBox.lineEdit().setReadOnly(True)
         comboBox.setModel(model)
         if(self.inDict[x]):
           comboBox.setEditText(",".join(self.inDict[x]))
