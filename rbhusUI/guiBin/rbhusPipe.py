@@ -1138,14 +1138,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         
         
     
-    #self.tableWidget.setSortingEnabled(True)
+    #
     
     #self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     self.tableWidget.resizeColumnsToContents()
     #self.timerAssetsRefresh.stop()
     self.loader.hide()
-    
+    self.tableWidget.setSortingEnabled(True)
   
   
   def rbhusPipeSeqSceCreate(self):
