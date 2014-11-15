@@ -37,7 +37,10 @@
     <item row="13" column="1" colspan="2">
      <widget class="QLineEdit" name="lineEditTags">
       <property name="toolTip">
-       <string>group owner of the project directory</string>
+       <string>comma seperated list of tags</string>
+      </property>
+      <property name="statusTip">
+       <string>comma seperated list of tags</string>
       </property>
       <property name="text">
        <string>default</string>
@@ -329,6 +332,12 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>comma seperated list of asset names</string>
+      </property>
+      <property name="statusTip">
+       <string>comma seperated list of asset names</string>
       </property>
      </widget>
     </item>

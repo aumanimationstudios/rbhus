@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeAssetCreateMod.ui'
 #
-# Created: Fri Nov 14 10:42:56 2014
+# Created: Sat Nov 15 10:35:27 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -216,7 +216,8 @@ class Ui_MainWindow(object):
     MainWindow.setWindowTitle(_translate("MainWindow", "Create Asset", None))
     self.labelDirectory.setWhatsThis(_translate("MainWindow", "directory to store the output data from file. eg : rendered output of lighting files.", None))
     self.labelDirectory.setText(_translate("MainWindow", "directory", None))
-    self.lineEditTags.setToolTip(_translate("MainWindow", "group owner of the project directory", None))
+    self.lineEditTags.setToolTip(_translate("MainWindow", "comma seperated list of tags", None))
+    self.lineEditTags.setStatusTip(_translate("MainWindow", "comma seperated list of tags", None))
     self.lineEditTags.setText(_translate("MainWindow", "default", None))
     self.pushUsers.setText(_translate("MainWindow", "select", None))
     self.lineEditDesc.setToolTip(_translate("MainWindow", "group owner of the project directory", None))
@@ -240,5 +241,7 @@ class Ui_MainWindow(object):
     self.labelDesc.setText(_translate("MainWindow", "description", None))
     self.labelScene.setText(_translate("MainWindow", "scene", None))
     self.labelFRange.setText(_translate("MainWindow", "fRange", None))
+    self.lineEditAssName.setToolTip(_translate("MainWindow", "comma seperated list of asset names", None))
+    self.lineEditAssName.setStatusTip(_translate("MainWindow", "comma seperated list of asset names", None))
     self.pushTags.setText(_translate("MainWindow", "select", None))
 

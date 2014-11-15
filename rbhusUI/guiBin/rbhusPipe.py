@@ -130,7 +130,7 @@ class Worker(QtCore.QObject):
     self.asses = ()
     self.absdict = {}
     try:
-      self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
+      self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],limit=10)
       if(self.asses):
         for x in range(0,len(self.asses)):
           self.absdict[self.asses[x]['path']] = utilsPipe.getAbsPath(self.asses[x]['path'])
@@ -480,10 +480,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     rowstask=[]
     rowsSelected = []
     rowsModel = self.tableWidget.selectionModel().selectedRows()
-    
+    print(rowsModel)
     for idx in rowsModel:
       rowsSelected.append(idx.row())
+    print(rowsSelected)
     for row in rowsSelected:
+      print(self.tableWidget.items())
       rowstask.append(str(self.tableWidget.item(row,0).text()))
     return(rowstask)
   
@@ -1113,10 +1115,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         itemcn.setText(str(colNames[cn]))
         self.tableWidget.setHorizontalHeaderItem(cn, itemcn)
       for x in range(0,len(assesList)):
-        item = QtGui.QTableWidgetItem()
-        item.setText(str(assesList[x]))
+        #item = QtGui.QTableWidgetItem()
+        item = QtGui.QLabel()
+        item.setText('<font color="red">'+ str(assesList[x]) +'</font>')
+        #item.setReadOnly(True)
+        item.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+        #item.setFixedWidth(len(str(assesList[x])))
+        item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         assAbsPath = assesdict[assesList[x]]
-        self.tableWidget.setItem(x,0,item)
+        self.tableWidget.setCellWidget(x,0,item)
         
         if(assesList[x] in selAsses):
           self.tableWidget.selectRow(x)
@@ -1141,11 +1148,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #
     
     #self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
-    self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+    
     self.tableWidget.resizeColumnsToContents()
     #self.timerAssetsRefresh.stop()
     self.loader.hide()
     self.tableWidget.setSortingEnabled(True)
+    self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
   
   
   def rbhusPipeSeqSceCreate(self):

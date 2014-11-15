@@ -626,10 +626,13 @@ def getAssDetails(assId="",assPath=""):
     return(0)
   
 
-def getProjAsses(projName):
+def getProjAsses(projName,limit=None):
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"'", dictionary=True)
+    if(not limit):
+      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"'", dictionary=True)
+    else:
+      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' limit "+ str(limit), dictionary=True)
     return(rows)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
@@ -646,7 +649,23 @@ def getUsers():
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   
-
+def assPathColorCoded(assDetDict):
+  assPath = str(assDetDict['projName']) +"#"+ "indigo"
+  if(not re.search("^default",str(assDetDict['assetType']))):
+    assPath = assPath +":"+ str(assDetDict['assetType']) +"#"+ "saddlebrown"
+  if(not re.search("^default",str(assDetDict['sequenceName']))):
+    assPath = assPath +":"+ str(assDetDict['sequenceName']) +"#"+ "green"
+  if(not re.search("^default",str(assDetDict['sceneName']))):
+    assPath = assPath +":"+ str(assDetDict['sceneName']) +"#"+ "olive"
+  if(not re.search("^default",str(assDetDict['assName']))):
+    assPath = assPath +":"+ str(assDetDict['assName']) +"#"+ "magenta"
+  if(not re.search("^default",str(assDetDict['stageType']))):
+    assPath = assPath +":"+ str(assDetDict['stageType']) +"#"+ "darkblue"
+  if(not re.search("^default",str(assDetDict['nodeType']))):
+    assPath = assPath +":"+ str(assDetDict['nodeType']) +"#"+ "blue"
+  if(not re.search("^default",str(assDetDict['fileType']))):
+    assPath = assPath +":"+ str(assDetDict['fileType']) +"#"+ "darkviolet"
+  return(assPath)
 
 def assRegister(assDetDict):
   assPath = str(assDetDict['projName'])
@@ -670,9 +689,8 @@ def assRegister(assDetDict):
       if(not re.search("^default",str(assDetDict['sceneName']))):
         assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
       else:
-	assPath = assPath +":"+ str(assDetDict['sequenceName'])
-#        utilsPipeLogger.debug("if sequenceName is given sceneName cannot be a default")
-#       return(0)
+        assPath = assPath +":"+ str(assDetDict['sequenceName'])
+
     
     if(assDetDict.has_key('assName')):
       assPath = assPath +":" + str(assDetDict['assName'])
