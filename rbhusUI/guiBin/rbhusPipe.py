@@ -258,7 +258,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     filelineedit = self.comboFileType.lineEdit()
     filelineedit.setReadOnly(True)
     self.comboFileType.editTextChanged.connect(self.listAssets)
-    self.comboFileType.view().activated.connect(self.pressedScene)
+    self.comboFileType.view().activated.connect(self.pressedFileType)
     #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetFile.clicked.connect(self.setFileTypes)
     
@@ -385,6 +385,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.delAss()
     if(action == assCopyNew):
       self.copyNewAss()
+    if(action == assRender):
+      self.renderAss()
+      
+      
+    
+  def renderAss(self):
+    listAsses = self.selectedAsses()
+    print(listAsses)
+    
     
       
       
@@ -393,20 +402,20 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   def copyPathToClip(self):
-    listAsses = self.tableWidget.selectedItems()
+    listAsses = self.selectedAsses()
     print(listAsses)
     if(listAsses):
-      x = str(listAsses[0].text())
+      x = listAsses[0]
       abspath =  utilsPipe.getAbsPath(x)
       pyperclip.copy(abspath)
       
   
   def openFileAss(self):
-    listAsses = self.tableWidget.selectedItems()
+    listAsses = self.selectedAsses()
     print(listAsses)
     fcmd = fileSelectCmd
     if(listAsses):
-      x = str(listAsses[0].text())
+      x = listAsses[0]
       fcmd = fcmd +" "+ utilsPipe.getAbsPath(x)
       print(fcmd)
       p = QtCore.QProcess(parent=self.form)
@@ -948,10 +957,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     colNames = ['asset','assigned','preview']
     assesList = []
     assesNames = {}
-    self.tableWidget.clear()
+    #self.tableWidget.clear()
     self.tableWidget.clearContents()
-    #self.tableWidget.setSortingEnabled(False)
-    self.tableWidget.resizeColumnsToContents()
+    self.tableWidget.setSortingEnabled(False)
+    #self.tableWidget.resizeColumnsToContents()
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
     
     asses = asslist
@@ -1100,9 +1109,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.tableWidget.setColumnCount(len(colNames))
       self.tableWidget.setRowCount(len(assesList))
       for cn in range(0,len(colNames)):
-        item = QtGui.QTableWidgetItem()
-        item.setText(str(colNames[cn]))
-        self.tableWidget.setHorizontalHeaderItem(cn, item)
+        itemcn = QtGui.QTableWidgetItem()
+        itemcn.setText(str(colNames[cn]))
+        self.tableWidget.setHorizontalHeaderItem(cn, itemcn)
       for x in range(0,len(assesList)):
         item = QtGui.QTableWidgetItem()
         item.setText(str(assesList[x]))

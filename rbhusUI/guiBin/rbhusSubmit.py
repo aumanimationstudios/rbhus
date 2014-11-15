@@ -280,8 +280,10 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         if(x['fileType'] == str(self.comboFileType.currentText())):
           self.comboRenderer.addItem(_fromUtf8(x['renderer']))
           for y in self.fileTypeDefs:
+            print(str(y['fileType']) +" : "+ str(self.comboFileType.currentText()))
             if(str(y['fileType']) == str(self.comboFileType.currentText())):
-              if(str(y['defRenderer']) == str(x)):
+              print(str(y['defRenderer']) +" : "+ str(x['renderer']))
+              if(str(y['defRenderer']) == str(x['renderer'])):
                 setIndx = indx
           indx = indx + 1
         self.comboRenderer.setCurrentIndex(setIndx)
@@ -300,7 +302,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
           self.comboImageType.addItem(_fromUtf8(x['imageType']))
           for y in self.fileTypeDefs:
             if(str(y['fileType']) == str(self.comboFileType.currentText())):
-              if(str(y['defImageType']) == str(x)):
+              if(str(y['defImageType']) == str(x["imageType"])):
                 setIndx = indx
           indx = indx + 1
         self.comboImageType.setCurrentIndex(setIndx)
