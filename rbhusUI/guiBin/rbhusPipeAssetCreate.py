@@ -126,8 +126,8 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     if(self.lineEditAssName.text()):
       assesNames = str(self.lineEditAssName.text()).split(",")
       for aN in assesNames:
-        if(aN)
-        assdict['assName'] = aN
+        if(aN):
+          assdict['assName'] = aN
         for x in ntypes:
           assdict['nodeType'] = x.split("#")[0]
           self.centralwidget.setEnabled(False)
