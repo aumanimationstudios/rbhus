@@ -658,9 +658,9 @@ def assPathColorCoded(assDetDict):
   if(not re.search("^default",str(assDetDict['sceneName']))):
     assPath = assPath +":"+ str(assDetDict['sceneName']) +"#"+ "olive"
   if(not re.search("^default",str(assDetDict['assName']))):
-    assPath = assPath +":"+ str(assDetDict['assName']) +"#"+ "magenta"
+    assPath = assPath +":"+ str(assDetDict['assName']) +"#"+ "maroon"
   if(not re.search("^default",str(assDetDict['stageType']))):
-    assPath = assPath +":"+ str(assDetDict['stageType']) +"#"+ "darkblue"
+    assPath = assPath +":"+ str(assDetDict['stageType']) +"#"+ "dimgray"
   if(not re.search("^default",str(assDetDict['nodeType']))):
     assPath = assPath +":"+ str(assDetDict['nodeType']) +"#"+ "blue"
   if(not re.search("^default",str(assDetDict['fileType']))):

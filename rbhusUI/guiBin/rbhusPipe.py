@@ -130,7 +130,7 @@ class Worker(QtCore.QObject):
     self.asses = ()
     self.absdict = {}
     try:
-      self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],limit=10)
+      self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
       if(self.asses):
         for x in range(0,len(self.asses)):
           self.absdict[self.asses[x]['path']] = utilsPipe.getAbsPath(self.asses[x]['path'])
@@ -307,6 +307,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.checkFilterFunc()
     self.centralwidget.resizeEvent  = self.resizeEvent
     self.tableWidget.resizeEvent = self.resizeEvent
+    self.tableWidget.verticalScrollBar().valueChanged.connect(self.tableWidgetResizeContents)
     #self.updateAll()
     #self.listAssetsTimed()
     
@@ -320,6 +321,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.loader.resizeEvent(event)
     self.tableWidget.resizeColumnsToContents()
     
+  
+  def tableWidgetResizeContents(self):
+    self.tableWidget.resizeColumnsToContents()
   
   def comboStageTypeEvent(self,event):
     print(event)
@@ -448,9 +452,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       
     
   def openFolderAss(self):
-    listAsses = self.tableWidget.selectedItems()
+    listAsses = self.selectedAsses()
     if(listAsses): # and (len(listAsses) == 1)
-      x = str(listAsses[0].text())
+      x = str(listAsses[0])
       print(x)
       p = utilsPipe.getAbsPath(x)
       if(os.path.exists(p)):
@@ -476,28 +480,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   
-  def selectedAsses(self):
-    rowstask=[]
-    rowsSelected = []
-    rowsModel = self.tableWidget.selectionModel().selectedRows()
-    print(rowsModel)
-    for idx in rowsModel:
-      rowsSelected.append(idx.row())
-    print(rowsSelected)
-    for row in rowsSelected:
-      print(self.tableWidget.items())
-      rowstask.append(str(self.tableWidget.item(row,0).text()))
-    return(rowstask)
+  
   
   
   def delAss(self):
     wtf = self.messageBox()
     if(wtf):
-      listAsses = self.tableWidget.selectedItems()
+      listAsses = self.selectedAsses()
       
       for x in listAsses:
-        if(str(x.text())):
-          utilsPipe.assDelete(assPath=str(x.text()))
+        print(x)
+        if(str(x)):
+          utilsPipe.assDelete(assPath=str(x))
         
       self.listAssets()
   
@@ -945,6 +939,24 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def tableWidgetScrollEvent(self,event):
     self.resizeColumnsToContents()
   
+  
+  def selectedAsses(self):
+    rowstask=[]
+    rowsSelected = []
+    rowsModel = self.tableWidget.selectionModel().selectedRows()
+    #print("1 : "+ str(rowsModel))
+    for idx in rowsModel:
+      #print(dir(idx.model()))
+      rowsSelected.append(idx.row())
+    print(rowsSelected)
+    for row in rowsSelected:
+      
+      doc = QtGui.QTextDocument()
+      doc.setHtml(str(self.tableWidget.cellWidget(row,0).text()))
+      text = doc.toPlainText()
+      #print("2 : "+ text)
+      rowstask.append(str(text))
+    return(rowstask)
 
 
 
@@ -959,6 +971,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     colNames = ['asset','assigned','preview']
     assesList = []
     assesNames = {}
+    assesColor = {}
     #self.tableWidget.clear()
     self.tableWidget.clearContents()
     self.tableWidget.setSortingEnabled(False)
@@ -1056,10 +1069,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             else:
               assesList.append(asses[x]['path'])
               assesNames[asses[x]['path']] = asses[x]
+              assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
             
             if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
               assesList.append(asses[x]['path'])
               assesNames[asses[x]['path']] = asses[x]
+              assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
 
         elif(self.radioAllAss.isChecked()):
           
@@ -1103,9 +1118,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           else:
             assesList.append(asses[x]['path'])  
             assesNames[asses[x]['path']] = asses[x]
+            assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
           if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
             assesList.append(asses[x]['path'])
             assesNames[asses[x]['path']] = asses[x]
+            assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
           
     if(assesList):
       self.tableWidget.setColumnCount(len(colNames))
@@ -1117,9 +1134,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       for x in range(0,len(assesList)):
         #item = QtGui.QTableWidgetItem()
         item = QtGui.QLabel()
-        item.setText('<font color="red">'+ str(assesList[x]) +'</font>')
+        textAss = '<font color="'+ str(assesColor[assesList[x]].split(":")[0]).split("#")[1] +'">'+ (assesColor[assesList[x]].split(":")[0]).split("#")[0] +'</font>'
+        if(len(assesColor[assesList[x]].split(":")) > 1):
+          for fc in assesColor[assesList[x]].split(":")[1:]:
+            textAss = textAss + ':' +'<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>'
+        
+        
+        item.setText(textAss)
         #item.setReadOnly(True)
         item.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+        item.setTextFormat(QtCore.Qt.RichText)
         #item.setFixedWidth(len(str(assesList[x])))
         item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         assAbsPath = assesdict[assesList[x]]
@@ -1137,7 +1161,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         else:
           previewName = assesNames[assesList[x]]['assName']
         if(os.path.exists(assAbsPath +"/"+ previewName +".png")):
-          print(assAbsPath +"/"+ previewName +".png")
+          #print(assAbsPath +"/"+ previewName +".png")
           prevItem = ImageWidget(assAbsPath +"/"+ previewName +".png",self.tableWidget)
           prevItem.setToolTip('<img src="'+ assAbsPath +"/"+ previewName +".png"+'" height="192"/>')
           self.tableWidget.setCellWidget(x,2,prevItem)

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod.ui'
 #
-# Created: Wed Nov 12 23:03:21 2014
+# Created: Sat Nov 15 22:17:22 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -63,17 +63,6 @@ class Ui_MainWindow(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
     self.tableWidget.setSizePolicy(sizePolicy)
-    palette = QtGui.QPalette()
-    brush = QtGui.QBrush(QtGui.QColor(220, 220, 220))
-    brush.setStyle(QtCore.Qt.SolidPattern)
-    palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-    brush = QtGui.QBrush(QtGui.QColor(220, 220, 220))
-    brush.setStyle(QtCore.Qt.SolidPattern)
-    palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-    brush = QtGui.QBrush(QtGui.QColor(244, 244, 244))
-    brush.setStyle(QtCore.Qt.SolidPattern)
-    palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-    self.tableWidget.setPalette(palette)
     self.tableWidget.setAutoFillBackground(False)
     self.tableWidget.setFrameShape(QtGui.QFrame.StyledPanel)
     self.tableWidget.setFrameShadow(QtGui.QFrame.Raised)
