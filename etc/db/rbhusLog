@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.40, for Linux (x86_64)
 --
 -- Host: blues2    Database: rbhusLog
 -- ------------------------------------------------------
@@ -27,6 +27,7 @@ CREATE TABLE `hostLog` (
   `date` date NOT NULL,
   `timeOnRender` int(128) NOT NULL,
   `totalJobs` int(128) NOT NULL DEFAULT '1',
+  `avgEfficiency` int(3) NOT NULL DEFAULT '100',
   PRIMARY KEY (`ip`,`date`),
   KEY `index1` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -46,6 +47,7 @@ CREATE TABLE `tasksLog` (
   `fileName` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
   `timeSpentOnResource` int(128) NOT NULL DEFAULT '0' COMMENT 'in SECONDS only\n',
   `ip` varchar(92) COLLATE utf8_unicode_ci NOT NULL,
+  `avgEfficiency` int(3) NOT NULL DEFAULT '100',
   PRIMARY KEY (`sha256`,`date`,`ip`),
   KEY `index1` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Dont care about the output in this logdb\n';
@@ -60,4 +62,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-24 11:12:11
+-- Dump completed on 2014-11-16  6:23:53

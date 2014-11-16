@@ -1,0 +1,151 @@
+-- MySQL dump 10.13  Distrib 5.5.40, for Linux (x86_64)
+--
+-- Host: blues2    Database: hosts
+-- ------------------------------------------------------
+-- Server version	5.1.62-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `bootOptions`
+--
+
+DROP TABLE IF EXISTS `bootOptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bootOptions` (
+  `name` varchar(128) NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `clonedb`
+--
+
+DROP TABLE IF EXISTS `clonedb`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clonedb` (
+  `ip` varchar(92) NOT NULL,
+  `cloneServer` varchar(128) NOT NULL DEFAULT 'cloneMaster',
+  `cloneDir` varchar(1024) NOT NULL DEFAULT '/crap/gentooOnesis/',
+  `cloneRootDir` varchar(1024) NOT NULL DEFAULT '/cloneMaster',
+  `tftpServer` varchar(128) NOT NULL DEFAULT 'tftpServer',
+  `updateServer` varchar(128) NOT NULL DEFAULT 'cloneMaster',
+  `updateDir` varchar(1024) NOT NULL DEFAULT '/crap/gentooUpdate',
+  `cloneType` int(1) NOT NULL DEFAULT '0' COMMENT '0 - disable\n1 - clone (full linux)\n2 - clone (with windows dual boot)\n\n\n\n',
+  `cloneDisk` varchar(45) NOT NULL DEFAULT '/dev/sda',
+  `grubInstall` varchar(45) NOT NULL DEFAULT '/dev/sda',
+  `saveCrap` int(1) NOT NULL DEFAULT '0' COMMENT '0 - do not save crap dir\n1 - save the crap dir\n',
+  `formatType` varchar(45) NOT NULL DEFAULT 'fdisk',
+  `colorProfileDir` varchar(1024) NOT NULL DEFAULT '/projdump/pythonTestWindoze.DONOTDELETE/COLORMANAGEMENT/' COMMENT 'put the base path of the monitor color profiles\n$colorProfileDir/$monitorUID/\nget $monitorUID dynamically',
+  `cloneStatus` int(1) NOT NULL DEFAULT '0' COMMENT '0 - initiate, 1 - pending, 2 - running , 3 - done , 4 - fail',
+  `bootDefault` varchar(128) NOT NULL DEFAULT 'linux',
+  `restartFlag` int(1) NOT NULL DEFAULT '0' COMMENT '0 - immidiate, 1 - next restart',
+  `tftpDir` varchar(1024) NOT NULL DEFAULT '/srv/tftp/tftpboot/pxelinux.cfg/',
+  `clone` int(1) NOT NULL DEFAULT '0' COMMENT '0 - disable , 1 - clone , 2 - grub update, 3 - netboot\n',
+  PRIMARY KEY (`ip`),
+  UNIQUE KEY `ip_UNIQUE` (`ip`),
+  KEY `fk_clonedb_2_idx` (`formatType`),
+  KEY `fk_clonedb_3_idx` (`bootDefault`),
+  CONSTRAINT `fk_clonedb_1` FOREIGN KEY (`ip`) REFERENCES `main` (`ip`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_clonedb_2` FOREIGN KEY (`formatType`) REFERENCES `formatType` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_clonedb_3` FOREIGN KEY (`bootDefault`) REFERENCES `bootOptions` (`name`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `formatType`
+--
+
+DROP TABLE IF EXISTS `formatType`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `formatType` (
+  `type` varchar(32) NOT NULL DEFAULT 'gdisk' COMMENT 'gdisk - use gdisk\nfdisk - use fdisk \n',
+  `scriptPath` varchar(1024) NOT NULL DEFAULT '/mnt/cloneMaster/gdisk/init',
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `main`
+--
+
+DROP TABLE IF EXISTS `main`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `main` (
+  `macc` varchar(128) NOT NULL DEFAULT '0',
+  `ip` varchar(92) NOT NULL DEFAULT '0',
+  `name` varchar(256) NOT NULL DEFAULT '0',
+  `alias` varchar(2048) NOT NULL DEFAULT '0',
+  `domain` varchar(128) NOT NULL DEFAULT 'bluepixels.in',
+  PRIMARY KEY (`macc`,`ip`),
+  UNIQUE KEY `ip_UNIQUE` (`ip`),
+  UNIQUE KEY `macc_UNIQUE` (`macc`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `partInfo`
+--
+
+DROP TABLE IF EXISTS `partInfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `partInfo` (
+  `ip` varchar(92) NOT NULL,
+  `device` varchar(45) NOT NULL,
+  `partNumber` int(2) NOT NULL,
+  `partSize` varchar(45) NOT NULL DEFAULT 'default',
+  `partType` int(1) NOT NULL DEFAULT '0' COMMENT '0 - none\n1 - extended\n2 - primary\n\n\n',
+  `bootFlag` int(1) NOT NULL DEFAULT '0',
+  `fsType` varchar(45) NOT NULL DEFAULT 'ext4',
+  `label` varchar(45) NOT NULL DEFAULT 'default',
+  `formatFlag` int(1) NOT NULL DEFAULT '0' COMMENT '0 - do not format\n1 - format\n',
+  `mountDir` varchar(45) NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`ip`,`device`,`partNumber`),
+  CONSTRAINT `fk_partInfo_1` FOREIGN KEY (`ip`) REFERENCES `main` (`ip`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `storageDevice`
+--
+
+DROP TABLE IF EXISTS `storageDevice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `storageDevice` (
+  `ip` varchar(92) NOT NULL,
+  `device` varchar(45) NOT NULL,
+  `formatType` varchar(32) NOT NULL DEFAULT 'gdisk',
+  PRIMARY KEY (`ip`,`device`),
+  KEY `fk_storageDevice_1_idx` (`ip`),
+  KEY `fk_storageDevice_2_idx` (`formatType`),
+  CONSTRAINT `fk_storageDevice_1` FOREIGN KEY (`ip`) REFERENCES `main` (`ip`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_storageDevice_2` FOREIGN KEY (`formatType`) REFERENCES `formatType` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-11-16  6:23:42

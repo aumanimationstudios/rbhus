@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.40, for Linux (x86_64)
 --
 -- Host: blues2    Database: rbhus
 -- ------------------------------------------------------
@@ -40,6 +40,19 @@ DROP TABLE IF EXISTS `admins`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admins` (
   `user` varchar(128) NOT NULL DEFAULT 'shrinidhi',
+  PRIMARY KEY (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `adminsSys`
+--
+
+DROP TABLE IF EXISTS `adminsSys`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `adminsSys` (
+  `user` varchar(128) NOT NULL,
   PRIMARY KEY (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -120,8 +133,9 @@ CREATE TABLE `frames` (
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0 - unassigned\n1 - assigned\n2 - pending (Intermidiate state before the client picks it up for running)\n3 - running\n4 - done\n5 - failed\n6 - hold\n7 - autohold\n9 - killed',
   `batchId` varchar(100) NOT NULL DEFAULT 'default',
   `batchStatus` int(2) DEFAULT '0',
-  `wallTime` int(32) DEFAULT NULL,
-  `cpuTime` int(32) DEFAULT NULL,
+  `wallTime` int(32) NOT NULL DEFAULT '0',
+  `cpuTime` int(32) NOT NULL DEFAULT '0',
+  `efficiency` int(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`frameId`),
   KEY `fs_frames` (`id`),
   CONSTRAINT `fk_frames` FOREIGN KEY (`id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -238,6 +252,25 @@ CREATE TABLE `hostStates` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `hostSystem`
+--
+
+DROP TABLE IF EXISTS `hostSystem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hostSystem` (
+  `hostName` varchar(128) NOT NULL,
+  `ip` varchar(92) NOT NULL,
+  `systemUpdateStatus` int(1) NOT NULL DEFAULT '0' COMMENT '0 - dactivated, 1 - scheduled , 2 - running , 3 - failed, 4 - done',
+  `masterSystem` varchar(128) NOT NULL DEFAULT 'cloneMaster',
+  `eTimeUpdate` datetime DEFAULT NULL,
+  `sTimeUpdate` datetime DEFAULT NULL,
+  `os` varchar(256) NOT NULL DEFAULT 'linux',
+  PRIMARY KEY (`hostName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `imageTypes`
 --
 
@@ -247,7 +280,7 @@ DROP TABLE IF EXISTS `imageTypes`;
 CREATE TABLE `imageTypes` (
   `fileType` varchar(128) NOT NULL,
   `imageType` varchar(45) NOT NULL DEFAULT 'default',
-  `extention` varchar(5) NOT NULL,
+  `extention` varchar(10) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`fileType`,`imageType`),
   KEY `fk_imageTypes_1_idx` (`fileType`),
   CONSTRAINT `fk_imageTypes_1` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -368,7 +401,7 @@ CREATE TABLE `tasks` (
   KEY `fk_tasks_2` (`fileType`),
   CONSTRAINT `fk_tasks_1` FOREIGN KEY (`projId`) REFERENCES `proj` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_2` FOREIGN KEY (`fileType`) REFERENCES `fileType` (`fileType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1694 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
+) ENGINE=InnoDB AUTO_INCREMENT=2929 DEFAULT CHARSET=utf8 COMMENT='The main task table ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -396,4 +429,4 @@ CREATE TABLE `tasksLog` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-24 11:12:03
+-- Dump completed on 2014-11-16  6:23:14
