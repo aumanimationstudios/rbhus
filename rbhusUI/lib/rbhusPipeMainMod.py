@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod.ui'
 #
-# Created: Sat Nov 15 22:17:22 2014
+# Created: Sun Nov 16 21:33:53 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -365,6 +365,9 @@ class Ui_MainWindow(object):
     self.menuDebug = QtGui.QMenu(self.menuBar)
     self.menuDebug.setObjectName(_fromUtf8("menuDebug"))
     MainWindow.setMenuBar(self.menuBar)
+    self.statusBar = QtGui.QStatusBar(MainWindow)
+    self.statusBar.setObjectName(_fromUtf8("statusBar"))
+    MainWindow.setStatusBar(self.statusBar)
     self.actionMine = QtGui.QAction(MainWindow)
     self.actionMine.setObjectName(_fromUtf8("actionMine"))
     self.actionAll = QtGui.QAction(MainWindow)

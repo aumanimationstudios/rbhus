@@ -150,6 +150,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
     self.form = Form
+
     self.authL = authPipe.login()
     self.rbhusAssetEditCmdMod = ""
     self.username = None
@@ -160,7 +161,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.absPathList = {}
     self.getAssesLock = False
     self.hf = None
+    self.oldasses = None
+    self.oldassesdict = None
     self.center()
+    self.firstTime = True
+    self.listFirstTime = False
     try:
       self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
     except:
@@ -220,7 +225,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionNew_seq_scn.triggered.connect(self.rbhusPipeSeqSceCreate)
     self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
     self.filterRefresh.clicked.connect(self.resetFilterDefault)
-    self.assRefresh.clicked.connect(self.listAssets)
+    self.assRefresh.clicked.connect(self.assRefreshPressed)
     
     
     
@@ -304,13 +309,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.timer.timeout.connect(self.listAssets)
     self.checkRefresh.clicked.connect(self.timeCheck)
     
+
+
     self.checkFilterFunc()
     self.centralwidget.resizeEvent  = self.resizeEvent
     self.tableWidget.resizeEvent = self.resizeEvent
     self.tableWidget.verticalScrollBar().valueChanged.connect(self.tableWidgetResizeContents)
     #self.updateAll()
-    #self.listAssetsTimed()
-    
+
+    self.listAssetsTimed()
+    self.timerAss = QtCore.QTimer()
+    self.timerAss.timeout.connect(self.listAssetsTimed)
+    self.timerAss.start(30000)
   
   
   def setSeqSce(self):
@@ -322,6 +332,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.tableWidget.resizeColumnsToContents()
     
   
+  def assRefreshPressed(self):
+    self.firstTime = True
+    self.listAssetsTimed()
+
   def tableWidgetResizeContents(self):
     self.tableWidget.resizeColumnsToContents()
   
@@ -329,7 +343,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     print(event)
   
   def listAssets(self):
-    self.listAssetsTimed()
+    # self.listAssetsTimed()
+    self.listAssets_thread()
     
     #print("list assets called")
     #if(self.timerAssetsRefresh.isActive()):
@@ -914,6 +929,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     if(self.hf):
       if(self.hf.isRunning()):
+        if(self.firstTime):
+          self.resetFirstTime()
         return(0)
     #print("in get asses timed 1")
     
@@ -922,8 +939,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #print("in get asses timed 2")  
     assget = Worker()
     assget.moveToThread(self.hf)
-    assget.dataReady.connect(self.listAssets_thread)
-    assget.dataPending.connect(self.loader.show)
+    assget.dataReady.connect(self.setAssesData)
+    if(self.firstTime):
+      self.firstTime = False
+      assget.dataPending.connect(self.resetFirstTime)
+      
     
     #print("in get asses timed 3")
     self.hf.setTerminationEnabled(True)
@@ -934,8 +954,20 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     #print("in get asses timed 4")
     
-  
-  
+  def setAssesData(self,asslist,assdict):
+    self.oldasses = asslist
+    self.oldassesdict = assdict
+    if(self.listFirstTime):
+      self.listFirstTime = False
+      self.listAssets_thread()
+      # self.loader.hide()
+      
+    # self.listAssets_thread()
+  def resetFirstTime(self):
+    self.listFirstTime = True
+    # self.loader.show()
+    
+
   def tableWidgetScrollEvent(self,event):
     self.resizeColumnsToContents()
   
@@ -961,11 +993,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   
-  def listAssets_thread(self,asslist,assdict):
+  def listAssets_thread(self,asslist=None,assdict=None):
     #print(str((time.time() - self.listAssTimeOld)))
     #if((time.time() - self.listAssTimeOld) < 1.0):
       #return(0)
     #self.listAssTimeOld = time.time()
+    # self.loader.show()
     print("list ass thread called")
     selAsses = self.selectedAsses()
     colNames = ['asset','assigned','preview']
@@ -977,9 +1010,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.tableWidget.setSortingEnabled(False)
     #self.tableWidget.resizeColumnsToContents()
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-    
-    asses = asslist
-    assesdict = assdict
+    if(asslist):
+      asses = asslist
+      self.oldasses = asses
+    else:
+      asses = self.oldasses
+
+    if(asslist):
+      assesdict = assdict
+      self.oldassesdict = assesdict
+    else:
+      assesdict = self.oldassesdict
+
     searchItems = str(self.lineEditSearch.text())
     print("search : "+ str(searchItems))
     if(asses):
@@ -1123,7 +1165,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             assesList.append(asses[x]['path'])
             assesNames[asses[x]['path']] = asses[x]
             assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
-          
+    # assesList.sort()      
     if(assesList):
       self.tableWidget.setColumnCount(len(colNames))
       self.tableWidget.setRowCount(len(assesList))
@@ -1148,6 +1190,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         assAbsPath = assesdict[assesList[x]]
         self.tableWidget.setCellWidget(x,0,item)
+        
+
         
         if(assesList[x] in selAsses):
           self.tableWidget.selectRow(x)
@@ -1174,8 +1218,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
     
     self.tableWidget.resizeColumnsToContents()
+    self.form.statusBar().showMessage("total : "+ str(len(assesList)))
     #self.timerAssetsRefresh.stop()
-    self.loader.hide()
+    # self.loader.hide()
     self.tableWidget.setSortingEnabled(True)
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
   

@@ -669,6 +669,7 @@
    <addaction name="menuAdmin"/>
    <addaction name="menuDebug"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionMine">
    <property name="text">
     <string>mine</string>

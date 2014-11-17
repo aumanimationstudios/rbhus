@@ -630,9 +630,9 @@ def getProjAsses(projName,limit=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(not limit):
-      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"'", dictionary=True)
+      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' order by assName,assetType", dictionary=True)
     else:
-      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' limit "+ str(limit), dictionary=True)
+      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' limit "+ str(limit) +" order by assName,assetType", dictionary=True)
     return(rows)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
