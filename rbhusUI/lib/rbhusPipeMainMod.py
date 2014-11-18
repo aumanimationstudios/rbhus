@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod.ui'
 #
-# Created: Sun Nov 16 21:33:53 2014
+# Created: Tue Nov 18 06:12:15 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -76,8 +76,9 @@ class Ui_MainWindow(object):
     self.tableWidget.setColumnCount(0)
     self.tableWidget.setRowCount(0)
     self.tableWidget.horizontalHeader().setCascadingSectionResizes(True)
+    self.tableWidget.horizontalHeader().setMinimumSectionSize(2)
     self.tableWidget.horizontalHeader().setSortIndicatorShown(True)
-    self.tableWidget.horizontalHeader().setStretchLastSection(True)
+    self.tableWidget.horizontalHeader().setStretchLastSection(False)
     self.tableWidget.verticalHeader().setVisible(False)
     self.tableWidget.verticalHeader().setCascadingSectionResizes(True)
     self.tableWidget.verticalHeader().setDefaultSectionSize(32)

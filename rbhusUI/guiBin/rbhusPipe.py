@@ -126,7 +126,7 @@ class Worker(QtCore.QObject):
     
   def getAsses(self):
     self.dataPending.emit()
-    print("in get asses")
+    # print("in get asses")
     self.asses = ()
     self.absdict = {}
     try:
@@ -138,7 +138,7 @@ class Worker(QtCore.QObject):
       print(str(sys.exc_info()))
     
     self.finished.emit()
-    print("out get asses")
+    # print("out get asses")
     self.dataReady.emit(self.asses,self.absdict)
     
     
@@ -166,6 +166,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.center()
     self.firstTime = True
     self.listFirstTime = False
+
+    self.menuMine = QtGui.QMenu()
+    self.mineCreatedAction = QtGui.QAction("created",self.menuMine,checkable=True)
+    self.mineCreatedAction.setChecked(True)
+    self.mineAssignedAction = QtGui.QAction("assigned",self.menuMine,checkable=True)
+    self.mineAssignedAction.setChecked(True)
+    self.menuMine.addAction(self.mineCreatedAction)
+    self.menuMine.addAction(self.mineAssignedAction)
+    self.menuMine.triggered.connect(self.menuMineShow)
+
+
     try:
       self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
     except:
@@ -275,9 +286,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.comboFileType.currentIndexChanged.connect(self.listAssets)
     #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     
-    self.radioAllAss.toggled.connect(self.listAssets)
-    self.radioMineAss.toggled.connect(self.listAssets)
-    
+    self.radioAllAss.clicked.connect(self.listAssets)
+    # self.radioMineAss.toggled.connect(self.listAssets)
+    self.radioMineAss.clicked.connect(self.popupMine)
     
     self.lineEditSearch.returnPressed.connect(self.listAssets)
     self.lineEditSearch.textChanged.connect(self.listAssets)
@@ -320,7 +331,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listAssetsTimed()
     self.timerAss = QtCore.QTimer()
     self.timerAss.timeout.connect(self.listAssetsTimed)
-    self.timerAss.start(30000)
+    self.timerAss.start(60000)
   
   
   def setSeqSce(self):
@@ -408,7 +419,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.renderAss()
       
       
-    
+  def popupMine(self):
+    cursor =QtGui.QCursor()
+    action = self.menuMine.exec_(cursor.pos())
+    self.listAssets()
+
+  def menuMineShow(self):
+    self.menuMine.show()
+
   def renderAss(self):
     listAsses = self.selectedAsses()
     print(listAsses)
@@ -998,7 +1016,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #if((time.time() - self.listAssTimeOld) < 1.0):
       #return(0)
     #self.listAssTimeOld = time.time()
-    # self.loader.show()
+    self.loader.show()
     print("list ass thread called")
     selAsses = self.selectedAsses()
     colNames = ['asset','assigned','preview']
@@ -1220,7 +1238,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.tableWidget.resizeColumnsToContents()
     self.form.statusBar().showMessage("total : "+ str(len(assesList)))
     #self.timerAssetsRefresh.stop()
-    # self.loader.hide()
+    self.loader.hide()
     self.tableWidget.setSortingEnabled(True)
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
   
