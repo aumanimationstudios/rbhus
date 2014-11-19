@@ -169,9 +169,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     self.menuMine = QtGui.QMenu()
     self.mineCreatedAction = QtGui.QAction("created",self.menuMine,checkable=True)
-    self.mineCreatedAction.setChecked(True)
+    self.mineCreatedAction.setChecked(False)
+    self.mineCreatedAction.toggled.connect(self.mineCheck)
     self.mineAssignedAction = QtGui.QAction("assigned",self.menuMine,checkable=True)
     self.mineAssignedAction.setChecked(True)
+    self.mineAssignedAction.toggled.connect(self.mineCheck)
     self.menuMine.addAction(self.mineCreatedAction)
     self.menuMine.addAction(self.mineAssignedAction)
     self.menuMine.triggered.connect(self.menuMineShow)
@@ -208,8 +210,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
-    #self.timerAssetsRefresh = QtCore.QTimer()
-    #self.timerAssetsRefresh.timeout.connect(self.listAssetsTimed)
+    self.timerAssetsRefresh = QtCore.QTimer()
+    self.timerAssetsRefresh.timeout.connect(self.listAssets_thread)
     
     
     
@@ -331,7 +333,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listAssetsTimed()
     self.timerAss = QtCore.QTimer()
     self.timerAss.timeout.connect(self.listAssetsTimed)
-    self.timerAss.start(60000)
+    self.timerAss.start(45000)
   
   
   def setSeqSce(self):
@@ -355,14 +357,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def listAssets(self):
     # self.listAssetsTimed()
-    self.listAssets_thread()
+    # self.listAssets_thread()
     
     #print("list assets called")
-    #if(self.timerAssetsRefresh.isActive()):
-      #self.timerAssetsRefresh.stop()
-      #self.timerAssetsRefresh.start(500)
-    #else:
-      #self.timerAssetsRefresh.start(500)
+    if(self.timerAssetsRefresh.isActive()):
+      self.timerAssetsRefresh.stop()
+      self.timerAssetsRefresh.start(700)
+    else:
+      self.timerAssetsRefresh.start(700)
   
   
   
@@ -421,8 +423,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       
   def popupMine(self):
     cursor =QtGui.QCursor()
-    action = self.menuMine.exec_(cursor.pos())
+    self.menuMine.exec_(cursor.pos())
+    # self.menuMine.popup(cursor.pos())
     self.listAssets()
+
+  def mineCheck(self):
+    if(not self.mineCreatedAction.isChecked() and not self.mineAssignedAction.isChecked()):
+      self.mineAssignedAction.setChecked(True)
+    self.listAssets()
+
+
 
   def menuMineShow(self):
     self.menuMine.show()
@@ -965,7 +975,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     #print("in get asses timed 3")
     self.hf.setTerminationEnabled(True)
-    self.hf.started.connect(assget.getAsses)
+    # self.hf.started.connect(assget.getAsses)
     self.hf.run = assget.getAsses
     self.hf.start()
     
@@ -976,14 +986,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.oldasses = asslist
     self.oldassesdict = assdict
     if(self.listFirstTime):
-      self.listFirstTime = False
       self.listAssets_thread()
-      # self.loader.hide()
+      self.listFirstTime = False
+      self.loader.hide()
       
     # self.listAssets_thread()
   def resetFirstTime(self):
     self.listFirstTime = True
-    # self.loader.show()
+    self.loader.show()
     
 
   def tableWidgetScrollEvent(self,event):
@@ -1016,8 +1026,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #if((time.time() - self.listAssTimeOld) < 1.0):
       #return(0)
     #self.listAssTimeOld = time.time()
-    self.loader.show()
-    print("list ass thread called")
+    # self.loader.show()
+    self.timerAssetsRefresh.stop()
+    # print("list ass thread called")
     selAsses = self.selectedAsses()
     colNames = ['asset','assigned','preview']
     assesList = []
@@ -1041,7 +1052,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       assesdict = self.oldassesdict
 
     searchItems = str(self.lineEditSearch.text())
-    print("search : "+ str(searchItems))
+    # print("search : "+ str(searchItems))
     if(asses):
       for x in range(0,len(asses)):
         
@@ -1086,55 +1097,155 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         assTypeAss = 0
         if(self.radioMineAss.isChecked()):
           #print("reload 3")
-
-          if(asses[x]['createdUser'] == self.username or asses[x]['assignedWorker'] == self.username):
+          if(self.mineAssignedAction.isChecked() and not self.mineCreatedAction.isChecked()):
+            if(asses[x]['assignedWorker'] == self.username):
             
-            if(self.considerFilter):
+              if(self.considerFilter):
 
-              if(str(self.comboStageType.currentText()) != "default"):
-                if(str(asses[x]['stageType']) in str(self.comboStageType.currentText()).split(",")):
+                if(str(self.comboStageType.currentText()) != "default"):
+                  if(str(asses[x]['stageType']) in str(self.comboStageType.currentText()).split(",")):
+                    stageTypeAss = 1
+                else:
                   stageTypeAss = 1
-              else:
-                stageTypeAss = 1
-              
-              if(str(self.comboNodeType.currentText()) != "default"):
-                if(str(asses[x]['nodeType']) in str(self.comboNodeType.currentText()).split(",")):
+                
+                if(str(self.comboNodeType.currentText()) != "default"):
+                  if(str(asses[x]['nodeType']) in str(self.comboNodeType.currentText()).split(",")):
+                    nodeTypeAss = 1
+                else:
                   nodeTypeAss = 1
-              else:
-                nodeTypeAss = 1
-              
-              if(str(self.comboSequence.currentText()) != "default"):
-                if(str(asses[x]['sequenceName']) in str(self.comboSequence.currentText()).split(",")):
+                
+                if(str(self.comboSequence.currentText()) != "default"):
+                  if(str(asses[x]['sequenceName']) in str(self.comboSequence.currentText()).split(",")):
+                    seqAss = 1
+                else:
                   seqAss = 1
-              else:
-                seqAss = 1
-                
-              if(str(self.comboScene.currentText()) != "default"):
-                if(str(asses[x]['sceneName']) in str(self.comboScene.currentText()).split(",")):
+                  
+                if(str(self.comboScene.currentText()) != "default"):
+                  if(str(asses[x]['sceneName']) in str(self.comboScene.currentText()).split(",")):
+                    scnAss = 1
+                else:
                   scnAss = 1
-              else:
-                scnAss = 1
-                
-              if(str(self.comboFileType.currentText()) != "default"):
-                if(str(asses[x]['fileType']) in str(self.comboFileType.currentText()).split(",")):
+                  
+                if(str(self.comboFileType.currentText()) != "default"):
+                  if(str(asses[x]['fileType']) in str(self.comboFileType.currentText()).split(",")):
+                    fileTypeAss = 1
+                else:
                   fileTypeAss = 1
-              else:
-                fileTypeAss = 1
-                
-              if(str(self.comboAssType.currentText()) != "default"):
-                if(str(self.comboAssType.currentText()) == str(asses[x]['assetType'])):
+                  
+                if(str(self.comboAssType.currentText()) != "default"):
+                  if(str(self.comboAssType.currentText()) == str(asses[x]['assetType'])):
+                    assTypeAss = 1
+                else:
                   assTypeAss = 1
               else:
-                assTypeAss = 1
-            else:
-              assesList.append(asses[x]['path'])
-              assesNames[asses[x]['path']] = asses[x]
-              assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
+                assesList.append(asses[x]['path'])
+                assesNames[asses[x]['path']] = asses[x]
+                assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
+              
+              if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
+                assesList.append(asses[x]['path'])
+                assesNames[asses[x]['path']] = asses[x]
+                assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
+
+          elif(self.mineCreatedAction.isChecked() and not self.mineAssignedAction.isChecked()):
+            if(asses[x]['createdUser'] == self.username):
             
-            if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
-              assesList.append(asses[x]['path'])
-              assesNames[asses[x]['path']] = asses[x]
-              assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
+              if(self.considerFilter):
+
+                if(str(self.comboStageType.currentText()) != "default"):
+                  if(str(asses[x]['stageType']) in str(self.comboStageType.currentText()).split(",")):
+                    stageTypeAss = 1
+                else:
+                  stageTypeAss = 1
+                
+                if(str(self.comboNodeType.currentText()) != "default"):
+                  if(str(asses[x]['nodeType']) in str(self.comboNodeType.currentText()).split(",")):
+                    nodeTypeAss = 1
+                else:
+                  nodeTypeAss = 1
+                
+                if(str(self.comboSequence.currentText()) != "default"):
+                  if(str(asses[x]['sequenceName']) in str(self.comboSequence.currentText()).split(",")):
+                    seqAss = 1
+                else:
+                  seqAss = 1
+                  
+                if(str(self.comboScene.currentText()) != "default"):
+                  if(str(asses[x]['sceneName']) in str(self.comboScene.currentText()).split(",")):
+                    scnAss = 1
+                else:
+                  scnAss = 1
+                  
+                if(str(self.comboFileType.currentText()) != "default"):
+                  if(str(asses[x]['fileType']) in str(self.comboFileType.currentText()).split(",")):
+                    fileTypeAss = 1
+                else:
+                  fileTypeAss = 1
+                  
+                if(str(self.comboAssType.currentText()) != "default"):
+                  if(str(self.comboAssType.currentText()) == str(asses[x]['assetType'])):
+                    assTypeAss = 1
+                else:
+                  assTypeAss = 1
+              else:
+                assesList.append(asses[x]['path'])
+                assesNames[asses[x]['path']] = asses[x]
+                assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
+              
+              if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
+                assesList.append(asses[x]['path'])
+                assesNames[asses[x]['path']] = asses[x]
+                assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
+
+          else:
+            if(asses[x]['createdUser'] == self.username or asses[x]['assignedWorker'] == self.username):
+            
+              if(self.considerFilter):
+
+                if(str(self.comboStageType.currentText()) != "default"):
+                  if(str(asses[x]['stageType']) in str(self.comboStageType.currentText()).split(",")):
+                    stageTypeAss = 1
+                else:
+                  stageTypeAss = 1
+                
+                if(str(self.comboNodeType.currentText()) != "default"):
+                  if(str(asses[x]['nodeType']) in str(self.comboNodeType.currentText()).split(",")):
+                    nodeTypeAss = 1
+                else:
+                  nodeTypeAss = 1
+                
+                if(str(self.comboSequence.currentText()) != "default"):
+                  if(str(asses[x]['sequenceName']) in str(self.comboSequence.currentText()).split(",")):
+                    seqAss = 1
+                else:
+                  seqAss = 1
+                  
+                if(str(self.comboScene.currentText()) != "default"):
+                  if(str(asses[x]['sceneName']) in str(self.comboScene.currentText()).split(",")):
+                    scnAss = 1
+                else:
+                  scnAss = 1
+                  
+                if(str(self.comboFileType.currentText()) != "default"):
+                  if(str(asses[x]['fileType']) in str(self.comboFileType.currentText()).split(",")):
+                    fileTypeAss = 1
+                else:
+                  fileTypeAss = 1
+                  
+                if(str(self.comboAssType.currentText()) != "default"):
+                  if(str(self.comboAssType.currentText()) == str(asses[x]['assetType'])):
+                    assTypeAss = 1
+                else:
+                  assTypeAss = 1
+              else:
+                assesList.append(asses[x]['path'])
+                assesNames[asses[x]['path']] = asses[x]
+                assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
+              
+              if(stageTypeAss and nodeTypeAss and seqAss and scnAss and nodeTypeAss and fileTypeAss and assTypeAss):
+                assesList.append(asses[x]['path'])
+                assesNames[asses[x]['path']] = asses[x]
+                assesColor[asses[x]['path']] = utilsPipe.assPathColorCoded(asses[x])
 
         elif(self.radioAllAss.isChecked()):
           
@@ -1238,7 +1349,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.tableWidget.resizeColumnsToContents()
     self.form.statusBar().showMessage("total : "+ str(len(assesList)))
     #self.timerAssetsRefresh.stop()
-    self.loader.hide()
+    # self.loader.hide()
     self.tableWidget.setSortingEnabled(True)
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
   
