@@ -10,6 +10,7 @@
 from PyQt4 import QtCore, QtGui
 import glob
 import os
+import re
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -57,8 +58,9 @@ class Ui_Form(object):
     if(files):
       for f in files:
         if(os.path.isfile(f)):
-          fS = QtGui.QListWidgetItem(_fromUtf8(f.split("/")[-1]))
-          self.listWidget.addItem(fS)
+          if(not f.endswith("~")):
+            fS = QtGui.QListWidgetItem(_fromUtf8(f.split("/")[-1]))
+            self.listWidget.addItem(fS)
       
       
   def center(self):

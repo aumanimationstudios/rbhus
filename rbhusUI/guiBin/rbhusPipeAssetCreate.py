@@ -112,32 +112,46 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict = {}
     ntypes = str(self.lineEditNodes.text()).split(",")
     assesNames = []
-    assdict['assetType'] = str(self.comboAssType.currentText())
-    assdict['projName'] = os.environ['rp_proj_projName']
-    assdict['directory'] = str(self.comboDirectory.currentText())
-    assdict['stageType'] = str(self.comboStageType.currentText())
-    assdict['sequenceName'] = str(self.comboSequence.currentText())
-    assdict['sceneName'] = str(self.comboScene.currentText())
-    assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-    assdict['assignedWorker'] = str(self.lineEditWorkers.text())
-    assdict['description'] = str(self.lineEditDesc.text())
-    assdict['tags'] = str(self.lineEditTags.text())
-    assdict['fRange'] = str(self.lineEditFRange.text())
+    assdict['assetType'] = str(self.comboAssType.currentText()).rstrip().lstrip()
+    assdict['projName'] = os.environ['rp_proj_projName'].rstrip().lstrip()
+    assdict['directory'] = str(self.comboDirectory.currentText()).rstrip().lstrip()
+    assdict['stageType'] = str(self.comboStageType.currentText()).rstrip().lstrip()
+    assdict['sequenceName'] = str(self.comboSequence.currentText()).rstrip().lstrip()
+    assdict['sceneName'] = str(self.comboScene.currentText()).rstrip().lstrip()
+    assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second()).rstrip().lstrip()
+    assdict['assignedWorker'] = str(self.lineEditWorkers.text()).rstrip().lstrip()
+    assdict['description'] = str(self.lineEditDesc.text()).rstrip().lstrip()
+    assdict['tags'] = str(self.lineEditTags.text()).rstrip().lstrip()
+    assdict['fRange'] = str(self.lineEditFRange.text()).rstrip().lstrip()
     if(self.lineEditAssName.text()):
       assesNames = str(self.lineEditAssName.text()).split(",")
       for aN in assesNames:
         if(aN):
           assdict['assName'] = aN.rstrip().lstrip()
-        for x in ntypes:
-          assdict['nodeType'] = x.split("#")[0]
-          self.centralwidget.setEnabled(False)
-          if(len(x.split("#")) > 1):
-            for ft in (x.split("#")[1]).split("%"):
-              assdict['fileType'] = ft
+          for x in ntypes:
+            assdict['nodeType'] = x.split("#")[0].rstrip().lstrip()
+            self.centralwidget.setEnabled(False)
+            if(len(x.split("#")) > 1):
+              for ft in (x.split("#")[1]).split("%"):
+                assdict['fileType'] = ft.rstrip().lstrip()
+                utilsPipe.assRegister(assdict)
+            else:
+              assdict['fileType'] = "default"
               utilsPipe.assRegister(assdict)
-          else:
-            assdict['fileType'] = "default"
+    else:
+      for x in ntypes:
+        assdict['nodeType'] = x.split("#")[0].rstrip().lstrip()
+        self.centralwidget.setEnabled(False)
+        if(len(x.split("#")) > 1):
+          for ft in (x.split("#")[1]).split("%"):
+            assdict['fileType'] = ft.rstrip().lstrip()
+            utilsPipe.assRegister(assdict)
+        else:
+          assdict['fileType'] = "default"
           utilsPipe.assRegister(assdict)
+
+          
+
       self.centralwidget.setEnabled(True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     

@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeSeqSceCreateMod.ui'
 #
-# Created: Tue Apr 29 22:22:36 2014
-#      by: PyQt4 UI code generator 4.10.3
+# Created: Sat Nov 29 15:28:20 2014
+#      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -163,6 +163,7 @@ class Ui_MainWindow(object):
     self.labelProjName_3.setText(_translate("MainWindow", "sceneName", None))
     self.labelProjName_2.setText(_translate("MainWindow", "sequenceName", None))
     self.pushSelectSeq.setText(_translate("MainWindow", "select", None))
+    self.lineEditSceneName.setText(_translate("MainWindow", "default", None))
     self.lineEditAdmins.setToolTip(_translate("MainWindow", "list of space separated usernames", None))
     self.lineEditDesc.setToolTip(_translate("MainWindow", "description of the seq/sce", None))
     self.pushCreate.setText(_translate("MainWindow", "create", None))
