@@ -682,24 +682,24 @@ def assRegister(assDetDict):
       else:
         assPath = assPath +":"+ str(assDetDict['sequenceName'])
 
-    utilsPipeLogger.debug("WTF 001 : "+ str(assPath))
+    #utilsPipeLogger.debug("WTF 001 : "+ str(assPath))
     if(assDetDict.has_key('assName')):
       if(not re.search("^default$",str(assDetDict['assName']))):
         assPath = assPath +":" + str(assDetDict['assName'])
     
-    utilsPipeLogger.debug("WTF 002 : "+ str(assPath))
+    #utilsPipeLogger.debug("WTF 002 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['stageType']))):
       assPath = assPath +":" + str(assDetDict['stageType'])
-    utilsPipeLogger.debug("WTF 003 : "+ str(assPath))
+    #utilsPipeLogger.debug("WTF 003 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['nodeType']))):
       assPath = assPath +":" + str(assDetDict['nodeType'])
-    utilsPipeLogger.debug("WTF 004 : "+ str(assPath))
+    #utilsPipeLogger.debug("WTF 004 : "+ str(assPath))
     
     
       
     if(not re.search("^default$",str(assDetDict['fileType']))): 
       assPath = assPath +":" + str(assDetDict['fileType'])
-    utilsPipeLogger.debug("WTF 005 : "+ str(assPath))
+    #utilsPipeLogger.debug("WTF 005 : "+ str(assPath))
     assId = hashlib.sha256(assPath).hexdigest()
     assDetDict['assetId'] = assId
     assDetDict['path'] = assPath

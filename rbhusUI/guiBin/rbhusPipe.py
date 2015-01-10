@@ -51,10 +51,10 @@ except AttributeError:
 
 
 
-db = QtSql.QSqlDatabase.addDatabase("QMYSQL")
-db.setHostName("blues2")
-db.setDatabaseName("rbhusPipe")
-db.open()
+#db = QtSql.QSqlDatabase.addDatabase("QMYSQL")
+#db.setHostName("blues2")
+#db.setDatabaseName("rbhusPipe")
+#db.open()
   
 
 class ImageWidget(QtGui.QPushButton):
@@ -122,7 +122,7 @@ class ImagePlayer(QtGui.QWidget):
 class workerGetAsses(QtCore.QObject):
   finished = QtCore.pyqtSignal()
   dataPending = QtCore.pyqtSignal()
-  dataReady = QtCore.pyqtSignal(list,dict,dict,dict)
+  dataReady = QtCore.pyqtSignal(list,dict,dict,dict,dict)
   
   def __init__(self):
     super(workerGetAsses, self).__init__()
@@ -149,6 +149,7 @@ class workerGetAsses(QtCore.QObject):
     self.assesList = []
     self.assesNames = {}
     self.assesColor = {}
+    self.assModifiedTime = {}
     try:
       if(self.whereDict):
         self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],whereDict=self.whereDict)
@@ -156,7 +157,10 @@ class workerGetAsses(QtCore.QObject):
         self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
       if(self.asses):
         for x in range(0,len(self.asses)):
-          self.absdict[self.asses[x]['path']] = utilsPipe.getAbsPath(self.asses[x]['path'])
+          try:
+            self.absdict[self.asses[x]['path']] = utilsPipe.getAbsPath(self.asses[x]['path'])
+          except:
+            pass
       else:
         self.asses = ()
     except:
@@ -166,10 +170,17 @@ class workerGetAsses(QtCore.QObject):
     # print("out get asses")
     if(self.asses):
       for x in range(0,len(self.asses)):
-        self.assesList.append(self.asses[x]['path'])  
-        self.assesNames[self.asses[x]['path']] = self.asses[x]
-        self.assesColor[self.asses[x]['path']] = utilsPipe.assPathColorCoded(self.asses[x])
-    self.dataReady.emit(self.assesList,self.assesNames,self.assesColor,self.absdict)
+        try:
+          self.assesList.append(self.asses[x]['path'])
+          self.assesNames[self.asses[x]['path']] = self.asses[x]
+          self.assesColor[self.asses[x]['path']] = utilsPipe.assPathColorCoded(self.asses[x])
+          if(sys.platform.find("linux") >= 0):
+            self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.asses[x]['path']])))
+          elif(sys.platform.find("win") >= 0):
+            self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.asses[x]['path']])))
+        except:
+          pass
+    self.dataReady.emit(self.assesList,self.assesNames,self.assesColor,self.absdict,self.assModifiedTime)
     
     
 
@@ -189,8 +200,10 @@ class listUpdater(QtCore.QObject):
 
 class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setupUi(self, Form):
+    
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
     self.form = Form
+    self.form.setWindowState(QtCore.Qt.WindowMaximized)
 
     self.authL = authPipe.login()
     self.rbhusAssetEditCmdMod = ""
@@ -211,7 +224,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.previewWidgets = []
     self.dbcon = dbPipe.dbPipe()
     
-    
+    icon = QtGui.QIcon()
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.form.setWindowIcon(icon)
     
 
     self.menuMine = QtGui.QMenu()
@@ -239,6 +254,31 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     iconCancel = QtGui.QIcon()
     iconCancel.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    
+    iconBlender = QtGui.QIcon()
+    iconBlender.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/blender.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.pushBlender.setIcon(iconBlender)
+    
+    iconBlenderBeta = QtGui.QIcon()
+    iconBlenderBeta.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/blenderBeta.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.pushBlenderBeta.setIcon(iconBlenderBeta)
+    
+    iconKrita = QtGui.QIcon()
+    iconKrita.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/krita.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.pushKrita.setIcon(iconKrita)
+    
+    iconGimp = QtGui.QIcon()
+    iconGimp.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/gimp2.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.pushGimp.setIcon(iconGimp)
+    
+    iconMyPaint = QtGui.QIcon()
+    iconMyPaint.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/mypaint_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.pushMyPaint.setIcon(iconMyPaint)
+    
+    iconNatron = QtGui.QIcon()
+    iconNatron.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/natron_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.pushNatron.setIcon(iconNatron)
+
     self.pushResetAsset.setIcon(iconCancel)
     self.pushResetSeq.setIcon(iconCancel)
     self.pushResetStage.setIcon(iconCancel)
@@ -253,9 +293,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.iconDanger.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     
     
-    icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    Form.setWindowIcon(icon)
+    
     
     self.timerAssetsRefresh = QtCore.QTimer()
     self.timerAssetsRefresh.timeout.connect(self.listAssetsTimed)
@@ -299,6 +337,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     slineedit.setReadOnly(True)
     self.comboStageType.editTextChanged.connect(self.listAssets)
     self.comboStageType.view().activated.connect(self.pressedStageType)
+    #self.comboStageType.released.connect(self.pressedAction)
     #self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetStage.clicked.connect(self.setStageTypes)
     
@@ -420,9 +459,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #print("list assets called")
     if(self.timerAssetsRefresh.isActive()):
       self.timerAssetsRefresh.stop()
-      self.timerAssetsRefresh.start(800)
+      self.timerAssetsRefresh.start(2000)
     else:
-      self.timerAssetsRefresh.start(800)
+      self.timerAssetsRefresh.start(2000)
   
   
   
@@ -453,18 +492,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   def popupAss(self, pos):
     menu = QtGui.QMenu()
-    openFileAction = menu.addAction("open file")
-    openFolderAction = menu.addAction("open folder")
+    #openFileAction = menu.addAction("open file")
+    openFolderAction = menu.addAction("open")
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyNew = menu.addAction("copy/new")
-    assCreatePrev = menu.addAction("create preview")
+    #assCmdLine = menu.addAction("cmd line")
     assRender = menu.addAction("submit to render")
     assDeleteAction = menu.addAction("delete")
     
     action = menu.exec_(self.tableWidget.mapToGlobal(pos))
-    if(action == openFileAction):
-      self.openFileAss()
+    #if(action == openFileAction):
+      #self.openFileAss()
     if(action == openFolderAction):
       self.openFolderAss()
     if(action == assCopyToClip):
@@ -786,13 +825,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def setSequence(self):
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
-    try:
-      if(self.default):
-        present = None
-      else:
-        present = str(self.comboSequence.currentText())
-    except:
-      present = None
+    #try:
+      #if(self.default):
+        #present = None
+      #else:
+        #present = str(self.comboSequence.currentText())
+    #except:
+      #present = None
     self.comboSequence.clear()  
     seq = {}
     indx =  0
@@ -1089,13 +1128,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     return(0)     
   
   
-    #rows = utilsPipe.getAssTypes()
-    #self.comboAssType.clear()  
-    #if(rows):
-      #for row in rows:
-        #self.comboAssType.addItem(_fromUtf8(row['type']))
-      #return(1)
-    #return(0)
   def messageBox(self):
     msgbox = QtGui.QMessageBox()
     
@@ -1132,16 +1164,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     if(self.hf):
       if(self.hf.isRunning()):
-        #if(self.firstTime):
-          #self.resetFirstTime()
         return(0)
-    #print("in get asses timed 1")
-    #self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
     self.hf = QtCore.QThread(parent=self.tableWidget)
-    #print("in get asses timed 2")  
     assget = workerGetAsses()
     assget.whereDict = {}
-    #assget.moveToThread(self.hf)
     assget.dataReady.connect(self.listAssets_thread)
     assget.dataPending.connect(self.loaderShow)
     
@@ -1151,7 +1177,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         assget.whereDict['assignedWorker'] = str(self.username)
       if(self.mineCreatedAction.isChecked()):
         assget.whereDict['createdUser'] = str(self.username)
-    #if(self.checkBoxFilter.isChecked()):
     if(self.comboStageType.currentText() != "default"):
       assget.whereDict['stageType'] = str(self.comboStageType.currentText())
     if(self.comboNodeType.currentText() != "default"):
@@ -1175,16 +1200,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         assget.whereDict['assName'] = searchItems
     elif(searchItems):
       assget.whereDict['assName'] = searchItems
-        
-      
-    #print("in get asses timed 3")
     self.hf.setTerminationEnabled(True)
-    # self.hf.started.connect(assget.getAsses)
     self.hf.run = assget.getAsses
     self.hf.start()
-    
-    
-    #print("in get asses timed 4")
     
   def setAssesData(self,asslist,assdict):
     self.oldasses = asslist
@@ -1222,12 +1240,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     return(rowstask)
 
   
-  def listAssets_thread(self,assesList=None,assesNames=None,assesColor=None,assdict=None):
+  def listAssets_thread(self,assesList=None,assesNames=None,assesColor=None,assdict=None,assModifiedTime=None):
     self.timerAssetsRefresh.stop()
     selAsses = self.selectedAsses()
-    colNames = ['asset','assigned','tags','preview']
+    colNames = ['asset','assigned','tags','modified time','preview']
     #asses = asslist
-    assesdict = assdict
+    #assesdict = assdict
     self.tableWidget.clearContents()
     self.tableWidget.clear()
     
@@ -1244,48 +1262,57 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         itemcn.setText(str(colNames[cn]))
         self.tableWidget.setHorizontalHeaderItem(cn, itemcn)
       for x in range(0,len(assesList)):
-        #item = QtGui.QTableWidgetItem()
-        item = QtGui.QLabel()
-        textAss = '<font color="'+ str(assesColor[assesList[x]].split(":")[0]).split("#")[1] +'">'+ (assesColor[assesList[x]].split(":")[0]).split("#")[0] +'</font>'
-        if(len(assesColor[assesList[x]].split(":")) > 1):
-          for fc in assesColor[assesList[x]].split(":")[1:]:
-            textAss = textAss + ':' +'<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>'
-        
-        
-        item.setText(textAss)
-        #item.setReadOnly(True)
-        item.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
-        item.setTextFormat(QtCore.Qt.RichText)
-        #item.setFixedWidth(len(str(assesList[x])))
-        item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-        assAbsPath = assesdict[assesList[x]]
-        self.tableWidget.setCellWidget(x,0,item)
+        try:
+          item = QtGui.QLabel()
+          textAss = '<font color="'+ str(assesColor[assesList[x]].split(":")[0]).split("#")[1] +'">'+ (assesColor[assesList[x]].split(":")[0]).split("#")[0] +'</font>'
+          if(len(assesColor[assesList[x]].split(":")) > 1):
+            for fc in assesColor[assesList[x]].split(":")[1:]:
+              textAss = textAss + ':' +'<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>'
+          item.setText(textAss)
+          item.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+          item.setTextFormat(QtCore.Qt.RichText)
+          item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+          assAbsPath = assdict[assesList[x]]
+          self.tableWidget.setCellWidget(x,0,item)
+        except:
+          pass
         
 
+        
+        try:
+          itemAss = QtGui.QTableWidgetItem()
+          itemAss.setText(str(assesNames[assesList[x]]['assignedWorker']))
+          self.tableWidget.setItem(x,1,itemAss)
+        except:
+          pass
+        
+        try:
+          itemTag = QtGui.QTableWidgetItem()
+          itemTag.setText(str(assesNames[assesList[x]]['tags']))
+          self.tableWidget.setItem(x,2,itemTag)
+        except:
+          pass
+        
+        
+        try:
+          itemModified = QtGui.QTableWidgetItem()
+          itemModified.setText(str(assModifiedTime[assesList[x]]))
+          self.tableWidget.setItem(x,3,itemModified)
+        except:
+          pass
+        
+        try:
+          if(assesNames[assesList[x]]['assName'] == "default"):
+            previewName = "preview"
+          else:
+            previewName = assesNames[assesList[x]]['assName']
+          self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
+        except:
+          pass
         
         if(assesList[x] in selAsses):
           self.tableWidget.selectRow(x)
         
-        itemTag = QtGui.QTableWidgetItem()
-        itemTag.setText(str(assesNames[assesList[x]]['assignedWorker']))
-        self.tableWidget.setItem(x,1,itemTag)
-        
-        itemTag = QtGui.QTableWidgetItem()
-        itemTag.setText(str(assesNames[assesList[x]]['tags']))
-        self.tableWidget.setItem(x,2,itemTag)
-        
-        if(assesNames[assesList[x]]['assName'] == "default"):
-          previewName = "preview"
-        else:
-          previewName = assesNames[assesList[x]]['assName']
-        self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
-        
-        
-        
-    
-    #
-    
-    #self.tableWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
     
     self.tableWidget.resizeColumnsToContents()
     self.form.statusBar().showMessage("total : "+ str(len(assesList)))
@@ -1307,7 +1334,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           try:  
             self.previewWidgets.append(ImageWidget(self.previewItems[x],64,self.tableWidget))
             self.previewWidgets[x].setToolTip("click on the image")
-            self.tableWidget.setCellWidget(x,3,self.previewWidgets[x])
+            self.tableWidget.setCellWidget(x,4,self.previewWidgets[x])
             self.previewWidgets[x].clicked.connect(lambda boool, x=x : self.imageWidgetClicked(x,self.previewWidgets[x],boool))
           except:
             print(str(sys.exc_info()))
@@ -1318,6 +1345,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def imageWidgetClicked(self,*args):
     index = args[0]
     father = args[1]
+    print(args)
     import webbrowser
     webbrowser.open(father.imagePath)
     
@@ -1369,7 +1397,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
               print(y +":"+ str(os.environ[y]))
             
           self.updateAll()
-          #self.listAssets()
           break
         
     

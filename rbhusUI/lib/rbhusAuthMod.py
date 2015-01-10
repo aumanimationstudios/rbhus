@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusAuthMod.ui'
 #
-# Created: Thu Jan 24 10:06:08 2013
-#      by: PyQt4 UI code generator 4.9.6
+# Created: Sat Jan  3 12:27:07 2015
+#      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -54,11 +54,15 @@ class Ui_MainWindowAuth(object):
     self.horizontalLayout_3 = QtGui.QHBoxLayout()
     self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
     self.checkBoxRememberMe = QtGui.QCheckBox(self.centralwidget)
+    self.checkBoxRememberMe.setFocusPolicy(QtCore.Qt.StrongFocus)
+    self.checkBoxRememberMe.setChecked(True)
     self.checkBoxRememberMe.setObjectName(_fromUtf8("checkBoxRememberMe"))
     self.horizontalLayout_3.addWidget(self.checkBoxRememberMe)
     spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_3.addItem(spacerItem1)
     self.pushButton = QtGui.QPushButton(self.centralwidget)
+    self.pushButton.setFocusPolicy(QtCore.Qt.StrongFocus)
+    self.pushButton.setAutoDefault(False)
     self.pushButton.setObjectName(_fromUtf8("pushButton"))
     self.horizontalLayout_3.addWidget(self.pushButton)
     self.verticalLayout.addLayout(self.horizontalLayout_3)
@@ -72,6 +76,6 @@ class Ui_MainWindowAuth(object):
     self.labelUser.setText(_translate("MainWindowAuth", "username", None))
     self.labelPass.setText(_translate("MainWindowAuth", "password", None))
     self.checkBoxRememberMe.setText(_translate("MainWindowAuth", "rememberMe", None))
-    self.pushButton.setText(_translate("MainWindowAuth", "try ur luck!", None))
-    self.pushButton.setShortcut(_translate("MainWindowAuth", "Return, Ctrl+R", None))
+    self.pushButton.setText(_translate("MainWindowAuth", "login", None))
+    self.pushButton.setShortcut(_translate("MainWindowAuth", "Return", None))
 

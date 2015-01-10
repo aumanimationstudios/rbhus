@@ -1,5 +1,13 @@
 #!/usr/bin/python
-import glob, os, posix, pwd, time, fcntl, shutil, sys
+import glob
+import os
+import posix
+import pwd
+import time
+import fcntl
+import shutil
+import sys
+from collections import OrderedDict
 
 class _versionInfo:
   def __init__(self,verNum=None,verUser=None,verDesc=None,verDate=None,verTag=None):
@@ -18,9 +26,12 @@ class polymorph:
     self._pmTags = self._pmBaseDir + os.sep +"tags"+ os.sep
     self._pmParent = self._pmBaseDir + os.sep +"parent"
     self._pmBranch = self._pmBaseDir + os.sep +"branch"
+    self._pmExcludePaths = self._pmBaseDir + os.sep +"exclude"
     self._pmTip = self._pmBaseDir + os.sep +"tip"
     self._pmLock = self._pmBaseDir + os.sep +"lock"
     self._verDetails = self._vPopulate()
+    self._excludePaths = (".pm*","publish*","import*")
+    self.getExcludepaths()
     self._tip = self._readTip()
     
     
@@ -31,7 +42,21 @@ class polymorph:
   def getVersions(self):
     return(self._verDetails)
     
+  def getExcludepaths(self):
+    ep = open(self._pmExcludePaths,"r")
+    exp = {}
+    for x in ep.readlines():
+      if(x.rstrip().lstrip()):
+        exp[x] = 1
+    for y in self._excludePaths:
+      if(y.rstrip().lstrip()):
+        exp[y] = 1
+      
+    print("wtf 1")
+    self._excludePaths = tuple(OrderedDict.fromkeys([z.rstrip().lstrip() for z in exp]))
+    print("wtf 2")
     
+  
   def getBranchName(self):
     return(self._readBranchName())
     
@@ -95,7 +120,7 @@ class polymorph:
                   #shutil.move(self._initPath + lastFile,self._initPath + lastFile + ".bak")
                   if(os.path.isdir(f)):
                     shutil.rmtree(self._initPath + lastFile)
-                    shutil.copytree(f + os.sep,self._initPath + lastFile,ignore=shutil.ignore_patterns(".pm"))
+                    shutil.copytree(f + os.sep,self._initPath + lastFile,ignore=shutil.ignore_patterns(self._excludePaths))
                   else:
                     shutil.copy(f,self._initPath + lastFile)
           except:
@@ -202,7 +227,7 @@ class polymorph:
       except:
         pass
     try:
-      shutil.copytree(self._pmVerDir + str(ver),absDir,ignore=shutil.ignore_patterns(".pm","import","publish"))
+      shutil.copytree(self._pmVerDir + str(ver),absDir,ignore=shutil.ignore_patterns(self._excludePaths))
     except:
       raise
     return(1)
@@ -210,9 +235,12 @@ class polymorph:
   def _versionUp(self,vTip):
     verUpDir = self._pmVerDir + str(vTip)
     try:
-      shutil.copytree(self._initPath,verUpDir,ignore=shutil.ignore_patterns(".pm","import","publish"))
+      print("wtf 3")
+      shutil.copytree(self._initPath,verUpDir,ignore=shutil.ignore_patterns(self._excludePaths))
+      print("wtf 4")
       self._writeTip(vTip)
     except:
+      print(str(sys.exc_info()))
       raise
     return(1)
 

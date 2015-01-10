@@ -123,6 +123,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict['description'] = str(self.lineEditDesc.text()).rstrip().lstrip()
     assdict['tags'] = str(self.lineEditTags.text()).rstrip().lstrip()
     assdict['fRange'] = str(self.lineEditFRange.text()).rstrip().lstrip()
+    self.centralwidget.setEnabled(False)
     if(self.lineEditAssName.text()):
       assesNames = str(self.lineEditAssName.text()).split(",")
       for aN in assesNames:
@@ -130,7 +131,6 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
           assdict['assName'] = aN.rstrip().lstrip()
           for x in ntypes:
             assdict['nodeType'] = x.split("#")[0].rstrip().lstrip()
-            self.centralwidget.setEnabled(False)
             if(len(x.split("#")) > 1):
               for ft in (x.split("#")[1]).split("%"):
                 assdict['fileType'] = ft.rstrip().lstrip()
@@ -141,7 +141,6 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     else:
       for x in ntypes:
         assdict['nodeType'] = x.split("#")[0].rstrip().lstrip()
-        self.centralwidget.setEnabled(False)
         if(len(x.split("#")) > 1):
           for ft in (x.split("#")[1]).split("%"):
             assdict['fileType'] = ft.rstrip().lstrip()
@@ -149,10 +148,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
         else:
           assdict['fileType'] = "default"
           utilsPipe.assRegister(assdict)
-
-          
-
-      self.centralwidget.setEnabled(True)
+    self.centralwidget.setEnabled(True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     
     
