@@ -572,7 +572,80 @@ def getAssDetails(assId="",assPath=""):
       return(ret)
     return(0)
   
-
+def getProjAssesLinked(projName,limit=None,whereDict={}):
+  dbconn = dbPipe.dbPipe()
+  linkedProjects = "default"
+  projs = []
+  whereProj = ""
+  try:
+    linkedProjects = os.environ["rp_proj_linkedProjects"]
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  if(linkedProjects != "default"):
+    projs = ["'"+ x +"'" for x in linkedProjects.split(",")]
+    print(projs)
+    whereProj = " where projName=" + " or projName=".join(projs)
+  print("in getProjAssesLinked module 1")
+  whereString = []
+  try:
+    if(not limit):
+      if(whereDict):
+        
+        for x in whereDict:
+          whereDicts = []
+          y = whereDict[x].split(",")
+          for z in y:
+            if(x == "assName"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            elif(x == "tags"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            elif(x == "assignedWorker"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            else:
+              if(z):
+                whereDicts.append(x +"='"+ z +"'")
+          whereString.append("("+ " or ".join(whereDicts) +")")
+          
+        rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
+      else:
+        rows = dbconn.execute("select * from assets "+ whereProj +" order by sequenceName,sceneName,assName,assetType", dictionary=True)
+    else:
+      if(whereDict):
+        
+        for x in whereDict:
+          whereDicts = []
+          y = whereDict[x].split(",")
+          for z in y:
+            if(x == "assName"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            elif(x == "tags"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            elif(x == "assignedWorker"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            else:
+              if(z):
+                whereDicts.append(x +"='"+ z +"'")
+          whereString.append("("+ " or ".join(whereDicts) +")")
+        rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
+      else:
+        rows = dbconn.execute("select * from assets "+ whereProj +" order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
+        
+    print("in getProjAssesLinked module 2")
+    return(rows)
+  
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  
+  
+  
 def getProjAsses(projName,limit=None,whereDict={}):
   dbconn = dbPipe.dbPipe()
   whereString = []
@@ -878,9 +951,13 @@ def openAssetCmd(assdets ={},filename = None):
   
 
 def assDelete(assId=None,assPath=None):
+  
   dbconn = dbPipe.dbPipe()
   if(assId):
     assdets = getAssDetails(assId=str(assId))
+    projDets = getProjDetails(os.environ["rp_proj_projName"])
+    if(os.environ['rbhusPipe_acl_user'] not in projDets['admins'].split(",") and os.environ['rbhusPipe_acl_user'] not in assdets['createdUser'].split(",")):
+      return(0)
     dirMapsDets = getDirMapsDetails(assdets['directory'])
     try:
       if(sys.platform.find("win") >= 0):

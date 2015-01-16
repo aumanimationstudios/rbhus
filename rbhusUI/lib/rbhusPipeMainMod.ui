@@ -70,6 +70,26 @@
            <property name="margin">
             <number>1</number>
            </property>
+           <item row="7" column="6">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="sizeConstraint">
+              <enum>QLayout::SetDefaultConstraint</enum>
+             </property>
+             <item>
+              <widget class="QPushButton" name="filterRefresh">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
            <item row="5" column="1">
             <widget class="QLabel" name="label">
              <property name="text">
@@ -291,13 +311,6 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="3">
-            <widget class="QLabel" name="labelSce">
-             <property name="text">
-              <string>scene</string>
-             </property>
-            </widget>
-           </item>
            <item row="6" column="3">
             <widget class="QComboBox" name="comboNodeType">
              <property name="sizePolicy">
@@ -337,25 +350,12 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="6">
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <property name="sizeConstraint">
-              <enum>QLayout::SetDefaultConstraint</enum>
+           <item row="3" column="3">
+            <widget class="QLabel" name="labelSce">
+             <property name="text">
+              <string>scene</string>
              </property>
-             <item>
-              <widget class="QPushButton" name="filterRefresh">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -383,6 +383,13 @@
            <widget class="QRadioButton" name="radioAllAss">
             <property name="text">
              <string>all</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkLinkedProjects">
+            <property name="text">
+             <string>linkedProjects</string>
             </property>
            </widget>
           </item>

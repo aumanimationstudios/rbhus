@@ -144,6 +144,8 @@ class workerGetAsses(QtCore.QObject):
     self.assesList = []
     self.assesNames = {}
     self.assesColor = {}
+    self.assesLinked = ()
+    self.isAssesLinked = False
   
   #def terminateEvent(self):
     #print("holy cow . quiting!!")
@@ -156,6 +158,8 @@ class workerGetAsses(QtCore.QObject):
     self.dataPending.emit()
     # print("in get asses")
     self.asses = ()
+    self.assesLinked = ()
+    
     self.absdict = {}
     self.assesList = []
     self.assesNames = {}
@@ -163,8 +167,12 @@ class workerGetAsses(QtCore.QObject):
     self.assModifiedTime = {}
     try:
       if(self.whereDict):
+        if(self.isAssesLinked):
+          self.assesLinked = utilsPipe.getProjAssesLinked(os.environ['rp_proj_projName'],whereDict=self.whereDict)
         self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],whereDict=self.whereDict)
       else:
+        if(self.isAssesLinked):
+          self.assesLinked = utilsPipe.getProjAssesLinked(os.environ['rp_proj_projName'])
         self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
       if(self.asses):
         for x in range(0,len(self.asses)):
@@ -174,6 +182,15 @@ class workerGetAsses(QtCore.QObject):
             pass
       else:
         self.asses = ()
+      
+      if(self.assesLinked):
+        for x in range(0,len(self.assesLinked)):
+          try:
+            self.absdict[self.assesLinked[x]['path']] = utilsPipe.getAbsPath(self.assesLinked[x]['path'])
+          except:
+            pass
+      else:
+        self.assesLinked = ()
     except:
       print(str(sys.exc_info()))
     
@@ -191,6 +208,20 @@ class workerGetAsses(QtCore.QObject):
             self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.asses[x]['path']])))
         except:
           pass
+    
+    if(self.assesLinked):
+      for x in range(0,len(self.assesLinked)):
+        try:
+          self.assesList.append(self.assesLinked[x]['path'])
+          self.assesNames[self.assesLinked[x]['path']] = self.assesLinked[x]
+          self.assesColor[self.assesLinked[x]['path']] = utilsPipe.assPathColorCoded(self.assesLinked[x])
+          if(sys.platform.find("linux") >= 0):
+            self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.assesLinked[x]['path']])))
+          elif(sys.platform.find("win") >= 0):
+            self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.assesLinked[x]['path']])))
+        except:
+          pass
+        
     self.dataReady.emit(self.assesList,self.assesNames,self.assesColor,self.absdict,self.assModifiedTime)
     
     
@@ -392,6 +423,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     
     self.radioAllAss.clicked.connect(self.listAssets)
+    self.checkLinkedProjects.clicked.connect(self.listAssets)
     # self.radioMineAss.toggled.connect(self.listAssets)
     self.radioMineAss.clicked.connect(self.popupMine)
     
@@ -1212,6 +1244,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       assget.whereDict['fileType'] = str(self.comboFileType.currentText())
     if(self.comboAssType.currentText() != "default"):
       assget.whereDict['assetType'] = str(self.comboAssType.currentText())
+      
+    if(self.checkLinkedProjects.isChecked()):
+      if(str(self.comboAssType.currentText()) == "library" or str(self.comboAssType.currentText()) == "default"):
+        assget.whereDict['assetType'] = "library"
+        assget.isAssesLinked = True
       
     searchItems = str(self.lineEditSearch.text())
     if(searchItems and not self.radioMineAss.isChecked()):
