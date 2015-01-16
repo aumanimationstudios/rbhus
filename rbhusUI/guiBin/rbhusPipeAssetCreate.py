@@ -64,13 +64,14 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     
     self.center()
     #self.setProjTypes()
-    self.comboSequence.currentIndexChanged.connect(self.setScene)
+    self.comboSequence.currentIndexChanged.connect(self.setSceneTemp)
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
     self.comboStageType.currentIndexChanged.connect(self.setNodeTypes)
     self.pushCreate.clicked.connect(self.cAss)
     self.pushTags.clicked.connect(self.setTags)
     self.pushUsers.clicked.connect(self.setUsers)
     self.pushNodes.clicked.connect(self.setNodes)
+    self.pushScenes.clicked.connect(self.setScene)
     self.checkAssName.clicked.connect(self.enableAssName)
     self.checkAssignSelf.clicked.connect(self.setAssignedWorker)
     
@@ -96,6 +97,57 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       self.lineEditAssName.setEnabled(False)
   
   
+  def setSceneTemp(self):
+    seqName = str(self.comboSequence.currentText())
+    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seqName)
+    scenes = []
+    if(rows):
+      for x in rows:
+        if(x['sceneName'].rstrip().lstrip()):
+          scenes.append(x['sceneName'])
+    if(scenes):
+      self.lineEditScenes.setText(scenes[0])
+  
+  def setScene(self):
+    seqName = str(self.comboSequence.currentText())
+    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seqName)
+    scenes = []
+    if(rows):
+      for x in rows:
+        if(x['sceneName'].rstrip().lstrip()):
+          scenes.append(x['sceneName'])
+    outScenes = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(scenes),"-d",str(self.lineEditScenes.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outScenes == ""):
+      outScenes = self.lineEditScenes.text()
+    self.lineEditScenes.setText(_fromUtf8(outScenes))
+    #self.comboScene.clear()
+    #scenes = {}
+    #indx =  0
+    #foundIndx = -1
+    #rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seqName)
+    #if(rows):
+      #for x in rows:
+        #scenes[x['sceneName']] = 1
+    #if(scenes):
+      #model = QtGui.QStandardItemModel(len(scenes),1)
+      #for x in scenes:
+        #item = QtGui.QStandardItem(x)
+        #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        #item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
+        #model.setItem(indx,0,item)
+        #abrush = QtGui.QBrush()
+        #color = QtGui.QColor()
+        #color.setAlpha(0)
+        #abrush.setColor(color)
+        #model.item(indx).setForeground(abrush)
+        #indx = indx + 1
+      #model.itemChanged.connect(self.itemChangedScenes)
+      #self.comboScene.setModel(model)
+      #self.comboScene.setEditText("default")
+      #return(1)
+    #return(0)
+  
+  
   def setAssignedWorker(self):
     if(self.checkAssignSelf.isChecked()):
       self.lineEditWorkers.setText(str(self.username))
@@ -117,7 +169,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict['directory'] = str(self.comboDirectory.currentText()).rstrip().lstrip()
     assdict['stageType'] = str(self.comboStageType.currentText()).rstrip().lstrip()
     assdict['sequenceName'] = str(self.comboSequence.currentText()).rstrip().lstrip()
-    assdict['sceneName'] = str(self.comboScene.currentText()).rstrip().lstrip()
+    sN = str(self.lineEditScenes.text()).rstrip().lstrip()
     assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second()).rstrip().lstrip()
     assdict['assignedWorker'] = str(self.lineEditWorkers.text()).rstrip().lstrip()
     assdict['description'] = str(self.lineEditDesc.text()).rstrip().lstrip()
@@ -129,6 +181,24 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       for aN in assesNames:
         if(aN):
           assdict['assName'] = aN.rstrip().lstrip()
+          for s in sN.split(","):
+            if(s.rstrip().lstrip()):
+              assdict['sceneName'] = s.rstrip().lstrip()
+              
+              for x in ntypes:
+                assdict['nodeType'] = x.split("#")[0].rstrip().lstrip()
+                if(len(x.split("#")) > 1):
+                  for ft in (x.split("#")[1]).split("%"):
+                    assdict['fileType'] = ft.rstrip().lstrip()
+                    utilsPipe.assRegister(assdict)
+                else:
+                  assdict['fileType'] = "default"
+                  utilsPipe.assRegister(assdict)
+    else:
+      for s in sN.split(","):
+        if(s.rstrip().lstrip()):
+          assdict['sceneName'] = s.rstrip().lstrip()
+      
           for x in ntypes:
             assdict['nodeType'] = x.split("#")[0].rstrip().lstrip()
             if(len(x.split("#")) > 1):
@@ -138,16 +208,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
             else:
               assdict['fileType'] = "default"
               utilsPipe.assRegister(assdict)
-    else:
-      for x in ntypes:
-        assdict['nodeType'] = x.split("#")[0].rstrip().lstrip()
-        if(len(x.split("#")) > 1):
-          for ft in (x.split("#")[1]).split("%"):
-            assdict['fileType'] = ft.rstrip().lstrip()
-            utilsPipe.assRegister(assdict)
-        else:
-          assdict['fileType'] = "default"
-          utilsPipe.assRegister(assdict)
+
     self.centralwidget.setEnabled(True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     
@@ -194,18 +255,18 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
  
   
   
-  def setScene(self):
-    seqName = str(self.comboSequence.currentText())
-    rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
-    self.comboScene.clear()
-    scenes = {}
-    if(rows):
-      for x in rows:
-        scenes[x['sceneName']] = 1
-    if(scenes):
-      for x in scenes:
-        self.comboScene.addItem(_fromUtf8(x))
-    return(1)
+  #def setScene(self):
+    #seqName = str(self.comboSequence.currentText())
+    #rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
+    #self.comboScene.clear()
+    #scenes = {}
+    #if(rows):
+      #for x in rows:
+        #scenes[x['sceneName']] = 1
+    #if(scenes):
+      #for x in scenes:
+        #self.comboScene.addItem(_fromUtf8(x))
+    #return(1)
         
         
       

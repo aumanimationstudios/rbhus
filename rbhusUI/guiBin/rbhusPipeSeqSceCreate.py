@@ -69,6 +69,8 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
     
     
   def createSeqScn(self):
+    self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+    
     seqScnDict = {}
     seqScnDict['projName'] = os.environ['rp_proj_projName']
     if(not self.lineEditSequenceName.text()):
@@ -76,13 +78,18 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
     seqScnDict['sequenceName'] = str(self.lineEditSequenceName.text())
     if(not self.lineEditSceneName.text()):
       return(0)
-    seqScnDict['sceneName'] = str(self.lineEditSceneName.text())
-    seqScnDict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-    seqScnDict['sFrame'] = str(self.spinStartFrame.value())
-    seqScnDict['eFrame'] = str(self.spinEndFrame.value())
-    seqScnDict['admins'] = str(self.lineEditAdmins.text())
-    seqScnDict['description'] = str(self.lineEditDesc.text())
-    utilsPipe.setupSequenceScene(seqScnDict)
+    self.centralwidget.setEnabled(False)
+    for x in str(self.lineEditSceneName.text()).split(","):
+      if(x.rstrip().lstrip()):
+        seqScnDict['sceneName'] = str(x.rstrip().lstrip())
+        seqScnDict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
+        seqScnDict['sFrame'] = str(self.spinStartFrame.value())
+        seqScnDict['eFrame'] = str(self.spinEndFrame.value())
+        seqScnDict['admins'] = str(self.lineEditAdmins.text())
+        seqScnDict['description'] = str(self.lineEditDesc.text())
+        utilsPipe.setupSequenceScene(seqScnDict)
+    self.centralwidget.setEnabled(True)
+    self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
   
   
   def rbhusPipeSeqSet(self):

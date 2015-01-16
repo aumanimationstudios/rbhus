@@ -75,7 +75,7 @@ utilsPipeLogger.addHandler(LOG_FILENAME)
 def getDirMaps():
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("SELECT * FROM dirMaps", dictionary=True)
+    rows = dbconn.execute("SELECT * FROM dirMaps order by directory", dictionary=True)
     return(rows)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
@@ -86,7 +86,7 @@ def getTags(projName="",assPath="",assId=""):
   dbconn = dbPipe.dbPipe()
   if(projName):
     try:
-      rows = dbconn.execute("SELECT tags FROM assets WHERE projName='"+ projName +"'", dictionary=True)
+      rows = dbconn.execute("SELECT tags FROM assets WHERE projName='"+ projName +"' order by tags", dictionary=True)
       if(rows):
         #print(rows)
         tags = {}
@@ -109,7 +109,7 @@ def getTags(projName="",assPath="",assId=""):
 def getDirMapsDetails(directory):
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("SELECT * FROM dirMaps where directory='"+ str(directory) +"'", dictionary=True)
+    rows = dbconn.execute("SELECT * FROM dirMaps where directory='"+ str(directory) +"' order by directory", dictionary=True)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
@@ -125,13 +125,13 @@ def getProjTypes(ptype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(ptype):
-      rows = dbconn.execute("SELECT * FROM projTypes where type='"+ str(ptype) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM projTypes where type='"+ str(ptype) +"' order by type", dictionary=True)
       if(rows):
         return(rows[0])
       else:
         return(0)
     else:
-      rows = dbconn.execute("SELECT * FROM projTypes", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM projTypes order by type", dictionary=True)
       if(rows):
         return(rows)
       else:
@@ -145,13 +145,13 @@ def getStageTypes(stype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(stype):
-      rows = dbconn.execute("SELECT * FROM stageTypes where type='"+ str(stype) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM stageTypes where type='"+ str(stype) +"' order by type", dictionary=True)
       if(rows):
         return(rows[0])
       else:
         return(0)
     else:
-      rows = dbconn.execute("SELECT * FROM stageTypes", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM stageTypes order by type", dictionary=True)
       if(rows):
         return(rows)
       else:
@@ -172,13 +172,13 @@ def getNodeTypes(ntype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(ntype):
-      rows = dbconn.execute("SELECT * FROM nodeTypes where type='"+ str(ntype) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM nodeTypes where type='"+ str(ntype) +"' order by type", dictionary=True)
       if(rows):
         return(rows[0])
       else:
         return(0)
     else:
-      rows = dbconn.execute("SELECT * FROM nodeTypes", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM nodeTypes order by type", dictionary=True)
       if(rows):
         return(rows)
       else:
@@ -192,13 +192,13 @@ def getFileTypes(ftype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(ftype):
-      rows = dbconn.execute("SELECT * FROM fileTypes where type='"+ str(ftype) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM fileTypes where type='"+ str(ftype) +"' order by type", dictionary=True)
       if(rows):
         return(rows[0])
       else:
         return(0)
     else:
-      rows = dbconn.execute("SELECT * FROM fileTypes", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM fileTypes order by type", dictionary=True)
       if(rows):
         return(rows)
       else:
@@ -212,13 +212,13 @@ def getAssTypes(atype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(atype):
-      rows = dbconn.execute("SELECT * FROM assetTypes where type='"+ str(atype) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM assetTypes where type='"+ str(atype) +"' order by type", dictionary=True)
       if(rows):
         return(rows[0])
       else:
         return(0)
     else:
-      rows = dbconn.execute("SELECT * FROM assetTypes", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM assetTypes order by type", dictionary=True)
       if(rows):
         return(rows)
       else:
@@ -232,11 +232,11 @@ def getSequenceScenes(proj,seq=None,sce=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(proj and seq and (not sce)):
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' order by sequenceName,sceneName", dictionary=True)
     elif(proj and seq and sce):
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' and sceneName='"+ str(sce) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' and sceneName='"+ str(sce) +"' order by sequenceName,sceneName", dictionary=True)
     else:
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"'", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' order by sequenceName,sceneName", dictionary=True)
     if(rows):
       return(rows)
     else:
@@ -263,7 +263,7 @@ def getAdmins():
   dbconn = dbPipe.dbPipe()
   adminUsers = []
   try:
-    rows = dbconn.execute("select * from admins", dictionary=True)
+    rows = dbconn.execute("select * from admins  order by user", dictionary=True)
     if(rows):
       for x in rows:
         adminUsers.append(x['user'])
@@ -411,7 +411,7 @@ def getProjDetails(projName=None,status=None):
   if(projName):
     dbconn = dbPipe.dbPipe()
     try:
-      rows = dbconn.execute("select * from proj where projName='"+ str(projName) +"'", dictionary=True)
+      rows = dbconn.execute("select * from proj where projName='"+ str(projName) +"' order by projName", dictionary=True)
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
@@ -425,7 +425,7 @@ def getProjDetails(projName=None,status=None):
     if(status != "all"):
       dbconn = dbPipe.dbPipe()
       try:
-        rows = dbconn.execute("select * from proj where status="+ str(status), dictionary=True)
+        rows = dbconn.execute("select * from proj where status="+ str(status) +" order by projName", dictionary=True)
       except:
         utilsPipeLogger.debug(str(sys.exc_info()))
         return(0)
@@ -598,9 +598,9 @@ def getProjAsses(projName,limit=None,whereDict={}):
                 whereDicts.append(x +"='"+ z +"'")
           whereString.append("("+ " or ".join(whereDicts) +")")
           
-        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by assName,assetType", dictionary=True)
+        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
       else:
-        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' order by assName,assetType", dictionary=True)
+        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' order by sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
       if(whereDict):
         
@@ -621,9 +621,9 @@ def getProjAsses(projName,limit=None,whereDict={}):
               if(z):
                 whereDicts.append(x +"='"+ z +"'")
           whereString.append("("+ " or ".join(whereDicts) +")")
-        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by assName,assetType limit "+ str(limit), dictionary=True)
+        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
       else:
-        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' order by assName,assetType limit "+ str(limit), dictionary=True)
+        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
     return(rows)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
@@ -633,7 +633,7 @@ def getProjAsses(projName,limit=None,whereDict={}):
 def getUsers():
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("select * from users", dictionary=True)
+    rows = dbconn.execute("select * from users order by id", dictionary=True)
     #print([row['id'] for row in rows])
     return([row['id'] for row in rows])
   except:

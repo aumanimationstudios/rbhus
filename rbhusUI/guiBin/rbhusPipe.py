@@ -42,7 +42,10 @@ import constantsPipe
 import authPipe
 import dbPipe
 import utilsPipe
+import hgmod
 import pyperclip
+
+
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -56,7 +59,15 @@ except AttributeError:
 #db.setDatabaseName("rbhusPipe")
 #db.open()
   
+class ExtendedQLabel(QtGui.QLabel):
+  clicked = QtCore.pyqtSignal()
 
+  def __init(self):
+    QtGui.QLabel.__init__(self)
+
+  def mouseDoubleClickEvent(self, ev):
+    self.clicked.emit()
+        
 class ImageWidget(QtGui.QPushButton):
   def __init__(self, imagePath, imageSize, parent):
     super(ImageWidget, self).__init__(parent)
@@ -741,8 +752,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         for x in rows:
           scenes[x['sceneName']] = 1
     if(scenes):
+      sortedsc = []
+      for s in scenes.keys():
+        if(s):
+          sortedsc.append(s)
+     
+      sortedsc.sort()  
       model = QtGui.QStandardItemModel(len(scenes),1)
-      for x in scenes:
+      for x in sortedsc:
         item = QtGui.QStandardItem(x)
         item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
@@ -843,7 +860,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     model = QtGui.QStandardItemModel(len(seq),1)
     
     if(seq):
-      for row in seq.keys():
+      sortedsc = []
+      for s in seq.keys():
+        if(s):
+          sortedsc.append(s)
+     
+      sortedsc.sort() 
+      for row in sortedsc:
         item = QtGui.QStandardItem(row)
         item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
@@ -1262,19 +1285,25 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         itemcn.setText(str(colNames[cn]))
         self.tableWidget.setHorizontalHeaderItem(cn, itemcn)
       for x in range(0,len(assesList)):
+        assAbsPath = assdict[assesList[x]]
         try:
-          item = QtGui.QLabel()
+          item = ExtendedQLabel()
+          item.setAlignment(QtCore.Qt.AlignVCenter)
           textAss = '<font color="'+ str(assesColor[assesList[x]].split(":")[0]).split("#")[1] +'">'+ (assesColor[assesList[x]].split(":")[0]).split("#")[0] +'</font>'
           if(len(assesColor[assesList[x]].split(":")) > 1):
             for fc in assesColor[assesList[x]].split(":")[1:]:
               textAss = textAss + ':' +'<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>'
-          item.setText(textAss)
-          item.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
           item.setTextFormat(QtCore.Qt.RichText)
+          item.setText(textAss)
+          sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+          
+          item.setSizePolicy(sizePolicy)
           item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-          assAbsPath = assdict[assesList[x]]
+          item.clicked.connect(lambda item=item : self.versionCheck(item))
+          
           self.tableWidget.setCellWidget(x,0,item)
         except:
+          print(str(sys.exc_info()))
           pass
         
 
@@ -1284,6 +1313,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           itemAss.setText(str(assesNames[assesList[x]]['assignedWorker']))
           self.tableWidget.setItem(x,1,itemAss)
         except:
+          print(str(sys.exc_info()))
           pass
         
         try:
@@ -1291,6 +1321,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           itemTag.setText(str(assesNames[assesList[x]]['tags']))
           self.tableWidget.setItem(x,2,itemTag)
         except:
+          print(str(sys.exc_info()))
           pass
         
         
@@ -1299,6 +1330,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           itemModified.setText(str(assModifiedTime[assesList[x]]))
           self.tableWidget.setItem(x,3,itemModified)
         except:
+          print(str(sys.exc_info()))
           pass
         
         try:
@@ -1308,6 +1340,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             previewName = assesNames[assesList[x]]['assName']
           self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
         except:
+          print(str(sys.exc_info()))
           pass
         
         if(assesList[x] in selAsses):
@@ -1350,6 +1383,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     webbrowser.open(father.imagePath)
     
 
+  def versionCheck(self,*args):
+    doc = QtGui.QTextDocument()
+    doc.setHtml(args[0].text())
+    text = doc.toPlainText()
+    hgmod.hg(text)
+    
   
   def rbhusPipeSeqSceCreate(self):
     p = QtCore.QProcess(parent=self.form)

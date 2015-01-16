@@ -24,7 +24,7 @@ cloneType = cInfo['cloneType']
 cType = constants.cloneType[cloneType] 
 clone = cInfo['clone']
 
-if(not clone):
+if(not clone or not cType):
   sys.exit(0)
 
 
