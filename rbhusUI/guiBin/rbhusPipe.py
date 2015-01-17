@@ -1341,7 +1341,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.tableWidget.setCellWidget(x,0,item)
         except:
           print(str(sys.exc_info()))
-          pass
         
 
         
@@ -1351,7 +1350,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.tableWidget.setItem(x,1,itemAss)
         except:
           print(str(sys.exc_info()))
-          pass
         
         try:
           itemTag = QtGui.QTableWidgetItem()
@@ -1359,7 +1357,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.tableWidget.setItem(x,2,itemTag)
         except:
           print(str(sys.exc_info()))
-          pass
         
         
         try:
@@ -1368,7 +1365,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.tableWidget.setItem(x,3,itemModified)
         except:
           print(str(sys.exc_info()))
-          pass
         
         try:
           if(assesNames[assesList[x]]['assName'] == "default"):
@@ -1378,7 +1374,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
         except:
           print(str(sys.exc_info()))
-          pass
         
         if(assesList[x] in selAsses):
           self.tableWidget.selectRow(x)
