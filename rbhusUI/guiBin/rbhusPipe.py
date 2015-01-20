@@ -179,7 +179,7 @@ class workerGetAsses(QtCore.QObject):
           try:
             self.absdict[self.asses[x]['path']] = utilsPipe.getAbsPath(self.asses[x]['path'])
           except:
-            pass
+            print(str(sys.exc_info()))
       else:
         self.asses = ()
       
@@ -188,7 +188,7 @@ class workerGetAsses(QtCore.QObject):
           try:
             self.absdict[self.assesLinked[x]['path']] = utilsPipe.getAbsPath(self.assesLinked[x]['path'])
           except:
-            pass
+            print(str(sys.exc_info()))
       else:
         self.assesLinked = ()
     except:
@@ -207,7 +207,7 @@ class workerGetAsses(QtCore.QObject):
           elif(sys.platform.find("win") >= 0):
             self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.asses[x]['path']])))
         except:
-          pass
+          print(str(sys.exc_info()))
     
     if(self.assesLinked):
       for x in range(0,len(self.assesLinked)):
@@ -220,7 +220,7 @@ class workerGetAsses(QtCore.QObject):
           elif(sys.platform.find("win") >= 0):
             self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.assesLinked[x]['path']])))
         except:
-          pass
+          print(str(sys.exc_info()))
         
     self.dataReady.emit(self.assesList,self.assesNames,self.assesColor,self.absdict,self.assModifiedTime)
     
