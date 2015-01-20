@@ -1367,10 +1367,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           print(str(sys.exc_info()))
         
         try:
-          if(assesNames[assesList[x]]['assName'] == "default"):
-            previewName = "preview"
-          else:
-            previewName = assesNames[assesList[x]]['assName']
+          previewName = "preview"
           self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
         except:
           print(str(sys.exc_info()))
