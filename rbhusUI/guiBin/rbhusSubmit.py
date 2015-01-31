@@ -224,7 +224,10 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     if(sys.platform.find("win") >= 0):
       self.lineEditOutDir.setText("z:/"+ "/".join((outFile.replace("\\","/")).split("/")[1:-1]).rstrip().lstrip() +"/")
     else:
-      self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/")
+      if(outFile.find("egg") >= 0):
+        self.lineEditOutDir.setText("/".join(outFile.split("/")[0:3]) +"/output/" + "/".join(outFile.split("/")[3:-1]) +"/")
+      else:
+        self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/")
   
   def selectOutDir(self):
     dirac = QtGui.QFileDialog.getExistingDirectory()

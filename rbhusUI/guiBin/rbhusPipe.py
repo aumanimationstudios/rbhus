@@ -20,6 +20,8 @@ srb = "selectRadioBox.py"
 rpS = "rbhusPipeSeqSceCreate.py" 
 fileSelect = "fileSelectUI.py"
 scb = "selectCheckBox.py"
+vc = "rbhusPipeVersions.py"
+
 
 selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
 #selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
@@ -28,6 +30,7 @@ rbhusPipeAssetCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpAss
 rbhusPipeAssetEditCmd = dirSelf.rstrip(os.sep) + os.sep + rpAssEdit
 rbhusPipeSeqSceCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpS
 fileSelectCmd = dirSelf.rstrip(os.sep) + os.sep + fileSelect
+versionCmd = dirSelf.rstrip(os.sep) + os.sep + vc
 
 
 
@@ -681,7 +684,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #for x in listAsses:
       #if(str(x)):
         #print(str(x))
-      
+  
+  def versionAss(self):
+    pass
   
   def setStageTypes(self):
     rows = utilsPipe.getStageTypes()
