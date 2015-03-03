@@ -41,6 +41,47 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+class ImagePlayer(QtGui.QWidget):
+  def __init__(self, filename, parent):
+    super(ImagePlayer,self).__init__(parent)
+    self.parent = parent
+
+    # Load the file into a QMovie
+    self.movie = QtGui.QMovie(filename, QtCore.QByteArray(), parent)
+    self.newSize = QtCore.QSize(100,100)
+    self.movie.setScaledSize(self.newSize)
+
+    self.movie_screen = QtGui.QLabel()
+    self.movie_screen.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+    self.movie_screen.setAlignment(QtCore.Qt.AlignCenter)
+
+    # Add the QMovie object to the label
+    self.movie.setCacheMode(QtGui.QMovie.CacheAll)
+    self.movie.setSpeed(100)
+    self.movie_screen.setMovie(self.movie)
+    
+    
+    # Create the layout
+    main_layout = QtGui.QVBoxLayout()
+    main_layout.addWidget(self.movie_screen)
+    self.setLayout(main_layout)
+    self.movie.start()
+    
+    
+  def resizeEvent(self, event):
+    self.move((self.parent.geometry().width()-100)/2,(self.parent.geometry().height()-100)/2)
+    
+  def showEvent(self,event):
+    #self.movie.setEnabled(True)
+    self.movie.start()
+    #self.show()
+    
+    
+  def hideEvent(self,event):
+    self.movie.stop()
+
+
+
 class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def setupUi(self, Form):
     rbhusListMod.Ui_mainRbhusList.setupUi(self,Form)
@@ -59,6 +100,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.form = Form
     
     
+    
+    
     icon = QtGui.QIcon()
     iconRefresh = QtGui.QIcon()
     iconTime = QtGui.QIcon()
@@ -74,7 +117,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     Form.setWindowIcon(icon)
 
     self.taskThreads = []
-    
+    self.sFrames = ()
     self.dockWidgetTasks.setTitleBarWidget(self.titleBarWidgetTasks)
     self.dockWidgetFrames.setTitleBarWidget(self.titleBarWidgetFrames)
     self.authL = auth.login()
@@ -128,6 +171,19 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.dateEditTaskTo.setDate(QtCore.QDate.currentDate())
     
     self.popTableList()
+    
+    #self.centralwidget.resizeEvent  = self.resizeEvent
+    #self.tableList.resizeEvent = self.resizeEvent
+    
+    
+    #self.loadingGif = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/loading.gif"
+    #self.loader = ImagePlayer(self.loadingGif,parent=self.tableList)
+    #self.loader.hide()
+    
+    
+  #def resizeEvent(self,event):
+    #self.loader.resizeEvent(event)
+    #self.tableList.resizeColumnsToContents()
   
   
   
@@ -199,7 +255,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
               subprocess.Popen(["x:/standard/template/djv-0.8.3-x64/bin/djv_view.exe -file_proxy 1/4 ",str(fi.replace("\\","/"))," -file_seq_auto ","true"," -file_cache ","true"])
             elif(sys.platform.find("linux") >= 0):
               print("/usr/local/bin/djv_view -file_proxy 1/4 "+ str(fi) +" -file_seq_auto  true  -file_cache true")
-              subprocess.Popen(["/usr/local/bin/djv_view -file_proxy 1/4 ",str(fi)," -file_seq_auto ","true"," -file_cache ","true"])
+              subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-file_seq_auto","true","-file_cache","true"])
             print(fi)
           
         
@@ -229,6 +285,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test3Action = menu.addAction("rerun")
     test4Action = menu.addAction("edit")
     test5Action = menu.addAction("open dir")
+    test10Action = menu.addAction("exr2png(linux)")
     test6Action = menu.addAction("copy/submit")
     test7Action = menu.addAction("fastAssign enable")
     test8Action = menu.addAction("fastAssign disable")
@@ -253,7 +310,24 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.fastAssignFunc(e=0)
     if(action == test9Action):
       self.delTask()
+    if(action == test10Action):
+      self.exr2png()
       
+      
+      
+  def exr2png(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    db_conn = dbRbhus.dbRbhus()
+    if(selTasksDict):
+      for x in selTasksDict:
+        tD = db_conn.getTaskDetails(x['id'])
+        oDir = tD['outDir']
+        #self.loader.show()
+        openP = subprocess.Popen("ls "+ oDir +"*.exr | parallel -kj4 -eta 'djv_convert {} {}.png -layer 0 -default_speed 50 -pixel rgba f16 ; rename .exr.png .png {}.png'",shell=True)
+        timestart = time.time()
+        openP.wait()
+        #self.loader.hide()
       
       
   def fastAssignFunc(self,e=0):

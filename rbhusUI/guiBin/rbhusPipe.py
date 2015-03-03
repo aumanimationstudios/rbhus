@@ -540,6 +540,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     menu = QtGui.QMenu()
     #openFileAction = menu.addAction("open file")
     openFolderAction = menu.addAction("open")
+    versionAction = menu.addAction("versioning")
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyNew = menu.addAction("copy/new")
@@ -562,6 +563,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.copyNewAss()
     if(action == assRender):
       self.renderAss()
+    if(action == versionAction):
+      self.versionAss()
       
       
   def popupMine(self):
@@ -580,6 +583,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def menuMineShow(self):
     self.menuMine.show()
 
+  
+  
+  
+  
+  
   def renderAss(self):
     listAsses = self.selectedAsses()
     print(listAsses)
@@ -686,8 +694,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         #print(str(x))
   
   def versionAss(self):
-    pass
-  
+    selass = self.selectedAsses()
+    os.system(versionCmd +" --path \""+ selass[-1] +"\"")
+    
+    
   def setStageTypes(self):
     rows = utilsPipe.getStageTypes()
     #defStage = utilsPipe.getDefaults("stageTypes")
@@ -699,7 +709,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
-        item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        item.setFlags(QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -743,7 +754,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboStageType.setEditText("default")
   
   def pressedStageType(self, index):
-    selectedStages = []
+    
     
     if(self.comboStageType.model().item(index.row()).checkState() != 0):
       self.comboStageType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
@@ -763,7 +774,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setRed(225)
       abrush.setColor(color)
       self.comboStageType.model().item(index.row()).setForeground(abrush)
-    
+    selectedStages = []
     for i in range(0,self.comboStageType.model().rowCount()):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboStageType.model().item(i).text()))
@@ -798,7 +809,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       model = QtGui.QStandardItemModel(len(scenes),1)
       for x in sortedsc:
         item = QtGui.QStandardItem(x)
-        item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        item.setFlags(QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -845,7 +857,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   def pressedScene(self, index):
-    selectedStages = []
+    
     
     if(self.comboScene.model().item(index.row()).checkState() != 0):
       self.comboScene.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
@@ -865,7 +877,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setRed(225)
       abrush.setColor(color)
       self.comboScene.model().item(index.row()).setForeground(abrush)
-    
+    selectedStages = []
     for i in range(0,self.comboScene.model().rowCount()):
       if(self.comboScene.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboScene.model().item(i).text()))
@@ -905,7 +917,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       sortedsc.sort() 
       for row in sortedsc:
         item = QtGui.QStandardItem(row)
-        item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        item.setFlags(QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -951,7 +964,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   def pressedSequence(self, index):
-    selectedStages = []
+    
     
     if(self.comboSequence.model().item(index.row()).checkState() != 0):
       self.comboSequence.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
@@ -971,7 +984,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setRed(225)
       abrush.setColor(color)
       self.comboSequence.model().item(index.row()).setForeground(abrush)
-    
+    selectedStages = []
     for i in range(0,self.comboSequence.model().rowCount()):
       if(self.comboSequence.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboSequence.model().item(i).text()))
@@ -994,7 +1007,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
-        item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        item.setFlags(QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -1038,7 +1052,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboNodeType.setEditText("default")
   
   def pressedNodeType(self, index):
-    selectedStages = []
+    
     if(self.comboNodeType.model().item(index.row()).checkState() != 0):
       self.comboNodeType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
       #self.comboStageType.model().item(index.row()).setEnabled(False)
@@ -1057,7 +1071,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setRed(225)
       abrush.setColor(color)
       self.comboNodeType.model().item(index.row()).setForeground(abrush)
-    
+    selectedStages = []
     for i in range(0,self.comboNodeType.model().rowCount()):
       if(self.comboNodeType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboNodeType.model().item(i).text()))
@@ -1080,7 +1094,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
-        item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        item.setFlags(QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -1124,7 +1139,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboFileType.setEditText("default")
   
   def pressedFileType(self, index):
-    selectedStages = []
+    
     
     if(self.comboFileType.model().item(index.row()).checkState() != 0):
       self.comboFileType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
@@ -1144,7 +1159,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setRed(225)
       abrush.setColor(color)
       self.comboFileType.model().item(index.row()).setForeground(abrush)
-    
+    selectedStages = []
     for i in range(0,self.comboFileType.model().rowCount()):
       if(self.comboFileType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboFileType.model().item(i).text()))
@@ -1421,7 +1436,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     doc = QtGui.QTextDocument()
     doc.setHtml(args[0].text())
     text = doc.toPlainText()
-    hgmod.hg(text)
+    a = hgmod.hg(text)
+    print("in versionCheck : "+ str(os.getcwd()))
+    #a._init()
     
   
   def rbhusPipeSeqSceCreate(self):

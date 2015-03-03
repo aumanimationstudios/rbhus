@@ -29,6 +29,7 @@ import dbPipe
 import constantsPipe
 import authPipe
 import utilsPipe
+import hgmod
 
 
 
@@ -56,21 +57,55 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
+    if(args.assId):
+      self.assetDetails = utilsPipe.getAssDetails(assId=args.assId)
+    if(args.assPath):
+      self.assetDetails = utilsPipe.getAssDetails(assPath=args.assPath)
+    print(self.assetDetails)
     
     
+    self.pushInit.clicked.connect(self.initialize)
+    self.pushWork.clicked.connect(self.openfolder)
+    self.pushCommit.clicked.connect(self.commit)
     
-
-
-
-
-
-
-
-
-
-
-
-
+    self.versionsHg = hgmod.hg(args.assPath)
+    
+    
+  def push(self):
+    pass
+  
+  def initialize(self):
+    self.versionsHg.initialize()
+  
+  def commit(self):
+    self.versionsHg._add()
+    self.versionsHg._commit()
+    self.versionsHg._push()
+    os.chdir(self.versionsHg.absPipePath)
+    self.versionsHg._update()
+    self.versionsHg._log()
+    os.chdir(self.versionsHg.localPath)
+    
+    
+  
+  
+  def openfolder(self):
+    self.versionsHg.initializeLocal()
+    if(os.path.exists(self.versionsHg.localPath)):
+      fila = QtGui.QFileDialog.getOpenFileNames(directory=self.versionsHg.localPath)
+      print(fila)
+      if(fila):
+        print(str(fila[0]))
+        filename = str(fila[0])
+        assdets = utilsPipe.getAssDetails(assPath=self.versionsHg.pipepath)
+        runCmd = utilsPipe.openAssetCmd(assdets,filename)
+        if(runCmd):
+          runCmd = runCmd.rstrip().lstrip()
+          subprocess.Popen(runCmd,shell=True)
+        else:
+          import webbrowser
+          webbrowser.open(filename)
+    
 
 
 

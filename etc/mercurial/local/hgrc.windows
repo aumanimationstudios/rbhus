@@ -3,4 +3,7 @@ largefiles =
 
 [largefiles]
 minsize = 1
-usercache = /crap/mercurial/
+usercache = D:/mercurial/
+
+[trusted]
+groups = artist

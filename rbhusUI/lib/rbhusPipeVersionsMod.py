@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeVersionsMod.ui'
 #
-# Created: Sun Jan 25 21:13:32 2015
+# Created: Mon Feb  9 22:25:38 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,14 +26,14 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(659, 428)
+    MainWindow.resize(675, 442)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
     self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-    self.pushCommit = QtGui.QPushButton(self.centralwidget)
-    self.pushCommit.setObjectName(_fromUtf8("pushCommit"))
-    self.gridLayout.addWidget(self.pushCommit, 2, 0, 1, 1)
+    self.pushWork = QtGui.QPushButton(self.centralwidget)
+    self.pushWork.setObjectName(_fromUtf8("pushWork"))
+    self.gridLayout.addWidget(self.pushWork, 4, 1, 1, 1)
     self.gridLayout_2 = QtGui.QGridLayout()
     self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
     self.label = QtGui.QLabel(self.centralwidget)
@@ -45,10 +45,7 @@ class Ui_MainWindow(object):
     self.lineEditAssName.setReadOnly(True)
     self.lineEditAssName.setObjectName(_fromUtf8("lineEditAssName"))
     self.gridLayout_2.addWidget(self.lineEditAssName, 0, 1, 1, 1)
-    self.gridLayout.addLayout(self.gridLayout_2, 0, 0, 1, 2)
-    self.pushWork = QtGui.QPushButton(self.centralwidget)
-    self.pushWork.setObjectName(_fromUtf8("pushWork"))
-    self.gridLayout.addWidget(self.pushWork, 2, 1, 1, 1)
+    self.gridLayout.addLayout(self.gridLayout_2, 0, 0, 1, 3)
     self.verticalLayout = QtGui.QVBoxLayout()
     self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
     self.groupVersions = QtGui.QGroupBox(self.centralwidget)
@@ -72,7 +69,13 @@ class Ui_MainWindow(object):
     self.tableVersions.setRowCount(0)
     self.verticalLayout_2.addWidget(self.tableVersions)
     self.verticalLayout.addWidget(self.groupVersions)
-    self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 2)
+    self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 3)
+    self.pushCommit = QtGui.QPushButton(self.centralwidget)
+    self.pushCommit.setObjectName(_fromUtf8("pushCommit"))
+    self.gridLayout.addWidget(self.pushCommit, 4, 2, 1, 1)
+    self.pushInit = QtGui.QPushButton(self.centralwidget)
+    self.pushInit.setObjectName(_fromUtf8("pushInit"))
+    self.gridLayout.addWidget(self.pushInit, 4, 0, 1, 1)
     MainWindow.setCentralWidget(self.centralwidget)
     self.statusbar = QtGui.QStatusBar(MainWindow)
     self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -83,8 +86,9 @@ class Ui_MainWindow(object):
 
   def retranslateUi(self, MainWindow):
     MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-    self.pushCommit.setText(_translate("MainWindow", "commit", None))
-    self.label.setText(_translate("MainWindow", "asset", None))
     self.pushWork.setText(_translate("MainWindow", "open", None))
+    self.label.setText(_translate("MainWindow", "asset", None))
     self.groupVersions.setTitle(_translate("MainWindow", "versions", None))
+    self.pushCommit.setText(_translate("MainWindow", "commit", None))
+    self.pushInit.setText(_translate("MainWindow", "initialize", None))
 

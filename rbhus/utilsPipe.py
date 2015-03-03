@@ -75,7 +75,7 @@ utilsPipeLogger.addHandler(LOG_FILENAME)
 def getDirMaps():
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("SELECT * FROM dirMaps order by directory", dictionary=True)
+    rows = dbconn.execute("SELECT * FROM dirMaps", dictionary=True)
     return(rows)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
