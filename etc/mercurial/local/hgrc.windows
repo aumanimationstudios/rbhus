@@ -7,3 +7,7 @@ usercache = D:/mercurial/
 
 [trusted]
 groups = artist
+
+[ui]
+timeout = 5
+interactive = False

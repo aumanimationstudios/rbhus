@@ -175,6 +175,10 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict['description'] = str(self.lineEditDesc.text()).rstrip().lstrip()
     assdict['tags'] = str(self.lineEditTags.text()).rstrip().lstrip()
     assdict['fRange'] = str(self.lineEditFRange.text()).rstrip().lstrip()
+    if(self.checkVersion.isChecked()):
+      assdict['versioning'] = 1
+    else:
+      assdict['versioning'] = 0
     self.centralwidget.setEnabled(False)
     if(self.lineEditAssName.text()):
       assesNames = str(self.lineEditAssName.text()).split(",")

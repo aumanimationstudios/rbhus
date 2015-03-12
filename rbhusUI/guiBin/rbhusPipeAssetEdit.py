@@ -94,6 +94,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.checkAssign.clicked.connect(self.enableAssignTo)
     self.checkDesc.clicked.connect(self.enableDesc)
     self.checkAssignSelf.clicked.connect(self.setAssignedWorker)
+    self.checkVersionEnable.clicked.connect(self.checkVersionEnableFunc)
     self.enableAssignTo()
     self.enableDesc()
     self.enableDueDate()
@@ -146,7 +147,12 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
 
 
       
-
+  def checkVersionEnableFunc(self):
+    if(self.checkVersionEnable.isChecked()):
+      self.checkVersion.setEnabled(True)
+    else:
+      self.checkVersion.setEnabled(False)
+    
 
   
   def setAssignedWorker(self):
@@ -178,6 +184,11 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           assdict['tags'] = str(self.lineEditTags.text())
         if(self.checkFRange.isChecked()):
           assdict['fRange'] = str(self.lineEditFRange.text())
+        if(self.checkVersionEnable.isChecked()):
+          if(self.checkVersion.isChecked()):
+            assdict['versioning'] = 1;
+          else:
+            assdict['versioning'] = 0;
           
         if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username)):
           print("user not allowed to edit . not an admin or an asset founder!!")
@@ -200,6 +211,11 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           assdict['tags'] = str(self.lineEditTags.text())
         if(self.checkFRange.isChecked()):
           assdict['fRange'] = str(self.lineEditFRange.text())
+        if(self.checkVersionEnable.isChecked()):
+          if(self.checkVersion.isChecked()):
+            assdict['versioning'] = 1;
+          else:
+            assdict['versioning'] = 0;
           
         if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username)):
           print("user not allowed to edit . not an admin or an asset founder!!")

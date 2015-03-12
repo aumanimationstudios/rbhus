@@ -112,7 +112,11 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         
         for row in self.defCombo:
           item = QtGui.QStandardItem(row)
-          item.setFlags(QtCore.Qt.ItemIsUserCheckable)
+          if(sys.platform.find("linux") >=0):
+            item.setFlags(QtCore.Qt.ItemIsEnabled)
+          elif(sys.platform.find("win") >=0):
+            item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+          #item.setFlags(QtCore.Qt.ItemIsUserCheckable)
           item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
           model.setItem(indx,0,item)
           abrush = QtGui.QBrush()

@@ -170,6 +170,18 @@ def atUrService():
     setproctitle.setproctitle("rD_Control")
   db_conn = dbRbhus.dbRbhus()
   logClientCrtl.debug(str(os.getpid()) + ": atUrService func")
+  try:
+    if(sys.platform.find("linux") >=0):
+      os.makedirs("/crap/versionCache/")
+      os.chmod("/crap/versionCache/",0777)
+      os.makedirs("/crap/mercurial/")
+      os.chmod("/crap/mercurial/",0777)
+    elif(sys.platform.find("linux") >=0):
+      os.makedirs("d:/versionCache/")
+      os.makedirs("d:/mercurial/")
+  except:
+    pass
+  
   while(1):
     try:
       hostName,ipAddr = rUtils.getLocalNameIP()
@@ -184,6 +196,7 @@ def atUrService():
     time.sleep(1)
 
   while(1):
+    
     clientSocket, address = serverSocket.accept()
     data = ""
     data = clientSocket.recv(1024)

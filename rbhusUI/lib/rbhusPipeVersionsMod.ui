@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>675</width>
-    <height>442</height>
+    <width>466</width>
+    <height>425</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,36 +15,8 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="1">
-     <widget class="QPushButton" name="pushWork">
-      <property name="text">
-       <string>open</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0" colspan="3">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="text">
-         <string>asset</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEditAssName">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <layout class="QGridLayout" name="gridLayout_2"/>
     </item>
     <item row="1" column="0" colspan="3">
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -71,6 +43,44 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="mouseTracking">
+            <bool>true</bool>
+           </property>
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <row>
+            <property name="text">
+             <string>tete</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>eteeee</string>
+            </property>
+           </row>
+           <column>
+            <property name="text">
+             <string>teset</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>eee</string>
+            </property>
+           </column>
           </widget>
          </item>
         </layout>
@@ -86,9 +96,9 @@
      </widget>
     </item>
     <item row="4" column="0">
-     <widget class="QPushButton" name="pushInit">
+     <widget class="QPushButton" name="pushWork">
       <property name="text">
-       <string>initialize</string>
+       <string>open</string>
       </property>
      </widget>
     </item>

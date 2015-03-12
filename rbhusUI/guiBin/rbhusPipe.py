@@ -710,7 +710,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
         #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-        item.setFlags(QtCore.Qt.ItemIsEnabled)
+        if(sys.platform.find("linux") >=0):
+          item.setFlags(QtCore.Qt.ItemIsEnabled)
+        elif(sys.platform.find("win") >=0):
+          item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -1352,6 +1355,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
               textAss = textAss + ':' +'<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>'
           item.setTextFormat(QtCore.Qt.RichText)
           item.setText(textAss)
+          item.setToolTip("CHECK OUT THE VERSION OPTION    };)\nEnable it by editing the asset")
           sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
           
           item.setSizePolicy(sizePolicy)

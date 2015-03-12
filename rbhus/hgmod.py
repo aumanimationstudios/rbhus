@@ -18,6 +18,7 @@ etcMercurial.append("mercurial")
 hgrcHome = os.sep.join(etcMercurial) + os.sep +"home"+ os.sep +".hgrc"
 hgrcLocalLinux = os.sep.join(etcMercurial) + os.sep +"local"+ os.sep +"hgrc.linux"
 hgrcLocalWindows = os.sep.join(etcMercurial) + os.sep +"local"+ os.sep +"hgrc.windows"
+hgignore = os.sep.join(etcMercurial) + os.sep +"local"+ os.sep +".hgignore"
 localCacheLinux = "/crap/versionCache/"+ os.environ['rbhusPipe_acl_user'] +"/"
 localCacheWindows = "D:/versionCache/"+ os.environ['rbhusPipe_acl_user'] +"/"
 
@@ -55,6 +56,7 @@ class hg(object):
     
   
   
+  
   def isMainInitialized(self):
     if(os.path.exists(self.absPipePath +"/.hg")):
       print("versioning main : true")
@@ -81,6 +83,7 @@ class hg(object):
       self._init()
       self._add()
       self._commit()
+      self._copyIgnore()
     print("initialization done")
     return(True)
   
@@ -88,7 +91,8 @@ class hg(object):
     os.chdir(self.localPath)
     if(self.isLocalInitialized()):
       print("already initialized")
-    self._clone()
+    else:
+      self._clone()
     self._pull()
     self._update()
     print("cloning done")
@@ -121,6 +125,19 @@ class hg(object):
       print("copying hgrc to main : fail")
       print(str(sys.exc_info()))
     print("copying hgrc to main : done")
+  
+  def _copyIgnore(self):
+    userdir = expanduser("~") + os.sep
+    try:
+      if(sys.platform.find("linux") >= 0):
+        shutil.copy(hgignore,self.absPipePath +"/.hgignore")
+      elif(sys.platform.find("win") >= 0):
+        shutil.copy(hgignore,self.absPipePath +"/.hgignore")
+    except:
+      print("copying hgrc to main : fail")
+      print(str(sys.exc_info()))
+    print("copying hgrc to main : done")
+  
     
   def _copyLocalConfig(self):
     userdir = expanduser("~") + os.sep
@@ -134,6 +151,14 @@ class hg(object):
       print(str(sys.exc_info()))
     print("copying hgrc to local : done")  
     
+  
+  def _deleteLock(self):
+    try:
+      os.remove(self.absPipePath +"/.hg/store/lock")
+    except:
+      print(str(sys.exc_info()))
+  
+  
   def _init(self):
     print(os.getcwd())
     p = subprocess.Popen(["hg","init"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -151,44 +176,65 @@ class hg(object):
     p = subprocess.Popen(["hg","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    print(out)
+    self._deleteLock()
+    print("_add"+ str(out))
+    
     
   def _commit(self):
-    p = subprocess.Popen(["hg","commit","--addremove","--message","wtf","--user",os.environ['rbhusPipe_acl_user']],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    p = subprocess.Popen(["hg","commit","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']])
+    #out = p.communicate()
     p.wait()
-    print(out)
+    self._deleteLock()
+    #print("_commit"+ str(out))
    
   def _push(self):
-    p = subprocess.Popen(["hg","push",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    p = subprocess.Popen(["hg","push",self.absPipePath])
+    #out = p.communicate()
     p.wait()
-    print(out)
+    self._deleteLock()
+    #print("_push"+ str(out))
   
   def _pull(self):
     p = subprocess.Popen(["hg","pull",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    print(out)
+    print("_pull"+ str(out))
     
   def _clone(self):
     p = subprocess.Popen(["hg","clone",self.absPipePath,"."],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    print(out)
+    print("_clone"+ str(out))
     
     
   def _update(self):
     p = subprocess.Popen(["hg","update"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    print(out)
+    print("_updte"+ str(out))
+    self._deleteLock()
   
   def _log(self):
-    p = subprocess.Popen(["hg","log","--style","xml"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print("going into log")
+    p = subprocess.Popen(["hg","log","--template","{rev}###{author}###{date}###{desc}@@@"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
-    dom = minidom.parseString(out[0])
     p.wait()
-    #for node in dom.getElementsByTagName('logentry'):  # visit every node <bar />
-      #print node.childNodes[0].localName
-    print(dom.toxml())
+    print(out)
+    ret = []
+    for t in out:
+      if(t):
+        for g in t.split("@@@"):
+          if(g):
+            ret.append(g.split("###"))
+    self._deleteLock()        
+    return(ret)
+  
+  
+  def _archive(self,rev):
+    os.chdir(self.absPipePath)
+    p = subprocess.Popen(["hg","archive","--rev",str(rev),"./publish/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()
+    p.wait()
+    print("_archive"+ str(out))
+    self._deleteLock()
+    os.chdir(self.localPath)
