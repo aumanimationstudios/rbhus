@@ -190,7 +190,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           else:
             assdict['versioning'] = 0;
           
-        if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username)):
+        if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username or assdets['assignedWorker'] == self.username)):
           print("user not allowed to edit . not an admin or an asset founder!!")
           self.cetralwidget.setCursor(QtCore.Qt.ArrowCursor)
           return(0)
@@ -217,7 +217,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           else:
             assdict['versioning'] = 0;
           
-        if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username)):
+        if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username or assdets['assignedWorker'] == self.username)):
           print("user not allowed to edit . not an admin or an asset founder!!")
           self.cetralwidget.setCursor(QtCore.Qt.ArrowCursor)
           return(0)

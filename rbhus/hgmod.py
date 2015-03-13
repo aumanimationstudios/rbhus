@@ -233,6 +233,9 @@ class hg(object):
   def _archive(self,rev):
     os.chdir(self.absPipePath)
     p = subprocess.Popen(["hg","archive","--rev",str(rev),"./publish/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    assdict = {}
+    assdict["publishVersion"] = str(rev)
+    utilsPipe.assEdit(asspath = self.pipepath , assdict=assdict)
     out = p.communicate()
     p.wait()
     print("_archive"+ str(out))
