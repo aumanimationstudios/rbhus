@@ -78,7 +78,10 @@ class hg(object):
     os.chdir(self.absPipePath)
     if(self.isMainInitialized()):
       print("already initialized")
+      self._add()
+      self._commit()
       self._update()
+      self._copyIgnore()
     else:
       self._init()
       self._add()
@@ -188,7 +191,7 @@ class hg(object):
     #print("_commit"+ str(out))
    
   def _push(self):
-    p = subprocess.Popen(["hg","push",self.absPipePath])
+    p = subprocess.Popen(["hg","push","-f",self.absPipePath])
     #out = p.communicate()
     p.wait()
     self._deleteLock()
@@ -241,3 +244,13 @@ class hg(object):
     print("_archive"+ str(out))
     self._deleteLock()
     os.chdir(self.localPath)
+    
+  def _revert(self,rev):
+    os.chdir(self.localPath)
+    p = subprocess.Popen(["hg","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()
+    p.wait()
+    print("_revert"+ str(out))
+    self._deleteLock()
+    os.chdir(self.localPath)  
+  

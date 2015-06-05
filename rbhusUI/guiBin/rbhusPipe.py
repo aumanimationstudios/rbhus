@@ -540,7 +540,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     menu = QtGui.QMenu()
     #openFileAction = menu.addAction("open file")
     openFolderAction = menu.addAction("open")
-    versionAction = menu.addAction("versioning")
+    #versionAction = menu.addAction("versioning")
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyNew = menu.addAction("copy/new")
@@ -563,8 +563,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.copyNewAss()
     if(action == assRender):
       self.renderAss()
-    if(action == versionAction):
-      self.versionAss()
+    #if(action == versionAction):
+      #self.versionAss()
       
       
   def popupMine(self):
@@ -608,6 +608,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       pyperclip.copy(abspath)
       
   
+  
+ 
+  
+  
   def openFileAss(self):
     listAsses = self.selectedAsses()
     print(listAsses)
@@ -637,26 +641,35 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       
       
     
+  
+  
   def openFolderAss(self):
     listAsses = self.selectedAsses()
     if(listAsses): # and (len(listAsses) == 1)
       x = str(listAsses[0])
       print(x)
       p = utilsPipe.getAbsPath(x)
+      assdets = utilsPipe.getAssDetails(assPath=x)
+      
+      print("versioning : "+ str(assdets['versioning']))
       if(os.path.exists(p)):
-        fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
-        print(fila)
-        if(fila):
-          print(str(fila[0]))
-          filename = str(fila[0])
-          assdets = utilsPipe.getAssDetails(assPath=x)
-          runCmd = utilsPipe.openAssetCmd(assdets,filename)
-          if(runCmd):
-            runCmd = runCmd.rstrip().lstrip()
-            subprocess.Popen(runCmd,shell=True)
-          else:
-            import webbrowser
-            webbrowser.open(filename)
+        if(assdets['versioning'] == 0):
+          fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
+          print(fila)
+          if(fila):
+            print(str(fila[0]))
+            filename = str(fila[0])
+            assdets = utilsPipe.getAssDetails(assPath=x)
+            runCmd = utilsPipe.openAssetCmd(assdets,filename)
+            if(runCmd):
+              runCmd = runCmd.rstrip().lstrip()
+              subprocess.Popen(runCmd,shell=True)
+            else:
+              import webbrowser
+              webbrowser.open(filename)
+        else:
+          subprocess.Popen(versionCmd +" --path \""+ x +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
+         
           
         
    
@@ -695,7 +708,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def versionAss(self):
     selass = self.selectedAsses()
-    os.system(versionCmd +" --path \""+ selass[-1] +"\"")
+    #pv = QtCore.QProcess(parent=self.form)
+    #pv.setStandardOutputFile(tempDir + os.sep +"rbhusPipe_version"+ self.username +".log")
+    #pv.setStandardErrorFile(tempDir + os.sep +"rbhusPipe_version"+ self.username +".err")
+    #global versionCmd
+    #versionCmd = versionCmd +" --path \""+ selass[-1] +"\""
+    
+    #pv.start(sys.executable,versionCmd.split())
+    #pv.waitForFinished()
+    subprocess.Popen(versionCmd +" --path \""+ selass[-1] +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
     
     
   def setStageTypes(self):
@@ -703,9 +724,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #defStage = utilsPipe.getDefaults("stageTypes")
     self.comboStageType.clear()  
     indx = 0
-    
     model = QtGui.QStandardItemModel(len(rows),1)
-    
     if(rows):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
@@ -812,8 +831,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       model = QtGui.QStandardItemModel(len(scenes),1)
       for x in sortedsc:
         item = QtGui.QStandardItem(x)
+        if(sys.platform.find("linux") >=0):
+          item.setFlags(QtCore.Qt.ItemIsEnabled)
+        elif(sys.platform.find("win") >=0):
+          item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
         #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-        item.setFlags(QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -920,8 +942,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       sortedsc.sort() 
       for row in sortedsc:
         item = QtGui.QStandardItem(row)
+        if(sys.platform.find("linux") >=0):
+          item.setFlags(QtCore.Qt.ItemIsEnabled)
+        elif(sys.platform.find("win") >=0):
+          item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
         #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-        item.setFlags(QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -967,8 +992,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   def pressedSequence(self, index):
-    
-    
     if(self.comboSequence.model().item(index.row()).checkState() != 0):
       self.comboSequence.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
       #self.comboStageType.model().item(index.row()).setEnabled(False)
@@ -1002,16 +1025,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setNodeTypes(self):
     rows = utilsPipe.getNodeTypes()
     #defStage = utilsPipe.getDefaults("nodeTypes")
-    
     self.comboNodeType.clear()  
     indx = 0
-    
     model = QtGui.QStandardItemModel(len(rows),1)
     if(rows):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
         #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-        item.setFlags(QtCore.Qt.ItemIsEnabled)
+        if(sys.platform.find("linux") >=0):
+          item.setFlags(QtCore.Qt.ItemIsEnabled)
+        elif(sys.platform.find("win") >=0):
+          item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -1097,8 +1121,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
+        if(sys.platform.find("linux") >=0):
+          item.setFlags(QtCore.Qt.ItemIsEnabled)
+        elif(sys.platform.find("win") >=0):
+          item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
         #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-        item.setFlags(QtCore.Qt.ItemIsEnabled)
+        #item.setFlags(QtCore.Qt.ItemIsEnabled)
         item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
         model.setItem(indx,0,item)
         abrush = QtGui.QBrush()
@@ -1326,7 +1354,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def listAssets_thread(self,assesList=None,assesNames=None,assesColor=None,assdict=None,assModifiedTime=None):
     self.timerAssetsRefresh.stop()
     selAsses = self.selectedAsses()
-    colNames = ['asset','assigned','tags','modified time','preview']
+    colNames = ['asset','assigned','tags','modified time','isVer','preview']
     #asses = asslist
     #assesdict = assdict
     self.tableWidget.clearContents()
@@ -1391,6 +1419,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           print(str(sys.exc_info()))
         
         try:
+          itemModified = QtGui.QTableWidgetItem()
+          itemModified.setText(str(assesNames[assesList[x]]['versioning']))
+          self.tableWidget.setItem(x,4,itemModified)
+        except:
+          print(str(sys.exc_info()))
+        
+        try:
           previewName = "preview"
           self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
         except:
@@ -1420,7 +1455,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           try:  
             self.previewWidgets.append(ImageWidget(self.previewItems[x],64,self.tableWidget))
             self.previewWidgets[x].setToolTip("click on the image")
-            self.tableWidget.setCellWidget(x,4,self.previewWidgets[x])
+            self.tableWidget.setCellWidget(x,5,self.previewWidgets[x])
             self.previewWidgets[x].clicked.connect(lambda boool, x=x : self.imageWidgetClicked(x,self.previewWidgets[x],boool))
           except:
             print(str(sys.exc_info()))

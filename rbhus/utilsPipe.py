@@ -738,6 +738,10 @@ def assRegister(assDetDict):
   assDetDict['createDate'] = str(MySQLdb.Timestamp.now())
   assDetDict['createdUser']  = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
   utilsPipeLogger.debug("WTF : "+ str(assDetDict))
+  fileName = ""
+  if(assDetDict.has_key('assName')):
+    if(str(assDetDict['assName']) != "default"):
+      fileName = str(assDetDict['assName'])
   if(re.search("^default$",str(assDetDict['assetType']))):
     pass 
   else:
@@ -752,9 +756,16 @@ def assRegister(assDetDict):
     if(not re.search("^default$",str(assDetDict['sequenceName']))):
       if(not re.search("^default$",str(assDetDict['sceneName']))):
         assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
+        if(fileName):
+          fileName = fileName +"_"+ str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
+        else:
+          fileName = str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
       else:
         assPath = assPath +":"+ str(assDetDict['sequenceName'])
-
+        if(fileName):
+          fileName = fileName +"_"+ str(assDetDict['sequenceName'])
+        else:
+          fileName = str(assDetDict['sequenceName'])
     #utilsPipeLogger.debug("WTF 001 : "+ str(assPath))
     if(assDetDict.has_key('assName')):
       if(not re.search("^default$",str(assDetDict['assName']))):
@@ -763,9 +774,17 @@ def assRegister(assDetDict):
     #utilsPipeLogger.debug("WTF 002 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['stageType']))):
       assPath = assPath +":" + str(assDetDict['stageType'])
+      if(fileName):
+        fileName = fileName +"_"+ str(assDetDict['stageType'])
+      else:
+        fileName = str(assDetDict['stageType'])
     #utilsPipeLogger.debug("WTF 003 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['nodeType']))):
       assPath = assPath +":" + str(assDetDict['nodeType'])
+      if(fileName):
+        fileName = fileName +"_"+ str(assDetDict['nodeType'])
+      else:
+        fileName = str(assDetDict['nodeType'])
     #utilsPipeLogger.debug("WTF 004 : "+ str(assPath))
     
     
@@ -803,8 +822,7 @@ def assRegister(assDetDict):
         utilsPipeLogger.debug(str(sys.exc_info()))
       templateFile = getTemplateFile(assDetDict,dirMapsDets)
       if(templateFile):
-        shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ str(assDetDict['assName']) +"_000."+ templateFile.split(".")[-1])
-      
+        shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
@@ -874,13 +892,15 @@ def getTemplateFile(assdets = {},dirmapdets = {}):
   else:
     stageTempDir = tempMain 
   dirs.append(stageTempDir)
+  
   if(assdets['nodeType'] != "default"):
     nodeTempDir = stageTempDir +"/"+ assdets['nodeType']
     if(not os.path.exists(nodeTempDir)):
-      nodeTempDir = tempMain
+      nodeTempDir = stageTempDir
   else:
     nodeTempDir = stageTempDir 
   dirs.append(nodeTempDir)
+  
   if(assdets['fileType'] != "default"):
     fileTempDir = nodeTempDir +"/"+ assdets['fileType']
     filetypedets = getFileTypes(assdets['fileType'])
@@ -981,10 +1001,10 @@ def assDelete(assId=None,assPath=None):
     try:
       if(sys.platform.find("win") >= 0):
         corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
-        os.system("rmdir "+ str() +" /s /q")
+        #os.system("rmdir "+ str() +" /s /q")
       else:
         corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
-        os.system("rm -frv "+ str(corePath))
+        #os.system("rm -frv "+ str(corePath))
       utilsPipeLogger.debug(corePath)
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))

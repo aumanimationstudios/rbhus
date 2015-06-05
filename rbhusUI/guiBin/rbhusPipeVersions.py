@@ -62,7 +62,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       self.assetDetails = utilsPipe.getAssDetails(assId=args.assId)
     if(args.assPath):
       self.assetDetails = utilsPipe.getAssDetails(assPath=args.assPath)
-    print(self.assetDetails['versioning'])
+    print(str(self.assetDetails))
     
     
     self.pushWork.clicked.connect(self.openfolder)
@@ -73,7 +73,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.tableVersions.customContextMenuRequested.connect(self.popupPublish)
     
     
-    print("\nVERSIONING  :::::::::::: "+ str(self.assetDetails['versioning']) +"\n")
+    print("\nVERSIONING  :::::::::::: "+ str(self.assetDetails) +"\n")
     if(int(self.assetDetails['versioning']) == 0):
       sys.exit(1)
     
@@ -110,8 +110,11 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   
   
   def reviseVersion(self):
-    pass
-  
+    selvers = self.selectedVersions()
+    if(selvers):
+      sv = selvers[-1]
+      self.versionsHg._revert(sv)
+    
   
   def selectedVersions(self):
     rowstask=[]
@@ -120,7 +123,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     for idx in rowsModel:
       rowsSelected.append(idx)
     for rows in rowsSelected:
-      rowstask.append(self.tableVersions.item(rows.row(), 0).text())
+      rowstask.append(str(self.tableVersions.item(rows.row(), 0).text()).lstrip("0"))
     return(rowstask)
   
   
@@ -141,6 +144,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           self.tableVersions.setItem(indrow, indcol, item)
           if(indcol == 2):
             self.tableVersions.item(indrow, indcol).setText(str(time.ctime(float(t.split("-")[0]))))
+          elif(indcol == 0):
+            self.tableVersions.item(indrow, indcol).setText(str(t).zfill(4))
           else:
             self.tableVersions.item(indrow, indcol).setText(str(t))
           indcol = indcol + 1
@@ -168,6 +173,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg._update()
     os.chdir(self.versionsHg.localPath)
     self.hglog()
+    
+    
     
   
   

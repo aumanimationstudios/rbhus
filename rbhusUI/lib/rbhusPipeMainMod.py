@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod.ui'
 #
-# Created: Fri Jan 16 21:54:05 2015
+# Created: Mon Apr 13 11:07:25 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -242,7 +242,7 @@ class Ui_MainWindow(object):
     self.checkLinkedProjects = QtGui.QCheckBox(self.centralwidget)
     self.checkLinkedProjects.setObjectName(_fromUtf8("checkLinkedProjects"))
     self.horizontalLayout.addWidget(self.checkLinkedProjects)
-    spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+    spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout.addItem(spacerItem)
     self.previewEnabled = QtGui.QGroupBox(self.centralwidget)
     self.previewEnabled.setEnabled(True)
