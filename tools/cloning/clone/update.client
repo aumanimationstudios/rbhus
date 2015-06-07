@@ -20,8 +20,8 @@ mount /boot/
 bootupdatecmd="rsync -aXHAv cloneMaster:/crap/gentooOnesis/boot/ /boot/ --delete --rsh=rsh;rsync -aXHAv cloneMaster:/crap/gentooOnesis/lib64/modules/ /lib64/modules/ --delete --rsh=rsh;rsync -aXHAv cloneMaster:/crap/gentooOnesis/lib64/firmware/ /lib64/firmware/ --delete --rsh=rsh"
 $bootupdatecmd
 cat /proc/mounts > /etc/mtab
-grub2-install /dev/sda -f
-grub2-mkconfig -o /boot/grub2/grub.cfg
+grub-install /dev/sda -f
+grub-mkconfig -o /boot/grub/grub.cfg
 
 
 

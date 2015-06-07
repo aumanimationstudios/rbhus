@@ -4,7 +4,7 @@
 #
 # To populate all changes in this file you need to regenerate your
 # grub configuration file afterwards:
-#     'grub2-mkconfig -o /boot/grub/grub.cfg'
+#     'grub-mkconfig -o /boot/grub/grub.cfg'
 #
 # See the grub info page for documentation on possible variables and
 # their associated values. 
@@ -14,6 +14,7 @@ GRUB_DISTRIBUTOR="Gentoo"
 GRUB_DEFAULT=saved
 GRUB_HIDDEN_TIMEOUT=0
 GRUB_HIDDEN_TIMEOUT_QUIET=true
+GRUB_RECORDFAIL_TIMEOUT=10
 GRUB_TIMEOUT=10
 
 # Append parameters to the linux kernel command line

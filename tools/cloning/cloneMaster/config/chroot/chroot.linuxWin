@@ -2,7 +2,9 @@ env-update;source /etc/profile
 ln -s /proc/mounts /etc/mtab
 cat /tmp/grub.disk | gawk '{print "dd if="$1" of=~/first_63_sectors bs=512 count=63"}' | sh -v
 cat /tmp/grub.disk | gawk '{print "dd if=/dev/zero of="$1" bs=512 count=62 seek=1"}' | sh -v
-cat /tmp/grub.disk | xargs grub2-install --force 
-grub2-mkconfig -o /boot/grub/grub.cfg
+/usr/sbin/update-initramfs -k all -u
+cat /tmp/grub.disk | xargs grub-install --force 
+grub-mkconfig -o /boot/grub/grub.cfg
 touch /etc/firstboot
+/usr/sbin/update-initramfs -k all -u
 
