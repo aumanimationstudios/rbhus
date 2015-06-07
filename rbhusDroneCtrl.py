@@ -100,7 +100,7 @@ def RESTARTSYS(clientSocket):
   time.sleep(5)
   if(sys.platform.find("linux") >= 0):
     try:
-      os.system("sync ; reboot -f >& /dev/null &")
+      os.system("sync ; /sbin/reboot -f &> /dev/null &")
     except:
       logClient.debug(msg)
   elif(sys.platform.find("win") >= 0):
@@ -115,7 +115,7 @@ def SHUTDOWNSYS(clientSocket):
   time.sleep(5)
   if(sys.platform.find("linux") >= 0):
     try:
-      os.system("sync ; halt -f -p >& /dev/null &")
+      os.system("sync ; halt -f -p &>  /dev/null &")
     except:
       logClient.debug(msg)
   elif(sys.platform.find("win") >= 0):
