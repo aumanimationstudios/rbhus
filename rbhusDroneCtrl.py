@@ -210,23 +210,17 @@ def atUrService():
       msg = data
     logClientCrtl.debug("I got a connection from "+ str(address) +" : "+ str(data))
     if(msg == "CLIENTKILL"):
-      ckillThread = threading.Thread(target=CLIENTKILL,args=(clientSocket,))
-      ckillThread.start()
+      CLIENTKILL(clientSocket)
     if(msg == "UPDATE"):
-      updateThread = threading.Thread(target=UPDATE,args=(clientSocket,))
-      updateThread.start()
+      UPDATE(clientSocket)
     if(msg == "RESTARTSYS"):
-      restartThread = threading.Thread(target=RESTARTSYS,args=(clientSocket,))
-      restartThread.start()
+      RESTARTSYS(clientSocket)
     if(msg == "CLIENTSTART"):
-      cstartThread = threading.Thread(target=CLIENTSTART,args=(clientSocket,))
-      cstartThread.start()
+      CLIENTSTART(clientSocket)
     if(msg == "CLEANUPPIDS"):
-      cleanThread = threading.Thread(target=CLEANUPPIDS,args=(clientSocket,))
-      cleanThread.start()
+      CLEANUPPIDS(clientSocket)
     if(msg == "SHUTDOWNSYS"):
-      shutdownThread = threading.Thread(target=SHUTDOWNSYS,args=(clientSocket,))
-      shutdownThread.start()
+      SHUTDOWNSYS(clientSocket)
     
       
       
