@@ -84,7 +84,8 @@ def CLIENTKILL(clientSocket):
         except:
           logClientCrtl.debug(str(sys.exc_info()))
           logClientCrtl.debug("CLIENTKILLFAILED")
-          clientSocket.send("CLIENTKILLFAILED")
+          if(clientSocket):
+            clientSocket.send("CLIENTKILLFAILED")
           pass
   clientSocket.close()
   time.sleep(2)
