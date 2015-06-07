@@ -89,13 +89,14 @@ def CLIENTKILL(clientSocket):
   clientSocket.close()
   time.sleep(2)
 
-def UPDATE(clientSocket):
+def UPDATE(clientSocket = None):
   if(sys.platform.find("linux") >= 0):
     try:
       os.system("cd /opt/rbhus/ ; git pull")
     except:
       logClient.debug(msg)
-  clientSocket.close()
+  if(clientSocket != None):
+    clientSocket.close()
   
 
 
@@ -225,4 +226,5 @@ def atUrService():
       
       
 if(__name__ == "__main__"):
+  UPDATE()
   atUrService()
