@@ -91,6 +91,10 @@ class hg(object):
     return(True)
   
   def initializeLocal(self):
+    try:
+      os.makedirs(self.localPath)
+    except:
+      print(sys.exc_info())
     os.chdir(self.localPath)
     if(self.isLocalInitialized()):
       print("already initialized")
@@ -234,7 +238,11 @@ class hg(object):
   
   
   def _archive(self,rev):
+    if(not rev):
+      rev = 0
     os.chdir(self.absPipePath)
+    if(os.path.exists("./publish/")):
+      shutil.rmtree("./publish/")
     p = subprocess.Popen(["hg","archive","--rev",str(rev),"./publish/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     assdict = {}
     assdict["publishVersion"] = str(rev)
@@ -245,12 +253,50 @@ class hg(object):
     self._deleteLock()
     os.chdir(self.localPath)
     
+    
+  def _archiveVersion(self,rev):
+    if(not rev):
+      rev = 0
+    os.chdir(self.absPipePath)
+    if(os.path.exists("./export_"+ str(rev) +"/")):
+      shutil.rmtree("./export_"+ str(rev) +"/")
+    p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    assdict = {}
+    print("_archive"+ str(rev))
+    self._deleteLock()
+    os.chdir(self.localPath)
+    
+    
   def _revert(self,rev):
+    if(not rev):
+      rev = 0
     os.chdir(self.localPath)
     p = subprocess.Popen(["hg","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
     print("_revert"+ str(out))
     self._deleteLock()
-    os.chdir(self.localPath)  
+    os.chdir(self.localPath)
+    
+  def getVersionPath(self,rev):
+    if(not rev):
+      rev = 0
+    if(not os.path.exists(self.absPipePath +"/export_"+ str(rev) +"/")):
+      self._archiveVersion(rev)
+    return(self.absPipePath +"/export_"+ str(rev) +"/")
+  
+  
+  def reInitLocal(self):
+    if(os.path.exists(self.localPath)):
+      try:
+        shutil.rmtree(self.localPath)
+        self.initializeLocal()
+      except:
+        return(0)
+    return(1)
+      
+      
+      
+        
+    
   

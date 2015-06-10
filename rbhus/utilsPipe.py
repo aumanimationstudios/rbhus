@@ -820,7 +820,7 @@ def assRegister(assDetDict):
         os.makedirs(corePath,0775)
       except:
         utilsPipeLogger.debug(str(sys.exc_info()))
-      templateFile = getTemplateFile(assDetDict,dirMapsDets)
+      templateFile = getTemplateFile(assDetDict)
       if(templateFile):
         shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
     except:
@@ -875,10 +875,12 @@ def assLinks(assId):
 def assLinkedTo(assId):
   pass
 
-def getTemplateFile(assdets = {},dirmapdets = {}):
+def getTemplateFile(assdets = {}):
   filetypedets = {}
   tempMain = ""
   dirs = []
+  projDets = getProjDetails(projName = assdets['projName'])
+  dirmapdets = getDirMapsDetails(projDets['directory'])
   if(sys.platform.find("win") >= 0):
     tempMain = dirmapdets['windowsMapping'] +"/"+ assdets['projName'] +"/share/template"
   elif(sys.platform.find("linux") >= 0):
@@ -1001,10 +1003,10 @@ def assDelete(assId=None,assPath=None):
     try:
       if(sys.platform.find("win") >= 0):
         corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
-        #os.system("rmdir "+ str() +" /s /q")
+        os.system("rmdir "+ str() +" /s /q")
       else:
         corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
-        #os.system("rm -frv "+ str(corePath))
+        os.system("rm -frv "+ str(corePath))
       utilsPipeLogger.debug(corePath)
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))

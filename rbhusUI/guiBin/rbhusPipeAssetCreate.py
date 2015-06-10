@@ -55,12 +55,16 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       pass
     try:
       self.project = os.environ['rp_proj_projName']
+      self.projDets = utilsPipe.getProjDetails(projName = self.project)
     except:
       pass
     try:
       self.directory = os.environ['rp_proj_directory']
     except:
       pass
+    
+    
+    
     
     self.center()
     #self.setProjTypes()
@@ -238,9 +242,15 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   def setDirectory(self):
     dirs = utilsPipe.getDirMaps()
     self.comboDirectory.clear()
+    i = 0
+    foundIndx = 0
     if(dirs):
       for d in dirs:
+        if(d['directory'] == self.projDets['directory']):
+          foundIndx = i
         self.comboDirectory.addItem(_fromUtf8(d['directory']))
+        i = i + 1
+      self.comboDirectory.setCurrentIndex(foundIndx)
       return(1)
     return(0)
     

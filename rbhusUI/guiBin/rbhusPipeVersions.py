@@ -58,15 +58,13 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     Form.setWindowTitle(args.assPath)
-    if(args.assId):
-      self.assetDetails = utilsPipe.getAssDetails(assId=args.assId)
-    if(args.assPath):
-      self.assetDetails = utilsPipe.getAssDetails(assPath=args.assPath)
+    self.updateAssDetails()
     print(str(self.assetDetails))
     
     
     self.pushWork.clicked.connect(self.openfolder)
     self.pushCommit.clicked.connect(self.commit)
+    self.pushReInit.clicked.connect(self.reInit)
     
     
     self.tableVersions.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
@@ -82,13 +80,21 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     
     self.hglog()
 
-    
+  
+  def updateAssDetails(self):
+    if(args.assId):
+      self.assetDetails = utilsPipe.getAssDetails(assId=args.assId)
+    if(args.assPath):
+      self.assetDetails = utilsPipe.getAssDetails(assPath=args.assPath)
+  
   
   def popupPublish(self, pos):
     menu = QtGui.QMenu()
     #openFileAction = menu.addAction("open file")
     publishAction = menu.addAction("publish")
     reviseAction = menu.addAction("revise")
+    exportAction = menu.addAction("export")
+    openVersionAction = menu.addAction("open version")
     action = menu.exec_(self.tableVersions.mapToGlobal(pos))
     #if(action == openFileAction):
       #self.openFileAss()
@@ -96,14 +102,51 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       self.publishVersion()
     if(action == reviseAction):
       self.reviseVersion()
+    if(action == exportAction):
+      self.exportVeriosn()
+    if(action == openVersionAction):
+      self.openVersion()
     
+  def reInit(self):
+    self.versionsHg.reInitLocal()
+    self.hglog()
   
+  
+  def openVersion(self):
+    selvers = self.selectedVersions()
+    if(selvers):
+      sv = selvers[-1]
+      verpath = self.versionsHg.getVersionPath(sv)
+    assdets = utilsPipe.getAssDetails(assPath=self.versionsHg.pipepath)
+    runCmd = utilsPipe.openAssetCmd(assdets,verpath)
+    if(runCmd):
+      runCmd = runCmd.rstrip().lstrip()
+      subprocess.Popen(runCmd,shell=True)
+    else:
+      import webbrowser
+      webbrowser.open(verpath)
+  
+  
+  def exportVeriosn(self):
+    selvers = self.selectedVersions()
+    if(selvers):
+      sv = selvers[-1]
+      self.versionsHg._archiveVersion(sv)
+    self.hglog()
+    
+  def exportVeriosn(self):
+    selvers = self.selectedVersions()
+    if(selvers):
+      sv = selvers[-1]
+      self.versionsHg._archiveVersion(sv)
+    self.hglog()
   
   def publishVersion(self):
     selvers = self.selectedVersions()
     if(selvers):
       sv = selvers[-1]
       self.versionsHg._archive(sv)
+    self.hglog()
         
     
     
@@ -128,6 +171,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   
   
   def hglog(self):
+    self.updateAssDetails()
     self.tableVersions.clearContents()
     self.tableVersions.setSortingEnabled(False)
     self.tableVersions.resizeColumnsToContents()
@@ -141,10 +185,15 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         indcol = 0
         for t in te:
           item = QtGui.QTableWidgetItem()
+          brush = QtGui.QBrush()
           self.tableVersions.setItem(indrow, indcol, item)
           if(indcol == 2):
             self.tableVersions.item(indrow, indcol).setText(str(time.ctime(float(t.split("-")[0]))))
           elif(indcol == 0):
+            if(str(t) == str(self.assetDetails['publishVersion'])):
+              brush.setColor(QtGui.QColor(0, 200, 0))
+              brush.setStyle(QtCore.Qt.SolidPattern)
+              self.tableVersions.item(indrow, indcol).setBackground(brush)
             self.tableVersions.item(indrow, indcol).setText(str(t).zfill(4))
           else:
             self.tableVersions.item(indrow, indcol).setText(str(t))

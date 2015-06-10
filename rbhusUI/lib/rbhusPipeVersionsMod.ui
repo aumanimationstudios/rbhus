@@ -61,26 +61,6 @@
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
            </attribute>
-           <row>
-            <property name="text">
-             <string>tete</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>eteeee</string>
-            </property>
-           </row>
-           <column>
-            <property name="text">
-             <string>teset</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>eee</string>
-            </property>
-           </column>
           </widget>
          </item>
         </layout>
@@ -99,6 +79,13 @@
      <widget class="QPushButton" name="pushWork">
       <property name="text">
        <string>open</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="pushReInit">
+      <property name="text">
+       <string>re-initialize</string>
       </property>
      </widget>
     </item>

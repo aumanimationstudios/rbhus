@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeVersionsMod.ui'
 #
-# Created: Wed Mar 11 21:26:30 2015
-#      by: PyQt4 UI code generator 4.11.3
+# Created: Wed Jun 10 23:48:18 2015
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -56,16 +56,8 @@ class Ui_MainWindow(object):
     self.tableVersions.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
     self.tableVersions.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableVersions.setObjectName(_fromUtf8("tableVersions"))
-    self.tableVersions.setColumnCount(2)
-    self.tableVersions.setRowCount(2)
-    item = QtGui.QTableWidgetItem()
-    self.tableVersions.setVerticalHeaderItem(0, item)
-    item = QtGui.QTableWidgetItem()
-    self.tableVersions.setVerticalHeaderItem(1, item)
-    item = QtGui.QTableWidgetItem()
-    self.tableVersions.setHorizontalHeaderItem(0, item)
-    item = QtGui.QTableWidgetItem()
-    self.tableVersions.setHorizontalHeaderItem(1, item)
+    self.tableVersions.setColumnCount(0)
+    self.tableVersions.setRowCount(0)
     self.tableVersions.horizontalHeader().setVisible(False)
     self.tableVersions.verticalHeader().setVisible(False)
     self.verticalLayout_2.addWidget(self.tableVersions)
@@ -77,6 +69,9 @@ class Ui_MainWindow(object):
     self.pushWork = QtGui.QPushButton(self.centralwidget)
     self.pushWork.setObjectName(_fromUtf8("pushWork"))
     self.gridLayout.addWidget(self.pushWork, 4, 0, 1, 1)
+    self.pushReInit = QtGui.QPushButton(self.centralwidget)
+    self.pushReInit.setObjectName(_fromUtf8("pushReInit"))
+    self.gridLayout.addWidget(self.pushReInit, 4, 1, 1, 1)
     MainWindow.setCentralWidget(self.centralwidget)
     self.statusbar = QtGui.QStatusBar(MainWindow)
     self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -89,14 +84,7 @@ class Ui_MainWindow(object):
     MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
     self.groupVersions.setTitle(_translate("MainWindow", "versions", None))
     self.tableVersions.setSortingEnabled(True)
-    item = self.tableVersions.verticalHeaderItem(0)
-    item.setText(_translate("MainWindow", "tete", None))
-    item = self.tableVersions.verticalHeaderItem(1)
-    item.setText(_translate("MainWindow", "eteeee", None))
-    item = self.tableVersions.horizontalHeaderItem(0)
-    item.setText(_translate("MainWindow", "teset", None))
-    item = self.tableVersions.horizontalHeaderItem(1)
-    item.setText(_translate("MainWindow", "eee", None))
     self.pushCommit.setText(_translate("MainWindow", "commit", None))
     self.pushWork.setText(_translate("MainWindow", "open", None))
+    self.pushReInit.setText(_translate("MainWindow", "re-initialize", None))
 
