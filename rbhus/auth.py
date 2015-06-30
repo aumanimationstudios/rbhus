@@ -44,6 +44,7 @@ class login():
         user = x[0].rstrip().lstrip()
         os.environ['rbhus_acl_rememberMe'] = user
         self.useEnvUser()
+        pf.close()
         return(1)
         
     
@@ -55,6 +56,7 @@ class login():
       print(str(sys.exc_info()))
     pf = open(passwdF,"w")
     pf.writelines(self.username)
+    pf.close()
     
   def logout(self):
     passwdF = tempfile.gettempdir() + os.sep +"sys_init.dnd"

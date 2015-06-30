@@ -12,6 +12,7 @@ import tempfile
 import subprocess
 import re
 import shutil
+import copy
 
 
 progPath =  sys.argv[0].split(os.sep)
@@ -645,6 +646,88 @@ def getProjAssesLinked(projName,limit=None,whereDict={}):
     return(0)
   
   
+def getLibAsses(projNames,limit=None,whereDict={}):
+  dbconn = dbPipe.dbPipe()
+  linkedProjects = "default"
+  projs = []
+  whereProj = ""
+  
+    
+  try:
+    if(projNames == "default"):
+      linkedProjects = os.environ["rp_proj_linkedProjects"]
+    else:
+      linkedProjects = projNames
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  if(linkedProjects != "default"):
+    projs = ["'"+ x +"'" for x in linkedProjects.split(",")]
+    print(projs)
+    whereProj = " where projName=" + " or projName=".join(projs)
+  print("in getProjAssesLinked module 1")
+  whereString = []
+  try:
+    if(not limit):
+      if(whereDict):
+        for x in whereDict:
+          whereDicts = []
+          y = whereDict[x].split(",")
+          for z in y:
+            if(x == "assName"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            elif(x == "tags"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            elif(x == "assignedWorker"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            else:
+              if(z):
+                whereDicts.append(x +"='"+ z +"'")
+          whereString.append("("+ " or ".join(whereDicts) +")")
+          
+        rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by projName,sequenceName,sceneName,assName,assetType", dictionary=True)
+      else:
+        rows = dbconn.execute("select * from assets "+ whereProj +" order by projName,sequenceName,sceneName,assName,assetType", dictionary=True)
+    else:
+      if(whereDict):
+        
+        for x in whereDict:
+          whereDicts = []
+          y = whereDict[x].split(",")
+          for z in y:
+            if(x == "assName"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            elif(x == "tags"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            elif(x == "assignedWorker"):
+              if(z):
+                whereDicts.append(x +" like '%"+ z +"%'")
+            else:
+              if(z):
+                whereDicts.append(x +"='"+ z +"'")
+          whereString.append("("+ " or ".join(whereDicts) +")")
+        rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by projName,sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
+      else:
+        rows = dbconn.execute("select * from assets "+ whereProj +" order by projName,sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
+        
+    print("in getProjAssesLinked module 2")
+    return(rows)
+  
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  
+  
+  
+  
+
+  
+  
   
 def getProjAsses(projName,limit=None,whereDict={}):
   dbconn = dbPipe.dbPipe()
@@ -802,7 +885,6 @@ def assRegister(assDetDict):
       valuesA.append("'"+ str(assDetDict[x]) +"'")
     fs = "("+ ",".join(fieldsA) +")"
     vs = "("+ ",".join(valuesA) +")"
-    
     utilsPipeLogger.debug(assDetDict)
     dbconn = dbPipe.dbPipe()
     try:
@@ -820,9 +902,11 @@ def assRegister(assDetDict):
         os.makedirs(corePath,0775)
       except:
         utilsPipeLogger.debug(str(sys.exc_info()))
-      templateFile = getTemplateFile(assDetDict)
+      templateFile = getTemplatePath(assDetDict)
       if(templateFile):
-        shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
+        if(not os.path.exists(corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])):
+          shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
+          utilsPipeLogger.debug(templateFile +" : "+ corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))
       return(0)
@@ -831,6 +915,71 @@ def assRegister(assDetDict):
     return(0)
     
     
+def getAssPath(assDetDictTemp = {}):
+  assDetDict = copy.copy(assDetDictTemp)
+  if(not assDetDict):
+    return(0)
+  assPath = str(assDetDict['projName'])
+  assId = ""
+  dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
+  utilsPipeLogger.debug("WTF asspathtemp : "+ str(assDetDict))
+  fileName = ""
+  if(assDetDict.has_key('assName')):
+    if(str(assDetDict['assName']) != "default"):
+      fileName = str(assDetDict['assName'])
+  if(re.search("^default$",str(assDetDict['assetType']))):
+    pass 
+  else:
+    assTypeDets = getAssTypes(str(assDetDict['assetType']))
+    if(assTypeDets):
+      for p in assTypeDets['path'].split(":"):
+        if(re.search("^\$",str(p))):
+          assPath = assPath +":"+ os.environ["rp_"+ str(p).lstrip("$")]
+        else:
+          assPath = assPath +":"+ p
+  if(assPath):
+    if(not re.search("^default$",str(assDetDict['sequenceName']))):
+      if(not re.search("^default$",str(assDetDict['sceneName']))):
+        assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
+        if(fileName):
+          fileName = fileName +"_"+ str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
+        else:
+          fileName = str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
+      else:
+        assPath = assPath +":"+ str(assDetDict['sequenceName'])
+        if(fileName):
+          fileName = fileName +"_"+ str(assDetDict['sequenceName'])
+        else:
+          fileName = str(assDetDict['sequenceName'])
+    #utilsPipeLogger.debug("WTF 001 : "+ str(assPath))
+    if(assDetDict.has_key('assName')):
+      if(not re.search("^default$",str(assDetDict['assName']))):
+        assPath = assPath +":" + str(assDetDict['assName'])
+    
+    #utilsPipeLogger.debug("WTF 002 : "+ str(assPath))
+    if(not re.search("^default$",str(assDetDict['stageType']))):
+      assPath = assPath +":" + str(assDetDict['stageType'])
+      if(fileName):
+        fileName = fileName +"_"+ str(assDetDict['stageType'])
+      else:
+        fileName = str(assDetDict['stageType'])
+    #utilsPipeLogger.debug("WTF 003 : "+ str(assPath))
+    if(not re.search("^default$",str(assDetDict['nodeType']))):
+      assPath = assPath +":" + str(assDetDict['nodeType'])
+      if(fileName):
+        fileName = fileName +"_"+ str(assDetDict['nodeType'])
+      else:
+        fileName = str(assDetDict['nodeType'])
+    #utilsPipeLogger.debug("WTF 004 : "+ str(assPath))
+    
+    
+      
+    if(not re.search("^default$",str(assDetDict['fileType']))): 
+      assPath = assPath +":" + str(assDetDict['fileType'])
+    #utilsPipeLogger.debug("WTF 005 : "+ str(assPath))
+    return(assPath)
+  return(0)
+
 
 def assEdit(asspath="",assid="",assdict={}):
   utilsPipeLogger.debug("editing ass : "+ str(assdict))
@@ -875,49 +1024,57 @@ def assLinks(assId):
 def assLinkedTo(assId):
   pass
 
-def getTemplateFile(assdets = {}):
+def getTemplatePath(assdetsTemp = {}):
+  assdets = copy.copy(assdetsTemp)
   filetypedets = {}
   tempMain = ""
-  dirs = []
-  projDets = getProjDetails(projName = assdets['projName'])
-  dirmapdets = getDirMapsDetails(projDets['directory'])
-  if(sys.platform.find("win") >= 0):
-    tempMain = dirmapdets['windowsMapping'] +"/"+ assdets['projName'] +"/share/template"
-  elif(sys.platform.find("linux") >= 0):
-    tempMain = dirmapdets['linuxMapping'] +"/"+ assdets['projName'] +"/share/template"
-  dirs.append(tempMain)
-     
-  if(assdets['stageType'] != "default"):
-    stageTempDir = tempMain +"/"+ assdets['stageType']
-    if(not os.path.exists(stageTempDir)):
-      stageTempDir = tempMain
-  else:
-    stageTempDir = tempMain 
-  dirs.append(stageTempDir)
+  direcs = {}
+  dirs = getDirMaps()
   
-  if(assdets['nodeType'] != "default"):
-    nodeTempDir = stageTempDir +"/"+ assdets['nodeType']
-    if(not os.path.exists(nodeTempDir)):
-      nodeTempDir = stageTempDir
-  else:
-    nodeTempDir = stageTempDir 
-  dirs.append(nodeTempDir)
+  for x in range(0,len(dirs)):
+    if(dirs[x]):
+      direcs[dirs[x]['directory']] = 1
+  for y in direcs:
+    print(y)
+  assdets['assName'] = "default"
+  assdets['assetType'] = "template"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  print(assPathTemp)
   
-  if(assdets['fileType'] != "default"):
-    fileTempDir = nodeTempDir +"/"+ assdets['fileType']
-    filetypedets = getFileTypes(assdets['fileType'])
-  else:
-    fileTempDir = nodeTempDir
-  dirs.append(fileTempDir)
+  if(not assdetails):
+    assdets['sceneName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  print(assPathTemp)
   
+  if(not assdetails):
+    assdets['sequenceName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  print(assPathTemp)
   
-  while(dirs):
-    currTempDir = dirs.pop()
-    if(filetypedets):
-      fileTempFile = currTempDir +"/template."+ filetypedets['extension'].split(",")[0]
-      utilsPipeLogger.debug(str(fileTempFile))
-      if(os.path.exists(fileTempFile)):
-        return(fileTempFile)
+  if(not assdetails):
+    assdets['stageType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  print(assPathTemp)
+  
+  if(not assdetails):
+    assdets['nodeType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  print(assPathTemp)
+  
+  if(assdetails):
+    assPathTemp = assdetails['path']
+    assPathAbs = getAbsPath(assPathTemp)
+    print(assPathAbs)
+    if(os.path.exists(assPathAbs)):
+      filetypedets = getFileTypes(assdets['fileType'])
+      filename = assPathAbs+ "/template." + filetypedets['extension'].split(",")[0]
+      print(filename)
+      return(filename)
   return(0)
       
         
@@ -952,20 +1109,23 @@ def openAssetCmd(assdets ={},filename = None):
     runCmd = binDir +"/"+ filetypedets[exeAss]
     if(os.path.exists(runCmd)):
       runProc = runCmd +" "+ filename
+      print(runProc)
       return(runProc)
     else:
       binPaths = filetypedets[pathAss].split(",")
-      for x in binPaths:
-        if(x != "default"):
-          print(x)
+      for x in reversed(binPaths):
+        print(str(x))
+        if(str(x) != "default"):
+          
           absBinPath = getAbsPath(x)
           if(absBinPath):
             runCmd = absBinPath +"/"+ filetypedets[exeAss]
             if(os.path.exists(runCmd)):
               runProc = runCmd +" "+ filename
+              print(runProc)
               return(runProc)
         else:
-          return(filetypedets[exeAss] +" "+ filename)
+          return("\""+ filetypedets[exeAss] +"\" "+ filename)
   else:
     return(0)
     
@@ -1003,10 +1163,10 @@ def assDelete(assId=None,assPath=None):
     try:
       if(sys.platform.find("win") >= 0):
         corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
-        os.system("rmdir "+ str() +" /s /q")
+        #os.system("rmdir "+ str() +" /s /q")
       else:
         corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
-        os.system("rm -frv "+ str(corePath))
+        #os.system("rm -frv "+ str(corePath))
       utilsPipeLogger.debug(corePath)
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))

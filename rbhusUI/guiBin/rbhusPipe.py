@@ -149,6 +149,7 @@ class workerGetAsses(QtCore.QObject):
     self.assesColor = {}
     self.assesLinked = ()
     self.isAssesLinked = False
+    self.linkedProjects = ""
   
   #def terminateEvent(self):
     #print("holy cow . quiting!!")
@@ -171,7 +172,7 @@ class workerGetAsses(QtCore.QObject):
     try:
       if(self.whereDict):
         if(self.isAssesLinked):
-          self.assesLinked = utilsPipe.getProjAssesLinked(os.environ['rp_proj_projName'],whereDict=self.whereDict)
+          self.assesLinked = utilsPipe.getLibAsses(projNames = self.linkedProjects,whereDict=self.whereDict)
         self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],whereDict=self.whereDict)
       else:
         if(self.isAssesLinked):
@@ -273,6 +274,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     self.form.setWindowIcon(icon)
     
+    
 
     self.menuMine = QtGui.QMenu()
     self.mineCreatedAction = QtGui.QAction("created",self.menuMine,checkable=True)
@@ -294,44 +296,33 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
     iconRefresh = QtGui.QIcon()
     iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    
+    iconAdd= QtGui.QIcon()
+    iconAdd.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_new.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    
+    
+    
     self.assRefresh.setIcon(iconRefresh)
     
 
-    iconCancel = QtGui.QIcon()
-    iconCancel.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    
-    #iconBlender = QtGui.QIcon()
-    #iconBlender.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/blender.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    #self.pushBlender.setIcon(iconBlender)
-    
-    #iconBlenderBeta = QtGui.QIcon()
-    #iconBlenderBeta.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/blenderBeta.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    #self.pushBlenderBeta.setIcon(iconBlenderBeta)
-    
-    #iconKrita = QtGui.QIcon()
-    #iconKrita.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/krita.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    #self.pushKrita.setIcon(iconKrita)
-    
-    #iconGimp = QtGui.QIcon()
-    #iconGimp.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/gimp2.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    #self.pushGimp.setIcon(iconGimp)
-    
-    #iconMyPaint = QtGui.QIcon()
-    #iconMyPaint.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/mypaint_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    #self.pushMyPaint.setIcon(iconMyPaint)
-    
-    #iconNatron = QtGui.QIcon()
-    #iconNatron.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/appIcons/natron_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    #self.pushNatron.setIcon(iconNatron)
+    #iconRefresh = QtGui.QIcon()
+    #iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
-    self.pushResetAsset.setIcon(iconCancel)
-    self.pushResetSeq.setIcon(iconCancel)
-    self.pushResetStage.setIcon(iconCancel)
-    self.pushResetScene.setIcon(iconCancel)
-    self.pushResetNode.setIcon(iconCancel)
-    self.pushResetAsset.setIcon(iconCancel)
-    self.pushResetFile.setIcon(iconCancel)
-    self.filterRefresh.setIcon(iconCancel)
+    self.pushResetAsset.setIcon(iconRefresh)
+    self.pushResetSeq.setIcon(iconRefresh)
+    self.pushResetStage.setIcon(iconRefresh)
+    self.pushResetScene.setIcon(iconRefresh)
+    self.pushResetNode.setIcon(iconRefresh)
+    self.pushResetAsset.setIcon(iconRefresh)
+    self.pushResetFile.setIcon(iconRefresh)
+    self.filterRefresh.setIcon(iconRefresh)
+    self.pushResetLinked.setIcon(iconRefresh)
+    self.pushAssetFavReset.setIcon(iconRefresh)
+    self.pushSearchFav.setIcon(iconRefresh)
+    self.searchRefresh.setIcon(iconRefresh)
+    
+    self.pushSearchFav.setIcon(iconAdd)
+    self.pushSearchFavReset.setIcon(iconRefresh)
 
     
     self.iconDanger = QtGui.QIcon()
@@ -385,6 +376,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.comboStageType.released.connect(self.pressedAction)
     #self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetStage.clicked.connect(self.setStageTypes)
+    
+    linkedit = self.comboLinked.lineEdit()
+    linkedit.setReadOnly(True)
+    self.comboLinked.editTextChanged.connect(self.listAssets)
+    self.comboLinked.view().activated.connect(self.pressedLinked)
+    #self.comboStageType.released.connect(self.pressedAction)
+    #self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
+    self.pushResetLinked.clicked.connect(self.setLinkedProj)
     
     nlineedit = self.comboNodeType.lineEdit()
     nlineedit.setReadOnly(True)
@@ -470,6 +469,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.updateAll()
 
     self.listAssetsTimed()
+    
+    self.searchRefresh.clicked.connect(self.pushResetSearchFunc)
+    self.pushSearchFav.clicked.connect(self.saveSearch)
     #self.timerAss = QtCore.QTimer()
     #self.timerAss.timeout.connect(self.listAssetsTimed)
     #self.timerAss.start(2000)
@@ -478,6 +480,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.labelZoomValue.setText(str(value) +"x")
     #self.previewCheck()
   
+  
+  
+  def pushResetSearchFunc(self):
+    self.lineEditSearch.setText("")
+    self.listAssets()
   
   def setSeqSce(self):
     self.setScene()
@@ -544,6 +551,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyNew = menu.addAction("copy/new")
+    assGetTemplate = menu.addAction("template path")
     #assCmdLine = menu.addAction("cmd line")
     assRender = menu.addAction("submit to render")
     assDeleteAction = menu.addAction("delete")
@@ -563,6 +571,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.copyNewAss()
     if(action == assRender):
       self.renderAss()
+    if(action == assGetTemplate):
+      self.getTemplatePath()
+     
     #if(action == versionAction):
       #self.versionAss()
       
@@ -663,12 +674,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             runCmd = utilsPipe.openAssetCmd(assdets,filename)
             if(runCmd):
               runCmd = runCmd.rstrip().lstrip()
-              subprocess.Popen(runCmd,shell=True)
+              if(sys.platform.find("win") >= 0):
+                print(runCmd)
+                subprocess.Popen(runCmd,shell=True) 
+              elif(sys.platform.find("linux") >= 0):
+                print(runCmd)
+                subprocess.Popen(runCmd,shell=True)
             else:
               import webbrowser
               webbrowser.open(filename)
         else:
-          subprocess.Popen(versionCmd +" --path \""+ x +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
+          print("wtf : opening version cmd ")
+          if(sys.platform.find("win") >= 0):
+            subprocess.Popen([versionCmd,"--path",x],shell = True)
+          elif(sys.platform.find("linux") >= 0):
+            subprocess.Popen(versionCmd +" --path "+ x,shell = True)
          
           
         
@@ -717,6 +737,104 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #pv.start(sys.executable,versionCmd.split())
     #pv.waitForFinished()
     subprocess.Popen(versionCmd +" --path \""+ selass[-1] +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
+    
+    
+  def getTemplatePath(self):
+    selass = self.selectedAsses()
+    if(selass):
+      assDets = utilsPipe.getAssDetails(assPath = selass[-1])
+      utilsPipe.getTemplatePath(assDets)
+   
+  def setLinkedProj(self):
+    try:
+      rows = os.environ["rp_proj_linkedProjects"].split(",")
+    except:
+      print(str(sys.exc_info()))
+      return(0)
+    #defStage = utilsPipe.getDefaults("stageTypes")
+    self.comboLinked.clear()
+    indx = 0
+    model = QtGui.QStandardItemModel(len(rows),1)
+    if(rows):
+      for row in rows:
+        item = QtGui.QStandardItem(row)
+        #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        if(sys.platform.find("linux") >=0):
+          item.setFlags(QtCore.Qt.ItemIsEnabled)
+        elif(sys.platform.find("win") >=0):
+          item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+        item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
+        model.setItem(indx,0,item)
+        abrush = QtGui.QBrush()
+        color = QtGui.QColor()
+        color.setAlpha(0)
+        abrush.setColor(color)
+        model.item(indx).setForeground(abrush)
+        indx = indx + 1
+      model.itemChanged.connect(self.itemChangedStageType)
+      self.comboLinked.setModel(model)
+      self.comboLinked.setEditText("default")
+      return(1)
+    return(0)    
+  
+  
+  def itemChangedLinked(self,item):
+    if(item.checkState() == QtCore.Qt.Checked):
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setGreen(10)
+      color.setBlue(125)
+      color.setRed(225)
+      abrush.setColor(color)
+      item.setForeground(abrush)
+    else:
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setAlpha(0)
+      abrush.setColor(color)
+      item.setForeground(abrush)
+    
+    linkedProjects = []
+    
+    for i in range(0,self.comboLinked.model().rowCount()):
+      if(self.comboLinked.model().item(i).checkState() == QtCore.Qt.Checked):
+        linkedProjects.append(str(self.comboLinked.model().item(i).text()))
+      
+    #print("EVENT CALLED : "+ str(index.row()))
+    if(linkedProjects):
+      self.comboLinked.setEditText(",".join(linkedProjects))
+    else:
+      self.comboLinked.setEditText("default")
+      
+      
+  def pressedLinked(self, index):
+    if(self.comboLinked.model().item(index.row()).checkState() != 0):
+      self.comboLinked.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
+      #self.comboStageType.model().item(index.row()).setEnabled(False)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setAlpha(0)
+      abrush.setColor(color)
+      self.comboLinked.model().item(index.row()).setForeground(abrush)
+    else:
+      self.comboLinked.model().item(index.row()).setCheckState(QtCore.Qt.Checked)
+      #self.comboStageType.model().item(index.row()).setEnabled(True)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setGreen(10)
+      color.setBlue(125)
+      color.setRed(225)
+      abrush.setColor(color)
+      self.comboLinked.model().item(index.row()).setForeground(abrush)
+    linkedProjects = []
+    for i in range(0,self.comboLinked.model().rowCount()):
+      if(self.comboLinked.model().item(i).checkState() == QtCore.Qt.Checked):
+        linkedProjects.append(str(self.comboLinked.model().item(i).text()))
+    #print("EVENT CALLED : "+ str(index.row()))
+    if(linkedProjects):
+      self.comboLinked.setEditText(",".join(linkedProjects))
+    else:
+      self.comboLinked.setEditText("default")
     
     
   def setStageTypes(self):
@@ -1300,6 +1418,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(str(self.comboAssType.currentText()) == "library" or str(self.comboAssType.currentText()) == "default"):
         assget.whereDict['assetType'] = "library"
         assget.isAssesLinked = True
+        assget.linkedProjects = str(self.comboLinked.currentText())
       
     searchItems = str(self.lineEditSearch.text())
     if(searchItems and not self.radioMineAss.isChecked()):
@@ -1560,6 +1679,70 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.updateAll()
     
     
+  def saveSearch(self):
+    from os.path import expanduser
+    home = expanduser("~")
+    saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
+    saveFileFd = open(saveFile,"a")
+    assetTypeSave = str(self.comboAssType.currentText())
+    seqSave = str(self.comboSequence.currentText())
+    scnSave = str(self.comboScene.currentText())
+    stageSave = str(self.comboStageType.currentText())
+    nodeSave = str(self.comboNodeType.currentText())
+    fileTypeSave = str(self.comboFileType.currentText())
+    isMineAssignedSave = str(self.mineAssignedAction.isChecked())
+    isMineCreatedSave = str(self.mineCreatedAction.isChecked())
+    isAllSave = str(self.radioAllAss.isChecked())
+    isLinkedSave = str(self.checkLinkedProjects.isChecked())
+    linkedProjSave = str(self.comboLinked.currentText())
+    isTagsSave = str(self.checkTags.isChecked())
+    isUsersSave = str(self.checkUsers.isChecked())
+    searchBoxSave = str(self.lineEditSearch.text())
+    
+    
+    saveString = assetTypeSave +"###"+ \
+                 seqSave +"###"+ \
+                 scnSave +"###"+ \
+                 stageSave +"###"+ \
+                 nodeSave +"###"+ \
+                 fileTypeSave +"###"+ \
+                 isMineAssignedSave +"###"+ \
+                 isMineCreatedSave +"###"+ \
+                 isAllSave +"###"+ \
+                 isLinkedSave +"###"+ \
+                 linkedProjSave +"###"+ \
+                 isTagsSave +"###"+ \
+                 isUsersSave +"###"+ \
+                 searchBoxSave
+               
+    print(saveString)
+    searchDict[saveString] = "New Fav"
+    
+                 
+    item = QtGui.QListWidgetItem()
+    item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
+    item.setText("New Fav")
+    self.listWidgetSearch.addItem(item)
+                   
+    #for x in range(0,self.listWidgetSearch.count()):
+      #item = self.listWidgetSearch.item(x)
+      #print(":"+ str(item.text()))
+    
+    
+    
+  def loadSearch(self):
+    from os.path import expanduser
+    home = expanduser("~")
+    saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
+    if(os.path.exists(saveFile)):
+      saveFileFd = open(saveFile,"r")
+      for x in saveFileFd.readlines():
+        
+    
+    
+    pass
+    
+    
   def rbhusPipeProjCreateEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)
     self.updateAll()
@@ -1567,6 +1750,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   def updateAll(self):
+    self.setLinkedProj()
     self.setStageTypes()
     self.setAssTypes()
     self.setFileTypes()

@@ -199,8 +199,6 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
             self.tableVersions.item(indrow, indcol).setText(str(t))
           indcol = indcol + 1
         indrow = indrow + 1
-        
-        
     self.tableVersions.setSortingEnabled(True) 
     self.tableVersions.resizeColumnsToContents()
     print(tem)
