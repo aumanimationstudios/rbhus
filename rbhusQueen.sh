@@ -2,3 +2,5 @@
 ./rbhusQueen_initTasks.py &
 ./rbhusQueen_pingClient.py &
 ./rbhusQueen_scheduler.py &
+./rPipeQueen_initProj.py &
+
