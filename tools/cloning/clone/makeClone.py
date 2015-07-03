@@ -78,10 +78,10 @@ os.system(rsync +" -avHAX "+ root_dir_h +" "+ target +" "+ xclude_option +" "+ p
 if(args.makeDir):
   for x in make_dirs:
     os.system("mkdir -vp "+ x)
-    os.system("chown "+ make_dirs[x] +":"+ make_dirs[x] +" "+ x)
+    os.system("chown -v "+ make_dirs[x] +":"+ make_dirs[x] +" "+ x)
   if(make_dirs_perms):
     for x in make_dirs_perms:
-      os.system("chmod "+ make_dirs_perms[x]+" "+ x)
+      os.system("chmod -v "+ make_dirs_perms[x]+" "+ x)
     
     
 if(link_dict):
