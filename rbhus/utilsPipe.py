@@ -815,112 +815,104 @@ def assPathColorCoded(assDetDict):
   return(assPath)
 
 def assRegister(assDetDict):
-  assPath = str(assDetDict['projName'])
+  assPath = getAssPath(assDetDict)
+  #assPath = str(assDetDict['projName'])
   assId = ""
   dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
   assDetDict['createDate'] = str(MySQLdb.Timestamp.now())
   assDetDict['createdUser']  = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
-  utilsPipeLogger.debug("WTF : "+ str(assDetDict))
+  fileName = getAssFileName(assDetDict)
+  assId = hashlib.sha256(assPath).hexdigest()
+  assDetDict['assetId'] = assId
+  assDetDict['path'] = assPath
+  fieldsA = []
+  valuesA = []
+  for x in assDetDict.keys():
+    fieldsA.append(str(x))
+    valuesA.append("'"+ str(assDetDict[x]) +"'")
+  fs = "("+ ",".join(fieldsA) +")"
+  vs = "("+ ",".join(valuesA) +")"
+  utilsPipeLogger.debug(assDetDict)
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("insert into assets "+ fs +" values "+ vs)
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  try:
+    
+    if(sys.platform.find("win") >= 0):
+      corePath = dirMapsDets['windowsMapping'] + assPath.replace(":","/")
+    else:
+      corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
+    utilsPipeLogger.debug(corePath)
+    try:
+      os.makedirs(corePath,0775)
+    except:
+      utilsPipeLogger.debug(str(sys.exc_info()))
+    setAssTemplate(assDetDict)  
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  return(assDetDict['assetId'])
+  #else:
+    #return(0)
+    
+
+def setAssTemplate(assDetDict):
+  templateFile = getTemplatePath(assDetDict)
+  assPath = getAssPath(assDetDict)
+  dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
+  fileName = getAssFileName(assDetDict)
+  if(sys.platform.find("win") >= 0):
+    corePath = dirMapsDets['windowsMapping'] + assPath.replace(":","/")
+  else:
+    corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
+  if(templateFile):
+    if(not os.path.exists(corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])):
+      utilsPipeLogger.debug("recopied template file")
+      shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
+    else:
+      utilsPipeLogger.debug("file already exits. not copying template")
+
+
+def getAssFileName(assDetDict):
   fileName = ""
   if(assDetDict.has_key('assName')):
     if(str(assDetDict['assName']) != "default"):
       fileName = str(assDetDict['assName'])
-  if(re.search("^default$",str(assDetDict['assetType']))):
-    pass 
-  else:
-    assTypeDets = getAssTypes(str(assDetDict['assetType']))
-    if(assTypeDets):
-      for p in assTypeDets['path'].split(":"):
-        if(re.search("^\$",str(p))):
-          assPath = assPath +":"+ os.environ["rp_"+ str(p).lstrip("$")]
-        else:
-          assPath = assPath +":"+ p
-  if(assPath):
-    if(not re.search("^default$",str(assDetDict['sequenceName']))):
-      if(not re.search("^default$",str(assDetDict['sceneName']))):
-        assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
-        if(fileName):
-          fileName = fileName +"_"+ str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
-        else:
-          fileName = str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
-      else:
-        assPath = assPath +":"+ str(assDetDict['sequenceName'])
-        if(fileName):
-          fileName = fileName +"_"+ str(assDetDict['sequenceName'])
-        else:
-          fileName = str(assDetDict['sequenceName'])
-    #utilsPipeLogger.debug("WTF 001 : "+ str(assPath))
-    if(assDetDict.has_key('assName')):
-      if(not re.search("^default$",str(assDetDict['assName']))):
-        assPath = assPath +":" + str(assDetDict['assName'])
-    
-    #utilsPipeLogger.debug("WTF 002 : "+ str(assPath))
-    if(not re.search("^default$",str(assDetDict['stageType']))):
-      assPath = assPath +":" + str(assDetDict['stageType'])
+  if(not re.search("^default$",str(assDetDict['sequenceName']))):
+    if(not re.search("^default$",str(assDetDict['sceneName']))):
       if(fileName):
-        fileName = fileName +"_"+ str(assDetDict['stageType'])
+        fileName = fileName +"_"+ str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
       else:
-        fileName = str(assDetDict['stageType'])
-    #utilsPipeLogger.debug("WTF 003 : "+ str(assPath))
-    if(not re.search("^default$",str(assDetDict['nodeType']))):
-      assPath = assPath +":" + str(assDetDict['nodeType'])
+        fileName = str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
+    else:
       if(fileName):
-        fileName = fileName +"_"+ str(assDetDict['nodeType'])
+        fileName = fileName +"_"+ str(assDetDict['sequenceName'])
       else:
-        fileName = str(assDetDict['nodeType'])
-    #utilsPipeLogger.debug("WTF 004 : "+ str(assPath))
+        fileName = str(assDetDict['sequenceName'])
+  if(not re.search("^default$",str(assDetDict['stageType']))):
+    if(fileName):
+      fileName = fileName +"_"+ str(assDetDict['stageType'])
+    else:
+      fileName = str(assDetDict['stageType'])
+  if(not re.search("^default$",str(assDetDict['nodeType']))):
+    if(fileName):
+      fileName = fileName +"_"+ str(assDetDict['nodeType'])
+    else:
+      fileName = str(assDetDict['nodeType'])
+  return(fileName)
+  
     
-    
-      
-    if(not re.search("^default$",str(assDetDict['fileType']))): 
-      assPath = assPath +":" + str(assDetDict['fileType'])
-    #utilsPipeLogger.debug("WTF 005 : "+ str(assPath))
-    assId = hashlib.sha256(assPath).hexdigest()
-    assDetDict['assetId'] = assId
-    assDetDict['path'] = assPath
-    fieldsA = []
-    valuesA = []
-    for x in assDetDict.keys():
-      fieldsA.append(str(x))
-      valuesA.append("'"+ str(assDetDict[x]) +"'")
-    fs = "("+ ",".join(fieldsA) +")"
-    vs = "("+ ",".join(valuesA) +")"
-    utilsPipeLogger.debug(assDetDict)
-    dbconn = dbPipe.dbPipe()
-    try:
-      rows = dbconn.execute("insert into assets "+ fs +" values "+ vs)
-    except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
-      return(0)
-    try:
-      if(sys.platform.find("win") >= 0):
-        corePath = dirMapsDets['windowsMapping'] + assPath.replace(":","/")
-      else:
-        corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
-      utilsPipeLogger.debug(corePath)
-      try:
-        os.makedirs(corePath,0775)
-      except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
-      templateFile = getTemplatePath(assDetDict)
-      if(templateFile):
-        if(not os.path.exists(corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])):
-          shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
-          utilsPipeLogger.debug(templateFile +" : "+ corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
-    except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
-      return(0)
-    return(assDetDict['assetId'])
-  else:
-    return(0)
-    
+  
+          
     
 def getAssPath(assDetDictTemp = {}):
   assDetDict = copy.copy(assDetDictTemp)
   if(not assDetDict):
     return(0)
   assPath = str(assDetDict['projName'])
-  assId = ""
   dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
   utilsPipeLogger.debug("WTF asspathtemp : "+ str(assDetDict))
   fileName = ""

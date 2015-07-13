@@ -174,7 +174,13 @@ class hg(object):
     self._copyMainConfig()
     
     
-    
+  
+  def _merge(self):
+    p = subprocess.Popen(["hg","merge"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()
+    p.wait()
+    self._deleteLock()
+    print("_merge"+ str(out))
     
     
   def _add(self):
@@ -185,20 +191,27 @@ class hg(object):
     self._deleteLock()
     print("_add"+ str(out))
     
+  def _addremove(self):
+    p = subprocess.Popen(["hg","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()
+    p.wait()
+    self._deleteLock()
+    print("_addremove"+ str(out))
+    
     
   def _commit(self):
     p = subprocess.Popen(["hg","commit","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']])
-    #out = p.communicate()
+    out = p.communicate()
     p.wait()
     self._deleteLock()
-    #print("_commit"+ str(out))
+    print("_commit"+ str(out))
    
   def _push(self):
     p = subprocess.Popen(["hg","push","-f",self.absPipePath])
-    #out = p.communicate()
+    out = p.communicate()
     p.wait()
     self._deleteLock()
-    #print("_push"+ str(out))
+    print("_push"+ str(out))
   
   def _pull(self):
     p = subprocess.Popen(["hg","pull",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -265,7 +278,18 @@ class hg(object):
     self._deleteLock()
     os.chdir(self.localPath)
     
-    
+  def _archiveVersionLocal(self,rev):
+    if(not rev):
+      rev = 0
+    os.chdir(self.localPath)
+    if(os.path.exists("./export_"+ str(rev) +"/")):
+      shutil.rmtree("./export_"+ str(rev) +"/")
+    p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    assdict = {}
+    print("_archive"+ str(rev))
+    self._deleteLock()
+    os.chdir(self.localPath)
+  
   def _revert(self,rev):
     if(not rev):
       rev = 0
@@ -277,12 +301,15 @@ class hg(object):
     self._deleteLock()
     os.chdir(self.localPath)
     
+    
+  
+    
   def getVersionPath(self,rev):
     if(not rev):
       rev = 0
     if(not os.path.exists(self.absPipePath +"/export_"+ str(rev) +"/")):
-      self._archiveVersion(rev)
-    return(self.absPipePath +"/export_"+ str(rev) +"/")
+      self._archiveVersionLocal(rev)
+    return(self.localPath +"/export_"+ str(rev) +"/")
   
   
   def reInitLocal(self):

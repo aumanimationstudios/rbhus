@@ -199,7 +199,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
             self.tableVersions.item(indrow, indcol).setText(str(t))
           indcol = indcol + 1
         indrow = indrow + 1
-    self.tableVersions.setSortingEnabled(True) 
+    self.tableVersions.setSortingEnabled(True)
     self.tableVersions.resizeColumnsToContents()
     print(tem)
   
@@ -214,6 +214,9 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   
   def commit(self):
     self.versionsHg._add()
+    self.versionsHg._addremove()
+    self.versionsHg._pull()
+    self.versionsHg._merge()
     self.versionsHg._commit()
     self.versionsHg._push()
     os.chdir(self.versionsHg.absPipePath)

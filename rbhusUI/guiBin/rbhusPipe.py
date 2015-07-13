@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ #!/usr/bin/python
 from PyQt4 import QtCore, QtGui, QtSql
 import os
 import sys
@@ -6,7 +6,10 @@ import tempfile
 import time
 import subprocess
 import math
+import pickle
+from os.path import expanduser
 
+home = expanduser("~")
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
@@ -61,6 +64,10 @@ except AttributeError:
 #db.setHostName("blues2")
 #db.setDatabaseName("rbhusPipe")
 #db.open()
+
+class saveSearch:
+  searchPath = ''
+  searchName = "new fav"
   
 class ExtendedQLabel(QtGui.QLabel):
   clicked = QtCore.pyqtSignal()
@@ -268,6 +275,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listFirstTime = False
     self.previewItems = {}
     self.previewWidgets = []
+    
+    self.searchDict = {}
+    self.assFavDict = {}
+    self.saveSearchArray = []
+    self.assSearchArray = []
+    
+    self.saveFile = ""
+    self.saveFileShortcut = ""
     self.dbcon = dbPipe.dbPipe()
     
     icon = QtGui.QIcon()
@@ -416,7 +431,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetFile.clicked.connect(self.setFileTypes)
     
-    
+    asstypelineedit = self.comboAssType.lineEdit()
+    asstypelineedit.setReadOnly(True)
     self.comboAssType.currentIndexChanged.connect(self.listAssets)
     #self.comboAssType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetAsset.clicked.connect(self.setAssTypes)
@@ -455,6 +471,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.tableWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.tableWidget.customContextMenuRequested.connect(self.popupAss)
     
+    self.listWidgetSearch.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+    self.listWidgetSearch.customContextMenuRequested.connect(self.popUpSearchFav)
+    
+    self.listWidgetAssets.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+    self.listWidgetAssets.customContextMenuRequested.connect(self.popUpAssetFav)
+    
     
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.listAssets)
@@ -471,10 +493,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listAssetsTimed()
     
     self.searchRefresh.clicked.connect(self.pushResetSearchFunc)
-    self.pushSearchFav.clicked.connect(self.saveSearch)
+    self.pushSearchFav.clicked.connect(self.saveSearchItem)
+    self.listWidgetSearch.itemChanged.connect(self.searchItemChanged)
+    #self.listWidgetSearch.itemPressed.connect(self.searchItemActivate)
+    self.pushSearchFavReset.clicked.connect(self.clearSearchFav)
     #self.timerAss = QtCore.QTimer()
     #self.timerAss.timeout.connect(self.listAssetsTimed)
     #self.timerAss.start(2000)
+    #self.loadSearch()
   
   #def sliderZoom(self,value):
     #self.labelZoomValue.setText(str(value) +"x")
@@ -547,11 +573,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     menu = QtGui.QMenu()
     #openFileAction = menu.addAction("open file")
     openFolderAction = menu.addAction("open")
+    addToFavAction = menu.addAction("add to shortcuts")
     #versionAction = menu.addAction("versioning")
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyNew = menu.addAction("copy/new")
-    assGetTemplate = menu.addAction("template path")
+    assGetTemplate = menu.addAction("reset templates")
     #assCmdLine = menu.addAction("cmd line")
     assRender = menu.addAction("submit to render")
     assDeleteAction = menu.addAction("delete")
@@ -572,7 +599,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(action == assRender):
       self.renderAss()
     if(action == assGetTemplate):
-      self.getTemplatePath()
+      self.resetTemplateFiles()
+    if(action == addToFavAction):
+      self.assetFavSave()
+    
      
     #if(action == versionAction):
       #self.versionAss()
@@ -654,10 +684,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     
   
   
-  def openFolderAss(self):
-    listAsses = self.selectedAsses()
-    if(listAsses): # and (len(listAsses) == 1)
+  def openFolderAss(self,favSearch = False):
+    if(favSearch):
+      i = self.listWidgetAssets.currentRow()
+      print("current row selected :"+ str(i))
+      x = self.assSearchArray[i]
+    else:
+      listAsses = self.selectedAsses()
       x = str(listAsses[0])
+    if(x): # and (len(listAsses) == 1)
+      #x = str(listAsses[0])
       print(x)
       p = utilsPipe.getAbsPath(x)
       assdets = utilsPipe.getAssDetails(assPath=x)
@@ -739,11 +775,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     subprocess.Popen(versionCmd +" --path \""+ selass[-1] +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
     
     
-  def getTemplatePath(self):
+  def resetTemplateFiles(self):
     selass = self.selectedAsses()
-    if(selass):
-      assDets = utilsPipe.getAssDetails(assPath = selass[-1])
-      utilsPipe.getTemplatePath(assDets)
+    for x in range(0,len(selass)):
+      print(selass[x])
+      assDets = utilsPipe.getAssDetails(assPath = selass[x])
+      utilsPipe.setAssTemplate(assDets)
    
   def setLinkedProj(self):
     try:
@@ -1628,8 +1665,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   def rbhusPipeSetProjDefault(self):
-    from os.path import expanduser
-    home = expanduser("~")
     projFile = 0
     if(os.path.exists(home.rstrip(os.sep) + os.sep +"projSet.default")):
       projFile = open(home.rstrip(os.sep) + os.sep +"projSet.default","r")
@@ -1645,13 +1680,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
               print(y +":"+ str(os.environ[y]))
             
           self.updateAll()
+          self.saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
+          self.saveFileShortcut = home.rstrip(os.sep) + os.sep +"rbhusShort.default_"+ os.environ['rp_proj_projName']
+          self.loadSearch()
+          self.loadAssetShortcut()
           break
+      
         
     
   
   def rbhusPipeSetProject(self):
-    from os.path import expanduser
-    home = expanduser("~")
     projFile = open(home.rstrip(os.sep) + os.sep +"projSet.default","w")
     
     
@@ -1677,19 +1715,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         print(x +":"+ str(os.environ[x]))
       
     self.updateAll()
+    self.saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
+    self.saveFileShortcut = home.rstrip(os.sep) + os.sep +"rbhusShort.default_"+ os.environ['rp_proj_projName']
+    self.loadSearch()
+    self.loadAssetShortcut()
     
     
-  def saveSearch(self):
-    from os.path import expanduser
-    home = expanduser("~")
-    saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
-    saveFileFd = open(saveFile,"a")
+    
+  def saveSearchItem(self):
     assetTypeSave = str(self.comboAssType.currentText())
     seqSave = str(self.comboSequence.currentText())
     scnSave = str(self.comboScene.currentText())
     stageSave = str(self.comboStageType.currentText())
     nodeSave = str(self.comboNodeType.currentText())
     fileTypeSave = str(self.comboFileType.currentText())
+    isMineSave = str(self.radioMineAss.isChecked())
     isMineAssignedSave = str(self.mineAssignedAction.isChecked())
     isMineCreatedSave = str(self.mineCreatedAction.isChecked())
     isAllSave = str(self.radioAllAss.isChecked())
@@ -1698,14 +1738,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     isTagsSave = str(self.checkTags.isChecked())
     isUsersSave = str(self.checkUsers.isChecked())
     searchBoxSave = str(self.lineEditSearch.text())
-    
-    
     saveString = assetTypeSave +"###"+ \
                  seqSave +"###"+ \
                  scnSave +"###"+ \
                  stageSave +"###"+ \
                  nodeSave +"###"+ \
                  fileTypeSave +"###"+ \
+                 isMineSave +"###"+ \
                  isMineAssignedSave +"###"+ \
                  isMineCreatedSave +"###"+ \
                  isAllSave +"###"+ \
@@ -1716,33 +1755,216 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
                  searchBoxSave
                
     print(saveString)
-    searchDict[saveString] = "New Fav"
-    
-                 
-    item = QtGui.QListWidgetItem()
-    item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
-    item.setText("New Fav")
-    self.listWidgetSearch.addItem(item)
+    if(not self.searchDict.has_key(saveString)):
+      saveFileFd = open(self.saveFile,"w")
+      self.searchDict[saveString] = 1
+      searchSavedObj = saveSearch()
+      searchSavedObj.searchPath = saveString
+      searchSavedObj.searchName = "new fav"
+      self.saveSearchArray.append(searchSavedObj)
+      item = QtGui.QListWidgetItem()
+      item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
+      item.setText(searchSavedObj.searchName)
+      self.listWidgetSearch.addItem(item)
+      pickle.dump(self.saveSearchArray,saveFileFd)
+      saveFileFd.flush()
+      saveFileFd.close()
                    
     #for x in range(0,self.listWidgetSearch.count()):
       #item = self.listWidgetSearch.item(x)
       #print(":"+ str(item.text()))
     
     
+  def searchItemChanged(self,item):
+    print(item.text())
+    indexChanged = self.listWidgetSearch.indexFromItem(item).row()
+    self.saveSearchArray[indexChanged].searchName = item.text()
+    saveFileFd = open(self.saveFile,"w")
+    pickle.dump(self.saveSearchArray,saveFileFd)
+    saveFileFd.flush()
+    saveFileFd.close()
     
+  def searchItemActivate(self):
+    indexChanged = self.listWidgetSearch.currentRow()
+    print(indexChanged)
+    s = self.saveSearchArray[indexChanged].searchPath.split("###")
+    print(str(s) +":"+ str(len(s)))
+    self.comboAssType.setEditText(s[0])
+    self.comboSequence.setEditText(s[1])
+    self.comboScene.setEditText(s[2])
+    self.comboStageType.setEditText(s[3])
+    self.comboNodeType.setEditText(s[4])
+    self.comboFileType.setEditText(s[5])
+    
+    
+    if(s[6] == "True"):
+      self.radioMineAss.setChecked(True)
+    else:
+      self.radioMineAss.setChecked(False)
+    
+    if(s[7] == "True"):
+      self.mineAssignedAction.setChecked(True)
+    else:
+      self.mineAssignedAction.setChecked(False)
+    
+    if(s[8] == "True"):
+      self.mineCreatedAction.setChecked(True)
+    else:
+      self.mineCreatedAction.setChecked(False)
+    
+    if(s[9] == "True"):
+      self.radioAllAss.setChecked(True)
+    else:
+      self.radioAllAss.setChecked(False)
+      
+    if(s[10] == "True"):
+      self.checkLinkedProjects.setChecked(True)
+    else:
+      self.checkLinkedProjects.setChecked(False)
+      
+    self.comboLinked.setEditText(s[11])
+    
+    if(s[12] == "True"):
+      self.checkTags.setChecked(True)
+    else:
+      self.checkTags.setChecked(False)
+      
+    if(s[13] == "True"):
+      self.checkUsers.setChecked(True)
+    else:
+      self.checkUsers.setChecked(False)
+      
+    self.lineEditSearch.setText(s[14])
+    
+    self.listAssets()
+    
+    
+    
+  
+  
   def loadSearch(self):
-    from os.path import expanduser
-    home = expanduser("~")
-    saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
-    if(os.path.exists(saveFile)):
-      saveFileFd = open(saveFile,"r")
-      for x in saveFileFd.readlines():
+    print(self.saveFile)
+    self.listWidgetSearch.clear()
+    self.saveSearchArray = []
+    self.searchDict = {}
+    if(os.path.exists(self.saveFile)):
+      if(os.path.getsize(self.saveFile) > 0):
+        saveFileFd = open(self.saveFile,"r")
+        itemsForSaveSearch = pickle.load(saveFileFd)
+        for x in range(0,len(itemsForSaveSearch)):
+          print("funcky : "+ str(itemsForSaveSearch[x]))
+          item = QtGui.QListWidgetItem()
+          item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
+          item.setText(itemsForSaveSearch[x].searchName)
+          self.listWidgetSearch.addItem(item)
+          self.saveSearchArray.append(itemsForSaveSearch[x])
+          self.searchDict[itemsForSaveSearch[x].searchPath] = 1
+      
+        saveFileFd.close()
+    
+  
+  def deleteSearch(self):
+    i = self.listWidgetSearch.currentRow()
+    print("current row selected :"+ str(i))
+    poped = self.saveSearchArray.pop(i)
+    del self.searchDict[poped.searchPath]
+    saveFileFd = open(self.saveFile,"w")
+    pickle.dump(self.saveSearchArray,saveFileFd)
+    saveFileFd.flush()
+    saveFileFd.close()
+    self.loadSearch()
+    
+    
+  def clearSearchFav(self):
+    self.listWidgetSearch.clear()
+    self.saveSearchArray = []
+    self.searchDict = {}
+    saveFileFd = open(self.saveFile,"w")
+    pickle.dump(self.saveSearchArray,saveFileFd)
+
+  
+  def popUpSearchFav(self,pos):
+    menu = QtGui.QMenu()
+    filterSearchAction = menu.addAction("filter")
+    deleteSearchAction = menu.addAction("delete")
+    action = menu.exec_(self.listWidgetSearch.mapToGlobal(pos))
+    
+    if(action == filterSearchAction):
+      self.searchItemActivate()
+    
+    if(action == deleteSearchAction):
+      self.deleteSearch()
+      
+      
+  def popUpAssetFav(self,pos):
+    menu = QtGui.QMenu()
+    openSearchAction = menu.addAction("open")
+    deleteSearchAction = menu.addAction("delete")
+    action = menu.exec_(self.listWidgetAssets.mapToGlobal(pos))
+    
+    if(action ==  openSearchAction):
+      self.openFolderAss(favSearch = True)
+    
+    if(action == deleteSearchAction):
+      self.deleteFavAss()
+    
+    
+    
+  def deleteFavAss(self):
+    i = self.listWidgetAssets.currentRow()
+    print("current row selected :"+ str(i))
+    poped = self.assSearchArray.pop(i)
+    del self.assFavDict[poped]
+    saveFileFd = open(self.saveFileShortcut,"w")
+    pickle.dump(self.assSearchArray,saveFileFd)
+    saveFileFd.flush()
+    saveFileFd.close()
+    self.loadAssetShortcut()
+    
+    
+  
+  def assetFavSave(self):
+    asses = self.selectedAsses()
+    if(asses):
+      for x in range(0,len(asses)):
+        print(asses[x])
+        if(not self.assFavDict.has_key(str(asses[x]))):
+          self.assFavDict[str(asses[x])] = 1
+          self.assSearchArray.append(str(asses[x]))
+          assSaveFileFd = open(self.saveFileShortcut,"w")
+          pickle.dump(self.assSearchArray,assSaveFileFd)
+          assSaveFileFd.flush()
+          assSaveFileFd.close()
+          item = QtGui.QListWidgetItem()
+          item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
+          item.setText(str(asses[x]))
+          self.listWidgetAssets.addItem(item)
+  
+  
+  def loadAssetShortcut(self):
+    self.listWidgetAssets.clear()
+    self.assFavDict = {}
+    self.assSearchArray = []
+    if(os.path.exists(self.saveFileShortcut)):
+      if(os.path.getsize(self.saveFileShortcut) > 0):
+        assSaveFileFd = open(self.saveFileShortcut,"r")
+        self.assSearchArray = pickle.load(assSaveFileFd)
+        assSaveFileFd.close()
+        for x in range(0,len(self.assSearchArray)):
+          self.assFavDict[self.assSearchArray[x]] = 1
+          item = QtGui.QListWidgetItem()
+          item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
+          item.setText(str(self.assSearchArray[x]))
+          self.listWidgetAssets.addItem(item)
         
+      
+
     
-    
-    pass
-    
-    
+  
+  
+  
+  
+  
   def rbhusPipeProjCreateEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)
     self.updateAll()

@@ -748,34 +748,6 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <item>
-         <property name="text">
-          <string>sdf</string>
-         </property>
-         <property name="flags">
-          <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>sdf</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>sd</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>fs</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>New Item</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>
@@ -907,41 +879,6 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <item>
-               <property name="text">
-                <string>sdfs</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>df</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>sdf</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>sdf</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>sf</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>a</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>f</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item>
