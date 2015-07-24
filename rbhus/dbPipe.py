@@ -91,7 +91,7 @@ class dbPipe:
         else:
           cur = self.__conn.cursor()
         cur.execute(query)
-        
+        modPipeLogger.debug(query)
         if(dictionary):
           try:
             rows = cur.fetchall()

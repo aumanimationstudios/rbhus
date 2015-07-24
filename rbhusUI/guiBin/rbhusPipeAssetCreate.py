@@ -324,8 +324,8 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     ftypes = [str(x['type']) for x in utilsPipe.getFileTypes()]
     
     defNodes =[str(df.split("#")[0]) for df in self.lineEditNodes.text().split(",")]
-    print(sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",",".join(defNodes))
-    outNodes = subprocess.Popen([sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",",".join(defNodes)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    print(sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",str(self.lineEditNodes.text()))
+    outNodes = subprocess.Popen([sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",str(self.lineEditNodes.text())],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     
     if(outNodes == ""):
       outNodes = str(self.lineEditNodes.text())

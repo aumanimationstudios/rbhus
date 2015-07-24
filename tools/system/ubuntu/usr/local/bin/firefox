@@ -1,0 +1,2 @@
+mkdir -p /tmp/$HOME/$HOME/$HOME
+/usr/bin/firejail --private=/tmp/$HOME/$HOME/$HOME /usr/bin/firefox $@

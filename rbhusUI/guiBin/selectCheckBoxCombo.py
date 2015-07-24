@@ -6,6 +6,12 @@ import sys
 import datetime
 import re
 import argparse
+import logging
+import logging.handlers
+import socket
+import tempfile
+import copy
+
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
@@ -17,6 +23,33 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("r
 
 parser = argparse.ArgumentParser()
 
+hostname = socket.gethostname()
+tempDir = os.path.abspath(tempfile.gettempdir())
+
+if(sys.platform.find("win") >= 0):
+  try:
+    username = os.environ['USERNAME']
+  except:
+    username = "nobody"
+if(sys.platform.find("linux") >= 0):
+  try:
+    username = os.environ['USER']
+  except:
+    username = "nobody"
+
+
+LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_selectCheckBoxCombo_"+ username +"_"+ str(hostname) +".log")
+  #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
+
+#LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
+selectCheckBoxComboLogger = logging.getLogger("selectCheckBoxComboLogger")
+selectCheckBoxComboLogger.setLevel(logging.DEBUG)
+
+
+#ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=104857600, backupCount=3)
+BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
+LOG_FILENAME.setFormatter(BASIC_FORMAT)
+selectCheckBoxComboLogger.addHandler(LOG_FILENAME)
 
 
 parser.add_argument("-i","--input",dest='inputlist',help='comma seperated input list')
@@ -43,6 +76,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
     self.inDict = {}
     self.defCombo = []
     self.updateLine = []
+    self.defDict = {}
+    self.findList = []
     if(args.inputlist):
       self.inList = args.inputlist.split(",")
       for x in self.inList:
@@ -56,16 +91,40 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
       self.defCombo = args.combolist.split(",")
     if(args.defaultlist):
       self.defList = args.defaultlist.split(",")
-      
+      for x in self.defList:
+        dets = x.split("#")
+        if(len(dets) > 1):
+          self.defDict[dets[0]] = dets[1].split("%")
+        else:
+          self.defDict[dets[0]] = []
+    selectCheckBoxComboLogger.debug(self.defDict)
     self.checkBoxes = {}
     self.updateCheckBoxes()
     self.updateSelected()
     self.pushApply.clicked.connect(self.pApply)
     self.pushDeselect.clicked.connect(self.deselectall)
     self.pushSelect.clicked.connect(self.selectall)
-    self.lineEditSearch.textChanged.connect(self.updateCheckBoxes)
+    self.lineEditSearch.textChanged.connect(self.searchReset)
     self.pushClearSearch.clicked.connect(self.lineEditSearch.clear)
     Form.closeEvent = self.closeEvent
+  
+  
+  
+  def searchReset(self):
+    try:
+      selectCheckBoxComboLogger.debug(str(self.plainTextEditSelected.document().toPlainText()))
+      self.defList = str(self.plainTextEditSelected.document().toPlainText()).split(",")
+      #self.defDict = {}
+      for x in self.defList:
+        dets = x.split("#")
+        if(len(dets) > 1):
+          self.defDict[dets[0]] = dets[1].split("%")
+        else:
+          self.defDict[dets[0]] = []
+      self.updateCheckBoxes()
+    #self.updateSelected()
+    except:
+      selectCheckBoxComboLogger.debug(str(sys.exc_info()))
   
   
   def closeEvent(self,event):
@@ -78,17 +137,17 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
   
   
   def pApply(self):
-    print(",".join(self.updateLine))
+    print(str(self.plainTextEditSelected.document().toPlainText()))
     QtCore.QCoreApplication.instance().quit()
     
     
     
     
   def updateCheckBoxes(self):
-    findList = []
+    self.findList = []
     for x in self.inDict.keys():
       if(x.find(str(self.lineEditSearch.text())) >= 0):
-        findList.append(x)
+        self.findList.append(x)
     
     
     for x in self.inDict.keys():
@@ -101,9 +160,9 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
       except:
         pass
       
-    if(findList):
-      #model = QtGui.QStandardItemModel(len(findList),1)
-      for x in findList:
+    if(self.findList):
+      #model = QtGui.QStandardItemModel(len(self.findList),1)
+      for x in self.findList:
         indx = 0
         groupBox = QtGui.QGroupBox(self.scrollAreaWidgetContents)
         comboBox = QtGui.QComboBox(groupBox)
@@ -146,8 +205,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         comboBox.setEditable(True)
         comboBox.lineEdit().setReadOnly(True)
         comboBox.setModel(model)
-        if(self.inDict[x]):
-          comboBox.setEditText(",".join(self.inDict[x]))
+        if(x in self.defDict):
+          comboBox.setEditText(",".join(self.defDict[x]))
         else:
           comboBox.setEditText("default")
         
@@ -173,7 +232,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         self.checkBoxes[x][2].editTextChanged.connect(self.updateSelected)
         self.checkBoxes[x][2].view().activated.connect(lambda index, x=x : self.pressedFileType(index,self.checkBoxes[x][2]))
         #print(self.checkBoxes[x][2].objectName())
-        if(x in self.defList):
+        if(x in self.defDict):
           self.checkBoxes[x][1].setChecked(2)
     #self.defCombo = []
     
@@ -212,25 +271,67 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
       father.setEditText("default")
         
   def deselectall(self):
-    for x in self.inList:
+    self.defList = []
+    self.defDict = {}
+    for x in self.findList:
       self.checkBoxes[x][1].setChecked(0)
         
   
   def selectall(self):
-    for x in self.inList:
+    for x in self.findList:
       self.checkBoxes[x][1].setChecked(2)
   
   
   def updateSelected(self):
-    self.updateLine = []
-    #self.plainTextEditSelected.setReadOnly(False)
-    self.plainTextEditSelected.clear()
-    for x in self.checkBoxes.keys():
-      #print(x + " : "+ str(self.checkBoxes[x].isChecked()))
-      if(self.checkBoxes[x][1].isChecked()):
+    try:
 
-        self.updateLine.append(str(x) +"#"+ "%".join(str(self.checkBoxes[x][2].currentText()).split(",")))
-    self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(self.updateLine)))
+
+      if(len(str(self.lineEditSearch.text())) > 0):
+        a = str(self.plainTextEditSelected.document().toPlainText()).split(",")
+        temDict = {}
+        for x in a:
+          detsa = x.split("#")
+          if(len(detsa) > 1):
+            temDict[detsa[0]] = detsa[1].split("%")
+          else:
+            temDict[detsa[0]] = []
+        
+        tempShit = []
+        for y in self.checkBoxes.keys():
+          if(self.checkBoxes[y][1].isChecked()):
+            tempShit.append(str(y) +"#"+ "%".join(str(self.checkBoxes[y][2].currentText()).split(",")))
+          else:
+            try:
+              del temDict[str(y)]
+            except:
+              selectCheckBoxComboLogger.debug(str(sys.exc_info()))
+        for z in tempShit:
+          detsb = z.split("#")
+          if(len(detsb) > 1):
+            temDict[detsb[0]] = detsb[1].split("%")
+          else:
+            temDict[detsb[0]] = []
+
+        tempshit2 = []
+        for v in temDict.keys():
+           if(temDict[v]):
+             tempshit2.append(str(v) +"#"+ "%".join(temDict[v]))
+
+        selectCheckBoxComboLogger.debug(tempshit2)
+        tempshit2.sort()
+        self.plainTextEditSelected.clear()
+        
+        self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(tempshit2)))
+      else:
+        self.updateLine = []
+        for x in self.checkBoxes.keys():
+          if(self.checkBoxes[x][1].isChecked()):
+            self.updateLine.append(str(x) +"#"+ "%".join(str(self.checkBoxes[x][2].currentText()).split(",")))
+        self.updateLine.sort()
+        self.plainTextEditSelected.clear()
+        self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(self.updateLine)))
+    except:
+      selectCheckBoxComboLogger.debug(str(sys.exc_info()))
     #self.plainTextEditSelected.setReadOnly(True)
       
         

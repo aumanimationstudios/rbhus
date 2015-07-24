@@ -1,0 +1,4 @@
+mkdir -p /tmp/$HOME/$HOME/$HOME
+/usr/bin/firejail --private=/tmp/$HOME/$HOME/$HOME /usr/bin/google-chrome-stable $@
+#/usr/bin/firejail /usr/bin/google-chrome-stable $@
+

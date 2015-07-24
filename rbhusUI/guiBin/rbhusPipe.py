@@ -24,6 +24,7 @@ rpS = "rbhusPipeSeqSceCreate.py"
 fileSelect = "fileSelectUI.py"
 scb = "selectCheckBox.py"
 vc = "rbhusPipeVersions.py"
+rS = "rbhusPipeRenderSubmit.py"
 
 
 selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
@@ -34,6 +35,7 @@ rbhusPipeAssetEditCmd = dirSelf.rstrip(os.sep) + os.sep + rpAssEdit
 rbhusPipeSeqSceCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpS
 fileSelectCmd = dirSelf.rstrip(os.sep) + os.sep + fileSelect
 versionCmd = dirSelf.rstrip(os.sep) + os.sep + vc
+rbhusPipeRenderSubmitCmd = dirSelf.rstrip(os.sep) + os.sep + rS
 
 
 
@@ -177,14 +179,17 @@ class workerGetAsses(QtCore.QObject):
     self.assesColor = {}
     self.assModifiedTime = {}
     try:
-      if(self.whereDict):
-        if(self.isAssesLinked):
-          self.assesLinked = utilsPipe.getLibAsses(projNames = self.linkedProjects,whereDict=self.whereDict)
-        self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],whereDict=self.whereDict)
+      #if(self.whereDict):
+        #if(self.isAssesLinked):
+          #self.assesLinked = utilsPipe.getLibAsses(projNames = self.linkedProjects,whereDict=self.whereDict)
+        #self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],whereDict=self.whereDict)
+      #else:
+      if(self.isAssesLinked):
+        self.assesLinked = utilsPipe.getLibAsses(self.linkedProjects,whereDict = self.whereDict)
+        if(self.linkedProjects == "default"):
+          self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],whereDict=self.whereDict)
       else:
-        if(self.isAssesLinked):
-          self.assesLinked = utilsPipe.getProjAssesLinked(os.environ['rp_proj_projName'])
-        self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'])
+        self.asses = utilsPipe.getProjAsses(os.environ['rp_proj_projName'],whereDict=self.whereDict)
       if(self.asses):
         for x in range(0,len(self.asses)):
           try:
@@ -237,18 +242,7 @@ class workerGetAsses(QtCore.QObject):
     
     
 
-class listUpdater(QtCore.QObject):
-  finished = QtCore.pyqtSignal()
-  dataPending = QtCore.pyqtSignal()
-  dataReady = QtCore.pyqtSignal(tuple,dict)
-  
-  def __init__(self,assListWidget):
-    super(listUpdater, self).__init__()
-    self.assListWidget = assListWidget
-    self.asses = ()
-    self.absdict = {}
-    print("init worker thread")
-  
+
 
 
 class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
@@ -257,7 +251,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
     self.form = Form
     self.form.setWindowState(QtCore.Qt.WindowMaximized)
-
+    
     self.authL = authPipe.login()
     self.rbhusAssetEditCmdMod = ""
     self.username = None
@@ -302,7 +296,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.menuMine.addAction(self.mineAssignedAction)
     self.menuMine.triggered.connect(self.menuMineShow)
 
-
+    self.splitterFilter.setStretchFactor(0, 10)
+    self.splitterAssets.setStretchFactor(0, 10)
     try:
       self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
     except:
@@ -320,8 +315,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.assRefresh.setIcon(iconRefresh)
     
 
-    #iconRefresh = QtGui.QIcon()
-    #iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    iconCancel = QtGui.QIcon()
+    iconCancel.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
     self.pushResetAsset.setIcon(iconRefresh)
     self.pushResetSeq.setIcon(iconRefresh)
@@ -332,12 +327,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.pushResetFile.setIcon(iconRefresh)
     self.filterRefresh.setIcon(iconRefresh)
     self.pushResetLinked.setIcon(iconRefresh)
-    self.pushAssetFavReset.setIcon(iconRefresh)
+    self.pushAssetFavReset.setIcon(iconCancel)
     self.pushSearchFav.setIcon(iconRefresh)
     self.searchRefresh.setIcon(iconRefresh)
     
     self.pushSearchFav.setIcon(iconAdd)
-    self.pushSearchFavReset.setIcon(iconRefresh)
+    self.pushSearchFavReset.setIcon(iconCancel)
 
     
     self.iconDanger = QtGui.QIcon()
@@ -449,8 +444,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.lineEditSearch.textChanged.connect(self.listAssets)
   
     
-    self.checkTags.clicked.connect(self.listAssets)
-    self.checkUsers.clicked.connect(self.listAssets)
+    self.checkTags.clicked.connect(self.setTags)
+    self.checkUsers.clicked.connect(self.setUsers)
     #self.checkCase.clicked.connect(self.listAssets)
     #self.checkWords.clicked.connect(self.listAssets)
     
@@ -577,11 +572,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #versionAction = menu.addAction("versioning")
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
+    assCopyPathToClip = menu.addAction("copy pipePath to clipboard")
     assCopyNew = menu.addAction("copy/new")
     assGetTemplate = menu.addAction("reset templates")
     #assCmdLine = menu.addAction("cmd line")
     assRender = menu.addAction("submit to render")
-    assDeleteAction = menu.addAction("delete")
+    assDeleteAction = menu.addAction("delete - database only")
+    assDeleteActionHard = menu.addAction("delete - database and disk")
     
     action = menu.exec_(self.tableWidget.mapToGlobal(pos))
     #if(action == openFileAction):
@@ -590,10 +587,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.openFolderAss()
     if(action == assCopyToClip):
       self.copyPathToClip()
+    if(action == assCopyPathToClip):
+      self.copyPipePathToClip()
     if(action == assEditAction):
       self.editAss()
     if(action == assDeleteAction):
       self.delAss()
+    if(action == assDeleteActionHard):
+      self.delAss(hard=True)
+      
     if(action == assCopyNew):
       self.copyNewAss()
     if(action == assRender):
@@ -630,8 +632,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   def renderAss(self):
+    filesTorender = self.getFileAss()
     listAsses = self.selectedAsses()
-    print(listAsses)
+    listedAss = listAsses[0]
+    renderFiles = []
+    for x in filesTorender:
+      renderFiles.append(str(x))
+    print(renderFiles[0])
+    subprocess.Popen(rbhusPipeRenderSubmitCmd +" --file \""+ renderFiles[0] +"\" --path \""+ listedAss +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
     
     
       
@@ -649,6 +657,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       pyperclip.copy(abspath)
       
   
+  def copyPipePathToClip(self):
+    listAsses = self.selectedAsses()
+    print(listAsses)
+    if(listAsses):
+      x = listAsses[0]
+      pyperclip.copy(x)
   
  
   
@@ -682,9 +696,30 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       
       
     
-  
+  def getFileAss(self,favSearch=False):
+    if(favSearch):
+      i = self.listWidgetAssets.currentRow()
+      print("current row selected :"+ str(i))
+      x = self.assSearchArray[i]
+    else:
+      listAsses = self.selectedAsses()
+      x = str(listAsses[0])
+    if(x): # and (len(listAsses) == 1)
+      #x = str(listAsses[0])
+      print(x)
+      p = utilsPipe.getAbsPath(x)
+      if(os.path.exists(p)):
+        fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
+        if(fila):
+          return(fila)
+        else:
+          return(0)
+      else:
+        return(0)
+      
   
   def openFolderAss(self,favSearch = False):
+    self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     if(favSearch):
       i = self.listWidgetAssets.currentRow()
       print("current row selected :"+ str(i))
@@ -697,7 +732,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       print(x)
       p = utilsPipe.getAbsPath(x)
       assdets = utilsPipe.getAssDetails(assPath=x)
-      
+      utilsPipe.exportAsset(assdets)
       print("versioning : "+ str(assdets['versioning']))
       if(os.path.exists(p)):
         if(assdets['versioning'] == 0):
@@ -725,6 +760,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             subprocess.Popen([versionCmd,"--path",x],shell = True)
           elif(sys.platform.find("linux") >= 0):
             subprocess.Popen(versionCmd +" --path "+ x,shell = True)
+    self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
          
           
         
@@ -738,16 +774,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   
   
-  def delAss(self):
-    wtf = self.messageBox()
+  def delAss(self,hard=False):
+    wtf = self.messageBoxDelete(hard=hard)
     if(wtf):
       listAsses = self.selectedAsses()
       
       for x in listAsses:
         print(x)
         if(str(x)):
-          utilsPipe.assDelete(assPath=str(x))
-        
+          utilsPipe.assDelete(assPath=str(x),hard=hard)
       self.listAssets()
   
   
@@ -764,14 +799,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def versionAss(self):
     selass = self.selectedAsses()
-    #pv = QtCore.QProcess(parent=self.form)
-    #pv.setStandardOutputFile(tempDir + os.sep +"rbhusPipe_version"+ self.username +".log")
-    #pv.setStandardErrorFile(tempDir + os.sep +"rbhusPipe_version"+ self.username +".err")
-    #global versionCmd
-    #versionCmd = versionCmd +" --path \""+ selass[-1] +"\""
-    
-    #pv.start(sys.executable,versionCmd.split())
-    #pv.waitForFinished()
     subprocess.Popen(versionCmd +" --path \""+ selass[-1] +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
     
     
@@ -788,7 +815,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     except:
       print(str(sys.exc_info()))
       return(0)
-    #defStage = utilsPipe.getDefaults("stageTypes")
     self.comboLinked.clear()
     indx = 0
     model = QtGui.QStandardItemModel(len(rows),1)
@@ -931,8 +957,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboStageType.setEditText("default")
   
   def pressedStageType(self, index):
-    
-    
     if(self.comboStageType.model().item(index.row()).checkState() != 0):
       self.comboStageType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
       #self.comboStageType.model().item(index.row()).setEnabled(False)
@@ -1389,10 +1413,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     return(0)     
   
   
-  def messageBox(self):
+  def messageBoxDelete(self,hard=False):
     msgbox = QtGui.QMessageBox()
-    
-    msgbox.setText("DELETE?!?!?!\nDo you want to really delete this asset?!")
+    if(hard == True):
+      delmsg = "DELETE (database and disk)?!?!?!"
+    else:
+      delmsg = "DELETE (database only)?!?!?!"
+    msgbox.setText(delmsg +"\nDo you want to really delete this asset?!")
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger_128.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
@@ -1452,32 +1479,34 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       assget.whereDict['assetType'] = str(self.comboAssType.currentText())
       
     if(self.checkLinkedProjects.isChecked()):
-      if(str(self.comboAssType.currentText()) == "library" or str(self.comboAssType.currentText()) == "default"):
-        assget.whereDict['assetType'] = "library"
-        assget.isAssesLinked = True
-        assget.linkedProjects = str(self.comboLinked.currentText())
+      #if(str(self.comboAssType.currentText()) == "library" or str(self.comboAssType.currentText()) == "default"):
+      assget.isAssesLinked = True
+      assget.linkedProjects = str(self.comboLinked.currentText())
+      #assget.whereDict['assetType'] = "library"
       
     searchItems = str(self.lineEditSearch.text())
-    if(searchItems and not self.radioMineAss.isChecked()):
-      if(self.checkUsers.isChecked()):
-        assget.whereDict['assignedWorker'] = searchItems
-      elif(self.checkTags.isChecked()):
+    if(searchItems):
+      if(not self.radioMineAss.isChecked()):
+        if(self.checkUsers.isChecked()):
+          assget.whereDict['assignedWorker'] = searchItems
+      if(self.checkTags.isChecked()):
         assget.whereDict['tags'] = searchItems
-      else:
+      if(self.checkAssetName.isChecked()):
         assget.whereDict['assName'] = searchItems
-    elif(searchItems):
-      assget.whereDict['assName'] = searchItems
+      if(self.checkAssetPath.isChecked()):
+        assget.whereDict['path'] = searchItems
+    
     self.hf.setTerminationEnabled(True)
     self.hf.run = assget.getAsses
     self.hf.start()
     
-  def setAssesData(self,asslist,assdict):
-    self.oldasses = asslist
-    self.oldassesdict = assdict
-    if(self.listFirstTime):
-      self.listAssets_thread()
-      self.listFirstTime = False
-      self.loader.hide()
+  #def setAssesData(self,asslist,assdict):
+    #self.oldasses = asslist
+    #self.oldassesdict = assdict
+    #if(self.listFirstTime):
+      #self.listAssets_thread()
+      #self.listFirstTime = False
+      #self.loader.hide()
       
     # self.listAssets_thread()
   def loaderShow(self):
@@ -1663,6 +1692,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     p.finished.connect(self.listAssets)
     
   
+  def setTags(self):
+    tags = utilsPipe.getTags(projName=os.environ['rp_proj_projName'])
+    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outTags == ""):
+      outTags = str(self.lineEditSearch.text()).rstrip().lstrip()
+    self.lineEditSearch.setText(_fromUtf8(outTags))
+  
+  
+  def setUsers(self):
+    users = utilsPipe.getUsers()
+    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outUsers == ""):
+      outTags = str(self.lineEditSearch.text()).rstrip().lstrip()
+    self.lineEditSearch.setText(_fromUtf8(outUsers))
+  
   
   def rbhusPipeSetProjDefault(self):
     projFile = 0
@@ -1738,6 +1782,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     isTagsSave = str(self.checkTags.isChecked())
     isUsersSave = str(self.checkUsers.isChecked())
     searchBoxSave = str(self.lineEditSearch.text())
+    isAssetNameSave = str(self.checkAssetName.isChecked())
+    isAssetPathSave = str(self.checkAssetPath.isChecked())
     saveString = assetTypeSave +"###"+ \
                  seqSave +"###"+ \
                  scnSave +"###"+ \
@@ -1752,7 +1798,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
                  linkedProjSave +"###"+ \
                  isTagsSave +"###"+ \
                  isUsersSave +"###"+ \
-                 searchBoxSave
+                 searchBoxSave +"###"+ \
+                 isAssetNameSave +"###"+ \
+                 isAssetPathSave
                
     print(saveString)
     if(not self.searchDict.has_key(saveString)):
@@ -1835,6 +1883,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.checkUsers.setChecked(False)
       
     self.lineEditSearch.setText(s[14])
+    
+    if(s[15] == "True"):
+      self.checkAssetName.setChecked(True)
+    else:
+      self.checkAssetName.setChecked(False)
+    
+    if(s[16] == "True"):
+      self.checkAssetPath.setChecked(True)
+    else:
+      self.checkAssetPath.setChecked(False)
     
     self.listAssets()
     

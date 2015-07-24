@@ -132,7 +132,7 @@ class dbRbhusLog:
         else:
           cur = self.__conn.cursor()
         cur.execute(query)
-        
+        modLogger.debug(query)
         if(dictionary):
           try:
             rows = cur.fetchall()

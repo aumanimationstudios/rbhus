@@ -87,7 +87,7 @@ def getTags(projName="",assPath="",assId=""):
   dbconn = dbPipe.dbPipe()
   if(projName):
     try:
-      rows = dbconn.execute("SELECT tags FROM assets WHERE projName='"+ projName +"' order by tags", dictionary=True)
+      rows = dbconn.execute("SELECT tags FROM assets", dictionary=True)
       if(rows):
         #print(rows)
         tags = {}
@@ -573,77 +573,7 @@ def getAssDetails(assId="",assPath=""):
       return(ret)
     return(0)
   
-def getProjAssesLinked(projName,limit=None,whereDict={}):
-  dbconn = dbPipe.dbPipe()
-  linkedProjects = "default"
-  projs = []
-  whereProj = ""
-  try:
-    linkedProjects = os.environ["rp_proj_linkedProjects"]
-  except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
-    return(0)
-  if(linkedProjects != "default"):
-    projs = ["'"+ x +"'" for x in linkedProjects.split(",")]
-    print(projs)
-    whereProj = " where projName=" + " or projName=".join(projs)
-  print("in getProjAssesLinked module 1")
-  whereString = []
-  try:
-    if(not limit):
-      if(whereDict):
-        
-        for x in whereDict:
-          whereDicts = []
-          y = whereDict[x].split(",")
-          for z in y:
-            if(x == "assName"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "tags"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "assignedWorker"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            else:
-              if(z):
-                whereDicts.append(x +"='"+ z +"'")
-          whereString.append("("+ " or ".join(whereDicts) +")")
-          
-        rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
-      else:
-        rows = dbconn.execute("select * from assets "+ whereProj +" order by sequenceName,sceneName,assName,assetType", dictionary=True)
-    else:
-      if(whereDict):
-        
-        for x in whereDict:
-          whereDicts = []
-          y = whereDict[x].split(",")
-          for z in y:
-            if(x == "assName"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "tags"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "assignedWorker"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            else:
-              if(z):
-                whereDicts.append(x +"='"+ z +"'")
-          whereString.append("("+ " or ".join(whereDicts) +")")
-        rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
-      else:
-        rows = dbconn.execute("select * from assets "+ whereProj +" order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
-        
-    print("in getProjAssesLinked module 2")
-    return(rows)
-  
-  except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
-    return(0)
+
   
   
 def getLibAsses(projNames,limit=None,whereDict={}):
@@ -651,7 +581,8 @@ def getLibAsses(projNames,limit=None,whereDict={}):
   linkedProjects = "default"
   projs = []
   whereProj = ""
-  
+  whereDictTemp = copy.copy(whereDict)
+  whereDictTemp['assetType'] = "library"
     
   try:
     if(projNames == "default"):
@@ -664,15 +595,15 @@ def getLibAsses(projNames,limit=None,whereDict={}):
   if(linkedProjects != "default"):
     projs = ["'"+ x +"'" for x in linkedProjects.split(",")]
     print(projs)
-    whereProj = " where projName=" + " or projName=".join(projs)
-  print("in getProjAssesLinked module 1")
+    whereProj = " where (projName=" + " or projName=".join(projs) +")"
+  print("in getProjAssesLinked module 1 : "+ str(whereProj) )
   whereString = []
   try:
     if(not limit):
-      if(whereDict):
-        for x in whereDict:
+      if(whereDictTemp):
+        for x in whereDictTemp:
           whereDicts = []
-          y = whereDict[x].split(",")
+          y = whereDictTemp[x].split(",")
           for z in y:
             if(x == "assName"):
               if(z):
@@ -692,11 +623,11 @@ def getLibAsses(projNames,limit=None,whereDict={}):
       else:
         rows = dbconn.execute("select * from assets "+ whereProj +" order by projName,sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
-      if(whereDict):
+      if(whereDictTemp):
         
-        for x in whereDict:
+        for x in whereDictTemp:
           whereDicts = []
-          y = whereDict[x].split(",")
+          y = whereDictTemp[x].split(",")
           for z in y:
             if(x == "assName"):
               if(z):
@@ -715,7 +646,7 @@ def getLibAsses(projNames,limit=None,whereDict={}):
       else:
         rows = dbconn.execute("select * from assets "+ whereProj +" order by projName,sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
         
-    print("in getProjAssesLinked module 2")
+    
     return(rows)
   
   except:
@@ -732,13 +663,14 @@ def getLibAsses(projNames,limit=None,whereDict={}):
 def getProjAsses(projName,limit=None,whereDict={}):
   dbconn = dbPipe.dbPipe()
   whereString = []
+  whereDictTemp = copy.copy(whereDict)
   try:
     if(not limit):
-      if(whereDict):
+      if(whereDictTemp):
         
-        for x in whereDict:
+        for x in whereDictTemp:
           whereDicts = []
-          y = whereDict[x].split(",")
+          y = whereDictTemp[x].split(",")
           for z in y:
             if(x == "assName"):
               if(z):
@@ -758,11 +690,11 @@ def getProjAsses(projName,limit=None,whereDict={}):
       else:
         rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' order by sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
-      if(whereDict):
+      if(whereDictTemp):
         
-        for x in whereDict:
+        for x in whereDictTemp:
           whereDicts = []
-          y = whereDict[x].split(",")
+          y = whereDictTemp[x].split(",")
           for z in y:
             if(x == "assName"):
               if(z):
@@ -857,6 +789,16 @@ def assRegister(assDetDict):
   return(assDetDict['assetId'])
   #else:
     #return(0)
+
+def getStageDefaultDirectories(assDetDict):
+  pass
+
+def getNodeDefaultDirectories(assDetDict):
+  pass
+
+def getFileTypeDefaultDirectories(assDetDict):
+  pass
+
     
 
 def setAssTemplate(assDetDict):
@@ -913,12 +855,12 @@ def getAssPath(assDetDictTemp = {}):
   if(not assDetDict):
     return(0)
   assPath = str(assDetDict['projName'])
-  dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
+  #dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
   utilsPipeLogger.debug("WTF asspathtemp : "+ str(assDetDict))
-  fileName = ""
-  if(assDetDict.has_key('assName')):
-    if(str(assDetDict['assName']) != "default"):
-      fileName = str(assDetDict['assName'])
+  #fileName = ""
+  #if(assDetDict.has_key('assName')):
+    #if(str(assDetDict['assName']) != "default"):
+      #fileName = str(assDetDict['assName'])
   if(re.search("^default$",str(assDetDict['assetType']))):
     pass 
   else:
@@ -933,16 +875,16 @@ def getAssPath(assDetDictTemp = {}):
     if(not re.search("^default$",str(assDetDict['sequenceName']))):
       if(not re.search("^default$",str(assDetDict['sceneName']))):
         assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
-        if(fileName):
-          fileName = fileName +"_"+ str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
-        else:
-          fileName = str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
+        #if(fileName):
+          #fileName = fileName +"_"+ str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
+        #else:
+          #fileName = str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
       else:
         assPath = assPath +":"+ str(assDetDict['sequenceName'])
-        if(fileName):
-          fileName = fileName +"_"+ str(assDetDict['sequenceName'])
-        else:
-          fileName = str(assDetDict['sequenceName'])
+        #if(fileName):
+          #fileName = fileName +"_"+ str(assDetDict['sequenceName'])
+        #else:
+          #fileName = str(assDetDict['sequenceName'])
     #utilsPipeLogger.debug("WTF 001 : "+ str(assPath))
     if(assDetDict.has_key('assName')):
       if(not re.search("^default$",str(assDetDict['assName']))):
@@ -951,17 +893,17 @@ def getAssPath(assDetDictTemp = {}):
     #utilsPipeLogger.debug("WTF 002 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['stageType']))):
       assPath = assPath +":" + str(assDetDict['stageType'])
-      if(fileName):
-        fileName = fileName +"_"+ str(assDetDict['stageType'])
-      else:
-        fileName = str(assDetDict['stageType'])
+      #if(fileName):
+        #fileName = fileName +"_"+ str(assDetDict['stageType'])
+      #else:
+        #fileName = str(assDetDict['stageType'])
     #utilsPipeLogger.debug("WTF 003 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['nodeType']))):
       assPath = assPath +":" + str(assDetDict['nodeType'])
-      if(fileName):
-        fileName = fileName +"_"+ str(assDetDict['nodeType'])
-      else:
-        fileName = str(assDetDict['nodeType'])
+      #if(fileName):
+        #fileName = fileName +"_"+ str(assDetDict['nodeType'])
+      #else:
+        #fileName = str(assDetDict['nodeType'])
     #utilsPipeLogger.debug("WTF 004 : "+ str(assPath))
     
     
@@ -1124,50 +1066,55 @@ def openAssetCmd(assdets ={},filename = None):
     
   
 
-def assDelete(assId=None,assPath=None):
-  
+def assDelete(assId=None,assPath=None,hard=False):
   dbconn = dbPipe.dbPipe()
   if(assId):
     assdets = getAssDetails(assId=str(assId))
-    projDets = getProjDetails(os.environ["rp_proj_projName"])
-    if(os.environ['rbhusPipe_acl_user'] not in projDets['admins'].split(",") and os.environ['rbhusPipe_acl_user'] not in assdets['createdUser'].split(",")):
-      return(0)
-    dirMapsDets = getDirMapsDetails(assdets['directory'])
-    try:
-      if(sys.platform.find("win") >= 0):
-        corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
-        os.system("rmdir "+ str() +" /s /q")
-      else:
-        corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
-        os.system("rm -frv "+ str(corePath))
-      utilsPipeLogger.debug(corePath)
-    except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
-      return(0)
-    try:
-      dbconn.execute("delete from assets where assetId='"+ str(assId) +"'")
-      utilsPipeLogger.debug("deleting asset assetId = "+ str(assId) +" : done")
-    except:
-      utilsPipeLogger.debug("deleting asset assetId = "+ str(assId) +" : failed")
   elif(assPath):
     assdets = getAssDetails(assPath=str(assPath))
+  else:
+    return(0)
+  projDets = getProjDetails(os.environ["rp_proj_projName"])
+  if(os.environ['rbhusPipe_acl_user'] in projDets['admins'].split(",") or os.environ['rbhusPipe_acl_user'] in assdets['createdUser'].split(",")):
     dirMapsDets = getDirMapsDetails(assdets['directory'])
+    if(hard == True):
+      try:
+        if(sys.platform.find("win") >= 0):
+          corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
+          os.system("rmdir "+ str() +" /s /q")
+        else:
+          corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
+          os.system("rm -frv "+ str(corePath))
+        utilsPipeLogger.debug(corePath)
+      except:
+        utilsPipeLogger.debug(str(sys.exc_info()))
     try:
-      if(sys.platform.find("win") >= 0):
-        corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
-        #os.system("rmdir "+ str() +" /s /q")
-      else:
-        corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
-        #os.system("rm -frv "+ str(corePath))
-      utilsPipeLogger.debug(corePath)
+      dbconn.execute("delete from assets where assetId='"+ str(assdets['assetId']) +"'")
+      utilsPipeLogger.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : done")
     except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
-      return(0)
-    try:
-      dbconn.execute("delete from assets where path='"+ str(assPath) +"'")
-      utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : done")
-    except:
-      utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : failed")
+      utilsPipeLogger.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : failed")
+  else:
+    utilsPipeLogger.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : permission denied")
+  #elif(assPath):
+    #assdets = getAssDetails(assPath=str(assPath))
+    #dirMapsDets = getDirMapsDetails(assdets['directory'])
+    
+    #if(hard == True):
+      #try:
+        #if(sys.platform.find("win") >= 0):
+          #corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
+          #os.system("rmdir "+ str() +" /s /q")
+        #else:
+          #corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
+          #os.system("rm -frv "+ str(corePath))
+        #utilsPipeLogger.debug(corePath)
+      #except:
+        #utilsPipeLogger.debug(str(sys.exc_info()))
+    #try:
+      #dbconn.execute("delete from assets where path='"+ str(assPath) +"'")
+      #utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : done")
+    #except:
+      #utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : failed")
     
   
   
