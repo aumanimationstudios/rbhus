@@ -233,11 +233,11 @@ def getSequenceScenes(proj,seq=None,sce=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(proj and seq and (not sce)):
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' order by sequenceName,sceneName", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' order by projName,sequenceName,sceneName", dictionary=True)
     elif(proj and seq and sce):
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' and sceneName='"+ str(sce) +"' order by sequenceName,sceneName", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' and sceneName='"+ str(sce) +"' order by projName,sequenceName,sceneName", dictionary=True)
     else:
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' order by sequenceName,sceneName", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' order by projName,sequenceName,sceneName", dictionary=True)
     if(rows):
       return(rows)
     else:
@@ -496,6 +496,30 @@ def setupSequenceScene(seqSceDict):
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
+  
+
+
+
+def editSequenceScene(seqSceDict):
+  seqSceDictTem = copy.copy(seqSceDict)
+  del seqSceDictTem['projName']
+  del seqSceDictTem['sequenceName']
+  del seqSceDictTem['sceneName']
+  dbvalues = []
+  if(seqSceDictTem):
+    for k in seqSceDictTem:
+      dbvalues.append(str(k) +"=\""+ str(seqSceDictTem[k]) +"\"")
+  if(dbvalues):
+    dbconn = dbPipe.dbPipe()    
+    try:
+      dbconn.execute("update sequenceScenes set "+ ",".join(dbvalues) +" where sequenceName=\""+ str(seqSceDict['sequenceName']) +"\" and sceneName=\""+ str(seqSceDict['sceneName']) +"\" and projName=\""+ str(seqSceDict['projName']) +"\"")    
+    except:
+      utilsPipeLogger.debug(str(sys.exc_info()))
+    print(dbvalues)
+    return(1)
+  else:
+    return(0)
+  
   
 
 def getFieldValue(table,field,fkey,fvalue):

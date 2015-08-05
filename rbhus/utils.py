@@ -518,7 +518,10 @@ class tasks(object):
     try:
       self.username = os.environ['rbhus_acl_user'].rstrip().lstrip()
     except:
-      pass
+      try:
+        self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
+      except:
+        pass
     try:
       self.userProjIds = os.environ['rbhus_acl_projIds'].split()
     except:
@@ -568,6 +571,7 @@ class tasks(object):
     self.validFields_keys = [x for x in self.validFields.keys()]
     self.validFields_values = ["'"+ str(self.validFields[x]) +"'" for x in self.validFields_keys]
     self.insertStatement = "insert into tasks ("+ ", ".join(self.validFields_keys) +") values ("+ ", ".join(self.validFields_values) +")"
+    print(self.insertStatement)
     try:
       self.db_conn.execute(self.insertStatement)
       rows = self.db_conn.execute("select last_insert_id()", dictionary = True)

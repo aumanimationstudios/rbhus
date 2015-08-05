@@ -1,0 +1,57 @@
+
+def atUrService():
+  if(sys.platform.find("linux") >=0):
+    setproctitle.setproctitle("rD_Control")
+  db_conn = dbRbhus.dbRbhus()
+  logClientCrtl.debug(str(os.getpid()) + ": atUrService func")
+  try:
+    if(sys.platform.find("linux") >=0):
+      os.makedirs("/crap/versionCache/")
+      os.chmod("/crap/versionCache/",0777)
+      os.makedirs("/crap/mercurial/")
+      os.chmod("/crap/mercurial/",0777)
+    elif(sys.platform.find("linux") >=0):
+      os.makedirs("d:/versionCache/")
+      os.makedirs("d:/mercurial/")
+  except:
+    pass
+  
+  while(1):
+    try:
+      hostName,ipAddr = rUtils.getLocalNameIP()
+      serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      serverSocket.bind(("", constants.clientCtrlListenPort))
+      serverSocket.listen(5)
+      break
+    except:
+      logClientCrtl.debug(str(sys.exc_info()))
+      if(str(sys.exc_info()).find('Address already in use') >= 0):
+        break
+    time.sleep(1)
+
+  while(1):
+    
+    clientSocket, address = serverSocket.accept()
+    data = ""
+    data = clientSocket.recv(1024)
+    data = data.rstrip()
+    data = data.lstrip()
+    msg = ""
+    value = ""
+    if(data.rfind(":") != -1):
+      msg, value = data.split(":")
+    else:
+      msg = data
+    logClientCrtl.debug("I got a connection from "+ str(address) +" : "+ str(data))
+    if(msg == "CLIENTKILL"):
+      CLIENTKILL(clientSocket)
+    if(msg == "UPDATE"):
+      UPDATE(clientSocket)
+    if(msg == "RESTARTSYS"):
+      RESTARTSYS(clientSocket)
+    if(msg == "CLIENTSTART"):
+      CLIENTSTART(clientSocket)
+    if(msg == "CLEANUPPIDS"):
+      CLEANUPPIDS(clientSocket)
+    if(msg == "SHUTDOWNSYS"):
+      SHUTDOWNSYS(clientSocket)

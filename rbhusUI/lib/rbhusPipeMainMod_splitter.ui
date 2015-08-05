@@ -1050,6 +1050,7 @@
     </property>
     <addaction name="actionTask_trak"/>
     <addaction name="actionNew_seq_scn"/>
+    <addaction name="actionEdit_seq_scn"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
@@ -1108,6 +1109,11 @@
   <action name="actionEdit_project">
    <property name="text">
     <string>edit project</string>
+   </property>
+  </action>
+  <action name="actionEdit_seq_scn">
+   <property name="text">
+    <string>edit seq/scn</string>
    </property>
   </action>
  </widget>

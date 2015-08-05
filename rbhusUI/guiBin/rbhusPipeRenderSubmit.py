@@ -53,10 +53,47 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     
     self.assDetsOutout = copy.copy(self.assDets) 
     self.assDetsOutout['assetType'] = 'output'
+    self.assDetsOutout['versioning'] = 0
+    self.fRange = ""
+    self.sFrame = 1
+    self.eFrame = 1
+    self.fRange = str(self.sFrame) +"-"+ str(self.eFrame)
+    if(self.assDets['fRange'] == "1"):
+      if(self.assDets['sequenceName'] == "default"):
+        self.sFrame = 1
+        self.eFrame = 1
+        if(self.sFrame == 1 and self.eFrame == 1):
+          self.fRange = "1"
+        else:
+          self.fRange = str(self.sFrame) +"-"+ str(self.eFrame)
+      else:
+        if(self.assDets['sceneName'] == "default"):
+          self.sFrame = 1
+          self.eFrame = 1
+          if(self.sFrame == 1 and self.eFrame == 1):
+            self.fRange = "1"
+          else:
+            self.fRange = str(self.sFrame) +"-"+ str(self.eFrame)
+        else:
+          det = utilsPipe.getSequenceScenes(self.assDets['projName'],self.assDets['sequenceName'],self.assDets['sceneName'])
+          if(det):
+            if(det['sFrame'] == "1" and det['eFrame'] == "1"):
+              self.fRange = "1"
+            else:
+              self.fRange = str(self.sFrame) +"-"+ str(self.eFrame)
+          else:
+            if(self.sFrame == 1 and self.eFrame == 1):
+              self.fRange = "1"
+            else:
+              self.fRange = str(self.sFrame) +"-"+ str(self.eFrame)
+    else:
+      self.fRange = str(self.assDets['fRange'])
+      
+            
+      
     
     utilsPipe.assRegister(self.assDetsOutout)
-    
-    
+    self.outDir = utilsPipe.getAbsPath(self.assDetsOutout['path'])
     self.username = None
     self.project = None
     self.directory = None
@@ -96,12 +133,13 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     
     
     
-    self.autoOutName.clicked.connect(self.setOutName)
+    #self.autoOutName.clicked.connect(self.setOutName)
     self.pushSubmit.clicked.connect(self.submitTasks)
     self.pushSelectHostGroups.clicked.connect(self.printGroupSel)
     self.comboPrio.currentIndexChanged.connect(self.printPrioSel)
     self.comboFileType.currentIndexChanged.connect(self.fileTypeChanged)
     self.comboOsType.currentIndexChanged.connect(self.osTypePrint)
+    self.comboImageType.currentIndexChanged.connect(self.setOutName)
     self.comboRes.currentIndexChanged.connect(self.resetRes)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
     self.checkBatching.clicked.connect(self.batchingCheck)
@@ -110,8 +148,6 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     ftypes = rUtils.getFileTypes()
     resTemplates = rUtils.getResTemplates()
     
-    self.autoOutName.setIcon(icon)
-    self.autoOutName.setIconSize(QtCore.QSize(12, 12))
     self.labelUser.setText(os.environ['rbhusPipe_acl_user'])
     
     
@@ -149,24 +185,17 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     
     self.popEditItems()
     self.batchingCheck()
-    self.setDirectory()
+    self.setOutName()
+    self.setOutDir()
     
     
-    
-  def setDirectory(self):
-    dirs = utilsPipe.getDirMaps()
-    self.comboDirectory.clear()
-    i = 0
-    foundIndx = 0
-    if(dirs):
-      for d in dirs:
-        if(d['directory'] == self.projDets['directory']):
-          foundIndx = i
-        self.comboDirectory.addItem(_fromUtf8(d['directory']))
-        i = i + 1
-      self.comboDirectory.setCurrentIndex(foundIndx)
-      return(1)
-    return(0)
+  def updateEdits(self):
+    try:
+      self.task = rUtils.tasks(int(sys.argv[1]))
+      self.taskValues = self.task.taskDetails
+    except:
+      pass
+  
   
   
   def batchingCheck(self):
@@ -242,38 +271,25 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     else:
       return(0)     
   
-  def selectFileName(self):
-    if(sys.platform.find("win") >= 0):
-      fila = QtGui.QFileDialog.getOpenFileNames(directory="x:/")
-    elif(sys.platform.find("linux") >= 0):
-      fila = QtGui.QFileDialog.getOpenFileNames(directory="/proj/")
-    if(fila):
-      if(self.lineEditFileName.text()):
-        self.lineEditFileName.setText(self.lineEditFileName.text() +","+ fila.join(","))
-      else:
-        self.lineEditFileName.setText(fila.join(","))
+  
       
   def setOutName(self):
     outFile = str(self.lineEditFileName.text())
+    exten = ""
     for x in self.imageTypes:
       if(x['imageType'] == str(self.comboImageType.currentText())):
         exten = x['extention']
-    self.lineEditOutName.setText(".".join((outFile.replace("\\","/")).split("/")[-1].split(".")[0:-1]) +"."+ exten)
+    if(exten):
+      self.lineEditOutName.setText(".".join((outFile.replace("\\","/")).split("/")[-1].split(".")[0:-1]) +"."+ exten)
     
   def setOutDir(self):
-    outFile = str(self.lineEditFileName.text())
-    if(sys.platform.find("win") >= 0):
-      self.lineEditOutDir.setText("z:/"+ "/".join((outFile.replace("\\","/")).split("/")[1:-1]).rstrip().lstrip() +"/")
-    else:
-      if(outFile.find("egg") >= 0):
-        self.lineEditOutDir.setText("/".join(outFile.split("/")[0:3]) +"/output/" + "/".join(outFile.split("/")[3:-1]) +"/")
-      else:
-        self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/")
+    outFile = str(self.lineEditOutName.text())
+    print(self.outDir)
+    
+    
+    
+    
   
-  def selectOutDir(self):
-    dirac = QtGui.QFileDialog.getExistingDirectory()
-    if(dirac):
-      self.lineEditOutDir.setText(dirac)
   
   def afterTimeEnable(self):
     cAT = self.checkAfterTime.isChecked()
@@ -293,7 +309,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
         self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
         self.lineEditAfterTask.setText(self.taskValues['afterTasks'])
         
-      self.lineEditFrange.setText(self.taskValues['fRange'])
+      self.lineEditFrange.setText(self.fRange)
       self.lineEditCameras.setText(self.taskValues['camera'])
       self.lineEditLayer.setText(self.taskValues['layer'])
       self.lineEditRes.setText(self.taskValues['resolution'])
@@ -415,7 +431,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     files = str(self.lineEditFileName.text())
     cameras = str(self.lineEditCameras.text())
     submitDict['fRange'] = str(self.lineEditFrange.text())
-    submitdir = str(self.lineEditOutDir.text())
+    submitdir = str(self.outDir)
     submitDict['description'] = str(self.lineEditDescription.text())
     if(str(self.lineEditRes.text()) == "default"):
       for rt in resTemplates:
@@ -466,18 +482,6 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
         submitDict['afterFrameCmd'] = x['defAfterFrameCmd']
         submitDict['beforeFrameCmd'] = x['defBeforeFrameCmd']
     
-    
-    #if((submitDict['fileType'] == "3dsmax") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
-      #submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/afterFrame.py"
-      #submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax/beforeFrame.py"
-    #elif((submitDict['fileType'] == "3dsmax2013") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
-      #submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
-      #submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"
-    #elif((submitDict['fileType'] == "3dsmax2013_test") and ((submitDict['os'] == "default") or (submitDict['os'] == "win"))):
-      #submitDict['afterFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/afterFrame.py"
-      #submitDict['beforeFrameCmd'] = "Z:/pythonTestWindoze.DONOTDELETE/rbhus/etc/3dsmax2013/beforeFrame.py"
-      
-      
       
     a = rUtils.tasks()
     
@@ -508,14 +512,14 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                   submitDict['outDir'] = sdcd
                   try:
                     b = a.submit(submitDict)
-                    print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+                    print("Submiting task : "+ str(b) +" : "+ str(submitDict))
                   except:
                     print("Error inserting task : "+ str(sys.exc_info()))
               else:
                 submitDict['outDir'] = sdc
                 try:
                   b = a.submit(submitDict)
-                  print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+                  print("Submiting task : "+ str(b) +" : "+ str(submitDict))
                 except:
                   print("Error inserting task : "+ str(sys.exc_info()))
         else:
@@ -524,24 +528,10 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
               submitDict['camera'] = c.lstrip().rstrip()
               try:
                 b = a.submit(submitDict)
-                print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
+                print("Submiting task : "+ str(b) +" : "+ str(submitDict))
               except:
                 print("Error inserting task : "+ str(sys.exc_info()))
                 
-            
-              
-            
-          
-        #if((submitDict['cameras'].indexOf("default") == -1) or (submitDict['cameras'].length() > 7) ):
-          #submitDict['cameras'] = submitDict['cameras'] + "/"
-          
-          #print(str(submitDict['outDir']))
-        #try:
-          #b = a.submit(submitDict)
-          #print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
-        #except:
-          #print("Error inserting task : "+ str(sys.exc_info()))
-    
     QtGui.qApp.closeAllWindows()
     
     

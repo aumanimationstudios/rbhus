@@ -320,7 +320,6 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     sys.exit(0)
   
   def commit(self):
-    self.pushCommit.setEnabled(False)
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     self.versionsHg._add()
     self.versionsHg._addremove()
@@ -333,14 +332,12 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     os.chdir(self.versionsHg.localPath)
     self.hglog()
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-    self.pushCommit.setEnabled(True)
     
     
     
   
   
   def openfolder(self):
-    self.pushCommit.setEnabled(False)
     if(os.path.exists(self.versionsHg.localPath)):
       fila = QtGui.QFileDialog.getOpenFileNames(directory=self.versionsHg.localPath)
       print(fila)
@@ -355,7 +352,6 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         else:
           import webbrowser
           webbrowser.open(filename)
-    self.pushCommit.setEnabled(False)
     
     
 

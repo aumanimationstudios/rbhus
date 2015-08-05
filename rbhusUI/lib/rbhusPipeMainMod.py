@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod_splitter.ui'
 #
-# Created: Wed Jul 15 12:11:22 2015
+# Created: Fri Jul 24 15:28:28 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -599,8 +599,11 @@ class Ui_MainWindow(object):
     self.actionNew_seq_scn.setObjectName(_fromUtf8("actionNew_seq_scn"))
     self.actionEdit_project = QtGui.QAction(MainWindow)
     self.actionEdit_project.setObjectName(_fromUtf8("actionEdit_project"))
+    self.actionEdit_seq_scn = QtGui.QAction(MainWindow)
+    self.actionEdit_seq_scn.setObjectName(_fromUtf8("actionEdit_seq_scn"))
     self.menuAdmin.addAction(self.actionTask_trak)
     self.menuAdmin.addAction(self.actionNew_seq_scn)
+    self.menuAdmin.addAction(self.actionEdit_seq_scn)
     self.menuProject.addAction(self.actionSet_project)
     self.menuProject.addAction(self.actionNew_project)
     self.menuProject.addAction(self.actionEdit_project)
@@ -645,4 +648,5 @@ class Ui_MainWindow(object):
     self.actionList_env.setText(_translate("MainWindow", "list env", None))
     self.actionNew_seq_scn.setText(_translate("MainWindow", "new seq/scn", None))
     self.actionEdit_project.setText(_translate("MainWindow", "edit project", None))
+    self.actionEdit_seq_scn.setText(_translate("MainWindow", "edit seq/scn", None))
 

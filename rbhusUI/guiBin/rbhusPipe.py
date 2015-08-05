@@ -20,7 +20,8 @@ rpA = "rbhusPipeProjCreate.py"
 rpAss = "rbhusPipeAssetCreate.py"
 rpAssEdit = "rbhusPipeAssetEdit.py"
 srb = "selectRadioBox.py"
-rpS = "rbhusPipeSeqSceCreate.py" 
+rpS = "rbhusPipeSeqSceCreate.py"
+rpSC = "rbhusPipeSeqSceEdit.py"
 fileSelect = "fileSelectUI.py"
 scb = "selectCheckBox.py"
 vc = "rbhusPipeVersions.py"
@@ -33,6 +34,7 @@ rbhusPipeProjCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpA
 rbhusPipeAssetCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpAss
 rbhusPipeAssetEditCmd = dirSelf.rstrip(os.sep) + os.sep + rpAssEdit
 rbhusPipeSeqSceCreateCmd = dirSelf.rstrip(os.sep) + os.sep + rpS
+rbhusPipeSeqSceEditCmd = dirSelf.rstrip(os.sep) + os.sep + rpSC
 fileSelectCmd = dirSelf.rstrip(os.sep) + os.sep + fileSelect
 versionCmd = dirSelf.rstrip(os.sep) + os.sep + vc
 rbhusPipeRenderSubmitCmd = dirSelf.rstrip(os.sep) + os.sep + rS
@@ -372,6 +374,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionNew_project.triggered.connect(self.rbhusPipeProjCreate)
     self.actionSet_project.triggered.connect(self.rbhusPipeSetProject)
     self.actionNew_seq_scn.triggered.connect(self.rbhusPipeSeqSceCreate)
+    self.actionEdit_seq_scn.triggered.connect(self.rbhusPipeSeqSceEdit)
     self.pushNewAsset.clicked.connect(self.rbhusPipeAssetCreate)
     self.filterRefresh.clicked.connect(self.resetFilterDefault)
     self.assRefresh.clicked.connect(self.assRefreshPressed)
@@ -636,11 +639,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     listAsses = self.selectedAsses()
     listedAss = listAsses[0]
     renderFiles = []
-    for x in filesTorender:
-      renderFiles.append(str(x))
-    print(renderFiles[0])
-    subprocess.Popen(rbhusPipeRenderSubmitCmd +" --file \""+ renderFiles[0] +"\" --path \""+ listedAss +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
-    
+    if(not isinstance(filesTorender,int)):
+      for x in filesTorender:
+        if(x):
+          renderFiles.append(str(x))
+    if(renderFiles):
+      print(renderFiles[0])
+      subprocess.Popen(rbhusPipeRenderSubmitCmd +" --file \""+ renderFiles[0] +"\" --path \""+ listedAss +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
+      return(1)
+    else:
+      return(0)
     
       
       
@@ -1539,7 +1547,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def listAssets_thread(self,assesList=None,assesNames=None,assesColor=None,assdict=None,assModifiedTime=None):
     self.timerAssetsRefresh.stop()
     selAsses = self.selectedAsses()
-    colNames = ['asset','assigned','tags','modified time','isVer','preview']
+    colNames = ['asset','assigned','created','tags','modified time','isVer','preview']
     #asses = asslist
     #assesdict = assdict
     self.tableWidget.clearContents()
@@ -1587,11 +1595,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.tableWidget.setItem(x,1,itemAss)
         except:
           print(str(sys.exc_info()))
+          
+        try:
+          itemAss = QtGui.QTableWidgetItem()
+          itemAss.setText(str(assesNames[assesList[x]]['createdUser']))
+          self.tableWidget.setItem(x,2,itemAss)
+        except:
+          print(str(sys.exc_info()))
         
         try:
           itemTag = QtGui.QTableWidgetItem()
           itemTag.setText(str(assesNames[assesList[x]]['tags']))
-          self.tableWidget.setItem(x,2,itemTag)
+          self.tableWidget.setItem(x,3,itemTag)
         except:
           print(str(sys.exc_info()))
         
@@ -1599,14 +1614,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         try:
           itemModified = QtGui.QTableWidgetItem()
           itemModified.setText(str(assModifiedTime[assesList[x]]))
-          self.tableWidget.setItem(x,3,itemModified)
+          self.tableWidget.setItem(x,4,itemModified)
         except:
           print(str(sys.exc_info()))
         
         try:
           itemModified = QtGui.QTableWidgetItem()
           itemModified.setText(str(assesNames[assesList[x]]['versioning']))
-          self.tableWidget.setItem(x,4,itemModified)
+          self.tableWidget.setItem(x,5,itemModified)
         except:
           print(str(sys.exc_info()))
         
@@ -1672,6 +1687,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionNew_seq_scn.setEnabled(False)
     p.start(sys.executable,rbhusPipeSeqSceCreateCmd.split())
     p.finished.connect(self.rbhusPipeSeqSceCreateEnable)
+  
+  
+  def rbhusPipeSeqSceEdit(self):
+    p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeSeqSceEdit_"+ self.username +".log")
+    p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeSeqSceEdit_"+ self.username +".err")
+    self.actionEdit_seq_scn.setEnabled(False)
+    p.start(sys.executable,rbhusPipeSeqSceEditCmd.split())
+    p.finished.connect(self.rbhusPipeSeqSceEditEnable)
+  
   
   
   
@@ -2057,6 +2082,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def rbhusPipeSeqSceCreateEnable(self,exitStatus):
     self.actionNew_seq_scn.setEnabled(True)
+    self.updateAll()
+  
+  def rbhusPipeSeqSceEditEnable(self,exitStatus):
+    self.actionEdit_seq_scn.setEnabled(True)
     self.updateAll()
     
   
