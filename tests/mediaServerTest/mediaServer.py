@@ -6,6 +6,7 @@ import time
 import copy
 import threading
 import os
+import re
 
 
 def getLocalNameIP():
@@ -28,7 +29,7 @@ def atUrService():
     try:
       hostName,ipAddr = getLocalNameIP()
       serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      serverSocket.bind(("", 59099))
+      serverSocket.bind(("", 80))
       serverSocket.listen(50)
       break
     except:
@@ -44,30 +45,53 @@ def atUrService():
     data = a[-1][0].recv(1024)
     data = data.rstrip()
     data = data.lstrip()
-    msg = ""
-    value = ""
-    if(data.rfind(":") != -1):
-      msg, value = data.split(":")
+    get_video = re.match('GET /GET_VIDEO\?a=(.+)\sHTTP/1', data)
+    play_video = re.match('GET /PLAY_VIDEO\?a=(.+)\sHTTP/1', data)
+    close_serv = re.match('GET /CLOSE\sHTTP/1', data)
+    if(get_video):
+      msg = "GET_VIDEO"
+      value = get_video.group(1)
+    elif(play_video):
+      msg = "PLAY_VIDEO"
+      value = play_video.group(1)
+    elif(close_serv):
+      msg = "CLOSE"
     else:
-      msg = data
+      msg = ""
+
     print("I got a connection from "+ str(a[-1][1]) +" : "+ str(data))
-    if(msg == "GET"):
-      t = threading.Thread(target=getfile,args=(a[-1][0],value))
+    if(msg == "GET_VIDEO"):
+      t = threading.Thread(target=getList_video,args=(a[-1][0],value))
       t.start()
-    if(msg == "CLOSE"):
+    elif(msg == "PLAY_VIDEO"):
+      t = threading.Thread(target=playVideo,args=(a[-1][0],value))
+      t.start()
+    elif(msg == "CLOSE"):
       serverSocket.close()
       sys.exit()
+    else:
+      a[-1][0].close()
       
       
       
       
-def getfile(cs,vl):
+def getList_video(cs,vl):
+  print("GETTING LIST")
   if(vl == "playlist"):
     for r,d,f in os.walk("./"):
       for x in f:
         cs.send(os.path.abspath(str(r)+ os.sep +str(x)))
         cs.send("\n\r")
   cs.close()
+
+def playVideo(cs,vf):
+  print("PLAYING VIDEO")
+  if(os.path.exists(vf)):
+    vfopen = open(vf,"rb")
+    for x in vfopen.read(1024):
+      cs.send(x)
+  cs.close()
+
 
 
 
