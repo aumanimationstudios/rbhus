@@ -87,9 +87,27 @@ def getList_video(cs,vl):
 def playVideo(cs,vf):
   print("PLAYING VIDEO")
   if(os.path.exists(vf)):
+    print("VIDEO FILE FOUND")
     vfopen = open(vf,"rb")
-    for x in vfopen.read(1024):
-      cs.send(x)
+    x = vfopen.read()
+    # print("SENDING PACKET : "+ str(x))
+    cs.sendall("""HTTP/1.1 200 OK
+Content-Type: application/octet-stream
+
+<html>
+<body>
+<video width="356" height="200" controls poster>
+
+<source src="1057012.mp4" type="video/mp4" />
+
+<em>Sorry, your browser doesn't support HTML5 video.</em>
+
+</video>
+</body>
+</html>
+""")
+    x= ""
+    vfopen.close()
   cs.close()
 
 
