@@ -5,6 +5,7 @@ import tempfile
 import time
 import dbPipe
 import constantsPipe
+import re
 
 
 class login():
@@ -150,10 +151,14 @@ class login():
         stageRows = db_conn.execute("select * from stages where admins REGEXP '[[:<:]]"+ str(self.username) +"[[:>:]]' and status="+ str(constantsPipe.projActive), dictionary=True)
         if(not isinstance(rows,int)):
           for x in rows:
-            users = x['admins'].split()
+            if(re.search(',',str(x['admins']))):
+              users = x['admins'].split(",")
+            else:
+              users = x['admins'].split()
+              
             if(self.username in users):
               print("appending project id : "+ str(x['projName']))
-              self.userAclProjIds.append(str(x['projName']))
+              self.userAclProjIds.append(str(x['projName']).rstrip().lstrip())
         if(not isinstance(adminRows,int)):
           for x in adminRows:
             if(self.username == x['user']):
@@ -161,14 +166,17 @@ class login():
               break
         if(not isinstance(stageRows,int)):
           for x in stageRows:
-            users = x['admins'].split()
+            if(re.search(',',str(x['admins']))):
+              users = x['admins'].split(",")
+            else:
+              users = x['admins'].split()
             if(self.username in users):
               print("appending stage Type "+ str(x['type']) +"to project "+ str(x['projName']))
               try:
-                self.userAclStages[int(x['projName'])].append(str(x['type']))
+                self.userAclStages[int(x['projName'])].append(str(x['type']).rstrip().lstrip())
               except:
                 self.userAclStages[int(x['projName'])] = []
-                self.userAclStages[int(x['projName'])].append(str(x['type']))
+                self.userAclStages[int(x['projName'])].append(str(x['type']).rstrip().lstrip())
           
          
       except:

@@ -317,17 +317,17 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
     if(pT['type'] == projType):
       cScript = pT['scriptDir']
       
-  os.environ['rp_proj_projName'] = str(projName)
-  os.environ['rp_proj_projType'] = str(projType)
-  os.environ['rp_proj_directory'] = str(directory)
-  os.environ['rp_proj_admins'] = str(admins)
-  os.environ['rp_proj_rbhusRenderIntegration'] = str(rbhusRenderIntegration)
-  os.environ['rp_proj_rbhusRenderServer'] = str(rbhusRenderServer)
-  os.environ['rp_proj_description'] = str(description)
-  os.environ['rp_proj_aclUser'] = str(aclUser)
-  os.environ['rp_proj_aclGroup'] = str(aclGroup)
-  os.environ['rp_proj_dueDate'] = str(dueDate)
-  os.environ['rp_proj_createdUser'] = str(createdUser)
+  os.environ['rp_proj_projName'] = str(projName).rstrip().lstrip()
+  os.environ['rp_proj_projType'] = str(projType).rstrip().lstrip()
+  os.environ['rp_proj_directory'] = str(directory).rstrip().lstrip()
+  os.environ['rp_proj_admins'] = str(admins).rstrip().lstrip()
+  os.environ['rp_proj_rbhusRenderIntegration'] = str(rbhusRenderIntegration).rstrip().lstrip()
+  os.environ['rp_proj_rbhusRenderServer'] = str(rbhusRenderServer).rstrip().lstrip()
+  os.environ['rp_proj_description'] = str(description).rstrip().lstrip()
+  os.environ['rp_proj_aclUser'] = str(aclUser).rstrip().lstrip()
+  os.environ['rp_proj_aclGroup'] = str(aclGroup).rstrip().lstrip()
+  os.environ['rp_proj_dueDate'] = str(dueDate).rstrip().lstrip()
+  os.environ['rp_proj_createdUser'] = str(createdUser).rstrip().lstrip()
 
   exportDirMaps(directory)
   exportProjTypes(projType)
@@ -336,40 +336,40 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
   utilsPipeLogger.debug(cScript)
   try:
     dbconn.execute("insert into proj (projName,directory,admins,projType,rbhusRenderIntegration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,createDate,description) \
-                    values ('"+ str(projName) +"', \
-                    '"+ str(directory) +"', \
-                    '"+ str(admins) +"', \
-                    '"+ str(projType) +"', \
-                    '"+ str(rbhusRenderIntegration) +"', \
-                    '"+ str(rbhusRenderServer) +"', \
-                    '"+ str(aclUser) +"', \
-                    '"+ str(aclGroup) +"', \
-                    '"+ str(createdUser) +"', \
-                    '"+ str(dueDate) +"', \
-                    '"+ str(MySQLdb.Timestamp.now()) +"', \
-                    '"+ str(description) +"')")
+                    values ('"+ str(projName).rstrip().lstrip() +"', \
+                    '"+ str(directory).rstrip().lstrip() +"', \
+                    '"+ str(admins).rstrip().lstrip() +"', \
+                    '"+ str(projType).rstrip().lstrip() +"', \
+                    '"+ str(rbhusRenderIntegration).rstrip().lstrip() +"', \
+                    '"+ str(rbhusRenderServer).rstrip().lstrip() +"', \
+                    '"+ str(aclUser).rstrip().lstrip() +"', \
+                    '"+ str(aclGroup).rstrip().lstrip() +"', \
+                    '"+ str(createdUser).rstrip().lstrip() +"', \
+                    '"+ str(dueDate).rstrip().lstrip() +"', \
+                    '"+ str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"', \
+                    '"+ str(description).rstrip().lstrip() +"')")
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
   
   seqScnDict = {}
   seqScnDict['sequenceName'] = "default"
-  seqScnDict['projName'] = str(projName)
+  seqScnDict['projName'] = str(projName).rstrip().lstrip()
   seqScnDict['sceneName'] = "default"
-  seqScnDict['createdUser'] = str(createdUser)
+  seqScnDict['createdUser'] = str(createdUser).rstrip().lstrip()
   
   setupSequenceScene(seqScnDict)
   
     
   try:
     if(cScript):
-      dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusRunning) +" where projName='"+ str(projName) +"'")
+      dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusRunning).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
       utilsPipeLogger.debug("python -d '"+ str(cScript).rstrip("/") +"/"+ projType +".py'")
       status = os.system("python -d '"+ str(cScript).rstrip("/") +"/"+ projType +".py'")
       if(status != 0):
-        dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusFailed) +" where projName='"+ str(projName) +"'")
+        dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusFailed).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
       else:
-        dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusDone) +" where projName='"+ str(projName) +"'")
+        dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusDone).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
       return(1)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
@@ -461,15 +461,15 @@ def setupSequenceScene(seqSceDict):
   projDets = getProjDetails(str(seqSceDict['projName']))
   dirMapsDets = getDirMapsDetails(str(projDets['directory']))
   defaultSeq = {}
-  defaultSeq['projName'] = str(seqSceDict['projName'])
-  defaultSeq['sequenceName'] = str(seqSceDict['sequenceName'])
+  defaultSeq['projName'] = str(seqSceDict['projName']).rstrip().lstrip()
+  defaultSeq['sequenceName'] = str(seqSceDict['sequenceName']).rstrip().lstrip()
   defaultSeq['sceneName'] = "default"
   
   defKeys = defaultSeq.keys()
-  defValues = ["'"+ defaultSeq[x] +"'" for x in defKeys]
+  defValues = ["'"+ str(defaultSeq[x]).rstrip().lstrip() +"'" for x in defKeys]
   
   seqKeys = seqSceDict.keys()
-  seqValues = ["'"+ seqSceDict[x] +"'" for x in seqKeys]
+  seqValues = ["'"+ str(seqSceDict[x]).rstrip().lstrip() +"'" for x in seqKeys]
   seqKeys.append("createDate")
   seqValues.append("'"+ str(MySQLdb.Timestamp.now()) +"'")
   
@@ -508,7 +508,7 @@ def editSequenceScene(seqSceDict):
   dbvalues = []
   if(seqSceDictTem):
     for k in seqSceDictTem:
-      dbvalues.append(str(k) +"=\""+ str(seqSceDictTem[k]) +"\"")
+      dbvalues.append(str(k) +"=\""+ str(seqSceDictTem[k]).rstrip().lstrip() +"\"")
   if(dbvalues):
     dbconn = dbPipe.dbPipe()    
     try:
@@ -785,7 +785,7 @@ def assRegister(assDetDict):
   valuesA = []
   for x in assDetDict.keys():
     fieldsA.append(str(x))
-    valuesA.append("'"+ str(assDetDict[x]) +"'")
+    valuesA.append("'"+ str(assDetDict[x]).rstrip().lstrip() +"'")
   fs = "("+ ",".join(fieldsA) +")"
   vs = "("+ ",".join(valuesA) +")"
   utilsPipeLogger.debug(assDetDict)
@@ -944,7 +944,7 @@ def assEdit(asspath="",assid="",assdict={}):
   dbvalues = []
   if(assdict):
     for k in assdict:
-      dbvalues.append(str(k) +"=\""+ str(assdict[k]) +"\"")
+      dbvalues.append(str(k) +"=\""+ str(assdict[k]).rstrip().lstrip() +"\"")
   print(dbvalues)
   if(dbvalues):
     dbconn = dbPipe.dbPipe()
