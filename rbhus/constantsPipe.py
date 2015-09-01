@@ -36,3 +36,7 @@ createStatus = {
   3 : "done",
   4 : "failed"
 }
+
+assetStatusDelete = 0
+assetStatusActive = 1
+

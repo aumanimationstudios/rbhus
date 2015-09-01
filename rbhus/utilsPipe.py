@@ -276,7 +276,7 @@ def getAdmins():
 
 
 # createdUser should come from an env variable set by the authPipe module
-def createProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRenderServer,aclUser,aclGroup,dueDate,description):
+def createProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRenderServer,aclUser,aclGroup,dueDate,description,linkedProjs="default"):
   if(os.environ['rbhusPipe_acl_user'] not in getAdmins()):
     utilsPipeLogger.debug("User not allowed to create projects")
     return(0)
@@ -294,6 +294,7 @@ def createProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRe
   projDets['createdUser'] = os.environ['rbhusPipe_acl_user']
   projDets['dueDate'] = dueDate if(dueDate) else str(now.year + 1) +"-"+ str(now.month) +"-"+ str(now.day) +" "+ str(now.hour) +"-"+ str(now.minute) +"-"+ str(now.second)
   projDets['description'] = description if(description) else pDefs['description']
+  projDets['linkedProjects'] = linkedProjs
   
   servSoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
@@ -607,7 +608,8 @@ def getLibAsses(projNames,limit=None,whereDict={}):
   whereProj = ""
   whereDictTemp = copy.copy(whereDict)
   whereDictTemp['assetType'] = "library"
-    
+  whereDictTemp['status'] = str(constantsPipe.assetStatusActive)
+  rows = 0  
   try:
     if(projNames == "default"):
       linkedProjects = os.environ["rp_proj_linkedProjects"]
@@ -624,55 +626,48 @@ def getLibAsses(projNames,limit=None,whereDict={}):
   whereString = []
   try:
     if(not limit):
-      if(whereDictTemp):
-        for x in whereDictTemp:
-          whereDicts = []
-          y = whereDictTemp[x].split(",")
-          for z in y:
-            if(x == "assName"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "tags"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "assignedWorker"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            else:
-              if(z):
-                whereDicts.append(x +"='"+ z +"'")
-          whereString.append("("+ " or ".join(whereDicts) +")")
-          
-        rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by projName,sequenceName,sceneName,assName,assetType", dictionary=True)
-      else:
-        rows = dbconn.execute("select * from assets "+ whereProj +" order by projName,sequenceName,sceneName,assName,assetType", dictionary=True)
+      for x in whereDictTemp:
+        whereDicts = []
+        y = whereDictTemp[x].split(",")
+        for z in y:
+          if(x == "assName"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "tags"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "assignedWorker"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          else:
+            if(z):
+              whereDicts.append(x +"='"+ z +"'")
+        whereString.append("("+ " or ".join(whereDicts) +")")
+        
+      rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by projName,sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
-      if(whereDictTemp):
-        
-        for x in whereDictTemp:
-          whereDicts = []
-          y = whereDictTemp[x].split(",")
-          for z in y:
-            if(x == "assName"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "tags"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "assignedWorker"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            else:
-              if(z):
-                whereDicts.append(x +"='"+ z +"'")
-          whereString.append("("+ " or ".join(whereDicts) +")")
-        rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by projName,sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
-      else:
-        rows = dbconn.execute("select * from assets "+ whereProj +" order by projName,sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
-        
-    
-    return(rows)
-  
+      for x in whereDictTemp:
+        whereDicts = []
+        y = whereDictTemp[x].split(",")
+        for z in y:
+          if(x == "assName"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "tags"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "assignedWorker"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          else:
+            if(z):
+              whereDicts.append(x +"='"+ z +"'")
+        whereString.append("("+ " or ".join(whereDicts) +")")
+      rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by projName,sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
+    if(rows):
+      return(rows)
+    else:
+      return(0)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
@@ -681,6 +676,58 @@ def getLibAsses(projNames,limit=None,whereDict={}):
   
   
 
+def getProjAssesForDelete(projName,limit=None,whereDict={}):
+  dbconn = dbPipe.dbPipe()
+  whereString = []
+  whereDictTemp = copy.copy(whereDict)
+  whereDictTemp['status'] = str(constantsPipe.assetStatusDelete)
+  rows = 0
+  try:
+    if(not limit):
+      for x in whereDictTemp:
+        whereDicts = []
+        y = whereDictTemp[x].split(",")
+        for z in y:
+          if(x == "assName"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "tags"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "assignedWorker"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          else:
+            if(z):
+              whereDicts.append(x +"='"+ z +"'")
+        whereString.append("("+ " or ".join(whereDicts) +")")
+      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
+    else:
+      for x in whereDictTemp:
+        whereDicts = []
+        y = whereDictTemp[x].split(",")
+        for z in y:
+          if(x == "assName"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "tags"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "assignedWorker"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          else:
+            if(z):
+              whereDicts.append(x +"='"+ z +"'")
+        whereString.append("("+ " or ".join(whereDicts) +")")
+      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
+    if(rows):
+      return(rows)
+    else:
+      return(0)
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
   
   
   
@@ -688,55 +735,51 @@ def getProjAsses(projName,limit=None,whereDict={}):
   dbconn = dbPipe.dbPipe()
   whereString = []
   whereDictTemp = copy.copy(whereDict)
+  whereDictTemp['status'] = str(constantsPipe.assetStatusActive)
+  rows = 0
   try:
     if(not limit):
-      if(whereDictTemp):
-        
-        for x in whereDictTemp:
-          whereDicts = []
-          y = whereDictTemp[x].split(",")
-          for z in y:
-            if(x == "assName"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "tags"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "assignedWorker"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            else:
-              if(z):
-                whereDicts.append(x +"='"+ z +"'")
-          whereString.append("("+ " or ".join(whereDicts) +")")
-          
-        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
-      else:
-        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' order by sequenceName,sceneName,assName,assetType", dictionary=True)
+      for x in whereDictTemp:
+        whereDicts = []
+        y = whereDictTemp[x].split(",")
+        for z in y:
+          if(x == "assName"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "tags"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "assignedWorker"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          else:
+            if(z):
+              whereDicts.append(x +"='"+ z +"'")
+        whereString.append("("+ " or ".join(whereDicts) +")")
+      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
-      if(whereDictTemp):
-        
-        for x in whereDictTemp:
-          whereDicts = []
-          y = whereDictTemp[x].split(",")
-          for z in y:
-            if(x == "assName"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "tags"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            elif(x == "assignedWorker"):
-              if(z):
-                whereDicts.append(x +" like '%"+ z +"%'")
-            else:
-              if(z):
-                whereDicts.append(x +"='"+ z +"'")
-          whereString.append("("+ " or ".join(whereDicts) +")")
-        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
-      else:
-        rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
-    return(rows)
+      for x in whereDictTemp:
+        whereDicts = []
+        y = whereDictTemp[x].split(",")
+        for z in y:
+          if(x == "assName"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "tags"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          elif(x == "assignedWorker"):
+            if(z):
+              whereDicts.append(x +" like '%"+ z +"%'")
+          else:
+            if(z):
+              whereDicts.append(x +"='"+ z +"'")
+        whereString.append("("+ " or ".join(whereDicts) +")")
+      rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
+    if(rows):
+      return(rows)
+    else:
+      return(0)
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
@@ -1090,6 +1133,25 @@ def openAssetCmd(assdets ={},filename = None):
     
   
 
+
+def assMarkForDelete(assId=None,assPath=None):
+  dbconn = dbPipe.dbPipe()
+  if(assId):
+    assdets = getAssDetails(assId=str(assId))
+  elif(assPath):
+    assdets = getAssDetails(assPath=str(assPath))
+  else:
+    return(0)
+  
+  try:
+    dbconn.execute("update assets set status="+ str(constantsPipe.assetStatusDelete) +" where path='"+ str(assdets['path']) +"'")
+    utilsPipeLogger.debug("marked for deletion asset = "+ str(assdets['path']) +" : done")
+  except:
+    utilsPipeLogger.debug("marked for deletion asset = "+ str(assdets['path']) +" : failed")
+    return(0)
+  return(1)
+  
+
 def assDelete(assId=None,assPath=None,hard=False):
   dbconn = dbPipe.dbPipe()
   if(assId):
@@ -1098,6 +1160,10 @@ def assDelete(assId=None,assPath=None,hard=False):
     assdets = getAssDetails(assPath=str(assPath))
   else:
     return(0)
+  
+  
+  
+  
   projDets = getProjDetails(os.environ["rp_proj_projName"])
   if(os.environ['rbhusPipe_acl_user'] in projDets['admins'].split(",") or os.environ['rbhusPipe_acl_user'] in assdets['createdUser'].split(",")):
     dirMapsDets = getDirMapsDetails(assdets['directory'])
@@ -1140,6 +1206,43 @@ def assDelete(assId=None,assPath=None,hard=False):
     #except:
       #utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : failed")
     
+    
+def isAssCreated(assdets = {}):
+  if(os.environ['rbhusPipe_acl_user'] in assdets['createdUser'].split(",")):
+    return(True)
+  else:
+    return(False)
   
+def isAssAssigned(assdets = {}):
+  if(os.environ['rbhusPipe_acl_user'] in assdets['assignedWorker'].split(",")):
+    return(True)
+  else:
+    return(False)
   
+def isStageAdmin(assdets = {}):
+  if(assdets['stageName'] != "default"):
+    stagedets  = getStageTypes(assdets['stageName'])
+    if(os.environ['rbhusPipe_acl_user'] in stagedets['admins'].split(",")):
+      return(True)
+    else:
+      return(False)
+  else:
+    return(True)
+
+def isProjAdmin(assdets = {}):
+  projdets = getProjDetails(projName=assdets['projName'])
+  if(os.environ['rbhusPipe_acl_user'] in projdets['admins'].split(",")):
+    return(True)
+  else:
+    return(False)
+
+def isNodeAdmin(assdets = {}):
+  if(assdets['nodeType'] != "default"):
+    nodedets  = getNodeTypes(assdets['nodeType'])
+    if(os.environ['rbhusPipe_acl_user'] in nodedets['admins'].split(",")):
+      return(True)
+    else:
+      return(False)
+  else:
+    return(True)
     

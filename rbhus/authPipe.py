@@ -58,6 +58,7 @@ class login():
       print(str(sys.exc_info()))
     pf = open(passwdF,"w")
     pf.writelines(self.username)
+    pf.flush()
     pf.close()
     
   def logout(self):
@@ -123,14 +124,14 @@ class login():
     os.environ['rbhusPipe_acl_stages'] = ""
     stageEnv = []
     if(self.userAclProjIds):
-      os.environ['rbhusPipe_acl_projIds'] = " ".join(self.userAclProjIds)
+      os.environ['rbhusPipe_acl_projIds'] = ",".join(self.userAclProjIds)
     if(self.rbhusAdminFlag):
       os.environ['rbhusPipe_acl_admin'] = "1"
     if(self.userAclStages):
       for x in self.userAclStages.keys():
         stageEnv.append((x) +":"+ ",".join(self.userAclStages[x]))
       if(stageEnv):
-        os.environ['rbhusPipe_acl_stages'] = " ".join(stageEnv)
+        os.environ['rbhusPipe_acl_stages'] = ",".join(stageEnv)
   
   def _unsetEnvs(self):
     self.status = False
@@ -173,10 +174,10 @@ class login():
             if(self.username in users):
               print("appending stage Type "+ str(x['type']) +"to project "+ str(x['projName']))
               try:
-                self.userAclStages[int(x['projName'])].append(str(x['type']).rstrip().lstrip())
+                self.userAclStages[str(x['projName'])].append(str(x['type']).rstrip().lstrip())
               except:
-                self.userAclStages[int(x['projName'])] = []
-                self.userAclStages[int(x['projName'])].append(str(x['type']).rstrip().lstrip())
+                self.userAclStages[str(x['projName'])] = []
+                self.userAclStages[str(x['projName'])].append(str(x['type']).rstrip().lstrip())
           
          
       except:

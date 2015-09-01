@@ -56,6 +56,7 @@ class login():
       print(str(sys.exc_info()))
     pf = open(passwdF,"w")
     pf.writelines(self.username)
+    pf.flush()
     pf.close()
     
   def logout(self):

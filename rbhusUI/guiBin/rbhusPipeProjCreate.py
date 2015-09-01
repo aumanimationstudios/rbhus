@@ -3,6 +3,7 @@ from PyQt4 import QtCore, QtGui
 import glob
 import os
 import sys
+import subprocess
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
@@ -18,6 +19,12 @@ import constantsPipe
 import authPipe
 import utilsPipe
 
+
+scb = "selectCheckBox.py" 
+
+selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
+
+print(selectCheckBoxCmd)
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -44,6 +51,7 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     self.setDirectory()
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
     self.pushCreate.clicked.connect(self.cProj)
+    self.pushLinked.clicked.connect(self.setLinked)
     
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.updateStatus)
@@ -58,6 +66,19 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
   
+  def setLinked(self):
+    projNames = []
+    projects = utilsPipe.getProjDetails(status="all")
+    for x in projects:
+      projNames.append(x['projName'])
+      
+    outLinked = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(projNames),"-d",str(self.lineEditLinked.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outLinked == ""):
+      outLinked = str(self.lineEditLinked.text()).rstrip().lstrip()
+    self.lineEditLinked.setText(_fromUtf8(outLinked))
+  
+  
+  
   def updateStatus(self):
     if(self.lineEditName.text()):
       pDets = utilsPipe.getProjDetails(projName=str(self.lineEditName.text()))
@@ -68,15 +89,16 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     self.statusBar.showMessage("status : "+ str(self.wtf))
   
   def cProj(self):
-    pType = str(self.comboProjType.currentText())
-    pName = str(self.lineEditName.text()) if(self.lineEditName.text()) else None
-    pDir = str(self.comboDirectory.currentText())
+    pType = str(self.comboProjType.currentText()).rstrip().lstrip()
+    pName = str(self.lineEditName.text()) if(self.lineEditName.text()).rstrip().lstrip() else None
+    pDir = str(self.comboDirectory.currentText()).rstrip().lstrip()
     pDueDate = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-    pAdmins = str(self.lineEditAdmins.text()) if(self.lineEditAdmins.text()) else None
-    pAclUser = str(self.lineEditAclUser.text()) if(self.lineEditAclUser.text()) else None
-    pAclGroup = str(self.lineEditAclGroup.text()) if(self.lineEditAclGroup.text()) else None
+    pAdmins = str(self.lineEditAdmins.text()).rstrip().lstrip() if(self.lineEditAdmins.text()) else None
+    pAclUser = str(self.lineEditAclUser.text()).rstrip().lstrip() if(self.lineEditAclUser.text()) else None
+    pAclGroup = str(self.lineEditAclGroup.text()).rstrip().lstrip() if(self.lineEditAclGroup.text()) else None
     pRI = 1 if(self.checkRI.isChecked()) else 0
-    pDesc = str(self.lineEditDesc.text()) if(self.lineEditDesc.text()) else None
+    pDesc = str(self.lineEditDesc.text()).rstrip().lstrip() if(self.lineEditDesc.text()) else None
+    linked = str(self.lineEditLinked.text()).rstrip().lstrip()
     self.wtf = "connecting"
     utilsPipe.createProj(projType=pType,
                             projName=pName,
@@ -87,7 +109,8 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
                             aclUser=pAclUser,
                             aclGroup=pAclGroup,
                             dueDate=pDueDate,
-                            description=pDesc)
+                            description=pDesc,
+                            linkedProjs=linked)
     
     
   

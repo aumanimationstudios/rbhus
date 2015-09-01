@@ -581,7 +581,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #assCmdLine = menu.addAction("cmd line")
     assRender = menu.addAction("submit to render")
     assDeleteAction = menu.addAction("delete - database only")
-    assDeleteActionHard = menu.addAction("delete - database and disk")
+    #assDeleteActionHard = menu.addAction("delete - database and disk")
     
     action = menu.exec_(self.tableWidget.mapToGlobal(pos))
     #if(action == openFileAction):
@@ -596,8 +596,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.editAss()
     if(action == assDeleteAction):
       self.delAss()
-    if(action == assDeleteActionHard):
-      self.delAss(hard=True)
+    #if(action == assDeleteActionHard):
+      #self.delAss(hard=True)
       
     if(action == assCopyNew):
       self.copyNewAss()
@@ -611,6 +611,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
      
     #if(action == versionAction):
       #self.versionAss()
+      
       
       
   def popupMine(self):
@@ -790,7 +791,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       for x in listAsses:
         print(x)
         if(str(x)):
-          utilsPipe.assDelete(assPath=str(x),hard=hard)
+          utilsPipe.assMarkForDelete(assPath=str(x))
       self.listAssets()
   
   
@@ -1729,7 +1730,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     users = utilsPipe.getUsers()
     outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     if(outUsers == ""):
-      outTags = str(self.lineEditSearch.text()).rstrip().lstrip()
+      outUsers = str(self.lineEditSearch.text()).rstrip().lstrip()
     self.lineEditSearch.setText(_fromUtf8(outUsers))
   
   

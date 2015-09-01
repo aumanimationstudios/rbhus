@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>263</width>
-    <height>295</height>
+    <width>420</width>
+    <height>335</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,30 +15,17 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="10" column="0" colspan="2">
-     <widget class="Line" name="line">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QLineEdit" name="lineEditAclGroup">
+    <item row="8" column="0">
+     <widget class="QLabel" name="labelDesc">
       <property name="toolTip">
        <string>group owner of the project directory</string>
       </property>
       <property name="text">
-       <string>artist</string>
+       <string>description</string>
       </property>
      </widget>
     </item>
-    <item row="9" column="0" colspan="2">
+    <item row="10" column="0" colspan="2">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -51,26 +38,29 @@
       </property>
      </spacer>
     </item>
-    <item row="6" column="1">
-     <widget class="QLineEdit" name="lineEditAclUser">
-      <property name="toolTip">
-       <string>user owner of the project directory</string>
+    <item row="4" column="0">
+     <widget class="QLabel" name="labelDue">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="text">
-       <string>kryptos</string>
+       <string>due date</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEditName"/>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="labelAclGroup">
-      <property name="toolTip">
-       <string>group owner of the project directory</string>
+    <item row="13" column="0" colspan="3">
+     <widget class="QCheckBox" name="checkRI">
+      <property name="enabled">
+       <bool>false</bool>
       </property>
       <property name="text">
-       <string>aclGroup</string>
+       <string>rbhusRender intergration</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -87,19 +77,6 @@
       </property>
      </widget>
     </item>
-    <item row="12" column="0" colspan="3">
-     <widget class="QCheckBox" name="checkRI">
-      <property name="text">
-       <string>rbhusRender intergration</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="comboProjType"/>
-    </item>
     <item row="1" column="0">
      <widget class="QLabel" name="labelName">
       <property name="sizePolicy">
@@ -113,23 +90,13 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="lineEditAdmins">
+    <item row="7" column="0">
+     <widget class="QLabel" name="labelAclGroup">
       <property name="toolTip">
-       <string>list of space separated usernames</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="labelDue">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+       <string>group owner of the project directory</string>
       </property>
       <property name="text">
-       <string>due date</string>
+       <string>aclGroup</string>
       </property>
      </widget>
     </item>
@@ -166,10 +133,105 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="9" column="0">
+     <widget class="QLabel" name="labelLinked">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>linked</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QLineEdit" name="lineEditLinked">
+      <property name="text">
+       <string>default</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="2">
+     <widget class="QPushButton" name="pushLinked">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>select</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEditDesc">
+      <property name="toolTip">
+       <string>group owner of the project directory</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEditAclGroup">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="toolTip">
+       <string>group owner of the project directory</string>
+      </property>
+      <property name="text">
+       <string>artist</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEditAclUser">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="toolTip">
+       <string>user owner of the project directory</string>
+      </property>
+      <property name="text">
+       <string>kryptos</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="QDateTimeEdit" name="dateEditDue">
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="2">
      <widget class="QComboBox" name="comboDirectory"/>
     </item>
-    <item row="13" column="0" colspan="2">
+    <item row="1" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEditName"/>
+    </item>
+    <item row="0" column="1" colspan="2">
+     <widget class="QComboBox" name="comboProjType"/>
+    </item>
+    <item row="11" column="0" colspan="3">
+     <widget class="Line" name="line">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="0" colspan="3">
      <widget class="QPushButton" name="pushCreate">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -182,30 +244,23 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
-     <widget class="QDateTimeEdit" name="dateEditDue">
-      <property name="calendarPopup">
-       <bool>true</bool>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEditAdmins">
+      <property name="toolTip">
+       <string>list of comma separated usernames</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="labelDesc">
-      <property name="toolTip">
-       <string>group owner of the project directory</string>
+    <item row="5" column="2">
+     <widget class="QPushButton" name="pushUsers">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="text">
-       <string>description</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="1">
-     <widget class="QLineEdit" name="lineEditDesc">
-      <property name="toolTip">
-       <string>group owner of the project directory</string>
-      </property>
-      <property name="text">
-       <string/>
+       <string>select</string>
       </property>
      </widget>
     </item>
