@@ -27,8 +27,6 @@ class httpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     print("----------------------")
     print(str(self.client_address[0]) +" : "+ self.path)
     print("----------------------")
-    print(str(self.client_address[0]) +" : "+ str(self.extensions_map))
-    print("----------------------")
     if(re.search('[v,V][l,L][c,C]',self.headers['user-agent'])):
       print(str(self.client_address[0]) +" : FOUND VLC REQUEST")
       print("----------------------")
