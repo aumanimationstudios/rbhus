@@ -1007,6 +1007,47 @@ def assEdit(asspath="",assid="",assdict={}):
         return(0)
     return(1)
   return(0)
+
+
+def reviewAdd(assdict={}):
+  dbconn = dbPipe.dbPipe()
+  try:
+    dbconn.execute("insert into assetsReview (assetId,reviewVersion,message,username,datetime) value ('"\
+      + str(assdict['assetId']).rstrip().lstrip() +"','"\
+      + str(assdict['reviewVersion']).rstrip().lstrip() +"','"\
+      + str(assdict['message']).rstrip().lstrip() +"','"\
+      + str(assdict['username']).rstrip().lstrip() +"','"\
+      + str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"')")
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+
+
+
+def reviewEdit(asspath="",assid="",assdict={}):
+  utilsPipeLogger.debug("editing ass review : "+ str(assdict))
+  dbvalues = []
+  if(assdict):
+    for k in assdict:
+      dbvalues.append(str(k) +"=\""+ str(assdict[k]).rstrip().lstrip() +"\"")
+  print(dbvalues)
+  if(dbvalues):
+    dbconn = dbPipe.dbPipe()
+    if(assid):
+      try:
+        dbconn.execute("update assetReviews set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
+        utilsPipeLogger.debug("update assetReviews set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
+      except:
+        utilsPipeLogger.debug(str(sys.exc_info()))
+        return(0)
+    # elif(asspath):
+    #   try:
+    #     dbconn.execute("update assets set "+ ",".join(dbvalues) +" where path=\""+ str(asspath) +"\"")
+    #     utilsPipeLogger.debug("update assets set "+ ",".join(dbvalues) +" where path=\""+ str(asspath) +"\"")
+    #   except:
+    #     utilsPipeLogger.debug(str(sys.exc_info()))
+    #     return(0)
+    return(1)
+  return(0)
     
     
             
@@ -1026,6 +1067,7 @@ def assLinkedTo(assId):
   pass
 
 def getTemplatePath(assdetsTemp = {}):
+  print("in getTemplatePath")
   assdets = copy.copy(assdetsTemp)
   filetypedets = {}
   tempMain = ""
@@ -1041,31 +1083,38 @@ def getTemplatePath(assdetsTemp = {}):
   assdets['assetType'] = "template"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
+  print(assdetails)
   print(assPathTemp)
   
   if(not assdetails):
     assdets['sceneName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
+  print(assdetails)
   print(assPathTemp)
   
   if(not assdetails):
     assdets['sequenceName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  print(assPathTemp)
-  
-  if(not assdetails):
-    assdets['stageType'] = "default"
-  assPathTemp = getAssPath(assdets)
-  assdetails = getAssDetails(assPath = assPathTemp)
+  print(assdetails)
   print(assPathTemp)
   
   if(not assdetails):
     assdets['nodeType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
+  print(assdetails)
   print(assPathTemp)
+  
+  if(not assdetails):
+    assdets['stageType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  print(assdetails)
+  print(assPathTemp)
+  
+  
   
   if(assdetails):
     assPathTemp = assdetails['path']
@@ -1213,6 +1262,9 @@ def isAssCreated(assdets = {}):
   else:
     return(False)
   
+  
+
+
 def isAssAssigned(assdets = {}):
   if(os.environ['rbhusPipe_acl_user'] in assdets['assignedWorker'].split(",")):
     return(True)
@@ -1220,8 +1272,8 @@ def isAssAssigned(assdets = {}):
     return(False)
   
 def isStageAdmin(assdets = {}):
-  if(assdets['stageName'] != "default"):
-    stagedets  = getStageTypes(assdets['stageName'])
+  if(assdets['stageType'] != "default"):
+    stagedets  = getStageTypes(assdets['stageType'])
     if(os.environ['rbhusPipe_acl_user'] in stagedets['admins'].split(",")):
       return(True)
     else:
@@ -1231,6 +1283,8 @@ def isStageAdmin(assdets = {}):
 
 def isProjAdmin(assdets = {}):
   projdets = getProjDetails(projName=assdets['projName'])
+  adms = ",".join(projdets['admins'].split())
+  projdets['admins'] = adms
   if(os.environ['rbhusPipe_acl_user'] in projdets['admins'].split(",")):
     return(True)
   else:
@@ -1246,3 +1300,9 @@ def isNodeAdmin(assdets = {}):
   else:
     return(True)
     
+
+def isDbAdmin(assdets = {}):
+  if(os.environ['rbhusPipe_acl_admin'] == "1"):
+    return(True)
+  else:
+    return(False)

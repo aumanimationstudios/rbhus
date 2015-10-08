@@ -30,6 +30,17 @@ import utilsPipe
 class hg(object):
   
   def __init__(self,pipePath):
+    if(sys.platform.find("win") >= 0):
+      try:
+        self.username = os.environ['USERNAME']
+      except:
+        self.username = "nobody"
+    if(sys.platform.find("linux") >= 0):
+      try:
+        self.username = os.environ['USER']
+      except:
+        self.username = "nobody"
+
     self.pipepath = pipePath
     self.absPipePath = utilsPipe.getAbsPath(pipePath)
     self.assDets = utilsPipe.getAssDetails(assPath=pipePath)
@@ -290,6 +301,27 @@ class hg(object):
     self._deleteLock()
     os.chdir(self.localPath)
     
+    
+    
+  def _review(self,rev):
+    if(not (utilsPipe.isProjAdmin(self.assDets) and utilsPipe.isStageAdmin(self.assDets))):
+      return(0)
+    if(not rev):
+      rev = 0
+    os.chdir(self.absPipePath)
+    # if(os.path.exists("./review_"+ str(rev) +"/")):
+    #   shutil.rmtree("./review_"+ str(rev) +"/")
+    p = subprocess.Popen(["hg","archive","--rev",str(rev),"./review_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    assdict = {}
+    assdict["reviewVersion"] = str(rev)
+    assdict['assetId'] = self.assDets['assetId']
+    assdict['username'] = self.username
+    utilsPipe.assEdit(asspath = self.pipepath , assdict=assdict)
+    out = p.communicate()
+    p.wait()
+    print(str(out))
+    self._deleteLock()
+    os.chdir(self.localPath)
     
   def _archiveVersion(self,rev):
     if(not rev):

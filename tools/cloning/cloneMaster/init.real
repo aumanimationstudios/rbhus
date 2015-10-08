@@ -4,7 +4,7 @@ import os
 import dbRbhus
 import constants
 import socket
-
+import platform
 
 
 
@@ -45,7 +45,12 @@ def getMacAddress():
 
 def updateGrub():
   os.system("echo \""+ cInfo['grubInstall'] +"\" > /mnt/realroot/tmp/grub.disk")
-  os.system("cp -avf /mnt/cloneMaster/config/grub /mnt/realroot/etc/default/")
+  if(str(platform.dist()[0]).upper() == 'GENTOO'):
+    os.system("cp -avf /mnt/cloneMaster/config/grub.Gentoo /mnt/realroot/etc/default/grub")
+  if(str(platform.dist()[0]).upper() == 'UBUNTU'):
+    os.system("cp -avf /mnt/cloneMaster/config/grub.Ubuntu /mnt/realroot/etc/default/grub")
+    
+
   os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +"")
 
 

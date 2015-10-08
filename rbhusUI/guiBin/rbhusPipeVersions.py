@@ -164,6 +164,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   def popupPublish(self, pos):
     menu = QtGui.QMenu()
     #openFileAction = menu.addAction("open file")
+    reviewAction = menu.addAction("send for review")
     publishAction = menu.addAction("publish")
     reviseAction = menu.addAction("revise")
     exportAction = menu.addAction("export")
@@ -179,11 +180,23 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       self.exportVersion()
     if(action == openVersionAction):
       self.openVersion()
+    if(action == reviewAction):
+      self.reviewVersion()
     
   def reInit(self):
     self.versionsHg.reInitLocal()
     self.hglog()
   
+  def reviewVersion(self):
+    self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+    selvers = self.selectedVersions()
+    if(selvers):
+      sv = selvers[-1]
+      self.versionsHg._review(sv)
+    self.hglog()
+    self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+
+    pass
   
   def openVersion(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)

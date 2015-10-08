@@ -741,6 +741,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       print(x)
       p = utilsPipe.getAbsPath(x)
       assdets = utilsPipe.getAssDetails(assPath=x)
+      print("isAssCreated : "+ str(assdets['createdUser']) +" : "+ str(utilsPipe.isAssCreated(assdets)))
+      print("isAssAssigned : "+ str(assdets['assignedWorker']) +" : "+ str(utilsPipe.isAssAssigned(assdets)))
+      print("isStageAdmin : "+ str(assdets['stageType']) +" : "+ str(utilsPipe.isStageAdmin(assdets)))
+      print("isNodeAdmin : "+ str(assdets['nodeType']) +" : "+ str(utilsPipe.isNodeAdmin(assdets)))
+      print("isProjAdmin : "+ str(assdets['projName']) +" : "+ str(utilsPipe.isProjAdmin(assdets)))
       utilsPipe.exportAsset(assdets)
       print("versioning : "+ str(assdets['versioning']))
       if(os.path.exists(p)):
@@ -1656,7 +1661,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           try:  
             self.previewWidgets.append(ImageWidget(self.previewItems[x],64,self.tableWidget))
             self.previewWidgets[x].setToolTip("click on the image")
-            self.tableWidget.setCellWidget(x,5,self.previewWidgets[x])
+            self.tableWidget.setCellWidget(x,6,self.previewWidgets[x])
             self.previewWidgets[x].clicked.connect(lambda boool, x=x : self.imageWidgetClicked(x,self.previewWidgets[x],boool))
           except:
             print(str(sys.exc_info()))
