@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.40, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.44, for debian-linux-gnu (x86_64)
 --
 -- Host: blues2    Database: rbhusPipe
 -- ------------------------------------------------------
--- Server version	5.1.62-log
+-- Server version	5.5.40-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,6 +25,26 @@ DROP TABLE IF EXISTS `admins`;
 CREATE TABLE `admins` (
   `user` varchar(128) NOT NULL DEFAULT 'shrinidhi',
   PRIMARY KEY (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `assetReviews`
+--
+
+DROP TABLE IF EXISTS `assetReviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `assetReviews` (
+  `assetId` varchar(64) NOT NULL,
+  `reviewCount` int(11) NOT NULL AUTO_INCREMENT,
+  `reviewVersion` int(11) NOT NULL,
+  `message` varchar(4096) DEFAULT 'review',
+  `username` varchar(45) NOT NULL,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`reviewCount`,`assetId`),
+  KEY `fk_assetsReviews_1_idx` (`assetId`),
+  CONSTRAINT `fk_assetsReviews_1` FOREIGN KEY (`assetId`) REFERENCES `assets` (`assetId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -53,6 +73,7 @@ DROP TABLE IF EXISTS `assets`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `assets` (
   `assetId` varchar(64) NOT NULL,
+  `path` varchar(4096) NOT NULL DEFAULT 'default',
   `assName` varchar(45) NOT NULL DEFAULT 'default',
   `projName` varchar(128) NOT NULL,
   `sequenceName` varchar(128) NOT NULL DEFAULT 'default',
@@ -65,21 +86,25 @@ CREATE TABLE `assets` (
   `workers` varchar(4096) NOT NULL DEFAULT 'default',
   `assignedWorker` varchar(45) NOT NULL DEFAULT 'default',
   `fRange` varchar(45) NOT NULL DEFAULT '1',
-  `versioning` int(1) NOT NULL DEFAULT '1' COMMENT '1 - enabled , 0 - disabled',
+  `versioning` int(1) NOT NULL DEFAULT '0' COMMENT '1 - enabled , 0 - disabled',
+  `versioningCleaned` int(1) NOT NULL DEFAULT '0' COMMENT '0 - false, 1 - true',
   `pVersion` int(11) NOT NULL DEFAULT '0',
   `createDate` datetime NOT NULL COMMENT 'create date',
   `dueDate` datetime NOT NULL,
   `publishVersion` int(11) DEFAULT NULL,
+  `reviewVersion` int(11) DEFAULT NULL,
   `publishPath` varchar(4096) DEFAULT NULL,
   `description` varchar(1024) DEFAULT 'default',
-  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive, 1 - active',
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - marked for delete, 1 - active',
   `timeWorked` int(64) NOT NULL DEFAULT '0',
   `groups` varchar(1024) NOT NULL DEFAULT 'default',
   `locations` varchar(45) NOT NULL DEFAULT 'MANG',
-  `path` varchar(4096) NOT NULL DEFAULT 'default',
   `createdUser` varchar(45) NOT NULL,
   `createStatus` int(1) NOT NULL DEFAULT '0',
   `tags` varchar(1024) NOT NULL DEFAULT 'default',
+  `progressStatus` int(1) NOT NULL DEFAULT '0' COMMENT '0 - inprogress,1-done',
+  `reviewStatus` int(1) NOT NULL DEFAULT '0' COMMENT '0-reviewNotDone,1-reviewInProgress, 2 - reviewDone',
+  `reviewUser` varchar(45) NOT NULL DEFAULT 'shrinidhi',
   PRIMARY KEY (`assetId`),
   KEY `fk_assets_1_idx` (`projName`),
   KEY `fk_assets_4_idx` (`fileType`),
@@ -113,7 +138,7 @@ CREATE TABLE `dirMaps` (
   `totalSize` varchar(45) NOT NULL DEFAULT '0',
   `freeSize` varchar(45) NOT NULL DEFAULT '0',
   `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive\n1 - active\n',
-  `server` varchar(128) NOT NULL DEFAULT 'stor1',
+  `server` varchar(128) NOT NULL DEFAULT 'default',
   `nfsMountDir` varchar(128) NOT NULL DEFAULT 'default' COMMENT 'used to nfs mount the main dir during project setup .\n',
   `nfsServDir` varchar(128) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`directory`)
@@ -132,12 +157,13 @@ CREATE TABLE `fileTypes` (
   `scriptDir` varchar(45) NOT NULL DEFAULT 'default',
   `templateDir` varchar(256) NOT NULL DEFAULT 'default',
   `extension` varchar(256) NOT NULL DEFAULT 'default',
-  `linuxCmd` varchar(45) NOT NULL DEFAULT 'default',
-  `windowsCmd` varchar(45) NOT NULL DEFAULT 'default',
+  `linuxCmd` varchar(1024) NOT NULL DEFAULT 'default',
+  `windowsCmd` varchar(1024) NOT NULL DEFAULT 'default',
   `macCmd` varchar(45) NOT NULL DEFAULT 'default',
   `linuxPath` varchar(256) NOT NULL DEFAULT 'default' COMMENT 'paths seperated by "," to search for the program\n',
   `windowsPath` varchar(256) NOT NULL DEFAULT 'default' COMMENT 'paths seperated by "," to search for the program',
   `macPath` varchar(256) NOT NULL DEFAULT 'default' COMMENT 'paths seperated by "," to search for the program',
+  `defaultDirectories` varchar(4096) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -154,7 +180,31 @@ CREATE TABLE `nodeTypes` (
   `scriptDir` varchar(4096) NOT NULL DEFAULT 'default',
   `templateDir` varchar(256) NOT NULL DEFAULT 'default',
   `defaultFileType` varchar(45) NOT NULL DEFAULT 'default',
+  `defaultDirectories` varchar(4096) NOT NULL DEFAULT 'default',
+  `admins` varchar(4096) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `nodes`
+--
+
+DROP TABLE IF EXISTS `nodes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `nodes` (
+  `projName` varchar(128) NOT NULL,
+  `type` varchar(45) NOT NULL,
+  `stageType` varchar(45) NOT NULL,
+  `admins` varchar(4096) NOT NULL DEFAULT 'shrinidhi',
+  `status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`projName`,`type`,`stageType`),
+  KEY `fk_nodes_2_idx` (`stageType`),
+  KEY `fk_nodes_3_idx` (`type`),
+  CONSTRAINT `fk_nodes_1` FOREIGN KEY (`projName`) REFERENCES `proj` (`projName`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_nodes_2` FOREIGN KEY (`stageType`) REFERENCES `stageTypes` (`type`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_nodes_3` FOREIGN KEY (`type`) REFERENCES `nodeTypes` (`type`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -181,7 +231,7 @@ CREATE TABLE `proj` (
   `dueDate` datetime NOT NULL,
   `createDate` datetime NOT NULL,
   `createStatus` int(1) NOT NULL DEFAULT '0' COMMENT '0 - initiate , 1 - pending , 2 - running , 3 - done  , 4 - failed . ',
-  `linkedProjs` varchar(4096) NOT NULL DEFAULT 'default',
+  `linkedProjects` varchar(4096) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`projName`),
   KEY `fk_proj_1_idx` (`projType`),
   KEY `fk_proj_2_idx` (`directory`),
@@ -243,9 +293,10 @@ DROP TABLE IF EXISTS `stageTypes`;
 CREATE TABLE `stageTypes` (
   `type` varchar(45) NOT NULL DEFAULT 'default',
   `scriptDir` varchar(4096) NOT NULL DEFAULT 'default',
-  `admins` varchar(8192) NOT NULL DEFAULT 'shrinidhi',
+  `admins` varchar(4096) NOT NULL DEFAULT 'shrinidhi',
   `validNodeTypes` varchar(1024) NOT NULL DEFAULT 'default',
   `templateDir` varchar(256) NOT NULL DEFAULT 'default',
+  `defaultDirectories` varchar(4096) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='define the main stages in production (general table)';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -258,13 +309,14 @@ DROP TABLE IF EXISTS `stages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stages` (
-  `projId` int(11) NOT NULL,
+  `projName` varchar(128) NOT NULL,
   `type` varchar(45) NOT NULL,
   `admins` varchar(4096) NOT NULL DEFAULT 'shrinidhi',
   `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - deactive , 1 - active',
-  PRIMARY KEY (`projId`,`type`),
+  PRIMARY KEY (`projName`,`type`),
   KEY `fk_stages_1_idx` (`type`),
-  CONSTRAINT `fk_stages_1` FOREIGN KEY (`type`) REFERENCES `stageTypes` (`type`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_stages_1` FOREIGN KEY (`type`) REFERENCES `stageTypes` (`type`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_stages_2` FOREIGN KEY (`projName`) REFERENCES `proj` (`projName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -290,4 +342,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-16  6:23:23
+-- Dump completed on 2015-10-19 18:17:02

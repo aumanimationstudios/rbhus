@@ -576,6 +576,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     assEditAction = menu.addAction("edit")
     assCopyToClip = menu.addAction("copy path to clipboard")
     assCopyPathToClip = menu.addAction("copy pipePath to clipboard")
+    assReviewAction = menu.addAction("review")
     assCopyNew = menu.addAction("copy/new")
     assGetTemplate = menu.addAction("reset templates")
     #assCmdLine = menu.addAction("cmd line")

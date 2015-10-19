@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>344</width>
-    <height>219</height>
+    <height>247</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,8 +24,21 @@
     <property name="margin">
      <number>1</number>
     </property>
-    <item row="10" column="0">
-     <widget class="QLabel" name="labelTags">
+    <item row="13" column="0" colspan="7">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="12" column="0">
+     <widget class="QLabel" name="labelVersion">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -36,7 +49,7 @@
        <string>group owner of the project directory</string>
       </property>
       <property name="text">
-       <string>tags</string>
+       <string>versioning</string>
       </property>
      </widget>
     </item>
@@ -53,52 +66,6 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1" colspan="5">
-     <widget class="QLineEdit" name="lineEditFRange">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>1</string>
-      </property>
-     </widget>
-    </item>
-    <item row="13" column="0" colspan="7">
-     <widget class="Line" name="line">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="5">
-     <widget class="QCheckBox" name="checkAssignSelf">
-      <property name="text">
-       <string>self</string>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="6">
-     <widget class="QPushButton" name="pushUsers">
-      <property name="text">
-       <string>select</string>
-      </property>
-     </widget>
-    </item>
     <item row="4" column="0">
      <widget class="QLabel" name="labelDue">
       <property name="sizePolicy">
@@ -112,39 +79,66 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="6">
-     <widget class="QCheckBox" name="checkDueDate">
-      <property name="enabled">
-       <bool>true</bool>
+    <item row="15" column="0" colspan="7">
+     <widget class="QPushButton" name="pushEdit">
+      <property name="text">
+       <string>edit</string>
       </property>
+     </widget>
+    </item>
+    <item row="14" column="0" colspan="7">
+     <widget class="Line" name="line">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="12" column="0" colspan="7">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+    <item row="6" column="6">
+     <widget class="QPushButton" name="pushUsers">
+      <property name="text">
+       <string>select</string>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+     </widget>
     </item>
-    <item row="7" column="1" colspan="5">
+    <item row="8" column="0">
+     <widget class="QLabel" name="labelDesc">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>group owner of the project directory</string>
+      </property>
+      <property name="text">
+       <string>description</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="labelTags">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>group owner of the project directory</string>
+      </property>
+      <property name="text">
+       <string>tags</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1" colspan="5">
      <widget class="QLineEdit" name="lineEditDesc">
       <property name="enabled">
        <bool>false</bool>
@@ -163,89 +157,30 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="0">
-     <widget class="QLabel" name="labelVersion">
+    <item row="11" column="6">
+     <widget class="QPushButton" name="pushTags">
+      <property name="text">
+       <string>select</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="labelAssignTo">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="toolTip">
-       <string>group owner of the project directory</string>
-      </property>
       <property name="text">
-       <string>versioning</string>
+       <string>assign to</string>
       </property>
      </widget>
     </item>
-    <item row="11" column="1">
-     <widget class="QCheckBox" name="checkVersion">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
+    <item row="7" column="5">
+     <widget class="QCheckBox" name="checkReviewSelf">
       <property name="text">
-       <string/>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1" colspan="5">
-     <widget class="QDateTimeEdit" name="dateEditDue">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="1" colspan="4">
-     <widget class="QLineEdit" name="lineEditTags">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip">
-       <string>group owner of the project directory</string>
-      </property>
-      <property name="text">
-       <string>default</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="6">
-     <widget class="QCheckBox" name="checkDesc">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string/>
+       <string>self</string>
       </property>
       <property name="checked">
        <bool>false</bool>
@@ -253,64 +188,23 @@
      </widget>
     </item>
     <item row="7" column="0">
-     <widget class="QLabel" name="labelDesc">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip">
-       <string>group owner of the project directory</string>
-      </property>
+     <widget class="QLabel" name="labelReview">
       <property name="text">
-       <string>description</string>
+       <string>reviewer</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEditWorkers">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip">
-       <string>list of space separated usernames</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="6">
-     <widget class="QCheckBox" name="checkFRange">
+    <item row="7" column="6">
+     <widget class="QPushButton" name="pushReviewers">
       <property name="enabled">
        <bool>true</bool>
       </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="6">
-     <widget class="QPushButton" name="pushTags">
       <property name="text">
        <string>select</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="4">
+    <item row="6" column="7">
      <widget class="QCheckBox" name="checkAssign">
       <property name="enabled">
        <bool>true</bool>
@@ -329,27 +223,83 @@
       </property>
      </widget>
     </item>
-    <item row="14" column="0" colspan="7">
-     <widget class="QPushButton" name="pushEdit">
-      <property name="text">
-       <string>edit</string>
+    <item row="2" column="7">
+     <widget class="QCheckBox" name="checkFRange">
+      <property name="enabled">
+       <bool>true</bool>
       </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="labelAssignTo">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="text">
-       <string>assign to</string>
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
-    <item row="10" column="5">
+    <item row="4" column="7">
+     <widget class="QCheckBox" name="checkDueDate">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="7">
+     <widget class="QCheckBox" name="checkReview">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="7">
+     <widget class="QCheckBox" name="checkDesc">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="7">
      <widget class="QCheckBox" name="checkTags">
       <property name="enabled">
        <bool>true</bool>
@@ -368,7 +318,36 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="2">
+    <item row="12" column="7">
+     <widget class="QCheckBox" name="checkVersion">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="5">
+     <widget class="QCheckBox" name="checkAssignSelf">
+      <property name="text">
+       <string>self</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1">
      <widget class="QCheckBox" name="checkVersionEnable">
       <property name="enabled">
        <bool>true</bool>
@@ -384,6 +363,86 @@
       </property>
       <property name="checked">
        <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1" colspan="5">
+     <widget class="QLineEdit" name="lineEditTags">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>group owner of the project directory</string>
+      </property>
+      <property name="text">
+       <string>default</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1" colspan="4">
+     <widget class="QLineEdit" name="lineEditReviewers">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="toolTip">
+       <string>list of space separated usernames</string>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1" colspan="4">
+     <widget class="QLineEdit" name="lineEditWorkers">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>list of space separated usernames</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="6">
+     <widget class="QLineEdit" name="lineEditFRange">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="6">
+     <widget class="QDateTimeEdit" name="dateEditDue">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
       </property>
      </widget>
     </item>

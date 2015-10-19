@@ -135,6 +135,7 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
     horizontalLayout_4.addItem(spacerItem)
     verticalLayout_3.addLayout(horizontalLayout_4)
     msgBox.setPlainText("testing\ntestin")
+    msgBox.setReadOnly(True)
     user.setText("user:")
     date.setText("date:")
     version.setText("version:")

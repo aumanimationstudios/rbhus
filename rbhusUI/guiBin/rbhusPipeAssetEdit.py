@@ -88,32 +88,60 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.pushEdit.clicked.connect(self.eAss)
     self.pushTags.clicked.connect(self.setTags)
     self.pushUsers.clicked.connect(self.setUsers)
+    self.pushReviewers.clicked.connect(self.setReviewers)
     self.checkTags.clicked.connect(self.enableTags)
     self.checkFRange.clicked.connect(self.enableFRange)
     self.checkDueDate.clicked.connect(self.enableDueDate)
     self.checkAssign.clicked.connect(self.enableAssignTo)
     self.checkDesc.clicked.connect(self.enableDesc)
     self.checkAssignSelf.clicked.connect(self.setAssignedWorker)
+    self.checkReviewSelf.clicked.connect(self.setAssignedReviewer)
     self.checkVersionEnable.clicked.connect(self.checkVersionEnableFunc)
+    self.checkReview.clicked.connect(self.enableReview)
     self.enableAssignTo()
     self.enableDesc()
     self.enableDueDate()
     self.enableFRange()
     self.enableTags()
+    self.enableReview()
+
     
-    
-    
+
+
+
+     
+  
+  def setReviewers(self):
+    users = utilsPipe.getUsers()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outUsers == ""):
+      outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
+    self.lineEditReviewers.setText(_fromUtf8(outUsers))
+
     
     
   def center(self):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
   
+  def enableReview(self):
+    if(self.checkReview.isChecked()):
+      self.lineEditReviewers.setEnabled(True)
+      self.checkReviewSelf.setEnabled(True)
+      self.pushReviewers.setEnabled(True)
+    else:
+      self.lineEditTags.setEnabled(False)
+      self.checkReviewSelf.setEnabled(False)
+      self.pushReviewers.setEnabled(False)
+
+
   def enableTags(self):
     if(self.checkTags.isChecked()):
       self.lineEditTags.setEnabled(True)
+      self.pushTags.setEnabled(True)
     else:
       self.lineEditTags.setEnabled(False)
+      self.pushTags.setEnabled(False)
       
   def enableFRange(self):
     if(self.checkFRange.isChecked()):
@@ -158,6 +186,15 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
   def setAssignedWorker(self):
     if(self.checkAssignSelf.isChecked()):
       self.lineEditWorkers.setText(str(self.username))
+    else:
+      self.lineEditWorkers.setText("")
+
+
+  def setAssignedReviewer(self):
+    if(self.checkReviewSelf.isChecked()):
+      self.lineEditReviewers.setText(str(self.username))
+    else:
+      self.lineEditReviewers.setText("")
   
   
   def setUsers(self):
@@ -177,18 +214,20 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
         if(self.checkDueDate.isChecked()):
           assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
         if(self.checkAssign.isChecked()):
-          assdict['assignedWorker'] = str(self.lineEditWorkers.text())
+          assdict['assignedWorker'] = str(self.lineEditWorkers.text()).rstrip().lstrip()
         if(self.checkDesc.isChecked()):
-          assdict['description'] = str(self.lineEditDesc.text())
+          assdict['description'] = str(self.lineEditDesc.text()).rstrip().lstrip()
         if(self.checkTags.isChecked()):
-          assdict['tags'] = str(self.lineEditTags.text())
+          assdict['tags'] = str(self.lineEditTags.text()).rstrip().lstrip()
         if(self.checkFRange.isChecked()):
-          assdict['fRange'] = str(self.lineEditFRange.text())
+          assdict['fRange'] = str(self.lineEditFRange.text()).rstrip().lstrip()
         if(self.checkVersionEnable.isChecked()):
           if(self.checkVersion.isChecked()):
-            assdict['versioning'] = 1;
+            assdict['versioning'] = 1
           else:
-            assdict['versioning'] = 0;
+            assdict['versioning'] = 0
+        if(self.checkReview.isChecked()):
+          assdict['reviewUser'] = str(self.lineEditReviewers.text()).rstrip().lstrip()
           
         if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username or assdets['assignedWorker'] == self.username)):
           print("user not allowed to edit . not an admin or an asset founder!!")

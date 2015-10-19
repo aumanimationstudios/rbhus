@@ -74,10 +74,12 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     self.pushCreate.clicked.connect(self.cAss)
     self.pushTags.clicked.connect(self.setTags)
     self.pushUsers.clicked.connect(self.setUsers)
+    self.pushReviewers.clicked.connect(self.setReviewers)
     self.pushNodes.clicked.connect(self.setNodes)
     self.pushScenes.clicked.connect(self.setScene)
     self.checkAssName.clicked.connect(self.enableAssName)
     self.checkAssignSelf.clicked.connect(self.setAssignedWorker)
+    self.checkReviewSelf.clicked.connect(self.setReviewerSelf)
     
     
     self.setDirectory()
@@ -88,6 +90,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     self.setStageTypes()
     self.enableAssName()
     self.setAssignedWorker()
+    self.setReviewerSelf()
     
     
     
@@ -160,7 +163,17 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     else:
       self.lineEditWorkers.setEnabled(True)
       self.pushUsers.setEnabled(True)
-      
+
+
+  def setReviewerSelf(self):
+    if(self.checkReviewSelf.isChecked()):
+      self.lineEditReviewers.setText(str(self.username))
+      self.lineEditReviewers.setEnabled(False)
+      self.pushReviewers.setEnabled(False)
+    else:
+      self.lineEditReviewers.setEnabled(True)
+      self.pushReviewers.setEnabled(True)
+
 
   
   def cAss(self):
@@ -179,6 +192,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict['description'] = str(self.lineEditDesc.text()).rstrip().lstrip()
     assdict['tags'] = str(self.lineEditTags.text()).rstrip().lstrip()
     assdict['fRange'] = str(self.lineEditFRange.text()).rstrip().lstrip()
+    assdict['reviewUser'] = str(self.lineEditReviewers.text()).rstrip().lstrip()
     if(self.checkVersion.isChecked()):
       assdict['versioning'] = 1
     else:
@@ -237,6 +251,15 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     if(outUsers == ""):
       outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
     self.lineEditWorkers.setText(_fromUtf8(outUsers))
+
+
+  def setReviewers(self):
+    users = utilsPipe.getStageAdmins(stageType = str(self.comboStageType.currentText()).rstrip().lstrip())
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outUsers == ""):
+      outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
+    self.lineEditReviewers.setText(_fromUtf8(outUsers))
+
   
   
   def setDirectory(self):

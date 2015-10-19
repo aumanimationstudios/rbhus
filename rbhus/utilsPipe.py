@@ -790,10 +790,21 @@ def getUsers():
   try:
     rows = dbconn.execute("select * from users order by id", dictionary=True)
     #print([row['id'] for row in rows])
-    return([row['id'] for row in rows])
+    return([str(row['id']).rstrip().lstrip() for row in rows])
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
+
+def getStageAdmins(stageType):
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("select admins from stageTypes where type = '"+ str(stageType) +"'", dictionary=True)
+    return([x.rstrip().lstrip() for x in rows[-1]['admins'].split(",")])
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+
+
   
 def assPathColorCoded(assDetDict):
   assPath = str(assDetDict['projName']) +"#"+ "indigo"
@@ -1023,12 +1034,16 @@ def reviewAdd(assdict={}):
 
 
 
-def reviewEdit(asspath="",assid="",assdict={}):
+def reviewEdit(assdict={}):
+  assDets = copy.copy(assdict)
   utilsPipeLogger.debug("editing ass review : "+ str(assdict))
   dbvalues = []
+  assid = ""
   if(assdict):
-    for k in assdict:
-      dbvalues.append(str(k) +"=\""+ str(assdict[k]).rstrip().lstrip() +"\"")
+    assid = assDets['assetId']
+    del(assDets['assetId'])
+    for k in assDets:
+      dbvalues.append(str(k) +"=\""+ str(assDets[k]).rstrip().lstrip() +"\"")
   print(dbvalues)
   if(dbvalues):
     dbconn = dbPipe.dbPipe()
@@ -1039,13 +1054,6 @@ def reviewEdit(asspath="",assid="",assdict={}):
       except:
         utilsPipeLogger.debug(str(sys.exc_info()))
         return(0)
-    # elif(asspath):
-    #   try:
-    #     dbconn.execute("update assets set "+ ",".join(dbvalues) +" where path=\""+ str(asspath) +"\"")
-    #     utilsPipeLogger.debug("update assets set "+ ",".join(dbvalues) +" where path=\""+ str(asspath) +"\"")
-    #   except:
-    #     utilsPipeLogger.debug(str(sys.exc_info()))
-    #     return(0)
     return(1)
   return(0)
     

@@ -316,7 +316,8 @@ class hg(object):
     assdict["reviewVersion"] = str(rev)
     assdict['assetId'] = self.assDets['assetId']
     assdict['username'] = self.username
-    utilsPipe.assEdit(asspath = self.pipepath , assdict=assdict)
+    utilsPipe.reviewAdd(assdict=assdict)
+
     out = p.communicate()
     p.wait()
     print(str(out))
