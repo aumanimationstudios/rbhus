@@ -20,6 +20,13 @@ import rbhusPipeReviewMod
 
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 
+import dbPipe
+import constantsPipe
+import authPipe
+import utilsPipe
+
+
+
 parser = argparse.ArgumentParser()
 
 hostname = socket.gethostname()
@@ -27,12 +34,12 @@ tempDir = os.path.abspath(tempfile.gettempdir())
 
 if(sys.platform.find("win") >= 0):
   try:
-    username = os.environ['USERNAME']
+    username = os.environ['rbhusPipe_acl_user']
   except:
     username = "nobody"
 if(sys.platform.find("linux") >= 0):
   try:
-    username = os.environ['USER']
+    username = os.environ['rbhusPipe_acl_user']
   except:
     username = "nobody"
     
@@ -66,24 +73,60 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
     rbhusPipeReviewMod.Ui_MainWindow.setupUi(self,Form)
     self.spacerForMsgBox = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
     self.splitter.setStretchFactor(0, 10)
+    self.assdets = {}
+    if(args.assetpath):
+      self.assdets = utilsPipe.getAssDetails(assPath=args.assetpath)
+    elif(args.assetid):
+      self.assdets = utilsPipe.getAssDetails(assId=args.assetid)
+    if(self.assdets):
+      Form.setWindowTitle(self.assdets['path'])
+    else:
+      sys.exit(0)
+    self.assReviewDets = utilsPipe.reviewDetails(assId=self.assdets['assetId'])
+    self.reviewVersion.setText("review for version : "+ str(self.assdets['reviewVersion']))
+    self.reviewCountNow = 0
+    if(self.assReviewDets):
+      for x in self.assReviewDets:
+        self.addMsgBox(x['message'],x['username'],x['datetime'],x['reviewVersion'],x['reviewCount'])
+        self.reviewCountNow = x['reviewCount'] + 1
+    else:
+      self.reviewCountNow = 1
+    print("REVIEW COUNT : "+ str(self.reviewCountNow))
+    self.pushOpenReferenceReview.clicked.connect(lambda item,ver=str(self.assdets['reviewVersion']),revCount=str(self.reviewCountNow) : self.openReferenceFolder(item,ver,revCount))
+    self.pushSend.clicked.connect(self.sendReview)
+    self.scrollArea.verticalScrollBar().rangeChanged.connect(self.updateScroll)
+
+
+  
+  def updateScroll(self,min,max):
+    self.scrollArea.verticalScrollBar().setValue(max)
+    print(max)
+
+
+
+  def update(self):
+    x = utilsPipe.reviewDetails(assId=self.assdets['assetId'],)
+    self.addMsgBox(x['message'],x['username'],x['datetime'],x['reviewVersion'],x['reviewCount'])
+    self.reviewCountNow = x['reviewCount'] + 1
+
+
+  def openReferenceFolder(self,*args):
+    abspath  = utilsPipe.getAbsPath(self.assdets['path'])
+    refFolder = abspath +"/review_"+ str(args[1]) +"/"+ str(args[2])
+    print(refFolder)
+
+  def sendReview(self,args):
+    revdets = {}
+    revdets['assetId'] = str(self.assdets['assetId'])
+    revdets['reviewVersion'] = str(self.assdets['reviewVersion'])
+    revdets['message'] = self.plainTextEdit.document().toPlainText()
+    revdets['username'] = username
+    utilsPipe.reviewAdd(revdets)
+
 
 
     
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    self.addMsgBox()
-    
-  def addMsgBox(self):
+  def addMsgBox(self,msg,user1,date1,ver,revCount):
     try:
       self.verticalLayout_2.removeItem(self.spacerForMsgBox)
     except:
@@ -134,15 +177,17 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
     spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
     horizontalLayout_4.addItem(spacerItem)
     verticalLayout_3.addLayout(horizontalLayout_4)
-    msgBox.setPlainText("testing\ntestin")
+    msgBox.setPlainText(msg)
     msgBox.setReadOnly(True)
-    user.setText("user:")
-    date.setText("date:")
-    version.setText("version:")
+    user.setText("user : "+ str(user1))
+    date.setText("date : "+ str(date1))
+    version.setText("version : "+ str(ver))
     pushOpenReferenceReviewed.setText("open reference folder")
 
     self.verticalLayout_2.addWidget(widgetMsgQueue)
     self.verticalLayout_2.addItem(self.spacerForMsgBox)
+    pushOpenReferenceReviewed.clicked.connect(lambda item, ver=str(ver),revCount=str(revCount) : self.openReferenceFolder(item,ver,revCount))
+
     
     
     

@@ -18,8 +18,10 @@ hgrcHome = os.sep.join(etcMercurial) + os.sep +"home"+ os.sep +".hgrc"
 hgrcLocalLinux = os.sep.join(etcMercurial) + os.sep +"local"+ os.sep +"hgrc.linux"
 hgrcLocalWindows = os.sep.join(etcMercurial) + os.sep +"local"+ os.sep +"hgrc.windows"
 hgignore = os.sep.join(etcMercurial) + os.sep +"local"+ os.sep +".hgignore"
-localCacheLinux = "/crap/versionCache/"+ os.environ['rbhusPipe_acl_user'] +"/"
-localCacheWindows = "D:/versionCache/"+ os.environ['rbhusPipe_acl_user'] +"/"
+localCacheLinuxMain = "/crap/versionCache/"
+localCacheWindowsMain = "D:/versionCache/"
+localCacheLinux = localCacheLinuxMain + os.environ['rbhusPipe_acl_user'] +"/"
+localCacheWindows = localCacheWindowsMain + os.environ['rbhusPipe_acl_user'] +"/"
 
 import dbPipe
 import constantsPipe
@@ -35,11 +37,24 @@ class hg(object):
         self.username = os.environ['USERNAME']
       except:
         self.username = "nobody"
+      try:
+        os.makedirs(localCacheWindowsMain)
+      except:
+        print(sys.exc_info())
+
     if(sys.platform.find("linux") >= 0):
       try:
         self.username = os.environ['USER']
       except:
         self.username = "nobody"
+      try:
+        os.makedirs(localCacheLinuxMain)
+      except:
+        print(sys.exc_info())
+      try:
+        os.chmod(localCacheLinuxMain, 0777)
+      except:
+        print(sys.exc_info())
 
     self.pipepath = pipePath
     self.absPipePath = utilsPipe.getAbsPath(pipePath)
@@ -194,7 +209,7 @@ class hg(object):
     
   
   def _merge(self):
-    if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
+    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       return(0)
     p = subprocess.Popen(["hg","merge"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
@@ -204,7 +219,7 @@ class hg(object):
     
     
   def _add(self):
-    if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
+    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       return(0)
     #print(self.absPipePath)
     p = subprocess.Popen(["hg","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -214,7 +229,7 @@ class hg(object):
     print("_add"+ str(out))
     
   def _addremove(self):
-    if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
+    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       return(0)
     p = subprocess.Popen(["hg","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
@@ -224,7 +239,7 @@ class hg(object):
     
     
   def _commit(self):
-    if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
+    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       return(0)
     p = subprocess.Popen(["hg","commit","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']])
     out = p.communicate()
@@ -233,7 +248,7 @@ class hg(object):
     print("_commit"+ str(out))
    
   def _push(self):
-    if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
+    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       return(0)
     p = subprocess.Popen(["hg","push","-f",self.absPipePath])
     out = p.communicate()
@@ -242,8 +257,6 @@ class hg(object):
     print("_push"+ str(out))
   
   def _pull(self):
-    if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
-      return(0)
     p = subprocess.Popen(["hg","pull",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
@@ -259,7 +272,7 @@ class hg(object):
     
     
   def _update(self):
-    if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
+    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       return(0)
     p = subprocess.Popen(["hg","update"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
@@ -284,7 +297,7 @@ class hg(object):
   
   
   def _archive(self,rev):
-    if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
+    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       return(0)
     if(not rev):
       rev = 0
@@ -304,7 +317,7 @@ class hg(object):
     
     
   def _review(self,rev):
-    if(not (utilsPipe.isProjAdmin(self.assDets) and utilsPipe.isStageAdmin(self.assDets))):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isAssCreated(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       return(0)
     if(not rev):
       rev = 0
@@ -312,11 +325,11 @@ class hg(object):
     # if(os.path.exists("./review_"+ str(rev) +"/")):
     #   shutil.rmtree("./review_"+ str(rev) +"/")
     p = subprocess.Popen(["hg","archive","--rev",str(rev),"./review_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    assdict = {}
-    assdict["reviewVersion"] = str(rev)
-    assdict['assetId'] = self.assDets['assetId']
-    assdict['username'] = self.username
-    utilsPipe.reviewAdd(assdict=assdict)
+    # assdict = {}
+    # assdict["reviewVersion"] = str(rev)
+    # assdict['assetId'] = self.assDets['assetId']
+    # assdict['username'] = self.username
+    utilsPipe.reviewVersion(self.assDets['path'], rev)
 
     out = p.communicate()
     p.wait()

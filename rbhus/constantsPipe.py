@@ -40,3 +40,7 @@ createStatus = {
 assetStatusDelete = 0
 assetStatusActive = 1
 
+
+reviewStatusNotDone = 0
+reviewStatusInProgress = 1
+reviewStatusDone = 2

@@ -1023,7 +1023,7 @@ def assEdit(asspath="",assid="",assdict={}):
 def reviewAdd(assdict={}):
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("insert into assetsReview (assetId,reviewVersion,message,username,datetime) value ('"\
+    dbconn.execute("insert into assetReviews (assetId,reviewVersion,message,username,datetime) value ('"\
       + str(assdict['assetId']).rstrip().lstrip() +"','"\
       + str(assdict['reviewVersion']).rstrip().lstrip() +"','"\
       + str(assdict['message']).rstrip().lstrip() +"','"\
@@ -1031,6 +1031,18 @@ def reviewAdd(assdict={}):
       + str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"')")
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
+
+
+def reviewVersion(asspath,version):
+  dbconn = dbPipe.dbPipe()
+  try:
+    dbconn.execute("update assets set reviewVersion = '"+ str(version) +"',reviewStatus='"+ str(constantsPipe.reviewStatusInProgress) +"' where path = '"+ str(asspath) +"'")
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+
+
+
+
 
 
 
@@ -1056,6 +1068,35 @@ def reviewEdit(assdict={}):
         return(0)
     return(1)
   return(0)
+
+def reviewDetails(assId = 0,revCount=0):
+  if(assId):
+    dbconn = dbPipe.dbPipe()
+    if(revCount == 0):
+      try:
+        rows = dbconn.execute("select * from assetReviews where assetId='"+ str(assId) +"' order by reviewCount", dictionary=True)
+      except:
+        utilsPipeLogger.debug(str(sys.exc_info()))
+        return(0)
+      if(isinstance(rows, int)):
+        return(0)
+      else:
+        return(rows)
+    else:
+      try:
+        rows = dbconn.execute("select * from assetReviews where assetId='"+ str(assId) +"' and reviewCount='"+ str(revCount) +"' order by reviewCount", dictionary=True)
+      except:
+        utilsPipeLogger.debug(str(sys.exc_info()))
+        return(0)
+      if(isinstance(rows, int)):
+        return(0)
+      else:
+        return(rows[0])
+  else:
+    return(0)
+    
+
+
     
     
             
@@ -1311,6 +1352,12 @@ def isNodeAdmin(assdets = {}):
 
 def isDbAdmin(assdets = {}):
   if(os.environ['rbhusPipe_acl_admin'] == "1"):
+    return(True)
+  else:
+    return(False)
+
+def isReviewUser(assdets = {}):
+  if(os.environ['rbhusPipe_acl_user'] in assdets['reviewUser'].split(",")):
     return(True)
   else:
     return(False)

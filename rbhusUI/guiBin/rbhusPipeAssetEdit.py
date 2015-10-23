@@ -96,7 +96,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.checkDesc.clicked.connect(self.enableDesc)
     self.checkAssignSelf.clicked.connect(self.setAssignedWorker)
     self.checkReviewSelf.clicked.connect(self.setAssignedReviewer)
-    self.checkVersionEnable.clicked.connect(self.checkVersionEnableFunc)
+    self.checkVersion.clicked.connect(self.enableVersion)
     self.checkReview.clicked.connect(self.enableReview)
     self.enableAssignTo()
     self.enableDesc()
@@ -104,6 +104,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.enableFRange()
     self.enableTags()
     self.enableReview()
+    self.enableVersion()
 
     
 
@@ -175,11 +176,11 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
 
 
       
-  def checkVersionEnableFunc(self):
-    if(self.checkVersionEnable.isChecked()):
-      self.checkVersion.setEnabled(True)
+  def enableVersion(self):
+    if(self.checkVersion.isChecked()):
+      self.checkVersionEnable.setEnabled(True)
     else:
-      self.checkVersion.setEnabled(False)
+      self.checkVersionEnable.setEnabled(False)
     
 
   
@@ -221,8 +222,8 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           assdict['tags'] = str(self.lineEditTags.text()).rstrip().lstrip()
         if(self.checkFRange.isChecked()):
           assdict['fRange'] = str(self.lineEditFRange.text()).rstrip().lstrip()
-        if(self.checkVersionEnable.isChecked()):
-          if(self.checkVersion.isChecked()):
+        if(self.checkVersion.isChecked()):
+          if(self.checkVersionEnable.isChecked()):
             assdict['versioning'] = 1
           else:
             assdict['versioning'] = 0
@@ -250,11 +251,13 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           assdict['tags'] = str(self.lineEditTags.text())
         if(self.checkFRange.isChecked()):
           assdict['fRange'] = str(self.lineEditFRange.text())
-        if(self.checkVersionEnable.isChecked()):
-          if(self.checkVersion.isChecked()):
+        if(self.checkVersion.isChecked()):
+          if(self.checkVersionEnable.isChecked()):
             assdict['versioning'] = 1;
           else:
             assdict['versioning'] = 0;
+        if(self.checkReview.isChecked()):
+          assdict['reviewUser'] = str(self.lineEditReviewers.text()).rstrip().lstrip()
           
         #if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username or assdets['assignedWorker'] == self.username)):
           #print("user not allowed to edit . not an admin or an asset founder!!")

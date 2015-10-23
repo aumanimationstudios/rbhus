@@ -26,6 +26,7 @@ fileSelect = "fileSelectUI.py"
 scb = "selectCheckBox.py"
 vc = "rbhusPipeVersions.py"
 rS = "rbhusPipeRenderSubmit.py"
+rR = "rbhusPipeReview.py"
 
 
 selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
@@ -38,6 +39,7 @@ rbhusPipeSeqSceEditCmd = dirSelf.rstrip(os.sep) + os.sep + rpSC
 fileSelectCmd = dirSelf.rstrip(os.sep) + os.sep + fileSelect
 versionCmd = dirSelf.rstrip(os.sep) + os.sep + vc
 rbhusPipeRenderSubmitCmd = dirSelf.rstrip(os.sep) + os.sep + rS
+rbhusPipeReviewCmd = dirSelf.rstrip(os.sep) + os.sep + rR
 
 
 
@@ -290,12 +292,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.menuMine = QtGui.QMenu()
     self.mineCreatedAction = QtGui.QAction("created",self.menuMine,checkable=True)
     self.mineCreatedAction.setChecked(False)
-    self.mineCreatedAction.toggled.connect(self.mineCheck)
+    self.mineCreatedAction.changed.connect(self.mineCheck)
     self.mineAssignedAction = QtGui.QAction("assigned",self.menuMine,checkable=True)
     self.mineAssignedAction.setChecked(True)
-    self.mineAssignedAction.toggled.connect(self.mineCheck)
+    self.mineAssignedAction.changed.connect(self.mineCheck)
+    self.mineReviewAction = QtGui.QAction("toReview",self.menuMine,checkable=True)
+    self.mineReviewAction.changed.connect(self.mineCheck)
+    self.mineReviewAction.setChecked(False)
+
     self.menuMine.addAction(self.mineCreatedAction)
     self.menuMine.addAction(self.mineAssignedAction)
+    self.menuMine.addAction(self.mineReviewAction)
     self.menuMine.triggered.connect(self.menuMineShow)
 
     self.splitterFilter.setStretchFactor(0, 10)
@@ -608,6 +615,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.resetTemplateFiles()
     if(action == addToFavAction):
       self.assetFavSave()
+
+    if(action == assReviewAction):
+      self.reviewAss()
+
     
      
     #if(action == versionAction):
@@ -622,8 +633,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listAssets()
 
   def mineCheck(self):
-    if(not self.mineCreatedAction.isChecked() and not self.mineAssignedAction.isChecked()):
+    if(not self.mineCreatedAction.isChecked() and not self.mineAssignedAction.isChecked() and not self.mineReviewAction.isChecked()):
       self.mineAssignedAction.setChecked(True)
+    if(self.mineReviewAction.isChecked()):
+      self.mineCreatedAction.setChecked(False)
+      self.mineAssignedAction.setChecked(False)
     self.listAssets()
 
 
@@ -632,7 +646,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.menuMine.show()
 
   
-  
+  def reviewAss(self):
+    listAsses = self.selectedAsses()
+    listedAss = listAsses[0]
+    if(sys.platform.find("win") >= 0):
+      subprocess.Popen([rbhusPipeReviewCmd,"--assetpath",listedAss],shell = True)
+    elif(sys.platform.find("linux") >= 0):
+      subprocess.Popen(rbhusPipeReviewCmd +" --assetpath "+ listedAss,shell = True)
+
   
   
   
@@ -665,6 +686,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       x = listAsses[0]
       abspath =  utilsPipe.getAbsPath(x)
       pyperclip.copy(abspath)
+
+  def copyPublishPath(self):
+    listAsses = self.selectedAsses()
+    print(listAsses)
+    if(listAsses):
+      x = listAsses[0]
+      abspath =  utilsPipe.getAbsPath(x)
+      abspath = abspath + "/publish"
+      pyperclip.copy(abspath)
+
+
       
   
   def copyPipePathToClip(self):
@@ -691,17 +723,22 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       p.start(sys.executable,fcmd.split())
       p.waitForFinished()
       filename = str(p.readAllStandardOutput()).rstrip().lstrip()
+
       if(filename):
-        assdets = utilsPipe.getAssDetails(assPath=x)
-        runCmd = utilsPipe.openAssetCmd(assdets,filename)
-        print("wtf1 : "+ str(runCmd))
-        fileTypeDets = None
-        if(runCmd):
-          runCmd = runCmd.rstrip().lstrip()
-          subprocess.Popen(runCmd,shell=True)
+        print(filename.split("."))
+        if(filename.split(".")[-1] == "py"):
+          subprocess.Popen("python "+ str(filename),shell=True)
         else:
-          import webbrowser
-          webbrowser.open(filename)
+          assdets = utilsPipe.getAssDetails(assPath=x)
+          runCmd = utilsPipe.openAssetCmd(assdets,filename)
+          print("wtf1 : "+ str(runCmd))
+          fileTypeDets = None
+          if(runCmd):
+            runCmd = runCmd.rstrip().lstrip()
+            subprocess.Popen(runCmd,shell=True)
+          else:
+            import webbrowser
+            webbrowser.open(filename)
       
       
       
@@ -756,19 +793,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           if(fila):
             print(str(fila[0]))
             filename = str(fila[0])
-            assdets = utilsPipe.getAssDetails(assPath=x)
-            runCmd = utilsPipe.openAssetCmd(assdets,filename)
-            if(runCmd):
-              runCmd = runCmd.rstrip().lstrip()
-              if(sys.platform.find("win") >= 0):
-                print(runCmd)
-                subprocess.Popen(runCmd,shell=True) 
-              elif(sys.platform.find("linux") >= 0):
-                print(runCmd)
-                subprocess.Popen(runCmd,shell=True)
+            print(filename.split("."))
+            if(filename.split(".")[-1] == "py"):
+              subprocess.Popen("python "+ str(filename),shell=True)
             else:
-              import webbrowser
-              webbrowser.open(filename)
+              assdets = utilsPipe.getAssDetails(assPath=x)
+              runCmd = utilsPipe.openAssetCmd(assdets,filename)
+              if(runCmd):
+                runCmd = runCmd.rstrip().lstrip()
+                if(sys.platform.find("win") >= 0):
+                  print(runCmd)
+                  subprocess.Popen(runCmd,shell=True) 
+                elif(sys.platform.find("linux") >= 0):
+                  print(runCmd)
+                  subprocess.Popen(runCmd,shell=True)
+              else:
+                import webbrowser
+                webbrowser.open(filename)
         else:
           print("wtf : opening version cmd ")
           if(sys.platform.find("win") >= 0):
@@ -1480,6 +1521,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         assget.whereDict['assignedWorker'] = str(self.username)
       if(self.mineCreatedAction.isChecked()):
         assget.whereDict['createdUser'] = str(self.username)
+      if(self.mineReviewAction.isChecked()):
+        assget.whereDict['reviewUser'] = str(self.username)
+        assget.whereDict['reviewStatus'] = str(constantsPipe.reviewStatusInProgress)
     if(self.comboStageType.currentText() != "default"):
       assget.whereDict['stageType'] = str(self.comboStageType.currentText())
     if(self.comboNodeType.currentText() != "default"):
@@ -1554,7 +1598,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def listAssets_thread(self,assesList=None,assesNames=None,assesColor=None,assdict=None,assModifiedTime=None):
     self.timerAssetsRefresh.stop()
     selAsses = self.selectedAsses()
-    colNames = ['asset','assigned','created','tags','modified time','isVer','preview']
+    colNames = ['asset','assigned','created','reviewer','tags','modified time','versioning','review','preview']
     #asses = asslist
     #assesdict = assdict
     self.tableWidget.clearContents()
@@ -1609,11 +1653,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.tableWidget.setItem(x,2,itemAss)
         except:
           print(str(sys.exc_info()))
+
+        try:
+          itemAss = QtGui.QTableWidgetItem()
+          itemAss.setText(str(assesNames[assesList[x]]['reviewUser']))
+          self.tableWidget.setItem(x,3,itemAss)
+        except:
+          print(str(sys.exc_info()))
         
         try:
           itemTag = QtGui.QTableWidgetItem()
           itemTag.setText(str(assesNames[assesList[x]]['tags']))
-          self.tableWidget.setItem(x,3,itemTag)
+          self.tableWidget.setItem(x,4,itemTag)
         except:
           print(str(sys.exc_info()))
         
@@ -1621,14 +1672,29 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         try:
           itemModified = QtGui.QTableWidgetItem()
           itemModified.setText(str(assModifiedTime[assesList[x]]))
-          self.tableWidget.setItem(x,4,itemModified)
+          self.tableWidget.setItem(x,5,itemModified)
         except:
           print(str(sys.exc_info()))
         
         try:
           itemModified = QtGui.QTableWidgetItem()
-          itemModified.setText(str(assesNames[assesList[x]]['versioning']))
-          self.tableWidget.setItem(x,5,itemModified)
+          if(assesNames[assesList[x]]['versioning'] == 0):
+            itemModified.setText("disabled")
+          else:
+            itemModified.setText("enabled : "+ str(assesNames[assesList[x]]['publishVersion']))
+          self.tableWidget.setItem(x,6,itemModified)
+        except:
+          print(str(sys.exc_info()))
+
+        try:
+          itemModified = QtGui.QTableWidgetItem()
+          if(assesNames[assesList[x]]['reviewStatus'] == 0):
+            itemModified.setText("notDone")
+          elif(assesNames[assesList[x]]['reviewStatus'] == 1):
+            itemModified.setText("inProgress : "+ str(assesNames[assesList[x]]['reviewVersion']))
+          else:
+            itemModified.setText("done")
+          self.tableWidget.setItem(x,7,itemModified)
         except:
           print(str(sys.exc_info()))
         
@@ -1662,7 +1728,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           try:  
             self.previewWidgets.append(ImageWidget(self.previewItems[x],64,self.tableWidget))
             self.previewWidgets[x].setToolTip("click on the image")
-            self.tableWidget.setCellWidget(x,6,self.previewWidgets[x])
+            self.tableWidget.setCellWidget(x,8,self.previewWidgets[x])
             self.previewWidgets[x].clicked.connect(lambda boool, x=x : self.imageWidgetClicked(x,self.previewWidgets[x],boool))
           except:
             print(str(sys.exc_info()))
