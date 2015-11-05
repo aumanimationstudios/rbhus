@@ -5,3 +5,4 @@ syntax: glob
 *~
 publish/*
 export_*
+review_*

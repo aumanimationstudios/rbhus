@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeReviewMod.ui'
 #
-# Created: Fri Oct 23 17:00:25 2015
+# Created: Tue Oct 27 11:08:55 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(593, 839)
+    MainWindow.resize(651, 839)
     MainWindow.setDocumentMode(False)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -188,7 +188,7 @@ class Ui_MainWindow(object):
     self.scrollArea.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
     self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
     self.scrollAreaWidgetContents = QtGui.QWidget()
-    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 579, 70))
+    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 637, 70))
     self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
     self.verticalLayout_2 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
     self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
@@ -199,7 +199,7 @@ class Ui_MainWindow(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
     self.plainTextEdit.setSizePolicy(sizePolicy)
-    self.plainTextEdit.setMinimumSize(QtCore.QSize(0, 1))
+    self.plainTextEdit.setMinimumSize(QtCore.QSize(0, 2))
     self.plainTextEdit.setMaximumSize(QtCore.QSize(16777215, 16777215))
     self.plainTextEdit.setObjectName(_fromUtf8("plainTextEdit"))
     self.groupBox_2 = QtGui.QGroupBox(self.splitter)
@@ -226,8 +226,13 @@ class Ui_MainWindow(object):
     self.pushOpenReferenceReview = QtGui.QPushButton(self.centralwidget)
     self.pushOpenReferenceReview.setObjectName(_fromUtf8("pushOpenReferenceReview"))
     self.horizontalLayout_3.addWidget(self.pushOpenReferenceReview)
-    spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+    spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Minimum)
     self.horizontalLayout_3.addItem(spacerItem)
+    self.pushOpenVersion = QtGui.QPushButton(self.centralwidget)
+    self.pushOpenVersion.setObjectName(_fromUtf8("pushOpenVersion"))
+    self.horizontalLayout_3.addWidget(self.pushOpenVersion)
+    spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+    self.horizontalLayout_3.addItem(spacerItem1)
     self.comboProgress = QtGui.QComboBox(self.centralwidget)
     self.comboProgress.setObjectName(_fromUtf8("comboProgress"))
     self.comboProgress.addItem(_fromUtf8(""))
@@ -249,6 +254,7 @@ class Ui_MainWindow(object):
     MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
     self.reviewVersion.setText(_translate("MainWindow", "version:", None))
     self.pushOpenReferenceReview.setText(_translate("MainWindow", "open reference folder", None))
+    self.pushOpenVersion.setText(_translate("MainWindow", "open version folder", None))
     self.comboProgress.setItemText(0, _translate("MainWindow", "inProgress", None))
     self.comboProgress.setItemText(1, _translate("MainWindow", "done", None))
     self.pushSend.setText(_translate("MainWindow", "send", None))

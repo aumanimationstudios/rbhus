@@ -77,10 +77,10 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
         else:
           det = utilsPipe.getSequenceScenes(self.assDets['projName'],self.assDets['sequenceName'],self.assDets['sceneName'])
           if(det):
-            if(det['sFrame'] == "1" and det['eFrame'] == "1"):
+            if(det[0]['sFrame'] == "1" and det[0]['eFrame'] == "1"):
               self.fRange = "1"
             else:
-              self.fRange = str(self.sFrame) +"-"+ str(self.eFrame)
+              self.fRange = str(det[0]['sFrame']) +"-"+ str(det[0]['eFrame'])
           else:
             if(self.sFrame == 1 and self.eFrame == 1):
               self.fRange = "1"

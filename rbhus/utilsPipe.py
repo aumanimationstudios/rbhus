@@ -404,9 +404,34 @@ def exportProjTypes(projType):
 def exportAsset(assDets):
   for x in assDets:
     os.environ['rp_assets_'+ str(x).rstrip().lstrip()] = str(assDets[x])
+  exportProj(projName=assDets['projName'])
+  exportSeqScn(assDets['projName'], assDets['sequenceName'], assDets['sceneName'])
   return(1)
   
 
+def exportSeqScn(projName,scq,scn):
+  dbconn = dbPipe.dbPipe()
+  rows = 0
+  try:
+    rows = dbconn.execute("select * from sequenceScenes where projName='"+ str(projName) +"' and sequenceName='"+ str(scq) +"' and sceneName='"+ str(scn) +"'",dictionary=True)
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+  if(not isinstance(rows, int)):
+    row = rows[0]
+    for x in row.keys():
+      os.environ['rp_sequenceScenes_'+ str(x).rstrip().lstrip()] = str(row[x])
+
+
+
+
+def exportProj(projName):
+  if(projName):
+    dets = getProjDetails(projName=projName)
+    for x in dets.keys():
+      os.environ['rp_proj_'+ str(x)] = str(dets[x])
+    exportProjTypes(dets['projType'])
+    exportDirMaps(dets['directory'])
+  
 
 #when you give the projName it returns a single dict else it returns an array of dict
 def getProjDetails(projName=None,status=None):
@@ -443,14 +468,7 @@ def getProjDetails(projName=None,status=None):
   return(0)
     
 
-def exportProj(projName):
-  if(projName):
-    dets = getProjDetails(projName=projName)
-    for x in dets.keys():
-      os.environ['rp_proj_'+ str(x)] = str(dets[x])
-    exportProjTypes(dets['projType'])
-    exportDirMaps(dets['directory'])
-  
+
   
   
 
@@ -1023,11 +1041,12 @@ def assEdit(asspath="",assid="",assdict={}):
 def reviewAdd(assdict={}):
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("insert into assetReviews (assetId,reviewVersion,message,username,datetime) value ('"\
+    dbconn.execute("insert into assetReviews (assetId,reviewVersion,message,username,referenceFolder,datetime) value ('"\
       + str(assdict['assetId']).rstrip().lstrip() +"','"\
       + str(assdict['reviewVersion']).rstrip().lstrip() +"','"\
       + str(assdict['message']).rstrip().lstrip() +"','"\
       + str(assdict['username']).rstrip().lstrip() +"','"\
+      + str(assdict['referenceFolder']).rstrip().lstrip() +"','"\
       + str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"')")
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
@@ -1197,7 +1216,7 @@ def openAssetCmd(assdets ={},filename = None):
     exeAss = "linuxCmd"
     pathAss = "linuxPath"
   dirs.append(binMain)
-  
+  exportAsset(assdets)
   if(assdets['fileType'] != "default"):
     filetypedets = getFileTypes(assdets['fileType'])
     binDir = binMain +"/"+ assdets['fileType']
@@ -1304,7 +1323,32 @@ def assDelete(assId=None,assPath=None,hard=False):
     #except:
       #utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : failed")
     
-    
+
+def setWorkInProgress(asspath):
+  dbconn = dbPipe.dbPipe()
+  try:
+    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressInProgress) +" where path='"+ str(asspath) +"'")
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  return(1)
+  
+
+
+def setWorkDone(asspath):
+  dbconn = dbPipe.dbPipe()
+  try:
+    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressDone) +" where path='"+ str(asspath) +"'")
+  except:
+    utilsPipeLogger.debug(str(sys.exc_info()))
+    return(0)
+  return(1)
+
+
+
+
+
+
 def isAssCreated(assdets = {}):
   if(os.environ['rbhusPipe_acl_user'] in assdets['createdUser'].split(",")):
     return(True)
@@ -1319,6 +1363,8 @@ def isAssAssigned(assdets = {}):
     return(True)
   else:
     return(False)
+    
+
   
 def isStageAdmin(assdets = {}):
   if(assdets['stageType'] != "default"):

@@ -283,6 +283,10 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
               brush.setColor(QtGui.QColor(0, 200, 0))
               brush.setStyle(QtCore.Qt.SolidPattern)
               self.tableVersions.item(indrow, indcol).setBackground(brush)
+            if(str(t) == str(self.assetDetails['reviewVersion'])):
+              brush.setColor(QtGui.QColor(150, 150, 200))
+              brush.setStyle(QtCore.Qt.SolidPattern)
+              self.tableVersions.item(indrow, indcol).setBackground(brush)
             self.tableVersions.item(indrow, indcol).setText(str(t).zfill(4))
           else:
             self.tableVersions.item(indrow, indcol).setText(str(t))

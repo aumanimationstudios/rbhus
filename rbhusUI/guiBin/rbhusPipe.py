@@ -575,15 +575,34 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.listAssets()
     
   def popupAss(self, pos):
+    listAsses = self.selectedAsses()
+    print("selected asses : "+ str(len(listAsses)))
+    if(len(listAsses) == 0):
+      return(0)
+
     menu = QtGui.QMenu()
+    menuProgress = QtGui.QMenu()
+    menuCopy = QtGui.QMenu()
+    menuCopy.setTitle("copy to clipboard")
+    menuProgress.setTitle("progress status")
+
+    inProgressAction = menuProgress.addAction("set to inProgress")
+    inProgressDoneAction = menuProgress.addAction("set to done")
+
+    assCopyToClip = menuCopy.addAction("copy path to clipboard")
+    assCopyPathToClip = menuCopy.addAction("copy assetPath to clipboard")
+    assPublishPath = menuCopy.addAction("copy publish path to clipboard")
+
+
     #openFileAction = menu.addAction("open file")
     openFolderAction = menu.addAction("open")
     addToFavAction = menu.addAction("add to shortcuts")
     #versionAction = menu.addAction("versioning")
     assEditAction = menu.addAction("edit")
-    assCopyToClip = menu.addAction("copy path to clipboard")
-    assCopyPathToClip = menu.addAction("copy pipePath to clipboard")
+    
     assReviewAction = menu.addAction("review")
+    menu.addMenu(menuCopy)
+    menu.addMenu(menuProgress)
     assCopyNew = menu.addAction("copy/new")
     assGetTemplate = menu.addAction("reset templates")
     #assCmdLine = menu.addAction("cmd line")
@@ -618,11 +637,29 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     if(action == assReviewAction):
       self.reviewAss()
+    if(action == assPublishPath):
+      self.copyPublishPath()
 
-    
-     
+    if(action == inProgressAction):
+      self.setInProgress()
+    if(action == inProgressDoneAction):
+      self.setDone()
+
     #if(action == versionAction):
       #self.versionAss()
+
+
+
+  def setInProgress(self):
+    listAsses = self.selectedAsses()
+    for x in listAsses:
+      utilsPipe.setWorkInProgress(x)
+
+  def setDone(self):
+    listAsses = self.selectedAsses()
+    for x in listAsses:
+      utilsPipe.setWorkDone(x)
+
       
       
       
@@ -784,7 +821,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       print("isStageAdmin : "+ str(assdets['stageType']) +" : "+ str(utilsPipe.isStageAdmin(assdets)))
       print("isNodeAdmin : "+ str(assdets['nodeType']) +" : "+ str(utilsPipe.isNodeAdmin(assdets)))
       print("isProjAdmin : "+ str(assdets['projName']) +" : "+ str(utilsPipe.isProjAdmin(assdets)))
-      utilsPipe.exportAsset(assdets)
       print("versioning : "+ str(assdets['versioning']))
       if(os.path.exists(p)):
         if(assdets['versioning'] == 0):
@@ -794,22 +830,19 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             print(str(fila[0]))
             filename = str(fila[0])
             print(filename.split("."))
-            if(filename.split(".")[-1] == "py"):
-              subprocess.Popen("python "+ str(filename),shell=True)
+            assdets = utilsPipe.getAssDetails(assPath=x)
+            runCmd = utilsPipe.openAssetCmd(assdets,filename)
+            if(runCmd):
+              runCmd = runCmd.rstrip().lstrip()
+              if(sys.platform.find("win") >= 0):
+                print(runCmd)
+                subprocess.Popen(runCmd,shell=True) 
+              elif(sys.platform.find("linux") >= 0):
+                print(runCmd)
+                subprocess.Popen(runCmd,shell=True)
             else:
-              assdets = utilsPipe.getAssDetails(assPath=x)
-              runCmd = utilsPipe.openAssetCmd(assdets,filename)
-              if(runCmd):
-                runCmd = runCmd.rstrip().lstrip()
-                if(sys.platform.find("win") >= 0):
-                  print(runCmd)
-                  subprocess.Popen(runCmd,shell=True) 
-                elif(sys.platform.find("linux") >= 0):
-                  print(runCmd)
-                  subprocess.Popen(runCmd,shell=True)
-              else:
-                import webbrowser
-                webbrowser.open(filename)
+              import webbrowser
+              webbrowser.open(filename)
         else:
           print("wtf : opening version cmd ")
           if(sys.platform.find("win") >= 0):
@@ -817,6 +850,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           elif(sys.platform.find("linux") >= 0):
             subprocess.Popen(versionCmd +" --path "+ x,shell = True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+    for x in os.environ.keys():
+      if(x.find("rp_") >= 0):
+        print(x +" : "+os.environ[x])
          
           
         
@@ -1598,7 +1634,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def listAssets_thread(self,assesList=None,assesNames=None,assesColor=None,assdict=None,assModifiedTime=None):
     self.timerAssetsRefresh.stop()
     selAsses = self.selectedAsses()
-    colNames = ['asset','assigned','created','reviewer','tags','modified time','versioning','review','preview']
+    colNames = ['asset','assigned','created','reviewer','tags','modified time','versioning','review','progress','preview']
     #asses = asslist
     #assesdict = assdict
     self.tableWidget.clearContents()
@@ -1688,15 +1724,28 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
         try:
           itemModified = QtGui.QTableWidgetItem()
-          if(assesNames[assesList[x]]['reviewStatus'] == 0):
+          if(assesNames[assesList[x]]['reviewStatus'] == constantsPipe.reviewStatusNotDone):
             itemModified.setText("notDone")
-          elif(assesNames[assesList[x]]['reviewStatus'] == 1):
+          elif(assesNames[assesList[x]]['reviewStatus'] == constantsPipe.reviewStatusInProgress):
             itemModified.setText("inProgress : "+ str(assesNames[assesList[x]]['reviewVersion']))
           else:
-            itemModified.setText("done")
+            itemModified.setText("done : "+ str(assesNames[assesList[x]]['reviewVersion']))
           self.tableWidget.setItem(x,7,itemModified)
         except:
           print(str(sys.exc_info()))
+
+
+        try:
+          itemModified = QtGui.QTableWidgetItem()
+          if(assesNames[assesList[x]]['progressStatus'] == constantsPipe.assetProgressInProgress):
+            itemModified.setText("inProgress")
+          elif(assesNames[assesList[x]]['progressStatus'] == constantsPipe.assetProgressDone):
+            itemModified.setText("done")
+          self.tableWidget.setItem(x,8,itemModified)
+        except:
+          print(str(sys.exc_info()))
+
+
         
         try:
           previewName = "preview"
@@ -1728,7 +1777,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           try:  
             self.previewWidgets.append(ImageWidget(self.previewItems[x],64,self.tableWidget))
             self.previewWidgets[x].setToolTip("click on the image")
-            self.tableWidget.setCellWidget(x,8,self.previewWidgets[x])
+            self.tableWidget.setCellWidget(x,9,self.previewWidgets[x])
             self.previewWidgets[x].clicked.connect(lambda boool, x=x : self.imageWidgetClicked(x,self.previewWidgets[x],boool))
           except:
             print(str(sys.exc_info()))

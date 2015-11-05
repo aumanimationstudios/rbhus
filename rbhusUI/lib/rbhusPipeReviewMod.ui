@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>593</width>
+    <width>651</width>
     <height>839</height>
    </rect>
   </property>
@@ -465,7 +465,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>579</width>
+          <width>637</width>
           <height>70</height>
          </rect>
         </property>
@@ -482,7 +482,7 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>1</height>
+         <height>2</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -526,6 +526,29 @@
        <widget class="QPushButton" name="pushOpenReferenceReview">
         <property name="text">
          <string>open reference folder</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushOpenVersion">
+        <property name="text">
+         <string>open version folder</string>
         </property>
        </widget>
       </item>
