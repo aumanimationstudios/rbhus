@@ -878,7 +878,8 @@ def assRegister(assDetDict):
       os.makedirs(corePath,0775)
     except:
       utilsPipeLogger.debug(str(sys.exc_info()))
-    setAssTemplate(assDetDict)  
+    if(assDetDict['assetType'].rstrip().lstrip() != "output" and assDetDict['assetType'].rstrip().lstrip() != "share" and assDetDict['assetType'].rstrip().lstrip() != "template"):
+      setAssTemplate(assDetDict)  
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
@@ -1327,7 +1328,7 @@ def assDelete(assId=None,assPath=None,hard=False):
 def setWorkInProgress(asspath):
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressInProgress) +" where path='"+ str(asspath) +"'")
+    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressInProgress) +",doneDate = '0000-00-00 00:00:00' where path='"+ str(asspath) +"'")
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)
@@ -1338,7 +1339,7 @@ def setWorkInProgress(asspath):
 def setWorkDone(asspath):
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressDone) +" where path='"+ str(asspath) +"'")
+    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressDone) +",doneDate='"+ str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"' where path='"+ str(asspath) +"'") 
   except:
     utilsPipeLogger.debug(str(sys.exc_info()))
     return(0)

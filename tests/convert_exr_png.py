@@ -19,7 +19,6 @@ def convert(exrimage):
   return(exitcode)
 
 exrs = glob.glob(path.rstrip(os.sep) + os.sep +"*.exr")
-print(exrs)
-exr.sort()
+exrs.sort()
 convertPool = multiprocessing.Pool(cpus)
 convertPool.map(convert, exrs)

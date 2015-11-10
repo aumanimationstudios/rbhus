@@ -1,57 +1,37 @@
 import bpy
-import os
-import sys
+import asyncore
 import socket
 import threading
-import time
+
+class EchoHandler(asyncore.dispatcher_with_send):
+
+    def handle_read(self):
+        data = self.recv(8192)
+        if data:
+          print(data)
+          eval(data)
+
+class EchoServer(asyncore.dispatcher):
+
+    def __init__(self, host, port):
+        asyncore.dispatcher.__init__(self)
+        self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.set_reuse_addr()
+        self.bind((host, port))
+        self.listen(5)
+
+    def handle_accept(self):
+        pair = self.accept()
+        if pair is not None:
+            sock, addr = pair
+            print('Incoming connection from '+ repr(addr))
+            handler = EchoHandler(sock)
+
+def startCmdPort():
+  server = EchoServer('localhost', 8999)
+  asyncore.loop()
 
 
-
-
-
-
-def getHostNameIP():
-  while(1):
-    try:
-      hostname = socket.gethostname()
-      ipAddr = socket.gethostbyname(socket.gethostname()).strip()
-      return(hostname,ipAddr)
-    except:
-      time.sleep(1)
-
-
-def atUrService():
-  while(1):
-    try:
-      hostName,ipAddr = getHostNameIP()
-      serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      serverSocket.bind(("", 8999))
-      serverSocket.listen(5)
-      break
-    except:
-      print("socket failed 1 : "+ str(sys.exc_info()))
-      try:
-        serverSocket.close()
-      except:
-        pass
-      pass
-    time.sleep(5)
-  
-  while(1):
-    clientSocket, address = serverSocket.accept()
-    data = ""
-    data = clientSocket.recv(4096)
-    clientSocket.close()
-    
-    print(data)
-    eval(data)
-  
-  
-t = threading.Thread(target = atUrService)
-t.start()
-#t.join()
-
-
-
-
-
+a = threading.Thread(target=startCmdPort)
+a.start()
+# server = EchoServer('localhost', 8999)

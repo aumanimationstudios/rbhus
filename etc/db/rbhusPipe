@@ -42,9 +42,10 @@ CREATE TABLE `assetReviews` (
   `message` varchar(4096) DEFAULT 'review',
   `username` varchar(45) NOT NULL,
   `datetime` datetime NOT NULL,
+  `referenceFolder` varchar(45) NOT NULL,
   PRIMARY KEY (`assetId`,`reviewCount`),
   KEY `fk_assetsReviews_1_idx` (`assetId`,`reviewCount`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,6 +105,7 @@ CREATE TABLE `assets` (
   `progressStatus` int(1) NOT NULL DEFAULT '0' COMMENT '0 - inprogress,1-done',
   `reviewStatus` int(1) NOT NULL DEFAULT '0' COMMENT '0-reviewNotDone,1-reviewInProgress, 2 - reviewDone',
   `reviewUser` varchar(45) NOT NULL DEFAULT 'default',
+  `doneDate` datetime DEFAULT NULL,
   PRIMARY KEY (`assetId`),
   KEY `fk_assets_1_idx` (`projName`),
   KEY `fk_assets_4_idx` (`fileType`),
@@ -218,7 +220,7 @@ CREATE TABLE `proj` (
   `projName` varchar(128) NOT NULL DEFAULT 'default',
   `directory` varchar(128) NOT NULL DEFAULT 'proj' COMMENT 'main directory from the dirMaps . ',
   `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - initStart\n1 - initPending\n2 - active\n3 - deactive\n\ninitStart -> initPending -> active\n',
-  `admins` varchar(4096) NOT NULL DEFAULT 'shrinidhi' COMMENT 'list of space separated admin usernames\n',
+  `admins` varchar(4096) NOT NULL DEFAULT 'shiva,shrinidhi,lsherigar,suhas,mahesh' COMMENT 'list of space separated admin usernames\n',
   `projType` varchar(45) NOT NULL,
   `rbhusRenderIntegration` int(1) NOT NULL DEFAULT '1',
   `rbhusRenderServer` varchar(45) NOT NULL DEFAULT 'rbhusServer',
@@ -341,4 +343,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-10-23 18:28:44
+-- Dump completed on 2015-11-10 12:32:19

@@ -2208,7 +2208,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   
   def rbhusPipeSeqSceEditEnable(self,exitStatus):
     self.actionEdit_seq_scn.setEnabled(True)
-    self.updateAll()
+    # self.updateAll()
     
   
   

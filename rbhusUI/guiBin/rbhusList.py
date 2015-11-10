@@ -12,6 +12,8 @@ dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
+toolsdir = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep + "tools" + os.sep + "rbhus"
+
 rEc = "rbhusEdit.py"
 rEcM = "rbhusEditMulti.py"
 rSubmit = "rbhusSubmit.py"
@@ -24,6 +26,8 @@ editTaskMultiCmd = editTaskMultiCmd.replace("\\","/")
 
 submitCmd = dirSelf.rstrip(os.sep) + os.sep + rSubmit
 submitCmd = submitCmd.replace("\\","/")
+
+exr2pngCmd = toolsdir + os.sep + "convert_exr_png.py"
 
 print editTaskCmd
 import rbhusListMod
@@ -323,12 +327,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       for x in selTasksDict:
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
-        #self.loader.show()
-        openP = subprocess.Popen("ls "+ oDir +"*.exr | parallel -kj4 -eta 'djv_convert {} {}.png -layer 0 -default_speed 50 -pixel rgba f16 ; rename .exr.png .png {}.png'",shell=True)
-        timestart = time.time()
+        self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+        openP = subprocess.Popen(exr2pngCmd +" "+ str(oDir),shell=True)
         openP.wait()
-        #self.loader.hide()
-      
+        self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+
+
       
   def fastAssignFunc(self,e=0):
     selTasksDict = self.selectedTasks()
@@ -356,6 +360,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test3Action = menu.addAction("hold")
     test4Action = menu.addAction("rerun")
     test5Action = menu.addAction("check frame")
+    test10Action = menu.addAction("exr2png(linux)")
     test2Action = menu.addAction("kill")
     test6Action = menu.addAction("kill/hold")
     
@@ -379,7 +384,28 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.previewFrame()
     if(action == test6Action):
       self.killHoldFrame()
-  
+    if(action == test10Action):
+      self.exr2pngFrames()
+
+  def exr2pngFrames(self):
+    selFramesDict = self.selectedFrames()
+    selFrames = {}
+    db_conn = dbRbhus.dbRbhus()
+    if(selFramesDict):
+      for x in selFramesDict:
+        tD = db_conn.getTaskDetails(x['id'])
+        oDir = tD['outDir']
+        print("*"+ str(x['frameId']).zfill(tD['pad']) +"*")
+        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*",options=QtGui.QFileDialog.DontUseNativeDialog)
+        print(fila)
+        if(fila):
+          for f in fila:
+            self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+            openP = subprocess.Popen(exr2pngCmd +" "+ str(f).rstrip().lstrip(),shell=True)
+            openP.wait()
+            self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+    
+
   def stopFrame(self):
     selFramesDict = self.selectedFrames()
     selFrames = {}
