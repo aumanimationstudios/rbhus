@@ -28,6 +28,7 @@ submitCmd = dirSelf.rstrip(os.sep) + os.sep + rSubmit
 submitCmd = submitCmd.replace("\\","/")
 
 exr2pngCmd = toolsdir + os.sep + "convert_exr_png.py"
+png2flvCmd = toolsdir + os.sep + "convert_png_flv.py"
 
 print editTaskCmd
 import rbhusListMod
@@ -290,6 +291,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test4Action = menu.addAction("edit")
     test5Action = menu.addAction("open dir")
     test10Action = menu.addAction("exr2png(linux)")
+    test11Action = menu.addAction("png2flv(linux)")
     test6Action = menu.addAction("copy/submit")
     test7Action = menu.addAction("fastAssign enable")
     test8Action = menu.addAction("fastAssign disable")
@@ -316,6 +318,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.delTask()
     if(action == test10Action):
       self.exr2png()
+    if(action == test11Action):
+      self.png2flv()
       
       
       
@@ -333,7 +337,21 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
 
-      
+  def png2flv(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    db_conn = dbRbhus.dbRbhus()
+    if(selTasksDict):
+      for x in selTasksDict:
+        tD = db_conn.getTaskDetails(x['id'])
+        oDir = tD['outDir']
+        self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+        openP = subprocess.Popen(png2flvCmd +" "+ str(oDir),shell=True)
+        openP.wait()
+        self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+
+
+
   def fastAssignFunc(self,e=0):
     selTasksDict = self.selectedTasks()
     selTasks = []

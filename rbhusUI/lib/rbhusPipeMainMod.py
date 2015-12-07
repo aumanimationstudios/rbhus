@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod_splitter.ui'
 #
-# Created: Fri Jul 24 15:28:28 2015
+# Created: Tue Nov 17 10:44:35 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -468,6 +468,17 @@ class Ui_MainWindow(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
     self.tableWidget.setSizePolicy(sizePolicy)
+    palette = QtGui.QPalette()
+    brush = QtGui.QBrush(QtGui.QColor(232, 232, 232))
+    brush.setStyle(QtCore.Qt.SolidPattern)
+    palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+    brush = QtGui.QBrush(QtGui.QColor(232, 232, 232))
+    brush.setStyle(QtCore.Qt.SolidPattern)
+    palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+    brush = QtGui.QBrush(QtGui.QColor(244, 244, 244))
+    brush.setStyle(QtCore.Qt.SolidPattern)
+    palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+    self.tableWidget.setPalette(palette)
     self.tableWidget.setMouseTracking(True)
     self.tableWidget.setAcceptDrops(True)
     self.tableWidget.setAutoFillBackground(False)
@@ -476,7 +487,7 @@ class Ui_MainWindow(object):
     self.tableWidget.setMidLineWidth(1)
     self.tableWidget.setDragEnabled(False)
     self.tableWidget.setDragDropMode(QtGui.QAbstractItemView.NoDragDrop)
-    self.tableWidget.setAlternatingRowColors(True)
+    self.tableWidget.setAlternatingRowColors(False)
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     self.tableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
     self.tableWidget.setWordWrap(False)

@@ -531,7 +531,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listAssetsTimed()
 
   def tableWidgetResizeContents(self):
-    self.tableWidget.resizeColumnsToContents()
+    pass
+    # self.tableWidget.resizeColumnsToContents()
   
   def comboStageTypeEvent(self,event):
     print(event)
@@ -1622,12 +1623,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       rowsSelected.append(idx.row())
     print(rowsSelected)
     for row in rowsSelected:
-      
-      doc = QtGui.QTextDocument()
-      doc.setHtml(str(self.tableWidget.cellWidget(row,0).text()))
-      text = doc.toPlainText()
-      #print("2 : "+ text)
-      rowstask.append(str(text))
+      try:
+        doc = QtGui.QTextDocument()
+        doc.setHtml(str(self.tableWidget.cellWidget(row,0).text()))
+        text = doc.toPlainText()
+        #print("2 : "+ text)
+        rowstask.append(str(text))
+      except:
+        print(sys.exc_info())
     return(rowstask)
 
   
