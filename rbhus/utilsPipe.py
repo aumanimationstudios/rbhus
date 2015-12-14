@@ -842,6 +842,14 @@ def assPathColorCoded(assDetDict):
     assPath = assPath +":"+ str(assDetDict['fileType']) +"#"+ "darkviolet"
   return(assPath)
 
+
+
+
+def getBestDir(assDetDict):
+  pass
+
+
+
 def assRegister(assDetDict):
   assPath = getAssPath(assDetDict)
   #assPath = str(assDetDict['projName'])
