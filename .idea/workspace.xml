@@ -4,14 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" line="0" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rbhusDNSDHCP.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/rbhus.iml" afterPath="$PROJECT_DIR$/.idea/rbhus.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh" afterPath="$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh" />
-    </list>
+    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="" />
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
