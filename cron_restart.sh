@@ -1,5 +1,6 @@
 #!/bin/sh
-sleep 20
+sleep 60
+
 /etc/local.d/01-rbhus.stop
-sleep 5
+sleep 10
 /etc/local.d/01-rbhus.start
