@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/httpTests/rbhus.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/httpTests/appc.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/httpTests/appf.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/httpTests/cherry.conf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/httpTests/cherrypy01.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/httpTests/scrapeTest01.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/system/ubuntu/update_wacom.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeProjCreate.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeProjCreate.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/httpTests/cherrypy01.py" afterPath="$PROJECT_DIR$/tests/httpTests/cherrypy01.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/firefox" afterPath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/firefox" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome" afterPath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome-stable" afterPath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome-stable" />
@@ -34,63 +34,73 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="cron_restart.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cron_restart.sh">
+      <file leaf-file-name="cherry.conf" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/httpTests/cherry.conf">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="27" selection-start-line="0" selection-start-column="0" selection-end-line="5" selection-end-column="27" />
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="appf.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/httpTests/appf.py">
+      <file leaf-file-name="cherrypy01.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/httpTests/cherrypy01.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="1" column="14" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="xlsheet.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/xlsheet.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="106" column="39" selection-start-line="106" selection-start-column="39" selection-end-line="106" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="appc.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/httpTests/appc.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+              <caret line="23" column="30" selection-start-line="23" selection-start-column="30" selection-end-line="23" selection-end-column="30" />
               <folding>
-                <element signature="e#0#31#0" expanded="true" />
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cherry.conf" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/httpTests/cherry.conf">
+      <file leaf-file-name="makeClone_ubuntu.sh" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="77" selection-start-line="2" selection-start-column="77" selection-end-line="2" selection-end-column="77" />
+            <state vertical-scroll-proportion="0.08073197">
+              <caret line="5" column="240" selection-start-line="5" selection-start-column="240" selection-end-line="5" selection-end-column="240" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cherrypy01.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tests/httpTests/cherrypy01.py">
+      <file leaf-file-name="rbhusPipeProjCreate.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeProjCreate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.46824542">
-              <caret line="29" column="2" selection-start-line="29" selection-start-column="2" selection-end-line="29" selection-end-column="2" />
+            <state vertical-scroll-proportion="-12.357142">
+              <caret line="121" column="9" selection-start-line="121" selection-start-column="6" selection-end-line="121" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rbhusPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-18.214285">
+              <caret line="729" column="20" selection-start-line="729" selection-start-column="20" selection-end-line="729" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="update_wacom.sh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/update_wacom.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="scrapeTest01.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/httpTests/scrapeTest01.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="11" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -100,7 +110,7 @@
         <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/firefox">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="9" selection-start-line="0" selection-start-column="9" selection-end-line="0" selection-end-column="9" />
+              <caret line="3" column="36" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -110,7 +120,7 @@
         <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="56" selection-start-line="2" selection-start-column="56" selection-end-line="2" selection-end-column="56" />
+              <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -120,17 +130,7 @@
         <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome-stable">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="56" selection-start-line="2" selection-start-column="56" selection-end-line="2" selection-end-column="56" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="decoratorTest.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/decoratorTest.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -162,7 +162,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/tests/xlsheet.py" />
-        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
         <option value="$PROJECT_DIR$/tools/system/add_new_system.py" />
         <option value="$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh" />
@@ -170,10 +169,15 @@
         <option value="$PROJECT_DIR$/rbhusDNSDHCP.sh" />
         <option value="$PROJECT_DIR$/tests/httpTests/appc.py" />
         <option value="$PROJECT_DIR$/tests/httpTests/appf.py" />
+        <option value="$PROJECT_DIR$/tests/httpTests/cherry.conf" />
+        <option value="$PROJECT_DIR$/tools/system/ubuntu/update_wacom.sh" />
         <option value="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/firefox" />
         <option value="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome" />
         <option value="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome-stable" />
-        <option value="$PROJECT_DIR$/tests/httpTests/cherry.conf" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeProjCreate.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
+        <option value="$PROJECT_DIR$/tests/httpTests/seleniumTest.py" />
+        <option value="$PROJECT_DIR$/tests/httpTests/scrapeTest01.py" />
         <option value="$PROJECT_DIR$/tests/httpTests/cherrypy01.py" />
       </list>
     </option>
@@ -269,8 +273,18 @@
               <option name="myItemId" value="ubuntu" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="usr" />
+              <option name="myItemId" value="rbhus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rbhus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tools" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -288,23 +302,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ubuntu" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="usr" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="local" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bin" />
+              <option name="myItemId" value="cloning" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -319,6 +317,14 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="tools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cloning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="clone" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -636,35 +642,13 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome-stable">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/httpTests/cherry.conf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/decoratorTest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/httpTests/cherrypy01.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -686,6 +670,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -854,14 +839,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1632" column="29" selection-start-line="1632" selection-start-column="29" selection-end-line="1632" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/init.real">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -880,13 +857,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="976" column="13" selection-start-line="976" selection-start-column="13" selection-end-line="976" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="110" selection-start-line="6" selection-start-column="110" selection-end-line="6" selection-end-column="110" />
         </state>
       </provider>
     </entry>
@@ -974,10 +944,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/firefox">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="36" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="56" selection-start-line="2" selection-start-column="56" selection-end-line="2" selection-end-column="56" />
+          <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
           <folding />
         </state>
       </provider>
@@ -985,15 +963,7 @@
     <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome-stable">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="56" selection-start-line="2" selection-start-column="56" selection-end-line="2" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/firefox">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="9" selection-start-line="0" selection-start-column="9" selection-end-line="0" selection-end-column="9" />
+          <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
           <folding />
         </state>
       </provider>
@@ -1001,15 +971,57 @@
     <entry file="file://$PROJECT_DIR$/tests/httpTests/cherry.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="77" selection-start-line="2" selection-start-column="77" selection-end-line="2" selection-end-column="77" />
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeProjCreate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.357142">
+          <caret line="121" column="9" selection-start-line="121" selection-start-column="6" selection-end-line="121" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.214285">
+          <caret line="729" column="20" selection-start-line="729" selection-start-column="20" selection-end-line="729" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/system/ubuntu/update_wacom.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/httpTests/scrapeTest01.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="11" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/httpTests/cherrypy01.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46824542">
-          <caret line="29" column="2" selection-start-line="29" selection-start-column="2" selection-end-line="29" selection-end-column="2" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="30" selection-start-line="23" selection-start-column="30" selection-end-line="23" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08073197">
+          <caret line="5" column="240" selection-start-line="5" selection-start-column="240" selection-end-line="5" selection-end-column="240" />
           <folding />
         </state>
       </provider>

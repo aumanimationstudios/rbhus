@@ -604,7 +604,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     assReviewAction = menu.addAction("review")
     menu.addMenu(menuCopy)
     menu.addMenu(menuProgress)
-    assCopyNew = menu.addAction("copy/new")
+    # assCopyNew = menu.addAction("copy/new")
     assGetTemplate = menu.addAction("reset templates")
     #assCmdLine = menu.addAction("cmd line")
     assRender = menu.addAction("submit to render")
@@ -627,8 +627,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #if(action == assDeleteActionHard):
       #self.delAss(hard=True)
       
-    if(action == assCopyNew):
-      self.copyNewAss()
+    # if(action == assCopyNew):
+    #   self.copyNewAss()
     if(action == assRender):
       self.renderAss()
     if(action == assGetTemplate):

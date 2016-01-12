@@ -90,7 +90,7 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
   
   def cProj(self):
     pType = str(self.comboProjType.currentText()).rstrip().lstrip()
-    pName = str(self.lineEditName.text()) if(self.lineEditName.text()).rstrip().lstrip() else None
+    pName = str(self.lineEditName.text()) if(str(self.lineEditName.text()).rstrip().lstrip()) else None
     pDir = str(self.comboDirectory.currentText()).rstrip().lstrip()
     pDueDate = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
     pAdmins = str(self.lineEditAdmins.text()).rstrip().lstrip() if(self.lineEditAdmins.text()) else None

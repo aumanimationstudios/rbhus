@@ -1,3 +1,5 @@
 #!/bin/sh
 mkdir -p /tmp/$USER/$USER/$USER/$HOME
 /usr/bin/firejail --private=/tmp/$USER/$USER/$USER/$HOME /usr/bin/firefox $@
+rm -frv /tmp/$USER/$USER/$USER/$HOME
+
