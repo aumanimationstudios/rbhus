@@ -1,5 +1,8 @@
 #!/bin/sh
-mkdir -p /tmp/$USER/$USER/$USER/$HOME
-/usr/bin/firejail --private=/tmp/$USER/$USER/$USER/$HOME /usr/bin/firefox $@
-rm -frv /tmp/$USER/$USER/$USER/$HOME
-
+if [ "$USER" = "bluepixels" ]
+then
+    /bin/echo "user matched"
+    /bin/mkdir -p /tmp/$USER/$USER/$USER/$HOME
+    /usr/bin/firejail --private=/tmp/$USER/$USER/$USER/$HOME /usr/bin/firefox $@
+    rm -fr /tmp/$USER/$USER/$USER/$HOME
+fi

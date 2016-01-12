@@ -1,6 +1,9 @@
 #!/bin/sh
-mkdir -p /tmp/$USER/$USER/$USER/$HOME
-/usr/bin/firejail --private=/tmp/$USER/$USER/$USER/$HOME /usr/bin/google-chrome $@
-rm -frv /tmp/$USER/$USER/$USER/$HOME
-#/usr/bin/firejail /usr/bin/google-chrome $@
-
+if [ "$USER" = "bluepixels" ]
+then
+    /bin/echo "user matched"
+    mkdir -p /tmp/$USER/$USER/$USER/$HOME
+    /usr/bin/firejail --private=/tmp/$USER/$USER/$USER/$HOME /usr/bin/google-chrome $@
+    rm -frv /tmp/$USER/$USER/$USER/$HOME
+    #/usr/bin/firejail /usr/bin/google-chrome $@
+fi
