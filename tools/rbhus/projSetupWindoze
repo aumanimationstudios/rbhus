@@ -1,0 +1,4 @@
+#!/bin/bash
+/home/shrinidhi/bin/gitHub/pipeline/tools/projSetup.py -s stor1 -t /tmp/ -o win -p $1
+
+
