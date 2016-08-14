@@ -3,7 +3,7 @@ import sys
 import os
 bpy.context.scene.unit_settings.system = 'IMPERIAL'
 bpy.ops.file.make_paths_absolute()
-bpy.context.scene.render.fps = 25
+bpy.context.scene.render.fps = 24
 bpy.context.scene.render.fps_base = 1
 # bpy.context.scene.render.use_single_layer = False
 
