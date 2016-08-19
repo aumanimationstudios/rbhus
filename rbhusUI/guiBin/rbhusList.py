@@ -17,7 +17,7 @@ toolsdir = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusU
 rEc = "rbhusEdit.py"
 rEcM = "rbhusEditMulti.py"
 rSubmit = "rbhusSubmit.py"
-  
+
 editTaskCmd = dirSelf.rstrip(os.sep) + os.sep + rEc
 editTaskCmd = editTaskCmd.replace("\\","/")
 
@@ -29,6 +29,7 @@ submitCmd = submitCmd.replace("\\","/")
 
 exr2pngCmd = toolsdir + os.sep + "convert_exr_png.py"
 png2flvCmd = toolsdir + os.sep + "convert_png_flv.py"
+png2mp4Cmd = toolsdir + os.sep + "convert_png_mp4.py"
 
 print editTaskCmd
 import rbhusListMod
@@ -44,7 +45,7 @@ try:
   _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
   _fromUtf8 = lambda s: s
-  
+
 
 class ImagePlayer(QtGui.QWidget):
   def __init__(self, filename, parent):
@@ -64,24 +65,24 @@ class ImagePlayer(QtGui.QWidget):
     self.movie.setCacheMode(QtGui.QMovie.CacheAll)
     self.movie.setSpeed(100)
     self.movie_screen.setMovie(self.movie)
-    
-    
+
+
     # Create the layout
     main_layout = QtGui.QVBoxLayout()
     main_layout.addWidget(self.movie_screen)
     self.setLayout(main_layout)
     self.movie.start()
-    
-    
+
+
   def resizeEvent(self, event):
     self.move((self.parent.geometry().width()-100)/2,(self.parent.geometry().height()-100)/2)
-    
+
   def showEvent(self,event):
     #self.movie.setEnabled(True)
     self.movie.start()
     #self.show()
-    
-    
+
+
   def hideEvent(self,event):
     self.movie.stop()
 
@@ -90,7 +91,7 @@ class ImagePlayer(QtGui.QWidget):
 class Ui_Form(rbhusListMod.Ui_mainRbhusList):
   def setupUi(self, Form):
     rbhusListMod.Ui_mainRbhusList.setupUi(self,Form)
-    
+
     self.username = None
     self.userProjIds = []
     try:
@@ -101,12 +102,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.userProjIds = os.environ['rbhus_acl_projIds'].split()
     except:
       pass
-    
+
     self.form = Form
-    
-    
-    
-    
+
+
+
+
     icon = QtGui.QIcon()
     iconRefresh = QtGui.QIcon()
     iconTime = QtGui.QIcon()
@@ -131,9 +132,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.colNamesFramesXtra = ["timeTaken"]
     self.colNamesTaskXtra = ["pending"]
     #self.checkTMine.setChecked(2)
-    
+
     self.selectedTaskList = []
-    
+
     QtCore.QObject.connect(self.framesRefresh, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
     QtCore.QObject.connect(self.tableList, QtCore.SIGNAL(_fromUtf8("itemSelectionChanged()")), self.timeFramesCheck)
     QtCore.QObject.connect(self.checkAll, QtCore.SIGNAL(_fromUtf8("clicked()")), self.popTableFrames)
@@ -168,31 +169,31 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.checkRefresh.clicked.connect(self.timeCheck)
     self.lineEditSearch.returnPressed.connect(self.popTableList)
     self.lineEditSearchFrames.returnPressed.connect(self.popTableFrames)
-    
+
     self.checkDateTaskFunc()
     self.labelUser.setText(os.environ['rbhus_acl_user'])
     self.taskSearchTime = 0.0
     self.dateEditTaskFrom.setDate(QtCore.QDate.currentDate())
     self.dateEditTaskTo.setDate(QtCore.QDate.currentDate())
-    
+
     self.popTableList()
-    
+
     #self.centralwidget.resizeEvent  = self.resizeEvent
     #self.tableList.resizeEvent = self.resizeEvent
-    
-    
+
+
     #self.loadingGif = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/loading.gif"
     #self.loader = ImagePlayer(self.loadingGif,parent=self.tableList)
     #self.loader.hide()
-    
-    
+
+
   #def resizeEvent(self,event):
     #self.loader.resizeEvent(event)
     #self.tableList.resizeColumnsToContents()
-  
-  
-  
-  
+
+
+
+
   def report_thread(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -202,7 +203,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     pendingFs = []
     batchIds = []
     threadAvg = []
-    
+
     for x in selTasksDict:
       try:
         rows = db_conn.execute("select * from frames where id="+ str(x['id']), dictionary=True)
@@ -226,13 +227,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             except:
               threadAvg[dfs['fThreads']] = []
               threadAvg[dfs['fThreads']].append(dfs)
-        
-          
-              
-              
-    
-    
-  
+
+
+
+
+
+
+
   def checkDateTaskFunc(self):
     if(self.checkDateTask.isChecked()):
       self.dateEditTaskFrom.setEnabled(True)
@@ -242,9 +243,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.dateEditTaskFrom.setEnabled(False)
       self.dateEditTaskTo.setEnabled(False)
       self.groupBoxTaskDate.setVisible(False)
-  
-  
-  
+
+
+
   def previewTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -262,8 +263,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
               print("/usr/local/bin/djv_view -file_proxy 1/4 "+ str(fi) +" -file_seq_auto  true  -file_cache true")
               subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-file_seq_auto","true","-file_cache","true"])
             print(fi)
-          
-        
+
+
   def previewFrame(self):
     selFramesDict = self.selectedFrames()
     selFrames = {}
@@ -281,8 +282,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           elif(sys.platform.find("linux") >= 0):
             subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-file_seq_auto","false","-file_cache","true"])
           print(fi)
-            
-  
+
+
   def popupTask(self, pos):
     menu = QtGui.QMenu()
     test1Action = menu.addAction("activate")
@@ -292,11 +293,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test5Action = menu.addAction("open dir")
     test10Action = menu.addAction("exr2png(linux)")
     test11Action = menu.addAction("png2flv(linux)")
+    test12Action = menu.addAction("png2mp4(linux)")
     test6Action = menu.addAction("copy/submit")
     test7Action = menu.addAction("fastAssign enable")
     test8Action = menu.addAction("fastAssign disable")
     test9Action = menu.addAction("delete")
-    
+
     action = menu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
       self.activateTask()
@@ -320,9 +322,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.exr2png()
     if(action == test11Action):
       self.png2flv()
-      
-      
-      
+    if(action == test12Action):
+      self.png2mp4()
+
+
+
   def exr2png(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -350,6 +354,22 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         openP.wait()
         self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
+  def png2mp4(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    db_conn = dbRbhus.dbRbhus()
+    if(selTasksDict):
+      for x in selTasksDict:
+        tD = db_conn.getTaskDetails(x['id'])
+        oDir = tD['outDir']
+        self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+        openP = subprocess.Popen(png2mp4Cmd +" "+ str(oDir),shell=True)
+        openP.wait()
+        self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+
+
+
+
 
 
   def fastAssignFunc(self,e=0):
@@ -366,9 +386,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             tsks.fastAssign(enable=e)
       return(1)
     return(0)
-        
-        
-      
+
+
+
 
   def popupFrames(self, pos):
     selFramesDict = self.selectedFrames()
@@ -381,17 +401,17 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test10Action = menu.addAction("exr2png(linux)")
     test2Action = menu.addAction("kill")
     test6Action = menu.addAction("kill/hold")
-    
+
     action = menu.exec_(self.tableFrames.mapToGlobal(pos))
     if(action == test1Action):
       for x in selFramesDict:
-        
+
         fInfos = db_conn.getFrameInfo(x['id'],x['frameId'])
         if(fInfos):
           #print(fInfos)
           print("log file : "+ str(fInfos['logFile']))
           openP = subprocess.Popen([sys.executable,dirSelf.rstrip(os.sep) + os.sep + "rbhusReadText.py",fInfos['logFile']])
-          
+
     if(action == test2Action):
       self.stopFrame()
     if(action == test3Action):
@@ -422,7 +442,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             openP = subprocess.Popen(exr2pngCmd +" "+ str(f).rstrip().lstrip(),shell=True)
             openP.wait()
             self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-    
+
 
   def stopFrame(self):
     selFramesDict = self.selectedFrames()
@@ -435,7 +455,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       else:
         print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
     self.popTableFrames()
-        
+
   def killHoldFrame(self):
     selFramesDict = self.selectedFrames()
     selFrames = {}
@@ -447,7 +467,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       else:
         print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
     self.popTableFrames()
-  
+
   def rerunFrame(self):
     selFramesDict = self.selectedFrames()
     selFrames = {}
@@ -471,10 +491,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           conn.close()
         except:
           print("1 :Error connecting to db :"+ str(sys.exc_info()))
-          return(0)    
+          return(0)
     self.popTableFrames()
-    
-  
+
+
   def holdFrame(self):
     selFramesDict = self.selectedFrames()
     selFrames = {}
@@ -487,7 +507,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           selFrames[x['id']].append(x['frameId'])
       else:
         print(str(x['id']) +"%"+ str(x['frameId']) +" cannot hold frames that are running. please stop them before holding them")
-        
+
     if(selFrames):
       for x in selFrames.keys():
         ids = " or frameId=".join(selFrames[x])
@@ -499,17 +519,17 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           conn.close()
         except:
           print("1 :Error connecting to db :"+ str(sys.exc_info()))
-          return()    
+          return()
     self.popTableFrames()
 
-  
+
   def copySubmit(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
     for x in selTasksDict:
       selTasks.append(x['id'].lstrip("0"))
-    
-    
+
+
     if(len(selTasks) == 1):
       try:
         subprocess.Popen([sys.executable,submitCmd,str(selTasks[0])])
@@ -517,8 +537,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         print(str(sys.exc_info()))
     else:
       print("wtf . cannot copy from multiple tasks!")
-  
-  
+
+
   def editTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -534,7 +554,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         subprocess.Popen([sys.executable,editTaskCmd,str(selTasks[0])])
       except:
         print(str(sys.exc_info()))
-  
+
 
 
   def holdTask(self):
@@ -546,8 +566,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         t = rUtils.tasks(str(x['id']).lstrip("0"))
         t.holdTask()
     self.popTableList()
-    
- 
+
+
   def delTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -558,8 +578,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         t = rUtils.tasks(str(x['id']).lstrip("0"))
         t.remove()
     self.popTableList()
-    
-      
+
+
   def activateTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -567,8 +587,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       t = rUtils.tasks(str(x['id']).lstrip("0"))
       t.activateTask()
     self.popTableList()
-    
-    
+
+
   def rerunTask(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -579,35 +599,35 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         t = rUtils.tasks(str(x['id']).lstrip("0"))
         t.rerunTask()
     self.popTableList()
-    
 
-  
+
+
   def stopRunning(self,tableType):
     pass
-    
+
   def timeFramesCheck(self):
     if(self.timerFramesRefresh.isActive()):
       self.timerFramesRefresh.stop()
       self.timerFramesRefresh.start(2000)
     else:
       self.timerFramesRefresh.start(2000)
-      
-      
-  
+
+
+
   def timeCheck(self):
     cRefresh = self.checkRefresh.isChecked()
     if(cRefresh):
       self.startTimer()
     else:
       self.stopTimer()
-  
+
   def startTimer(self):
     self.timer.start(5000)
 
   def stopTimer(self):
     self.timer.stop()
-  
-  
+
+
   def popTableList(self):
     taskThread = QtCore.QThread(parent=self.form)
     #if(self.taskThreads):
@@ -622,8 +642,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           #print("terminating :"+ str(x))
       #self.taskThreads = []
       #time.sleep(0.5)
-          
-      
+
+
     taskThread.run = self.selectTasks
     taskThread.finished.connect(self.popTableList_thread)
     self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
@@ -631,8 +651,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.groupBoxTaskDate.setEnabled(False)
     taskThread.start()
     #self.taskThreads.append(taskThread)
-  
-  
+
+
   def selectTasks(self):
     self.pendFrames = {}
     self.selTasks = []
@@ -689,31 +709,31 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")",dictionary=True)
     except:
       print("Error connecting to db "+ str(sys.exc_info()))
-    
+
     if(rows):
       for row in rows:
         self.pendFrames[row['id']] = db_conn.getUnassignedFramesCount(row['id'])
     self.selTasks = rows
-    
+
     #self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
-  
-  
+
+
   def popTableList_thread(self):
     #self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
-    
+
     tSeletected = self.selectedTasks()
     tSelect = []
     if(tSeletected):
       for x in tSeletected:
         tSelect.append(x['id'])
-    
+
     self.tableList.clearContents()
     self.tableList.setSortingEnabled(False)
     self.tableList.resizeColumnsToContents()
     self.tableList.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
     colCount = 0
     rows = self.selTasks
-    
+
     if(not rows):
       self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.tableList.setColumnCount(0)
@@ -723,9 +743,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.groupBoxTaskDate.setEnabled(True)
       return()
     colCount = len(self.colNamesTask) + len(self.colNamesTaskXtra)
-      
+
     findRows = []
-    
+
     for row in rows:
       sFlag = 0
       for colName in self.colNamesTask:
@@ -734,12 +754,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       if(sFlag):
         findRows.append(row)
     rows = findRows
-     
-    
-    self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8)) 
+
+
+    self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
     self.tableList.setColumnCount(colCount)
     self.tableList.setRowCount(len(rows))
-    
+
     for x in range(0,colCount):
       item = QtGui.QTableWidgetItem()
       self.tableList.setHorizontalHeaderItem(x, item)
@@ -747,7 +767,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for x in self.colNamesTask:
       self.tableList.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
       indx = indx + 1
-      
+
     for x in self.colNamesTaskXtra:
       self.tableList.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
       indx = indx + 1
@@ -759,7 +779,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       #for colName in self.colNamesTask:
         #if(str(row[colName]).find(str(self.lineEditSearch.text())) >= 0):
           #sFlag = 1
-        
+
       #if(sFlag):
       item = QtGui.QTableWidgetItem()
       self.tableList.setVerticalHeaderItem(indx, item)
@@ -779,8 +799,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             self.tableList.selectRow(indx)
           colIndx = colIndx + 1
           continue
-        
-        
+
+
         self.tableList.setItem(indx, colIndx, item)
         self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
@@ -792,7 +812,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           totalPend = 0
           #pendFrames = dbconn.getUnassignedFramesCount(row['id'])
           try:
-            totalPend = self.pendFrames[row['id']][-1]['count(*)'] 
+            totalPend = self.pendFrames[row['id']][-1]['count(*)']
           except:
             pass
           self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(totalPend), None, QtGui.QApplication.UnicodeUTF8))
@@ -801,33 +821,33 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         self.tableList.setItem(indx, colIndx, item)
         self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
-      
+
       indx = indx + 1
 
     self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
     self.tableList.resizeColumnsToContents()
     self.tableList.setSortingEnabled(True)
-    
+
     self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
     self.tableList.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     self.groupBoxTask.setEnabled(True)
     self.groupBoxTaskDate.setEnabled(True)
     #self.popTableFrames()
-    
-    
+
+
   def refresh(self):
     self.popTableList()
     self.popTableFrames()
-    
-  
+
+
   def popTableFrames(self):
     hf = QtCore.QThread(parent=self.form)
     hf.run = self.selectFrames
     hf.finished.connect(self.popTableFrames_thread)
     self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.WaitCursor))
     hf.start()
-    
-  
+
+
   def selectFrames(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -836,14 +856,14 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for x in selTasksDict:
       selTasks.append(x['id'])
       padDict[re.sub("^0+","",x['id'])] = 4
-      
-    #print(padDict)  
+
+    #print(padDict)
     if(selTasks):
       ids = " or id = ".join(selTasks)
     else:
       self.timerFramesRefresh.stop()
       return()
-    
+
     statusToCheck = []
     cDone = self.checkDone.isChecked()
     cAssigned = self.checkAssigned.isChecked()
@@ -873,9 +893,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       statusToCheck.append(str(constants.framesUnassigned))
     if(cHung):
       statusToCheck.append(str(constants.framesHung))
-    
+
     #print(statusToCheck)
-    
+
     rows = []
     try:
       if(cAll):
@@ -891,17 +911,17 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       print(str(sys.exc_info()))
       self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
       self.timerFramesRefresh.stop()
-    self.sFrames = rows 
-  
-  
+    self.sFrames = rows
+
+
   def popTableFrames_thread(self):
     print("popTableFrames called!")
     self.tableFrames.clearContents()
     self.tableFrames.setSortingEnabled(False)
     self.tableFrames.resizeColumnsToContents()
     self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-    
-    
+
+
     rows = self.sFrames
     if(not rows):
       self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
@@ -918,11 +938,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       except:
         selFrames[x['id']] = []
         selFrames[x['id']].append(x['frameId'])
-    
+
     selFramesTid = selFrames.keys()
-    
+
     colCount = 0
-    
+
 
     selTasksDict = self.selectedTasks()
     selTasks = []
@@ -931,36 +951,36 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     for x in selTasksDict:
       selTasks.append(x['id'])
       padDict[re.sub("^0+","",x['id'])] = 4
-      
-    ##print(padDict)  
+
+    ##print(padDict)
     if(selTasks):
       ids = " or id = ".join(selTasks)
     else:
       self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.timerFramesRefresh.stop()
       return()
-    
+
     findRows = []
     for row in rows:
-      
+
       sFlag = 0
       for colName in self.colNamesFrames:
         if(str(row[colName]).find(str(self.lineEditSearchFrames.text())) >= 0):
           sFlag = 1
       if(sFlag):
         findRows.append(row)
-    rows = findRows   
-    
-    
+    rows = findRows
+
+
     if(not rows):
       self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.timerFramesRefresh.stop()
       return()
     colCount = len(self.colNamesFrames) + len(self.colNamesFramesXtra)
-      
+
     self.tableFrames.setColumnCount(colCount)
     self.tableFrames.setRowCount(len(rows))
-    
+
     for x in range(0,colCount):
       item = QtGui.QTableWidgetItem()
       self.tableFrames.setHorizontalHeaderItem(x, item)
@@ -1008,7 +1028,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         #print self.tableFrames.item(indx, colIndx).type()
         colIndx = colIndx + 1
-        
+
       for colName in self.colNamesFramesXtra:
         if(colName == "timeTaken"):
           item = QtGui.QTableWidgetItem()
@@ -1018,7 +1038,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             tT = 0
           if(not row['eTime']):
             row['eTime'] = 0
-            
+
           elif(not row['eTime'] and row['sTime'] and (row['status'] == constants.framesRunning)):
             tT = 0
           elif(row['sTime'] >= row['eTime']):
@@ -1028,13 +1048,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(tT).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
-        
+
         item = QtGui.QTableWidgetItem()
         self.tableFrames.setItem(indx, colIndx, item)
         self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         #print self.tableFrames.item(indx, colIndx).type()
         colIndx = colIndx + 1
-        
+
       if(str(row['id']).zfill(4) in selFramesTid):
         if(str(row['frameId']).zfill(int(padDict[str(row['id'])])) in selFrames[str(row['id']).zfill(int(padDict[str(row['id'])]))]):
           self.tableFrames.selectRow(indx)
@@ -1042,19 +1062,19 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       #print(row['eTime'] - row['sTime'])
 
     self.labelTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
-    
+
     self.tableFrames.resizeColumnsToContents()
     self.tableFrames.setSortingEnabled(True)
     QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
     self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     self.timerFramesRefresh.stop()
-    
-    
+
+
   def selectedTasks(self):
     rowstask=[]
     rowsSelected = []
     rowsModel = self.tableList.selectionModel().selectedRows()
-    
+
     for idx in rowsModel:
       rowsSelected.append(idx.row())
     colCount = len(self.colNamesTask)
@@ -1066,8 +1086,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         rowstask.append(singleRow)
 
     return(rowstask)
-    
-    
+
+
   def selectedFrames(self):
     rowsframes=[]
     rowsSelected = []
@@ -1082,7 +1102,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         rowsframes.append(singleRow)
 
     return(rowsframes)
-    
+
   def getHostIp(self, hostN):
     try:
       conn = db.connRbhus()
@@ -1095,11 +1115,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     except:
       print(str(sys.exc_info()))
       return(0)
-      
-      
-  
-      
-    
+
+
+
+
+
 if __name__ == "__main__":
   import sys
   app = QtGui.QApplication(sys.argv)
