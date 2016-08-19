@@ -1,11 +1,11 @@
 #!/bin/sh
-mkdir -p /mnt/tempprojdump
-mount stor1:/mnt/stor2/stor1/prod/projdump /mnt/tempprojdump
+mkdir -p /dell1-pool/tempprojdump
+mount stor1:/dell1-pool/stor2/stor1/prod/projdump /dell1-pool/tempprojdump
 
-rsync -av ./ /mnt/tempprojdump/pythonTestWindoze.DONOTDELETE/rbhus/ --delete --exclude=*.pyc --exclude=.git
-cd /mnt/tempprojdump/pythonTestWindoze.DONOTDELETE/rbhus/ ; ./clean.sh ; cd -
-chown root:root /mnt/tempprojdump/pythonTestWindoze.DONOTDELETE/rbhus/ -Rv
-chmod 755 /mnt/tempprojdump/pythonTestWindoze.DONOTDELETE/rbhus/ -Rv
-umount /mnt/tempprojdump
+rsync -av ./ /dell1-pool/tempprojdump/pythonTestWindoze.DONOTDELETE/rbhus/ --delete --exclude=*.pyc --exclude=.git
+cd /dell1-pool/tempprojdump/pythonTestWindoze.DONOTDELETE/rbhus/ ; ./clean.sh ; cd -
+chown root:root /dell1-pool/tempprojdump/pythonTestWindoze.DONOTDELETE/rbhus/ -Rv
+chmod 755 /dell1-pool/tempprojdump/pythonTestWindoze.DONOTDELETE/rbhus/ -Rv
+umount /dell1-pool/tempprojdump
 
 

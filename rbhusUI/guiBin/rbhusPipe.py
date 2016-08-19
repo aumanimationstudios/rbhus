@@ -74,7 +74,7 @@ except AttributeError:
 class saveSearch:
   searchPath = ''
   searchName = "new fav"
-  
+
 class ExtendedQLabel(QtGui.QLabel):
   clicked = QtCore.pyqtSignal()
 
@@ -83,7 +83,7 @@ class ExtendedQLabel(QtGui.QLabel):
 
   def mouseDoubleClickEvent(self, ev):
     self.clicked.emit()
-        
+
 class ImageWidget(QtGui.QPushButton):
   def __init__(self, imagePath, imageSize, parent):
     super(ImageWidget, self).__init__(parent)
@@ -94,7 +94,7 @@ class ImageWidget(QtGui.QPushButton):
   def paintEvent(self, event):
     painter = QtGui.QPainter(self)
     painter.drawPixmap(0, 0, self.picture)
-    
+
 
 
 
@@ -116,41 +116,41 @@ class ImagePlayer(QtGui.QWidget):
     self.movie.setCacheMode(QtGui.QMovie.CacheAll)
     self.movie.setSpeed(100)
     self.movie_screen.setMovie(self.movie)
-    
-    
+
+
     # Create the layout
     main_layout = QtGui.QVBoxLayout()
     main_layout.addWidget(self.movie_screen)
     self.setLayout(main_layout)
     self.movie.start()
-    
-    
+
+
   def resizeEvent(self, event):
     self.move((self.parent.geometry().width()-100)/2,(self.parent.geometry().height()-100)/2)
-    
+
   def showEvent(self,event):
     #self.movie.setEnabled(True)
     self.movie.start()
     #self.show()
-    
-    
+
+
   def hideEvent(self,event):
     self.movie.stop()
     #self.movie.setEnabled(False)
     #self.hide()
-    
-  
+
+
 #class workerPreviewItems(QtCore.QObject):
   #finished = QtCore.pyqtSignal()
   #dataPending = QtCore.pyqtSignal()
   #dataReady = QtCore.pyqtSignal(int,)
-  
-    
+
+
 class workerGetAsses(QtCore.QObject):
   finished = QtCore.pyqtSignal()
   dataPending = QtCore.pyqtSignal()
   dataReady = QtCore.pyqtSignal(list,dict,dict,dict,dict)
-  
+
   def __init__(self):
     super(workerGetAsses, self).__init__()
     self.asses = ()
@@ -163,20 +163,20 @@ class workerGetAsses(QtCore.QObject):
     self.assesLinked = ()
     self.isAssesLinked = False
     self.linkedProjects = ""
-  
+
   #def terminateEvent(self):
     #print("holy cow . quiting!!")
     #if(self.asses or self.absdict):
       #self.finished.emit()
     #else:
       #self.dataReady.emit(self.asses,self.absdict)
-    
+
   def getAsses(self):
     self.dataPending.emit()
     # print("in get asses")
     self.asses = ()
     self.assesLinked = ()
-    
+
     self.absdict = {}
     self.assesList = []
     self.assesNames = {}
@@ -202,7 +202,7 @@ class workerGetAsses(QtCore.QObject):
             print(str(sys.exc_info()))
       else:
         self.asses = ()
-      
+
       if(self.assesLinked):
         for x in range(0,len(self.assesLinked)):
           try:
@@ -213,7 +213,7 @@ class workerGetAsses(QtCore.QObject):
         self.assesLinked = ()
     except:
       print(str(sys.exc_info()))
-    
+
     self.finished.emit()
     # print("out get asses")
     if(self.asses):
@@ -222,40 +222,42 @@ class workerGetAsses(QtCore.QObject):
           self.assesList.append(self.asses[x]['path'])
           self.assesNames[self.asses[x]['path']] = self.asses[x]
           self.assesColor[self.asses[x]['path']] = utilsPipe.assPathColorCoded(self.asses[x])
-          if(sys.platform.find("linux") >= 0):
-            self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.asses[x]['path']])))
-          elif(sys.platform.find("win") >= 0):
-            self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.asses[x]['path']])))
+          self.assModifiedTime[self.asses[x]['path']] = 0
+          # if(sys.platform.find("linux") >= 0):
+          #   self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.asses[x]['path']])))
+          # elif(sys.platform.find("win") >= 0):
+          #   self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.asses[x]['path']])))
         except:
           print(str(sys.exc_info()))
-    
+
     if(self.assesLinked):
       for x in range(0,len(self.assesLinked)):
         try:
           self.assesList.append(self.assesLinked[x]['path'])
           self.assesNames[self.assesLinked[x]['path']] = self.assesLinked[x]
           self.assesColor[self.assesLinked[x]['path']] = utilsPipe.assPathColorCoded(self.assesLinked[x])
-          if(sys.platform.find("linux") >= 0):
-            self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.assesLinked[x]['path']])))
-          elif(sys.platform.find("win") >= 0):
-            self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.assesLinked[x]['path']])))
+          self.assModifiedTime[self.asses[x]['path']] = 0
+          # if(sys.platform.find("linux") >= 0):
+          #   self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.assesLinked[x]['path']])))
+          # elif(sys.platform.find("win") >= 0):
+          #   self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.assesLinked[x]['path']])))
         except:
           print(str(sys.exc_info()))
-        
+
     self.dataReady.emit(self.assesList,self.assesNames,self.assesColor,self.absdict,self.assModifiedTime)
-    
-    
+
+
 
 
 
 
 class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def setupUi(self, Form):
-    
+
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
     self.form = Form
     self.form.setWindowState(QtCore.Qt.WindowMaximized)
-    
+
     self.authL = authPipe.login()
     self.rbhusAssetEditCmdMod = ""
     self.username = None
@@ -273,21 +275,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listFirstTime = False
     self.previewItems = {}
     self.previewWidgets = []
-    
+
     self.searchDict = {}
     self.assFavDict = {}
     self.saveSearchArray = []
     self.assSearchArray = []
-    
+
     self.saveFile = ""
     self.saveFileShortcut = ""
     self.dbcon = dbPipe.dbPipe()
-    
+
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     self.form.setWindowIcon(icon)
-    
-    
+
+
 
     self.menuMine = QtGui.QMenu()
     self.mineCreatedAction = QtGui.QAction("created",self.menuMine,checkable=True)
@@ -311,18 +313,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
     except:
       pass
-    
-    
+
+
     iconRefresh = QtGui.QIcon()
     iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    
+
     iconAdd= QtGui.QIcon()
     iconAdd.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_new.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    
-    
-    
+
+
+
     self.assRefresh.setIcon(iconRefresh)
-    
+
 
     iconCancel = QtGui.QIcon()
     iconCancel.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -339,45 +341,45 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.pushAssetFavReset.setIcon(iconCancel)
     self.pushSearchFav.setIcon(iconRefresh)
     self.searchRefresh.setIcon(iconRefresh)
-    
+
     self.pushSearchFav.setIcon(iconAdd)
     self.pushSearchFavReset.setIcon(iconCancel)
 
-    
+
     self.iconDanger = QtGui.QIcon()
     self.iconDanger.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    
-    
-    
-    
+
+
+
+
     self.timerAssetsRefresh = QtCore.QTimer()
     self.timerAssetsRefresh.timeout.connect(self.listAssetsTimed)
-    
-    
-    
+
+
+
     self.pushLogout.setText("logout : "+ str(self.username))
     self.pushLogout.clicked.connect(self.logout)
-    
+
     self.wFlag = self.form.windowFlags()
     self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg"))
     self.trayIcon.show()
-    
+
     self.trayMenu = QtGui.QMenu()
-    
-    
-    
+
+
+
     #self.sliderPreview.valueChanged.connect(self.sliderZoom)
-    
-    
-    
+
+
+
     #self.tableWidget.resizeEvent
-    
+
     self.quitAction = self.trayMenu.addAction("quit")
     self.quitAction.triggered.connect(self.quitFunc)
-    
+
     self.trayIcon.setContextMenu(self.trayMenu)
     self.trayIcon.activated.connect(self.showMain)
-    
+
     self.actionNew_project.triggered.connect(self.rbhusPipeProjCreate)
     self.actionSet_project.triggered.connect(self.rbhusPipeSetProject)
     self.actionNew_seq_scn.triggered.connect(self.rbhusPipeSeqSceCreate)
@@ -386,9 +388,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.filterRefresh.clicked.connect(self.resetFilterDefault)
     self.assRefresh.clicked.connect(self.assRefreshPressed)
     self.previewEnabled.clicked.connect(self.previewCheck)
-    
-    
-    
+
+
+
     slineedit = self.comboStageType.lineEdit()
     slineedit.setReadOnly(True)
     self.comboStageType.editTextChanged.connect(self.listAssets)
@@ -396,7 +398,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.comboStageType.released.connect(self.pressedAction)
     #self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetStage.clicked.connect(self.setStageTypes)
-    
+
     linkedit = self.comboLinked.lineEdit()
     linkedit.setReadOnly(True)
     self.comboLinked.editTextChanged.connect(self.listAssets)
@@ -404,89 +406,89 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.comboStageType.released.connect(self.pressedAction)
     #self.comboStageType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetLinked.clicked.connect(self.setLinkedProj)
-    
+
     nlineedit = self.comboNodeType.lineEdit()
     nlineedit.setReadOnly(True)
     self.comboNodeType.editTextChanged.connect(self.listAssets)
     self.comboNodeType.view().activated.connect(self.pressedNodeType)
     #self.comboNodeType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetNode.clicked.connect(self.setNodeTypes)
-    
-    
+
+
     seqlineedit = self.comboSequence.lineEdit()
     seqlineedit.setReadOnly(True)
     self.comboSequence.editTextChanged.connect(self.setSeqSce)
     self.comboSequence.view().activated.connect(self.pressedSequence)
     #self.comboSequence.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetSeq.clicked.connect(self.setSequence)
-    
-    
+
+
     scelineedit = self.comboScene.lineEdit()
     scelineedit.setReadOnly(True)
     self.comboScene.editTextChanged.connect(self.listAssets)
     self.comboScene.view().activated.connect(self.pressedScene)
     #self.comboScene.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetScene.clicked.connect(self.setScene)
-    
-    
+
+
     filelineedit = self.comboFileType.lineEdit()
     filelineedit.setReadOnly(True)
     self.comboFileType.editTextChanged.connect(self.listAssets)
     self.comboFileType.view().activated.connect(self.pressedFileType)
     #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetFile.clicked.connect(self.setFileTypes)
-    
+
     asstypelineedit = self.comboAssType.lineEdit()
     asstypelineedit.setReadOnly(True)
     self.comboAssType.currentIndexChanged.connect(self.listAssets)
     #self.comboAssType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
     self.pushResetAsset.clicked.connect(self.setAssTypes)
-    
+
     self.comboFileType.currentIndexChanged.connect(self.listAssets)
     #self.comboFileType.completer().setCompletionMode(QtGui.QCompleter.PopupCompletion)
-    
+
     self.radioAllAss.clicked.connect(self.listAssets)
     self.checkLinkedProjects.clicked.connect(self.listAssets)
     # self.radioMineAss.toggled.connect(self.listAssets)
     self.radioMineAss.clicked.connect(self.popupMine)
-    
+
     self.lineEditSearch.returnPressed.connect(self.listAssets)
     self.lineEditSearch.textChanged.connect(self.listAssets)
-  
-    
+
+
     self.checkTags.clicked.connect(self.setTags)
     self.checkUsers.clicked.connect(self.setUsers)
     #self.checkCase.clicked.connect(self.listAssets)
     #self.checkWords.clicked.connect(self.listAssets)
-    
-    
+
+
     #self.form.closeEvent = self.closeEvent
-   
-    
+
+
     self.loadingGif = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/loading.gif"
     self.loader = ImagePlayer(self.loadingGif,parent=self.tableWidget)
     self.loader.hide()
-    
-    
+
+
     self.rbhusPipeSetProjDefault()
-    self.form.hideEvent = self.hideEvent
+    # self.form.hideEvent = self.hideEvent
     self.form.closeEvent = self.hideEvent
-    
+
     # set up the right-click context menu for tableWidget
     self.tableWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.tableWidget.customContextMenuRequested.connect(self.popupAss)
-    
+
     self.listWidgetSearch.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.listWidgetSearch.customContextMenuRequested.connect(self.popUpSearchFav)
-    
+
     self.listWidgetAssets.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.listWidgetAssets.customContextMenuRequested.connect(self.popUpAssetFav)
-    
-    
+
+
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.listAssets)
     self.checkRefresh.clicked.connect(self.timeCheck)
-    
+
 
 
     #self.checkFilterFunc()
@@ -496,7 +498,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.updateAll()
 
     self.listAssetsTimed()
-    
+
     self.searchRefresh.clicked.connect(self.pushResetSearchFunc)
     self.pushSearchFav.clicked.connect(self.saveSearchItem)
     self.listWidgetSearch.itemChanged.connect(self.searchItemChanged)
@@ -506,26 +508,26 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.timerAss.timeout.connect(self.listAssetsTimed)
     #self.timerAss.start(2000)
     #self.loadSearch()
-  
+
   #def sliderZoom(self,value):
     #self.labelZoomValue.setText(str(value) +"x")
     #self.previewCheck()
-  
-  
-  
+
+
+
   def pushResetSearchFunc(self):
     self.lineEditSearch.setText("")
     self.listAssets()
-  
+
   def setSeqSce(self):
     self.setScene()
     self.listAssets()
-  
+
   def resizeEvent(self,event):
     self.loader.resizeEvent(event)
     self.tableWidget.resizeColumnsToContents()
-    
-  
+
+
   def assRefreshPressed(self):
     self.firstTime = True
     self.listAssetsTimed()
@@ -533,38 +535,38 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def tableWidgetResizeContents(self):
     pass
     # self.tableWidget.resizeColumnsToContents()
-  
+
   def comboStageTypeEvent(self,event):
     print(event)
-  
+
   def listAssets(self):
     # self.listAssetsTimed()
     # self.listAssets_thread()
-    
+
     #print("list assets called")
     if(self.timerAssetsRefresh.isActive()):
       self.timerAssetsRefresh.stop()
       self.timerAssetsRefresh.start(2000)
     else:
       self.timerAssetsRefresh.start(2000)
-  
-  
-  
-  
+
+
+
+
   def timeCheck(self):
     cRefresh = self.checkRefresh.isChecked()
     if(cRefresh):
       self.startTimer()
     else:
       self.stopTimer()
-  
+
   def startTimer(self):
     self.timer.start(15000)
 
   def stopTimer(self):
     self.timer.stop()
-  
-  
+
+
   def checkFilterFunc(self):
     if(self.checkBoxFilter.isChecked()):
       self.groupBoxFilter.setVisible(True)
@@ -574,7 +576,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.groupBoxFilter.setVisible(False)
       self.considerFilter = False
       self.listAssets()
-    
+
   def popupAss(self, pos):
     listAsses = self.selectedAsses()
     print("selected asses : "+ str(len(listAsses)))
@@ -600,7 +602,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     addToFavAction = menu.addAction("add to shortcuts")
     #versionAction = menu.addAction("versioning")
     assEditAction = menu.addAction("edit")
-    
+
     assReviewAction = menu.addAction("review")
     menu.addMenu(menuCopy)
     menu.addMenu(menuProgress)
@@ -610,7 +612,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     assRender = menu.addAction("submit to render")
     assDeleteAction = menu.addAction("delete - database only")
     #assDeleteActionHard = menu.addAction("delete - database and disk")
-    
+
     action = menu.exec_(self.tableWidget.mapToGlobal(pos))
     #if(action == openFileAction):
       #self.openFileAss()
@@ -626,7 +628,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.delAss()
     #if(action == assDeleteActionHard):
       #self.delAss(hard=True)
-      
+
     # if(action == assCopyNew):
     #   self.copyNewAss()
     if(action == assRender):
@@ -661,9 +663,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for x in listAsses:
       utilsPipe.setWorkDone(x)
 
-      
-      
-      
+
+
+
   def popupMine(self):
     cursor =QtGui.QCursor()
     self.menuMine.exec_(cursor.pos())
@@ -683,7 +685,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def menuMineShow(self):
     self.menuMine.show()
 
-  
+
   def reviewAss(self):
     listAsses = self.selectedAsses()
     listedAss = listAsses[0]
@@ -692,9 +694,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     elif(sys.platform.find("linux") >= 0):
       subprocess.Popen(rbhusPipeReviewCmd +" --assetpath "+ listedAss,shell = True)
 
-  
-  
-  
+
+
+
   def renderAss(self):
     filesTorender = self.getFileAss()
     listAsses = self.selectedAsses()
@@ -710,13 +712,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       return(1)
     else:
       return(0)
-    
-      
-      
+
+
+
   def copyNewAss(self):
     pass
-    
-  
+
+
   def copyPathToClip(self):
     listAsses = self.selectedAsses()
     print(listAsses)
@@ -735,18 +737,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       pyperclip.copy(abspath)
 
 
-      
-  
+
+
   def copyPipePathToClip(self):
     listAsses = self.selectedAsses()
     print(listAsses)
     if(listAsses):
       x = listAsses[0]
       pyperclip.copy(x)
-  
- 
-  
-  
+
+
+
+
   def openFileAss(self):
     listAsses = self.selectedAsses()
     print(listAsses)
@@ -777,10 +779,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           else:
             import webbrowser
             webbrowser.open(filename)
-      
-      
-      
-    
+
+
+
+
   def getFileAss(self,favSearch=False):
     if(favSearch):
       i = self.listWidgetAssets.currentRow()
@@ -801,8 +803,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           return(0)
       else:
         return(0)
-      
-  
+
+
   def openFolderAss(self,favSearch = False):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     if(favSearch):
@@ -837,7 +839,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
               runCmd = runCmd.rstrip().lstrip()
               if(sys.platform.find("win") >= 0):
                 print(runCmd)
-                subprocess.Popen(runCmd,shell=True) 
+                subprocess.Popen(runCmd,shell=True)
               elif(sys.platform.find("linux") >= 0):
                 print(runCmd)
                 subprocess.Popen(runCmd,shell=True)
@@ -854,31 +856,31 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for x in os.environ.keys():
       if(x.find("rp_") >= 0):
         print(x +" : "+os.environ[x])
-         
-          
-        
-   
-  
+
+
+
+
+
   def newFolderAss(self):
     pass
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   def delAss(self,hard=False):
     wtf = self.messageBoxDelete(hard=hard)
     if(wtf):
       listAsses = self.selectedAsses()
-      
+
       for x in listAsses:
         print(x)
         if(str(x)):
           utilsPipe.assMarkForDelete(assPath=str(x))
       self.listAssets()
-  
-  
+
+
   def editAss(self):
     listAsses = self.selectedAsses()
     print(listAsses)
@@ -889,19 +891,19 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #for x in listAsses:
       #if(str(x)):
         #print(str(x))
-  
+
   def versionAss(self):
     selass = self.selectedAsses()
     subprocess.Popen(versionCmd +" --path \""+ selass[-1] +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
-    
-    
+
+
   def resetTemplateFiles(self):
     selass = self.selectedAsses()
     for x in range(0,len(selass)):
       print(selass[x])
       assDets = utilsPipe.getAssDetails(assPath = selass[x])
       utilsPipe.setAssTemplate(assDets)
-   
+
   def setLinkedProj(self):
     try:
       rows = os.environ["rp_proj_linkedProjects"].split(",")
@@ -931,9 +933,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboLinked.setModel(model)
       self.comboLinked.setEditText("default")
       return(1)
-    return(0)    
-  
-  
+    return(0)
+
+
   def itemChangedLinked(self,item):
     if(item.checkState() == QtCore.Qt.Checked):
       abrush = QtGui.QBrush()
@@ -949,20 +951,20 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setAlpha(0)
       abrush.setColor(color)
       item.setForeground(abrush)
-    
+
     linkedProjects = []
-    
+
     for i in range(0,self.comboLinked.model().rowCount()):
       if(self.comboLinked.model().item(i).checkState() == QtCore.Qt.Checked):
         linkedProjects.append(str(self.comboLinked.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(linkedProjects):
       self.comboLinked.setEditText(",".join(linkedProjects))
     else:
       self.comboLinked.setEditText("default")
-      
-      
+
+
   def pressedLinked(self, index):
     if(self.comboLinked.model().item(index.row()).checkState() != 0):
       self.comboLinked.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
@@ -991,12 +993,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboLinked.setEditText(",".join(linkedProjects))
     else:
       self.comboLinked.setEditText("default")
-    
-    
+
+
   def setStageTypes(self):
     rows = utilsPipe.getStageTypes()
     #defStage = utilsPipe.getDefaults("stageTypes")
-    self.comboStageType.clear()  
+    self.comboStageType.clear()
     indx = 0
     model = QtGui.QStandardItemModel(len(rows),1)
     if(rows):
@@ -1019,8 +1021,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboStageType.setModel(model)
       self.comboStageType.setEditText("default")
       return(1)
-    return(0)     
-  
+    return(0)
+
   def itemChangedStageType(self,item):
     if(item.checkState() == QtCore.Qt.Checked):
       abrush = QtGui.QBrush()
@@ -1036,19 +1038,19 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setAlpha(0)
       abrush.setColor(color)
       item.setForeground(abrush)
-    
+
     selectedStages = []
-    
+
     for i in range(0,self.comboStageType.model().rowCount()):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboStageType.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboStageType.setEditText(",".join(selectedStages))
     else:
       self.comboStageType.setEditText("default")
-  
+
   def pressedStageType(self, index):
     if(self.comboStageType.model().item(index.row()).checkState() != 0):
       self.comboStageType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
@@ -1072,22 +1074,22 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for i in range(0,self.comboStageType.model().rowCount()):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboStageType.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboStageType.setEditText(",".join(selectedStages))
     else:
       self.comboStageType.setEditText("default")
-        
-            
+
+
   def setScene(self):
     seqNames = str(self.comboSequence.currentText()).split(",")
-    
+
     self.comboScene.clear()
     scenes = {}
     indx =  0
     foundIndx = -1
-    
+
     for x in seqNames:
       rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=x)
       if(rows):
@@ -1098,8 +1100,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       for s in scenes.keys():
         if(s):
           sortedsc.append(s)
-     
-      sortedsc.sort()  
+
+      sortedsc.sort()
       model = QtGui.QStandardItemModel(len(scenes),1)
       for x in sortedsc:
         item = QtGui.QStandardItem(x)
@@ -1120,9 +1122,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboScene.setModel(model)
       self.comboScene.setEditText("default")
       return(1)
-    return(0)     
-        
-  
+    return(0)
+
+
   def itemChangedScenes(self,item):
     if(item.checkState() == QtCore.Qt.Checked):
       abrush = QtGui.QBrush()
@@ -1138,24 +1140,24 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setAlpha(0)
       abrush.setColor(color)
       item.setForeground(abrush)
-    
+
     selectedStages = []
-    
+
     for i in range(0,self.comboScene.model().rowCount()):
       if(self.comboScene.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboScene.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboScene.setEditText(",".join(selectedStages))
     else:
       self.comboScene.setEditText("default")
-  
-  
-  
+
+
+
   def pressedScene(self, index):
-    
-    
+
+
     if(self.comboScene.model().item(index.row()).checkState() != 0):
       self.comboScene.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
       #self.comboStageType.model().item(index.row()).setEnabled(False)
@@ -1178,14 +1180,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for i in range(0,self.comboScene.model().rowCount()):
       if(self.comboScene.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboScene.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboScene.setEditText(",".join(selectedStages))
     else:
       self.comboScene.setEditText("default")
-  
-  
+
+
   def setSequence(self):
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
     #try:
@@ -1195,23 +1197,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         #present = str(self.comboSequence.currentText())
     #except:
       #present = None
-    self.comboSequence.clear()  
+    self.comboSequence.clear()
     seq = {}
     indx =  0
     foundIndx = -1
-    
+
     for row in rows:
       seq[row['sequenceName']] = 1
-    
+
     model = QtGui.QStandardItemModel(len(seq),1)
-    
+
     if(seq):
       sortedsc = []
       for s in seq.keys():
         if(s):
           sortedsc.append(s)
-     
-      sortedsc.sort() 
+
+      sortedsc.sort()
       for row in sortedsc:
         item = QtGui.QStandardItem(row)
         if(sys.platform.find("linux") >=0):
@@ -1231,9 +1233,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboSequence.setModel(model)
       self.comboSequence.setEditText("default")
       return(1)
-    return(0)     
-  
-    
+    return(0)
+
+
   def itemChangedSequence(self,item):
     if(item.checkState() == QtCore.Qt.Checked):
       abrush = QtGui.QBrush()
@@ -1249,20 +1251,20 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setAlpha(0)
       abrush.setColor(color)
       item.setForeground(abrush)
-    
+
     selectedStages = []
-    
+
     for i in range(0,self.comboSequence.model().rowCount()):
       if(self.comboSequence.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboSequence.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboSequence.setEditText(",".join(selectedStages))
     else:
-      self.comboSequence.setEditText("default")  
-  
-  
+      self.comboSequence.setEditText("default")
+
+
   def pressedSequence(self, index):
     if(self.comboSequence.model().item(index.row()).checkState() != 0):
       self.comboSequence.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
@@ -1286,18 +1288,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for i in range(0,self.comboSequence.model().rowCount()):
       if(self.comboSequence.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboSequence.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboSequence.setEditText(",".join(selectedStages))
     else:
       self.comboSequence.setEditText("default")
-  
-  
+
+
   def setNodeTypes(self):
     rows = utilsPipe.getNodeTypes()
     #defStage = utilsPipe.getDefaults("nodeTypes")
-    self.comboNodeType.clear()  
+    self.comboNodeType.clear()
     indx = 0
     model = QtGui.QStandardItemModel(len(rows),1)
     if(rows):
@@ -1320,8 +1322,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboNodeType.setModel(model)
       self.comboNodeType.setEditText("default")
       return(1)
-    return(0)     
-  
+    return(0)
+
   def itemChangedNodeType(self,item):
     if(item.checkState() == QtCore.Qt.Checked):
       abrush = QtGui.QBrush()
@@ -1337,21 +1339,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setAlpha(0)
       abrush.setColor(color)
       item.setForeground(abrush)
-    
+
     selectedStages = []
-    
+
     for i in range(0,self.comboNodeType.model().rowCount()):
       if(self.comboNodeType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboNodeType.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboNodeType.setEditText(",".join(selectedStages))
     else:
       self.comboNodeType.setEditText("default")
-  
+
   def pressedNodeType(self, index):
-    
+
     if(self.comboNodeType.model().item(index.row()).checkState() != 0):
       self.comboNodeType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
       #self.comboStageType.model().item(index.row()).setEnabled(False)
@@ -1374,22 +1376,22 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for i in range(0,self.comboNodeType.model().rowCount()):
       if(self.comboNodeType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboNodeType.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboNodeType.setEditText(",".join(selectedStages))
     else:
       self.comboNodeType.setEditText("default")
-  
-  
-  
+
+
+
   def setFileTypes(self):
     rows = utilsPipe.getFileTypes()
     #defStage = utilsPipe.getDefaults("fileTypes")
     model = QtGui.QStandardItemModel(len(rows),1)
-    
+
     indx = 0
-    self.comboFileType.clear()  
+    self.comboFileType.clear()
     if(rows):
       for row in rows:
         item = QtGui.QStandardItem(row['type'])
@@ -1411,8 +1413,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.comboFileType.setModel(model)
       self.comboFileType.setEditText("default")
       return(1)
-    return(0)     
-    
+    return(0)
+
   def itemChangedFileType(self,item):
     if(item.checkState() == QtCore.Qt.Checked):
       abrush = QtGui.QBrush()
@@ -1428,22 +1430,22 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       color.setAlpha(0)
       abrush.setColor(color)
       item.setForeground(abrush)
-    
+
     selectedStages = []
-    
+
     for i in range(0,self.comboFileType.model().rowCount()):
       if(self.comboFileType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboFileType.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboFileType.setEditText(",".join(selectedStages))
     else:
       self.comboFileType.setEditText("default")
-  
+
   def pressedFileType(self, index):
-    
-    
+
+
     if(self.comboFileType.model().item(index.row()).checkState() != 0):
       self.comboFileType.model().item(index.row()).setCheckState(QtCore.Qt.Unchecked)
       #self.comboStageType.model().item(index.row()).setEnabled(False)
@@ -1466,24 +1468,24 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for i in range(0,self.comboFileType.model().rowCount()):
       if(self.comboFileType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboFileType.model().item(i).text()))
-      
+
     #print("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboFileType.setEditText(",".join(selectedStages))
     else:
       self.comboFileType.setEditText("default")
-    
-    
-    
+
+
+
     #rows = utilsPipe.getFileTypes()
-    #self.comboFileType.clear()  
+    #self.comboFileType.clear()
     #if(rows):
       #for row in rows:
         #self.comboFileType.addItem(_fromUtf8(row['type']))
       #return(1)
     #return(0)
-  
-  
+
+
   def setAssTypes(self):
     rows = utilsPipe.getAssTypes()
     #defStage = utilsPipe.getDefaults("assetTypes")
@@ -1494,7 +1496,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         #present = str(self.comboAssType.currentText())
     #except:
       #present = None
-    self.comboAssType.clear()  
+    self.comboAssType.clear()
     indx = 0
     foundIndx = -1
     if(rows):
@@ -1503,9 +1505,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         indx = indx + 1
       self.comboAssType.setEditText("default")
       return(1)
-    return(0)     
-  
-  
+    return(0)
+
+
   def messageBoxDelete(self,hard=False):
     msgbox = QtGui.QMessageBox()
     if(hard == True):
@@ -1524,13 +1526,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       return(1)
     else:
       return(0)
-    
+
     #if(ok == QtGui.QMessageBox.Yes):
       #return(1)
     #else:
       #return(0)
-  
-  
+
+
   def rbhusPipeProjCreate(self):
     p = QtCore.QProcess(parent=self.form)
     p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeProjCreate_"+ self.username +".log")
@@ -1538,11 +1540,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionNew_project.setEnabled(False)
     p.start(sys.executable,rbhusPipeProjCreateCmd.split())
     p.finished.connect(self.rbhusPipeProjCreateEnable)
-    
-    
-  
+
+
+
   def listAssetsTimed(self):
-    
+
     if(self.hf):
       if(self.hf.isRunning()):
         return(0)
@@ -1551,8 +1553,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     assget.whereDict = {}
     assget.dataReady.connect(self.listAssets_thread)
     assget.dataPending.connect(self.loaderShow)
-    
-    
+
+
     if(self.radioMineAss.isChecked()):
       if(self.mineAssignedAction.isChecked()):
         assget.whereDict['assignedWorker'] = str(self.username)
@@ -1573,13 +1575,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       assget.whereDict['fileType'] = str(self.comboFileType.currentText())
     if(self.comboAssType.currentText() != "default"):
       assget.whereDict['assetType'] = str(self.comboAssType.currentText())
-      
+
     if(self.checkLinkedProjects.isChecked()):
       #if(str(self.comboAssType.currentText()) == "library" or str(self.comboAssType.currentText()) == "default"):
       assget.isAssesLinked = True
       assget.linkedProjects = str(self.comboLinked.currentText())
       #assget.whereDict['assetType'] = "library"
-      
+
     searchItems = str(self.lineEditSearch.text())
     if(searchItems):
       if(not self.radioMineAss.isChecked()):
@@ -1591,11 +1593,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         assget.whereDict['assName'] = searchItems
       if(self.checkAssetPath.isChecked()):
         assget.whereDict['path'] = searchItems
-    
+
     self.hf.setTerminationEnabled(True)
     self.hf.run = assget.getAsses
     self.hf.start()
-    
+
   #def setAssesData(self,asslist,assdict):
     #self.oldasses = asslist
     #self.oldassesdict = assdict
@@ -1603,16 +1605,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       #self.listAssets_thread()
       #self.listFirstTime = False
       #self.loader.hide()
-      
+
     # self.listAssets_thread()
   def loaderShow(self):
     self.loader.show()
-    
+
 
   def tableWidgetScrollEvent(self,event):
     self.resizeColumnsToContents()
-  
-  
+
+
   def selectedAsses(self):
     rowstask=[]
     rowsSelected = []
@@ -1633,7 +1635,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         print(sys.exc_info())
     return(rowstask)
 
-  
+
   def listAssets_thread(self,assesList=None,assesNames=None,assesColor=None,assdict=None,assModifiedTime=None):
     self.timerAssetsRefresh.stop()
     selAsses = self.selectedAsses()
@@ -1642,8 +1644,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #assesdict = assdict
     self.tableWidget.clearContents()
     self.tableWidget.clear()
-    
-    
+
+
     self.tableWidget.setSortingEnabled(False)
     #self.tableWidget.resizeColumnsToContents()
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
@@ -1668,24 +1670,24 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           item.setText(textAss)
           item.setToolTip("CHECK OUT THE VERSION OPTION    };)\nEnable it by editing the asset")
           sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
-          
+
           item.setSizePolicy(sizePolicy)
           item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
           item.clicked.connect(lambda item=item : self.versionCheck(item))
-          
+
           self.tableWidget.setCellWidget(x,0,item)
         except:
           print(str(sys.exc_info()))
-        
 
-        
+
+
         try:
           itemAss = QtGui.QTableWidgetItem()
           itemAss.setText(str(assesNames[assesList[x]]['assignedWorker']))
           self.tableWidget.setItem(x,1,itemAss)
         except:
           print(str(sys.exc_info()))
-          
+
         try:
           itemAss = QtGui.QTableWidgetItem()
           itemAss.setText(str(assesNames[assesList[x]]['createdUser']))
@@ -1699,22 +1701,22 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.tableWidget.setItem(x,3,itemAss)
         except:
           print(str(sys.exc_info()))
-        
+
         try:
           itemTag = QtGui.QTableWidgetItem()
           itemTag.setText(str(assesNames[assesList[x]]['tags']))
           self.tableWidget.setItem(x,4,itemTag)
         except:
           print(str(sys.exc_info()))
-        
-        
+
+
         try:
           itemModified = QtGui.QTableWidgetItem()
           itemModified.setText(str(assModifiedTime[assesList[x]]))
           self.tableWidget.setItem(x,5,itemModified)
         except:
           print(str(sys.exc_info()))
-        
+
         try:
           itemModified = QtGui.QTableWidgetItem()
           if(assesNames[assesList[x]]['versioning'] == 0):
@@ -1749,17 +1751,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           print(str(sys.exc_info()))
 
 
-        
+
         try:
           previewName = "preview"
           self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
         except:
           print(str(sys.exc_info()))
-        
+
         if(assesList[x] in selAsses):
           self.tableWidget.selectRow(x)
-        
-    
+
+
     self.tableWidget.resizeColumnsToContents()
     self.form.statusBar().showMessage("total : "+ str(len(assesList)))
     #self.timerAssetsRefresh.stop()
@@ -1767,17 +1769,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
     self.previewCheck()
     self.loader.hide()
-    
 
-  
-  
+
+
+
   def previewCheck(self):
     self.previewWidgets = []
     if(self.previewEnabled.isChecked()):
       if(self.previewItems):
         x = 0
         while(1):
-          try:  
+          try:
             self.previewWidgets.append(ImageWidget(self.previewItems[x],64,self.tableWidget))
             self.previewWidgets[x].setToolTip("click on the image")
             self.tableWidget.setCellWidget(x,9,self.previewWidgets[x])
@@ -1787,14 +1789,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           x = x+1;
           if(x >= len(self.previewItems)):
             break;
-    
+
   def imageWidgetClicked(self,*args):
     index = args[0]
     father = args[1]
     print(args)
     import webbrowser
     webbrowser.open(father.imagePath)
-    
+
 
   def versionCheck(self,*args):
     doc = QtGui.QTextDocument()
@@ -1803,8 +1805,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     a = hgmod.hg(text)
     print("in versionCheck : "+ str(os.getcwd()))
     #a._init()
-    
-  
+
+
   def rbhusPipeSeqSceCreate(self):
     p = QtCore.QProcess(parent=self.form)
     p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeSeqSceCreate_"+ self.username +".log")
@@ -1812,8 +1814,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionNew_seq_scn.setEnabled(False)
     p.start(sys.executable,rbhusPipeSeqSceCreateCmd.split())
     p.finished.connect(self.rbhusPipeSeqSceCreateEnable)
-  
-  
+
+
   def rbhusPipeSeqSceEdit(self):
     p = QtCore.QProcess(parent=self.form)
     p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeSeqSceEdit_"+ self.username +".log")
@@ -1821,10 +1823,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionEdit_seq_scn.setEnabled(False)
     p.start(sys.executable,rbhusPipeSeqSceEditCmd.split())
     p.finished.connect(self.rbhusPipeSeqSceEditEnable)
-  
-  
-  
-  
+
+
+
+
   def rbhusPipeAssetCreate(self):
     p = QtCore.QProcess(parent=self.form)
     p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAssetCreate_"+ self.username +".log")
@@ -1832,37 +1834,37 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.pushNewAsset.setEnabled(False)
     p.start(sys.executable,rbhusPipeAssetCreateCmd.split())
     p.finished.connect(self.rbhusPipeAssCreateEnable)
-    
-    
+
+
   def rbhusPipeAssetEdit(self):
     p = QtCore.QProcess(parent=self.form)
     p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAssetEdit_"+ self.username +".log")
     p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeAssetEdit_"+ self.username +".err")
     p.start(sys.executable,self.rbhusAssetEditCmdMod.split())
     p.finished.connect(self.listAssets)
-    
-  
+
+
   def setTags(self):
     tags = utilsPipe.getTags(projName=os.environ['rp_proj_projName'])
     outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     if(outTags == ""):
       outTags = str(self.lineEditSearch.text()).rstrip().lstrip()
     self.lineEditSearch.setText(_fromUtf8(outTags))
-  
-  
+
+
   def setUsers(self):
     users = utilsPipe.getUsers()
     outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     if(outUsers == ""):
       outUsers = str(self.lineEditSearch.text()).rstrip().lstrip()
     self.lineEditSearch.setText(_fromUtf8(outUsers))
-  
-  
+
+
   def rbhusPipeSetProjDefault(self):
     projFile = 0
     if(os.path.exists(home.rstrip(os.sep) + os.sep +"projSet.default")):
       projFile = open(home.rstrip(os.sep) + os.sep +"projSet.default","r")
-    
+
     if(projFile):
       for x in projFile.readlines():
         if(x):
@@ -1872,22 +1874,22 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           for y in os.environ.keys():
             if(y.find("rp_") >= 0):
               print(y +":"+ str(os.environ[y]))
-            
+
           self.updateAll()
           self.saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
           self.saveFileShortcut = home.rstrip(os.sep) + os.sep +"rbhusShort.default_"+ os.environ['rp_proj_projName']
           self.loadSearch()
           self.loadAssetShortcut()
           break
-      
-        
-    
-  
+
+
+
+
   def rbhusPipeSetProject(self):
     projFile = open(home.rstrip(os.sep) + os.sep +"projSet.default","w")
-    
-    
-    
+
+
+
     projNames = []
     projects = utilsPipe.getProjDetails(status="all")
     for x in projects:
@@ -1896,26 +1898,26 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     print(projN)
     if(not projN):
       return(0)
-    
-    
+
+
     projFile.writelines(projN)
     projFile.close()
-    
+
     utilsPipe.exportProj(projN)
     self.form.setWindowTitle(projN)
     self.actionSet_project.setText("set project ("+ projN +")")
     for x in os.environ.keys():
       if(x.find("rp_") >= 0):
         print(x +":"+ str(os.environ[x]))
-      
+
     self.updateAll()
     self.saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
     self.saveFileShortcut = home.rstrip(os.sep) + os.sep +"rbhusShort.default_"+ os.environ['rp_proj_projName']
     self.loadSearch()
     self.loadAssetShortcut()
-    
-    
-    
+
+
+
   def saveSearchItem(self):
     assetTypeSave = str(self.comboAssType.currentText())
     seqSave = str(self.comboSequence.currentText())
@@ -1951,7 +1953,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
                  searchBoxSave +"###"+ \
                  isAssetNameSave +"###"+ \
                  isAssetPathSave
-               
+
     print(saveString)
     if(not self.searchDict.has_key(saveString)):
       saveFileFd = open(self.saveFile,"w")
@@ -1967,12 +1969,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       pickle.dump(self.saveSearchArray,saveFileFd)
       saveFileFd.flush()
       saveFileFd.close()
-                   
+
     #for x in range(0,self.listWidgetSearch.count()):
       #item = self.listWidgetSearch.item(x)
       #print(":"+ str(item.text()))
-    
-    
+
+
   def searchItemChanged(self,item):
     print(item.text())
     indexChanged = self.listWidgetSearch.indexFromItem(item).row()
@@ -1981,7 +1983,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     pickle.dump(self.saveSearchArray,saveFileFd)
     saveFileFd.flush()
     saveFileFd.close()
-    
+
   def searchItemActivate(self):
     indexChanged = self.listWidgetSearch.currentRow()
     print(indexChanged)
@@ -1993,63 +1995,63 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.comboStageType.setEditText(s[3])
     self.comboNodeType.setEditText(s[4])
     self.comboFileType.setEditText(s[5])
-    
-    
+
+
     if(s[6] == "True"):
       self.radioMineAss.setChecked(True)
     else:
       self.radioMineAss.setChecked(False)
-    
+
     if(s[7] == "True"):
       self.mineAssignedAction.setChecked(True)
     else:
       self.mineAssignedAction.setChecked(False)
-    
+
     if(s[8] == "True"):
       self.mineCreatedAction.setChecked(True)
     else:
       self.mineCreatedAction.setChecked(False)
-    
+
     if(s[9] == "True"):
       self.radioAllAss.setChecked(True)
     else:
       self.radioAllAss.setChecked(False)
-      
+
     if(s[10] == "True"):
       self.checkLinkedProjects.setChecked(True)
     else:
       self.checkLinkedProjects.setChecked(False)
-      
+
     self.comboLinked.setEditText(s[11])
-    
+
     if(s[12] == "True"):
       self.checkTags.setChecked(True)
     else:
       self.checkTags.setChecked(False)
-      
+
     if(s[13] == "True"):
       self.checkUsers.setChecked(True)
     else:
       self.checkUsers.setChecked(False)
-      
+
     self.lineEditSearch.setText(s[14])
-    
+
     if(s[15] == "True"):
       self.checkAssetName.setChecked(True)
     else:
       self.checkAssetName.setChecked(False)
-    
+
     if(s[16] == "True"):
       self.checkAssetPath.setChecked(True)
     else:
       self.checkAssetPath.setChecked(False)
-    
+
     self.listAssets()
-    
-    
-    
-  
-  
+
+
+
+
+
   def loadSearch(self):
     print(self.saveFile)
     self.listWidgetSearch.clear()
@@ -2067,10 +2069,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.listWidgetSearch.addItem(item)
           self.saveSearchArray.append(itemsForSaveSearch[x])
           self.searchDict[itemsForSaveSearch[x].searchPath] = 1
-      
+
         saveFileFd.close()
-    
-  
+
+
   def deleteSearch(self):
     i = self.listWidgetSearch.currentRow()
     print("current row selected :"+ str(i))
@@ -2081,8 +2083,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     saveFileFd.flush()
     saveFileFd.close()
     self.loadSearch()
-    
-    
+
+
   def clearSearchFav(self):
     self.listWidgetSearch.clear()
     self.saveSearchArray = []
@@ -2090,34 +2092,34 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     saveFileFd = open(self.saveFile,"w")
     pickle.dump(self.saveSearchArray,saveFileFd)
 
-  
+
   def popUpSearchFav(self,pos):
     menu = QtGui.QMenu()
     filterSearchAction = menu.addAction("filter")
     deleteSearchAction = menu.addAction("delete")
     action = menu.exec_(self.listWidgetSearch.mapToGlobal(pos))
-    
+
     if(action == filterSearchAction):
       self.searchItemActivate()
-    
+
     if(action == deleteSearchAction):
       self.deleteSearch()
-      
-      
+
+
   def popUpAssetFav(self,pos):
     menu = QtGui.QMenu()
     openSearchAction = menu.addAction("open")
     deleteSearchAction = menu.addAction("delete")
     action = menu.exec_(self.listWidgetAssets.mapToGlobal(pos))
-    
+
     if(action ==  openSearchAction):
       self.openFolderAss(favSearch = True)
-    
+
     if(action == deleteSearchAction):
       self.deleteFavAss()
-    
-    
-    
+
+
+
   def deleteFavAss(self):
     i = self.listWidgetAssets.currentRow()
     print("current row selected :"+ str(i))
@@ -2128,9 +2130,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     saveFileFd.flush()
     saveFileFd.close()
     self.loadAssetShortcut()
-    
-    
-  
+
+
+
   def assetFavSave(self):
     asses = self.selectedAsses()
     if(asses):
@@ -2147,8 +2149,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
           item.setText(str(asses[x]))
           self.listWidgetAssets.addItem(item)
-  
-  
+
+
   def loadAssetShortcut(self):
     self.listWidgetAssets.clear()
     self.assFavDict = {}
@@ -2164,21 +2166,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
           item.setText(str(self.assSearchArray[x]))
           self.listWidgetAssets.addItem(item)
-        
-      
 
-    
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
   def rbhusPipeProjCreateEnable(self,exitStatus):
     self.actionNew_project.setEnabled(True)
     self.updateAll()
-  
-  
-  
+
+
+
   def updateAll(self):
     self.setLinkedProj()
     self.setStageTypes()
@@ -2189,8 +2191,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.setScene()
     self.setAssTypes()
     self.listAssets()
-    
-  
+
+
   def resetFilterDefault(self):
     self.default = True
     self.setStageTypes()
@@ -2201,51 +2203,52 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.setScene()
     self.setAssTypes()
     self.default = False
-  
+
   def rbhusPipeAssCreateEnable(self,exitStatus):
     self.pushNewAsset.setEnabled(True)
-  
+
   def rbhusPipeSeqSceCreateEnable(self,exitStatus):
     self.actionNew_seq_scn.setEnabled(True)
     self.updateAll()
-  
+
   def rbhusPipeSeqSceEditEnable(self,exitStatus):
     self.actionEdit_seq_scn.setEnabled(True)
     # self.updateAll()
-    
-  
-  
+
+
+
   def closeEvent(self,event):
     event.ignore()
     QtGui.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray .\nPlease quit from the tray icon if you really want to quit!")
-    self.form.setVisible(False) 
-    
+    self.form.setVisible(False)
+
   def hideEvent(self,event):
-    
-    self.form.setVisible(False) 
-    self.form.setWindowFlags(self.wFlag & QtCore.Qt.Tool)
+
+    # self.form.setVisible(False)
+    self.form.showMinimized()
+    # self.form.setWindowFlags(self.wFlag & QtCore.Qt.Tool)
     event.ignore()
-    
-   
-  
+
+
+
   def showMain(self,actReason):
     if(actReason == 2):
       self.form.setVisible(True)
       self.form.setWindowFlags(self.wFlag)
-    
+
 
   def logout(self):
     self.authL.logout()
     QtCore.QCoreApplication.instance().quit()
-  
+
   def quitFunc(self):
     QtCore.QCoreApplication.instance().quit()
-  
-  
+
+
   def center(self):
     Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
-      
-    
+
+
 if __name__ == "__main__":
   import sys
   app = QtGui.QApplication(sys.argv)
