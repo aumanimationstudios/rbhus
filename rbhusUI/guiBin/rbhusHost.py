@@ -161,7 +161,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       self.hostStop()
     if(action == test5Action):
       self.hostClientKill()
-      self.hostClientStart()
+      # self.hostClientStart()
     if(action == test6Action):
       self.hostClientKill()
     if(action == test14Action):

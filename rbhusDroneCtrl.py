@@ -213,7 +213,8 @@ def atUrService():
     if(msg == "RESTARTSYS"):
       RESTARTSYS(clientSocket)
     if(msg == "CLIENTSTART"):
-      CLIENTSTART(clientSocket)
+      pass
+      # CLIENTSTART(clientSocket)
     if(msg == "CLEANUPPIDS"):
       CLEANUPPIDS(clientSocket)
     if(msg == "SHUTDOWNSYS"):
