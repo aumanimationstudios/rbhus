@@ -99,7 +99,7 @@ dF.close()
 RENDERCMD = RENDERCMD +" --python "+ defaultF
 
 if(layer != "default"):
-  
+
   layerScript = "import bpy\nfor x in bpy.context.scene.render.layers:\n  bpy.context.scene.render.layers[x.name].use = False\n\n"
   lay = layer.split(",")
   for l in lay:
@@ -131,13 +131,9 @@ if(outFile.find("default") < 0):
   RENDERCMD = RENDERCMD +" -o "+ outFile
 RENDERCMD = RENDERCMD + fr
 
-
+os.system("chmod 777 {0} {1} {2} {3} {4} >& /dev/null".format(layerScF,cameraF,resF,defaultF,outputNoutF))
 
 print(RENDERCMD)
 
 
 sys.exit(0)
-
-
-
-
