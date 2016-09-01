@@ -260,8 +260,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             if(sys.platform.find("win") >= 0):
               subprocess.Popen(["x:/standard/template/djv-0.8.3-x64/bin/djv_view.exe -file_proxy 1/4 ",str(fi.replace("\\","/"))," -file_seq_auto ","true"," -file_cache ","true"])
             elif(sys.platform.find("linux") >= 0):
-              print("/usr/local/bin/djv_view -file_proxy 1/4 "+ str(fi) +" -file_seq_auto  true  -file_cache true")
-              subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-file_seq_auto","true","-file_cache","true"])
+              print("/usr/local/bin/djv_view -file_proxy 1/4 "+ str(fi) +" -seq Off  -file_cache true")
+              subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-seq","Range","-file_cache","true"])
             print(fi)
 
 
@@ -280,7 +280,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           if(sys.platform.find("win") >= 0):
             subprocess.Popen(["x:/standard/template/djv-0.8.3-x64/bin/djv_view.exe",str(fi.replace("\\","/")),"-file_seq_auto","false","-file_cache","true"])
           elif(sys.platform.find("linux") >= 0):
-            subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-file_seq_auto","false","-file_cache","true"])
+            subprocess.Popen(["/usr/local/bin/djv_view",str(fi),"-seq","Off","-file_cache","true"])
           print(fi)
 
 
