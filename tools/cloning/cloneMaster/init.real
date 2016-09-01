@@ -21,7 +21,7 @@ if(not cInfo):
   sys.exit(0)
 
 cloneType = cInfo['cloneType']
-cType = constants.cloneType[cloneType] 
+cType = constants.cloneType[cloneType]
 clone = cInfo['clone']
 
 if(not clone or not cType):
@@ -37,9 +37,9 @@ def updateCloneStatus(status):
     sys.exit(1)
 
 def getMacAddress():
-  for line in os.popen("ifconfig"): 
-    if line.find('Ether') > -1: 
-      mac = line.split()[4] 
+  for line in os.popen("ifconfig"):
+    if line.find('Ether') > -1:
+      mac = line.split()[4]
       return mac
 
 
@@ -49,7 +49,7 @@ def updateGrub():
     os.system("cp -avf /mnt/cloneMaster/config/grub.Gentoo /mnt/realroot/etc/default/grub")
   if(str(platform.dist()[0]).upper() == 'UBUNTU'):
     os.system("cp -avf /mnt/cloneMaster/config/grub.Ubuntu /mnt/realroot/etc/default/grub")
-    
+
 
   os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot."+ cType +"")
 
@@ -57,7 +57,7 @@ def updateGrub():
 def grubSetDefault(title):
   os.system("echo \""+ title +"\" > /mnt/realroot/tmp/grub.setDefault")
   os.system("chroot /mnt/realroot/ < /mnt/cloneMaster/config/chroot/chroot.grubSetDefault")
-  
+
 
 def mountSysPaths():
   os.system("mount -t proc none /mnt/realroot/proc")
@@ -68,13 +68,13 @@ def mountSysPaths():
 # check if anything is initiated! . if not exit gracefully
 
 if((cInfo['cloneStatus'] != constants.cloneStatusPending) and (cInfo['cloneStatus'] != constants.cloneStatusRunning)):
-  print("nothing to do") 
+  print("nothing to do")
   sys.exit(0)
 
 updateCloneStatus(constants.cloneStatusRunning)
 
-  
-  
+
+
 if(not os.path.exists(cInfo['cloneDisk'])):
   updateCloneStatus(constants.cloneStatusFail)
   sys.exit(1)
@@ -105,11 +105,7 @@ if(clone == constants.cloneGrubUpdate):
     os.system("rm -fv "+ str(myPxebootFile))
     os.system("reboot -f")
   updateGrub()
-  #if(os.path.exists("/mnt/realroot/boot/grub/grub.default")):
-    #os.system("cp -avf /mnt/realroot/boot/grub/grub.default /mnt/realroot/boot/grub/grub.cfg")
-  #else:
-    #os.system("cp -avf /mnt/realroot/boot/grub/grub.cfg /mnt/realroot/boot/grub/grub.default")
-    
+  
   menus = os.popen("grep ^menuentry /mnt/realroot/boot/grub/grub.cfg | gawk -F \"'\" '{print $2}'","r")
   menuenties = [x.rstrip().lstrip() for x in menus.readlines()]
   for x in menuenties:
@@ -145,4 +141,3 @@ elif(clone == constants.cloneClone):
     os.system("rm -f "+ str(myPxebootFile))
     updateCloneStatus(constants.cloneStatusDone)
     os.system("sync;reboot -f")
-

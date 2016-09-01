@@ -93,8 +93,8 @@ def sigHandle(sigNum, frame):
     pass
   clientQuit(myPid)
   os._exit(0)
-  
-  
+
+
 
 def getProcessLastKids(ppid,lastKids):
   try:
@@ -104,7 +104,7 @@ def getProcessLastKids(ppid,lastKids):
     return(0)
 
   try:
-    pidKids = pidDets.get_children(recursive=True)
+    pidKids = pidDets.children(recursive=True)
   except:
     logClient.debug(str(sys.exc_info()))
     return(0)
@@ -117,7 +117,7 @@ def getProcessLastKids(ppid,lastKids):
 
 def getallkids(mpid,leafPids,branchPids):
   mmpid = psutil.Process(int(mpid))
-  mylasts = mmpid.get_children()
+  mylasts = mmpid.children()
   if(not mylasts):
     leafPids.append(mpid)
     return()
@@ -134,7 +134,7 @@ def clientQuit(ppid):
     pparents.remove(ppid)
   except:
     pass
-  
+
   if(lkids):
     for x in lkids:
       try:
@@ -150,7 +150,7 @@ def clientQuit(ppid):
       except:
         logClient.debug(str(sys.exc_info()))
   return()
-      
+
 
 # Get the host info and update the database.
 def init():
@@ -163,18 +163,18 @@ def init():
     return(1)
   return(0)
 
-def getMacAddress(): 
+def getMacAddress():
   mac = ""
-  if(sys.platform.find('win') >= 0): 
-    for line in os.popen("ipconfig /all"): 
-      if line.lstrip().startswith('Physical Address'): 
-        mac = line.split(':')[1].strip().replace('-',':') 
-        break 
-  else: 
-    for line in os.popen("ifconfig"): 
-      if line.find('Ether') > -1: 
-        mac = line.split()[4] 
-        break 
+  if(sys.platform.find('win') >= 0):
+    for line in os.popen("ipconfig /all"):
+      if line.lstrip().startswith('Physical Address'):
+        mac = line.split(':')[1].strip().replace('-',':')
+        break
+  else:
+    for line in os.popen("ifconfig"):
+      if line.find('Ether') > -1:
+        mac = line.split()[4]
+        break
   return(mac)
 
 
@@ -191,7 +191,7 @@ def checkHostNameDb():
     realName = det['name']
     if(sys.platform.find("win") >= 0):
       os.system("wmic computersystem where name=\"%COMPUTERNAME%\" call rename name=\""+ str(realName) +"\"")
-    
+
 
 def hostUpdater():
   if(sys.platform.find("linux") >=0):
@@ -240,7 +240,7 @@ def hostUpdaterSys():
               db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateDone) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
             else:
               db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFail) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
-              
+
     except:
       logClient.debug(str(sys.exc_info()))
       db_conn.execute("update hostSystem set systemUpdateStatus="+ str(constants.hostSystemUpdateFail) +" where ip='"+ str(ipAddr) +"' and hostName='"+ str(hostname) +"'")
@@ -288,7 +288,7 @@ def getHostNameIP():
     except:
       logClient.debug(str(sys.exc_info()))
       time.sleep(1)
-    
+
 
 def getAssignedFrames(qAssigned):
   if(sys.platform.find("linux") >=0):
@@ -348,9 +348,9 @@ def runFrames(qRun,frameScrutiny):
         totalPids = eCpus
       else:
         totalPids = 1
-    
-    
-    
+
+
+
 
     while(1):
       a = 1
@@ -415,10 +415,10 @@ def runFrames(qRun,frameScrutiny):
       cpuAffiToSend.append(u)
     cpuMax = u + 1
       #cpuAffi.append(x)
-      
+
     processFrames.append(multiprocessing.Process(target=_execFrames,args=(frameInfo,frameScrutiny,cpuAffiToSend,)))
     processFrames[-1].start()
-    
+
     while(1):
       time.sleep(1)
       a = 1
@@ -438,7 +438,7 @@ def runFrames(qRun,frameScrutiny):
 def _execFrames(frameInfo,frameScrutiny,cpuAffi):
   proc = multiprocessing.Process(target=execFrames,args=(frameInfo,frameScrutiny,))
   proc.start()
-  
+
   processFramesId = psutil.Process(proc.pid)
   #cpuAffi = []
   #for ca in range(0,int(frameInfo['fThreads'])):
@@ -451,10 +451,10 @@ def execFrames(frameInfo,frameScrutiny):
   db_conn = dbRbhus.dbRbhus()
   batchedFrames = db_conn.getBatchedFrames(frameInfo['batchId'])
   hostname,ipAddr = getHostNameIP()
-  
+
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ "-".join(batchedFrames))
-  
+
   logClient.debug(str(os.getpid()) + ": execFrames func : "+ str(frameInfo['fileName']))
   hostEff = getEffectiveDetails(db_conn)
   if(hostEff != 0):
@@ -503,7 +503,7 @@ def execFrames(frameInfo,frameScrutiny):
       db_conn.execute("update frames set logFile=\'"+ str(logFile) +"\' where batchId=\'"+ str(frameInfo['batchId']) +"\'")
     except:
       logClient.debug("update logFile  : "+ str(sys.exc_info()))
-      
+
     os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
     if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]
@@ -539,7 +539,7 @@ def execFrames(frameInfo,frameScrutiny):
 
 
 
-    
+
     try:
       if(sys.platform.find("win") >= 0):
         runCmd = os.popen('python.exe '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
@@ -788,7 +788,7 @@ def rbhusLog(lframeInfo):
       eT = fIn['eTime']
       sT = fIn['sTime']
       tDelta = int((eT - sT).total_seconds())
-    
+
     sha256 = hashlib.sha256(lframeInfo['fileName'])
     try:
       dbconnLog.execute("insert into tasksLog \
@@ -880,11 +880,11 @@ def writeFramePidFile(pidLock,taskId,frameId,pids):
         taskPidD.close()
       except IOError:
         pass
-  
+
       for pid in pids:
         if(str(pid).rstrip().lstrip() and str(pid).rstrip().lstrip() != str(os.getpid())):
           pidDict[str(pid).rstrip().lstrip()] = 0
-  
+
       taskPidD = open(taskPidF,"w")
       if(pidDict):
         for inPid in pidDict.keys():
@@ -1103,7 +1103,7 @@ def snoopFrames(fDets):
   logClient.debug(str(frameInfo['id']) +" : "+ str(frameInfo['frameId']))
   try:
     while(1):
-      
+
       lastKids = []
       vmSize = 0
       getProcessLastKids(ProcessPid,lastKids)
@@ -1146,10 +1146,10 @@ def getCPUeffeciency(pid):
         logClient.debug(str(sys.exc_info()))
         pass
   return(cpu_percent)
-    
-    
-  
-  
+
+
+
+
 
 def getProcessVmSize(pid):
   vmSizeRet = 0
@@ -1244,7 +1244,7 @@ def getEffectiveDetails(db_conn):
   except:
     return(0)
   if(isinstance(rows,int)):
-    return(0) 
+    return(0)
   return(rows[0])
 
 
@@ -1259,14 +1259,14 @@ def singularity():
       import fcntl
       flags = fcntl.LOCK_EX
       fcntl.lockf(f,flags)
-      
+
     if(sys.platform.find("win") >= 0):
       import msvcrt
       op = msvcrt.LK_LOCK
       f.seek(0)
       msvcrt.locking(f,op,1)
     return(0)
-  
+
 
 
 #If not used remove
@@ -1318,7 +1318,7 @@ def atUrService():
         continue
       frameInfos = getFrameInfo(taskId, frameId, db_conn)
       killFrame(db_conn,taskId,frameId,0,constants.framesHold)
-    
+
     elif(msg == "DELETE"):
       if(os.path.isfile(value)):
         try:
@@ -1327,8 +1327,8 @@ def atUrService():
           logClient.debug(msg)
       else:
           logClient.debug(msg)
-      
-    
+
+
     while(1):
       try:
         clientSocket.close()
@@ -1417,8 +1417,8 @@ def getHostState(db_conn):
   except:
     logClient.debug(str(sys.exc_info()))
     return(0)
-    
-  
+
+
 
 def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
   while(1):
@@ -1474,7 +1474,7 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
         logClient.debug("hostInfo update error")
         logClient.debug(str(sys.exc_info()))
         sys.exit(1)
-      
+
 
 
       try:
@@ -1490,7 +1490,7 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
         logClient.debug("hostResource update error")
         logClient.debug(str(sys.exc_info()))
         sys.exit(1)
-      
+
 
 
       try:
@@ -1566,11 +1566,11 @@ def mainFunc():
   signal.signal(signal.SIGTERM,sigHandle)
   myPid = os.getpid()
   logClient.debug("Rbhus : "+ str(myPid))
-  
+
   #if(os.path.exists(mainPidFile)):
     #logClient.debug("rbhusDrone allready running . please check the do a proper cleanup before restarting")
     #sys.exit(1)
-  
+
   #singularity()
   time.sleep(60)
   p = []
@@ -1582,7 +1582,7 @@ def mainFunc():
   hostUpdaterProcess = multiprocessing.Process(target=hostUpdater)
   p.append(hostUpdaterProcess)
   hostUpdaterProcess.start()
-  
+
   hostUpdaterSysProcess = multiprocessing.Process(target=hostUpdaterSys)
   p.append(hostUpdaterSysProcess)
   hostUpdaterSysProcess.start()
@@ -1611,7 +1611,7 @@ def mainFunc():
     except:
       print("Couldnt write mainPidFile : "+ str(sys.exc_info()))
   mainPidD.close()
- 
+
   mainOnlyD = open(pidOnlyFile,"w",0)
   try:
     mainOnlyD.write(str(myPid) +"\n")
