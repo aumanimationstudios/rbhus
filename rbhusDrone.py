@@ -444,7 +444,7 @@ def _execFrames(frameInfo,frameScrutiny,cpuAffi):
   #for ca in range(0,int(frameInfo['fThreads'])):
     #cpuAffi.append(ca)
   logClient.debug("CPU AFFINITY : "+ str(cpuAffi))
-  processFramesId.set_cpu_affinity(cpuAffi)
+  processFramesId.cpu_affinity(cpuAffi)
   proc.join()
 
 def execFrames(frameInfo,frameScrutiny):
