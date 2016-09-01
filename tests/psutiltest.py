@@ -9,7 +9,7 @@ branchPids = []
 
 def getallkids(mpid,leafPids,branchPids):
   mmpid = psutil.Process(int(mpid))
-  mylasts = mmpid.get_children()
+  mylasts = mmpid.children()
   if(not mylasts):
     leafPids.append(mpid)
     return()
@@ -20,13 +20,11 @@ def getallkids(mpid,leafPids,branchPids):
 
 
 getallkids(pid,leafPids,branchPids)
-  
-print(leafPids)  
+
+print(leafPids)
 print(":::::::::::::::")
 branchPids.reverse()
 print(branchPids)
 
 
 print("_______________")
-
-

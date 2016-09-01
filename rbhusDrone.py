@@ -1141,7 +1141,7 @@ def getCPUeffeciency(pid):
     for x in leafs:
       try:
         p = psutil.Process(x)
-        cpu_percent = cpu_percent + int(p.get_cpu_percent(interval=2))
+        cpu_percent = cpu_percent + int(p.cpu_percent(interval=2))
       except:
         logClient.debug(str(sys.exc_info()))
         pass
@@ -1156,9 +1156,9 @@ def getProcessVmSize(pid):
   try:
     pidDets = psutil.Process(pid)
     if(sys.platform.find("win") >= 0):
-      vmSizeRet = pidDets.get_memory_info().rss + pidDets.get_memory_info().vms
+      vmSizeRet = pidDets.memory_info().rss + pidDets.memory_info().vms
     if(sys.platform.find("linux") >= 0):
-      vmSizeRet = pidDets.get_memory_info().rss
+      vmSizeRet = pidDets.memory_info().rss
   except:
     logClient.debug(str(sys.exc_info()))
   if(vmSizeRet < 0):
