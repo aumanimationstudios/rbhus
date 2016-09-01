@@ -222,7 +222,7 @@ class hg(object):
       p = subprocess.Popen(["hg","merge"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    self._deleteLock()
+    # self._deleteLock()
     debug.info("_merge"+ str(out))
 
 
@@ -236,7 +236,7 @@ class hg(object):
       p = subprocess.Popen(["hg","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    self._deleteLock()
+    # self._deleteLock()
     debug.info("_add"+ str(out))
 
   def _addremove(self):
@@ -248,7 +248,7 @@ class hg(object):
       p = subprocess.Popen(["hg","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    self._deleteLock()
+    # self._deleteLock()
     debug.info("_addremove"+ str(out))
 
 
@@ -261,7 +261,7 @@ class hg(object):
       p = subprocess.Popen(["hg","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    self._deleteLock()
+    # self._deleteLock()
     debug.info("_commit"+ str(out))
 
   def _push(self):
@@ -273,7 +273,7 @@ class hg(object):
       p = subprocess.Popen(["hg","push","-f",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
-    self._deleteLock()
+    # self._deleteLock()
     debug.info("_push"+ str(out))
 
   def _pull(self):
@@ -307,7 +307,7 @@ class hg(object):
     out = p.communicate()
     p.wait()
     debug.info("_updte"+ str(out))
-    self._deleteLock()
+    # self._deleteLock()
 
   def _log(self):
     if(sys.platform.lower().find("linux") >= 0):
@@ -323,7 +323,7 @@ class hg(object):
         for g in t.split("@@@"):
           if(g):
             ret.append(g.split("###"))
-    self._deleteLock()
+    # self._deleteLock()
     return(ret)
 
 
@@ -345,7 +345,7 @@ class hg(object):
     out = p.communicate()
     p.wait()
     debug.info("_archive"+ str(out))
-    self._deleteLock()
+    # self._deleteLock()
     os.chdir(self.localPath)
 
 
@@ -371,7 +371,7 @@ class hg(object):
     out = p.communicate()
     p.wait()
     debug.info(str(out))
-    self._deleteLock()
+    # self._deleteLock()
     os.chdir(self.localPath)
 
   def _archiveVersion(self,rev):
@@ -380,13 +380,17 @@ class hg(object):
     os.chdir(self.absPipePath)
     if(os.path.exists("./export_"+ str(rev) +"/")):
       shutil.rmtree("./export_"+ str(rev) +"/")
+      try:
+        os.makedirs("./export_"+ str(rev) +"/")
+      except:
+        debug.error(sys.exc_info())
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg archive --rev {0} ./export_{0}/".format(rev),stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     assdict = {}
     debug.info("_archive"+ str(rev))
-    self._deleteLock()
+    # self._deleteLock()
     os.chdir(self.localPath)
 
   def _archiveVersionLocal(self,rev):
@@ -395,13 +399,18 @@ class hg(object):
     os.chdir(self.localPath)
     if(os.path.exists("./export_"+ str(rev) +"/")):
       shutil.rmtree("./export_"+ str(rev) +"/")
+      try:
+        os.makedirs("./export_"+ str(rev) +"/")
+      except:
+        debug.error(sys.exc_info())
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg archive --rev {0} /export_{0}/".format(rev),stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      print("hg archive --rev {0} ./export_{0}/".format(rev))
+      p = subprocess.Popen("hg archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     assdict = {}
     debug.info(str(rev))
-    self._deleteLock()
+    # self._deleteLock()
     os.chdir(self.localPath)
 
 
@@ -410,13 +419,13 @@ class hg(object):
       rev = 0
     os.chdir(self.localPath)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg update --rev {0}".format(rev),stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg update --rev {0}".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()
     p.wait()
     debug.info("_revert"+ str(out))
-    self._deleteLock()
+    # self._deleteLock()
     os.chdir(self.localPath)
 
 
