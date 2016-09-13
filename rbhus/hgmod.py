@@ -222,9 +222,10 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","merge","--tool",":local"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    # self._deleteLock()
-    debug.info("_merge"+ str(out))
+    if(p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
 
 
   def _add(self):
@@ -237,9 +238,10 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    # self._deleteLock()
-    debug.info("_add"+ str(out))
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
 
   def _addremove(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
@@ -250,9 +252,10 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    # self._deleteLock()
-    debug.info("_addremove : ".format(out))
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
 
 
   def _commit(self):
@@ -264,9 +267,11 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    # self._deleteLock()
-    debug.info("_commit : {}".format(out))
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
+
 
   def _push(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
@@ -277,9 +282,11 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","push","-f",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    # self._deleteLock()
-    debug.info("_push : {0}".format(out))
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
+
 
   def _pull(self):
     if(sys.platform.lower().find("linux") >= 0):
@@ -287,8 +294,11 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","pull",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    debug.info("_pull : {0}".format(out))
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
+
 
   def _clone(self):
     #if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
@@ -311,9 +321,10 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","update"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    debug.info("_update"+ str(out))
-    # self._deleteLock()
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
 
   def _log(self):
     if(sys.platform.lower().find("linux") >= 0):
@@ -351,8 +362,10 @@ class hg(object):
     utilsPipe.assEdit(asspath = self.pipepath , assdict=assdict)
     out = p.communicate()[0]
     p.wait()
-    debug.info("_archive"+ str(out))
-    # self._deleteLock()
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
     os.chdir(self.localPath)
 
 
@@ -377,9 +390,10 @@ class hg(object):
     utilsPipe.reviewVersion(self.assDets['path'], rev)
 
     out = p.communicate()[0]
-    p.wait()
-    debug.info(str(out))
-    # self._deleteLock()
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
     os.chdir(self.localPath)
 
   def _archiveVersion(self,rev):
@@ -397,8 +411,10 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     assdict = {}
-    debug.info("_archive"+ str(rev))
-    # self._deleteLock()
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
     os.chdir(self.localPath)
 
   def _archiveVersionLocal(self,rev):
@@ -417,8 +433,10 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     assdict = {}
-    debug.info(str(rev))
-    # self._deleteLock()
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
     os.chdir(self.localPath)
 
 
@@ -431,9 +449,10 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    debug.info("_revert"+ str(out))
-    # self._deleteLock()
+    if (p.returncode != 0)
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
     os.chdir(self.localPath)
 
 
