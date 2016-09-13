@@ -8,7 +8,6 @@ import subprocess
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
-print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 
@@ -24,7 +23,6 @@ selectCheckBoxComboCmd = dirSelf.rstrip(os.sep) + os.sep + scbc
 
 
 import rbhusPipeAssetCreateMod
-print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import dbPipe
 import constantsPipe

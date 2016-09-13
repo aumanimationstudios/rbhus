@@ -206,7 +206,7 @@ class hg(object):
       p = subprocess.Popen("hg init",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","init"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     debug.info(out)
     self._copyMainConfig()
@@ -215,12 +215,13 @@ class hg(object):
 
   def _merge(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg merge",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg merge --tool=\":local\"",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","merge"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+      p = subprocess.Popen(["hg","merge","--tool",":local"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()[0]
     p.wait()
     # self._deleteLock()
     debug.info("_merge"+ str(out))
@@ -228,62 +229,66 @@ class hg(object):
 
   def _add(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
       return(0)
     #debug.info(self.absPipePath)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg add --large",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     # self._deleteLock()
     debug.info("_add"+ str(out))
 
   def _addremove(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg addremove",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     # self._deleteLock()
-    debug.info("_addremove"+ str(out))
+    debug.info("_addremove : ".format(out))
 
 
   def _commit(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg commit -A --message \'ignore for now\' --user {0}".format(os.environ['rbhusPipe_acl_user']),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     # self._deleteLock()
-    debug.info("_commit"+ str(out))
+    debug.info("_commit : {}".format(out))
 
   def _push(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg push -f {0}".format(self.absPipePath),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","push","-f",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     # self._deleteLock()
-    debug.info("_push"+ str(out))
+    debug.info("_push : {0}".format(out))
 
   def _pull(self):
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg pull {0}".format(self.absPipePath),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","pull",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
-    debug.info("_pull"+ str(out))
+    debug.info("_pull : {0}".format(out))
 
   def _clone(self):
     #if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
@@ -292,43 +297,45 @@ class hg(object):
       p = subprocess.Popen("hg clone {0} {1}".format(self.absPipePath,"."),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","clone",self.absPipePath,"."],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     debug.info("_clone"+ str(out))
 
 
   def _update(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg update",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","update"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
-    debug.info("_updte"+ str(out))
+    debug.info("_update"+ str(out))
     # self._deleteLock()
 
   def _log(self):
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg log --template {rev}###{author}###{date}###{desc}@@@",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg log --template {rev}###{author}###{date}###{desc}@@@ --cwd "+ self.absPipePath,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","log","--template","{rev}###{author}###{date}###{desc}@@@"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+      p = subprocess.Popen(["hg","log","--template","{rev}###{author}###{date}###{desc}@@@","--cwd",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()[0]
     p.wait()
-    debug.info(out)
+    # debug.info(out)
     ret = []
-    for t in out:
-      if(t):
-        for g in t.split("@@@"):
-          if(g):
-            ret.append(g.split("###"))
+    # for t in out:
+    #   if(t):
+    for g in out.split("@@@"):
+      if(g):
+        ret.append(g.split("###"))
     # self._deleteLock()
     return(ret)
 
 
   def _archive(self,rev):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
       return(0)
     if(not rev):
       rev = 0
@@ -342,7 +349,7 @@ class hg(object):
     assdict = {}
     assdict["publishVersion"] = str(rev)
     utilsPipe.assEdit(asspath = self.pipepath , assdict=assdict)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     debug.info("_archive"+ str(out))
     # self._deleteLock()
@@ -352,6 +359,7 @@ class hg(object):
 
   def _review(self,rev):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isAssCreated(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
       return(0)
     if(not rev):
       rev = 0
@@ -368,7 +376,7 @@ class hg(object):
     # assdict['username'] = self.username
     utilsPipe.reviewVersion(self.assDets['path'], rev)
 
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     debug.info(str(out))
     # self._deleteLock()
@@ -404,7 +412,7 @@ class hg(object):
       except:
         debug.error(sys.exc_info())
     if(sys.platform.lower().find("linux") >= 0):
-      print("hg archive --rev {0} ./export_{0}/".format(rev))
+      debug.info("hg archive --rev {0} ./export_{0}/".format(rev))
       p = subprocess.Popen("hg archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -422,7 +430,7 @@ class hg(object):
       p = subprocess.Popen("hg update --rev {0}".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()
+    out = p.communicate()[0]
     p.wait()
     debug.info("_revert"+ str(out))
     # self._deleteLock()
@@ -445,5 +453,6 @@ class hg(object):
         shutil.rmtree(self.localPath)
         self.initializeLocal()
       except:
+        debug.error(sys.exc_info())
         return(0)
     return(1)

@@ -9,7 +9,6 @@ import tempfile
 tempDir = tempfile.gettempdir()
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
-print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 scb = "rbhusPipeProjCreate.py"
@@ -18,12 +17,12 @@ rppc = dirSelf.rstrip(os.sep) + os.sep + scb
 rppc = rppc.replace("\\","/")
 
 import rbhusPipeAdminPanelMod
-print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import dbPipe
 import constantsPipe
 import utils as rUtils
 import authPipe
+import debug
 
 
 try:

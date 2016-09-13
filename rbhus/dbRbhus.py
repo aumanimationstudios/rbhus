@@ -8,6 +8,7 @@ import logging.handlers
 import socket
 import os
 import tempfile
+import debug
 
 
 hostname = socket.gethostname()
@@ -415,7 +416,7 @@ class dbRbhus:
         except:
           f_status[constants.framesStatus[x['status']]] = 1
     if(f_status.has_key(constants.framesStatus[constants.framesRunning])):
-      print("cannot delete task : "+ str(taskId) +" : running frames detected!")
+      debug.info("cannot delete task : "+ str(taskId) +" : running frames detected!")
       return(0)
     else:
       try:
@@ -425,7 +426,7 @@ class dbRbhus:
           self.execute("delete from tasks where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +") and (status != "+ str(constants.taskActive) +")) and ((user='"+ str(username) +"') or (projId in ('"+ ",".join(userProjIds) +"')))")
         return(1)
       except:
-        print("1 :Error connecting to db :"+ str(sys.exc_info()))
+        debug.info("1 :Error connecting to db :"+ str(sys.exc_info()))
         return(0)    
     
   
@@ -447,7 +448,7 @@ class dbRbhus:
         self.execute("update tasks set status = "+ str(constants.taskStopped) +" where (id="+ str(taskId) +") and ((status != "+ str(constants.taskWaiting) +") and (status != "+ str(constants.taskPending) +")) and ((user='"+ str(username) +"') or (projId in ('"+ ",".join(userProjIds) +"')))")
       return(1)
     except:
-      print(str(sys.exc_info()))
+      debug.info(str(sys.exc_info()))
       return(0)
       
       
@@ -469,7 +470,7 @@ class dbRbhus:
         self.execute("update tasks set status = "+ str(constants.taskWaiting) +" where (id="+ str(taskId) +")  and ((user='"+ str(username) +"') or (projId in ('"+ ",".join(userProjIds) +"')))")
       return(1)
     except:
-      print("1 :Error connecting to db :"+ str(sys.exc_info()))
+      debug.info("1 :Error connecting to db :"+ str(sys.exc_info()))
       return(0)
       
   
@@ -588,7 +589,7 @@ class dbRbhus:
         clientSocket.close()
         break
       except:
-        print(str(sys.exc_info()))
+        debug.info(str(sys.exc_info()))
         tryCount = tryCount - 1
         clientSocket.close()
         return(1)
@@ -608,7 +609,7 @@ class dbRbhus:
         clientSocket.close()
         break
       except:
-        print(str(sys.exc_info()))
+        debug.info(str(sys.exc_info()))
         tryCount = tryCount - 1
         clientSocket.close()
         return(1)

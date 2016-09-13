@@ -13,6 +13,7 @@ import subprocess
 import re
 import shutil
 import copy
+import debug
 
 
 progPath =  sys.argv[0].split(os.sep)
@@ -57,18 +58,18 @@ hostname = socket.gethostname()
 tempDir = os.path.abspath(tempfile.gettempdir())
 
 
-LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_utilsPipe_module_"+ username +"_"+ str(hostname) +".log")
-  #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
-
-#LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
-utilsPipeLogger = logging.getLogger("utilsPipeLogger")
-utilsPipeLogger.setLevel(logging.DEBUG)
-
-
-#ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=104857600, backupCount=3)
-BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
-LOG_FILENAME.setFormatter(BASIC_FORMAT)
-utilsPipeLogger.addHandler(LOG_FILENAME)
+# LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_utilsPipe_module_"+ username +"_"+ str(hostname) +".log")
+#   #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
+#
+# #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
+# debug = logging.getLogger("debug")
+# debug.setLevel(logging.DEBUG)
+#
+#
+# #ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=104857600, backupCount=3)
+# BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
+# LOG_FILENAME.setFormatter(BASIC_FORMAT)
+# debug.addHandler(LOG_FILENAME)
 
 
 
@@ -79,9 +80,9 @@ def getDirMaps():
     rows = dbconn.execute("SELECT * FROM dirMaps", dictionary=True)
     return(rows)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-  
+
 
 def getTags(projName="",assPath="",assId=""):
   dbconn = dbPipe.dbPipe()
@@ -100,10 +101,10 @@ def getTags(projName="",assPath="",assId=""):
           retags.append(y)
         return(retags)
     except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
+      debug.debug(str(sys.exc_info()))
       return(0)
   return(0)
-  
+
 
 
 
@@ -112,7 +113,7 @@ def getDirMapsDetails(directory):
   try:
     rows = dbconn.execute("SELECT * FROM dirMaps where directory='"+ str(directory) +"' order by directory", dictionary=True)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
   if(rows):
     ret = {}
@@ -121,7 +122,7 @@ def getDirMapsDetails(directory):
       ret[x] = rows[0][x]
     return(ret)
 
- 
+
 def getProjTypes(ptype=None):
   dbconn = dbPipe.dbPipe()
   try:
@@ -138,10 +139,10 @@ def getProjTypes(ptype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-  
-  
+
+
 def getStageTypes(stype=None):
   dbconn = dbPipe.dbPipe()
   try:
@@ -158,16 +159,16 @@ def getStageTypes(stype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
 
 
 def getValidNodes(stype):
   pass
-  
-  
-  
-  
+
+
+
+
 
 def getNodeTypes(ntype=None):
   dbconn = dbPipe.dbPipe()
@@ -185,7 +186,7 @@ def getNodeTypes(ntype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -205,7 +206,7 @@ def getFileTypes(ftype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -225,7 +226,7 @@ def getAssTypes(atype=None):
       else:
         return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -243,7 +244,7 @@ def getSequenceScenes(proj,seq=None,sce=None):
     else:
       return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -256,7 +257,7 @@ def getDefaults(table):
       taskFieldss[row['Field']] = row['Default']
     return(taskFieldss)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
 
 
@@ -270,7 +271,7 @@ def getAdmins():
         adminUsers.append(x['user'])
     return(adminUsers)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     # easy to search like - if admin in getAdmins():
     return(adminUsers)
 
@@ -278,7 +279,7 @@ def getAdmins():
 # createdUser should come from an env variable set by the authPipe module
 def createProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRenderServer,aclUser,aclGroup,dueDate,description,linkedProjs="default"):
   if(os.environ['rbhusPipe_acl_user'] not in getAdmins()):
-    utilsPipeLogger.debug("User not allowed to create projects")
+    debug.debug("User not allowed to create projects")
     return(0)
   pDefs = getDefaults("proj")
   now = datetime.datetime.now()
@@ -295,15 +296,15 @@ def createProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRe
   projDets['dueDate'] = dueDate if(dueDate) else str(now.year + 1) +"-"+ str(now.month) +"-"+ str(now.day) +" "+ str(now.hour) +"-"+ str(now.minute) +"-"+ str(now.second)
   projDets['description'] = description if(description) else pDefs['description']
   projDets['linkedProjects'] = linkedProjs
-  
+
   servSoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
     servSoc.settimeout(15)
     servSoc.connect((constantsPipe.projInitServer,constantsPipe.projInitPort))
   except:
-    utilsPipeLogger.debug("utilsPipe createProj : "+ str(sys.exc_info()))
+    debug.debug("utilsPipe createProj : "+ str(sys.exc_info()))
     return(0)
-    
+
   servSoc.send(pickle.dumps(projDets))
   servSoc.close()
   return(1)
@@ -317,7 +318,7 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
   for pT in pTypes:
     if(pT['type'] == projType):
       cScript = pT['scriptDir']
-      
+
   os.environ['rp_proj_projName'] = str(projName).rstrip().lstrip()
   os.environ['rp_proj_projType'] = str(projType).rstrip().lstrip()
   os.environ['rp_proj_directory'] = str(directory).rstrip().lstrip()
@@ -332,9 +333,9 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
 
   exportDirMaps(directory)
   exportProjTypes(projType)
-  utilsPipeLogger.debug(description)
-  utilsPipeLogger.debug(projName)
-  utilsPipeLogger.debug(cScript)
+  debug.debug(description)
+  debug.debug(projName)
+  debug.debug(cScript)
   try:
     dbconn.execute("insert into proj (projName,directory,admins,projType,rbhusRenderIntegration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,createDate,description) \
                     values ('"+ str(projName).rstrip().lstrip() +"', \
@@ -350,22 +351,22 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
                     '"+ str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"', \
                     '"+ str(description).rstrip().lstrip() +"')")
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-  
+
   seqScnDict = {}
   seqScnDict['sequenceName'] = "default"
   seqScnDict['projName'] = str(projName).rstrip().lstrip()
   seqScnDict['sceneName'] = "default"
   seqScnDict['createdUser'] = str(createdUser).rstrip().lstrip()
-  
+
   setupSequenceScene(seqScnDict)
-  
-    
+
+
   try:
     if(cScript):
       dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusRunning).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
-      utilsPipeLogger.debug("python -d '"+ str(cScript).rstrip("/") +"/"+ projType +".py'")
+      debug.debug("python -d '"+ str(cScript).rstrip("/") +"/"+ projType +".py'")
       status = os.system("python -d '"+ str(cScript).rstrip("/") +"/"+ projType +".py'")
       if(status != 0):
         dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusFailed).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
@@ -373,9 +374,9 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
         dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusDone).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
       return(1)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-    
+
 
 def exportDirMaps(directory):
   dirms = getDirMaps()
@@ -407,7 +408,7 @@ def exportAsset(assDets):
   exportProj(projName=assDets['projName'])
   exportSeqScn(assDets['projName'], assDets['sequenceName'], assDets['sceneName'])
   return(1)
-  
+
 
 def exportSeqScn(projName,scq,scn):
   dbconn = dbPipe.dbPipe()
@@ -415,7 +416,7 @@ def exportSeqScn(projName,scq,scn):
   try:
     rows = dbconn.execute("select * from sequenceScenes where projName='"+ str(projName) +"' and sequenceName='"+ str(scq) +"' and sceneName='"+ str(scn) +"'",dictionary=True)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
   if(not isinstance(rows, int)):
     row = rows[0]
     for x in row.keys():
@@ -431,7 +432,7 @@ def exportProj(projName):
       os.environ['rp_proj_'+ str(x)] = str(dets[x])
     exportProjTypes(dets['projType'])
     exportDirMaps(dets['directory'])
-  
+
 
 #when you give the projName it returns a single dict else it returns an array of dict
 def getProjDetails(projName=None,status=None):
@@ -440,7 +441,7 @@ def getProjDetails(projName=None,status=None):
     try:
       rows = dbconn.execute("select * from proj where projName='"+ str(projName) +"' order by projName", dictionary=True)
     except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
+      debug.debug(str(sys.exc_info()))
       return(0)
     if(rows):
       ret = {}
@@ -454,7 +455,7 @@ def getProjDetails(projName=None,status=None):
       try:
         rows = dbconn.execute("select * from proj where status="+ str(status) +" order by projName", dictionary=True)
       except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
+        debug.debug(str(sys.exc_info()))
         return(0)
       return(rows)
     else:
@@ -462,19 +463,19 @@ def getProjDetails(projName=None,status=None):
       try:
         rows = dbconn.execute("select * from proj", dictionary=True)
       except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
+        debug.debug(str(sys.exc_info()))
         return(0)
       return(rows)
   return(0)
-    
 
 
-  
-  
 
-    
-  
-  
+
+
+
+
+
+
 def setupSequenceScene(seqSceDict):
   dbconn = dbPipe.dbPipe()
   projDets = getProjDetails(str(seqSceDict['projName']))
@@ -483,16 +484,16 @@ def setupSequenceScene(seqSceDict):
   defaultSeq['projName'] = str(seqSceDict['projName']).rstrip().lstrip()
   defaultSeq['sequenceName'] = str(seqSceDict['sequenceName']).rstrip().lstrip()
   defaultSeq['sceneName'] = "default"
-  
+
   defKeys = defaultSeq.keys()
   defValues = ["'"+ str(defaultSeq[x]).rstrip().lstrip() +"'" for x in defKeys]
-  
+
   seqKeys = seqSceDict.keys()
   seqValues = ["'"+ str(seqSceDict[x]).rstrip().lstrip() +"'" for x in seqKeys]
   seqKeys.append("createDate")
   seqValues.append("'"+ str(MySQLdb.Timestamp.now()) +"'")
-  
-  
+
+
   if(not seqSceDict.has_key("createdUser")):
     try:
       seqValues.append("'"+ os.environ['rbhusPipe_acl_user'] +"'")
@@ -500,22 +501,22 @@ def setupSequenceScene(seqSceDict):
     except:
       print("createdUser not given for seq scn")
       return(0)
-  
-    
+
+
   try:
     dbconn.execute("insert into sequenceScenes ("+ ",".join(defKeys) +") \
                     values("+ ",".join(defValues) +")")
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
-    
-    
+    debug.debug(str(sys.exc_info()))
+
+
   try:
     dbconn.execute("insert into sequenceScenes ("+ ",".join(seqKeys) +") \
                     values("+ ",".join(seqValues) +")")
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-  
+
 
 
 
@@ -529,17 +530,17 @@ def editSequenceScene(seqSceDict):
     for k in seqSceDictTem:
       dbvalues.append(str(k) +"=\""+ str(seqSceDictTem[k]).rstrip().lstrip() +"\"")
   if(dbvalues):
-    dbconn = dbPipe.dbPipe()    
+    dbconn = dbPipe.dbPipe()
     try:
-      dbconn.execute("update sequenceScenes set "+ ",".join(dbvalues) +" where sequenceName=\""+ str(seqSceDict['sequenceName']) +"\" and sceneName=\""+ str(seqSceDict['sceneName']) +"\" and projName=\""+ str(seqSceDict['projName']) +"\"")    
+      dbconn.execute("update sequenceScenes set "+ ",".join(dbvalues) +" where sequenceName=\""+ str(seqSceDict['sequenceName']) +"\" and sceneName=\""+ str(seqSceDict['sceneName']) +"\" and projName=\""+ str(seqSceDict['projName']) +"\"")
     except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
+      debug.debug(str(sys.exc_info()))
     print(dbvalues)
     return(1)
   else:
     return(0)
-  
-  
+
+
 
 def getFieldValue(table,field,fkey,fvalue):
   dbconn = dbPipe.dbPipe()
@@ -547,10 +548,10 @@ def getFieldValue(table,field,fkey,fvalue):
     rows = dbconn.execute("select "+ str(field) +" from "+ str(table) +" where "+ str(fkey) +"='"+ str(fvalue) +"'",dictionary=True)
     return(rows)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-  
-# take in a pipe type path eg :  $table_field:test: 
+
+# take in a pipe type path eg :  $table_field:test:
 # first and second should be $proj_directory:$proj_projName
 def getAbsPath(pipePath):
   absPath = []
@@ -560,13 +561,13 @@ def getAbsPath(pipePath):
       absPath.append(os.environ["rp_"+ str(x).lstrip("$")])
     else:
       absPath.append(str(x))
-  
+
   projName = absPath[0]
   #print("getAbsPath 1: "+ str(projName))
-  
-  
+
+
   #print("getAbsPath 2: "+ str(projDets))
-  
+
   assDets = getAssDetails(assPath=pipePath)
   #print("getAbsPath 3: "+ str(projDets))
   if(assDets):
@@ -574,7 +575,7 @@ def getAbsPath(pipePath):
   else:
     projDets = getProjDetails(projName)
     projDirMapsDets = getDirMapsDetails(projDets['directory'])
-    
+
   #print("getAbsPath 4: "+ str(projDirMapsDets))
   absPathRet = ""
   if(sys.platform.find("linux") >= 0):
@@ -582,8 +583,8 @@ def getAbsPath(pipePath):
   elif(sys.platform.find("win") >= 0):
     absPathRet = os.path.abspath(projDirMapsDets['windowsMapping'].rstrip("/") +"/"+ ":".join(absPath).replace(":","/").lstrip("/"))
   return(absPathRet)
-  
-  
+
+
 
 
 def getAssDetails(assId="",assPath=""):
@@ -592,7 +593,7 @@ def getAssDetails(assId="",assPath=""):
     try:
       rows = dbconn.execute("select * from assets where assetId='"+ str(assId) +"'", dictionary=True)
     except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
+      debug.debug(str(sys.exc_info()))
       return(0)
     if(rows):
       ret = {}
@@ -606,7 +607,7 @@ def getAssDetails(assId="",assPath=""):
     try:
       rows = dbconn.execute("select * from assets where path='"+ str(assPath) +"'", dictionary=True)
     except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
+      debug.debug(str(sys.exc_info()))
       return(0)
     if(rows):
       ret = {}
@@ -615,10 +616,10 @@ def getAssDetails(assId="",assPath=""):
         ret[x] = rows[0][x]
       return(ret)
     return(0)
-  
 
-  
-  
+
+
+
 def getLibAsses(projNames,limit=None,whereDict={}):
   dbconn = dbPipe.dbPipe()
   linkedProjects = "default"
@@ -627,14 +628,14 @@ def getLibAsses(projNames,limit=None,whereDict={}):
   whereDictTemp = copy.copy(whereDict)
   whereDictTemp['assetType'] = "library"
   whereDictTemp['status'] = str(constantsPipe.assetStatusActive)
-  rows = 0  
+  rows = 0
   try:
     if(projNames == "default"):
       linkedProjects = os.environ["rp_proj_linkedProjects"]
     else:
       linkedProjects = projNames
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
   if(linkedProjects != "default"):
     projs = ["'"+ x +"'" for x in linkedProjects.split(",")]
@@ -661,7 +662,7 @@ def getLibAsses(projNames,limit=None,whereDict={}):
             if(z):
               whereDicts.append(x +"='"+ z +"'")
         whereString.append("("+ " or ".join(whereDicts) +")")
-        
+
       rows = dbconn.execute("select * from assets "+ whereProj +" and ("+ " and ".join(whereString) +") order by projName,sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
       for x in whereDictTemp:
@@ -687,12 +688,12 @@ def getLibAsses(projNames,limit=None,whereDict={}):
     else:
       return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-  
-  
-  
-  
+
+
+
+
 
 def getProjAssesForDelete(projName,limit=None,whereDict={}):
   dbconn = dbPipe.dbPipe()
@@ -744,11 +745,11 @@ def getProjAssesForDelete(projName,limit=None,whereDict={}):
     else:
       return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-  
-  
-  
+
+
+
 def getProjAsses(projName,limit=None,whereDict={}):
   dbconn = dbPipe.dbPipe()
   whereString = []
@@ -799,9 +800,9 @@ def getProjAsses(projName,limit=None,whereDict={}):
     else:
       return(0)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
-  
+
 
 def getUsers():
   dbconn = dbPipe.dbPipe()
@@ -810,7 +811,7 @@ def getUsers():
     #print([row['id'] for row in rows])
     return([str(row['id']).rstrip().lstrip() for row in rows])
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
 
 def getStageAdmins(stageType):
@@ -819,11 +820,11 @@ def getStageAdmins(stageType):
     rows = dbconn.execute("select admins from stageTypes where type = '"+ str(stageType) +"'", dictionary=True)
     return([x.rstrip().lstrip() for x in rows[-1]['admins'].split(",")])
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
 
 
-  
+
 def assPathColorCoded(assDetDict):
   assPath = str(assDetDict['projName']) +"#"+ "indigo"
   if(not re.search("^default",str(assDetDict['assetType']))):
@@ -868,28 +869,28 @@ def assRegister(assDetDict):
     valuesA.append("'"+ str(assDetDict[x]).rstrip().lstrip() +"'")
   fs = "("+ ",".join(fieldsA) +")"
   vs = "("+ ",".join(valuesA) +")"
-  utilsPipeLogger.debug(assDetDict)
+  debug.debug(assDetDict)
   dbconn = dbPipe.dbPipe()
   try:
     rows = dbconn.execute("insert into assets "+ fs +" values "+ vs)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
   try:
-    
+
     if(sys.platform.find("win") >= 0):
       corePath = dirMapsDets['windowsMapping'] + assPath.replace(":","/")
     else:
       corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
-    utilsPipeLogger.debug(corePath)
+    debug.debug(corePath)
     try:
       os.makedirs(corePath,0775)
     except:
-      utilsPipeLogger.debug(str(sys.exc_info()))
+      debug.debug(str(sys.exc_info()))
     if(assDetDict['assetType'].rstrip().lstrip() != "output" and assDetDict['assetType'].rstrip().lstrip() != "share" and assDetDict['assetType'].rstrip().lstrip() != "template"):
-      setAssTemplate(assDetDict)  
+      setAssTemplate(assDetDict)
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
   return(assDetDict['assetId'])
   #else:
@@ -904,7 +905,7 @@ def getNodeDefaultDirectories(assDetDict):
 def getFileTypeDefaultDirectories(assDetDict):
   pass
 
-    
+
 
 def setAssTemplate(assDetDict):
   templateFile = getTemplatePath(assDetDict)
@@ -917,10 +918,10 @@ def setAssTemplate(assDetDict):
     corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
   if(templateFile):
     if(not os.path.exists(corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])):
-      utilsPipeLogger.debug("recopied template file")
+      debug.debug("recopied template file")
       shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
     else:
-      utilsPipeLogger.debug("file already exits. not copying template")
+      debug.debug("file already exits. not copying template")
 
 
 def getAssFileName(assDetDict):
@@ -950,24 +951,24 @@ def getAssFileName(assDetDict):
     else:
       fileName = str(assDetDict['nodeType'])
   return(fileName)
-  
-    
-  
-          
-    
+
+
+
+
+
 def getAssPath(assDetDictTemp = {}):
   assDetDict = copy.copy(assDetDictTemp)
   if(not assDetDict):
     return(0)
   assPath = str(assDetDict['projName'])
   #dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
-  utilsPipeLogger.debug("WTF asspathtemp : "+ str(assDetDict))
+  debug.debug("WTF asspathtemp : "+ str(assDetDict))
   #fileName = ""
   #if(assDetDict.has_key('assName')):
     #if(str(assDetDict['assName']) != "default"):
       #fileName = str(assDetDict['assName'])
   if(re.search("^default$",str(assDetDict['assetType']))):
-    pass 
+    pass
   else:
     assTypeDets = getAssTypes(str(assDetDict['assetType']))
     if(assTypeDets):
@@ -990,38 +991,38 @@ def getAssPath(assDetDictTemp = {}):
           #fileName = fileName +"_"+ str(assDetDict['sequenceName'])
         #else:
           #fileName = str(assDetDict['sequenceName'])
-    #utilsPipeLogger.debug("WTF 001 : "+ str(assPath))
+    #debug.debug("WTF 001 : "+ str(assPath))
     if(assDetDict.has_key('assName')):
       if(not re.search("^default$",str(assDetDict['assName']))):
         assPath = assPath +":" + str(assDetDict['assName'])
-    
-    #utilsPipeLogger.debug("WTF 002 : "+ str(assPath))
+
+    #debug.debug("WTF 002 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['stageType']))):
       assPath = assPath +":" + str(assDetDict['stageType'])
       #if(fileName):
         #fileName = fileName +"_"+ str(assDetDict['stageType'])
       #else:
         #fileName = str(assDetDict['stageType'])
-    #utilsPipeLogger.debug("WTF 003 : "+ str(assPath))
+    #debug.debug("WTF 003 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['nodeType']))):
       assPath = assPath +":" + str(assDetDict['nodeType'])
       #if(fileName):
         #fileName = fileName +"_"+ str(assDetDict['nodeType'])
       #else:
         #fileName = str(assDetDict['nodeType'])
-    #utilsPipeLogger.debug("WTF 004 : "+ str(assPath))
-    
-    
-      
-    if(not re.search("^default$",str(assDetDict['fileType']))): 
+    #debug.debug("WTF 004 : "+ str(assPath))
+
+
+
+    if(not re.search("^default$",str(assDetDict['fileType']))):
       assPath = assPath +":" + str(assDetDict['fileType'])
-    #utilsPipeLogger.debug("WTF 005 : "+ str(assPath))
+    #debug.debug("WTF 005 : "+ str(assPath))
     return(assPath)
   return(0)
 
 
 def assEdit(asspath="",assid="",assdict={}):
-  utilsPipeLogger.debug("editing ass : "+ str(assdict))
+  debug.debug("editing ass : "+ str(assdict))
   dbvalues = []
   if(assdict):
     for k in assdict:
@@ -1032,16 +1033,16 @@ def assEdit(asspath="",assid="",assdict={}):
     if(assid):
       try:
         dbconn.execute("update assets set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
-        utilsPipeLogger.debug("update assets set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
+        debug.debug("update assets set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
       except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
+        debug.debug(str(sys.exc_info()))
         return(0)
     elif(asspath):
       try:
         dbconn.execute("update assets set "+ ",".join(dbvalues) +" where path=\""+ str(asspath) +"\"")
-        utilsPipeLogger.debug("update assets set "+ ",".join(dbvalues) +" where path=\""+ str(asspath) +"\"")
+        debug.debug("update assets set "+ ",".join(dbvalues) +" where path=\""+ str(asspath) +"\"")
       except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
+        debug.debug(str(sys.exc_info()))
         return(0)
     return(1)
   return(0)
@@ -1058,7 +1059,7 @@ def reviewAdd(assdict={}):
       + str(assdict['referenceFolder']).rstrip().lstrip() +"','"\
       + str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"')")
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
 
 
 def reviewVersion(asspath,version):
@@ -1066,7 +1067,7 @@ def reviewVersion(asspath,version):
   try:
     dbconn.execute("update assets set reviewVersion = '"+ str(version) +"',reviewStatus='"+ str(constantsPipe.reviewStatusInProgress) +"' where path = '"+ str(asspath) +"'")
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
 
 
 
@@ -1076,7 +1077,7 @@ def reviewVersion(asspath,version):
 
 def reviewEdit(assdict={}):
   assDets = copy.copy(assdict)
-  utilsPipeLogger.debug("editing ass review : "+ str(assdict))
+  debug.debug("editing ass review : "+ str(assdict))
   dbvalues = []
   assid = ""
   if(assdict):
@@ -1090,9 +1091,9 @@ def reviewEdit(assdict={}):
     if(assid):
       try:
         dbconn.execute("update assetReviews set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
-        utilsPipeLogger.debug("update assetReviews set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
+        debug.debug("update assetReviews set "+ ",".join(dbvalues) +" where assetId=\""+ str(assid) +"\"")
       except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
+        debug.debug(str(sys.exc_info()))
         return(0)
     return(1)
   return(0)
@@ -1104,7 +1105,7 @@ def reviewDetails(assId = 0,revCount=0):
       try:
         rows = dbconn.execute("select * from assetReviews where assetId='"+ str(assId) +"' order by reviewCount", dictionary=True)
       except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
+        debug.debug(str(sys.exc_info()))
         return(0)
       if(isinstance(rows, int)):
         return(0)
@@ -1114,7 +1115,7 @@ def reviewDetails(assId = 0,revCount=0):
       try:
         rows = dbconn.execute("select * from assetReviews where assetId='"+ str(assId) +"' and reviewCount='"+ str(revCount) +"' order by reviewCount", dictionary=True)
       except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
+        debug.debug(str(sys.exc_info()))
         return(0)
       if(isinstance(rows, int)):
         return(0)
@@ -1122,15 +1123,15 @@ def reviewDetails(assId = 0,revCount=0):
         return(rows[0])
   else:
     return(0)
-    
 
 
-    
-    
-            
-    
-    
-  
+
+
+
+
+
+
+
 def assDetails(assDetDict={},assId=0):
   pass
 
@@ -1150,7 +1151,7 @@ def getTemplatePath(assdetsTemp = {}):
   tempMain = ""
   direcs = {}
   dirs = getDirMaps()
-  
+
   for x in range(0,len(dirs)):
     if(dirs[x]):
       direcs[dirs[x]['directory']] = 1
@@ -1162,37 +1163,37 @@ def getTemplatePath(assdetsTemp = {}):
   assdetails = getAssDetails(assPath = assPathTemp)
   print(assdetails)
   print(assPathTemp)
-  
+
   if(not assdetails):
     assdets['sceneName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
   print(assdetails)
   print(assPathTemp)
-  
+
   if(not assdetails):
     assdets['sequenceName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
   print(assdetails)
   print(assPathTemp)
-  
+
   if(not assdetails):
     assdets['nodeType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
   print(assdetails)
   print(assPathTemp)
-  
+
   if(not assdetails):
     assdets['stageType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
   print(assdetails)
   print(assPathTemp)
-  
-  
-  
+
+
+
   if(assdetails):
     assPathTemp = assdetails['path']
     assPathAbs = getAbsPath(assPathTemp)
@@ -1203,9 +1204,9 @@ def getTemplatePath(assdetsTemp = {}):
       print(filename)
       return(filename)
   return(0)
-      
-        
-    
+
+
+
 def openAssetCmd(assdets ={},filename = None):
   dirmapdets = getDirMapsDetails(assdets['directory'])
   filetypedets = None
@@ -1243,7 +1244,7 @@ def openAssetCmd(assdets ={},filename = None):
       for x in reversed(binPaths):
         print(str(x))
         if(str(x) != "default"):
-          
+
           absBinPath = getAbsPath(x)
           if(absBinPath):
             runCmd = absBinPath +"/"+ filetypedets[exeAss]
@@ -1255,9 +1256,9 @@ def openAssetCmd(assdets ={},filename = None):
           return("\""+ filetypedets[exeAss] +"\" "+ filename)
   else:
     return(0)
-    
-    
-  
+
+
+
 
 
 def assMarkForDelete(assId=None,assPath=None):
@@ -1268,15 +1269,15 @@ def assMarkForDelete(assId=None,assPath=None):
     assdets = getAssDetails(assPath=str(assPath))
   else:
     return(0)
-  
+
   try:
     dbconn.execute("update assets set status="+ str(constantsPipe.assetStatusDelete) +" where path='"+ str(assdets['path']) +"'")
-    utilsPipeLogger.debug("marked for deletion asset = "+ str(assdets['path']) +" : done")
+    debug.debug("marked for deletion asset = "+ str(assdets['path']) +" : done")
   except:
-    utilsPipeLogger.debug("marked for deletion asset = "+ str(assdets['path']) +" : failed")
+    debug.debug("marked for deletion asset = "+ str(assdets['path']) +" : failed")
     return(0)
   return(1)
-  
+
 
 def assDelete(assId=None,assPath=None,hard=False):
   dbconn = dbPipe.dbPipe()
@@ -1286,10 +1287,10 @@ def assDelete(assId=None,assPath=None,hard=False):
     assdets = getAssDetails(assPath=str(assPath))
   else:
     return(0)
-  
-  
-  
-  
+
+
+
+
   projDets = getProjDetails(os.environ["rp_proj_projName"])
   if(os.environ['rbhusPipe_acl_user'] in projDets['admins'].split(",") or os.environ['rbhusPipe_acl_user'] in assdets['createdUser'].split(",")):
     dirMapsDets = getDirMapsDetails(assdets['directory'])
@@ -1301,20 +1302,20 @@ def assDelete(assId=None,assPath=None,hard=False):
         else:
           corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
           os.system("rm -frv "+ str(corePath))
-        utilsPipeLogger.debug(corePath)
+        debug.debug(corePath)
       except:
-        utilsPipeLogger.debug(str(sys.exc_info()))
+        debug.debug(str(sys.exc_info()))
     try:
       dbconn.execute("delete from assets where assetId='"+ str(assdets['assetId']) +"'")
-      utilsPipeLogger.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : done")
+      debug.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : done")
     except:
-      utilsPipeLogger.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : failed")
+      debug.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : failed")
   else:
-    utilsPipeLogger.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : permission denied")
+    debug.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : permission denied")
   #elif(assPath):
     #assdets = getAssDetails(assPath=str(assPath))
     #dirMapsDets = getDirMapsDetails(assdets['directory'])
-    
+
     #if(hard == True):
       #try:
         #if(sys.platform.find("win") >= 0):
@@ -1323,33 +1324,33 @@ def assDelete(assId=None,assPath=None,hard=False):
         #else:
           #corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
           #os.system("rm -frv "+ str(corePath))
-        #utilsPipeLogger.debug(corePath)
+        #debug.debug(corePath)
       #except:
-        #utilsPipeLogger.debug(str(sys.exc_info()))
+        #debug.debug(str(sys.exc_info()))
     #try:
       #dbconn.execute("delete from assets where path='"+ str(assPath) +"'")
-      #utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : done")
+      #debug.debug("deleting asset path = "+ str(assPath) +" : done")
     #except:
-      #utilsPipeLogger.debug("deleting asset path = "+ str(assPath) +" : failed")
-    
+      #debug.debug("deleting asset path = "+ str(assPath) +" : failed")
+
 
 def setWorkInProgress(asspath):
   dbconn = dbPipe.dbPipe()
   try:
     dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressInProgress) +",doneDate = '0000-00-00 00:00:00' where path='"+ str(asspath) +"'")
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
   return(1)
-  
+
 
 
 def setWorkDone(asspath):
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressDone) +",doneDate='"+ str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"' where path='"+ str(asspath) +"'") 
+    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressDone) +",doneDate='"+ str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"' where path='"+ str(asspath) +"'")
   except:
-    utilsPipeLogger.debug(str(sys.exc_info()))
+    debug.debug(str(sys.exc_info()))
     return(0)
   return(1)
 
@@ -1363,8 +1364,8 @@ def isAssCreated(assdets = {}):
     return(True)
   else:
     return(False)
-  
-  
+
+
 
 
 def isAssAssigned(assdets = {}):
@@ -1372,9 +1373,9 @@ def isAssAssigned(assdets = {}):
     return(True)
   else:
     return(False)
-    
 
-  
+
+
 def isStageAdmin(assdets = {}):
   if(assdets['stageType'] != "default"):
     stagedets  = getStageTypes(assdets['stageType'])
@@ -1403,7 +1404,7 @@ def isNodeAdmin(assdets = {}):
       return(False)
   else:
     return(True)
-    
+
 
 def isDbAdmin(assdets = {}):
   if(os.environ['rbhusPipe_acl_admin'] == "1"):

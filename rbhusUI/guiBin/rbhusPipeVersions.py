@@ -104,7 +104,7 @@ class workerInitialize(QtCore.QObject):
       versionsHg = hgmod.hg(self.versionPath)
       versionsHg.initialize()
       versionsHg.initializeLocal()
-      print("EEEEEE :"+ str(versionsHg._log()))
+      # print("EEEEEE :"+ str(versionsHg._log()))
       self.dataReady.emit(versionsHg,assetDetails)
     else:
       self.dataNotAvailable.emit()
@@ -294,7 +294,6 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         indrow = indrow + 1
     self.tableVersions.setSortingEnabled(True)
     self.tableVersions.resizeColumnsToContents()
-    print(tem)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
   
   

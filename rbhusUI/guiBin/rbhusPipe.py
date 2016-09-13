@@ -12,7 +12,6 @@ from os.path import expanduser
 home = expanduser("~")
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
-print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
 tempDir = tempfile.gettempdir()
@@ -48,7 +47,6 @@ selectRadioBoxCmd = selectRadioBoxCmd.replace("\\","/")
 
 
 import rbhusPipeMainMod
-print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 import constantsPipe
 import authPipe
@@ -56,6 +54,7 @@ import dbPipe
 import utilsPipe
 import hgmod
 import pyperclip
+import debug
 
 
 
@@ -155,7 +154,7 @@ class workerGetAsses(QtCore.QObject):
     super(workerGetAsses, self).__init__()
     self.asses = ()
     self.absdict = {}
-    print("init worker thread")
+    debug.info("init worker thread")
     self.whereDict = {}
     self.assesList = []
     self.assesNames = {}
@@ -165,7 +164,7 @@ class workerGetAsses(QtCore.QObject):
     self.linkedProjects = ""
 
   #def terminateEvent(self):
-    #print("holy cow . quiting!!")
+    #debug.info("holy cow . quiting!!")
     #if(self.asses or self.absdict):
       #self.finished.emit()
     #else:
@@ -173,7 +172,7 @@ class workerGetAsses(QtCore.QObject):
 
   def getAsses(self):
     self.dataPending.emit()
-    # print("in get asses")
+    # debug.info("in get asses")
     self.asses = ()
     self.assesLinked = ()
 
@@ -199,7 +198,7 @@ class workerGetAsses(QtCore.QObject):
           try:
             self.absdict[self.asses[x]['path']] = utilsPipe.getAbsPath(self.asses[x]['path'])
           except:
-            print(str(sys.exc_info()))
+            debug.info(str(sys.exc_info()))
       else:
         self.asses = ()
 
@@ -208,27 +207,27 @@ class workerGetAsses(QtCore.QObject):
           try:
             self.absdict[self.assesLinked[x]['path']] = utilsPipe.getAbsPath(self.assesLinked[x]['path'])
           except:
-            print(str(sys.exc_info()))
+            debug.info(str(sys.exc_info()))
       else:
         self.assesLinked = ()
     except:
-      print(str(sys.exc_info()))
+      debug.info(str(sys.exc_info()))
 
     self.finished.emit()
-    # print("out get asses")
+    # debug.info("out get asses")
     if(self.asses):
       for x in range(0,len(self.asses)):
         try:
           self.assesList.append(self.asses[x]['path'])
           self.assesNames[self.asses[x]['path']] = self.asses[x]
           self.assesColor[self.asses[x]['path']] = utilsPipe.assPathColorCoded(self.asses[x])
-          self.assModifiedTime[self.asses[x]['path']] = 0
-          # if(sys.platform.find("linux") >= 0):
-          #   self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.asses[x]['path']])))
-          # elif(sys.platform.find("win") >= 0):
-          #   self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.asses[x]['path']])))
+          # self.assModifiedTime[self.asses[x]['path']] = 0
+          if(sys.platform.find("linux") >= 0):
+            self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.asses[x]['path']])))
+          elif(sys.platform.find("win") >= 0):
+            self.assModifiedTime[self.asses[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.asses[x]['path']])))
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
     if(self.assesLinked):
       for x in range(0,len(self.assesLinked)):
@@ -242,7 +241,7 @@ class workerGetAsses(QtCore.QObject):
           # elif(sys.platform.find("win") >= 0):
           #   self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.assesLinked[x]['path']])))
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
     self.dataReady.emit(self.assesList,self.assesNames,self.assesColor,self.absdict,self.assModifiedTime)
 
@@ -453,7 +452,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.radioMineAss.clicked.connect(self.popupMine)
 
     self.lineEditSearch.returnPressed.connect(self.listAssets)
-    self.lineEditSearch.textChanged.connect(self.listAssets)
+    # self.lineEditSearch.textChanged.connect(self.listAssets)
 
 
     self.checkTags.clicked.connect(self.setTags)
@@ -537,13 +536,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     # self.tableWidget.resizeColumnsToContents()
 
   def comboStageTypeEvent(self,event):
-    print(event)
+    debug.info(event)
 
   def listAssets(self):
     # self.listAssetsTimed()
     # self.listAssets_thread()
 
-    #print("list assets called")
+    #debug.info("list assets called")
     if(self.timerAssetsRefresh.isActive()):
       self.timerAssetsRefresh.stop()
       self.timerAssetsRefresh.start(2000)
@@ -579,7 +578,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def popupAss(self, pos):
     listAsses = self.selectedAsses()
-    print("selected asses : "+ str(len(listAsses)))
+    debug.info("selected asses : "+ str(len(listAsses)))
     if(len(listAsses) == 0):
       return(0)
 
@@ -707,7 +706,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         if(x):
           renderFiles.append(str(x))
     if(renderFiles):
-      print(renderFiles[0])
+      debug.info(renderFiles[0])
       subprocess.Popen(rbhusPipeRenderSubmitCmd +" --file \""+ renderFiles[0] +"\" --path \""+ listedAss +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
       return(1)
     else:
@@ -721,7 +720,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def copyPathToClip(self):
     listAsses = self.selectedAsses()
-    print(listAsses)
+    debug.info(listAsses)
     if(listAsses):
       x = listAsses[0]
       abspath =  utilsPipe.getAbsPath(x)
@@ -729,7 +728,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def copyPublishPath(self):
     listAsses = self.selectedAsses()
-    print(listAsses)
+    debug.info(listAsses)
     if(listAsses):
       x = listAsses[0]
       abspath =  utilsPipe.getAbsPath(x)
@@ -741,7 +740,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def copyPipePathToClip(self):
     listAsses = self.selectedAsses()
-    print(listAsses)
+    debug.info(listAsses)
     if(listAsses):
       x = listAsses[0]
       pyperclip.copy(x)
@@ -751,12 +750,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def openFileAss(self):
     listAsses = self.selectedAsses()
-    print(listAsses)
+    debug.info(listAsses)
     fcmd = fileSelectCmd
     if(listAsses):
       x = listAsses[0]
       fcmd = fcmd +" "+ utilsPipe.getAbsPath(x)
-      print(fcmd)
+      debug.info(fcmd)
       p = QtCore.QProcess(parent=self.form)
       #p.setStandardOutputFile(tempDir + os.sep +"rbhusOpenFileAss_"+ self.username +".log")
       p.setStandardErrorFile(tempDir + os.sep +"rbhusOpenFileAss_"+ self.username +".err")
@@ -765,13 +764,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       filename = str(p.readAllStandardOutput()).rstrip().lstrip()
 
       if(filename):
-        print(filename.split("."))
+        debug.info(filename.split("."))
         if(filename.split(".")[-1] == "py"):
           subprocess.Popen("python "+ str(filename),shell=True)
         else:
           assdets = utilsPipe.getAssDetails(assPath=x)
           runCmd = utilsPipe.openAssetCmd(assdets,filename)
-          print("wtf1 : "+ str(runCmd))
+          debug.info("wtf1 : "+ str(runCmd))
           fileTypeDets = None
           if(runCmd):
             runCmd = runCmd.rstrip().lstrip()
@@ -786,14 +785,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def getFileAss(self,favSearch=False):
     if(favSearch):
       i = self.listWidgetAssets.currentRow()
-      print("current row selected :"+ str(i))
+      debug.info("current row selected :"+ str(i))
       x = self.assSearchArray[i]
     else:
       listAsses = self.selectedAsses()
       x = str(listAsses[0])
     if(x): # and (len(listAsses) == 1)
       #x = str(listAsses[0])
-      print(x)
+      debug.info(x)
       p = utilsPipe.getAbsPath(x)
       if(os.path.exists(p)):
         fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
@@ -809,45 +808,45 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     if(favSearch):
       i = self.listWidgetAssets.currentRow()
-      print("current row selected :"+ str(i))
+      debug.info("current row selected :"+ str(i))
       x = self.assSearchArray[i]
     else:
       listAsses = self.selectedAsses()
       x = str(listAsses[0])
     if(x): # and (len(listAsses) == 1)
       #x = str(listAsses[0])
-      print(x)
+      debug.info(x)
       p = utilsPipe.getAbsPath(x)
       assdets = utilsPipe.getAssDetails(assPath=x)
-      print("isAssCreated : "+ str(assdets['createdUser']) +" : "+ str(utilsPipe.isAssCreated(assdets)))
-      print("isAssAssigned : "+ str(assdets['assignedWorker']) +" : "+ str(utilsPipe.isAssAssigned(assdets)))
-      print("isStageAdmin : "+ str(assdets['stageType']) +" : "+ str(utilsPipe.isStageAdmin(assdets)))
-      print("isNodeAdmin : "+ str(assdets['nodeType']) +" : "+ str(utilsPipe.isNodeAdmin(assdets)))
-      print("isProjAdmin : "+ str(assdets['projName']) +" : "+ str(utilsPipe.isProjAdmin(assdets)))
-      print("versioning : "+ str(assdets['versioning']))
+      debug.info("isAssCreated : "+ str(assdets['createdUser']) +" : "+ str(utilsPipe.isAssCreated(assdets)))
+      debug.info("isAssAssigned : "+ str(assdets['assignedWorker']) +" : "+ str(utilsPipe.isAssAssigned(assdets)))
+      debug.info("isStageAdmin : "+ str(assdets['stageType']) +" : "+ str(utilsPipe.isStageAdmin(assdets)))
+      debug.info("isNodeAdmin : "+ str(assdets['nodeType']) +" : "+ str(utilsPipe.isNodeAdmin(assdets)))
+      debug.info("isProjAdmin : "+ str(assdets['projName']) +" : "+ str(utilsPipe.isProjAdmin(assdets)))
+      debug.info("versioning : "+ str(assdets['versioning']))
       if(os.path.exists(p)):
         if(assdets['versioning'] == 0):
           fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
-          print(fila)
+          debug.info(fila)
           if(fila):
-            print(str(fila[0]))
+            debug.info(str(fila[0]))
             filename = str(fila[0])
-            print(filename.split("."))
+            debug.info(filename.split("."))
             assdets = utilsPipe.getAssDetails(assPath=x)
             runCmd = utilsPipe.openAssetCmd(assdets,filename)
             if(runCmd):
               runCmd = runCmd.rstrip().lstrip()
               if(sys.platform.find("win") >= 0):
-                print(runCmd)
+                debug.info(runCmd)
                 subprocess.Popen(runCmd,shell=True)
               elif(sys.platform.find("linux") >= 0):
-                print(runCmd)
+                debug.info(runCmd)
                 subprocess.Popen(runCmd,shell=True)
             else:
               import webbrowser
               webbrowser.open(filename)
         else:
-          print("wtf : opening version cmd ")
+          debug.info("wtf : opening version cmd ")
           if(sys.platform.find("win") >= 0):
             subprocess.Popen([versionCmd,"--path",x],shell = True)
           elif(sys.platform.find("linux") >= 0):
@@ -855,7 +854,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     for x in os.environ.keys():
       if(x.find("rp_") >= 0):
-        print(x +" : "+os.environ[x])
+        debug.info(x +" : "+os.environ[x])
 
 
 
@@ -875,7 +874,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       listAsses = self.selectedAsses()
 
       for x in listAsses:
-        print(x)
+        debug.info(x)
         if(str(x)):
           utilsPipe.assMarkForDelete(assPath=str(x))
       self.listAssets()
@@ -883,14 +882,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def editAss(self):
     listAsses = self.selectedAsses()
-    print(listAsses)
+    debug.info(listAsses)
     if(listAsses):
       self.rbhusAssetEditCmdMod = rbhusPipeAssetEditCmd +" -p "+ ",".join(listAsses)
-      print(self.rbhusAssetEditCmdMod)
+      debug.info(self.rbhusAssetEditCmdMod)
       self.rbhusPipeAssetEdit()
     #for x in listAsses:
       #if(str(x)):
-        #print(str(x))
+        #debug.info(str(x))
 
   def versionAss(self):
     selass = self.selectedAsses()
@@ -900,7 +899,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def resetTemplateFiles(self):
     selass = self.selectedAsses()
     for x in range(0,len(selass)):
-      print(selass[x])
+      debug.info(selass[x])
       assDets = utilsPipe.getAssDetails(assPath = selass[x])
       utilsPipe.setAssTemplate(assDets)
 
@@ -908,7 +907,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     try:
       rows = os.environ["rp_proj_linkedProjects"].split(",")
     except:
-      print(str(sys.exc_info()))
+      debug.info(str(sys.exc_info()))
       return(0)
     self.comboLinked.clear()
     indx = 0
@@ -958,7 +957,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboLinked.model().item(i).checkState() == QtCore.Qt.Checked):
         linkedProjects.append(str(self.comboLinked.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(linkedProjects):
       self.comboLinked.setEditText(",".join(linkedProjects))
     else:
@@ -988,7 +987,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for i in range(0,self.comboLinked.model().rowCount()):
       if(self.comboLinked.model().item(i).checkState() == QtCore.Qt.Checked):
         linkedProjects.append(str(self.comboLinked.model().item(i).text()))
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(linkedProjects):
       self.comboLinked.setEditText(",".join(linkedProjects))
     else:
@@ -1045,7 +1044,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboStageType.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboStageType.setEditText(",".join(selectedStages))
     else:
@@ -1075,7 +1074,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboStageType.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboStageType.setEditText(",".join(selectedStages))
     else:
@@ -1147,7 +1146,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboScene.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboScene.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboScene.setEditText(",".join(selectedStages))
     else:
@@ -1181,7 +1180,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboScene.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboScene.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboScene.setEditText(",".join(selectedStages))
     else:
@@ -1258,7 +1257,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboSequence.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboSequence.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboSequence.setEditText(",".join(selectedStages))
     else:
@@ -1289,7 +1288,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboSequence.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboSequence.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboSequence.setEditText(",".join(selectedStages))
     else:
@@ -1346,7 +1345,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboNodeType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboNodeType.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboNodeType.setEditText(",".join(selectedStages))
     else:
@@ -1377,7 +1376,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboNodeType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboNodeType.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboNodeType.setEditText(",".join(selectedStages))
     else:
@@ -1437,7 +1436,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboFileType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboFileType.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboFileType.setEditText(",".join(selectedStages))
     else:
@@ -1469,7 +1468,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.comboFileType.model().item(i).checkState() == QtCore.Qt.Checked):
         selectedStages.append(str(self.comboFileType.model().item(i).text()))
 
-    #print("EVENT CALLED : "+ str(index.row()))
+    #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
       self.comboFileType.setEditText(",".join(selectedStages))
     else:
@@ -1619,20 +1618,20 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     rowstask=[]
     rowsSelected = []
     rowsModel = self.tableWidget.selectionModel().selectedRows()
-    print("1 : "+ str(rowsModel))
+    debug.info("1 : "+ str(rowsModel))
     for idx in rowsModel:
-      #print(dir(idx.model()))
+      #debug.info(dir(idx.model()))
       rowsSelected.append(idx.row())
-    print(rowsSelected)
+    debug.info(rowsSelected)
     for row in rowsSelected:
       try:
         doc = QtGui.QTextDocument()
         doc.setHtml(str(self.tableWidget.cellWidget(row,0).text()))
         text = doc.toPlainText()
-        #print("2 : "+ text)
+        #debug.info("2 : "+ text)
         rowstask.append(str(text))
       except:
-        print(sys.exc_info())
+        debug.info(sys.exc_info())
     return(rowstask)
 
 
@@ -1668,7 +1667,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
               textAss = textAss + ':' +'<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>'
           item.setTextFormat(QtCore.Qt.RichText)
           item.setText(textAss)
-          item.setToolTip("CHECK OUT THE VERSION OPTION    };)\nEnable it by editing the asset")
+          # item.setToolTip("CHECK OUT THE VERSION OPTION    };)\nEnable it by editing the asset")
           sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
 
           item.setSizePolicy(sizePolicy)
@@ -1677,7 +1676,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
           self.tableWidget.setCellWidget(x,0,item)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
 
 
@@ -1686,28 +1685,28 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           itemAss.setText(str(assesNames[assesList[x]]['assignedWorker']))
           self.tableWidget.setItem(x,1,itemAss)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
         try:
           itemAss = QtGui.QTableWidgetItem()
           itemAss.setText(str(assesNames[assesList[x]]['createdUser']))
           self.tableWidget.setItem(x,2,itemAss)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
         try:
           itemAss = QtGui.QTableWidgetItem()
           itemAss.setText(str(assesNames[assesList[x]]['reviewUser']))
           self.tableWidget.setItem(x,3,itemAss)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
         try:
           itemTag = QtGui.QTableWidgetItem()
           itemTag.setText(str(assesNames[assesList[x]]['tags']))
           self.tableWidget.setItem(x,4,itemTag)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
 
         try:
@@ -1715,7 +1714,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           itemModified.setText(str(assModifiedTime[assesList[x]]))
           self.tableWidget.setItem(x,5,itemModified)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
         try:
           itemModified = QtGui.QTableWidgetItem()
@@ -1725,7 +1724,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             itemModified.setText("enabled : "+ str(assesNames[assesList[x]]['publishVersion']))
           self.tableWidget.setItem(x,6,itemModified)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
         try:
           itemModified = QtGui.QTableWidgetItem()
@@ -1737,7 +1736,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             itemModified.setText("done : "+ str(assesNames[assesList[x]]['reviewVersion']))
           self.tableWidget.setItem(x,7,itemModified)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
 
         try:
@@ -1748,7 +1747,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             itemModified.setText("done")
           self.tableWidget.setItem(x,8,itemModified)
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
 
 
@@ -1756,7 +1755,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           previewName = "preview"
           self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
         except:
-          print(str(sys.exc_info()))
+          debug.info(str(sys.exc_info()))
 
         if(assesList[x] in selAsses):
           self.tableWidget.selectRow(x)
@@ -1785,7 +1784,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             self.tableWidget.setCellWidget(x,9,self.previewWidgets[x])
             self.previewWidgets[x].clicked.connect(lambda boool, x=x : self.imageWidgetClicked(x,self.previewWidgets[x],boool))
           except:
-            print(str(sys.exc_info()))
+            debug.info(str(sys.exc_info()))
           x = x+1;
           if(x >= len(self.previewItems)):
             break;
@@ -1793,7 +1792,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def imageWidgetClicked(self,*args):
     index = args[0]
     father = args[1]
-    print(args)
+    debug.info(args)
     import webbrowser
     webbrowser.open(father.imagePath)
 
@@ -1803,7 +1802,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     doc.setHtml(args[0].text())
     text = doc.toPlainText()
     a = hgmod.hg(text)
-    print("in versionCheck : "+ str(os.getcwd()))
+    debug.info("in versionCheck : "+ str(os.getcwd()))
     #a._init()
 
 
@@ -1873,13 +1872,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.actionSet_project.setText("set project ("+ x +")")
           for y in os.environ.keys():
             if(y.find("rp_") >= 0):
-              print(y +":"+ str(os.environ[y]))
+              debug.info(y +":"+ str(os.environ[y]))
 
           self.updateAll()
           self.saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
           self.saveFileShortcut = home.rstrip(os.sep) + os.sep +"rbhusShort.default_"+ os.environ['rp_proj_projName']
           self.loadSearch()
           self.loadAssetShortcut()
+          try:
+            self.trayIcon.setToolTip(x)
+          except:
+            debug.error(sys.exc_info())
           break
 
 
@@ -1895,7 +1898,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for x in projects:
       projNames.append(x['projName'])
     projN = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(projNames)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
-    print(projN)
+    debug.info(projN)
     if(not projN):
       return(0)
 
@@ -1908,13 +1911,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.actionSet_project.setText("set project ("+ projN +")")
     for x in os.environ.keys():
       if(x.find("rp_") >= 0):
-        print(x +":"+ str(os.environ[x]))
+        debug.info(x +":"+ str(os.environ[x]))
 
     self.updateAll()
     self.saveFile = home.rstrip(os.sep) + os.sep +"rbhusSearch.default_"+ os.environ['rp_proj_projName']
     self.saveFileShortcut = home.rstrip(os.sep) + os.sep +"rbhusShort.default_"+ os.environ['rp_proj_projName']
     self.loadSearch()
     self.loadAssetShortcut()
+    try:
+      self.trayIcon.setToolTip(projN)
+    except:
+      debug.error(sys.exc_info())
 
 
 
@@ -1954,7 +1961,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
                  isAssetNameSave +"###"+ \
                  isAssetPathSave
 
-    print(saveString)
+    debug.info(saveString)
     if(not self.searchDict.has_key(saveString)):
       saveFileFd = open(self.saveFile,"w")
       self.searchDict[saveString] = 1
@@ -1972,11 +1979,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     #for x in range(0,self.listWidgetSearch.count()):
       #item = self.listWidgetSearch.item(x)
-      #print(":"+ str(item.text()))
+      #debug.info(":"+ str(item.text()))
 
 
   def searchItemChanged(self,item):
-    print(item.text())
+    debug.info(item.text())
     indexChanged = self.listWidgetSearch.indexFromItem(item).row()
     self.saveSearchArray[indexChanged].searchName = item.text()
     saveFileFd = open(self.saveFile,"w")
@@ -1986,9 +1993,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def searchItemActivate(self):
     indexChanged = self.listWidgetSearch.currentRow()
-    print(indexChanged)
+    debug.info(indexChanged)
     s = self.saveSearchArray[indexChanged].searchPath.split("###")
-    print(str(s) +":"+ str(len(s)))
+    debug.info(str(s) +":"+ str(len(s)))
     self.comboAssType.setEditText(s[0])
     self.comboSequence.setEditText(s[1])
     self.comboScene.setEditText(s[2])
@@ -2053,7 +2060,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def loadSearch(self):
-    print(self.saveFile)
+    debug.info(self.saveFile)
     self.listWidgetSearch.clear()
     self.saveSearchArray = []
     self.searchDict = {}
@@ -2062,7 +2069,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         saveFileFd = open(self.saveFile,"r")
         itemsForSaveSearch = pickle.load(saveFileFd)
         for x in range(0,len(itemsForSaveSearch)):
-          print("funcky : "+ str(itemsForSaveSearch[x]))
+          debug.info("funcky : "+ str(itemsForSaveSearch[x]))
           item = QtGui.QListWidgetItem()
           item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
           item.setText(itemsForSaveSearch[x].searchName)
@@ -2075,7 +2082,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def deleteSearch(self):
     i = self.listWidgetSearch.currentRow()
-    print("current row selected :"+ str(i))
+    debug.info("current row selected :"+ str(i))
     poped = self.saveSearchArray.pop(i)
     del self.searchDict[poped.searchPath]
     saveFileFd = open(self.saveFile,"w")
@@ -2122,7 +2129,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def deleteFavAss(self):
     i = self.listWidgetAssets.currentRow()
-    print("current row selected :"+ str(i))
+    debug.info("current row selected :"+ str(i))
     poped = self.assSearchArray.pop(i)
     del self.assFavDict[poped]
     saveFileFd = open(self.saveFileShortcut,"w")
@@ -2137,7 +2144,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     asses = self.selectedAsses()
     if(asses):
       for x in range(0,len(asses)):
-        print(asses[x])
+        debug.info(asses[x])
         if(not self.assFavDict.has_key(str(asses[x]))):
           self.assFavDict[str(asses[x])] = 1
           self.assSearchArray.append(str(asses[x]))
