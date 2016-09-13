@@ -222,7 +222,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","merge","--tool",":local"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if(p.returncode != 0)
+    if(p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -238,7 +238,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -252,7 +252,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -267,7 +267,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -282,7 +282,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","push","-f",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -294,7 +294,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","pull",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -321,7 +321,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","update"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -362,7 +362,7 @@ class hg(object):
     utilsPipe.assEdit(asspath = self.pipepath , assdict=assdict)
     out = p.communicate()[0]
     p.wait()
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -390,7 +390,7 @@ class hg(object):
     utilsPipe.reviewVersion(self.assDets['path'], rev)
 
     out = p.communicate()[0]
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -411,7 +411,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     assdict = {}
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -433,7 +433,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     assdict = {}
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
@@ -449,7 +449,7 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if (p.returncode != 0)
+    if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
