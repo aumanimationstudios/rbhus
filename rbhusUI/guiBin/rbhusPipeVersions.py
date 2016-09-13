@@ -6,6 +6,8 @@ import sys
 import time
 import subprocess
 import argparse
+import tempfile
+import psutil
 
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
@@ -30,6 +32,7 @@ import constantsPipe
 import authPipe
 import utilsPipe
 import hgmod
+import debug
 
 
 
@@ -41,7 +44,8 @@ parser.add_argument("-i","--id",dest='assId',help='asset id')
 parser.add_argument("-p","--path",dest='assPath',help='asset path')
 args = parser.parse_args()
 
-
+app_lock_file = os.path.join(tempfile.tempdir,args.assPath)
+debug.info(app_lock_file)
 
 class ImagePlayer(QtGui.QWidget):
   def __init__(self, filename, parent):
@@ -114,10 +118,41 @@ try:
   _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
   _fromUtf8 = lambda s: s
-  
+
+
+
+def app_lock():
+  if(os.path.exists(app_lock_file)):
+    f = open(app_lock_file,"r")
+    pid = f.read().strip()
+    f.close()
+    debug.info(pid)
+    try:
+      p = psutil.Process(int(pid))
+      if (os.path.abspath(p.cmdline()[1]) == os.path.abspath(__file__)):
+        debug.warning("already an instance of the app is running.")
+        debug.warning("delete the file {0}".format(app_lock_file))
+        QtCore.QCoreApplication.instance().quit()
+        os._exit(1)
+      else:
+        raise Exception("seems like a different process has the same pid")
+    except:
+      debug.warn(sys.exc_info())
+      f = open(app_lock_file,"w")
+      f.write(unicode(os.getpid()))
+      f.flush()
+      f.close()
+  else:
+    f = open(app_lock_file,"w")
+    f.write(unicode(os.getpid()))
+    f.flush()
+    f.close()
+
 
 class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   def setupUi(self, Form):
+    app_lock()
+
     self.form = Form
     rbhusPipeVersionsMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()

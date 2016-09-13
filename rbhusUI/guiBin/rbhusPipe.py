@@ -1881,6 +1881,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           self.loadAssetShortcut()
           try:
             self.trayIcon.setToolTip(x)
+            self.trayIcon.
           except:
             debug.error(sys.exc_info())
           break
