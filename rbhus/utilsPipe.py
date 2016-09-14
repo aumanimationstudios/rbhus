@@ -15,12 +15,11 @@ import shutil
 import copy
 import debug
 
-
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
   pwd = os.sep.join(progPath[0:-1])
   cwd = os.path.abspath(pwd)
-  print("utilsPipe 1: "+ str(cwd))
+  debug.info("utilsPipe 1: "+ str(cwd))
 else:
   cwd = os.path.abspath(os.getcwd())
 
@@ -29,7 +28,7 @@ etcpathtmp = cwd.split(os.sep)[0:-2]
 etcpathtmp.append("rbhus")
 etcpathtmp.append("etc")
 etcpath = os.sep.join(etcpathtmp)
-print("utilsPipe 1: "+ str(etcpath))
+debug.info("utilsPipe 1: "+ str(etcpath))
 
 
 sys.path.append(cwd.rstrip(os.sep) + os.sep)
@@ -90,7 +89,7 @@ def getTags(projName="",assPath="",assId=""):
     try:
       rows = dbconn.execute("SELECT tags FROM assets", dictionary=True)
       if(rows):
-        #print(rows)
+        #debug.info(rows)
         tags = {}
         for x in rows:
           t = x['tags'].split(",")
@@ -499,7 +498,7 @@ def setupSequenceScene(seqSceDict):
       seqValues.append("'"+ os.environ['rbhusPipe_acl_user'] +"'")
       seqKeys.append("createdUser")
     except:
-      print("createdUser not given for seq scn")
+      debug.info("createdUser not given for seq scn")
       return(0)
 
 
@@ -535,7 +534,7 @@ def editSequenceScene(seqSceDict):
       dbconn.execute("update sequenceScenes set "+ ",".join(dbvalues) +" where sequenceName=\""+ str(seqSceDict['sequenceName']) +"\" and sceneName=\""+ str(seqSceDict['sceneName']) +"\" and projName=\""+ str(seqSceDict['projName']) +"\"")
     except:
       debug.debug(str(sys.exc_info()))
-    print(dbvalues)
+    debug.info(dbvalues)
     return(1)
   else:
     return(0)
@@ -563,20 +562,20 @@ def getAbsPath(pipePath):
       absPath.append(str(x))
 
   projName = absPath[0]
-  #print("getAbsPath 1: "+ str(projName))
+  #debug.info("getAbsPath 1: "+ str(projName))
 
 
-  #print("getAbsPath 2: "+ str(projDets))
+  #debug.info("getAbsPath 2: "+ str(projDets))
 
   assDets = getAssDetails(assPath=pipePath)
-  #print("getAbsPath 3: "+ str(projDets))
+  #debug.info("getAbsPath 3: "+ str(projDets))
   if(assDets):
     projDirMapsDets = getDirMapsDetails(assDets['directory'])
   else:
     projDets = getProjDetails(projName)
     projDirMapsDets = getDirMapsDetails(projDets['directory'])
 
-  #print("getAbsPath 4: "+ str(projDirMapsDets))
+  #debug.info("getAbsPath 4: "+ str(projDirMapsDets))
   absPathRet = ""
   if(sys.platform.find("linux") >= 0):
     absPathRet = os.path.abspath(projDirMapsDets['linuxMapping'].rstrip("/") +"/"+ ":".join(absPath).replace(":","/").lstrip("/"))
@@ -639,9 +638,9 @@ def getLibAsses(projNames,limit=None,whereDict={}):
     return(0)
   if(linkedProjects != "default"):
     projs = ["'"+ x +"'" for x in linkedProjects.split(",")]
-    print(projs)
+    debug.info(projs)
     whereProj = " where (projName=" + " or projName=".join(projs) +")"
-  print("in getProjAssesLinked module 1 : "+ str(whereProj) )
+  debug.info("in getProjAssesLinked module 1 : "+ str(whereProj) )
   whereString = []
   try:
     if(not limit):
@@ -808,7 +807,7 @@ def getUsers():
   dbconn = dbPipe.dbPipe()
   try:
     rows = dbconn.execute("select * from users order by id", dictionary=True)
-    #print([row['id'] for row in rows])
+    #debug.info([row['id'] for row in rows])
     return([str(row['id']).rstrip().lstrip() for row in rows])
   except:
     debug.debug(str(sys.exc_info()))
@@ -1027,7 +1026,7 @@ def assEdit(asspath="",assid="",assdict={}):
   if(assdict):
     for k in assdict:
       dbvalues.append(str(k) +"=\""+ str(assdict[k]).rstrip().lstrip() +"\"")
-  print(dbvalues)
+  debug.info(dbvalues)
   if(dbvalues):
     dbconn = dbPipe.dbPipe()
     if(assid):
@@ -1085,7 +1084,7 @@ def reviewEdit(assdict={}):
     del(assDets['assetId'])
     for k in assDets:
       dbvalues.append(str(k) +"=\""+ str(assDets[k]).rstrip().lstrip() +"\"")
-  print(dbvalues)
+  debug.info(dbvalues)
   if(dbvalues):
     dbconn = dbPipe.dbPipe()
     if(assid):
@@ -1145,7 +1144,7 @@ def assLinkedTo(assId):
   pass
 
 def getTemplatePath(assdetsTemp = {}):
-  print("in getTemplatePath")
+  debug.info("in getTemplatePath")
   assdets = copy.copy(assdetsTemp)
   filetypedets = {}
   tempMain = ""
@@ -1156,52 +1155,52 @@ def getTemplatePath(assdetsTemp = {}):
     if(dirs[x]):
       direcs[dirs[x]['directory']] = 1
   for y in direcs:
-    print(y)
+    debug.info(y)
   assdets['assName'] = "default"
   assdets['assetType'] = "template"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  print(assdetails)
-  print(assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
 
   if(not assdetails):
     assdets['sceneName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  print(assdetails)
-  print(assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
 
   if(not assdetails):
     assdets['sequenceName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  print(assdetails)
-  print(assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
 
   if(not assdetails):
     assdets['nodeType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  print(assdetails)
-  print(assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
 
   if(not assdetails):
     assdets['stageType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  print(assdetails)
-  print(assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
 
 
 
   if(assdetails):
     assPathTemp = assdetails['path']
     assPathAbs = getAbsPath(assPathTemp)
-    print(assPathAbs)
+    debug.info(assPathAbs)
     if(os.path.exists(assPathAbs)):
       filetypedets = getFileTypes(assdets['fileType'])
       filename = assPathAbs+ "/template." + filetypedets['extension'].split(",")[0]
-      print(filename)
+      debug.info(filename)
       return(filename)
   return(0)
 
@@ -1237,12 +1236,12 @@ def openAssetCmd(assdets ={},filename = None):
     runCmd = binDir +"/"+ filetypedets[exeAss]
     if(os.path.exists(runCmd)):
       runProc = runCmd +" "+ filename
-      print(runProc)
+      debug.info(runProc)
       return(runProc)
     else:
       binPaths = filetypedets[pathAss].split(",")
       for x in reversed(binPaths):
-        print(str(x))
+        debug.info(str(x))
         if(str(x) != "default"):
 
           absBinPath = getAbsPath(x)
@@ -1250,7 +1249,7 @@ def openAssetCmd(assdets ={},filename = None):
             runCmd = absBinPath +"/"+ filetypedets[exeAss]
             if(os.path.exists(runCmd)):
               runProc = runCmd +" "+ filename
-              print(runProc)
+              debug.info(runProc)
               return(runProc)
         else:
           return("\""+ filetypedets[exeAss] +"\" "+ filename)

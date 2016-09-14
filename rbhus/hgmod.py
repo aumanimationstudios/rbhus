@@ -207,8 +207,10 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","init"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    p.wait()
-    debug.info(out)
+    if (p.returncode != 0):
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
     self._copyMainConfig()
 
 
@@ -290,9 +292,9 @@ class hg(object):
 
   def _pull(self):
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg pull {0}".format(self.absPipePath),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg pull --force {0}".format(self.absPipePath),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","pull",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","pull","--force",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
@@ -352,7 +354,14 @@ class hg(object):
       rev = 0
     os.chdir(self.absPipePath)
     if(os.path.exists("./publish/")):
-      shutil.rmtree("./publish/")
+      try:
+        shutil.rmtree("./publish/")
+      except:
+        debug.warn(sys.exc_info())
+    try:
+      os.makedirs(os.path.join(os.getcwd()),"publish")
+    except:
+      debug.warn(sys.exc_info())
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg archive --rev {0} ./publish/".format(rev),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
@@ -379,6 +388,11 @@ class hg(object):
     os.chdir(self.absPipePath)
     # if(os.path.exists("./review_"+ str(rev) +"/")):
     #   shutil.rmtree("./review_"+ str(rev) +"/")
+    try:
+      os.makedirs(os.path.join(os.getcwd()), "review_{0}".format(rev))
+    except:
+      debug.warn(sys.exc_info())
+
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg archive --rev {0} ./review_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
@@ -401,15 +415,20 @@ class hg(object):
       rev = 0
     os.chdir(self.absPipePath)
     if(os.path.exists("./export_"+ str(rev) +"/")):
-      shutil.rmtree("./export_"+ str(rev) +"/")
       try:
-        os.makedirs("./export_"+ str(rev) +"/")
+        shutil.rmtree("./export_"+ str(rev) +"/")
       except:
-        debug.error(sys.exc_info())
+        debug.warn(sys.exc_info())
+    try:
+      os.makedirs(os.path.join(os.getcwd()), "export_{0}".format(rev))
+    except:
+      debug.warn(sys.exc_info())
+
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()[0]
     assdict = {}
     if (p.returncode != 0):
       debug.error(str(out))
@@ -422,16 +441,21 @@ class hg(object):
       rev = 0
     os.chdir(self.localPath)
     if(os.path.exists("./export_"+ str(rev) +"/")):
-      shutil.rmtree("./export_"+ str(rev) +"/")
       try:
-        os.makedirs("./export_"+ str(rev) +"/")
+        shutil.rmtree("./export_"+ str(rev) +"/")
       except:
         debug.error(sys.exc_info())
+
+    try:
+      os.makedirs(os.path.join(os.getcwd()), "export_{0}".format(rev))
+    except:
+      debug.warn(sys.exc_info())
+
     if(sys.platform.lower().find("linux") >= 0):
-      debug.info("hg archive --rev {0} ./export_{0}/".format(rev))
       p = subprocess.Popen("hg archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()[0]
     assdict = {}
     if (p.returncode != 0):
       debug.error(str(out))
@@ -461,7 +485,8 @@ class hg(object):
   def getVersionPath(self,rev):
     if(not rev):
       rev = 0
-    if(not os.path.exists(self.absPipePath +"/export_"+ str(rev) +"/")):
+    if(not os.path.exists(self.localPath +"/export_"+ str(rev) +"/")):
+      debug.info("version path does not exists . creating it now ")
       self._archiveVersionLocal(rev)
     return(self.localPath +"/export_"+ str(rev) +"/")
 
