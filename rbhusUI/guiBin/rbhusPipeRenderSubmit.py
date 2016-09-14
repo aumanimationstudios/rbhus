@@ -510,6 +510,15 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                   sdcd = sdc.rstrip("/") +"/"+ l.lstrip().rstrip() + "/"
                   submitDict['layer'] = l
                   submitDict['outDir'] = sdcd
+                  for ii in range(1,1000):
+                    submitDict['outDir'] = os.path.join(sdcd,str(ii).rjust(4,"0"))
+                    if(not os.path.exists(submitDict['outDir'])):
+                      try:
+                        os.makedirs(submitDict['outDir'])
+                      except:
+                        print (sys.exc_info())
+                      break
+
                   try:
                     b = a.submit(submitDict)
                     print("Submiting task : "+ str(b) +" : "+ str(submitDict))
@@ -517,6 +526,15 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     print("Error inserting task : "+ str(sys.exc_info()))
               else:
                 submitDict['outDir'] = sdc
+                for ii in range(1, 1000):
+                  submitDict['outDir'] = os.path.join(sdc, str(ii).rjust(4, "0"))
+                  if (not os.path.exists(submitDict['outDir'])):
+                    try:
+                      os.makedirs(submitDict['outDir'])
+                    except:
+                      print (sys.exc_info())
+                    break
+
                 try:
                   b = a.submit(submitDict)
                   print("Submiting task : "+ str(b) +" : "+ str(submitDict))
