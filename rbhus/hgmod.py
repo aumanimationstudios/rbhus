@@ -359,7 +359,7 @@ class hg(object):
       except:
         debug.warn(sys.exc_info())
     try:
-      os.makedirs(os.path.join(os.getcwd()),"publish")
+      os.makedirs(os.path.join(os.getcwd(),"publish"))
     except:
       debug.warn(sys.exc_info())
     if(sys.platform.lower().find("linux") >= 0):
@@ -389,7 +389,7 @@ class hg(object):
     # if(os.path.exists("./review_"+ str(rev) +"/")):
     #   shutil.rmtree("./review_"+ str(rev) +"/")
     try:
-      os.makedirs(os.path.join(os.getcwd()), "review_{0}".format(rev))
+      os.makedirs(os.path.join(os.getcwd(), "review_{0}".format(rev)))
     except:
       debug.warn(sys.exc_info())
 
@@ -420,7 +420,7 @@ class hg(object):
       except:
         debug.warn(sys.exc_info())
     try:
-      os.makedirs(os.path.join(os.getcwd()), "export_{0}".format(rev))
+      os.makedirs(os.path.join(os.getcwd(), "export_{0}".format(rev)))
     except:
       debug.warn(sys.exc_info())
 
@@ -447,7 +447,7 @@ class hg(object):
         debug.error(sys.exc_info())
 
     try:
-      os.makedirs(os.path.join(os.getcwd()), "export_{0}".format(rev))
+      os.makedirs(os.path.join(os.getcwd(), "export_{0}".format(rev)))
     except:
       debug.warn(sys.exc_info())
 
