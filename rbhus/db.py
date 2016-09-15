@@ -25,7 +25,7 @@ import MySQLdb
 import MySQLdb.cursors
 import os
 
-
+os.environ["QT_GRAPHICSSYSTEM"] = "native"
 dbHostname = "blues2"
 dbPort = "3306"
 dbDatabase = "rbhus"

@@ -8,7 +8,7 @@ import logging.handlers
 import socket
 import os
 import tempfile
-
+os.environ["QT_GRAPHICSSYSTEM"] = "native"
 
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()

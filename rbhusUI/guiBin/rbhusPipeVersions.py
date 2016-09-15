@@ -8,7 +8,7 @@ import subprocess
 import argparse
 import tempfile
 import psutil
-
+import fcntl
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
@@ -44,7 +44,7 @@ parser.add_argument("-i","--id",dest='assId',help='asset id')
 parser.add_argument("-p","--path",dest='assPath',help='asset path')
 args = parser.parse_args()
 
-app_lock_file = os.path.join(tempfile.tempdir,args.assPath)
+app_lock_file = os.path.join(tempfile.tempdir,str(args.assPath).replace(":","_"))
 debug.info(app_lock_file)
 
 class ImagePlayer(QtGui.QWidget):
@@ -124,6 +124,7 @@ except AttributeError:
 def app_lock():
   if(os.path.exists(app_lock_file)):
     f = open(app_lock_file,"r")
+    fcntl.flock(f,fcntl.LOCK_EX)
     pid = f.read().strip()
     f.close()
     debug.info(pid)
@@ -144,6 +145,7 @@ def app_lock():
       f.close()
   else:
     f = open(app_lock_file,"w")
+    fcntl.flock(f, fcntl.LOCK_EX)
     f.write(unicode(os.getpid()))
     f.flush()
     f.close()

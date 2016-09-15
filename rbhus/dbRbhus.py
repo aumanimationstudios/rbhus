@@ -10,6 +10,7 @@ import os
 import tempfile
 import debug
 
+os.environ["QT_GRAPHICSSYSTEM"] = "native"
 
 hostname = socket.gethostname()
 tempDir = os.path.abspath(tempfile.gettempdir())
