@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>651</width>
-    <height>839</height>
+    <width>567</width>
+    <height>780</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -465,14 +465,14 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>637</width>
+          <width>551</width>
           <height>70</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2"/>
        </widget>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit">
+      <widget class="QTextEdit" name="textEdit">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -490,6 +490,12 @@
          <width>16777215</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="autoFormatting">
+        <set>QTextEdit::AutoNone</set>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::LinksAccessibleByMouse|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
        </property>
       </widget>
       <widget class="QGroupBox" name="groupBox_2">
@@ -523,10 +529,34 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QPushButton" name="pushOpenReferenceReview">
-        <property name="text">
-         <string>open reference folder</string>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string/>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QPushButton" name="pushOpenReferenceReview">
+           <property name="text">
+            <string>add reference</string>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item>
@@ -548,7 +578,7 @@
       <item>
        <widget class="QPushButton" name="pushOpenVersion">
         <property name="text">
-         <string>open version folder</string>
+         <string>open version</string>
         </property>
        </widget>
       </item>

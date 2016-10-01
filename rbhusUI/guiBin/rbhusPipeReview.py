@@ -9,7 +9,7 @@ import logging.handlers
 import socket
 import tempfile
 import copy
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, uic
 import uuid
 import webbrowser
 
@@ -17,7 +17,9 @@ import webbrowser
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
-
+ui_file_path = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib"
+ui_left_msg = os.path.join(ui_file_path,"rbhusPipeReviewMod_textBox_left.ui")
+ui_right_msg = os.path.join(ui_file_path,"rbhusPipeReviewMod_textBox_right.ui")
 import rbhusPipeReviewMod
 
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -26,7 +28,7 @@ import dbPipe
 import constantsPipe
 import authPipe
 import utilsPipe
-
+import debug
 
 
 parser = argparse.ArgumentParser()
@@ -68,7 +70,6 @@ args = parser.parse_args()
 
 
 
-
   
 class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
   def setupUi(self, Form):
@@ -77,6 +78,7 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
     self.splitter.setStretchFactor(0, 10)
     self.assdets = {}
     self.msgboxes = []
+    self.isReferenceAdded = False
     self.referenceFolder = str(uuid.uuid4())
     if(args.assetpath):
       self.assdets = utilsPipe.getAssDetails(assPath=args.assetpath)
@@ -103,7 +105,6 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
   
   def updateScroll(self,min,max):
     self.scrollArea.verticalScrollBar().setValue(max)
-    print(max)
 
 
 
@@ -124,36 +125,42 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
   
   def openReferenceFolder(self,*args):
     abspath  = utilsPipe.getAbsPath(self.assdets['path'])
-    refFolder = abspath +"/review_"+ str(args[1]) +"/.ref/"+ str(args[2])
+    verFolder = abspath + "/review_" + str(args[1]) + "/"
+    refFolder = verFolder + ".ref/"+ str(args[2])
     if(utilsPipe.isReviewUser(self.assdets) or utilsPipe.isStageAdmin(self.assdets) or utilsPipe.isAssAssigned(self.assdets)):
       try:
         os.makedirs(refFolder)
       except:
         pass
-  
-    webbrowser.open(refFolder)
+      webbrowser.open(refFolder)
+      self.isReferenceAdded = True
 
 
   def openVersionFolder(self,*args):
     abspath  = utilsPipe.getAbsPath(self.assdets['path'])
-    refFolder = abspath +"/review_"+ str(args[1]) +"/"
-    webbrowser.open(refFolder)
+    verFolder = abspath +"/review_"+ str(args[1]) +"/"
+    if(os.path.exists(verFolder)):
+      webbrowser.open(verFolder)
     
 
   def sendReview(self):
     if(utilsPipe.isReviewUser(self.assdets) or utilsPipe.isStageAdmin(self.assdets) or utilsPipe.isAssAssigned(self.assdets) or utilsPipe.isProjAdmin(self.assdets)):
       if(self.assdets['reviewStatus'] == constantsPipe.reviewStatusDone):
-        print("review done")
-      if(str(self.plainTextEdit.document().toPlainText()) == ""):
-        print("not updating since there is no message")
+        debug.info("review done")
+      if(str(self.textEdit.toPlainText()) == ""):
+        debug.info("not updating since there is no message")
         return(0)
 
       revdets = {}
       revdets['assetId'] = str(self.assdets['assetId'])
       revdets['reviewVersion'] = str(self.assdets['reviewVersion'])
-      revdets['message'] = str(self.plainTextEdit.document().toPlainText())
+      revdets['message'] = str(self.textEdit.toPlainText())
       revdets['username'] = str(username)
-      revdets['referenceFolder'] = str(self.referenceFolder)
+      if(self.isReferenceAdded):
+        revdets['referenceFolder'] = str(self.referenceFolder)
+        self.isReferenceAdded = False
+      else:
+        revdets['referenceFolder'] = ""
       utilsPipe.reviewAdd(revdets)
       assedit = {}
 
@@ -163,11 +170,13 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
         assedit['reviewStatus'] = constantsPipe.reviewStatusDone
 
       utilsPipe.assEdit(assid=str(self.assdets['assetId']),assdict=assedit)
+      self.referenceFolder = str(uuid.uuid4())
       self.clearLayout()
       self.update()
-      self.referenceFolder = str(uuid.uuid4())
       self.pushOpenReferenceReview.clicked.disconnect()
       self.pushOpenReferenceReview.clicked.connect(lambda item,ver=str(self.assdets['reviewVersion']),refFolder=str(self.referenceFolder) : self.openReferenceFolder(item,ver,refFolder))
+      self.textEdit.clear()
+
 
 
 
@@ -177,69 +186,25 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
       self.verticalLayout_2.removeItem(self.spacerForMsgBox)
     except:
       pass
-    widgetMsgQueue = QtGui.QWidget(self.scrollAreaWidgetContents)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.MinimumExpanding)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(widgetMsgQueue.sizePolicy().hasHeightForWidth())
-    widgetMsgQueue.setSizePolicy(sizePolicy)
-    widgetMsgQueue.setObjectName(_fromUtf8("widgetMsgQueue"))
-    verticalLayout_3 = QtGui.QVBoxLayout(widgetMsgQueue)
-    verticalLayout_3.setMargin(0)
-    verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
-    groupBox = QtGui.QGroupBox(widgetMsgQueue)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(groupBox.sizePolicy().hasHeightForWidth())
-    groupBox.setSizePolicy(sizePolicy)
-    groupBox.setTitle(_fromUtf8(""))
-    groupBox.setObjectName(_fromUtf8("groupBox"))
-    horizontalLayout = QtGui.QHBoxLayout(groupBox)
-    horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-    user = QtGui.QLabel(groupBox)
-    user.setObjectName(_fromUtf8("user"))
-    horizontalLayout.addWidget(user)
-    date = QtGui.QLabel(groupBox)
-    date.setObjectName(_fromUtf8("date"))
-    horizontalLayout.addWidget(date)
-    version = QtGui.QLabel(groupBox)
-    version.setObjectName(_fromUtf8("version"))
-    horizontalLayout.addWidget(version)
-    verticalLayout_3.addWidget(groupBox)
-    msgBox = QtGui.QPlainTextEdit(widgetMsgQueue)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.MinimumExpanding)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    # sizePolicy.setHeightForWidth(msgBox.sizePolicy().hasHeightForWidth())
-    sizePolicy.setHeightForWidth(False)
-    msgBox.setSizePolicy(sizePolicy)
-    msgBox.setObjectName(_fromUtf8("msgBox"))
-    verticalLayout_3.addWidget(msgBox)
-    horizontalLayout_4 = QtGui.QHBoxLayout()
-    horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
-    pushOpenReferenceReviewed = QtGui.QPushButton(widgetMsgQueue)
-    pushOpenVersion1 = QtGui.QPushButton(widgetMsgQueue)
-    # pushOpenReferenceReviewed.setObjectName(_fromUtf8("pushOpenReferenceReviewed"))
-    # pushOpenVersion.setObjectName(_fromUtf8("pushOpenVersion"))
-    horizontalLayout_4.addWidget(pushOpenReferenceReviewed)
-    spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-    horizontalLayout_4.addItem(spacerItem)
-    horizontalLayout_4.addWidget(pushOpenVersion1)
-    verticalLayout_3.addLayout(horizontalLayout_4)
-    msgBox.setPlainText(msg)
-    msgBox.setReadOnly(True)
-    user.setText("user : "+ str(user1))
-    date.setText("date : "+ str(date1))
-    version.setText("version : "+ str(ver))
-    pushOpenReferenceReviewed.setText("open reference folder")
-    pushOpenVersion1.setText("open version folder")
 
-    self.verticalLayout_2.addWidget(widgetMsgQueue)
+    if(username == user1):
+      ui_msg = uic.loadUi(ui_left_msg)
+    else:
+      ui_msg = uic.loadUi(ui_right_msg)
+    ui_msg.textEditContent.setText(msg)
+    ui_msg.textEditContent.setReadOnly(True)
+    ui_msg.labelUser.setText("user : "+ str(user1))
+    ui_msg.labelDate.setText("date : "+ str(date1))
+    ui_msg.labelVersion.setText("version : "+ str(ver))
+    self.verticalLayout_2.addWidget(ui_msg)
     self.verticalLayout_2.addItem(self.spacerForMsgBox)
-    pushOpenReferenceReviewed.clicked.connect(lambda item, ver=str(ver),refFolder=str(rFolder) : self.openReferenceFolder(item,ver,refFolder))
-    pushOpenVersion1.clicked.connect(lambda item, ver=str(ver) : self.openVersionFolder(item,ver))
-    return(widgetMsgQueue)
+    debug.info("reference folder : {0}".format(len(rFolder)))
+    if(not len(rFolder)):
+      ui_msg.pushReference.setEnabled(False)
+    else:
+      ui_msg.pushReference.clicked.connect(lambda item, ver=str(ver),refFolder=str(rFolder) : self.openReferenceFolder(item,ver,refFolder))
+    ui_msg.pushVersion.clicked.connect(lambda item, ver=str(ver) : self.openVersionFolder(item,ver))
+    return(ui_msg)
 
     
     

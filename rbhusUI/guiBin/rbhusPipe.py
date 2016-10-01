@@ -1,4 +1,5 @@
- #!/usr/bin/python
+#!/usr/bin/python
+import zmq
 from PyQt4 import QtCore, QtGui, QtSql
 import os
 import sys
@@ -73,6 +74,27 @@ except AttributeError:
 class saveSearch:
   searchPath = ''
   searchName = "new fav"
+
+
+class api_serv(QtCore.QThread):
+  msg_recved = QtCore.pyqtSignal(object)
+  def __init__(self):
+    super(api_serv, self).__init__()
+
+    self.context = zmq.Context()
+
+    # Define the socket using the "Context"
+    self.sock = self.context.socket(zmq.REP)
+    self.sock.bind("tcp://127.0.0.1:8989")
+
+  def run(self):
+    # Run a simple "Echo" server
+    while True:
+      (id, msg) = self.sock.recv_multipart()
+      self.msg_recved.emit(msg)
+      self.sock.send_multipart([bytes(id), "ack"])
+
+
 
 class ExtendedQLabel(QtGui.QLabel):
   clicked = QtCore.pyqtSignal()
@@ -235,11 +257,11 @@ class workerGetAsses(QtCore.QObject):
           self.assesList.append(self.assesLinked[x]['path'])
           self.assesNames[self.assesLinked[x]['path']] = self.assesLinked[x]
           self.assesColor[self.assesLinked[x]['path']] = utilsPipe.assPathColorCoded(self.assesLinked[x])
-          self.assModifiedTime[self.asses[x]['path']] = 0
-          # if(sys.platform.find("linux") >= 0):
-          #   self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.assesLinked[x]['path']])))
-          # elif(sys.platform.find("win") >= 0):
-          #   self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.assesLinked[x]['path']])))
+          # self.assModifiedTime[self.asses[x]['path']] = 0
+          if(sys.platform.find("linux") >= 0):
+            self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getctime(self.absdict[self.assesLinked[x]['path']])))
+          elif(sys.platform.find("win") >= 0):
+            self.assModifiedTime[self.assesLinked[x]['path']] = time.strftime("%Y/%m/%d # %I:%M %p",time.localtime(os.path.getmtime(self.absdict[self.assesLinked[x]['path']])))
         except:
           debug.info(str(sys.exc_info()))
 
@@ -503,6 +525,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listWidgetSearch.itemChanged.connect(self.searchItemChanged)
     #self.listWidgetSearch.itemPressed.connect(self.searchItemActivate)
     self.pushSearchFavReset.clicked.connect(self.clearSearchFav)
+    self.api = api_serv()
+    self.api.start()
+    self.api.msg_recved.connect(self.run_api)
+
     #self.timerAss = QtCore.QTimer()
     #self.timerAss.timeout.connect(self.listAssetsTimed)
     #self.timerAss.start(2000)
@@ -513,6 +539,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.previewCheck()
 
 
+  def run_api(self,*args):
+    debug.info(args)
 
   def pushResetSearchFunc(self):
     self.lineEditSearch.setText("")

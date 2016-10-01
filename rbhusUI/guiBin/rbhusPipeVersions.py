@@ -8,7 +8,9 @@ import subprocess
 import argparse
 import tempfile
 import psutil
-import fcntl
+if(sys.platform.find("linux") >=0 ):
+  import fcntl
+
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
@@ -124,7 +126,6 @@ except AttributeError:
 def app_lock():
   if(os.path.exists(app_lock_file)):
     f = open(app_lock_file,"r")
-    fcntl.flock(f,fcntl.LOCK_EX)
     pid = f.read().strip()
     f.close()
     debug.info(pid)
@@ -140,14 +141,31 @@ def app_lock():
     except:
       debug.warn(sys.exc_info())
       f = open(app_lock_file,"w")
+      if(sys.platform.find("linux") >= 0):
+        try:
+          fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except:
+          debug.error(sys.exc_info())
+          QtCore.QCoreApplication.instance().quit()
+          os._exit(1)
       f.write(unicode(os.getpid()))
       f.flush()
+      if (sys.platform.find("linux") >= 0):
+        fcntl.flock(f, fcntl.LOCK_UN)
       f.close()
   else:
     f = open(app_lock_file,"w")
-    fcntl.flock(f, fcntl.LOCK_EX)
+    if (sys.platform.find("linux") >= 0):
+      try:
+        fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+      except:
+        debug.error(sys.exc_info())
+        QtCore.QCoreApplication.instance().quit()
+        os._exit(1)
     f.write(unicode(os.getpid()))
     f.flush()
+    if (sys.platform.find("linux") >= 0):
+      fcntl.flock(f, fcntl.LOCK_UN)
     f.close()
 
 

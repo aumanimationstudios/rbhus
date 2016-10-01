@@ -1048,15 +1048,17 @@ def assEdit(asspath="",assid="",assdict={}):
 
 
 def reviewAdd(assdict={}):
+  if(not assdict.has_key("referenceFolder")):
+    assdict["referenceFolder"] = ""
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("insert into assetReviews (assetId,reviewVersion,message,username,referenceFolder,datetime) value ('"\
-      + str(assdict['assetId']).rstrip().lstrip() +"','"\
-      + str(assdict['reviewVersion']).rstrip().lstrip() +"','"\
-      + str(assdict['message']).rstrip().lstrip() +"','"\
-      + str(assdict['username']).rstrip().lstrip() +"','"\
-      + str(assdict['referenceFolder']).rstrip().lstrip() +"','"\
-      + str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"')")
+    dbconn.execute("insert into assetReviews (assetId,reviewVersion,message,username,referenceFolder,datetime) value (\""\
+      + str(assdict['assetId']).rstrip().lstrip() +"\",\""\
+      + str(assdict['reviewVersion']).rstrip().lstrip() +"\",\""\
+      + str(assdict['message']).rstrip().lstrip() +"\",\""\
+      + str(assdict['username']).rstrip().lstrip() +"\",\""\
+      + str(assdict['referenceFolder']).rstrip().lstrip() +"\",\""\
+      + str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"\")")
   except:
     debug.debug(str(sys.exc_info()))
 
@@ -1064,9 +1066,11 @@ def reviewAdd(assdict={}):
 def reviewVersion(asspath,version):
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("update assets set reviewVersion = '"+ str(version) +"',reviewStatus='"+ str(constantsPipe.reviewStatusInProgress) +"' where path = '"+ str(asspath) +"'")
+    dbconn.execute("update assets set reviewVersion = \""+ str(version) +"\",reviewStatus=\""+ str(constantsPipe.reviewStatusInProgress) +"\" where path = \""+ str(asspath) +"\"")
   except:
     debug.debug(str(sys.exc_info()))
+
+
 
 
 

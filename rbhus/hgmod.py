@@ -401,14 +401,20 @@ class hg(object):
     # assdict["reviewVersion"] = str(rev)
     # assdict['assetId'] = self.assDets['assetId']
     # assdict['username'] = self.username
-    utilsPipe.reviewVersion(self.assDets['path'], rev)
-
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
+      utilsPipe.reviewVersion(self.assDets['path'], rev)
+      revdets = {}
+      revdets['assetId'] = str(self.assDets['assetId'])
+      revdets['reviewVersion'] = str(rev)
+      revdets['message'] = "please review the given version."
+      revdets['username'] = str(self.username)
+      utilsPipe.reviewAdd(revdets)
     os.chdir(self.localPath)
+
 
   def _archiveVersion(self,rev):
     if(not rev):
