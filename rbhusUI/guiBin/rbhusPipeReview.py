@@ -212,7 +212,12 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
         assedit['reviewStatus'] = constantsPipe.reviewStatusInProgress
       else:
         assedit['reviewStatus'] = constantsPipe.reviewStatusDone
-      utilsTray.addNotifications(self.assdets['assignedWorker'],"rbhusReview",self.assdets['path'],"rbhusPipe_review.py","-p "+ self.assdets['projName'] +" -a "+ self.assdets['path'])
+      if (username != self.assdets['assignedWorker']):
+        utilsTray.addNotifications(self.assdets['assignedWorker'], "rbhusReview", self.assdets['path'], "rbhusPipe_review.py", "-p " + self.assdets['projName'] + " -a " + self.assdets['path'])
+
+      if (username != self.assdets['reviewUser']):
+        utilsTray.addNotifications(self.assdets['reviewUser'], "rbhusReview", self.assdets['path'], "rbhusPipe_review.py", "-p " + self.assdets['projName'] + " -a " + self.assdets['path'])
+
       utilsPipe.assEdit(assid=str(self.assdets['assetId']),assdict=assedit)
       self.referenceFolder = str(uuid.uuid4())
       self.clearLayout()
