@@ -6,7 +6,7 @@ import sys
 import tempfile
 import time
 import subprocess
-import math
+import simplejson
 import pickle
 from os.path import expanduser
 
@@ -278,7 +278,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     rbhusPipeMainMod.Ui_MainWindow.setupUi(self,Form)
     self.form = Form
     self.form.setWindowState(QtCore.Qt.WindowMaximized)
-
+    self.set_project = None
     self.authL = authPipe.login()
     self.rbhusAssetEditCmdMod = ""
     self.username = None
@@ -539,8 +539,18 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #self.previewCheck()
 
 
-  def run_api(self,*args):
-    debug.info(args)
+  def run_api(self,inputDict):
+    inputs = simplejson.loads(inputDict)
+    temp_project = inputs['project']
+    temp_asset = inputs['asset']
+    temp_run = inputs['run']
+    if(temp_project != self.set_project):
+      self.rbhusPipeSetProject_temp(temp_project)
+    if(temp_run == constantsPipe.run_api_cmd_review):
+      self.reviewAss(ass = temp_asset)
+
+
+
 
   def pushResetSearchFunc(self):
     self.lineEditSearch.setText("")
@@ -560,8 +570,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.listAssetsTimed()
 
   def tableWidgetResizeContents(self):
-    pass
-    # self.tableWidget.resizeColumnsToContents()
+    # pass
+    self.tableWidget.resizeColumnsToContents()
 
   def comboStageTypeEvent(self,event):
     debug.info(event)
@@ -713,9 +723,12 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.menuMine.show()
 
 
-  def reviewAss(self):
-    listAsses = self.selectedAsses()
-    listedAss = listAsses[0]
+  def reviewAss(self,ass=None):
+    if(ass):
+      listedAss = ass
+    else:
+      listAsses = self.selectedAsses()
+      listedAss = listAsses[0]
     if(sys.platform.find("win") >= 0):
       subprocess.Popen([rbhusPipeReviewCmd,"--assetpath",listedAss],shell = True)
     elif(sys.platform.find("linux") >= 0):
@@ -727,7 +740,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def renderAss(self):
     filesTorender = self.getFileAss()
     listAsses = self.selectedAsses()
-    listedAss = listAsses[0]
+    listedAss = list
+    Asses[0]
     renderFiles = []
     if(not isinstance(filesTorender,int)):
       for x in filesTorender:
@@ -1813,9 +1827,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             self.previewWidgets[x].clicked.connect(lambda boool, x=x : self.imageWidgetClicked(x,self.previewWidgets[x],boool))
           except:
             debug.info(str(sys.exc_info()))
-          x = x+1;
+          x = x+1
           if(x >= len(self.previewItems)):
-            break;
+            break
 
   def imageWidgetClicked(self,*args):
     index = args[0]
@@ -1911,6 +1925,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             self.trayIcon.setToolTip(x)
           except:
             debug.error(sys.exc_info())
+          self.set_project = x
           break
 
 
@@ -1950,6 +1965,21 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.trayIcon.setToolTip(projN)
     except:
       debug.error(sys.exc_info())
+    self.set_project = projN
+
+
+  def rbhusPipeSetProject_temp(self,proj):
+    utilsPipe.exportProj(proj)
+    self.form.setWindowTitle(proj)
+    self.actionSet_project.setText("set project (" + proj + ")")
+    self.updateAll()
+    self.loadSearch()
+    self.loadAssetShortcut()
+    try:
+      self.trayIcon.setToolTip(proj)
+    except:
+      debug.error(sys.exc_info())
+    self.set_project = proj
 
 
 

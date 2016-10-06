@@ -8,8 +8,14 @@ import zmq
 import uuid
 import time
 import sys
+import simplejson
 
-message = "{test:\"testing\"}"
+message_str = {"test":"testing",
+               "project":"AndePirki_se01_ep003_SavingPrivateRyan",
+               "asset":"AndePirki_se01_ep003_SavingPrivateRyan:library:sq01:sc001:anim:rig:blend",
+               "run":"review"
+               }
+message = simplejson.dumps(message_str)
 ip = "127.0.0.1"
 port = 8989
 context = zmq.Context()

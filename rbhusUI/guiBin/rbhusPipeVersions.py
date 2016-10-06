@@ -46,7 +46,7 @@ parser.add_argument("-i","--id",dest='assId',help='asset id')
 parser.add_argument("-p","--path",dest='assPath',help='asset path')
 args = parser.parse_args()
 
-app_lock_file = os.path.join(tempfile.tempdir,str(args.assPath).replace(":","_"))
+app_lock_file = os.path.join(tempfile.gettempdir(),str(args.assPath).replace(":","_"))
 debug.info(app_lock_file)
 
 class ImagePlayer(QtGui.QWidget):

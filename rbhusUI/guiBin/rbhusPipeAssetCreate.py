@@ -247,15 +247,15 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     users = utilsPipe.getUsers()
     outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     if(outUsers == ""):
-      outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
+      outUsers = str(self.lineEditWorkers.text()).rstrip().lstrip()
     self.lineEditWorkers.setText(_fromUtf8(outUsers))
 
 
   def setReviewers(self):
-    users = utilsPipe.getStageAdmins(stageType = str(self.comboStageType.currentText()).rstrip().lstrip())
+    users = utilsPipe.getUsers()
     outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
     if(outUsers == ""):
-      outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
+      outUsers = str(self.lineEditReviewers.text()).rstrip().lstrip()
     self.lineEditReviewers.setText(_fromUtf8(outUsers))
 
   

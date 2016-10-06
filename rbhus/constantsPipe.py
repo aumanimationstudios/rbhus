@@ -47,3 +47,4 @@ reviewStatusNotDone = 0
 reviewStatusInProgress = 1
 reviewStatusDone = 2
 
+run_api_cmd_review = "review"

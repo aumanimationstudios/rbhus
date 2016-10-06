@@ -953,19 +953,12 @@ def getAssFileName(assDetDict):
 
 
 
-
-
 def getAssPath(assDetDictTemp = {}):
   assDetDict = copy.copy(assDetDictTemp)
   if(not assDetDict):
     return(0)
   assPath = str(assDetDict['projName'])
-  #dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
   debug.debug("WTF asspathtemp : "+ str(assDetDict))
-  #fileName = ""
-  #if(assDetDict.has_key('assName')):
-    #if(str(assDetDict['assName']) != "default"):
-      #fileName = str(assDetDict['assName'])
   if(re.search("^default$",str(assDetDict['assetType']))):
     pass
   else:
@@ -980,42 +973,18 @@ def getAssPath(assDetDictTemp = {}):
     if(not re.search("^default$",str(assDetDict['sequenceName']))):
       if(not re.search("^default$",str(assDetDict['sceneName']))):
         assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
-        #if(fileName):
-          #fileName = fileName +"_"+ str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
-        #else:
-          #fileName = str(assDetDict['sequenceName']) +"_" + str(assDetDict['sceneName'])
       else:
         assPath = assPath +":"+ str(assDetDict['sequenceName'])
-        #if(fileName):
-          #fileName = fileName +"_"+ str(assDetDict['sequenceName'])
-        #else:
-          #fileName = str(assDetDict['sequenceName'])
-    #debug.debug("WTF 001 : "+ str(assPath))
     if(assDetDict.has_key('assName')):
       if(not re.search("^default$",str(assDetDict['assName']))):
         assPath = assPath +":" + str(assDetDict['assName'])
 
-    #debug.debug("WTF 002 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['stageType']))):
       assPath = assPath +":" + str(assDetDict['stageType'])
-      #if(fileName):
-        #fileName = fileName +"_"+ str(assDetDict['stageType'])
-      #else:
-        #fileName = str(assDetDict['stageType'])
-    #debug.debug("WTF 003 : "+ str(assPath))
     if(not re.search("^default$",str(assDetDict['nodeType']))):
       assPath = assPath +":" + str(assDetDict['nodeType'])
-      #if(fileName):
-        #fileName = fileName +"_"+ str(assDetDict['nodeType'])
-      #else:
-        #fileName = str(assDetDict['nodeType'])
-    #debug.debug("WTF 004 : "+ str(assPath))
-
-
-
     if(not re.search("^default$",str(assDetDict['fileType']))):
       assPath = assPath +":" + str(assDetDict['fileType'])
-    #debug.debug("WTF 005 : "+ str(assPath))
     return(assPath)
   return(0)
 
@@ -1127,6 +1096,9 @@ def reviewDetails(assId = 0,revCount=0):
   else:
     return(0)
 
+
+def isReviewChecked():
+  os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
 
 
 

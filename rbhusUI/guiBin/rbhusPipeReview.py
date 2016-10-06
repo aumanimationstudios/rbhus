@@ -1,19 +1,21 @@
 #!/usr/bin/python
-import os
-import sys
-import datetime
-import re
 import argparse
-import logging
-import logging.handlers
+import os
 import socket
+import sys
 import tempfile
-import copy
-from PyQt4 import QtCore, QtGui, uic
 import uuid
 import webbrowser
+if(sys.platform.find("linux") >=0 ):
+  import fcntl
+import psutil
 
+from PyQt4 import QtCore, QtGui, uic
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-p","--assetpath",dest='assetpath',help='asset path (pipePath)')
+parser.add_argument("-i","--assetid",dest='assetid',help='asset id')
+args = parser.parse_args()
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
@@ -24,17 +26,17 @@ import rbhusPipeReviewMod
 
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 
-import dbPipe
 import constantsPipe
-import authPipe
 import utilsPipe
+import utilsTray
 import debug
 
 
-parser = argparse.ArgumentParser()
 
 hostname = socket.gethostname()
 tempDir = os.path.abspath(tempfile.gettempdir())
+app_lock_file = os.path.join(tempfile.gettempdir(),str(args.assetpath).replace(":","_")) + ".review"
+
 
 if(sys.platform.find("win") >= 0):
   try:
@@ -63,17 +65,59 @@ except AttributeError:
     return QtGui.QApplication.translate(context, text, disambig)
   
   
-parser = argparse.ArgumentParser()
-parser.add_argument("-p","--assetpath",dest='assetpath',help='asset path (pipePath)')
-parser.add_argument("-i","--assetid",dest='assetid',help='asset id')
-args = parser.parse_args()
 
 
+def app_lock():
+  if(os.path.exists(app_lock_file)):
+    f = open(app_lock_file,"r")
+    pid = f.read().strip()
+    f.close()
+    debug.info(pid)
+    try:
+      p = psutil.Process(int(pid))
+      if (os.path.abspath(p.cmdline()[1]) == os.path.abspath(__file__)):
+        debug.warning("already an instance of the app is running.")
+        debug.warning("delete the file {0}".format(app_lock_file))
+        QtCore.QCoreApplication.instance().quit()
+        os._exit(1)
+      else:
+        raise Exception("seems like a different process has the same pid")
+    except:
+      debug.warn(sys.exc_info())
+      f = open(app_lock_file,"w")
+      if(sys.platform.find("linux") >= 0):
+        try:
+          fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except:
+          debug.error(sys.exc_info())
+          QtCore.QCoreApplication.instance().quit()
+          os._exit(1)
+      f.write(unicode(os.getpid()))
+      f.flush()
+      if (sys.platform.find("linux") >= 0):
+        fcntl.flock(f, fcntl.LOCK_UN)
+      f.close()
+  else:
+    f = open(app_lock_file,"w")
+    if (sys.platform.find("linux") >= 0):
+      try:
+        fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+      except:
+        debug.error(sys.exc_info())
+        QtCore.QCoreApplication.instance().quit()
+        os._exit(1)
+    f.write(unicode(os.getpid()))
+    f.flush()
+    if (sys.platform.find("linux") >= 0):
+      fcntl.flock(f, fcntl.LOCK_UN)
+    f.close()
 
   
 class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
   def setupUi(self, Form):
+    app_lock()
     rbhusPipeReviewMod.Ui_MainWindow.setupUi(self,Form)
+
     self.spacerForMsgBox = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
     self.splitter.setStretchFactor(0, 10)
     self.assdets = {}
@@ -168,7 +212,7 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
         assedit['reviewStatus'] = constantsPipe.reviewStatusInProgress
       else:
         assedit['reviewStatus'] = constantsPipe.reviewStatusDone
-
+      utilsTray.addNotifications(self.assdets['assignedWorker'],"rbhusReview",self.assdets['path'],"rbhusPipe_review.py","-p "+ self.assdets['projName'] +" -a "+ self.assdets['path'])
       utilsPipe.assEdit(assid=str(self.assdets['assetId']),assdict=assedit)
       self.referenceFolder = str(uuid.uuid4())
       self.clearLayout()
@@ -192,18 +236,31 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
     else:
       ui_msg = uic.loadUi(ui_right_msg)
     ui_msg.textEditContent.setText(msg)
+
     ui_msg.textEditContent.setReadOnly(True)
     ui_msg.labelUser.setText("user : "+ str(user1))
     ui_msg.labelDate.setText("date : "+ str(date1))
     ui_msg.labelVersion.setText("version : "+ str(ver))
+    hdoc = QtGui.QTextDocument()
+    hdoc.setPlainText(ui_msg.textEditContent.toPlainText())
+    h = hdoc.size().height() + 40
+    ui_msg.textEditContent.setMinimumHeight(h)
+    debug.info("height : " + str(h))
+
+    # ui_msg.textEditContent.setFixedHeight(height)
+
     self.verticalLayout_2.addWidget(ui_msg)
     self.verticalLayout_2.addItem(self.spacerForMsgBox)
     debug.info("reference folder : {0}".format(len(rFolder)))
     if(not len(rFolder)):
       ui_msg.pushReference.setEnabled(False)
+      ui_msg.pushReference.hide()
     else:
+      ui_msg.pushReference.show()
       ui_msg.pushReference.clicked.connect(lambda item, ver=str(ver),refFolder=str(rFolder) : self.openReferenceFolder(item,ver,refFolder))
     ui_msg.pushVersion.clicked.connect(lambda item, ver=str(ver) : self.openVersionFolder(item,ver))
+
+
     return(ui_msg)
 
     
