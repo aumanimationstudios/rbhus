@@ -740,8 +740,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def renderAss(self):
     filesTorender = self.getFileAss()
     listAsses = self.selectedAsses()
-    listedAss = list
-    Asses[0]
+    listedAss = listAsses[0]
     renderFiles = []
     if(not isinstance(filesTorender,int)):
       for x in filesTorender:
