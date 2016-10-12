@@ -27,6 +27,7 @@ localCacheWindows = localCacheWindowsMain + os.environ['rbhusPipe_acl_user'] +"/
 import dbPipe
 import constantsPipe
 import utilsPipe
+import utilsTray
 
 
 
@@ -413,6 +414,11 @@ class hg(object):
       revdets['message'] = "please review the given version."
       revdets['username'] = str(self.username)
       utilsPipe.reviewAdd(revdets)
+      if (self.username != self.assDets['assignedWorker']):
+        utilsTray.addNotifications(self.assDets['assignedWorker'], "review :"+ self.username, self.assDets['path'], "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'])
+
+      if (self.username != self.assDets['reviewUser']):
+        utilsTray.addNotifications(self.assDets['reviewUser'], "review :"+ self.username, self.assDets['path'], "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'])
     os.chdir(self.localPath)
 
 

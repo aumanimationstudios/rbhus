@@ -251,8 +251,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.hglog()
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
-    pass
-  
+
   def openVersion(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     selvers = self.selectedVersions()
