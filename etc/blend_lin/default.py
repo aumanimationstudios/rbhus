@@ -34,7 +34,6 @@ runScript = os.environ['rbhus_runScript']
 camera = os.environ['rbhus_camera']
 res = os.environ['rbhus_resolution']
 
-runScript.split("/")
 if(renExtArgs == "None"):
   renExtArgs = ""
 RENDERCMD = "/usr/local/bin/blender -noaudio -b \"" + str(fileName) +"\""
