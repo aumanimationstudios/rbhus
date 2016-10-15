@@ -156,7 +156,7 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
     self.assReviewDets = utilsPipe.reviewDetails(assId=self.assdets['assetId'])
     if(self.assReviewDets):
       for x in self.assReviewDets:
-        b = self.addMsgBox(x['message'],x['username'],x['datetime'],x['reviewVersion'],x['referenceFolder'])
+        b = self.addMsgBox(x['message'],x['username'],x['datetime'].ctime(),x['reviewVersion'],x['referenceFolder'])
         self.msgboxes.append(b)
 
   
@@ -213,10 +213,10 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
       else:
         assedit['reviewStatus'] = constantsPipe.reviewStatusDone
       if (username != self.assdets['assignedWorker']):
-        utilsTray.addNotifications(self.assdets['assignedWorker'], "review :"+ username, self.assdets['path'], "rbhusPipe_review.py", "-p " + self.assdets['projName'] + " -a " + self.assdets['path'])
+        utilsTray.addNotifications(self.assdets['assignedWorker'], "rbhusReview", self.assdets['path'], "rbhusPipe_review.py", "-p " + self.assdets['projName'] + " -a " + self.assdets['path'])
 
       if (username != self.assdets['reviewUser']):
-        utilsTray.addNotifications(self.assdets['reviewUser'], "review :"+ username, self.assdets['path'], "rbhusPipe_review.py", "-p " + self.assdets['projName'] + " -a " + self.assdets['path'])
+        utilsTray.addNotifications(self.assdets['reviewUser'], "rbhusReview", self.assdets['path'], "rbhusPipe_review.py", "-p " + self.assdets['projName'] + " -a " + self.assdets['path'])
 
       utilsPipe.assEdit(assid=str(self.assdets['assetId']),assdict=assedit)
       self.referenceFolder = str(uuid.uuid4())
@@ -289,5 +289,6 @@ if __name__ == "__main__":
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()
+  Form.raise_()
   sys.exit(app.exec_())
     
