@@ -9,15 +9,17 @@ bpy.context.scene.render.fps_base = 1
 
 try:
   assPath = os.environ['rp_assets_path']
-  bpy.context.scene.render.use_stamp = True
-  bpy.context.scene.render.use_stamp_time = False
-  bpy.context.scene.render.use_stamp_date = False
-  bpy.context.scene.render.use_stamp_render_time = False
-  bpy.context.scene.render.use_stamp_frame = True
-  bpy.context.scene.render.use_stamp_scene = False
-  bpy.context.scene.render.use_stamp_camera = False
-  bpy.context.scene.render.use_stamp_filename = False
-  bpy.context.scene.render.use_stamp_note = True
+  stageType = os.environ['rp_assets_stageType']
+  if(stageType != "light"):
+    bpy.context.scene.render.use_stamp = True
+    bpy.context.scene.render.use_stamp_time = False
+    bpy.context.scene.render.use_stamp_date = False
+    bpy.context.scene.render.use_stamp_render_time = False
+    bpy.context.scene.render.use_stamp_frame = True
+    bpy.context.scene.render.use_stamp_scene = False
+    bpy.context.scene.render.use_stamp_camera = False
+    bpy.context.scene.render.use_stamp_filename = False
+    bpy.context.scene.render.use_stamp_note = True
 
   try:
     if(os.environ['rp_sequenceScenes_sFrame'] != os.environ['rp_sequenceScenes_eFrame']):
