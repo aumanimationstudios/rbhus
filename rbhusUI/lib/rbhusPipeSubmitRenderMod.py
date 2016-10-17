@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeSubmitRenderMod.ui'
 #
-# Created: Mon Jul 27 11:37:50 2015
-#      by: PyQt4 UI code generator 4.10.4
+# Created by: PyQt4 UI code generator 4.12.dev1606101416
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,11 +25,23 @@ except AttributeError:
 class Ui_rbhusSubmit(object):
   def setupUi(self, rbhusSubmit):
     rbhusSubmit.setObjectName(_fromUtf8("rbhusSubmit"))
-    rbhusSubmit.resize(575, 588)
+    rbhusSubmit.resize(572, 684)
     self.centralwidget = QtGui.QWidget(rbhusSubmit)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
     self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
+    self.checkPngFlv = QtGui.QCheckBox(self.centralwidget)
+    self.checkPngFlv.setChecked(True)
+    self.checkPngFlv.setObjectName(_fromUtf8("checkPngFlv"))
+    self.gridLayout.addWidget(self.checkPngFlv, 24, 1, 1, 1)
+    self.comboFileType = QtGui.QComboBox(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(self.comboFileType.sizePolicy().hasHeightForWidth())
+    self.comboFileType.setSizePolicy(sizePolicy)
+    self.comboFileType.setObjectName(_fromUtf8("comboFileType"))
+    self.gridLayout.addWidget(self.comboFileType, 2, 1, 1, 1)
     self.pushSelectHostGroups = QtGui.QPushButton(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
@@ -159,15 +170,15 @@ class Ui_rbhusSubmit(object):
     sizePolicy.setHeightForWidth(self.pushSubmit.sizePolicy().hasHeightForWidth())
     self.pushSubmit.setSizePolicy(sizePolicy)
     self.pushSubmit.setObjectName(_fromUtf8("pushSubmit"))
-    self.gridLayout.addWidget(self.pushSubmit, 25, 2, 1, 1)
-    self.comboFileType = QtGui.QComboBox(self.centralwidget)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+    self.gridLayout.addWidget(self.pushSubmit, 26, 2, 1, 1)
+    self.labelOsType = QtGui.QLabel(self.centralwidget)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.comboFileType.sizePolicy().hasHeightForWidth())
-    self.comboFileType.setSizePolicy(sizePolicy)
-    self.comboFileType.setObjectName(_fromUtf8("comboFileType"))
-    self.gridLayout.addWidget(self.comboFileType, 2, 1, 1, 1)
+    sizePolicy.setHeightForWidth(self.labelOsType.sizePolicy().hasHeightForWidth())
+    self.labelOsType.setSizePolicy(sizePolicy)
+    self.labelOsType.setObjectName(_fromUtf8("labelOsType"))
+    self.gridLayout.addWidget(self.labelOsType, 15, 0, 1, 1)
     self.labelCamera = QtGui.QLabel(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
@@ -200,6 +211,7 @@ class Ui_rbhusSubmit(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.checkBatching.sizePolicy().hasHeightForWidth())
     self.checkBatching.setSizePolicy(sizePolicy)
+    self.checkBatching.setChecked(True)
     self.checkBatching.setObjectName(_fromUtf8("checkBatching"))
     self.gridLayout.addWidget(self.checkBatching, 20, 2, 1, 1)
     self.horizontalLayout_3 = QtGui.QHBoxLayout()
@@ -240,6 +252,7 @@ class Ui_rbhusSubmit(object):
     self.spinMaxBatch.setSizePolicy(sizePolicy)
     self.spinMaxBatch.setMinimum(1)
     self.spinMaxBatch.setMaximum(999999999)
+    self.spinMaxBatch.setProperty("value", 3)
     self.spinMaxBatch.setObjectName(_fromUtf8("spinMaxBatch"))
     self.horizontalLayout_3.addWidget(self.spinMaxBatch)
     self.gridLayout.addLayout(self.horizontalLayout_3, 20, 1, 1, 1)
@@ -319,7 +332,7 @@ class Ui_rbhusSubmit(object):
     self.checkHold.setLayoutDirection(QtCore.Qt.RightToLeft)
     self.checkHold.setObjectName(_fromUtf8("checkHold"))
     self.horizontalLayout_2.addWidget(self.checkHold)
-    self.gridLayout.addLayout(self.horizontalLayout_2, 25, 1, 1, 1)
+    self.gridLayout.addLayout(self.horizontalLayout_2, 26, 1, 1, 1)
     self.labeRenderer = QtGui.QLabel(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
@@ -344,14 +357,6 @@ class Ui_rbhusSubmit(object):
     self.comboOsType.setSizePolicy(sizePolicy)
     self.comboOsType.setObjectName(_fromUtf8("comboOsType"))
     self.gridLayout.addWidget(self.comboOsType, 15, 1, 1, 1)
-    self.labelOsType = QtGui.QLabel(self.centralwidget)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(self.labelOsType.sizePolicy().hasHeightForWidth())
-    self.labelOsType.setSizePolicy(sizePolicy)
-    self.labelOsType.setObjectName(_fromUtf8("labelOsType"))
-    self.gridLayout.addWidget(self.labelOsType, 15, 0, 1, 1)
     self.lineEditCameras = QtGui.QLineEdit(self.centralwidget)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
     sizePolicy.setHorizontalStretch(0)
@@ -424,6 +429,10 @@ class Ui_rbhusSubmit(object):
     self.lineEditOutName.setReadOnly(False)
     self.lineEditOutName.setObjectName(_fromUtf8("lineEditOutName"))
     self.gridLayout.addWidget(self.lineEditOutName, 5, 1, 1, 1)
+    self.checkPngMP4 = QtGui.QCheckBox(self.centralwidget)
+    self.checkPngMP4.setChecked(True)
+    self.checkPngMP4.setObjectName(_fromUtf8("checkPngMP4"))
+    self.gridLayout.addWidget(self.checkPngMP4, 25, 1, 1, 1)
     rbhusSubmit.setCentralWidget(self.centralwidget)
 
     self.retranslateUi(rbhusSubmit)
@@ -431,6 +440,7 @@ class Ui_rbhusSubmit(object):
 
   def retranslateUi(self, rbhusSubmit):
     rbhusSubmit.setWindowTitle(_translate("rbhusSubmit", "rbhusSubmit", None))
+    self.checkPngFlv.setText(_translate("rbhusSubmit", "convert png to FLV", None))
     self.pushSelectHostGroups.setText(_translate("rbhusSubmit", "select", None))
     self.lineEditFrange.setWhatsThis(_translate("rbhusSubmit", "<html><head/><body><p>frame range in the format</p><p>startframe-endframe:byframes</p><p>eg:</p><p>render frames from 1 to 100   : <span style=\" font-weight:600;\">1-100</span></p><p>render every 5th frame from 1 to 100   : <span style=\" font-weight:600;\">1-100:5</span></p><p>render 1 frame     :<span style=\" font-weight:600;\"> 1</span></p><p><br/></p><p><br/></p></body></html>", None))
     self.lineEditFrange.setText(_translate("rbhusSubmit", "1", None))
@@ -446,6 +456,7 @@ class Ui_rbhusSubmit(object):
     self.label.setText(_translate("rbhusSubmit", "USER", None))
     self.labelAfterTime.setText(_translate("rbhusSubmit", "afterTime ", None))
     self.pushSubmit.setText(_translate("rbhusSubmit", "submit", None))
+    self.labelOsType.setText(_translate("rbhusSubmit", "osType", None))
     self.labelCamera.setText(_translate("rbhusSubmit", "cameras", None))
     self.labelResolution.setText(_translate("rbhusSubmit", "resolution", None))
     self.lineEditFileName.setWhatsThis(_translate("rbhusSubmit", "comma seperated list of files to render", None))
@@ -462,7 +473,6 @@ class Ui_rbhusSubmit(object):
     self.checkHold.setText(_translate("rbhusSubmit", "deactivate", None))
     self.labeRenderer.setText(_translate("rbhusSubmit", "renderer", None))
     self.labelHostGroup.setText(_translate("rbhusSubmit", "hostGroup", None))
-    self.labelOsType.setText(_translate("rbhusSubmit", "osType", None))
     self.lineEditCameras.setToolTip(_translate("rbhusSubmit", "comma seperated list of cameras to render", None))
     self.lineEditCameras.setText(_translate("rbhusSubmit", "default", None))
     self.labelBatching.setText(_translate("rbhusSubmit", "batching", None))
@@ -476,4 +486,5 @@ class Ui_rbhusSubmit(object):
     self.lineEditOutName.setToolTip(_translate("rbhusSubmit", "name of the image file. eg: wtf.png", None))
     self.lineEditOutName.setWhatsThis(_translate("rbhusSubmit", "<html><head/><body><p>name of the image file. eg: <span style=\" font-weight:600;\">wtfigo.png</span></p></body></html>", None))
     self.lineEditOutName.setText(_translate("rbhusSubmit", "default", None))
+    self.checkPngMP4.setText(_translate("rbhusSubmit", "convert png to MP4", None))
 

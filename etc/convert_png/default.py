@@ -34,5 +34,9 @@ runScript = os.environ['rbhus_runScript']
 camera = os.environ['rbhus_camera']
 res = os.environ['rbhus_resolution']
 
-cmd = runScript + renExtArgs
+if(fileType == "convert_png_mp4"):
+  script = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/tools/rbhus/convert_png_mp4.py"
+else:
+  script = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/tools/rbhus/convert_png_flv.py"
+cmd = script +" "+ outDir
 print (cmd)

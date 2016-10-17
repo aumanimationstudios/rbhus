@@ -521,6 +521,20 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
 
                   try:
                     b = a.submit(submitDict)
+                    if(self.checkPngFlv.isChecked()):
+                      flvdict = copy.copy(submitDict)
+                      flvdict['afterTasks'] = str(b)
+                      flvdict['fileType'] = "convert_png_flv"
+                      flv = a.submit(flvdict)
+                      print("Submiting PNG to FLV task : " + str(b) + " : " + str(submitDict))
+
+                    if (self.checkPngMP4.isChecked()):
+                      flvdict = copy.copy(submitDict)
+                      flvdict['afterTasks'] = str(b)
+                      flvdict['fileType'] = "convert_png_mp4"
+                      flv = a.submit(flvdict)
+                      print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
+
                     print("Submiting task : "+ str(b) +" : "+ str(submitDict))
                   except:
                     print("Error inserting task : "+ str(sys.exc_info()))
@@ -537,6 +551,19 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
 
                 try:
                   b = a.submit(submitDict)
+                  if (self.checkPngFlv.isChecked()):
+                    flvdict = copy.copy(submitDict)
+                    flvdict['afterTasks'] = str(b)
+                    flvdict['fileType'] = "convert_png_flv"
+                    flv = a.submit(flvdict)
+                    print("Submiting PNG to FLV task : " + str(b) + " : " + str(submitDict))
+
+                  if (self.checkPngMP4.isChecked()):
+                    flvdict = copy.copy(submitDict)
+                    flvdict['afterTasks'] = str(b)
+                    flvdict['fileType'] = "convert_png_mp4"
+                    flv = a.submit(flvdict)
+                    print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
                   print("Submiting task : "+ str(b) +" : "+ str(submitDict))
                 except:
                   print("Error inserting task : "+ str(sys.exc_info()))
@@ -546,7 +573,22 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
               submitDict['camera'] = c.lstrip().rstrip()
               try:
                 b = a.submit(submitDict)
-                print("Submiting task : "+ str(b) +" : "+ str(submitDict))
+                print("Submiting task : " + str(b) + " : " + str(submitDict))
+                if(b):
+                  if (self.checkPngFlv.isChecked()):
+                    flvdict = copy.copy(submitDict)
+                    flvdict['afterTasks'] = str(b)
+                    flvdict['fileType'] = "convert_png_flv"
+                    flv = a.submit(flvdict)
+                    print("Submiting PNG to FLV task : " + str(b) + " : " + str(submitDict))
+
+                  if (self.checkPngMP4.isChecked()):
+                    flvdict = copy.copy(submitDict)
+                    flvdict['afterTasks'] = str(b)
+                    flvdict['fileType'] = "convert_png_mp4"
+                    flv = a.submit(flvdict)
+                    print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
+
               except:
                 print("Error inserting task : "+ str(sys.exc_info()))
                 
