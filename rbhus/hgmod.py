@@ -204,9 +204,9 @@ class hg(object):
   def _init(self):
     debug.info(os.getcwd())
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg init",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose init",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","init"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","init"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
@@ -221,9 +221,9 @@ class hg(object):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg merge --tool=\":local\"",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose merge --tool=\":local\"",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","merge","--tool",":local"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","merge","--tool",":local"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if(p.returncode != 0):
       debug.error(str(out))
@@ -237,9 +237,9 @@ class hg(object):
       return(0)
     #debug.info(self.absPipePath)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg add --large",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose add --large",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
@@ -251,9 +251,9 @@ class hg(object):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg addremove",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose addremove",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
@@ -266,9 +266,9 @@ class hg(object):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg commit -A --message \'ignore for now\' --user {0}".format(os.environ['rbhusPipe_acl_user']),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose commit -A --message \'ignore for now\' --user {0}".format(os.environ['rbhusPipe_acl_user']),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
@@ -281,9 +281,9 @@ class hg(object):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg push -f {0}".format(self.absPipePath),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose push -f {0}".format(self.absPipePath),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","push","-f",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","push","-f",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
@@ -293,9 +293,9 @@ class hg(object):
 
   def _pull(self):
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg pull --force {0}".format(self.absPipePath),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose pull --force {0}".format(self.absPipePath),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","pull","--force",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","pull","--force",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
@@ -307,9 +307,9 @@ class hg(object):
     #if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
       #return(0)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg clone {0} {1}".format(self.absPipePath,"."),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose clone {0} {1}".format(self.absPipePath,"."),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","clone",self.absPipePath,"."],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","clone",self.absPipePath,"."],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     p.wait()
     debug.info("_clone"+ str(out))
@@ -320,9 +320,9 @@ class hg(object):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg update",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose update",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","update"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","update"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
@@ -331,9 +331,9 @@ class hg(object):
 
   def _log(self):
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg log --template {rev}###{author}###{date}###{desc}@@@ --cwd "+ self.absPipePath,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose log --template {rev}###{author}###{date}###{desc}@@@ --cwd "+ self.absPipePath,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","log","--template","{rev}###{author}###{date}###{desc}@@@","--cwd",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","log","--template","{rev}###{author}###{date}###{desc}@@@","--cwd",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     p.wait()
     # debug.info(out)
@@ -364,18 +364,19 @@ class hg(object):
     except:
       debug.warn(sys.exc_info())
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg archive --rev {0} ./publish/".format(rev),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose archive --rev {0} ./publish/".format(rev),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","archive","--rev",str(rev),"./publish/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    assdict = {}
-    assdict["publishVersion"] = str(rev)
-    utilsPipe.assEdit(asspath = self.pipepath , assdict=assdict)
+      p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./publish/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
     out = p.communicate()[0]
     p.wait()
     if (p.returncode != 0):
       debug.error(str(out))
     else:
       debug.info(str(out))
+      assdict = {}
+      assdict["publishVersion"] = str(rev)
+      utilsPipe.assEdit(asspath=self.pipepath, assdict=assdict)
     os.chdir(self.localPath)
 
 
@@ -395,9 +396,9 @@ class hg(object):
       debug.warn(sys.exc_info())
 
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg archive --rev {0} ./review_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose archive --rev {0} ./review_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","archive","--rev",str(rev),"./review_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./review_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # assdict = {}
     # assdict["reviewVersion"] = str(rev)
     # assdict['assetId'] = self.assDets['assetId']
@@ -437,9 +438,9 @@ class hg(object):
       debug.warn(sys.exc_info())
 
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     assdict = {}
     if (p.returncode != 0):
@@ -464,9 +465,9 @@ class hg(object):
       debug.warn(sys.exc_info())
 
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     assdict = {}
     if (p.returncode != 0):
@@ -481,9 +482,9 @@ class hg(object):
       rev = 0
     os.chdir(self.localPath)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg update --rev {0}".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose update --rev {0}".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))

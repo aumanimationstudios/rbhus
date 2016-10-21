@@ -208,10 +208,11 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
       utilsPipe.reviewAdd(revdets)
       assedit = {}
 
-      if(str(self.comboProgress.currentText()) == "inProgress"):
-        assedit['reviewStatus'] = constantsPipe.reviewStatusInProgress
-      else:
-        assedit['reviewStatus'] = constantsPipe.reviewStatusDone
+      if (utilsPipe.isReviewUser(self.assdets) or utilsPipe.isStageAdmin(self.assdets) or utilsPipe.isProjAdmin(self.assdets)):
+        if(str(self.comboProgress.currentText()) == "inProgress"):
+          assedit['reviewStatus'] = constantsPipe.reviewStatusInProgress
+        else:
+          assedit['reviewStatus'] = constantsPipe.reviewStatusDone
       if (username != self.assdets['assignedWorker']):
         utilsTray.addNotifications(self.assdets['assignedWorker'], "rbhusReview", self.assdets['path'], "rbhusPipe_review.py", "-p " + self.assdets['projName'] + " -a " + self.assdets['path'])
 

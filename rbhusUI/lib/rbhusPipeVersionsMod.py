@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeVersionsMod.ui'
 #
-# Created: Wed Jun 10 23:48:18 2015
-#      by: PyQt4 UI code generator 4.10.4
+# Created by: PyQt4 UI code generator 4.12.dev1606101416
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,14 +25,14 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(466, 425)
+    MainWindow.resize(489, 453)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
     self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-    self.gridLayout_2 = QtGui.QGridLayout()
-    self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-    self.gridLayout.addLayout(self.gridLayout_2, 0, 0, 1, 3)
+    self.pushCommit = QtGui.QPushButton(self.centralwidget)
+    self.pushCommit.setObjectName(_fromUtf8("pushCommit"))
+    self.gridLayout.addWidget(self.pushCommit, 3, 2, 1, 1)
     self.verticalLayout = QtGui.QVBoxLayout()
     self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
     self.groupVersions = QtGui.QGroupBox(self.centralwidget)
@@ -47,7 +46,7 @@ class Ui_MainWindow(object):
     self.verticalLayout_2.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
     self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
     self.tableVersions = QtGui.QTableWidget(self.groupVersions)
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.tableVersions.sizePolicy().hasHeightForWidth())
@@ -59,19 +58,21 @@ class Ui_MainWindow(object):
     self.tableVersions.setColumnCount(0)
     self.tableVersions.setRowCount(0)
     self.tableVersions.horizontalHeader().setVisible(False)
+    self.tableVersions.horizontalHeader().setCascadingSectionResizes(False)
+    self.tableVersions.horizontalHeader().setDefaultSectionSize(10)
+    self.tableVersions.horizontalHeader().setHighlightSections(False)
+    self.tableVersions.horizontalHeader().setMinimumSectionSize(5)
+    self.tableVersions.horizontalHeader().setSortIndicatorShown(False)
     self.tableVersions.verticalHeader().setVisible(False)
     self.verticalLayout_2.addWidget(self.tableVersions)
     self.verticalLayout.addWidget(self.groupVersions)
-    self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 3)
-    self.pushCommit = QtGui.QPushButton(self.centralwidget)
-    self.pushCommit.setObjectName(_fromUtf8("pushCommit"))
-    self.gridLayout.addWidget(self.pushCommit, 4, 2, 1, 1)
+    self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 3)
     self.pushWork = QtGui.QPushButton(self.centralwidget)
     self.pushWork.setObjectName(_fromUtf8("pushWork"))
-    self.gridLayout.addWidget(self.pushWork, 4, 0, 1, 1)
+    self.gridLayout.addWidget(self.pushWork, 3, 0, 1, 1)
     self.pushReInit = QtGui.QPushButton(self.centralwidget)
     self.pushReInit.setObjectName(_fromUtf8("pushReInit"))
-    self.gridLayout.addWidget(self.pushReInit, 4, 1, 1, 1)
+    self.gridLayout.addWidget(self.pushReInit, 3, 1, 1, 1)
     MainWindow.setCentralWidget(self.centralwidget)
     self.statusbar = QtGui.QStatusBar(MainWindow)
     self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -82,9 +83,9 @@ class Ui_MainWindow(object):
 
   def retranslateUi(self, MainWindow):
     MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+    self.pushCommit.setText(_translate("MainWindow", "commit", None))
     self.groupVersions.setTitle(_translate("MainWindow", "versions", None))
     self.tableVersions.setSortingEnabled(True)
-    self.pushCommit.setText(_translate("MainWindow", "commit", None))
     self.pushWork.setText(_translate("MainWindow", "open", None))
     self.pushReInit.setText(_translate("MainWindow", "re-initialize", None))
 

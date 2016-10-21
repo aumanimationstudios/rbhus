@@ -319,29 +319,37 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.tableVersions.setSortingEnabled(False)
     self.tableVersions.resizeColumnsToContents()
     tem = self.versionsHg._log()
+    colorSize = QtCore.QSize()
+    colorSize.setWidth(2)
     if(tem):
-      self.tableVersions.setColumnCount(len(tem[0]))
+      self.tableVersions.setColumnCount(len(tem[0]) + 2)
       self.tableVersions.setRowCount(len(tem))
       indrow = 0
-      
       for te in tem:
         indcol = 0
         for t in te:
           item = QtGui.QTableWidgetItem()
           brush = QtGui.QBrush()
           self.tableVersions.setItem(indrow, indcol, item)
-          if(indcol == 2):
+          if(indcol == 4):
             self.tableVersions.item(indrow, indcol).setText(str(time.ctime(float(t.split("-")[0]))))
           elif(indcol == 0):
             if(str(t) == str(self.assetDetails['publishVersion'])):
-              brush.setColor(QtGui.QColor(0, 200, 0))
-              brush.setStyle(QtCore.Qt.SolidPattern)
-              self.tableVersions.item(indrow, indcol).setBackground(brush)
+              item1 = QtGui.QTableWidgetItem()
+              brush1 = QtGui.QBrush()
+              self.tableVersions.setItem(indrow, indcol+1, item1)
+              brush1.setColor(QtGui.QColor(0, 200, 0))
+              brush1.setStyle(QtCore.Qt.SolidPattern)
+              self.tableVersions.item(indrow, indcol+1).setBackground(brush1)
             if(str(t) == str(self.assetDetails['reviewVersion'])):
-              brush.setColor(QtGui.QColor(150, 150, 200))
-              brush.setStyle(QtCore.Qt.SolidPattern)
-              self.tableVersions.item(indrow, indcol).setBackground(brush)
+              item2 = QtGui.QTableWidgetItem()
+              brush2 = QtGui.QBrush()
+              self.tableVersions.setItem(indrow, indcol + 2, item2)
+              brush2.setColor(QtGui.QColor(150, 150, 200))
+              brush2.setStyle(QtCore.Qt.SolidPattern)
+              self.tableVersions.item(indrow, indcol+2).setBackground(brush2)
             self.tableVersions.item(indrow, indcol).setText(str(t).zfill(4))
+            indcol = indcol + 2
           else:
             self.tableVersions.item(indrow, indcol).setText(str(t))
           indcol = indcol + 1
