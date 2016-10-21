@@ -1311,7 +1311,6 @@ def assDelete(assId=None,assPath=None,hard=False):
 
 def setWorkInProgress(asspath):
   assdets = getAssDetails(assPath=str(asspath))
-  dbconn = dbPipe.dbPipe()
   if (isProjAdmin(assdets) or isStageAdmin(assdets)):
     try:
       dbconn = dbPipe.dbPipe()
