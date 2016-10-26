@@ -41,6 +41,7 @@ assetStatusDelete = 0
 assetStatusActive = 1
 assetProgressInProgress = 0
 assetProgressDone = 1
+assetProgressNotStarted = 2
 
 
 reviewStatusNotDone = 0

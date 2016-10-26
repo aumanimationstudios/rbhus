@@ -905,6 +905,22 @@ def getFileTypeDefaultDirectories(assDetDict):
   pass
 
 
+def getDistinctAssNames(projName):
+  dbconn = dbPipe.dbPipe()
+  assnames = []
+  try:
+    rows = dbconn.execute("select distinct(assName) from assets where projName=\"{0}\"".format(projName),dictionary=True)
+  except:
+    debug.warn(sys.exc_info())
+  debug.info(rows)
+  if (isinstance(rows, int)):
+    return (0)
+  else:
+    for x in rows:
+      assnames.append(x['assName'])
+    return(assnames)
+
+
 
 def setAssTemplate(assDetDict):
   templateFile = getTemplatePath(assDetDict)

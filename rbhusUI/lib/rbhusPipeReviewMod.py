@@ -269,6 +269,6 @@ class Ui_MainWindow(object):
     self.pushOpenReferenceReview.setText(_translate("MainWindow", "add reference", None))
     self.pushOpenVersion.setText(_translate("MainWindow", "open version", None))
     self.comboProgress.setItemText(0, _translate("MainWindow", "inProgress", None))
-    self.comboProgress.setItemText(1, _translate("MainWindow", "done", None))
+    self.comboProgress.setItemText(1, _translate("MainWindow", "approved", None))
     self.pushSend.setText(_translate("MainWindow", "send", None))
 

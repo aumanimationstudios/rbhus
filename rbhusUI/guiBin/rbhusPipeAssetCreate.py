@@ -28,6 +28,7 @@ import dbPipe
 import constantsPipe
 import authPipe
 import utilsPipe
+import debug
 
 
 try:
@@ -43,7 +44,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
-    
+    self.assetTypeRadios = []
     self.username = None
     self.project = None
     self.directory = None
@@ -78,6 +79,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     self.checkAssName.clicked.connect(self.enableAssName)
     self.checkAssignSelf.clicked.connect(self.setAssignedWorker)
     self.checkReviewSelf.clicked.connect(self.setReviewerSelf)
+    self.pushAssets.clicked.connect(self.getAssNames)
     
     
     self.setDirectory()
@@ -98,8 +100,10 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   def enableAssName(self):
     if(self.checkAssName.isChecked()):
       self.lineEditAssName.setEnabled(True)
+      self.pushAssets.setEnabled(True)
     else:
       self.lineEditAssName.setEnabled(False)
+      self.pushAssets.setEnabled(False)
   
   
   def setSceneTemp(self):
@@ -125,33 +129,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     if(outScenes == ""):
       outScenes = self.lineEditScenes.text()
     self.lineEditScenes.setText(_fromUtf8(outScenes))
-    #self.comboScene.clear()
-    #scenes = {}
-    #indx =  0
-    #foundIndx = -1
-    #rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seqName)
-    #if(rows):
-      #for x in rows:
-        #scenes[x['sceneName']] = 1
-    #if(scenes):
-      #model = QtGui.QStandardItemModel(len(scenes),1)
-      #for x in scenes:
-        #item = QtGui.QStandardItem(x)
-        #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-        #item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
-        #model.setItem(indx,0,item)
-        #abrush = QtGui.QBrush()
-        #color = QtGui.QColor()
-        #color.setAlpha(0)
-        #abrush.setColor(color)
-        #model.item(indx).setForeground(abrush)
-        #indx = indx + 1
-      #model.itemChanged.connect(self.itemChangedScenes)
-      #self.comboScene.setModel(model)
-      #self.comboScene.setEditText("default")
-      #return(1)
-    #return(0)
-  
+
   
   def setAssignedWorker(self):
     if(self.checkAssignSelf.isChecked()):
@@ -179,7 +157,16 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict = {}
     ntypes = str(self.lineEditNodes.text()).split(",")
     assesNames = []
-    assdict['assetType'] = str(self.comboAssType.currentText()).rstrip().lstrip()
+    for aT in self.assetTypeRadios:
+      if(aT.isChecked()):
+        assdict['assetType'] = str(aT.text()).rstrip().lstrip()
+        break
+
+    if(not assdict.has_key('assetType')):
+      QtGui.QMessageBox.critical(self.form,"WTF!!!","assetType not selected. Please select one")
+      self.centralwidget.setEnabled(True)
+      self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+      return
     assdict['projName'] = os.environ['rp_proj_projName'].rstrip().lstrip()
     assdict['directory'] = str(self.comboDirectory.currentText()).rstrip().lstrip()
     assdict['stageType'] = str(self.comboStageType.currentText()).rstrip().lstrip()
@@ -242,7 +229,15 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     self.lineEditTags.setText(_fromUtf8(outTags))
   
   
-  
+  def getAssNames(self):
+    asses = utilsPipe.getDistinctAssNames(projName=os.environ['rp_proj_projName'])
+    if(asses):
+      selectedAss = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(asses),"-d",str(self.lineEditAssName.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+      if (selectedAss == ""):
+        selectedAss = ""
+      self.lineEditAssName.setText(_fromUtf8(selectedAss))
+
+
   def setUsers(self):
     users = utilsPipe.getUsers()
     outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
@@ -285,31 +280,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       return(1)
     return(0)     
   
-  
-  
- 
-  
-  
-  #def setScene(self):
-    #seqName = str(self.comboSequence.currentText())
-    #rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'],seq=seqName)
-    #self.comboScene.clear()
-    #scenes = {}
-    #if(rows):
-      #for x in rows:
-        #scenes[x['sceneName']] = 1
-    #if(scenes):
-      #for x in scenes:
-        #self.comboScene.addItem(_fromUtf8(x))
-    #return(1)
-        
-        
-      
-    
-    
-    
-  
-  
+
   def setSequence(self):
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
     self.comboSequence.clear()  
@@ -352,23 +323,16 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       outNodes = str(self.lineEditNodes.text())
     self.lineEditNodes.setText(_fromUtf8(outNodes))
   
-  
-  #def setFileTypes(self):
-    #rows = utilsPipe.getFileTypes()
-    #self.comboFileType.clear()  
-    #if(rows):
-      #for row in rows:
-        #self.comboFileType.addItem(_fromUtf8(row['type']))
-      #return(1)
-    #return(0)
-  
-  
+
   def setAssTypes(self):
     rows = utilsPipe.getAssTypes()
-    self.comboAssType.clear()  
     if(rows):
       for row in rows:
-        self.comboAssType.addItem(_fromUtf8(row['type']))
+        radioButton = QtGui.QRadioButton()
+        radioButton.setObjectName("radio_"+ _fromUtf8(row['type']))
+        radioButton.setText(_fromUtf8(row['type']))
+        self.horizontalLayout_3.addWidget(radioButton)
+        self.assetTypeRadios.append(radioButton)
       return(1)
     return(0)
   

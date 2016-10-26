@@ -24,6 +24,8 @@ localCacheWindowsMain = "D:/versionCache/"
 localCacheLinux = localCacheLinuxMain + os.environ['rbhusPipe_acl_user'] +"/"
 localCacheWindows = localCacheWindowsMain + os.environ['rbhusPipe_acl_user'] +"/"
 
+
+
 import dbPipe
 import constantsPipe
 import utilsPipe
@@ -69,7 +71,7 @@ class hg(object):
       self.localPath = localCacheWindows + "/".join(str(pipePath).split(":"))
 
     self._copyHomeConfig()
-    self.isMainInitialized()
+    # self.isMainInitialized()
     debug.info(self.localPath)
     try:
       os.makedirs(self.localPath)
@@ -232,7 +234,7 @@ class hg(object):
 
 
   def _add(self):
-    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(0)
     #debug.info(self.absPipePath)
@@ -247,7 +249,7 @@ class hg(object):
       debug.info(str(out))
 
   def _addremove(self):
-    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
@@ -262,7 +264,7 @@ class hg(object):
 
 
   def _commit(self):
-    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
@@ -277,7 +279,7 @@ class hg(object):
 
 
   def _push(self):
-    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
@@ -316,7 +318,7 @@ class hg(object):
 
 
   def _update(self):
-    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(0)
     if(sys.platform.lower().find("linux") >= 0):
@@ -348,7 +350,7 @@ class hg(object):
 
 
   def _archive(self,rev):
-    if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(0)
     if(not rev):
@@ -382,14 +384,12 @@ class hg(object):
 
 
   def _review(self,rev):
-    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isAssCreated(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(0)
     if(not rev):
       rev = 0
     os.chdir(self.absPipePath)
-    # if(os.path.exists("./review_"+ str(rev) +"/")):
-    #   shutil.rmtree("./review_"+ str(rev) +"/")
     try:
       os.makedirs(os.path.join(os.getcwd(), "review_{0}".format(rev)))
     except:
@@ -399,10 +399,6 @@ class hg(object):
       p = subprocess.Popen("hg --verbose archive --rev {0} ./review_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./review_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # assdict = {}
-    # assdict["reviewVersion"] = str(rev)
-    # assdict['assetId'] = self.assDets['assetId']
-    # assdict['username'] = self.username
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))

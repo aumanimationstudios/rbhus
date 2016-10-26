@@ -604,7 +604,7 @@
         </item>
         <item>
          <property name="text">
-          <string>done</string>
+          <string>approved</string>
          </property>
         </item>
        </widget>

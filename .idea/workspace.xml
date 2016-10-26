@@ -5,8 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetCreateMod.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetCreateMod.ui" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeReviewMod.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeReviewMod.ui" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeVersionsMod.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeVersionsMod.ui" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetCreateMod.py" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetCreateMod.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeReviewMod.py" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeReviewMod.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,36 +45,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="rbhusPipeRenderSubmit.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py">
+      <file leaf-file-name="rbhusPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9450">
-              <caret line="532" column="52" selection-start-line="532" selection-start-column="52" selection-end-line="532" selection-end-column="52" />
+            <state relative-caret-position="420">
+              <caret line="1844" column="69" selection-start-line="1844" selection-start-column="69" selection-end-line="1844" selection-end-column="69" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusList.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py">
+      <file leaf-file-name="rbhusPipeAssetCreate.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5202">
-              <caret line="296" column="38" selection-start-line="296" selection-start-column="34" selection-end-line="296" selection-end-column="38" />
-              <folding>
-                <marker date="1472660454645" expanded="true" signature="8412:8442" ph="select * fro... frames" />
-                <marker date="1472660454645" expanded="true" signature="17899:18016" ph="update frame... " />
-                <marker date="1472660454645" expanded="true" signature="18922:19033" ph="update frame... " />
-                <marker date="1472660454645" expanded="true" signature="40300:40361" ph="select ip fr... hostInfo" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rbhusPipe.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="700" column="27" selection-start-line="700" selection-start-column="16" selection-end-line="700" selection-end-column="27" />
+            <state relative-caret-position="312">
+              <caret line="169" column="0" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -69,55 +68,89 @@
       <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-260">
-              <caret line="1184" column="8" selection-start-line="1184" selection-start-column="4" selection-end-line="1184" selection-end-column="8" />
+            <state relative-caret-position="359">
+              <caret line="924" column="31" selection-start-line="924" selection-start-column="31" selection-end-line="924" selection-end-column="31" />
               <folding>
-                <marker date="1477025675668" expanded="true" signature="1759:1780" ph="SELECT * FRO... dirMaps" />
-                <marker date="1477025675668" expanded="true" signature="2007:2030" ph="SELECT tags assets" />
-                <marker date="1477025675668" expanded="true" signature="2492:2571" ph="SELECT * FRO... dirMaps" />
-                <marker date="1477025675668" expanded="true" signature="2870:2937" ph="SELECT * FRO... projTypes" />
-                <marker date="1477025675668" expanded="true" signature="3066:3103" ph="SELECT * FRO... projTypes" />
-                <marker date="1477025675668" expanded="true" signature="3362:3430" ph="SELECT * FRO... stageTypes" />
-                <marker date="1477025675668" expanded="true" signature="3559:3597" ph="SELECT * FRO... stageTypes" />
-                <marker date="1477025675668" expanded="true" signature="3893:3960" ph="SELECT * FRO... nodeTypes" />
-                <marker date="1477025675668" expanded="true" signature="4089:4126" ph="SELECT * FRO... nodeTypes" />
-                <marker date="1477025675668" expanded="true" signature="4384:4451" ph="SELECT * FRO... fileTypes" />
-                <marker date="1477025675668" expanded="true" signature="4580:4617" ph="SELECT * FRO... fileTypes" />
-                <marker date="1477025675668" expanded="true" signature="4874:4942" ph="SELECT * FRO... assetTypes" />
-                <marker date="1477025675668" expanded="true" signature="5071:5109" ph="SELECT * FRO... assetTypes" />
-                <marker date="1477025675668" expanded="true" signature="5405:5541" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1477025675668" expanded="true" signature="5622:5789" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1477025675668" expanded="true" signature="5848:5950" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1477025675668" expanded="true" signature="6487:6522" ph="select * fro... admins" />
-                <marker date="1477025675668" expanded="true" signature="11127:11273" ph="update proj " />
-                <marker date="1477025675668" expanded="true" signature="11494:11639" ph="update proj " />
-                <marker date="1477025675668" expanded="true" signature="11678:11821" ph="update proj " />
-                <marker date="1477025675668" expanded="true" signature="12828:12958" ph="select * fro... sequenceScenes" />
-                <marker date="1477025675668" expanded="true" signature="13641:13714" ph="select * fro... proj" />
-                <marker date="1477025675668" expanded="true" signature="14035:14102" ph="select * fro... proj" />
-                <marker date="1477025675668" expanded="true" signature="14297:14315" ph="select * fro... proj" />
-                <marker date="1477025675668" expanded="true" signature="15422:15530" ph="insert into sequenceScenes... " />
-                <marker date="1477025675668" expanded="true" signature="15609:15717" ph="insert into sequenceScenes... " />
-                <marker date="1477025675668" expanded="true" signature="18117:18170" ph="select * fro... assets" />
-                <marker date="1477025675668" expanded="true" signature="18473:18525" ph="select * fro... assets" />
-                <marker date="1477025675668" expanded="true" signature="20161:20294" ph="select * fro... assets" />
-                <marker date="1477025675668" expanded="true" signature="20936:21076" ph="select * fro... assets" />
-                <marker date="1477025675668" expanded="true" signature="22093:22238" ph="select * fro... assets" />
-                <marker date="1477025675668" expanded="true" signature="22880:23032" ph="select * fro... assets" />
-                <marker date="1477025675668" expanded="true" signature="24038:24183" ph="select * fro... assets" />
-                <marker date="1477025675668" expanded="true" signature="24825:24977" ph="select * fro... assets" />
-                <marker date="1477025675668" expanded="true" signature="25208:25239" ph="select * fro... users" />
-                <marker date="1477025675668" expanded="true" signature="25521:25586" ph="select admin... stageTypes" />
-                <marker date="1477025675668" expanded="true" signature="27617:27652" ph="insert into assets... " />
-                <marker date="1477025675668" expanded="true" signature="32940:33418" ph="insert into assetReviews... " />
-                <marker date="1477025675668" expanded="true" signature="33560:33717" ph="update asset... " />
-                <marker date="1477025675668" expanded="true" signature="34650:34730" ph="select * fro... assetReviews" />
-                <marker date="1477025675668" expanded="true" signature="34959:35077" ph="select * fro... assetReviews" />
-                <marker date="1477025675668" expanded="true" signature="39049:39156" ph="update asset... " />
-                <marker date="1477025675668" expanded="true" signature="40325:40389" ph="delete from " />
-                <marker date="1477025675668" expanded="true" signature="41692:41838" ph="update asset... " />
-                <marker date="1477025675668" expanded="true" signature="42182:42353" ph="update asset... " />
+                <marker date="1477304070020" expanded="true" signature="1759:1780" ph="SELECT * FRO... dirMaps" />
+                <marker date="1477304070020" expanded="true" signature="2007:2030" ph="SELECT tags assets" />
+                <marker date="1477304070020" expanded="true" signature="2492:2571" ph="SELECT * FRO... dirMaps" />
+                <marker date="1477304070020" expanded="true" signature="2870:2937" ph="SELECT * FRO... projTypes" />
+                <marker date="1477304070020" expanded="true" signature="3066:3103" ph="SELECT * FRO... projTypes" />
+                <marker date="1477304070020" expanded="true" signature="3362:3430" ph="SELECT * FRO... stageTypes" />
+                <marker date="1477304070020" expanded="true" signature="3559:3597" ph="SELECT * FRO... stageTypes" />
+                <marker date="1477304070020" expanded="true" signature="3893:3960" ph="SELECT * FRO... nodeTypes" />
+                <marker date="1477304070020" expanded="true" signature="4089:4126" ph="SELECT * FRO... nodeTypes" />
+                <marker date="1477304070020" expanded="true" signature="4384:4451" ph="SELECT * FRO... fileTypes" />
+                <marker date="1477304070020" expanded="true" signature="4580:4617" ph="SELECT * FRO... fileTypes" />
+                <marker date="1477304070020" expanded="true" signature="4874:4942" ph="SELECT * FRO... assetTypes" />
+                <marker date="1477304070020" expanded="true" signature="5071:5109" ph="SELECT * FRO... assetTypes" />
+                <marker date="1477304070020" expanded="true" signature="5405:5541" ph="SELECT * FRO... sequenceScenes" />
+                <marker date="1477304070020" expanded="true" signature="5622:5789" ph="SELECT * FRO... sequenceScenes" />
+                <marker date="1477304070020" expanded="true" signature="5848:5950" ph="SELECT * FRO... sequenceScenes" />
+                <marker date="1477304070020" expanded="true" signature="6487:6522" ph="select * fro... admins" />
+                <marker date="1477304070020" expanded="true" signature="11127:11273" ph="update proj " />
+                <marker date="1477304070020" expanded="true" signature="11494:11639" ph="update proj " />
+                <marker date="1477304070020" expanded="true" signature="11678:11821" ph="update proj " />
+                <marker date="1477304070020" expanded="true" signature="12828:12958" ph="select * fro... sequenceScenes" />
+                <marker date="1477304070020" expanded="true" signature="13641:13714" ph="select * fro... proj" />
+                <marker date="1477304070020" expanded="true" signature="14035:14102" ph="select * fro... proj" />
+                <marker date="1477304070020" expanded="true" signature="14297:14315" ph="select * fro... proj" />
+                <marker date="1477304070020" expanded="true" signature="15422:15530" ph="insert into sequenceScenes... " />
+                <marker date="1477304070020" expanded="true" signature="15609:15717" ph="insert into sequenceScenes... " />
+                <marker date="1477304070020" expanded="true" signature="18117:18170" ph="select * fro... assets" />
+                <marker date="1477304070020" expanded="true" signature="18473:18525" ph="select * fro... assets" />
+                <marker date="1477304070020" expanded="true" signature="20161:20294" ph="select * fro... assets" />
+                <marker date="1477304070020" expanded="true" signature="20936:21076" ph="select * fro... assets" />
+                <marker date="1477304070020" expanded="true" signature="22093:22238" ph="select * fro... assets" />
+                <marker date="1477304070020" expanded="true" signature="22880:23032" ph="select * fro... assets" />
+                <marker date="1477304070020" expanded="true" signature="24038:24183" ph="select * fro... assets" />
+                <marker date="1477304070020" expanded="true" signature="24825:24977" ph="select * fro... assets" />
+                <marker date="1477304070020" expanded="true" signature="25208:25239" ph="select * fro... users" />
+                <marker date="1477304070020" expanded="true" signature="25521:25586" ph="select admin... stageTypes" />
+                <marker date="1477304070020" expanded="true" signature="27617:27652" ph="insert into assets... " />
+                <marker date="1477304070020" expanded="true" signature="28644:28696" ph="select disti... assets" />
+                <marker date="1477304070020" expanded="true" signature="28644:28698" ph="select disti... assets" />
+                <marker date="1477304070020" expanded="true" signature="28644:28703" ph="select disti... assets" />
+                <marker date="1477304070020" expanded="true" signature="28644:28738" ph="select disti... assets" />
+                <marker date="1477304070020" expanded="true" signature="33338:33816" ph="insert into assetReviews... " />
+                <marker date="1477304070020" expanded="true" signature="33958:34115" ph="update asset... " />
+                <marker date="1477304070020" expanded="true" signature="35048:35128" ph="select * fro... assetReviews" />
+                <marker date="1477304070020" expanded="true" signature="35357:35475" ph="select * fro... assetReviews" />
+                <marker date="1477304070020" expanded="true" signature="39447:39554" ph="update asset... " />
+                <marker date="1477304070020" expanded="true" signature="40723:40787" ph="delete from " />
+                <marker date="1477304070020" expanded="true" signature="42090:42236" ph="update asset... " />
+                <marker date="1477304070020" expanded="true" signature="42580:42751" ph="update asset... " />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="selectCheckBoxCombo.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="148" column="64" selection-start-line="148" selection-start-column="64" selection-end-line="148" selection-end-column="64" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="selectCheckBox.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="179">
+              <caret line="21" column="61" selection-start-line="21" selection-start-column="58" selection-end-line="21" selection-end-column="61" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -125,8 +158,28 @@
       <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2991">
-              <caret line="358" column="48" selection-start-line="358" selection-start-column="48" selection-end-line="358" selection-end-column="48" />
+            <state relative-caret-position="592">
+              <caret line="428" column="35" selection-start-line="428" selection-start-column="35" selection-end-line="428" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="beforeFile.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="afterFile.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="630">
+              <caret line="37" column="54" selection-start-line="37" selection-start-column="54" selection-end-line="37" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -135,85 +188,9 @@
       <file leaf-file-name="rbhusPipeReview.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="602">
-              <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
-              <folding>
-                <marker date="1477024081818" expanded="true" signature="3375:9601" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5313">
-              <caret line="493" column="0" selection-start-line="493" selection-start-column="0" selection-end-line="493" selection-end-column="0" />
+            <state relative-caret-position="179">
+              <caret line="208" column="38" selection-start-line="208" selection-start-column="38" selection-end-line="208" selection-end-column="38" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rbhusQueen_initTasks.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusQueen_initTasks.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <marker date="1385100239000" expanded="true" signature="1481:1514" ph="SELECT * FRO... tasks" />
-                <marker date="1385100239000" expanded="true" signature="2283:2419" ph="UPDATE tasks... " />
-                <marker date="1385100239000" expanded="true" signature="2675:2727" ph="INSERT INTO tasksLog... " />
-                <marker date="1385100239000" expanded="true" signature="3808:3885" ph="delete from " />
-                <marker date="1385100239000" expanded="true" signature="4387:4417" ph="update frame... " />
-                <marker date="1385100239000" expanded="true" signature="4775:4840" ph="UPDATE tasks... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rbhusQueen_frameCheck.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusQueen_frameCheck.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <marker date="1396417536000" expanded="true" signature="1344:1502" ph="UPDATE frame... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9540">
-              <caret line="537" column="27" selection-start-line="537" selection-start-column="27" selection-end-line="537" selection-end-column="27" />
-              <folding>
-                <marker date="1437975470507" expanded="true" signature="188:211" ph="select * fro... adminsSys" />
-                <marker date="1437975470507" expanded="true" signature="540:583" ph="select group... hostInfo" />
-                <marker date="1437975470507" expanded="true" signature="1218:1267" ph="select gName... hostGroupsActive" />
-                <marker date="1437975470507" expanded="true" signature="1550:1572" ph="SELECT * FRO... fileType" />
-                <marker date="1437975470507" expanded="true" signature="2087:2113" ph="SELECT * FRO... resTemplates" />
-                <marker date="1437975470507" expanded="true" signature="2290:2308" ph="select * fro... proj" />
-                <marker date="1437975470507" expanded="true" signature="2604:2626" ph="select * fro... fileType" />
-                <marker date="1437975470507" expanded="true" signature="2926:2948" ph="select * fro... renderer" />
-                <marker date="1437975470507" expanded="true" signature="3177:3201" ph="select * fro... imageTypes" />
-                <marker date="1437975470507" expanded="true" signature="3672:3707" ph="select os fr... hostInfo" />
-                <marker date="1437975470507" expanded="true" signature="4987:5285" ph="select * fro... hostInfo" />
-                <marker date="1437975470507" expanded="true" signature="5490:5549" ph="select group... hostStates" />
-                <marker date="1437975470507" expanded="true" signature="5819:5948" ph="select * fro... frames" />
-                <marker date="1437975470507" expanded="true" signature="6513:6624" ph="update hostI... " />
-                <marker date="1437975470507" expanded="true" signature="6657:6770" ph="update hostS... " />
-                <marker date="1437975470507" expanded="true" signature="7139:7251" ph="update hostI... " />
-                <marker date="1437975470507" expanded="true" signature="7284:7398" ph="update hostS... " />
-                <marker date="1437975470507" expanded="true" signature="15241:15270" ph="select * fro... tasks" />
-                <marker date="1437975470507" expanded="true" signature="16020:16128" ph="insert into tasks... " />
-                <marker date="1437975470507" expanded="true" signature="16436:16493" ph="insert into tasksLog... " />
-                <marker date="1437975470507" expanded="true" signature="16677:16759" ph="update tasks... " />
-                <marker date="1437975470507" expanded="true" signature="17226:17357" ph="update tasks... " />
-                <marker date="1437975470507" expanded="true" signature="17826:18018" ph="update tasks... " />
-                <marker date="1437975470507" expanded="true" signature="18454:18522" ph="update tasks... " />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -250,9 +227,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tests/xlsheet.py" />
-        <option value="$PROJECT_DIR$/tools/system/add_new_system.py" />
-        <option value="$PROJECT_DIR$/cron_restart.sh" />
         <option value="$PROJECT_DIR$/rbhusDNSDHCP.sh" />
         <option value="$PROJECT_DIR$/tests/httpTests/appc.py" />
         <option value="$PROJECT_DIR$/tests/httpTests/appf.py" />
@@ -277,18 +251,12 @@
         <option value="$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh" />
         <option value="$PROJECT_DIR$/tests/wacomctl/wacomctl.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAdmin.py" />
-        <option value="$PROJECT_DIR$/rbhus/dbRbhus.py" />
-        <option value="$PROJECT_DIR$/rbhus/db.py" />
-        <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
         <option value="$PROJECT_DIR$/__init__.py" />
         <option value="$PROJECT_DIR$/tests/__init__.py" />
         <option value="$PROJECT_DIR$/rbhusUI/__init__.py" />
-        <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
         <option value="$PROJECT_DIR$/tests/zmq_client.py" />
-        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
         <option value="$PROJECT_DIR$/rbhus/dbTrayServer.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsTray.py" />
-        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" />
         <option value="$PROJECT_DIR$/tests/blenderMoviePerSequenceStrip.py" />
         <option value="$PROJECT_DIR$/etc/mercurial/local/.hgignore" />
         <option value="$PROJECT_DIR$/etc/convert_png_mp4/default.py" />
@@ -297,9 +265,18 @@
         <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
         <option value="$PROJECT_DIR$/etc/convert_png/default.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" />
+        <option value="$PROJECT_DIR$/rbhus/db.py" />
+        <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
+        <option value="$PROJECT_DIR$/rbhus/dbRbhus.py" />
+        <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" />
         <option value="$PROJECT_DIR$/rbhus/hgmod.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
-        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
       </list>
     </option>
@@ -312,8 +289,8 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1920" />
-    <option name="width" value="1680" />
-    <option name="height" value="1020" />
+    <option name="width" value="1678" />
+    <option name="height" value="1024" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -1105,7 +1082,14 @@
       <option name="project" value="LOCAL" />
       <updated>1477025669768</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="fixing">
+      <created>1477027167490</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1477027167490</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1118,17 +1102,18 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1680" height="1020" extended-state="6" />
+    <frame x="1920" y="0" width="1678" height="1024" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21787025" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22352217" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17136414" sideWeight="0.5134639" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26832017" sideWeight="0.4960464" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32586786" sideWeight="0.48883525" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26763716" sideWeight="0.4960464" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24636059" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17133258" sideWeight="0.48653612" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17133258" sideWeight="0.48653612" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1138,7 +1123,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24464487" sideWeight="0.47676525" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32586786" sideWeight="0.48883525" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1203,29 +1187,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/wacomctl/scalable-icons.png" />
-    <entry file="file://$PROJECT_DIR$/tests/wacomctl/wacomctl.py" />
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAdmin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/pyperclip.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/mercurial/home/.hgrc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/etc/mercurial/local/hgrc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1251,13 +1212,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4194">
           <caret line="233" column="7" selection-start-line="233" selection-start-column="4" selection-end-line="233" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/db.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="27" column="42" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
         </state>
       </provider>
     </entry>
@@ -1310,13 +1264,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/zmq_client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="810">
@@ -1328,27 +1275,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="21" column="49" selection-start-line="21" selection-start-column="49" selection-end-line="21" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/dbTrayServer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1332">
-          <caret line="82" column="31" selection-start-line="82" selection-start-column="31" selection-end-line="82" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4482">
-          <caret line="254" column="32" selection-start-line="254" selection-start-column="32" selection-end-line="254" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -1395,13 +1321,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6282">
-          <caret line="359" column="6" selection-start-line="359" selection-start-column="6" selection-end-line="359" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusQueen_scheduler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2538">
@@ -1443,27 +1362,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="14" column="55" selection-start-line="14" selection-start-column="55" selection-end-line="14" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1471,9 +1369,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="648">
           <caret line="41" column="11" selection-start-line="41" selection-start-column="11" selection-end-line="41" selection-end-column="11" />
-          <folding>
-            <element signature="e#19#28#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1481,32 +1376,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9540">
           <caret line="537" column="27" selection-start-line="537" selection-start-column="27" selection-end-line="537" selection-end-column="27" />
-          <folding>
-            <marker date="1437975470507" expanded="true" signature="188:211" ph="select * fro... adminsSys" />
-            <marker date="1437975470507" expanded="true" signature="540:583" ph="select group... hostInfo" />
-            <marker date="1437975470507" expanded="true" signature="1218:1267" ph="select gName... hostGroupsActive" />
-            <marker date="1437975470507" expanded="true" signature="1550:1572" ph="SELECT * FRO... fileType" />
-            <marker date="1437975470507" expanded="true" signature="2087:2113" ph="SELECT * FRO... resTemplates" />
-            <marker date="1437975470507" expanded="true" signature="2290:2308" ph="select * fro... proj" />
-            <marker date="1437975470507" expanded="true" signature="2604:2626" ph="select * fro... fileType" />
-            <marker date="1437975470507" expanded="true" signature="2926:2948" ph="select * fro... renderer" />
-            <marker date="1437975470507" expanded="true" signature="3177:3201" ph="select * fro... imageTypes" />
-            <marker date="1437975470507" expanded="true" signature="3672:3707" ph="select os fr... hostInfo" />
-            <marker date="1437975470507" expanded="true" signature="4987:5285" ph="select * fro... hostInfo" />
-            <marker date="1437975470507" expanded="true" signature="5490:5549" ph="select group... hostStates" />
-            <marker date="1437975470507" expanded="true" signature="5819:5948" ph="select * fro... frames" />
-            <marker date="1437975470507" expanded="true" signature="6513:6624" ph="update hostI... " />
-            <marker date="1437975470507" expanded="true" signature="6657:6770" ph="update hostS... " />
-            <marker date="1437975470507" expanded="true" signature="7139:7251" ph="update hostI... " />
-            <marker date="1437975470507" expanded="true" signature="7284:7398" ph="update hostS... " />
-            <marker date="1437975470507" expanded="true" signature="15241:15270" ph="select * fro... tasks" />
-            <marker date="1437975470507" expanded="true" signature="16020:16128" ph="insert into tasks... " />
-            <marker date="1437975470507" expanded="true" signature="16436:16493" ph="insert into tasksLog... " />
-            <marker date="1437975470507" expanded="true" signature="16677:16759" ph="update tasks... " />
-            <marker date="1437975470507" expanded="true" signature="17226:17357" ph="update tasks... " />
-            <marker date="1437975470507" expanded="true" signature="17826:18018" ph="update tasks... " />
-            <marker date="1437975470507" expanded="true" signature="18454:18522" ph="update tasks... " />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1514,14 +1383,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1385100239000" expanded="true" signature="1481:1514" ph="SELECT * FRO... tasks" />
-            <marker date="1385100239000" expanded="true" signature="2283:2419" ph="UPDATE tasks... " />
-            <marker date="1385100239000" expanded="true" signature="2675:2727" ph="INSERT INTO tasksLog... " />
-            <marker date="1385100239000" expanded="true" signature="3808:3885" ph="delete from " />
-            <marker date="1385100239000" expanded="true" signature="4387:4417" ph="update frame... " />
-            <marker date="1385100239000" expanded="true" signature="4775:4840" ph="UPDATE tasks... " />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1556,90 +1417,227 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
+    <entry file="file://$PROJECT_DIR$/tests/blender/paneltest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5313">
-          <caret line="493" column="0" selection-start-line="493" selection-start-column="0" selection-end-line="493" selection-end-column="0" />
+        <state relative-caret-position="288">
+          <caret line="18" column="27" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#10#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/blender/paneltest1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
+    <entry file="file://$PROJECT_DIR$/rbhus/dbTrayServer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2991">
-          <caret line="358" column="48" selection-start-line="358" selection-start-column="48" selection-end-line="358" selection-end-column="48" />
+        <state relative-caret-position="588">
+          <caret line="82" column="31" selection-start-line="82" selection-start-column="31" selection-end-line="82" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/db.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-18">
+          <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+          <folding>
+            <marker date="1477298195148" expanded="true" signature="7631:7687" ph="select frang... batch" />
+            <marker date="1477298195148" expanded="true" signature="8042:8134" ph="select batch... frames" />
+            <marker date="1477298195148" expanded="true" signature="8515:8562" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="9544:9655" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="9825:9908" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="10330:10367" ph="SELECT * FRO... frames" />
+            <marker date="1477298195148" expanded="true" signature="10898:11092" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="11133:11409" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="11882:12069" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12106:12375" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12812:12899" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12936:13106" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="13307:13341" ph="SELECT * FRO... proj" />
+            <marker date="1477298195148" expanded="true" signature="13573:13731" ph="SELECT tasks... tasks" />
+            <marker date="1477298195148" expanded="true" signature="18512:18595" ph="select count... frames" />
+            <marker date="1477298195148" expanded="true" signature="18835:19039" ph="UPDATE frame... " />
+            <marker date="1477298195148" expanded="true" signature="19670:19694" ph="SELECT * FRO... clientPref" />
+            <marker date="1477298195148" expanded="true" signature="20926:20948" ph="SELECT * FRO... hostInfomissing_value" />
+            <marker date="1477298195148" expanded="true" signature="21053:21089" ph="SELECT * FRO... hostInfo" />
+            <marker date="1477298195148" expanded="true" signature="21203:21239" ph="SELECT * FRO... hostInfo" />
+            <marker date="1477298195148" expanded="true" signature="21488:21569" ph="UPDATE hostA... " />
+            <marker date="1477298195148" expanded="true" signature="21712:22089" ph="UPDATE frame... " />
+            <marker date="1477298195148" expanded="true" signature="23696:23732" ph="select * fro... frames" />
+            <marker date="1477298195148" expanded="true" signature="23939:24346" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="24513:24564" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="24818:24852" ph="select statu... tasks" />
+            <marker date="1477298195148" expanded="true" signature="25083:25112" ph="select * fro... tasks" />
+            <marker date="1477298195148" expanded="true" signature="25781:25818" ph="SELECT * FRO... frames" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="647">
+          <caret line="43" column="27" selection-start-line="43" selection-start-column="27" selection-end-line="43" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="71" column="73" selection-start-line="71" selection-start-column="73" selection-end-line="71" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="148" column="64" selection-start-line="148" selection-start-column="64" selection-end-line="148" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="21" column="61" selection-start-line="21" selection-start-column="58" selection-end-line="21" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="169" column="0" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="602">
-          <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
-          <folding>
-            <marker date="1477024081818" expanded="true" signature="3375:9601" ph="..." />
-          </folding>
+        <state relative-caret-position="179">
+          <caret line="208" column="38" selection-start-line="208" selection-start-column="38" selection-end-line="208" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="592">
+          <caret line="428" column="35" selection-start-line="428" selection-start-column="35" selection-end-line="428" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="700" column="27" selection-start-line="700" selection-start-column="16" selection-end-line="700" selection-end-column="27" />
+        <state relative-caret-position="420">
+          <caret line="1844" column="69" selection-start-line="1844" selection-start-column="69" selection-end-line="1844" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="37" column="54" selection-start-line="37" selection-start-column="54" selection-end-line="37" selection-end-column="54" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-260">
-          <caret line="1184" column="8" selection-start-line="1184" selection-start-column="4" selection-end-line="1184" selection-end-column="8" />
+        <state relative-caret-position="359">
+          <caret line="924" column="31" selection-start-line="924" selection-start-column="31" selection-end-line="924" selection-end-column="31" />
           <folding>
-            <marker date="1477025675668" expanded="true" signature="1759:1780" ph="SELECT * FRO... dirMaps" />
-            <marker date="1477025675668" expanded="true" signature="2007:2030" ph="SELECT tags assets" />
-            <marker date="1477025675668" expanded="true" signature="2492:2571" ph="SELECT * FRO... dirMaps" />
-            <marker date="1477025675668" expanded="true" signature="2870:2937" ph="SELECT * FRO... projTypes" />
-            <marker date="1477025675668" expanded="true" signature="3066:3103" ph="SELECT * FRO... projTypes" />
-            <marker date="1477025675668" expanded="true" signature="3362:3430" ph="SELECT * FRO... stageTypes" />
-            <marker date="1477025675668" expanded="true" signature="3559:3597" ph="SELECT * FRO... stageTypes" />
-            <marker date="1477025675668" expanded="true" signature="3893:3960" ph="SELECT * FRO... nodeTypes" />
-            <marker date="1477025675668" expanded="true" signature="4089:4126" ph="SELECT * FRO... nodeTypes" />
-            <marker date="1477025675668" expanded="true" signature="4384:4451" ph="SELECT * FRO... fileTypes" />
-            <marker date="1477025675668" expanded="true" signature="4580:4617" ph="SELECT * FRO... fileTypes" />
-            <marker date="1477025675668" expanded="true" signature="4874:4942" ph="SELECT * FRO... assetTypes" />
-            <marker date="1477025675668" expanded="true" signature="5071:5109" ph="SELECT * FRO... assetTypes" />
-            <marker date="1477025675668" expanded="true" signature="5405:5541" ph="SELECT * FRO... sequenceScenes" />
-            <marker date="1477025675668" expanded="true" signature="5622:5789" ph="SELECT * FRO... sequenceScenes" />
-            <marker date="1477025675668" expanded="true" signature="5848:5950" ph="SELECT * FRO... sequenceScenes" />
-            <marker date="1477025675668" expanded="true" signature="6487:6522" ph="select * fro... admins" />
-            <marker date="1477025675668" expanded="true" signature="11127:11273" ph="update proj " />
-            <marker date="1477025675668" expanded="true" signature="11494:11639" ph="update proj " />
-            <marker date="1477025675668" expanded="true" signature="11678:11821" ph="update proj " />
-            <marker date="1477025675668" expanded="true" signature="12828:12958" ph="select * fro... sequenceScenes" />
-            <marker date="1477025675668" expanded="true" signature="13641:13714" ph="select * fro... proj" />
-            <marker date="1477025675668" expanded="true" signature="14035:14102" ph="select * fro... proj" />
-            <marker date="1477025675668" expanded="true" signature="14297:14315" ph="select * fro... proj" />
-            <marker date="1477025675668" expanded="true" signature="15422:15530" ph="insert into sequenceScenes... " />
-            <marker date="1477025675668" expanded="true" signature="15609:15717" ph="insert into sequenceScenes... " />
-            <marker date="1477025675668" expanded="true" signature="18117:18170" ph="select * fro... assets" />
-            <marker date="1477025675668" expanded="true" signature="18473:18525" ph="select * fro... assets" />
-            <marker date="1477025675668" expanded="true" signature="20161:20294" ph="select * fro... assets" />
-            <marker date="1477025675668" expanded="true" signature="20936:21076" ph="select * fro... assets" />
-            <marker date="1477025675668" expanded="true" signature="22093:22238" ph="select * fro... assets" />
-            <marker date="1477025675668" expanded="true" signature="22880:23032" ph="select * fro... assets" />
-            <marker date="1477025675668" expanded="true" signature="24038:24183" ph="select * fro... assets" />
-            <marker date="1477025675668" expanded="true" signature="24825:24977" ph="select * fro... assets" />
-            <marker date="1477025675668" expanded="true" signature="25208:25239" ph="select * fro... users" />
-            <marker date="1477025675668" expanded="true" signature="25521:25586" ph="select admin... stageTypes" />
-            <marker date="1477025675668" expanded="true" signature="27617:27652" ph="insert into assets... " />
-            <marker date="1477025675668" expanded="true" signature="32940:33418" ph="insert into assetReviews... " />
-            <marker date="1477025675668" expanded="true" signature="33560:33717" ph="update asset... " />
-            <marker date="1477025675668" expanded="true" signature="34650:34730" ph="select * fro... assetReviews" />
-            <marker date="1477025675668" expanded="true" signature="34959:35077" ph="select * fro... assetReviews" />
-            <marker date="1477025675668" expanded="true" signature="39049:39156" ph="update asset... " />
-            <marker date="1477025675668" expanded="true" signature="40325:40389" ph="delete from " />
-            <marker date="1477025675668" expanded="true" signature="41692:41838" ph="update asset... " />
-            <marker date="1477025675668" expanded="true" signature="42182:42353" ph="update asset... " />
+            <marker date="1477304070020" expanded="true" signature="1759:1780" ph="SELECT * FRO... dirMaps" />
+            <marker date="1477304070020" expanded="true" signature="2007:2030" ph="SELECT tags assets" />
+            <marker date="1477304070020" expanded="true" signature="2492:2571" ph="SELECT * FRO... dirMaps" />
+            <marker date="1477304070020" expanded="true" signature="2870:2937" ph="SELECT * FRO... projTypes" />
+            <marker date="1477304070020" expanded="true" signature="3066:3103" ph="SELECT * FRO... projTypes" />
+            <marker date="1477304070020" expanded="true" signature="3362:3430" ph="SELECT * FRO... stageTypes" />
+            <marker date="1477304070020" expanded="true" signature="3559:3597" ph="SELECT * FRO... stageTypes" />
+            <marker date="1477304070020" expanded="true" signature="3893:3960" ph="SELECT * FRO... nodeTypes" />
+            <marker date="1477304070020" expanded="true" signature="4089:4126" ph="SELECT * FRO... nodeTypes" />
+            <marker date="1477304070020" expanded="true" signature="4384:4451" ph="SELECT * FRO... fileTypes" />
+            <marker date="1477304070020" expanded="true" signature="4580:4617" ph="SELECT * FRO... fileTypes" />
+            <marker date="1477304070020" expanded="true" signature="4874:4942" ph="SELECT * FRO... assetTypes" />
+            <marker date="1477304070020" expanded="true" signature="5071:5109" ph="SELECT * FRO... assetTypes" />
+            <marker date="1477304070020" expanded="true" signature="5405:5541" ph="SELECT * FRO... sequenceScenes" />
+            <marker date="1477304070020" expanded="true" signature="5622:5789" ph="SELECT * FRO... sequenceScenes" />
+            <marker date="1477304070020" expanded="true" signature="5848:5950" ph="SELECT * FRO... sequenceScenes" />
+            <marker date="1477304070020" expanded="true" signature="6487:6522" ph="select * fro... admins" />
+            <marker date="1477304070020" expanded="true" signature="11127:11273" ph="update proj " />
+            <marker date="1477304070020" expanded="true" signature="11494:11639" ph="update proj " />
+            <marker date="1477304070020" expanded="true" signature="11678:11821" ph="update proj " />
+            <marker date="1477304070020" expanded="true" signature="12828:12958" ph="select * fro... sequenceScenes" />
+            <marker date="1477304070020" expanded="true" signature="13641:13714" ph="select * fro... proj" />
+            <marker date="1477304070020" expanded="true" signature="14035:14102" ph="select * fro... proj" />
+            <marker date="1477304070020" expanded="true" signature="14297:14315" ph="select * fro... proj" />
+            <marker date="1477304070020" expanded="true" signature="15422:15530" ph="insert into sequenceScenes... " />
+            <marker date="1477304070020" expanded="true" signature="15609:15717" ph="insert into sequenceScenes... " />
+            <marker date="1477304070020" expanded="true" signature="18117:18170" ph="select * fro... assets" />
+            <marker date="1477304070020" expanded="true" signature="18473:18525" ph="select * fro... assets" />
+            <marker date="1477304070020" expanded="true" signature="20161:20294" ph="select * fro... assets" />
+            <marker date="1477304070020" expanded="true" signature="20936:21076" ph="select * fro... assets" />
+            <marker date="1477304070020" expanded="true" signature="22093:22238" ph="select * fro... assets" />
+            <marker date="1477304070020" expanded="true" signature="22880:23032" ph="select * fro... assets" />
+            <marker date="1477304070020" expanded="true" signature="24038:24183" ph="select * fro... assets" />
+            <marker date="1477304070020" expanded="true" signature="24825:24977" ph="select * fro... assets" />
+            <marker date="1477304070020" expanded="true" signature="25208:25239" ph="select * fro... users" />
+            <marker date="1477304070020" expanded="true" signature="25521:25586" ph="select admin... stageTypes" />
+            <marker date="1477304070020" expanded="true" signature="27617:27652" ph="insert into assets... " />
+            <marker date="1477304070020" expanded="true" signature="28644:28696" ph="select disti... assets" />
+            <marker date="1477304070020" expanded="true" signature="28644:28698" ph="select disti... assets" />
+            <marker date="1477304070020" expanded="true" signature="28644:28703" ph="select disti... assets" />
+            <marker date="1477304070020" expanded="true" signature="28644:28738" ph="select disti... assets" />
+            <marker date="1477304070020" expanded="true" signature="33338:33816" ph="insert into assetReviews... " />
+            <marker date="1477304070020" expanded="true" signature="33958:34115" ph="update asset... " />
+            <marker date="1477304070020" expanded="true" signature="35048:35128" ph="select * fro... assetReviews" />
+            <marker date="1477304070020" expanded="true" signature="35357:35475" ph="select * fro... assetReviews" />
+            <marker date="1477304070020" expanded="true" signature="39447:39554" ph="update asset... " />
+            <marker date="1477304070020" expanded="true" signature="40723:40787" ph="delete from " />
+            <marker date="1477304070020" expanded="true" signature="42090:42236" ph="update asset... " />
+            <marker date="1477304070020" expanded="true" signature="42580:42751" ph="update asset... " />
           </folding>
         </state>
       </provider>

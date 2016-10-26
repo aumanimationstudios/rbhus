@@ -30,6 +30,7 @@ import constantsPipe
 import utilsPipe
 import utilsTray
 import debug
+import pyperclip
 
 
 
@@ -176,6 +177,7 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
         os.makedirs(refFolder)
       except:
         pass
+      pyperclip.copy(refFolder)
       webbrowser.open(refFolder)
       self.isReferenceAdded = True
 

@@ -47,7 +47,7 @@ parser.add_argument("-p","--path",dest='assPath',help='asset path')
 args = parser.parse_args()
 
 app_lock_file = os.path.join(tempfile.gettempdir(),str(args.assPath).replace(":","_"))
-debug.info(app_lock_file)
+preview_files = ["preview.png"]
 
 class ImagePlayer(QtGui.QWidget):
   def __init__(self, filename, parent):
@@ -182,7 +182,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.assetDetails = None
     
     self.centralwidget.resizeEvent  = self.resizeEvent
-    self.tableVersions.resizeEvent = self.resizeEvent
+    # self.tableVersions.resizeEvent = self.resizeEvent
     
     
     self.initThread = None
@@ -202,7 +202,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     
     
     self.versionsHg = None
-    
+
     #self.versionsHg = hgmod.hg(args.assPath)
     self.initialize()
     
@@ -320,7 +320,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.tableVersions.resizeColumnsToContents()
     tem = self.versionsHg._log()
     colorSize = QtCore.QSize()
-    colorSize.setWidth(2)
+    colorSize.setWidth(10)
+    colorSize.setHeight(10)
     if(tem):
       self.tableVersions.setColumnCount(len(tem[0]) + 2)
       self.tableVersions.setRowCount(len(tem))
@@ -353,6 +354,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           else:
             self.tableVersions.item(indrow, indcol).setText(str(t))
           indcol = indcol + 1
+
         indrow = indrow + 1
     self.tableVersions.setSortingEnabled(True)
     self.tableVersions.resizeColumnsToContents()
@@ -364,7 +366,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   
   def resizeEvent(self,event):
     self.loader.resizeEvent(event)
-    #self.tableVersions.resizeColumnsToContents()
+    self.tableVersions.resizeColumnsToContents()
     
     
   def initialize(self):
@@ -399,6 +401,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   
   def commit(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+    self.convertPreview()
     self.versionsHg._add()
     self.versionsHg._addremove()
     self.versionsHg._pull()
@@ -412,7 +415,20 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     
     
-    
+  def convertPreview(self):
+    files = glob.glob(os.path.join(self.versionsHg.localPath,"*"))
+    for x in files:
+      debug.info(x)
+      if(x.split(os.sep)[-1] in preview_files):
+        cmd = "/usr/bin/convert -resize 128x128 {0} {1}".format(x,x.replace(".png","_low.png"))
+        debug.info(cmd)
+        try:
+          p = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+          debug.info(p.communicate())
+        except:
+          debug.info(sys.exc_info())
+
+
   
   
   def openfolder(self):

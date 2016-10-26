@@ -146,7 +146,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
   def updateCheckBoxes(self):
     self.findList = []
     for x in self.inDict.keys():
-      if(x.find(str(self.lineEditSearch.text())) >= 0):
+      if((x.lower()).find(str(self.lineEditSearch.text()).lower()) >= 0):
         self.findList.append(x)
     
     

@@ -629,9 +629,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     inProgressAction = menuProgress.addAction("set to inProgress")
     inProgressDoneAction = menuProgress.addAction("set to done")
 
-    assCopyToClip = menuCopy.addAction("copy path to clipboard")
-    assCopyPathToClip = menuCopy.addAction("copy assetPath to clipboard")
-    assPublishPath = menuCopy.addAction("copy publish path to clipboard")
+    assCopyToClip = menuCopy.addAction("path")
+    assCopyPathToClip = menuCopy.addAction("asset path")
+    assPublishPath = menuCopy.addAction("publish path")
+    assVersionPath = menuCopy.addAction("version path")
 
 
     #openFileAction = menu.addAction("open file")
@@ -679,6 +680,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.reviewAss()
     if(action == assPublishPath):
       self.copyPublishPath()
+    if(action == assVersionPath):
+      self.copyVersionPathToClip()
 
     if(action == inProgressAction):
       self.setInProgress()
@@ -766,6 +769,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       x = listAsses[0]
       abspath =  utilsPipe.getAbsPath(x)
       pyperclip.copy(abspath)
+
+  def copyVersionPathToClip(self):
+    listAsses = self.selectedAsses()
+    debug.info(listAsses)
+    if(listAsses):
+      x = listAsses[0]
+      import hgmod
+      versionPath =  hgmod.hg(x).localPath
+      pyperclip.copy(versionPath)
 
   def copyPublishPath(self):
     listAsses = self.selectedAsses()
@@ -1230,13 +1242,6 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def setSequence(self):
     rows = utilsPipe.getSequenceScenes(os.environ['rp_proj_projName'])
-    #try:
-      #if(self.default):
-        #present = None
-      #else:
-        #present = str(self.comboSequence.currentText())
-    #except:
-      #present = None
     self.comboSequence.clear()
     seq = {}
     indx =  0
@@ -1774,7 +1779,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           elif(assesNames[assesList[x]]['reviewStatus'] == constantsPipe.reviewStatusInProgress):
             itemModified.setText("inProgress : "+ str(assesNames[assesList[x]]['reviewVersion']))
           else:
-            itemModified.setText("done : "+ str(assesNames[assesList[x]]['reviewVersion']))
+            itemModified.setText("approved : "+ str(assesNames[assesList[x]]['reviewVersion']))
           self.tableWidget.setItem(x,7,itemModified)
         except:
           debug.info(str(sys.exc_info()))
@@ -1786,6 +1791,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
             itemModified.setText("inProgress")
           elif(assesNames[assesList[x]]['progressStatus'] == constantsPipe.assetProgressDone):
             itemModified.setText("done")
+          else:
+            itemModified.setText("notStarted")
           self.tableWidget.setItem(x,8,itemModified)
         except:
           debug.info(str(sys.exc_info()))
@@ -1793,7 +1800,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
         try:
-          previewName = "preview"
+          previewName = "preview_low"
           self.previewItems[x] = assAbsPath +"/"+ previewName +".png"
         except:
           debug.info(str(sys.exc_info()))
@@ -1835,7 +1842,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     father = args[1]
     debug.info(args)
     import webbrowser
-    webbrowser.open(father.imagePath)
+    webbrowser.open(str(father.imagePath).replace("_low.png",".png"))
 
 
   def versionCheck(self,*args):
