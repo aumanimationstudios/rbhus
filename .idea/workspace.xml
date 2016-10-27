@@ -5,22 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetCreateMod.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetCreateMod.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeReviewMod.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeReviewMod.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeVersionsMod.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeVersionsMod.ui" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetCreateMod.py" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetCreateMod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeReviewMod.py" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeReviewMod.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" afterPath="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -65,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="924" column="31" selection-start-line="924" selection-start-column="31" selection-end-line="924" selection-end-column="31" />
+            <state relative-caret-position="-12">
+              <caret line="1200" column="16" selection-start-line="1200" selection-start-column="4" selection-end-line="1200" selection-end-column="16" />
               <folding>
                 <marker date="1477304070020" expanded="true" signature="1759:1780" ph="SELECT * FRO... dirMaps" />
                 <marker date="1477304070020" expanded="true" signature="2007:2030" ph="SELECT tags assets" />
@@ -125,12 +111,41 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="selectCheckBoxCombo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py">
+      <file leaf-file-name="dbRbhus.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="148" column="64" selection-start-line="148" selection-start-column="64" selection-end-line="148" selection-end-column="64" />
-              <folding />
+            <state relative-caret-position="-2394">
+              <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+              <folding>
+                <marker date="1477298195148" expanded="true" signature="7631:7687" ph="select frang... batch" />
+                <marker date="1477298195148" expanded="true" signature="8042:8134" ph="select batch... frames" />
+                <marker date="1477298195148" expanded="true" signature="8515:8562" ph="delete from " />
+                <marker date="1477298195148" expanded="true" signature="9544:9655" ph="UPDATE tasks... " />
+                <marker date="1477298195148" expanded="true" signature="9825:9908" ph="UPDATE tasks... " />
+                <marker date="1477298195148" expanded="true" signature="10330:10367" ph="SELECT * FRO... frames" />
+                <marker date="1477298195148" expanded="true" signature="10898:11092" ph="delete from " />
+                <marker date="1477298195148" expanded="true" signature="11133:11409" ph="delete from " />
+                <marker date="1477298195148" expanded="true" signature="11882:12069" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="12106:12375" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="12812:12899" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="12936:13106" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="13307:13341" ph="SELECT * FRO... proj" />
+                <marker date="1477298195148" expanded="true" signature="13573:13731" ph="SELECT tasks... tasks" />
+                <marker date="1477298195148" expanded="true" signature="18512:18595" ph="select count... frames" />
+                <marker date="1477298195148" expanded="true" signature="18835:19039" ph="UPDATE frame... " />
+                <marker date="1477298195148" expanded="true" signature="19670:19694" ph="SELECT * FRO... clientPref" />
+                <marker date="1477298195148" expanded="true" signature="20926:20948" ph="SELECT * FRO... hostInfomissing_value" />
+                <marker date="1477298195148" expanded="true" signature="21053:21089" ph="SELECT * FRO... hostInfo" />
+                <marker date="1477298195148" expanded="true" signature="21203:21239" ph="SELECT * FRO... hostInfo" />
+                <marker date="1477298195148" expanded="true" signature="21488:21569" ph="UPDATE hostA... " />
+                <marker date="1477298195148" expanded="true" signature="21712:22089" ph="UPDATE frame... " />
+                <marker date="1477298195148" expanded="true" signature="23696:23732" ph="select * fro... frames" />
+                <marker date="1477298195148" expanded="true" signature="23939:24346" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="24513:24564" ph="UPDATE tasks... " />
+                <marker date="1477298195148" expanded="true" signature="24818:24852" ph="select statu... tasks" />
+                <marker date="1477298195148" expanded="true" signature="25083:25112" ph="select * fro... tasks" />
+                <marker date="1477298195148" expanded="true" signature="25781:25818" ph="SELECT * FRO... frames" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -158,8 +173,8 @@
       <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="592">
-              <caret line="428" column="35" selection-start-line="428" selection-start-column="35" selection-end-line="428" selection-end-column="35" />
+            <state relative-caret-position="148">
+              <caret line="441" column="39" selection-start-line="441" selection-start-column="27" selection-end-line="441" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -175,12 +190,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="afterFile.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="afterFile.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="37" column="54" selection-start-line="37" selection-start-column="54" selection-end-line="37" selection-end-column="54" />
-              <folding />
+            <state relative-caret-position="1134">
+              <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -262,7 +279,6 @@
         <option value="$PROJECT_DIR$/etc/convert_png_mp4/default.py" />
         <option value="$PROJECT_DIR$/etc/blend_lin/default.py" />
         <option value="$PROJECT_DIR$/etc/convert_png_flv/default.py" />
-        <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
         <option value="$PROJECT_DIR$/etc/convert_png/default.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" />
@@ -278,6 +294,7 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+        <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
       </list>
     </option>
   </component>
@@ -1089,7 +1106,14 @@
       <option name="project" value="LOCAL" />
       <updated>1477027167490</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="fixing">
+      <created>1477492231337</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1477492231337</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1459,43 +1483,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-18">
-          <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
-          <folding>
-            <marker date="1477298195148" expanded="true" signature="7631:7687" ph="select frang... batch" />
-            <marker date="1477298195148" expanded="true" signature="8042:8134" ph="select batch... frames" />
-            <marker date="1477298195148" expanded="true" signature="8515:8562" ph="delete from " />
-            <marker date="1477298195148" expanded="true" signature="9544:9655" ph="UPDATE tasks... " />
-            <marker date="1477298195148" expanded="true" signature="9825:9908" ph="UPDATE tasks... " />
-            <marker date="1477298195148" expanded="true" signature="10330:10367" ph="SELECT * FRO... frames" />
-            <marker date="1477298195148" expanded="true" signature="10898:11092" ph="delete from " />
-            <marker date="1477298195148" expanded="true" signature="11133:11409" ph="delete from " />
-            <marker date="1477298195148" expanded="true" signature="11882:12069" ph="update tasks... " />
-            <marker date="1477298195148" expanded="true" signature="12106:12375" ph="update tasks... " />
-            <marker date="1477298195148" expanded="true" signature="12812:12899" ph="update tasks... " />
-            <marker date="1477298195148" expanded="true" signature="12936:13106" ph="update tasks... " />
-            <marker date="1477298195148" expanded="true" signature="13307:13341" ph="SELECT * FRO... proj" />
-            <marker date="1477298195148" expanded="true" signature="13573:13731" ph="SELECT tasks... tasks" />
-            <marker date="1477298195148" expanded="true" signature="18512:18595" ph="select count... frames" />
-            <marker date="1477298195148" expanded="true" signature="18835:19039" ph="UPDATE frame... " />
-            <marker date="1477298195148" expanded="true" signature="19670:19694" ph="SELECT * FRO... clientPref" />
-            <marker date="1477298195148" expanded="true" signature="20926:20948" ph="SELECT * FRO... hostInfomissing_value" />
-            <marker date="1477298195148" expanded="true" signature="21053:21089" ph="SELECT * FRO... hostInfo" />
-            <marker date="1477298195148" expanded="true" signature="21203:21239" ph="SELECT * FRO... hostInfo" />
-            <marker date="1477298195148" expanded="true" signature="21488:21569" ph="UPDATE hostA... " />
-            <marker date="1477298195148" expanded="true" signature="21712:22089" ph="UPDATE frame... " />
-            <marker date="1477298195148" expanded="true" signature="23696:23732" ph="select * fro... frames" />
-            <marker date="1477298195148" expanded="true" signature="23939:24346" ph="update tasks... " />
-            <marker date="1477298195148" expanded="true" signature="24513:24564" ph="UPDATE tasks... " />
-            <marker date="1477298195148" expanded="true" signature="24818:24852" ph="select statu... tasks" />
-            <marker date="1477298195148" expanded="true" signature="25083:25112" ph="select * fro... tasks" />
-            <marker date="1477298195148" expanded="true" signature="25781:25818" ph="SELECT * FRO... frames" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="647">
@@ -1552,14 +1539,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="592">
-          <caret line="428" column="35" selection-start-line="428" selection-start-column="35" selection-end-line="428" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -1576,18 +1555,55 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
+    <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="37" column="54" selection-start-line="37" selection-start-column="54" selection-end-line="37" selection-end-column="54" />
+        <state relative-caret-position="-2394">
+          <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+          <folding>
+            <marker date="1477298195148" expanded="true" signature="7631:7687" ph="select frang... batch" />
+            <marker date="1477298195148" expanded="true" signature="8042:8134" ph="select batch... frames" />
+            <marker date="1477298195148" expanded="true" signature="8515:8562" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="9544:9655" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="9825:9908" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="10330:10367" ph="SELECT * FRO... frames" />
+            <marker date="1477298195148" expanded="true" signature="10898:11092" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="11133:11409" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="11882:12069" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12106:12375" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12812:12899" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12936:13106" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="13307:13341" ph="SELECT * FRO... proj" />
+            <marker date="1477298195148" expanded="true" signature="13573:13731" ph="SELECT tasks... tasks" />
+            <marker date="1477298195148" expanded="true" signature="18512:18595" ph="select count... frames" />
+            <marker date="1477298195148" expanded="true" signature="18835:19039" ph="UPDATE frame... " />
+            <marker date="1477298195148" expanded="true" signature="19670:19694" ph="SELECT * FRO... clientPref" />
+            <marker date="1477298195148" expanded="true" signature="20926:20948" ph="SELECT * FRO... hostInfomissing_value" />
+            <marker date="1477298195148" expanded="true" signature="21053:21089" ph="SELECT * FRO... hostInfo" />
+            <marker date="1477298195148" expanded="true" signature="21203:21239" ph="SELECT * FRO... hostInfo" />
+            <marker date="1477298195148" expanded="true" signature="21488:21569" ph="UPDATE hostA... " />
+            <marker date="1477298195148" expanded="true" signature="21712:22089" ph="UPDATE frame... " />
+            <marker date="1477298195148" expanded="true" signature="23696:23732" ph="select * fro... frames" />
+            <marker date="1477298195148" expanded="true" signature="23939:24346" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="24513:24564" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="24818:24852" ph="select statu... tasks" />
+            <marker date="1477298195148" expanded="true" signature="25083:25112" ph="select * fro... tasks" />
+            <marker date="1477298195148" expanded="true" signature="25781:25818" ph="SELECT * FRO... frames" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="441" column="39" selection-start-line="441" selection-start-column="27" selection-end-line="441" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="924" column="31" selection-start-line="924" selection-start-column="31" selection-end-line="924" selection-end-column="31" />
+        <state relative-caret-position="-12">
+          <caret line="1200" column="16" selection-start-line="1200" selection-start-column="4" selection-end-line="1200" selection-end-column="16" />
           <folding>
             <marker date="1477304070020" expanded="true" signature="1759:1780" ph="SELECT * FRO... dirMaps" />
             <marker date="1477304070020" expanded="true" signature="2007:2030" ph="SELECT tags assets" />
@@ -1638,6 +1654,16 @@
             <marker date="1477304070020" expanded="true" signature="40723:40787" ph="delete from " />
             <marker date="1477304070020" expanded="true" signature="42090:42236" ph="update asset... " />
             <marker date="1477304070020" expanded="true" signature="42580:42751" ph="update asset... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1134">
+          <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>

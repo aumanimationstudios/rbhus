@@ -1,16 +1,72 @@
 import bpy
 import sys
 import os
+import re
 bpy.context.scene.unit_settings.system = 'IMPERIAL'
 bpy.ops.file.make_paths_absolute()
 bpy.context.scene.render.fps = 24
 bpy.context.scene.render.fps_base = 1
 # bpy.context.scene.render.use_single_layer = False
 
+
+
+def getAssFileName():
+  fileName = ""
+  if("rp_assets_assName" in os.environ):
+    if(str(os.environ['rp_assets_assName']) != "default"):
+      fileName = str(os.environ['rp_assets_assName'])
+  if(not re.search("^default$",str(os.environ['rp_assets_sequenceName']))):
+    if(not re.search("^default$",str(os.environ['rp_assets_sceneName']))):
+      if(fileName):
+        fileName = fileName +"_"+ str(os.environ['rp_assets_sequenceName']) +"_" + str(os.environ['rp_assets_sceneName'])
+      else:
+        fileName = str(os.environ['rp_assets_sequenceName']) +"_" + str(os.environ['rp_assets_sceneName'])
+    else:
+      if(fileName):
+        fileName = fileName +"_"+ str(os.environ['rp_assets_sequenceName'])
+      else:
+        fileName = str(os.environ['rp_assets_sequenceName'])
+  if(not re.search("^default$",str(os.environ['rp_assets_stageType']))):
+    if(fileName):
+      fileName = fileName +"_"+ str(os.environ['rp_assets_stageType'])
+    else:
+      fileName = str(os.environ['rp_assets_stageType'])
+  if(not re.search("^default$",str(os.environ['rp_assets_nodeType']))):
+    if(fileName):
+      fileName = fileName +"_"+ str(os.environ['rp_assets_nodeType'])
+    else:
+      fileName = str(os.environ['rp_assets_nodeType'])
+  return(fileName)
+
+
+
+
+def setOutPut():
+  bpy.context.scene.render.image_settings.file_format = 'FFMPEG'
+
+  is_ntsc = (bpy.context.scene.render.fps != 25)
+
+  bpy.context.scene.render.ffmpeg.format = "MPEG4"
+  bpy.context.scene.render.ffmpeg.codec = "H264"
+
+  if is_ntsc:
+    bpy.context.scene.render.ffmpeg.gopsize = 18
+  else:
+    bpy.context.scene.render.ffmpeg.gopsize = 15
+
+  bpy.context.scene.render.ffmpeg.video_bitrate = 6000
+  bpy.context.scene.render.ffmpeg.maxrate = 9000
+  bpy.context.scene.render.ffmpeg.minrate = 0
+  bpy.context.scene.render.ffmpeg.buffersize = 224 * 8
+  bpy.context.scene.render.ffmpeg.packetsize = 2048
+  bpy.context.scene.render.ffmpeg.muxrate = 10080000
+
+
 try:
   assPath = os.environ['rp_assets_path']
   stageType = os.environ['rp_assets_stageType']
-  if(stageType != "light"):
+  if(stageType == "anim"):
+    setOutPut()
     bpy.context.scene.render.use_stamp = True
     bpy.context.scene.render.use_stamp_time = False
     bpy.context.scene.render.use_stamp_date = False
@@ -20,6 +76,7 @@ try:
     bpy.context.scene.render.use_stamp_camera = False
     bpy.context.scene.render.use_stamp_filename = False
     bpy.context.scene.render.use_stamp_note = True
+    bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mp4"
 
   try:
     if(os.environ['rp_sequenceScenes_sFrame'] != os.environ['rp_sequenceScenes_eFrame']):
