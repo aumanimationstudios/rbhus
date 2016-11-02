@@ -209,17 +209,20 @@ def getFileTypes(ftype=None):
     return(0)
 
 
-def getAssTypes(atype=None):
+def getAssTypes(atype=None, status=constantsPipe.typesActive):
   dbconn = dbPipe.dbPipe()
   try:
     if(atype):
-      rows = dbconn.execute("SELECT * FROM assetTypes where type='"+ str(atype) +"' order by type", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM assetTypes where type=\"" + str(atype)+ "\"", dictionary=True)
       if(rows):
         return(rows[0])
       else:
         return(0)
     else:
-      rows = dbconn.execute("SELECT * FROM assetTypes order by type", dictionary=True)
+      if(status != constantsPipe.typesAll):
+        rows = dbconn.execute("SELECT * FROM assetTypes where status=\""+ str(status) +"\" order by type", dictionary=True)
+      else:
+        rows = dbconn.execute("SELECT * FROM assetTypes order by type", dictionary=True)
       if(rows):
         return(rows)
       else:
@@ -361,7 +364,7 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
 
   setupSequenceScene(seqScnDict)
 
-
+  # TODO: remove the below logic . Dont create directories . Project is just an idea in the database without any physical manifestation
   try:
     if(cScript):
       dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusRunning).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
@@ -974,8 +977,9 @@ def getAssPath(assDetDictTemp = {}):
   if(not assDetDict):
     return(0)
   assPath = str(assDetDict['projName'])
-  debug.debug("WTF asspathtemp : "+ str(assDetDict))
+  debug.debug(assDetDict['assetType'])
   if(re.search("^default$",str(assDetDict['assetType']))):
+    debug.info("passing : "+ assDetDict['assetType'])
     pass
   else:
     assTypeDets = getAssTypes(str(assDetDict['assetType']))
@@ -1140,14 +1144,8 @@ def getTemplatePath(assdetsTemp = {}):
   assdets = copy.copy(assdetsTemp)
   filetypedets = {}
   tempMain = ""
-  direcs = {}
   dirs = getDirMaps()
 
-  for x in range(0,len(dirs)):
-    if(dirs[x]):
-      direcs[dirs[x]['directory']] = 1
-  for y in direcs:
-    debug.info(y)
   assdets['assName'] = "default"
   assdets['assetType'] = "template"
   assPathTemp = getAssPath(assdets)
@@ -1197,6 +1195,104 @@ def getTemplatePath(assdetsTemp = {}):
   return(0)
 
 
+def getBinPath(assdetsTemp = {}):
+  assdets = copy.copy(assdetsTemp)
+  filetypedets = getFileTypes(assdets['fileType'])
+
+  if(sys.platform.find("win") >= 0):
+    exeAss = "windowsCmd"
+    pathAss = "windowsPath"
+  elif(sys.platform.find("linux") >= 0):
+    exeAss = "linuxCmd"
+    pathAss = "linuxPath"
+
+  # assdets['assName'] = "default"
+  assdets['assetType'] = "bin"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if(not assdetails):
+    assdets['sceneName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if(not assdetails):
+    assdets['sequenceName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if(not assdetails):
+    assdets['nodeType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if(not assdetails):
+    assdets['stageType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+
+  # If there is no asset , then try the above logic with assName as 'default'
+  if (not assdetails):
+    assdets = copy.copy(assdetsTemp)
+    assdets['assetType'] = "bin"
+    assdets['assName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['sceneName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['sequenceName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['nodeType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['stageType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+
+
+  if(assdetails):
+    assPathTemp = assdetails['path']
+    assPathAbs = getAbsPath(assPathTemp)
+    debug.info(assPathAbs)
+    if(os.path.exists(assPathAbs)):
+      filename = assPathAbs+ "/" + filetypedets[exeAss]
+      debug.info(filename)
+      if(os.path.exists(filename)):
+        return(filename)
+
+  return (filetypedets[exeAss])
 
 def openAssetCmd(assdets ={},filename = None):
   dirmapdets = getDirMapsDetails(assdets['directory'])
@@ -1208,6 +1304,8 @@ def openAssetCmd(assdets ={},filename = None):
   exeAss = None
   pathAss = None
   runProc = None
+  binPathExe = getBinPath(assdets)
+  debug.info(filename)
   if(sys.platform.find("win") >= 0):
     binMain = dirmapdets['windowsMapping'] +"/"+ assdets['projName'] +"/share/bin"
     exeAss = "windowsCmd"
@@ -1220,31 +1318,16 @@ def openAssetCmd(assdets ={},filename = None):
   exportAsset(assdets)
   if(assdets['fileType'] != "default"):
     filetypedets = getFileTypes(assdets['fileType'])
-    binDir = binMain +"/"+ assdets['fileType']
     validExtenstions = filetypedets['extension'].split(",")
     fileExt = filename.split(".")[-1]
     if(fileExt not in validExtenstions):
       return(0)
-    runCmd = binDir +"/"+ filetypedets[exeAss]
+    runCmd = binPathExe
     if(os.path.exists(runCmd)):
       runProc = runCmd +" "+ filename
       debug.info(runProc)
+      debug.info(runProc)
       return(runProc)
-    else:
-      binPaths = filetypedets[pathAss].split(",")
-      for x in reversed(binPaths):
-        debug.info(str(x))
-        if(str(x) != "default"):
-
-          absBinPath = getAbsPath(x)
-          if(absBinPath):
-            runCmd = absBinPath +"/"+ filetypedets[exeAss]
-            if(os.path.exists(runCmd)):
-              runProc = runCmd +" "+ filename
-              debug.info(runProc)
-              return(runProc)
-        else:
-          return("\""+ filetypedets[exeAss] +"\" "+ filename)
   else:
     return(0)
 
@@ -1303,31 +1386,12 @@ def assDelete(assId=None,assPath=None,hard=False):
       debug.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : failed")
   else:
     debug.debug("deleting asset assetId = "+ str(assdets['assetId']) +" : permission denied")
-  #elif(assPath):
-    #assdets = getAssDetails(assPath=str(assPath))
-    #dirMapsDets = getDirMapsDetails(assdets['directory'])
 
-    #if(hard == True):
-      #try:
-        #if(sys.platform.find("win") >= 0):
-          #corePath = dirMapsDets['windowsMapping'] + assdets['path'].replace(":","/")
-          #os.system("rmdir "+ str() +" /s /q")
-        #else:
-          #corePath = dirMapsDets['linuxMapping'] + assdets['path'].replace(":","/")
-          #os.system("rm -frv "+ str(corePath))
-        #debug.debug(corePath)
-      #except:
-        #debug.debug(str(sys.exc_info()))
-    #try:
-      #dbconn.execute("delete from assets where path='"+ str(assPath) +"'")
-      #debug.debug("deleting asset path = "+ str(assPath) +" : done")
-    #except:
-      #debug.debug("deleting asset path = "+ str(assPath) +" : failed")
 
 
 def setWorkInProgress(asspath):
   assdets = getAssDetails(assPath=str(asspath))
-  if (isProjAdmin(assdets) or isStageAdmin(assdets)):
+  if (isProjAdmin(assdets) or isStageAdmin(assdets) or isAssAssigned(assdets)):
     try:
       dbconn = dbPipe.dbPipe()
       dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressInProgress) +",doneDate = '0000-00-00 00:00:00' where path='"+ str(asspath) +"'")
@@ -1343,7 +1407,7 @@ def setWorkInProgress(asspath):
 def setWorkDone(asspath):
   assdets = getAssDetails(assPath=str(asspath))
 
-  if(isProjAdmin(assdets) or isStageAdmin(assdets)):
+  if(isProjAdmin(assdets) or isStageAdmin(assdets) or isAssAssigned(assdets)):
     try:
       dbconn = dbPipe.dbPipe()
       dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressDone) +",doneDate='"+ str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"' where path='"+ str(asspath) +"'")

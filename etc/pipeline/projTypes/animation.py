@@ -48,70 +48,70 @@ projTypeLibrary = os.environ['rp_projTypes_libDir']
 projTypeShare = os.environ['rp_projTypes_shareDir']
 projTypeOutput = os.environ['rp_projTypes_outDir']
 
-try:
-  os.makedirs(diskNfsMount)
-except:
-  print("0 : "+ str(sys.exc_info()))
-
-try:
-  os.system("mount "+ diskServer +":"+ os.sep + diskNfsExport.rstrip(os.sep).lstrip(os.sep) + os.sep +" "+ os.sep + diskNfsMount.lstrip(os.sep))
-except:
-  print("1 : "+ str(sys.exc_info()))
-  sys.exit(1)
-
-
-lib = projTypeLibrary.split(":")
-libdir = diskNfsMount.rstrip(os.sep)
-for x in lib:
-  if(re.search("^\$",str(x))):
-    libdir = libdir.rstrip(os.sep) + os.sep + os.environ["rp_"+ str(x).lstrip("$")]
-  else:
-    libdir = libdir.rstrip(os.sep) + os.sep + x
-if(libdir):
-  try:
-    os.makedirs(libdir)
-    print(libdir)
-  except:
-    print("2 : "+ str(sys.exc_info()))
-  
-
-share = projTypeShare.split(":")
-sharedir = diskNfsMount.rstrip(os.sep)
-for x in share:
-  if(re.search("^\$",str(x))):
-    sharedir = sharedir.rstrip(os.sep) + os.sep + os.environ["rp_"+ str(x).lstrip("$")]
-  else:
-    sharedir = sharedir.rstrip(os.sep) + os.sep + x
-if(sharedir):
-  try:
-    os.makedirs(sharedir)
-    print(sharedir)
-  except:
-    print("3 : "+ str(sys.exc_info()))
-    
-
-output = projTypeOutput.split(":")
-outputdir = diskNfsMount.rstrip(os.sep)
-for x in output:
-  if(re.search("^\$",str(x))):
-    outputdir = outputdir.rstrip(os.sep) + os.sep + os.environ["rp_"+ str(x).lstrip("$")]
-  else:
-    outputdir = outputdir.rstrip(os.sep) + os.sep + x
-if(outputdir):
-  try:
-    os.makedirs(outputdir)
-    print(outputdir)
-  except:
-    print(str(sys.exc_info()))
-  
-    
-try:
-  os.system("chown -R "+ aclUser +":"+ aclGroup +" "+ diskNfsMount.rstrip(os.sep) + os.sep + projName)
-except:
-  print(str(sys.exc_info()))
-  sys.exit(1)
-  
-os.system("umount -f "+ str(diskNfsMount))
+# try:
+#   os.makedirs(diskNfsMount)
+# except:
+#   print("0 : "+ str(sys.exc_info()))
+#
+# try:
+#   os.system("mount "+ diskServer +":"+ os.sep + diskNfsExport.rstrip(os.sep).lstrip(os.sep) + os.sep +" "+ os.sep + diskNfsMount.lstrip(os.sep))
+# except:
+#   print("1 : "+ str(sys.exc_info()))
+#   sys.exit(1)
+#
+#
+# lib = projTypeLibrary.split(":")
+# libdir = diskNfsMount.rstrip(os.sep)
+# for x in lib:
+#   if(re.search("^\$",str(x))):
+#     libdir = libdir.rstrip(os.sep) + os.sep + os.environ["rp_"+ str(x).lstrip("$")]
+#   else:
+#     libdir = libdir.rstrip(os.sep) + os.sep + x
+# if(libdir):
+#   try:
+#     os.makedirs(libdir)
+#     print(libdir)
+#   except:
+#     print("2 : "+ str(sys.exc_info()))
+#
+#
+# share = projTypeShare.split(":")
+# sharedir = diskNfsMount.rstrip(os.sep)
+# for x in share:
+#   if(re.search("^\$",str(x))):
+#     sharedir = sharedir.rstrip(os.sep) + os.sep + os.environ["rp_"+ str(x).lstrip("$")]
+#   else:
+#     sharedir = sharedir.rstrip(os.sep) + os.sep + x
+# if(sharedir):
+#   try:
+#     os.makedirs(sharedir)
+#     print(sharedir)
+#   except:
+#     print("3 : "+ str(sys.exc_info()))
+#
+#
+# output = projTypeOutput.split(":")
+# outputdir = diskNfsMount.rstrip(os.sep)
+# for x in output:
+#   if(re.search("^\$",str(x))):
+#     outputdir = outputdir.rstrip(os.sep) + os.sep + os.environ["rp_"+ str(x).lstrip("$")]
+#   else:
+#     outputdir = outputdir.rstrip(os.sep) + os.sep + x
+# if(outputdir):
+#   try:
+#     os.makedirs(outputdir)
+#     print(outputdir)
+#   except:
+#     print(str(sys.exc_info()))
+#
+#
+# try:
+#   os.system("chown -R "+ aclUser +":"+ aclGroup +" "+ diskNfsMount.rstrip(os.sep) + os.sep + projName)
+# except:
+#   print(str(sys.exc_info()))
+#   sys.exit(1)
+#
+# os.system("umount -f "+ str(diskNfsMount))
 sys.exit(0)
       
   

@@ -161,6 +161,8 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       if(aT.isChecked()):
         assdict['assetType'] = str(aT.text()).rstrip().lstrip()
         break
+    else:
+      debug.info("reached the end and no asset types - WTF!")
 
     if(not assdict.has_key('assetType')):
       QtGui.QMessageBox.critical(self.form,"WTF!!!","assetType not selected. Please select one")
@@ -325,7 +327,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   
 
   def setAssTypes(self):
-    rows = utilsPipe.getAssTypes()
+    rows = utilsPipe.getAssTypes(status=constantsPipe.typesAll)
     if(rows):
       for row in rows:
         radioButton = QtGui.QRadioButton()

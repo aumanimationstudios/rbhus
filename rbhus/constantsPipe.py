@@ -39,6 +39,7 @@ createStatus = {
 
 assetStatusDelete = 0
 assetStatusActive = 1
+assetStatusHidden = 2
 assetProgressInProgress = 0
 assetProgressDone = 1
 assetProgressNotStarted = 2
@@ -49,3 +50,9 @@ reviewStatusInProgress = 1
 reviewStatusDone = 2
 
 run_api_cmd_review = "review"
+
+
+typesActive = 1
+typesDeactive = 2
+typesHidden = 3
+typesAll = 4
