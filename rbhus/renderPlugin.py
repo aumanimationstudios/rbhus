@@ -15,7 +15,7 @@ class __environmentVariables(object):
   def __init__(self):
     for x in os.environ:
       if(str(x).startswith("rbhus")):
-        exec ("self."+ x +"=\""+ str(os.environ[x]).strip() +"\"")
+        exec ("self."+ x +"=\'"+ str(os.environ[x]).strip() +"\'")
 
 
 env = __environmentVariables().__dict__
