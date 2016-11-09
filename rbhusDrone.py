@@ -570,35 +570,35 @@ def execFrames(frameInfo,frameScrutiny):
                 logClient.debug(sys.exc_info())
               break
           break
-        runScriptProcPoll = runScriptProc.poll()
-        if(runScriptProcPoll != None):
-          os.environ['rbhus_exit'] = str(runScriptProcPoll)
-          if(not runCmd):
-            logClient.debug("runCmd not found : "+ str(runCmd))
-            while (1):
-              if (setFramesStatus(frameInfo['id'], batchedFrames, constants.framesFailed, db_conn) == 1):
-                logClient.debug("run cmd failed !! ")
-                break
-              time.sleep(0.5)
-
-            # Run the afterFrame shits
-            if (str(frameInfo['afterFrameCmd']) != 'default'):
-              logClient.debug("running afterFrameCmd :" + str(frameInfo['afterFrameCmd']))
-              runCommand(str(frameInfo['afterFrameCmd']))
-
-            while (1):
-              if (setFreeCpus(frameInfo, db_conn) == 1):
-                break
-              time.sleep(0.5)
-            washMyButt(frameInfo['id'], frameInfo['frameId'])
-            db_conn.delBatchId(frameInfo['batchId'])
-            # db_conn.setTaskDone(frameInfo['id'])
-            rbhusLog(frameInfo)
-            sys.exit(0)
-          break
+        # runScriptProcPoll = runScriptProc.poll()
+        # if(runScriptProcPoll != None):
+        #   os.environ['rbhus_exit'] = str(runScriptProcPoll)
+        #   if(not runCmd):
+        #     logClient.debug("runCmd not found : "+ str(runCmd))
+        #     while (1):
+        #       if (setFramesStatus(frameInfo['id'], batchedFrames, constants.framesFailed, db_conn) == 1):
+        #         logClient.debug("run cmd failed !! ")
+        #         break
+        #       time.sleep(0.5)
+        #
+        #     # Run the afterFrame shits
+        #     if (str(frameInfo['afterFrameCmd']) != 'default'):
+        #       logClient.debug("running afterFrameCmd :" + str(frameInfo['afterFrameCmd']))
+        #       runCommand(str(frameInfo['afterFrameCmd']))
+        #
+        #     while (1):
+        #       if (setFreeCpus(frameInfo, db_conn) == 1):
+        #         break
+        #       time.sleep(0.5)
+        #     washMyButt(frameInfo['id'], frameInfo['frameId'])
+        #     db_conn.delBatchId(frameInfo['batchId'])
+        #     # db_conn.setTaskDone(frameInfo['id'])
+        #     rbhusLog(frameInfo)
+        #     sys.exit(0)
+        #   break
 
         logClient.debug ("timeout")
-
+      logClient.debug(runScriptProc.communicate(timeout=10))
     except:
       os.environ['rbhus_exit']   = "1"
       logClient.debug(str(sys.exc_info()))

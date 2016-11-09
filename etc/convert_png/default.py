@@ -6,6 +6,9 @@ import pwd
 import time
 import socket
 import subprocess
+rbhus_main_path = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-3])
+sys.path.append(rbhus_main_path)
+import rbhus.renderPlugin
 
 taskId = os.environ['rbhus_taskId']
 frameId = os.environ['rbhus_frameId']
@@ -40,3 +43,4 @@ else:
   script = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/tools/rbhus/convert_png_flv.py"
 cmd = script +" "+ outDir
 print (cmd)
+rbhus.renderPlugin.sendCmd(cmd)
