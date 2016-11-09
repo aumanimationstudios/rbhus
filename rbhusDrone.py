@@ -626,12 +626,13 @@ def execFrames(frameInfo,frameScrutiny):
       sys.exit(0)
 
 
-    logClient.debug("RUN CMD :"+ runCmd)
+    logClient.debug("RUN CMD :"+ str(runCmd))
 
 
     logClient.debug("logFile : "+ str(logFile))
     try:
       logD = open(logFile,"a+",0)
+      logD.write("RUN CMD :"+ str(runCmd))
       logD.write("START : "+ str(frameInfo['batchId']) + " : "+ str(hostname) +" : "+ str(time.asctime()) +"\n")
       logD.write("FRAMES : "+ " ".join(batchedFrames) +"\n")
     except:

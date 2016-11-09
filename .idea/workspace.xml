@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/renderPlugin.py" afterPath="$PROJECT_DIR$/rbhus/renderPlugin.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusDrone.py" afterPath="$PROJECT_DIR$/rbhusDrone.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,7 +71,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="renderPlugin.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="renderPlugin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="270">
@@ -103,32 +103,32 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="737">
-              <caret line="603" column="11" selection-start-line="603" selection-start-column="11" selection-end-line="603" selection-end-column="11" />
+            <state relative-caret-position="323">
+              <caret line="634" column="42" selection-start-line="634" selection-start-column="42" selection-end-line="634" selection-end-column="42" />
               <folding>
                 <element signature="e#731#741#0" expanded="true" />
-                <marker date="1478713367760" expanded="true" signature="4826:4869" ph="select * fro... main" />
-                <marker date="1478713367760" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
-                <marker date="1478713367760" expanded="true" signature="6538:6687" ph="update hostS... " />
-                <marker date="1478713367760" expanded="true" signature="6785:6888" ph="update hostS... " />
-                <marker date="1478713367760" expanded="true" signature="7016:7119" ph="update hostS... " />
-                <marker date="1478713367760" expanded="true" signature="7216:7362" ph="update hostS... " />
-                <marker date="1478713367760" expanded="true" signature="7414:7560" ph="update hostS... " />
-                <marker date="1478713367760" expanded="true" signature="7642:7788" ph="update hostS... " />
-                <marker date="1478713367760" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
-                <marker date="1478713367760" expanded="true" signature="16670:16768" ph="update frame... " />
-                <marker date="1478713367760" expanded="true" signature="40917:40995" ph="SELECT defSc... fileType" />
-                <marker date="1478713367760" expanded="true" signature="41767:41833" ph="SELECT * FRO... hostEffectiveResource" />
-                <marker date="1478713367760" expanded="true" signature="45800:45874" ph="select group... hostGroups" />
-                <marker date="1478713367760" expanded="true" signature="46281:46334" ph="select * fro... hostStates" />
-                <marker date="1478713367760" expanded="true" signature="47333:47382" ph="delete from " />
-                <marker date="1478713367760" expanded="true" signature="50153:50209" ph="insert into hostStates... " />
-                <marker date="1478713367760" expanded="true" signature="50357:50444" ph="insert into hostSystem... " />
-                <marker date="1478713367760" expanded="true" signature="50829:51077" ph="UPDATE hostR... " />
-                <marker date="1478713367760" expanded="true" signature="51300:51530" ph="UPDATE hostR... " />
+                <marker date="1478717369563" expanded="true" signature="4826:4869" ph="select * fro... main" />
+                <marker date="1478717369563" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
+                <marker date="1478717369563" expanded="true" signature="6538:6687" ph="update hostS... " />
+                <marker date="1478717369563" expanded="true" signature="6785:6888" ph="update hostS... " />
+                <marker date="1478717369563" expanded="true" signature="7016:7119" ph="update hostS... " />
+                <marker date="1478717369563" expanded="true" signature="7216:7362" ph="update hostS... " />
+                <marker date="1478717369563" expanded="true" signature="7414:7560" ph="update hostS... " />
+                <marker date="1478717369563" expanded="true" signature="7642:7788" ph="update hostS... " />
+                <marker date="1478717369563" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
+                <marker date="1478717369563" expanded="true" signature="16670:16768" ph="update frame... " />
+                <marker date="1478717369563" expanded="true" signature="40965:41043" ph="SELECT defSc... fileType" />
+                <marker date="1478717369563" expanded="true" signature="41815:41881" ph="SELECT * FRO... hostEffectiveResource" />
+                <marker date="1478717369563" expanded="true" signature="45848:45922" ph="select group... hostGroups" />
+                <marker date="1478717369563" expanded="true" signature="46329:46382" ph="select * fro... hostStates" />
+                <marker date="1478717369563" expanded="true" signature="47381:47430" ph="delete from " />
+                <marker date="1478717369563" expanded="true" signature="50201:50257" ph="insert into hostStates... " />
+                <marker date="1478717369563" expanded="true" signature="50405:50492" ph="insert into hostSystem... " />
+                <marker date="1478717369563" expanded="true" signature="50877:51125" ph="UPDATE hostR... " />
+                <marker date="1478717369563" expanded="true" signature="51348:51578" ph="UPDATE hostR... " />
               </folding>
             </state>
           </provider>
@@ -296,9 +296,9 @@
         <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
         <option value="$PROJECT_DIR$/etc/convert_png/default.py" />
-        <option value="$PROJECT_DIR$/rbhusDrone.py" />
         <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
         <option value="$PROJECT_DIR$/rbhus/renderPlugin.py" />
+        <option value="$PROJECT_DIR$/rbhusDrone.py" />
       </list>
     </option>
   </component>
@@ -1254,7 +1254,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478716595842</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
+      <created>1478716710613</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1478716710613</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1796,35 +1803,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="737">
-          <caret line="603" column="11" selection-start-line="603" selection-start-column="11" selection-end-line="603" selection-end-column="11" />
-          <folding>
-            <element signature="e#731#741#0" expanded="true" />
-            <marker date="1478713367760" expanded="true" signature="4826:4869" ph="select * fro... main" />
-            <marker date="1478713367760" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
-            <marker date="1478713367760" expanded="true" signature="6538:6687" ph="update hostS... " />
-            <marker date="1478713367760" expanded="true" signature="6785:6888" ph="update hostS... " />
-            <marker date="1478713367760" expanded="true" signature="7016:7119" ph="update hostS... " />
-            <marker date="1478713367760" expanded="true" signature="7216:7362" ph="update hostS... " />
-            <marker date="1478713367760" expanded="true" signature="7414:7560" ph="update hostS... " />
-            <marker date="1478713367760" expanded="true" signature="7642:7788" ph="update hostS... " />
-            <marker date="1478713367760" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
-            <marker date="1478713367760" expanded="true" signature="16670:16768" ph="update frame... " />
-            <marker date="1478713367760" expanded="true" signature="40917:40995" ph="SELECT defSc... fileType" />
-            <marker date="1478713367760" expanded="true" signature="41767:41833" ph="SELECT * FRO... hostEffectiveResource" />
-            <marker date="1478713367760" expanded="true" signature="45800:45874" ph="select group... hostGroups" />
-            <marker date="1478713367760" expanded="true" signature="46281:46334" ph="select * fro... hostStates" />
-            <marker date="1478713367760" expanded="true" signature="47333:47382" ph="delete from " />
-            <marker date="1478713367760" expanded="true" signature="50153:50209" ph="insert into hostStates... " />
-            <marker date="1478713367760" expanded="true" signature="50357:50444" ph="insert into hostSystem... " />
-            <marker date="1478713367760" expanded="true" signature="50829:51077" ph="UPDATE hostR... " />
-            <marker date="1478713367760" expanded="true" signature="51300:51530" ph="UPDATE hostR... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -1838,6 +1816,35 @@
         <state relative-caret-position="270">
           <caret line="17" column="66" selection-start-line="17" selection-start-column="66" selection-end-line="17" selection-end-column="66" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="634" column="42" selection-start-line="634" selection-start-column="42" selection-end-line="634" selection-end-column="42" />
+          <folding>
+            <element signature="e#731#741#0" expanded="true" />
+            <marker date="1478717369563" expanded="true" signature="4826:4869" ph="select * fro... main" />
+            <marker date="1478717369563" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
+            <marker date="1478717369563" expanded="true" signature="6538:6687" ph="update hostS... " />
+            <marker date="1478717369563" expanded="true" signature="6785:6888" ph="update hostS... " />
+            <marker date="1478717369563" expanded="true" signature="7016:7119" ph="update hostS... " />
+            <marker date="1478717369563" expanded="true" signature="7216:7362" ph="update hostS... " />
+            <marker date="1478717369563" expanded="true" signature="7414:7560" ph="update hostS... " />
+            <marker date="1478717369563" expanded="true" signature="7642:7788" ph="update hostS... " />
+            <marker date="1478717369563" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
+            <marker date="1478717369563" expanded="true" signature="16670:16768" ph="update frame... " />
+            <marker date="1478717369563" expanded="true" signature="40965:41043" ph="SELECT defSc... fileType" />
+            <marker date="1478717369563" expanded="true" signature="41815:41881" ph="SELECT * FRO... hostEffectiveResource" />
+            <marker date="1478717369563" expanded="true" signature="45848:45922" ph="select group... hostGroups" />
+            <marker date="1478717369563" expanded="true" signature="46329:46382" ph="select * fro... hostStates" />
+            <marker date="1478717369563" expanded="true" signature="47381:47430" ph="delete from " />
+            <marker date="1478717369563" expanded="true" signature="50201:50257" ph="insert into hostStates... " />
+            <marker date="1478717369563" expanded="true" signature="50405:50492" ph="insert into hostSystem... " />
+            <marker date="1478717369563" expanded="true" signature="50877:51125" ph="UPDATE hostR... " />
+            <marker date="1478717369563" expanded="true" signature="51348:51578" ph="UPDATE hostR... " />
+          </folding>
         </state>
       </provider>
     </entry>
