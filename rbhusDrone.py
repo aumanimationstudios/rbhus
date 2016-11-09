@@ -570,7 +570,7 @@ def execFrames(frameInfo,frameScrutiny):
                 logClient.debug(sys.exc_info())
               break
           break
-        logClient.debug(runScriptProc.communicate(timeout=10))
+        logClient.debug(runScriptProc.communicate())
         runScriptProcPoll = runScriptProc.poll()
         logClient.debug("poll : "+ str(runScriptProcPoll))
         # if(runScriptProcPoll != None and runScriptProcPoll != 0):
@@ -600,7 +600,7 @@ def execFrames(frameInfo,frameScrutiny):
         #   break
 
         logClient.debug ("timeout")
-      logClient.debug(runScriptProc.communicate(timeout=10))
+      logClient.debug(runScriptProc.communicate())
     except:
       os.environ['rbhus_exit']   = "1"
       logClient.debug(str(sys.exc_info()))
