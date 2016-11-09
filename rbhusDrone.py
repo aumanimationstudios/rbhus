@@ -571,7 +571,7 @@ def execFrames(frameInfo,frameScrutiny):
               break
           break
         runScriptProcPoll = runScriptProc.poll()
-        if(runScriptProcPoll != None):
+        if(runScriptProcPoll != None and runScriptProcPoll != 0):
           os.environ['rbhus_exit'] = str(runScriptProcPoll)
           if(not runCmd):
             logClient.debug("runCmd not found : "+ str(runCmd))
