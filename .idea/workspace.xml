@@ -1160,7 +1160,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478710095638</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
+      <created>1478710129440</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1478710129440</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TodoView">
