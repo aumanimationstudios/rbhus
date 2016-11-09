@@ -600,7 +600,7 @@ def execFrames(frameInfo,frameScrutiny):
         #   break
 
         logClient.debug ("timeout")
-      logClient.debug(runScriptProc.communicate())
+      # logClient.debug(runScriptProc.communicate())
     except:
       os.environ['rbhus_exit']   = "1"
       logClient.debug(str(sys.exc_info()))
