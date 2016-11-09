@@ -544,7 +544,8 @@ class tasks(object):
       return(taskFieldss)
     except:
       return(0)
-  
+
+
   def _getTaskDetails(self,tid):
     try:
       rows = self.db_conn.execute("select * from tasks where id="+ str(int(tid)),dictionary=True)
@@ -554,7 +555,9 @@ class tasks(object):
         return(0)
     except:
       return(0)
-      
+
+
+
   def submit(self,fieldDict):
     self.validFields = {}
     self.invalidFields = {}

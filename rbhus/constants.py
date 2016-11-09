@@ -16,6 +16,7 @@
 
 
 dnsmasq = "blues0"
+frameCheckIpcPort = 9874
 
 hostSystemUpdateDisable = 0
 hostSystemUpdateScheduled = 1

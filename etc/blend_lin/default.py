@@ -6,6 +6,12 @@ import pwd
 import time
 import socket
 import subprocess
+import simplejson
+
+rbhus_main_path = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-3])
+sys.path.append(rbhus_main_path)
+import rbhus.utilsPipe
+import rbhus.renderPlugin
 
 taskId = os.environ['rbhus_taskId']
 frameId = os.environ['rbhus_frameId']
@@ -34,9 +40,24 @@ runScript = os.environ['rbhus_runScript']
 camera = os.environ['rbhus_camera']
 res = os.environ['rbhus_resolution']
 
+RENDERCMD = "/usr/local/bin/blender -noaudio -b \"" + str(fileName) +"\""
+
+if("rbhus_renExtEnv" in rbhus.renderPlugin.env):
+  extEnv = rbhus.renderPlugin.env['rbhus_renExtEnv']
+  if(extEnv != "default"):
+    extEnvDict = simplejson.loads(extEnv)
+    if("exe" in extEnvDict):
+      RENDERCMD = extEnvDict['exe'] +" -noaudio -b \"" + str(fileName) + "\""
+
+
+
+
+
+
+
 if(renExtArgs == "None"):
   renExtArgs = ""
-RENDERCMD = "/usr/local/bin/blender -noaudio -b \"" + str(fileName) +"\""
+
 RENDER_CMD = ""
 
 outputN = "/"+ "/".join(runScript.split("/")[0:-1]) + "/" +"outputNodes.py"
@@ -133,6 +154,6 @@ RENDERCMD = RENDERCMD + fr
 os.system("chmod 777 {0} {1} {2} {3} {4} >& /dev/null".format(layerScF,cameraF,resF,defaultF,outputNoutF))
 
 print(RENDERCMD)
-
+rbhus.renderPlugin.sendCmd(RENDERCMD)
 
 sys.exit(0)

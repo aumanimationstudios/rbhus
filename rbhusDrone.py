@@ -40,6 +40,7 @@ if(sys.platform.find("linux") >= 0):
   setproctitle.setproctitle("rD")
 import tempfile
 import inspect
+import zmq
 
 
 hostname = socket.gethostname()
@@ -447,10 +448,21 @@ def _execFrames(frameInfo,frameScrutiny,cpuAffi):
   processFramesId.cpu_affinity(cpuAffi)
   proc.join()
 
+
 def execFrames(frameInfo,frameScrutiny):
   db_conn = dbRbhus.dbRbhus()
   batchedFrames = db_conn.getBatchedFrames(frameInfo['batchId'])
   hostname,ipAddr = getHostNameIP()
+
+  #create a zmq socket and get a random port for communi ation with the plugin scripts
+  context = zmq.Context()
+  socket = context.socket(zmq.REP)
+  port = socket.bind_to_random_port("tcp://127.0.0.1")
+  os.environ['rbhus_ipc_port'] = port
+  socket.poll(timeout=1)
+  poller = zmq.Poller()
+  poller.register(socket, zmq.POLLIN)
+
 
   if(sys.platform.find("linux") >=0):
     setproctitle.setproctitle("rD_"+ str(frameInfo['id']) +" : "+ "-".join(batchedFrames))
@@ -462,7 +474,7 @@ def execFrames(frameInfo,frameScrutiny):
       if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesRunning,db_conn) == 1):
         break
       time.sleep(0.1)
-
+    os.environ['rbhus_isRendering'] = "1"
     os.environ['rbhus_washmybutt'] = tempDir + os.sep + str(frameInfo['id']).lstrip().rstrip() +"_"+ str(frameInfo['frameId']).lstrip().rstrip() +".butt"
     os.environ['rbhus_frames']    = ",".join(batchedFrames)
     os.environ['rbhus_taskId']    = str(frameInfo['id']).lstrip().rstrip()
@@ -473,6 +485,7 @@ def execFrames(frameInfo,frameScrutiny):
     os.environ['rbhus_fileType']  = str(frameInfo['fileType']).lstrip().rstrip()
     os.environ['rbhus_renderer']  = str(frameInfo['renderer']).lstrip().rstrip()
     os.environ['rbhus_renExtArgs']= str(frameInfo['renExtArgs']).lstrip().rstrip()
+    os.environ['rbhus_renExtEnv'] = str(frameInfo['renExtEnv']).lstrip().rstrip()
     os.environ['rbhus_minRam']    = str(frameInfo['minRam']).lstrip().rstrip()
     os.environ['rbhus_maxRam']    = str(frameInfo['maxRam']).lstrip().rstrip()
     os.environ['rbhus_outDir']    = str(frameInfo['outDir']).lstrip().rstrip()
@@ -537,14 +550,55 @@ def execFrames(frameInfo,frameScrutiny):
       logClient.debug("running beforeFrameCmd :"+ str(frameInfo['beforeFrameCmd']))
       runCommand(str(frameInfo['beforeFrameCmd']))
 
-
-
-
+    runCmd = None
     try:
       if(sys.platform.find("win") >= 0):
-        runCmd = os.popen('python.exe '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
+        runScriptProc = subprocess.Popen(['python.exe',runScript],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+        # runCmd = os.popen('python.exe '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
       elif(sys.platform.find("linux") >= 0):
-        runCmd = os.popen('python '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
+        runScriptProc = subprocess.Popen("python {0}".format(runScript),shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+        # runCmd = os.popen('python '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
+      while True:
+        sockets = dict(poller.poll(10000))
+        if (sockets):
+          for s in sockets.keys():
+            if (sockets[s] == zmq.POLLIN):
+              try:
+                runCmd = s.recv()
+                s.send("ack")
+              except:
+                logClient.debug(sys.exc_info())
+              break
+          break
+        runScriptProcPoll = runScriptProc.poll()
+        if(runScriptProcPoll != None):
+          os.environ['rbhus_exit'] = str(runScriptProcPoll)
+          if(not runCmd):
+            logClient.debug("runCmd not found : "+ str(runCmd))
+            while (1):
+              if (setFramesStatus(frameInfo['id'], batchedFrames, constants.framesFailed, db_conn) == 1):
+                logClient.debug("run cmd failed !! ")
+                break
+              time.sleep(0.5)
+
+            # Run the afterFrame shits
+            if (str(frameInfo['afterFrameCmd']) != 'default'):
+              logClient.debug("running afterFrameCmd :" + str(frameInfo['afterFrameCmd']))
+              runCommand(str(frameInfo['afterFrameCmd']))
+
+            while (1):
+              if (setFreeCpus(frameInfo, db_conn) == 1):
+                break
+              time.sleep(0.5)
+            washMyButt(frameInfo['id'], frameInfo['frameId'])
+            db_conn.delBatchId(frameInfo['batchId'])
+            # db_conn.setTaskDone(frameInfo['id'])
+            rbhusLog(frameInfo)
+            sys.exit(0)
+          break
+
+        logClient.debug ("timeout")
+
     except:
       os.environ['rbhus_exit']   = "1"
       logClient.debug(str(sys.exc_info()))

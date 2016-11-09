@@ -8,7 +8,10 @@ bpy.context.scene.render.fps = 24
 bpy.context.scene.render.fps_base = 1
 # bpy.context.scene.render.use_single_layer = False
 
+rbhus_isRendering = False
 
+if("rbhus_isRendering" in os.environ):
+  rbhus_isRendering = True
 
 def getAssFileName():
   fileName = ""
@@ -62,43 +65,44 @@ def setOutPut():
   bpy.context.scene.render.ffmpeg.muxrate = 10080000
 
 
-try:
-  assPath = os.environ['rp_assets_path']
-  stageType = os.environ['rp_assets_stageType']
-  if(stageType == "anim"):
-    setOutPut()
-    bpy.context.scene.render.use_stamp = True
-    bpy.context.scene.render.use_stamp_time = False
-    bpy.context.scene.render.use_stamp_date = False
-    bpy.context.scene.render.use_stamp_render_time = False
-    bpy.context.scene.render.use_stamp_frame = True
-    bpy.context.scene.render.use_stamp_scene = False
-    bpy.context.scene.render.use_stamp_camera = False
-    bpy.context.scene.render.use_stamp_filename = False
-    bpy.context.scene.render.use_stamp_note = True
-    bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mp4"
-
+if(not rbhus_isRendering):
   try:
-    if(os.environ['rp_sequenceScenes_sFrame'] != os.environ['rp_sequenceScenes_eFrame']):
-      bpy.context.scene.frame_start = int(os.environ['rp_sequenceScenes_sFrame'])
-      bpy.context.scene.frame_end = int(os.environ['rp_sequenceScenes_eFrame'])
+    assPath = os.environ['rp_assets_path']
+    stageType = os.environ['rp_assets_stageType']
+    if(stageType == "anim"):
+      setOutPut()
+      bpy.context.scene.render.use_stamp = True
+      bpy.context.scene.render.use_stamp_time = False
+      bpy.context.scene.render.use_stamp_date = False
+      bpy.context.scene.render.use_stamp_render_time = False
+      bpy.context.scene.render.use_stamp_frame = True
+      bpy.context.scene.render.use_stamp_scene = False
+      bpy.context.scene.render.use_stamp_camera = False
+      bpy.context.scene.render.use_stamp_filename = False
+      bpy.context.scene.render.use_stamp_note = True
+      bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mp4"
+
+    try:
+      if(os.environ['rp_sequenceScenes_sFrame'] != os.environ['rp_sequenceScenes_eFrame']):
+        bpy.context.scene.frame_start = int(os.environ['rp_sequenceScenes_sFrame'])
+        bpy.context.scene.frame_end = int(os.environ['rp_sequenceScenes_eFrame'])
+      else:
+        if(os.environ['rp_assets_fRange'] != "1"):
+          bpy.context.scene.frame_start = int(os.environ['rp_assets_fRange'].split("-")[0])
+          bpy.context.scene.frame_end = int(os.environ['rp_assets_fRange'].split("-")[1])
+    except:
+      print(str(sys.exc_info()))
+
+    if(os.environ['rp_assets_fileType'] != "default"):
+      bpy.context.scene.render.stamp_note_text = ":".join(assPath.split(":")[0:-1])
     else:
-      if(os.environ['rp_assets_fRange'] != "1"):
-        bpy.context.scene.frame_start = int(os.environ['rp_assets_fRange'].split("-")[0])
-        bpy.context.scene.frame_end = int(os.environ['rp_assets_fRange'].split("-")[1])
+      bpy.context.scene.render.stamp_note_text = assPath
   except:
+    bpy.context.scene.render.use_stamp = False
     print(str(sys.exc_info()))
 
-  if(os.environ['rp_assets_fileType'] != "default"):
-    bpy.context.scene.render.stamp_note_text = ":".join(assPath.split(":")[0:-1])
-  else:
-    bpy.context.scene.render.stamp_note_text = assPath
-except:
-  bpy.context.scene.render.use_stamp = False
-  print(str(sys.exc_info()))
 
 
 
-  
 
 

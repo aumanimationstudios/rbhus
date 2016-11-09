@@ -27,7 +27,7 @@ import utils as rUtils
 import utilsPipe
 import auth
 import copy
-
+import simplejson
 dbconn = dbRbhus.dbRbhus()
 
 parser = argparse.ArgumentParser()
@@ -430,6 +430,12 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     submitDict = {}
     files = str(self.lineEditFileName.text())
     cameras = str(self.lineEditCameras.text())
+
+    assEnvDict = {}
+    assEnvDict["assPath"] = str(args.assPath)
+    assEnvDict["exe"] = utilsPipe.getBinPath(self.assDets)
+
+    submitDict['renExtEnv'] = simplejson.dumps(assEnvDict)
     submitDict['fRange'] = str(self.lineEditFrange.text())
     submitdir = str(self.outDir)
     submitDict['description'] = str(self.lineEditDescription.text())
@@ -525,6 +531,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                       flvdict = copy.copy(submitDict)
                       flvdict['afterTasks'] = str(b)
                       flvdict['fileType'] = "convert_png_flv"
+                      flvdict['fRange'] = "1"
                       flv = a.submit(flvdict)
                       print("Submiting PNG to FLV task : " + str(b) + " : " + str(submitDict))
 
@@ -532,6 +539,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                       flvdict = copy.copy(submitDict)
                       flvdict['afterTasks'] = str(b)
                       flvdict['fileType'] = "convert_png_mp4"
+                      flvdict['fRange'] = "1"
                       flv = a.submit(flvdict)
                       print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
 
@@ -555,6 +563,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     flvdict = copy.copy(submitDict)
                     flvdict['afterTasks'] = str(b)
                     flvdict['fileType'] = "convert_png_flv"
+                    flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
                     print("Submiting PNG to FLV task : " + str(b) + " : " + str(submitDict))
 
@@ -562,6 +571,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     flvdict = copy.copy(submitDict)
                     flvdict['afterTasks'] = str(b)
                     flvdict['fileType'] = "convert_png_mp4"
+                    flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
                     print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
                   print("Submiting task : "+ str(b) +" : "+ str(submitDict))
@@ -579,6 +589,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     flvdict = copy.copy(submitDict)
                     flvdict['afterTasks'] = str(b)
                     flvdict['fileType'] = "convert_png_flv"
+                    flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
                     print("Submiting PNG to FLV task : " + str(b) + " : " + str(submitDict))
 
@@ -586,6 +597,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     flvdict = copy.copy(submitDict)
                     flvdict['afterTasks'] = str(b)
                     flvdict['fileType'] = "convert_png_mp4"
+                    flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
                     print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
 

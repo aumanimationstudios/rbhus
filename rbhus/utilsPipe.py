@@ -1197,7 +1197,8 @@ def getTemplatePath(assdetsTemp = {}):
 
 def getBinPath(assdetsTemp = {}):
   assdets = copy.copy(assdetsTemp)
-  filetypedets = getFileTypes(assdets['fileType'])
+  debug.info(assdets)
+  filetypedets = getFileTypes(assdets["fileType"])
 
   if(sys.platform.find("win") >= 0):
     exeAss = "windowsCmd"
@@ -1287,7 +1288,7 @@ def getBinPath(assdetsTemp = {}):
     assPathAbs = getAbsPath(assPathTemp)
     debug.info(assPathAbs)
     if(os.path.exists(assPathAbs)):
-      filename = assPathAbs+ "/" + filetypedets[exeAss]
+      filename = os.path.join(assPathAbs,filetypedets[exeAss].split(os.sep)[-1])
       debug.info(filename)
       if(os.path.exists(filename)):
         return(filename)
@@ -1295,26 +1296,8 @@ def getBinPath(assdetsTemp = {}):
   return (filetypedets[exeAss])
 
 def openAssetCmd(assdets ={},filename = None):
-  dirmapdets = getDirMapsDetails(assdets['directory'])
-  filetypedets = None
-  runCmd = None
-  binPaths = None
-  binMain = None
-  dirs = []
-  exeAss = None
-  pathAss = None
-  runProc = None
   binPathExe = getBinPath(assdets)
   debug.info(filename)
-  if(sys.platform.find("win") >= 0):
-    binMain = dirmapdets['windowsMapping'] +"/"+ assdets['projName'] +"/share/bin"
-    exeAss = "windowsCmd"
-    pathAss = "windowsPath"
-  elif(sys.platform.find("linux") >= 0):
-    binMain = dirmapdets['linuxMapping'] +"/"+ assdets['projName'] +"/share/bin"
-    exeAss = "linuxCmd"
-    pathAss = "linuxPath"
-  dirs.append(binMain)
   exportAsset(assdets)
   if(assdets['fileType'] != "default"):
     filetypedets = getFileTypes(assdets['fileType'])
