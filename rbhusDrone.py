@@ -570,6 +570,7 @@ def execFrames(frameInfo,frameScrutiny):
                 logClient.debug(sys.exc_info())
               break
           break
+        logClient.debug(runScriptProc.communicate(timeout=10))
         runScriptProcPoll = runScriptProc.poll()
         logClient.debug("poll : "+ str(runScriptProcPoll))
         # if(runScriptProcPoll != None and runScriptProcPoll != 0):
