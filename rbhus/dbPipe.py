@@ -34,10 +34,14 @@ try:
   dbLogDatabase = os.environ['rbhusPipe_dbLogDatabase']
 except:
   pass
-if(sys.platform.find("win") >= 0):
-  username = os.environ['USERNAME']
-if(sys.platform.find("linux") >= 0):
-  username = os.environ['USER']
+username = "nobody"
+try:
+  if(sys.platform.find("win") >= 0):
+    username = os.environ['USERNAME']
+  if(sys.platform.find("linux") >= 0):
+    username = os.environ['USER']
+except:
+  pass
 
 LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_dbPipe_module_"+ username +"_"+ str(hostname) +".log")
 

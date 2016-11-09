@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusDrone.py" afterPath="$PROJECT_DIR$/rbhusDrone.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/dbPipe.py" afterPath="$PROJECT_DIR$/rbhus/dbPipe.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,16 +71,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="layers.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/etc/blend_lin/layers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/etc/convert_png/default.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -113,7 +103,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="737">
@@ -140,6 +130,16 @@
                 <marker date="1478713367760" expanded="true" signature="50829:51077" ph="UPDATE hostR... " />
                 <marker date="1478713367760" expanded="true" signature="51300:51530" ph="UPDATE hostR... " />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dbPipe.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="504">
+              <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -273,7 +273,6 @@
         <option value="$PROJECT_DIR$/etc/convert_png_flv/default.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" />
         <option value="$PROJECT_DIR$/rbhus/db.py" />
-        <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
         <option value="$PROJECT_DIR$/rbhus/dbRbhus.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py" />
@@ -299,6 +298,7 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
         <option value="$PROJECT_DIR$/etc/convert_png/default.py" />
         <option value="$PROJECT_DIR$/rbhusDrone.py" />
+        <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
       </list>
     </option>
   </component>
@@ -1219,7 +1219,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478713209646</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
+      <created>1478713382266</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1478713382266</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1423,14 +1430,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
           <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1805,6 +1804,14 @@
             <marker date="1478713367760" expanded="true" signature="50829:51077" ph="UPDATE hostR... " />
             <marker date="1478713367760" expanded="true" signature="51300:51530" ph="UPDATE hostR... " />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
