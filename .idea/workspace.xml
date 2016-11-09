@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/dbPipe.py" afterPath="$PROJECT_DIR$/rbhus/dbPipe.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/renderPlugin.py" afterPath="$PROJECT_DIR$/rbhus/renderPlugin.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,6 +71,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="renderPlugin.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="17" column="58" selection-start-line="17" selection-start-column="58" selection-end-line="17" selection-end-column="58" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/etc/convert_png/default.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -85,16 +95,6 @@
       </file>
       <file leaf-file-name="outputNodes.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/etc/blend_lin/outputNodes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="stereo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/etc/blend_lin/stereo.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -134,10 +134,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dbPipe.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dbPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
+            <state relative-caret-position="612">
               <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
               <folding />
             </state>
@@ -289,7 +289,6 @@
         <option value="$PROJECT_DIR$/rbhus/constants.py" />
         <option value="$PROJECT_DIR$/rbhus/renderPluginApi.py" />
         <option value="$PROJECT_DIR$/rbhus/utils.py" />
-        <option value="$PROJECT_DIR$/rbhus/renderPlugin.py" />
         <option value="$PROJECT_DIR$/tools/zmq_ipc_server.py" />
         <option value="$PROJECT_DIR$/tests/zmq_ipc_server.py" />
         <option value="$PROJECT_DIR$/etc/blend_lin/default.py" />
@@ -299,6 +298,7 @@
         <option value="$PROJECT_DIR$/etc/convert_png/default.py" />
         <option value="$PROJECT_DIR$/rbhusDrone.py" />
         <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
+        <option value="$PROJECT_DIR$/rbhus/renderPlugin.py" />
       </list>
     </option>
   </component>
@@ -1226,7 +1226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478713382266</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
+      <created>1478713847026</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1478713847026</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1620,16 +1627,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="30" column="37" selection-start-line="28" selection-start-column="2" selection-end-line="30" selection-end-column="37" />
-          <folding>
-            <element signature="e#133#142#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/zmq_ipc_server.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
@@ -1809,8 +1806,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
+        <state relative-caret-position="612">
           <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="17" column="58" selection-start-line="17" selection-start-column="58" selection-end-line="17" selection-end-column="58" />
           <folding />
         </state>
       </provider>
