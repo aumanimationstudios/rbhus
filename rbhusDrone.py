@@ -554,10 +554,8 @@ def execFrames(frameInfo,frameScrutiny):
     try:
       if(sys.platform.find("win") >= 0):
         runScriptProc = subprocess.Popen(['python.exe',runScript],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-        # runCmd = os.popen('python.exe '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
       elif(sys.platform.find("linux") >= 0):
         runScriptProc = subprocess.Popen("python {0}".format(runScript),shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-        # runCmd = os.popen('python '+ runScript +' 2>&1','r').read().strip().split("\r\n")[0]
       while True:
         sockets = dict(poller.poll(10000))
         if (sockets):

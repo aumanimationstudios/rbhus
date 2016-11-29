@@ -453,4 +453,12 @@ def scheduler():
 
 
 if __name__=="__main__":
-  scheduler()
+  import traceback
+  while(True):
+    try:
+      scheduler()
+    except:
+      traceback.print_exc()
+    time.sleep(2)
+
+
