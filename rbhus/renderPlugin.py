@@ -25,6 +25,7 @@ def sendCmd(cmd):
   port = env['rbhus_ipc_port']
   context = zmq.Context()
   socket = context.socket(zmq.REQ)
+  socket.setsockopt(zmq.SNDTIMEO,10000)
   socket.connect("tcp://127.0.0.1:{0}".format(port))
   socket.poll(timeout=1)
   poller = zmq.Poller()
