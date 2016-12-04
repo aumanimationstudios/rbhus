@@ -20,7 +20,7 @@ projActive = 1
 projDeactive = 0
 
 projInitPort = 9666
-projInitServer = "192.168.1.198"
+projInitServer = "blues2"
 
 
 createStatusInit = 0
