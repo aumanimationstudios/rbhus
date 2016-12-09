@@ -54,14 +54,14 @@ if(batch_by <= (end_frame-start_frame)+1):
 
     blender_cmd = "blender -b "+ filename +" --python "+ tmp_bpy_file +" -s "+ str(s) +" -e "+ str(e) +" -a"
     print (blender_cmd)
-    # p = subprocess.Popen(blender_cmd,shell=True)
-    # p.wait()
+    p = subprocess.Popen(blender_cmd,shell=True)
+    p.wait()
     filename_no = filename_no + 1
     filesrendered.append(outfilename)
-    # try:
-    #   os.remove(tmp_bpy_file)
-    # except:
-    #   print (sys.exc_info())
+    try:
+      os.remove(tmp_bpy_file)
+    except:
+      print (sys.exc_info())
     if(getlost):
       break
 
@@ -74,8 +74,8 @@ concat_list_file_fd.flush()
 concat_list_file_fd.close()
 ffmpegCmd = "ffmpeg -auto_convert 1 -f concat -safe 0 -i "+ concat_list_file + " -c copy "+ os.path.join(outputpath,outfile) +".mov"
 print (ffmpegCmd)
-# f = subprocess.Popen(ffmpegCmd,shell=True)
-# f.wait()
+f = subprocess.Popen(ffmpegCmd,shell=True)
+f.wait()
 
 
 
