@@ -420,7 +420,14 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     for x in files:
       debug.info(x)
       if(x.split(os.sep)[-1] in preview_files):
-        cmd = "/usr/bin/convert -resize 128x128 {0} {1}".format(x,x.replace(".png","_low.png"))
+        low_png = x.replace(".png","_low.png")
+        if(os.path.exists(low_png)):
+          debug.info("preview_low.png exists . deleting it now")
+          try:
+            os.remove(low_png)
+          except:
+            debug.error(sys.exc_info())
+        cmd = "/usr/bin/convert -resize 128x128 {0} {1}".format(x,low_png)
         debug.info(cmd)
         try:
           p = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
