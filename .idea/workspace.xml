@@ -4,10 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" line="0" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="fixing">
+    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/renderPlugin.py" afterPath="$PROJECT_DIR$/rbhus/renderPlugin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusDrone.py" afterPath="$PROJECT_DIR$/rbhusDrone.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,11 +38,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="462" column="24" selection-start-line="462" selection-start-column="24" selection-end-line="462" selection-end-column="24" />
+            <state relative-caret-position="-576">
+              <caret line="461" column="24" selection-start-line="461" selection-start-column="24" selection-end-line="461" selection-end-column="24" />
               <folding>
                 <marker date="1481695905318" expanded="true" signature="4826:4869" ph="select * fro... main" />
                 <marker date="1481695905318" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
@@ -79,11 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="renderPlugin.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="renderPlugin.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
+            <state relative-caret-position="180">
+              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding>
                 <element signature="e#133#142#0" expanded="true" />
               </folding>
@@ -242,8 +241,8 @@
         <option value="$PROJECT_DIR$/tools/system/mysql_backup.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/blender_render_vse.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
-        <option value="$PROJECT_DIR$/rbhus/renderPlugin.py" />
         <option value="$PROJECT_DIR$/rbhusDrone.py" />
+        <option value="$PROJECT_DIR$/rbhus/renderPlugin.py" />
       </list>
     </option>
   </component>
@@ -932,13 +931,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00007" summary="fixing">
-      <created>1473751313175</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1473751313175</updated>
-    </task>
     <task id="LOCAL-00008" summary="fixing">
       <created>1473757206925</created>
       <option name="number" value="00008" />
@@ -1275,7 +1267,14 @@
       <option name="project" value="LOCAL" />
       <updated>1481695415730</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="fixing">
+      <created>1481695911323</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1481695911323</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1714,20 +1713,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
-          <folding>
-            <element signature="e#133#142#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="462" column="24" selection-start-line="462" selection-start-column="24" selection-end-line="462" selection-end-column="24" />
+        <state relative-caret-position="-576">
+          <caret line="461" column="24" selection-start-line="461" selection-start-column="24" selection-end-line="461" selection-end-column="24" />
           <folding>
             <marker date="1481695905318" expanded="true" signature="4826:4869" ph="select * fro... main" />
             <marker date="1481695905318" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
@@ -1748,6 +1737,16 @@
             <marker date="1481695905318" expanded="true" signature="50518:50605" ph="insert into hostSystem... " />
             <marker date="1481695905318" expanded="true" signature="50990:51238" ph="UPDATE hostR... " />
             <marker date="1481695905318" expanded="true" signature="51461:51691" ph="UPDATE hostR... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding>
+            <element signature="e#133#142#0" expanded="true" />
           </folding>
         </state>
       </provider>
