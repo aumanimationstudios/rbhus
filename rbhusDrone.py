@@ -460,8 +460,8 @@ def execFrames(frameInfo,frameScrutiny):
   port = socket.bind_to_random_port("tcp://127.0.0.1")
   os.environ['rbhus_ipc_port'] = str(port)
   socket.poll(timeout=1)
-  # poller = zmq.Poller()
-  # poller.register(socket, zmq.POLLIN)
+  poller = zmq.Poller()
+  poller.register(socket, zmq.POLLIN)
 
 
   if(sys.platform.find("linux") >=0):
@@ -557,23 +557,23 @@ def execFrames(frameInfo,frameScrutiny):
       elif(sys.platform.find("linux") >= 0):
         runScriptProc = subprocess.Popen("python {0}".format(runScript),shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
       while True:
-        try:
-          runCmd = socket.recv_unicode()
-          socket.send_unicode("ack")
-        except:
-          logClient.debug(sys.exc_info())
+        # try:
+        #   runCmd = socket.recv_unicode()
+        #   socket.send_unicode("ack")
+        # except:
+        #   logClient.debug(sys.exc_info())
 
-        # sockets = dict(poller.poll(10000))
-        # if (sockets):
-        #   for s in sockets.keys():
-        #     if (sockets[s] == zmq.POLLIN):
-        #       try:
-        #         runCmd = s.recv()
-        #         s.send("ack")
-        #       except:
-        #         logClient.debug(sys.exc_info())
-        #       break
-        #   break
+        sockets = dict(poller.poll(10000))
+        if (sockets):
+          for s in sockets.keys():
+            if (sockets[s] == zmq.POLLIN):
+              try:
+                runCmd = s.recv_unicode()
+                s.send("ack")
+              except:
+                logClient.debug(sys.exc_info())
+              break
+          break
         logClient.debug(runScriptProc.communicate())
         runScriptProcPoll = runScriptProc.poll()
         logClient.debug("poll : "+ str(runScriptProcPoll))
