@@ -459,7 +459,7 @@ def execFrames(frameInfo,frameScrutiny):
   socket = context.socket(zmq.REP)
   port = socket.bind_to_random_port("tcp://127.0.0.1")
   os.environ['rbhus_ipc_port'] = str(port)
-  # socket.poll(timeout=1)
+  socket.poll(timeout=1)
   # poller = zmq.Poller()
   # poller.register(socket, zmq.POLLIN)
 
