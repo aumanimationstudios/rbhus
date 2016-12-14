@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/renderPlugin.py" afterPath="$PROJECT_DIR$/rbhus/renderPlugin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusDrone.py" afterPath="$PROJECT_DIR$/rbhusDrone.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/blend_lin/default.py" afterPath="$PROJECT_DIR$/etc/blend_lin/default.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,21 +38,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="128" column="27" selection-start-line="128" selection-start-column="27" selection-end-line="128" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="renderPlugin.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="renderPlugin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="46" column="66" selection-start-line="33" selection-start-column="4" selection-end-line="46" selection-end-column="66" />
+            <state relative-caret-position="216">
+              <caret line="33" column="16" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="16" />
               <folding>
                 <element signature="e#133#142#0" expanded="true" />
               </folding>
@@ -74,28 +63,28 @@
       <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="566" column="0" selection-start-line="566" selection-start-column="0" selection-end-line="566" selection-end-column="0" />
+            <state relative-caret-position="486">
+              <caret line="574" column="0" selection-start-line="559" selection-start-column="0" selection-end-line="574" selection-end-column="0" />
               <folding>
-                <marker date="1481706046183" expanded="true" signature="4826:4869" ph="select * fro... main" />
-                <marker date="1481706046183" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
-                <marker date="1481706046183" expanded="true" signature="6538:6687" ph="update hostS... " />
-                <marker date="1481706046183" expanded="true" signature="6785:6888" ph="update hostS... " />
-                <marker date="1481706046183" expanded="true" signature="7016:7119" ph="update hostS... " />
-                <marker date="1481706046183" expanded="true" signature="7216:7362" ph="update hostS... " />
-                <marker date="1481706046183" expanded="true" signature="7414:7560" ph="update hostS... " />
-                <marker date="1481706046183" expanded="true" signature="7642:7788" ph="update hostS... " />
-                <marker date="1481706046183" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
-                <marker date="1481706046183" expanded="true" signature="16670:16768" ph="update frame... " />
-                <marker date="1481706046183" expanded="true" signature="39691:39769" ph="SELECT defSc... fileType" />
-                <marker date="1481706046183" expanded="true" signature="40541:40607" ph="SELECT * FRO... hostEffectiveResource" />
-                <marker date="1481706046183" expanded="true" signature="44574:44648" ph="select group... hostGroups" />
-                <marker date="1481706046183" expanded="true" signature="45055:45108" ph="select * fro... hostStates" />
-                <marker date="1481706046183" expanded="true" signature="46107:46156" ph="delete from " />
-                <marker date="1481706046183" expanded="true" signature="48927:48983" ph="insert into hostStates... " />
-                <marker date="1481706046183" expanded="true" signature="49131:49218" ph="insert into hostSystem... " />
-                <marker date="1481706046183" expanded="true" signature="49603:49851" ph="UPDATE hostR... " />
-                <marker date="1481706046183" expanded="true" signature="50074:50304" ph="UPDATE hostR... " />
+                <marker date="1481706160623" expanded="true" signature="4826:4869" ph="select * fro... main" />
+                <marker date="1481706160623" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
+                <marker date="1481706160623" expanded="true" signature="6538:6687" ph="update hostS... " />
+                <marker date="1481706160623" expanded="true" signature="6785:6888" ph="update hostS... " />
+                <marker date="1481706160623" expanded="true" signature="7016:7119" ph="update hostS... " />
+                <marker date="1481706160623" expanded="true" signature="7216:7362" ph="update hostS... " />
+                <marker date="1481706160623" expanded="true" signature="7414:7560" ph="update hostS... " />
+                <marker date="1481706160623" expanded="true" signature="7642:7788" ph="update hostS... " />
+                <marker date="1481706160623" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
+                <marker date="1481706160623" expanded="true" signature="16670:16768" ph="update frame... " />
+                <marker date="1481706160623" expanded="true" signature="39758:39836" ph="SELECT defSc... fileType" />
+                <marker date="1481706160623" expanded="true" signature="40608:40674" ph="SELECT * FRO... hostEffectiveResource" />
+                <marker date="1481706160623" expanded="true" signature="44641:44715" ph="select group... hostGroups" />
+                <marker date="1481706160623" expanded="true" signature="45122:45175" ph="select * fro... hostStates" />
+                <marker date="1481706160623" expanded="true" signature="46174:46223" ph="delete from " />
+                <marker date="1481706160623" expanded="true" signature="48994:49050" ph="insert into hostStates... " />
+                <marker date="1481706160623" expanded="true" signature="49198:49285" ph="insert into hostSystem... " />
+                <marker date="1481706160623" expanded="true" signature="49670:49918" ph="UPDATE hostR... " />
+                <marker date="1481706160623" expanded="true" signature="50141:50371" ph="UPDATE hostR... " />
               </folding>
             </state>
           </provider>
@@ -106,16 +95,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-810">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7596">
-              <caret line="430" column="16" selection-start-line="430" selection-start-column="16" selection-end-line="430" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -156,6 +135,26 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2052">
+              <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="convert_png_mp4.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_png_mp4.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -228,22 +227,22 @@
         <option value="$PROJECT_DIR$/rbhus/utils.py" />
         <option value="$PROJECT_DIR$/tools/zmq_ipc_server.py" />
         <option value="$PROJECT_DIR$/tests/zmq_ipc_server.py" />
-        <option value="$PROJECT_DIR$/etc/blend_lin/default.py" />
         <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
         <option value="$PROJECT_DIR$/etc/convert_png/default.py" />
         <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
         <option value="$PROJECT_DIR$/rbhusQueen_scheduler.py" />
-        <option value="$PROJECT_DIR$/tools/rbhus/convert_png_mp4.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/convert_png_flv.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
         <option value="$PROJECT_DIR$/tools/system/mysql_backup.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/blender_render_vse.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
-        <option value="$PROJECT_DIR$/rbhusDrone.py" />
         <option value="$PROJECT_DIR$/rbhus/renderPlugin.py" />
+        <option value="$PROJECT_DIR$/rbhusDrone.py" />
+        <option value="$PROJECT_DIR$/etc/blend_lin/default.py" />
+        <option value="$PROJECT_DIR$/tools/rbhus/convert_png_mp4.py" />
       </list>
     </option>
   </component>
@@ -932,20 +931,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00010" summary="fixing">
-      <created>1473843393797</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1473843393797</updated>
-    </task>
-    <task id="LOCAL-00011" summary="fixing">
-      <created>1473854213357</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1473854213357</updated>
-    </task>
     <task id="LOCAL-00012" summary="fixing">
       <created>1473932915071</created>
       <option name="number" value="00012" />
@@ -1275,7 +1260,21 @@
       <option name="project" value="LOCAL" />
       <updated>1481697113416</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="fixing">
+      <created>1481706067029</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1481706067029</updated>
+    </task>
+    <task id="LOCAL-00060" summary="fixing">
+      <created>1481706167764</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1481706167764</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1289,26 +1288,26 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1680" height="1020" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28151774" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2374541" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281075" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2206047" sideWeight="0.50917995" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33034715" sideWeight="0.48883525" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26651737" sideWeight="0.4960464" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2206047" sideWeight="0.49082008" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2206047" sideWeight="0.49082008" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17133258" sideWeight="0.48653612" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24412094" sideWeight="0.47676525" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32586786" sideWeight="0.48883525" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1518,13 +1517,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_png_mp4.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="17" column="55" selection-start-line="17" selection-start-column="55" selection-end-line="17" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_png_flv.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
@@ -1699,14 +1691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="128" column="27" selection-start-line="128" selection-start-column="27" selection-end-line="128" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/zmq_ipc_server.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
@@ -1717,39 +1701,55 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="566" column="0" selection-start-line="566" selection-start-column="0" selection-end-line="566" selection-end-column="0" />
+        <state relative-caret-position="486">
+          <caret line="574" column="0" selection-start-line="559" selection-start-column="0" selection-end-line="574" selection-end-column="0" />
           <folding>
-            <marker date="1481706046183" expanded="true" signature="4826:4869" ph="select * fro... main" />
-            <marker date="1481706046183" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
-            <marker date="1481706046183" expanded="true" signature="6538:6687" ph="update hostS... " />
-            <marker date="1481706046183" expanded="true" signature="6785:6888" ph="update hostS... " />
-            <marker date="1481706046183" expanded="true" signature="7016:7119" ph="update hostS... " />
-            <marker date="1481706046183" expanded="true" signature="7216:7362" ph="update hostS... " />
-            <marker date="1481706046183" expanded="true" signature="7414:7560" ph="update hostS... " />
-            <marker date="1481706046183" expanded="true" signature="7642:7788" ph="update hostS... " />
-            <marker date="1481706046183" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
-            <marker date="1481706046183" expanded="true" signature="16670:16768" ph="update frame... " />
-            <marker date="1481706046183" expanded="true" signature="39691:39769" ph="SELECT defSc... fileType" />
-            <marker date="1481706046183" expanded="true" signature="40541:40607" ph="SELECT * FRO... hostEffectiveResource" />
-            <marker date="1481706046183" expanded="true" signature="44574:44648" ph="select group... hostGroups" />
-            <marker date="1481706046183" expanded="true" signature="45055:45108" ph="select * fro... hostStates" />
-            <marker date="1481706046183" expanded="true" signature="46107:46156" ph="delete from " />
-            <marker date="1481706046183" expanded="true" signature="48927:48983" ph="insert into hostStates... " />
-            <marker date="1481706046183" expanded="true" signature="49131:49218" ph="insert into hostSystem... " />
-            <marker date="1481706046183" expanded="true" signature="49603:49851" ph="UPDATE hostR... " />
-            <marker date="1481706046183" expanded="true" signature="50074:50304" ph="UPDATE hostR... " />
+            <marker date="1481706160623" expanded="true" signature="4826:4869" ph="select * fro... main" />
+            <marker date="1481706160623" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
+            <marker date="1481706160623" expanded="true" signature="6538:6687" ph="update hostS... " />
+            <marker date="1481706160623" expanded="true" signature="6785:6888" ph="update hostS... " />
+            <marker date="1481706160623" expanded="true" signature="7016:7119" ph="update hostS... " />
+            <marker date="1481706160623" expanded="true" signature="7216:7362" ph="update hostS... " />
+            <marker date="1481706160623" expanded="true" signature="7414:7560" ph="update hostS... " />
+            <marker date="1481706160623" expanded="true" signature="7642:7788" ph="update hostS... " />
+            <marker date="1481706160623" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
+            <marker date="1481706160623" expanded="true" signature="16670:16768" ph="update frame... " />
+            <marker date="1481706160623" expanded="true" signature="39758:39836" ph="SELECT defSc... fileType" />
+            <marker date="1481706160623" expanded="true" signature="40608:40674" ph="SELECT * FRO... hostEffectiveResource" />
+            <marker date="1481706160623" expanded="true" signature="44641:44715" ph="select group... hostGroups" />
+            <marker date="1481706160623" expanded="true" signature="45122:45175" ph="select * fro... hostStates" />
+            <marker date="1481706160623" expanded="true" signature="46174:46223" ph="delete from " />
+            <marker date="1481706160623" expanded="true" signature="48994:49050" ph="insert into hostStates... " />
+            <marker date="1481706160623" expanded="true" signature="49198:49285" ph="insert into hostSystem... " />
+            <marker date="1481706160623" expanded="true" signature="49670:49918" ph="UPDATE hostR... " />
+            <marker date="1481706160623" expanded="true" signature="50141:50371" ph="UPDATE hostR... " />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="46" column="66" selection-start-line="33" selection-start-column="4" selection-end-line="46" selection-end-column="66" />
+        <state relative-caret-position="216">
+          <caret line="33" column="16" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="16" />
           <folding>
             <element signature="e#133#142#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2052">
+          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_png_mp4.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

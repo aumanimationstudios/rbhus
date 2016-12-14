@@ -109,8 +109,16 @@ if(layer != "default"):
 if(renderer != "default"):
   RENDERCMD = RENDERCMD +" -E "+ renderer
 RENDERCMD = RENDERCMD +" -t "+ rThreads
-
 defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False\nbpy.context.scene.render.use_overwrite = True\nbpy.context.scene.render.use_simplify = False\nbpy.context.scene.render.fps = 24\nbpy.context.scene.render.fps_base = 1\nbpy.context.scene.render.use_single_layer = False\nbpy.context.scene.render.use_stamp = False"
+if(imType.find("PNG") >=0):
+  defaultScripts = defaultScripts +"\nbpy.context.scene.color_depth = '16'"
+if(imType == "PNG-RGB"):
+  defaultScripts = defaultScripts +"\nbpy.context.scene.color_mode = 'RGB'"
+  imType = "PNG"
+elif(imType == "PNG-RGBA"):
+  defaultScripts = defaultScripts + "\nbpy.context.scene.color_mode = 'RGBA'"
+  imType = "PNG"
+
 
 dF = open(defaultF,"w")
 dF.writelines(defaultScripts)
