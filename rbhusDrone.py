@@ -459,9 +459,9 @@ def execFrames(frameInfo,frameScrutiny):
   socket = context.socket(zmq.REP)
   port = socket.bind_to_random_port("tcp://127.0.0.1")
   os.environ['rbhus_ipc_port'] = str(port)
-  socket.poll(timeout=1)
-  poller = zmq.Poller()
-  poller.register(socket, zmq.POLLIN)
+  # socket.poll(timeout=1)
+  # poller = zmq.Poller()
+  # poller.register(socket, zmq.POLLIN)
 
 
   if(sys.platform.find("linux") >=0):
@@ -557,17 +557,23 @@ def execFrames(frameInfo,frameScrutiny):
       elif(sys.platform.find("linux") >= 0):
         runScriptProc = subprocess.Popen("python {0}".format(runScript),shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
       while True:
-        sockets = dict(poller.poll(10000))
-        if (sockets):
-          for s in sockets.keys():
-            if (sockets[s] == zmq.POLLIN):
-              try:
-                runCmd = s.recv()
-                s.send("ack")
-              except:
-                logClient.debug(sys.exc_info())
-              break
-          break
+        try:
+          runCmd = socket.recv_unicode()
+          socket.send_unicode("ack")
+        except:
+          logClient.debug(sys.exc_info())
+
+        # sockets = dict(poller.poll(10000))
+        # if (sockets):
+        #   for s in sockets.keys():
+        #     if (sockets[s] == zmq.POLLIN):
+        #       try:
+        #         runCmd = s.recv()
+        #         s.send("ack")
+        #       except:
+        #         logClient.debug(sys.exc_info())
+        #       break
+        #   break
         logClient.debug(runScriptProc.communicate())
         runScriptProcPoll = runScriptProc.poll()
         logClient.debug("poll : "+ str(runScriptProcPoll))
@@ -597,8 +603,13 @@ def execFrames(frameInfo,frameScrutiny):
         #     sys.exit(0)
         #   break
 
-        logClient.debug ("timeout")
+        # logClient.debug ("timeout")
       # logClient.debug(runScriptProc.communicate())
+      try:
+        socket.close()
+        logClient.debug("socket closed")
+      except:
+        logClient.debug(sys.exc_info())
     except:
       os.environ['rbhus_exit']   = "1"
       logClient.debug(str(sys.exc_info()))
