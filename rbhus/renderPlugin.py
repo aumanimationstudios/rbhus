@@ -31,22 +31,20 @@ def sendCmd(cmd):
   poller = zmq.Poller()
   poller.register(socket, zmq.POLLIN)
   socket.send_unicode(cmd)
-  # recvd = socket.recv_unicode()
-  print(recvd)
-  while(True):
-    sockets = dict(poller.poll(10000))
-    if (sockets):
-      for s in sockets.keys():
-        if (sockets[s] == zmq.POLLIN):
-          try:
-            revced = s.recv_unicode()
-            if(revced):
-              print(revced)
-          except:
-            print(sys.exc_info())
-          break
-      break
-    print ("ACK Timeout error : Check if the server is running")
+  # while(True):
+  #   sockets = dict(poller.poll(10000))
+  #   if (sockets):
+  #     for s in sockets.keys():
+  #       if (sockets[s] == zmq.POLLIN):
+  #         try:
+  #           revced = s.recv_unicode()
+  #           if(revced):
+  #             print(revced)
+  #         except:
+  #           print(sys.exc_info())
+  #         break
+  #     break
+  #   print ("ACK Timeout error : Check if the server is running")
   try:
     socket.close()
   except:

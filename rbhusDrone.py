@@ -557,19 +557,13 @@ def execFrames(frameInfo,frameScrutiny):
       elif(sys.platform.find("linux") >= 0):
         runScriptProc = subprocess.Popen("python {0}".format(runScript),shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
       while True:
-        # try:
-        #   runCmd = socket.recv_unicode()
-        #   socket.send_unicode("ack")
-        # except:
-        #   logClient.debug(sys.exc_info())
-
         sockets = dict(poller.poll(10000))
         if (sockets):
           for s in sockets.keys():
             if (sockets[s] == zmq.POLLIN):
               try:
                 runCmd = s.recv_unicode()
-                s.send("ack")
+                # s.send_unicode("ack")
               except:
                 logClient.debug(sys.exc_info())
               break
@@ -577,34 +571,7 @@ def execFrames(frameInfo,frameScrutiny):
         logClient.debug(runScriptProc.communicate())
         runScriptProcPoll = runScriptProc.poll()
         logClient.debug("poll : "+ str(runScriptProcPoll))
-        # if(runScriptProcPoll != None and runScriptProcPoll != 0):
-        #   os.environ['rbhus_exit'] = str(runScriptProcPoll)
-        #   if(not runCmd):
-        #     logClient.debug("runCmd not found : "+ str(runCmd))
-        #     while (1):
-        #       if (setFramesStatus(frameInfo['id'], batchedFrames, constants.framesFailed, db_conn) == 1):
-        #         logClient.debug("run cmd failed !! ")
-        #         break
-        #       time.sleep(0.5)
-        #
-        #     # Run the afterFrame shits
-        #     if (str(frameInfo['afterFrameCmd']) != 'default'):
-        #       logClient.debug("running afterFrameCmd :" + str(frameInfo['afterFrameCmd']))
-        #       runCommand(str(frameInfo['afterFrameCmd']))
-        #
-        #     while (1):
-        #       if (setFreeCpus(frameInfo, db_conn) == 1):
-        #         break
-        #       time.sleep(0.5)
-        #     washMyButt(frameInfo['id'], frameInfo['frameId'])
-        #     db_conn.delBatchId(frameInfo['batchId'])
-        #     # db_conn.setTaskDone(frameInfo['id'])
-        #     rbhusLog(frameInfo)
-        #     sys.exit(0)
-        #   break
 
-        # logClient.debug ("timeout")
-      # logClient.debug(runScriptProc.communicate())
       try:
         socket.close()
         logClient.debug("socket closed")
