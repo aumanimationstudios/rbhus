@@ -556,21 +556,22 @@ def execFrames(frameInfo,frameScrutiny):
         runScriptProc = subprocess.Popen(['python.exe',runScript],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
       elif(sys.platform.find("linux") >= 0):
         runScriptProc = subprocess.Popen("python {0}".format(runScript),shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-      while True:
-        sockets = dict(poller.poll(10000))
-        if (sockets):
-          for s in sockets.keys():
-            if (sockets[s] == zmq.POLLIN):
-              try:
-                runCmd = s.recv_unicode()
-                # s.send_unicode("ack")
-              except:
-                logClient.debug(sys.exc_info())
-              break
-          break
-        logClient.debug(runScriptProc.communicate())
-        runScriptProcPoll = runScriptProc.poll()
-        logClient.debug("poll : "+ str(runScriptProcPoll))
+      runCmd = socket.recv_unicode()
+      # while True:
+      #   sockets = dict(poller.poll(10000))
+      #   if (sockets):
+      #     for s in sockets.keys():
+      #       if (sockets[s] == zmq.POLLIN):
+      #         try:
+      #           runCmd = s.recv_unicode()
+      #           # s.send_unicode("ack")
+      #         except:
+      #           logClient.debug(sys.exc_info())
+      #         break
+      #     break
+      #   logClient.debug(runScriptProc.communicate())
+      #   runScriptProcPoll = runScriptProc.poll()
+      #   logClient.debug("poll : "+ str(runScriptProcPoll))
 
       try:
         socket.close()
