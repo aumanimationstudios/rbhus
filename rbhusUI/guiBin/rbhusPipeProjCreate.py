@@ -21,8 +21,14 @@ import utilsPipe
 
 
 scb = "selectCheckBox.py" 
+scbc = "selectCheckBoxCombo.py"
+srb = "selectRadioBox.py"
 
 selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
+selectRadioBoxCmd = dirSelf.rstrip(os.sep) + os.sep + srb
+selectCheckBoxComboCmd = dirSelf.rstrip(os.sep) + os.sep + scbc
+
+
 
 print(selectCheckBoxCmd)
 
@@ -52,6 +58,7 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     self.dateEditDue.setDateTime(QtCore.QDateTime.currentDateTime())
     self.pushCreate.clicked.connect(self.cProj)
     self.pushLinked.clicked.connect(self.setLinked)
+    self.pushUsers.clicked.connect(self.setUsers)
     
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.updateStatus)
@@ -113,8 +120,14 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
                             linkedProjs=linked)
     
     
+  def setUsers(self):
+    users = utilsPipe.getUsers()
+    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(self.lineEditAdmins.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    if(outUsers == ""):
+      outUsers = str(self.lineEditAdmins.text()).rstrip().lstrip()
+    self.lineEditAdmins.setText(_fromUtf8(outUsers))
   
-  
+
   def setProjTypes(self):
     rows = utilsPipe.getProjTypes()
     self.comboProjType.clear()  
