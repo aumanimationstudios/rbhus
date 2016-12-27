@@ -10,6 +10,7 @@ import sys
 import uuid
 import debug
 import MySQLdb
+import hashlib
 
 
 
@@ -27,11 +28,20 @@ if(sys.platform.find("linux") >= 0):
   except:
     username = "nobody"
 
-def addNotifications(toUser,title,msg,type_script,type_script_args):
+def addNotifications(toUser,title,msg,type_script,type_script_args,id):
   dbcon = dbTrayServer.dbTray()
-  id = unicode(uuid.uuid4())
+  idhash = hashlib.sha512(id).hexdigest()
   try:
-    dbcon.execute("insert into notify (id,title,msg,type_script,type_script_args,toUsers,fromUsers) values (\""+ id +"\",\""+ title +"\",\""+ msg +"\",\""+ type_script +"\",\""+ type_script_args +"\",\""+ toUser +"\",\""+ username +"\")")
+    dbcon.execute("insert into notify (id,title,msg,type_script,type_script_args,toUsers,fromUsers) values (\""+ idhash +"\",\""+ title +"\",\""+ msg +"\",\""+ type_script +"\",\""+ type_script_args +"\",\""+ toUser +"\",\""+ username +"\")"
+                  " on duplicate key update "
+                  "title=\""+ title +"\", "
+                  "msg=\""+ msg +"\", "
+                  "type_script=\""+ type_script +"\", "
+                  "type_script_args=\""+ type_script_args +"\", "
+                  "toUsers=\""+ toUser +"\", "
+                  "fromUsers=\""+ username +"\","
+                  "isChecked=0, "
+                  "created=now()")
   except:
     debug.error(sys.exc_info())
 

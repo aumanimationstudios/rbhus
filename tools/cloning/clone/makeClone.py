@@ -96,7 +96,7 @@ if(args.emptyTree):
     tree1 = subprocess.check_output(["tree","-aif","--noreport",mptyDir,"|","gawk","-F","'->'","'{print $1}'"]).split("\n")
     for y in tree1:
       if(os.path.isfile(y)):
-        os.system("rm -fv "+ y)
+        os.system("rm -f "+ y)
  
     
     
