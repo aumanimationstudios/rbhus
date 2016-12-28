@@ -1777,11 +1777,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         try:
           itemModified = QtGui.QTableWidgetItem()
           if(assesNames[assesList[x]]['reviewStatus'] == constantsPipe.reviewStatusNotDone):
+            brush1 = QtGui.QBrush()
+            brush1.setColor(QtGui.QColor(250, 100, 100))
+            brush1.setStyle(QtCore.Qt.SolidPattern)
             itemModified.setText("notDone")
+            itemModified.setBackground(brush1)
           elif(assesNames[assesList[x]]['reviewStatus'] == constantsPipe.reviewStatusInProgress):
+            brush1 = QtGui.QBrush()
+            brush1.setColor(QtGui.QColor(0, 150, 250))
+            brush1.setStyle(QtCore.Qt.SolidPattern)
             itemModified.setText("inProgress : "+ str(assesNames[assesList[x]]['reviewVersion']))
+            itemModified.setBackground(brush1)
           else:
+            brush1 = QtGui.QBrush()
+            brush1.setColor(QtGui.QColor(0, 150, 100))
+            brush1.setStyle(QtCore.Qt.SolidPattern)
             itemModified.setText("approved : "+ str(assesNames[assesList[x]]['reviewVersion']))
+            itemModified.setBackground(brush1)
           self.tableWidget.setItem(x,7,itemModified)
         except:
           debug.info(str(sys.exc_info()))
@@ -1790,11 +1802,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         try:
           itemModified = QtGui.QTableWidgetItem()
           if(assesNames[assesList[x]]['progressStatus'] == constantsPipe.assetProgressInProgress):
+            brush2 = QtGui.QBrush()
+            brush2.setColor(QtGui.QColor(0, 150, 250))
+            brush2.setStyle(QtCore.Qt.SolidPattern)
             itemModified.setText("inProgress")
+            itemModified.setBackground(brush2)
           elif(assesNames[assesList[x]]['progressStatus'] == constantsPipe.assetProgressDone):
+            brush2 = QtGui.QBrush()
+            brush2.setColor(QtGui.QColor(100, 250, 100))
+            brush2.setStyle(QtCore.Qt.SolidPattern)
             itemModified.setText("done")
+            itemModified.setBackground(brush2)
           else:
+            brush2 = QtGui.QBrush()
+            brush2.setColor(QtGui.QColor(250, 150, 0))
+            brush2.setStyle(QtCore.Qt.SolidPattern)
             itemModified.setText("notStarted")
+            itemModified.setBackground(brush2)
           self.tableWidget.setItem(x,8,itemModified)
         except:
           debug.info(str(sys.exc_info()))
