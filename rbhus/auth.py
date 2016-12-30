@@ -1,3 +1,9 @@
+#!/usr/bin/env python2.7
+#-*- coding: utf-8 -*-
+__author__ = "Shrinidhi Rao"
+__license__ = "GPL"
+__email__ = "shrinidhi666@gmail.com"
+
 import ldap
 import sys
 import dbRbhus
@@ -17,12 +23,12 @@ class login():
       self.ldaphost = os.environ['rbhus_ldapHost']
     except:
       self.ldaphost = 'ldap://ldaphost'
-    
+
     try:
       self.ldapport = os.environ['rbhus_ldapPort']
     except:
       self.ldapport = '389'
-  
+
   def tryRememberMe(self):
     passwdF = tempfile.gettempdir() + os.sep +"sys_init.dnd"
     pFs = 0
@@ -46,8 +52,8 @@ class login():
         self.useEnvUser()
         pf.close()
         return(1)
-        
-    
+
+
   def rememberMeStore(self):
     passwdF = tempfile.gettempdir() + os.sep +"sys_init.dnd"
     try:
@@ -58,14 +64,14 @@ class login():
     pf.writelines(self.username)
     pf.flush()
     pf.close()
-    
+
   def logout(self):
     passwdF = tempfile.gettempdir() + os.sep +"sys_init.dnd"
     try:
       os.remove(passwdF)
     except:
       pass
-  
+
   def ldapLogin(self,user, passwd, rMs = False):
     print("connecting ldap server : "+ str(self.ldaphost) +" : at port : "+ str(self.ldapport))
     try:
@@ -84,7 +90,7 @@ class login():
       self.status = False
       self._unsetEnvs()
       return(0)
-  
+
   def useEnvUser(self):
     try:
       self.username = os.environ['rbhus_acl_rememberMe']
@@ -110,9 +116,9 @@ class login():
         except:
           self._unsetEnvs()
           return(0)
-        
-    
-  
+
+
+
   def _setEnvs(self):
     self.__getUserDets()
     print("\nexporting environment variables...\n")
@@ -126,7 +132,7 @@ class login():
       os.environ['rbhus_acl_admin'] = "1"
     if(self.rbhusAdminSysFlag):
       os.environ['rbhus_acl_adminSys'] = "1"
-  
+
   def _unsetEnvs(self):
     self.status = False
     self.username = None
@@ -137,7 +143,7 @@ class login():
     os.environ['rbhus_acl_projIds'] = ""
     os.environ['rbhus_acl_admin'] = ""
     os.environ['rbhus_acl_adminSys'] = ""
-  
+
   def __getUserDets(self):
     if(self.username):
       db_conn = dbRbhus.dbRbhus()
@@ -163,5 +169,3 @@ class login():
               break
       except:
         print(str(sys.exc_info()))
-      
-    
