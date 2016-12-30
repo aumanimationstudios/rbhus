@@ -119,6 +119,8 @@ elif(imType == "PNG-RGBA"):
   defaultScripts = defaultScripts + "\nbpy.context.scene.color_mode = 'RGBA'"
   imType = "PNG"
 
+if(renderer == "CYCLES"):
+  defaultScripts = defaultScripts + "\nbpy.context.scene.cycles.device = 'CPU'"
 
 dF = open(defaultF,"w")
 dF.writelines(defaultScripts)
