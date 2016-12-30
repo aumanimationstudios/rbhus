@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/rbhus.iml" afterPath="$PROJECT_DIR$/.idea/rbhus.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="rbhus.iws" />
@@ -50,14 +48,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="default.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
+            <state relative-caret-position="75">
               <caret line="15" column="35" lean-forward="false" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
               <folding>
                 <element signature="e#19#28#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -136,64 +144,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15264">
-              <caret line="863" column="40" lean-forward="false" selection-start-line="863" selection-start-column="40" selection-end-line="863" selection-end-column="40" />
-              <folding>
-                <marker date="1478708483511" expanded="true" signature="1759:1780" ph="SELECT * FRO... dirMaps" />
-                <marker date="1478708483511" expanded="true" signature="2007:2030" ph="SELECT tags assets" />
-                <marker date="1478708483511" expanded="true" signature="2492:2571" ph="SELECT * FRO... dirMaps" />
-                <marker date="1478708483511" expanded="true" signature="2870:2937" ph="SELECT * FRO... projTypes" />
-                <marker date="1478708483511" expanded="true" signature="3066:3103" ph="SELECT * FRO... projTypes" />
-                <marker date="1478708483511" expanded="true" signature="3362:3430" ph="SELECT * FRO... stageTypes" />
-                <marker date="1478708483511" expanded="true" signature="3559:3597" ph="SELECT * FRO... stageTypes" />
-                <marker date="1478708483511" expanded="true" signature="3893:3960" ph="SELECT * FRO... nodeTypes" />
-                <marker date="1478708483511" expanded="true" signature="4089:4126" ph="SELECT * FRO... nodeTypes" />
-                <marker date="1478708483511" expanded="true" signature="4384:4451" ph="SELECT * FRO... fileTypes" />
-                <marker date="1478708483511" expanded="true" signature="4580:4617" ph="SELECT * FRO... fileTypes" />
-                <marker date="1478708483511" expanded="true" signature="4908:4965" ph="SELECT * FRO... assetTypes" />
-                <marker date="1478708483511" expanded="true" signature="5140:5213" ph="SELECT * FRO... assetTypes" />
-                <marker date="1478708483511" expanded="true" signature="5276:5314" ph="SELECT * FRO... assetTypes" />
-                <marker date="1478708483511" expanded="true" signature="5610:5746" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1478708483511" expanded="true" signature="5827:5994" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1478708483511" expanded="true" signature="6053:6155" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1478708483511" expanded="true" signature="6692:6727" ph="select * fro... admins" />
-                <marker date="1478708483511" expanded="true" signature="11467:11613" ph="update proj " />
-                <marker date="1478708483511" expanded="true" signature="11834:11979" ph="update proj " />
-                <marker date="1478708483511" expanded="true" signature="12018:12161" ph="update proj " />
-                <marker date="1478708483511" expanded="true" signature="13168:13298" ph="select * fro... sequenceScenes" />
-                <marker date="1478708483511" expanded="true" signature="13981:14054" ph="select * fro... proj" />
-                <marker date="1478708483511" expanded="true" signature="14375:14442" ph="select * fro... proj" />
-                <marker date="1478708483511" expanded="true" signature="14637:14655" ph="select * fro... proj" />
-                <marker date="1478708483511" expanded="true" signature="15762:15870" ph="insert into sequenceScenes... " />
-                <marker date="1478708483511" expanded="true" signature="15949:16057" ph="insert into sequenceScenes... " />
-                <marker date="1478708483511" expanded="true" signature="18457:18510" ph="select * fro... assets" />
-                <marker date="1478708483511" expanded="true" signature="18813:18865" ph="select * fro... assets" />
-                <marker date="1478708483511" expanded="true" signature="20501:20634" ph="select * fro... assets" />
-                <marker date="1478708483511" expanded="true" signature="21276:21416" ph="select * fro... assets" />
-                <marker date="1478708483511" expanded="true" signature="22433:22578" ph="select * fro... assets" />
-                <marker date="1478708483511" expanded="true" signature="23220:23372" ph="select * fro... assets" />
-                <marker date="1478708483511" expanded="true" signature="24378:24523" ph="select * fro... assets" />
-                <marker date="1478708483511" expanded="true" signature="25165:25317" ph="select * fro... assets" />
-                <marker date="1478708483511" expanded="true" signature="25548:25579" ph="select * fro... users" />
-                <marker date="1478708483511" expanded="true" signature="25861:25926" ph="select admin... stageTypes" />
-                <marker date="1478708483511" expanded="true" signature="27957:27992" ph="insert into assets... " />
-                <marker date="1478708483511" expanded="true" signature="28984:29043" ph="select disti... assets" />
-                <marker date="1478708483511" expanded="true" signature="33718:34196" ph="insert into assetReviews... " />
-                <marker date="1478708483511" expanded="true" signature="34338:34495" ph="update asset... " />
-                <marker date="1478708483511" expanded="true" signature="35428:35508" ph="select * fro... assetReviews" />
-                <marker date="1478708483511" expanded="true" signature="35737:35855" ph="select * fro... assetReviews" />
-                <marker date="1478708483511" expanded="true" signature="41472:41579" ph="update asset... " />
-                <marker date="1478708483511" expanded="true" signature="42748:42812" ph="delete from " />
-                <marker date="1478708483511" expanded="true" signature="43322:43468" ph="update asset... " />
-                <marker date="1478708483511" expanded="true" signature="43838:44009" ph="update asset... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -226,7 +176,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/rbhusDroneCtrl.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusHost.py" />
         <option value="$PROJECT_DIR$/tests/wacomctl/wacomctl.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAdmin.py" />
@@ -277,6 +226,7 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
         <option value="$PROJECT_DIR$/etc/blend_lin/default.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/__init__.py" />
       </list>
     </option>
   </component>
@@ -301,7 +251,7 @@
         </expanded-state>
         <selected-state>
           <State>
-            <id>AngularJS</id>
+            <id>Buildout</id>
           </State>
         </selected-state>
       </profile-state>
@@ -430,7 +380,7 @@
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///home/shrinidhi/bin/gitHub/rbhus/rbhus/utils.py" />
     <property name="prop_add_unversioned_files" value="true" />
@@ -710,13 +660,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
-    </task>
-    <task id="LOCAL-00018" summary="fixing">
-      <created>1476266613861</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1476266613861</updated>
     </task>
     <task id="LOCAL-00019" summary="fixing">
       <created>1476439013127</created>
@@ -1054,7 +997,14 @@
       <option name="project" value="LOCAL" />
       <updated>1483076925293</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="fixing">
+      <created>1483081774785</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1483081774785</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1070,7 +1020,7 @@
     <frame x="1920" y="0" width="1680" height="1020" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25407362" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25407362" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281075" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2206047" sideWeight="0.50917995" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26651737" sideWeight="0.4960464" order="8" side_tool="false" content_ui="tabs" />
@@ -1154,7 +1104,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/zmq_inproc_server.py" />
     <entry file="file://$PROJECT_DIR$/tests/zmq_inproc_client.py" />
     <entry file="file://$PROJECT_DIR$/rbhus/utils.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1550,11 +1499,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
+        <state relative-caret-position="75">
           <caret line="15" column="35" lean-forward="false" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
           <folding>
             <element signature="e#19#28#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
