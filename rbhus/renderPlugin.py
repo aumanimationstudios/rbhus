@@ -47,6 +47,7 @@ def sendCmd(cmd):
   #   print ("ACK Timeout error : Check if the server is running")
   try:
     socket.close()
+    context.destroy()
   except:
     print (sys.exc_info())
 
