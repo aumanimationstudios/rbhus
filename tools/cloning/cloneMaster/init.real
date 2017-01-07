@@ -67,7 +67,7 @@ def mountSysPaths():
 
 # check if anything is initiated! . if not exit gracefully
 
-if((cInfo['cloneStatus'] != constants.cloneStatusPending) and (cInfo['cloneStatus'] != constants.cloneStatusRunning)):
+if((cInfo['cloneStatus'] == constants.cloneStatusDisable) or (cInfo['cloneStatus'] == constants.cloneStatusDone)):
   print("nothing to do")
   sys.exit(0)
 
