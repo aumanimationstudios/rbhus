@@ -110,7 +110,7 @@ def getTags(projName="",assPath="",assId=""):
 def getDirMapsDetails(directory):
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("SELECT * FROM dirMaps where directory='"+ str(directory) +"' order by directory", dictionary=True)
+    rows = dbconn.execute("SELECT * FROM dirMaps where directory='"+ str(directory) +"'", dictionary=True)
   except:
     debug.debug(str(sys.exc_info()))
     return(0)
@@ -126,7 +126,7 @@ def getProjTypes(ptype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(ptype):
-      rows = dbconn.execute("SELECT * FROM projTypes where type='"+ str(ptype) +"' order by type", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM projTypes where type='"+ str(ptype) +"'", dictionary=True)
       if(rows):
         return(rows[0])
       else:
@@ -146,7 +146,7 @@ def getStageTypes(stype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(stype):
-      rows = dbconn.execute("SELECT * FROM stageTypes where type='"+ str(stype) +"' order by type", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM stageTypes where type='"+ str(stype) +"'", dictionary=True)
       if(rows):
         return(rows[0])
       else:
@@ -925,7 +925,7 @@ def getDistinctAssNames(projName):
 
 
 
-def setAssTemplate(assDetDict):
+def setAssTemplate(assDetDict,hard=False):
   templateFile = getTemplatePath(assDetDict)
   assPath = getAssPath(assDetDict)
   dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
@@ -934,12 +934,50 @@ def setAssTemplate(assDetDict):
     corePath = dirMapsDets['windowsMapping'] + assPath.replace(":","/")
   else:
     corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
+
   if(templateFile):
-    if(not os.path.exists(corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])):
+    if(hard):
       debug.debug("recopied template file")
-      shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
+      shutil.copyfile(templateFile, corePath.rstrip("/") + "/" + fileName + "." + templateFile.split(".")[-1])
     else:
-      debug.debug("file already exits. not copying template")
+      if(not os.path.exists(corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])):
+        debug.debug("recopied template file")
+        shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
+      else:
+        debug.debug("file already exits. not copying template")
+
+def setTemplateAss(assDetDict,hard=False):
+  templateFile = getTemplatePath(assDetDict)
+  assPath = getAssPath(assDetDict)
+  dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
+  fileName = getAssFileName(assDetDict)
+
+  if(sys.platform.find("win") >= 0):
+    corePath = dirMapsDets['windowsMapping'] + assPath.replace(":","/")
+  else:
+    corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
+
+  fullFileName = corePath.rstrip("/") + "/" + fileName + "." + templateFile.split(".")[-1]
+  debug.info(fullFileName)
+  debug.info(templateFile)
+  try:
+    shutil.copyfile(fullFileName,templateFile)
+  except:
+    debug.error(sys.exc_info())
+
+  #
+  # if(templateFile):
+  #   if(hard):
+  #     debug.debug("recopied template file")
+  #     shutil.copyfile(templateFile, corePath.rstrip("/") + "/" + fileName + "." + templateFile.split(".")[-1])
+  #   else:
+  #     if(not os.path.exists(corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])):
+  #       debug.debug("recopied template file")
+  #       shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
+  #     else:
+  #       debug.debug("file already exits. not copying template")
+
+
 
 
 def getAssFileName(assDetDict):

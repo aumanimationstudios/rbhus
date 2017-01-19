@@ -623,8 +623,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     menu = QtGui.QMenu()
     menuProgress = QtGui.QMenu()
     menuCopy = QtGui.QMenu()
+    menuTemplate = QtGui.QMenu()
     menuCopy.setTitle("copy to clipboard")
     menuProgress.setTitle("progress status")
+    menuTemplate.setTitle("template tools")
+
 
     inProgressAction = menuProgress.addAction("set to inProgress")
     inProgressDoneAction = menuProgress.addAction("set to done")
@@ -637,6 +640,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     #openFileAction = menu.addAction("open file")
     openFolderAction = menu.addAction("open")
+    noAction1 = menu.addAction("-")
+    noAction2 = menu.addAction("-")
     addToFavAction = menu.addAction("add to shortcuts")
     #versionAction = menu.addAction("versioning")
     assEditAction = menu.addAction("edit")
@@ -644,12 +649,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     assReviewAction = menu.addAction("review")
     menu.addMenu(menuCopy)
     menu.addMenu(menuProgress)
+    menu.addMenu(menuTemplate)
     # assCopyNew = menu.addAction("copy/new")
-    assGetTemplate = menu.addAction("reset from templates")
-    assGetTemplateUpdate = menu.addAction("update to templates")
+    assGetTemplate = menuTemplate.addAction("reset from templates")
+    assGetTemplateUpdate = menuTemplate.addAction("update to templates")
+    hardAssGetTemplate = menuTemplate.addAction("hard reset from templates")
     #assCmdLine = menu.addAction("cmd line")
     assRender = menu.addAction("submit to render")
     assDeleteAction = menu.addAction("delete - database only")
+
     #assDeleteActionHard = menu.addAction("delete - database and disk")
 
     action = menu.exec_(self.tableWidget.mapToGlobal(pos))
@@ -674,6 +682,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.renderAss()
     if(action == assGetTemplate):
       self.resetTemplateFiles()
+
+    if(action == hardAssGetTemplate):
+      self.resetTemplateFiles(hard=True)
+
     if(action == addToFavAction):
       self.assetFavSave()
 
@@ -688,6 +700,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.setInProgress()
     if(action == inProgressDoneAction):
       self.setDone()
+    if(action == assGetTemplateUpdate):
+      self.resetAssToTemplateFiles()
+
+
 
     #if(action == versionAction):
       #self.versionAss()
@@ -952,12 +968,24 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     subprocess.Popen(versionCmd +" --path \""+ selass[-1] +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
 
 
-  def resetTemplateFiles(self):
+  def resetTemplateFiles(self,hard=False):
+    if(hard):
+      yn = self.messageBoxTemplateHard()
+      if(yn):
+        selass = self.selectedAsses()
+        for x in range(0,len(selass)):
+          debug.info(selass[x])
+          assDets = utilsPipe.getAssDetails(assPath = selass[x])
+          utilsPipe.setAssTemplate(assDets,hard=hard)
+
+
+  def resetAssToTemplateFiles(self,hard=False):
     selass = self.selectedAsses()
     for x in range(0,len(selass)):
       debug.info(selass[x])
       assDets = utilsPipe.getAssDetails(assPath = selass[x])
-      utilsPipe.setAssTemplate(assDets)
+      utilsPipe.setTemplateAss(assDets,hard=hard)
+
 
   def setLinkedProj(self):
     try:
@@ -1575,6 +1603,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     else:
       return(0)
 
+  def messageBoxTemplateHard(self):
+    msgbox = QtGui.QMessageBox()
+    delmsg = "Replace the current asset file from template??!!!"
+    msgbox.setWindowTitle("WTF!!!")
+    msgbox.setText(delmsg + "\nYour time and effort used on this asset WILL be WASTED!!!!")
+    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep + "etc/icons/danger_128.png")))
+    # noBut = QtGui.QPushButton("cancel")
+    # yesBut = QtGui.QPushButton("yes")
+    yesBut = msgbox.addButton("yes", QtGui.QMessageBox.YesRole)
+    noBut = msgbox.addButton("cancel", QtGui.QMessageBox.NoRole)
+    msgbox.setDefaultButton(noBut)
+    msgbox.exec_()
+    if (msgbox.clickedButton() == yesBut):
+      return (1)
+    else:
+      return (0)
+
     #if(ok == QtGui.QMessageBox.Yes):
       #return(1)
     #else:
@@ -1710,7 +1755,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           if(len(assesColor[assesList[x]].split(":")) >= 1):
             for fc in assesColor[assesList[x]].split(":")[1:]:
               textAssArr.append('<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>')
-          textAss = "<b><i> : </i></b>".join(textAssArr)
+          textAss = " " + "<b><i> : </i></b>".join(textAssArr)
           item.setTextFormat(QtCore.Qt.RichText)
           item.setText(textAss)
           # item.setToolTip("CHECK OUT THE VERSION OPTION    };)\nEnable it by editing the asset")
