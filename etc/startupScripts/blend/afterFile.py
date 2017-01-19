@@ -9,6 +9,20 @@ bpy.context.scene.render.fps = 24
 bpy.context.scene.render.fps_base = 1
 # bpy.context.scene.render.use_single_layer = False
 
+
+# try:
+#   for x in  bpy.context.scene.objects:
+#     if(x.type == "CAMERA"):
+#       bpy.ops.object.select_all(action="DESELECT")
+#       x.select = True
+#       x.data.sensor_width = 32.0
+#       bpy.context.scene.objects.active = x
+#       bpy.ops.object.camera_add_title_safe()
+# except:
+#   print(sys.exc_info())
+
+
+
 rbhus_isRendering = False
 
 if("rbhus_isRendering" in os.environ):

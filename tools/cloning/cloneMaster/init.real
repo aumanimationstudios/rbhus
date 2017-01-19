@@ -9,6 +9,7 @@ import platform
 
 
 myip = socket.gethostbyname(socket.gethostname())
+print (myip)
 db_conn = dbRbhus.dbRbhusHost()
 try:
   cInfo = db_conn.execute("select * from clonedb where ip='"+ str(myip) +"'",dictionary=True)[-1]
@@ -66,7 +67,7 @@ def mountSysPaths():
 
 
 # check if anything is initiated! . if not exit gracefully
-
+print (cInfo['cloneStatus'])
 if((cInfo['cloneStatus'] == constants.cloneStatusDisable) or (cInfo['cloneStatus'] == constants.cloneStatusDone)):
   print("nothing to do")
   sys.exit(0)

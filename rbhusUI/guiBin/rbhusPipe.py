@@ -645,7 +645,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     menu.addMenu(menuCopy)
     menu.addMenu(menuProgress)
     # assCopyNew = menu.addAction("copy/new")
-    assGetTemplate = menu.addAction("reset templates")
+    assGetTemplate = menu.addAction("reset from templates")
+    assGetTemplateUpdate = menu.addAction("update to templates")
     #assCmdLine = menu.addAction("cmd line")
     assRender = menu.addAction("submit to render")
     assDeleteAction = menu.addAction("delete - database only")
@@ -1673,11 +1674,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     debug.info(rowsSelected)
     for row in rowsSelected:
       try:
-        doc = QtGui.QTextDocument()
-        doc.setHtml(str(self.tableWidget.cellWidget(row,0).text()))
-        text = doc.toPlainText()
-        #debug.info("2 : "+ text)
-        rowstask.append(str(text))
+        rowstask.append(str(self.tableWidget.cellWidget(row,0).assPath))
       except:
         debug.info(sys.exc_info())
     return(rowstask)
@@ -1709,10 +1706,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         try:
           item = ExtendedQLabel()
           item.setAlignment(QtCore.Qt.AlignVCenter)
-          textAss = '<font color="'+ str(assesColor[assesList[x]].split(":")[0]).split("#")[1] +'">'+ (assesColor[assesList[x]].split(":")[0]).split("#")[0] +'</font>'
-          if(len(assesColor[assesList[x]].split(":")) > 1):
+          textAssArr = [] #'<font color="'+ str(assesColor[assesList[x]].split(":")[0]).split("#")[1] +'">'+ (assesColor[assesList[x]].split(":")[0]).split("#")[0] +'</font>'
+          if(len(assesColor[assesList[x]].split(":")) >= 1):
             for fc in assesColor[assesList[x]].split(":")[1:]:
-              textAss = textAss + ':' +'<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>'
+              textAssArr.append('<font color="'+ fc.split("#")[1] +'">'+ fc.split("#")[0] +'</font>')
+          textAss = "<b><i> : </i></b>".join(textAssArr)
           item.setTextFormat(QtCore.Qt.RichText)
           item.setText(textAss)
           # item.setToolTip("CHECK OUT THE VERSION OPTION    };)\nEnable it by editing the asset")
@@ -1720,8 +1718,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
           item.setSizePolicy(sizePolicy)
           item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+          item.assPath = assesList[x]
           item.clicked.connect(lambda item=item : self.versionCheck(item))
-
           self.tableWidget.setCellWidget(x,0,item)
         except:
           debug.info(str(sys.exc_info()))
@@ -1872,6 +1870,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def versionCheck(self,*args):
+    debug.info("OPENING : "+ args[0].assPath)
     doc = QtGui.QTextDocument()
     doc.setHtml(args[0].text())
     text = doc.toPlainText()

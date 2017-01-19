@@ -832,15 +832,15 @@ def assPathColorCoded(assDetDict):
   if(not re.search("^default",str(assDetDict['assetType']))):
     assPath = assPath +":"+ str(assDetDict['assetType']) +"#"+ "saddlebrown"
   if(not re.search("^default",str(assDetDict['sequenceName']))):
-    assPath = assPath +":"+ str(assDetDict['sequenceName']) +"#"+ "green"
+    assPath = assPath +":"+ str(assDetDict['sequenceName']) +"#"+ "navy"
   if(not re.search("^default",str(assDetDict['sceneName']))):
-    assPath = assPath +":"+ str(assDetDict['sceneName']) +"#"+ "olive"
+    assPath = assPath +":"+ str(assDetDict['sceneName']) +"#"+ "Indigo"
   if(not re.search("^default",str(assDetDict['assName']))):
-    assPath = assPath +":"+ str(assDetDict['assName']) +"#"+ "maroon"
+    assPath = assPath +":"+ str(assDetDict['assName']) +"#"+ "crimson"
   if(not re.search("^default",str(assDetDict['stageType']))):
-    assPath = assPath +":"+ str(assDetDict['stageType']) +"#"+ "dimgray"
+    assPath = assPath +":"+ str(assDetDict['stageType']) +"#"+ "Teal"
   if(not re.search("^default",str(assDetDict['nodeType']))):
-    assPath = assPath +":"+ str(assDetDict['nodeType']) +"#"+ "blue"
+    assPath = assPath +":"+ str(assDetDict['nodeType']) +"#"+ "Olive"
   if(not re.search("^default",str(assDetDict['fileType']))):
     assPath = assPath +":"+ str(assDetDict['fileType']) +"#"+ "darkviolet"
   return(assPath)

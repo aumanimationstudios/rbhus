@@ -7,6 +7,8 @@ addon_utils.disable("ui_layer_manager")
 addon_utils.enable("ui_layer_manager")
 addon_utils.disable("bone_selection_groups")
 addon_utils.enable("bone_selection_groups")
+# addon_utils.disable("camera_add_title_safe")
+# addon_utils.enable("camera_add_title_safe")
 
 
 
