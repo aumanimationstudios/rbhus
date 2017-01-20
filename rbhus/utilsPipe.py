@@ -236,11 +236,11 @@ def getSequenceScenes(proj,seq=None,sce=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(proj and seq and (not sce)):
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' order by projName,sequenceName,sceneName", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' order by sceneName", dictionary=True)
     elif(proj and seq and sce):
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' and sceneName='"+ str(sce) +"' order by projName,sequenceName,sceneName", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' and sequenceName='"+ str(seq) +"' and sceneName='"+ str(sce) +"'", dictionary=True)
     else:
-      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' order by projName,sequenceName,sceneName", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM sequenceScenes where projName='"+ str(proj) +"' order by sequenceName,sceneName", dictionary=True)
     if(rows):
       return(rows)
     else:
@@ -441,7 +441,7 @@ def getProjDetails(projName=None,status=None):
   if(projName):
     dbconn = dbPipe.dbPipe()
     try:
-      rows = dbconn.execute("select * from proj where projName='"+ str(projName) +"' order by projName", dictionary=True)
+      rows = dbconn.execute("select * from proj where projName='"+ str(projName) +"'", dictionary=True)
     except:
       debug.debug(str(sys.exc_info()))
       return(0)
@@ -463,7 +463,7 @@ def getProjDetails(projName=None,status=None):
     else:
       dbconn = dbPipe.dbPipe()
       try:
-        rows = dbconn.execute("select * from proj", dictionary=True)
+        rows = dbconn.execute("select * from proj order by projName", dictionary=True)
       except:
         debug.debug(str(sys.exc_info()))
         return(0)
@@ -946,6 +946,7 @@ def setAssTemplate(assDetDict,hard=False):
       else:
         debug.debug("file already exits. not copying template")
 
+
 def setTemplateAss(assDetDict,hard=False):
   templateFile = getTemplatePath(assDetDict)
   assPath = getAssPath(assDetDict)
@@ -960,22 +961,11 @@ def setTemplateAss(assDetDict,hard=False):
   fullFileName = corePath.rstrip("/") + "/" + fileName + "." + templateFile.split(".")[-1]
   debug.info(fullFileName)
   debug.info(templateFile)
-  try:
-    shutil.copyfile(fullFileName,templateFile)
-  except:
-    debug.error(sys.exc_info())
-
-  #
-  # if(templateFile):
-  #   if(hard):
-  #     debug.debug("recopied template file")
-  #     shutil.copyfile(templateFile, corePath.rstrip("/") + "/" + fileName + "." + templateFile.split(".")[-1])
-  #   else:
-  #     if(not os.path.exists(corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])):
-  #       debug.debug("recopied template file")
-  #       shutil.copyfile(templateFile,corePath.rstrip("/") +"/"+ fileName +"."+ templateFile.split(".")[-1])
-  #     else:
-  #       debug.debug("file already exits. not copying template")
+  if(os.path.exists(fullFileName)):
+    try:
+      shutil.copyfile(fullFileName,templateFile)
+    except:
+      debug.error(sys.exc_info())
 
 
 
@@ -1099,12 +1089,6 @@ def reviewVersion(asspath,version):
 
 
 
-
-
-
-
-
-
 def reviewEdit(assdict={}):
   assDets = copy.copy(assdict)
   debug.debug("editing ass review : "+ str(assdict))
@@ -1143,7 +1127,7 @@ def reviewDetails(assId = 0,revCount=0):
         return(rows)
     else:
       try:
-        rows = dbconn.execute("select * from assetReviews where assetId='"+ str(assId) +"' and reviewCount='"+ str(revCount) +"' order by reviewCount", dictionary=True)
+        rows = dbconn.execute("select * from assetReviews where assetId='"+ str(assId) +"' and reviewCount='"+ str(revCount) +"'", dictionary=True)
       except:
         debug.debug(str(sys.exc_info()))
         return(0)

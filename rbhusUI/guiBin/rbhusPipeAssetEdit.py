@@ -29,6 +29,7 @@ import dbPipe
 import constantsPipe
 import authPipe
 import utilsPipe
+import debug
 
 
 
@@ -70,7 +71,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.project = None
     self.directory = None
     try:
-      self.username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
+      self.username = os.environ['rbhusPipe_acl_user'].strip()
     except:
       pass
     try:
@@ -89,6 +90,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.pushTags.clicked.connect(self.setTags)
     self.pushUsers.clicked.connect(self.setUsers)
     self.pushReviewers.clicked.connect(self.setReviewers)
+    self.pushReviewNotifiers.clicked.connect(self.setReviewNotifiers)
     self.checkTags.clicked.connect(self.enableTags)
     self.checkFRange.clicked.connect(self.enableFRange)
     self.checkDueDate.clicked.connect(self.enableDueDate)
@@ -98,6 +100,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.checkReviewSelf.clicked.connect(self.setAssignedReviewer)
     self.checkVersion.clicked.connect(self.enableVersion)
     self.checkReview.clicked.connect(self.enableReview)
+    self.checkReviewNotifiers.clicked.connect(self.enableReviewNotifiers)
     self.enableAssignTo()
     self.enableDesc()
     self.enableDueDate()
@@ -105,6 +108,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.enableTags()
     self.enableReview()
     self.enableVersion()
+    self.enableReviewNotifiers()
 
     
 
@@ -114,10 +118,18 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
   
   def setReviewers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
     if(outUsers == ""):
-      outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
+      outUsers = str(self.lineEditWorkers.text()).strip()
     self.lineEditReviewers.setText(_fromUtf8(outUsers))
+
+
+  def setReviewNotifiers(self):
+    users = utilsPipe.getUsers()
+    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(self.lineEditReviewNotifiers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    if(not outUsers):
+      outUsers = str(self.lineEditReviewNotifiers.text()).strip()
+    self.lineEditReviewNotifiers.setText(_fromUtf8(outUsers))
 
     
     
@@ -131,9 +143,18 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
       self.checkReviewSelf.setEnabled(True)
       self.pushReviewers.setEnabled(True)
     else:
-      self.lineEditTags.setEnabled(False)
+      self.lineEditReviewers.setEnabled(False)
       self.checkReviewSelf.setEnabled(False)
       self.pushReviewers.setEnabled(False)
+
+
+  def enableReviewNotifiers(self):
+    if(self.checkReviewNotifiers.isChecked()):
+      self.lineEditReviewNotifiers.setEnabled(True)
+      self.pushReviewNotifiers.setEnabled(True)
+    else:
+      self.lineEditReviewNotifiers.setEnabled(False)
+      self.pushReviewNotifiers.setEnabled(False)
 
 
   def enableTags(self):
@@ -200,9 +221,9 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
   
   def setUsers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
     if(outUsers == ""):
-      outTags = str(self.lineEditWorkers.text()).rstrip().lstrip()
+      outUsers = str(self.lineEditWorkers.text()).strip()
     self.lineEditWorkers.setText(_fromUtf8(outUsers))
   
   
@@ -215,20 +236,22 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
         if(self.checkDueDate.isChecked()):
           assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
         if(self.checkAssign.isChecked()):
-          assdict['assignedWorker'] = str(self.lineEditWorkers.text()).rstrip().lstrip()
+          assdict['assignedWorker'] = str(self.lineEditWorkers.text()).strip()
         if(self.checkDesc.isChecked()):
-          assdict['description'] = str(self.lineEditDesc.text()).rstrip().lstrip()
+          assdict['description'] = str(self.lineEditDesc.text()).strip()
         if(self.checkTags.isChecked()):
-          assdict['tags'] = str(self.lineEditTags.text()).rstrip().lstrip()
+          assdict['tags'] = str(self.lineEditTags.text()).strip()
         if(self.checkFRange.isChecked()):
-          assdict['fRange'] = str(self.lineEditFRange.text()).rstrip().lstrip()
+          assdict['fRange'] = str(self.lineEditFRange.text()).strip()
         if(self.checkVersion.isChecked()):
           if(self.checkVersionEnable.isChecked()):
             assdict['versioning'] = 1
           else:
             assdict['versioning'] = 0
         if(self.checkReview.isChecked()):
-          assdict['reviewUser'] = str(self.lineEditReviewers.text()).rstrip().lstrip()
+          assdict['reviewUser'] = str(self.lineEditReviewers.text()).strip()
+        if (self.checkReviewNotifiers.isChecked()):
+          assdict['reviewNotifyUsers'] = str(self.lineEditReviewNotifiers.text()).strip()
           
         if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username or assdets['assignedWorker'] == self.username)):
           print("user not allowed to edit . not an admin or an asset founder!!")
@@ -257,7 +280,9 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
           else:
             assdict['versioning'] = 0;
         if(self.checkReview.isChecked()):
-          assdict['reviewUser'] = str(self.lineEditReviewers.text()).rstrip().lstrip()
+          assdict['reviewUser'] = str(self.lineEditReviewers.text()).strip()
+        if (self.checkReviewNotifiers.isChecked()):
+          assdict['reviewNotifyUsers'] = str(self.lineEditReviewNotifiers.text()).strip()
           
         #if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username or assdets['assignedWorker'] == self.username)):
           #print("user not allowed to edit . not an admin or an asset founder!!")
@@ -273,7 +298,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     
   def setTags(self):
     tags = utilsPipe.getTags(projName=os.environ['rp_proj_projName'])
-    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str(self.lineEditTags.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str(self.lineEditTags.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
     if(outTags == ""):
       outTags = "default"
     self.lineEditTags.setText(_fromUtf8(outTags))

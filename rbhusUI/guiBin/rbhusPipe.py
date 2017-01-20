@@ -646,7 +646,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     #versionAction = menu.addAction("versioning")
     assEditAction = menu.addAction("edit")
 
-    assReviewAction = menu.addAction("review")
+    assReviewAction = menu.addAction("check review")
+
     menu.addMenu(menuCopy)
     menu.addMenu(menuProgress)
     menu.addMenu(menuTemplate)
@@ -1975,6 +1976,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(outUsers == ""):
       outUsers = str(self.lineEditSearch.text()).rstrip().lstrip()
     self.lineEditSearch.setText(_fromUtf8(outUsers))
+
 
 
   def rbhusPipeSetProjDefault(self):
