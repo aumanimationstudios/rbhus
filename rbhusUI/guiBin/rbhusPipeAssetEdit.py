@@ -61,11 +61,20 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.idList = []
     self.pathList = []
     self.updateLine = []
+    self.singleton = False
     
     if(args.assId):
       self.idList = args.assId.split(",")
     if(args.assPath):
       self.pathList = args.assPath.split(",")
+
+    if((len(self.pathList) == 1 and len(self.idList) == 0) or (len(self.pathList) == 0 and len(self.idList) == 1)):
+      if(len(self.pathList) == 1):
+        self.singleAssDet = utilsPipe.getAssDetails(assPath=self.pathList[0])
+      if (len(self.idList) == 1):
+        self.singleAssDet = utilsPipe.getAssDetails(addId=self.idList[0])
+      self.singleton = True
+
     
     self.username = None
     self.project = None
@@ -109,6 +118,8 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.enableReview()
     self.enableVersion()
     self.enableReviewNotifiers()
+    if(self.singleton):
+      self.setDefaults()
 
     
 
@@ -302,15 +313,22 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     if(outTags == ""):
       outTags = "default"
     self.lineEditTags.setText(_fromUtf8(outTags))
-  
-  
-  
-  
-  
+
   
   
   def setDefaults(self):
-    defs = utilsPipe.getProjDefaults()
+    self.lineEditFRange.setText(self.singleAssDet['fRange'])
+    self.dateEditDue.setDateTime(self.singleAssDet['dueDate'])
+    self.lineEditWorkers.setText(self.singleAssDet['assignedWorker'])
+    self.lineEditReviewers.setText(self.singleAssDet['reviewUser'])
+    self.lineEditReviewNotifiers.setText(self.singleAssDet['reviewNotifyUsers'])
+    self.lineEditDesc.setText(self.singleAssDet['description'])
+    self.lineEditTags.setText(self.singleAssDet['tags'])
+    if(int(self.singleAssDet['versioning'])):
+      self.checkVersionEnable.setChecked(True)
+
+
+
     
 
 
