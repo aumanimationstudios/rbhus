@@ -11,54 +11,23 @@
 	<OS>Linux</OS>
 	<Bits>64</Bits>
 	<NodesCollection class_id="1" tracking_level="0" version="1">
-		<NodesCount>3</NodesCount>
+		<NodesCount>2</NodesCount>
 		<item class_id="2" tracking_level="0" version="15">
-			<Plugin_label>Viewer1</Plugin_label>
-			<Plugin_script_name>Viewer1</Plugin_script_name>
-			<Plugin_id>fr.inria.built-in.Viewer</Plugin_id>
-			<PythonModule></PythonModule>
-			<PythonModuleVersion>0</PythonModuleVersion>
-			<Plugin_major_version>1</Plugin_major_version>
-			<Plugin_minor_version>0</Plugin_minor_version>
-			<KnobsCount>0</KnobsCount>
-			<Inputs_map class_id="3" tracking_level="0" version="0">
-				<count>1</count>
-				<item_version>0</item_version>
-				<item class_id="4" tracking_level="0" version="0">
-					<first>1</first>
-					<second>readFile</second>
-				</item>
-			</Inputs_map>
-			<KnobsAge>0</KnobsAge>
-			<MasterNode></MasterNode>
-			<HasRotoContext>0</HasRotoContext>
-			<HasTrackerContext>0</HasTrackerContext>
-			<MultiInstanceParent></MultiInstanceParent>
-			<UserPagesCount>0</UserPagesCount>
-			<PagesCount>0</PagesCount>
-			<Children>0</Children>
-			<UserComponents class_id="5" tracking_level="0" version="0">
-				<count>0</count>
-				<item_version>0</item_version>
-			</UserComponents>
-			<CacheID>Viewer1</CacheID>
-		</item>
-		<item>
 			<Plugin_label>readFile</Plugin_label>
-			<Plugin_script_name>readFile</Plugin_script_name>
+			<Plugin_script_name>Read1</Plugin_script_name>
 			<Plugin_id>fr.inria.built-in.Read</Plugin_id>
 			<PythonModule></PythonModule>
 			<PythonModuleVersion>0</PythonModuleVersion>
 			<Plugin_major_version>1</Plugin_major_version>
 			<Plugin_minor_version>0</Plugin_minor_version>
-			<KnobsCount>19</KnobsCount>
-			<item class_id="6" tracking_level="0" version="13">
+			<KnobsCount>20</KnobsCount>
+			<item class_id="3" tracking_level="0" version="13">
 				<Name>decodingPluginChoice</Name>
 				<Type>Choice</Type>
 				<Dimension>1</Dimension>
 				<Secret>1</Secret>
 				<MasterIsAlias>0</MasterIsAlias>
-				<item class_id="7" tracking_level="0" version="7">
+				<item class_id="4" tracking_level="0" version="7">
 					<Enabled>1</Enabled>
 					<HasAnimation>0</HasAnimation>
 					<Value>0</Value>
@@ -85,7 +54,7 @@
 					<Expression></Expression>
 					<ExprHasRet>0</ExprHasRet>
 				</item>
-				<StringsAnimation class_id="8" tracking_level="0" version="0">
+				<StringsAnimation class_id="5" tracking_level="0" version="0">
 					<count>0</count>
 					<item_version>0</item_version>
 				</StringsAnimation>
@@ -159,12 +128,30 @@
 				<item>
 					<Enabled>1</Enabled>
 					<HasAnimation>0</HasAnimation>
-					<Value>50</Value>
+					<Value>268</Value>
 					<Default>268</Default>
 					<HasMaster>0</HasMaster>
 					<Expression></Expression>
 					<ExprHasRet>0</ExprHasRet>
 				</item>
+				<UserKnob>0</UserKnob>
+			</item>
+			<item>
+				<Name>onMissingFrame</Name>
+				<Type>Choice</Type>
+				<Dimension>1</Dimension>
+				<Secret>0</Secret>
+				<MasterIsAlias>0</MasterIsAlias>
+				<item>
+					<Enabled>1</Enabled>
+					<HasAnimation>0</HasAnimation>
+					<Value>1</Value>
+					<Default>3</Default>
+					<HasMaster>0</HasMaster>
+					<Expression></Expression>
+					<ExprHasRet>0</ExprHasRet>
+				</item>
+				<ChoiceLabel>Load next</ChoiceLabel>
 				<UserKnob>0</UserKnob>
 			</item>
 			<item>
@@ -415,11 +402,11 @@
 				</StringsAnimation>
 				<UserKnob>0</UserKnob>
 			</item>
-			<Inputs_map>
+			<Inputs_map class_id="6" tracking_level="0" version="0">
 				<count>0</count>
 				<item_version>0</item_version>
 			</Inputs_map>
-			<KnobsAge>84</KnobsAge>
+			<KnobsAge>90</KnobsAge>
 			<MasterNode></MasterNode>
 			<HasRotoContext>0</HasRotoContext>
 			<HasTrackerContext>0</HasTrackerContext>
@@ -430,7 +417,7 @@
 			<name>Node</name>
 			<name>Info</name>
 			<Children>0</Children>
-			<UserComponents>
+			<UserComponents class_id="7" tracking_level="0" version="0">
 				<count>0</count>
 				<item_version>0</item_version>
 			</UserComponents>
@@ -444,7 +431,7 @@
 			<PythonModuleVersion>0</PythonModuleVersion>
 			<Plugin_major_version>1</Plugin_major_version>
 			<Plugin_minor_version>0</Plugin_minor_version>
-			<KnobsCount>26</KnobsCount>
+			<KnobsCount>27</KnobsCount>
 			<item>
 				<Name>encodingPluginChoice</Name>
 				<Type>Choice</Type>
@@ -493,7 +480,7 @@
 				<item>
 					<Enabled>1</Enabled>
 					<HasAnimation>0</HasAnimation>
-					<Value>&lt;font size=&quot;6&quot; color=&quot;#000000&quot; face=&quot;Droid Sans&quot;&gt;&lt;Natron&gt;(Untitled.mov)&lt;/Natron&gt;&lt;/font&gt;</Value>
+					<Value>&lt;font size=&quot;6&quot; color=&quot;#000000&quot; face=&quot;Droid Sans&quot;&gt;&lt;Natron&gt;(Untitled_rle.mov)&lt;/Natron&gt;&lt;/font&gt;</Value>
 					<Default></Default>
 					<HasMaster>0</HasMaster>
 					<Expression></Expression>
@@ -527,7 +514,7 @@
 				<Name>NatronOfxParamProcessR</Name>
 				<Type>Bool</Type>
 				<Dimension>1</Dimension>
-				<Secret>1</Secret>
+				<Secret>0</Secret>
 				<MasterIsAlias>0</MasterIsAlias>
 				<item>
 					<Enabled>0</Enabled>
@@ -544,7 +531,7 @@
 				<Name>NatronOfxParamProcessG</Name>
 				<Type>Bool</Type>
 				<Dimension>1</Dimension>
-				<Secret>1</Secret>
+				<Secret>0</Secret>
 				<MasterIsAlias>0</MasterIsAlias>
 				<item>
 					<Enabled>0</Enabled>
@@ -561,7 +548,7 @@
 				<Name>NatronOfxParamProcessB</Name>
 				<Type>Bool</Type>
 				<Dimension>1</Dimension>
-				<Secret>1</Secret>
+				<Secret>0</Secret>
 				<MasterIsAlias>0</MasterIsAlias>
 				<item>
 					<Enabled>0</Enabled>
@@ -600,12 +587,30 @@
 				<item>
 					<Enabled>1</Enabled>
 					<HasAnimation>0</HasAnimation>
-					<Value>/blueprod/STOR2/stor2/AndePirki_se01_ep004_olympics/output/sq06/sc005/light/main/blend/sq06_sc005_light_main/1920x1080/0004/Untitled.mov</Value>
+					<Value>/blueprod/STOR2/stor2/AndePirki_se01_ep004_olympics/output/sq06/sc005/light/main/blend/sq06_sc005_light_main/1920x1080/0004/Untitled_rle.mov</Value>
 					<Default></Default>
 					<HasMaster>0</HasMaster>
 					<Expression></Expression>
 					<ExprHasRet>0</ExprHasRet>
 				</item>
+				<UserKnob>0</UserKnob>
+			</item>
+			<item>
+				<Name>formatType</Name>
+				<Type>Choice</Type>
+				<Dimension>1</Dimension>
+				<Secret>0</Secret>
+				<MasterIsAlias>0</MasterIsAlias>
+				<item>
+					<Enabled>1</Enabled>
+					<HasAnimation>0</HasAnimation>
+					<Value>0</Value>
+					<Default>1</Default>
+					<HasMaster>0</HasMaster>
+					<Expression></Expression>
+					<ExprHasRet>0</ExprHasRet>
+				</item>
+				<ChoiceLabel>Input Format</ChoiceLabel>
 				<UserKnob>0</UserKnob>
 			</item>
 			<item>
@@ -728,7 +733,7 @@
 				<item>
 					<Enabled>0</Enabled>
 					<HasAnimation>0</HasAnimation>
-					<Value>0001</Value>
+					<Value>Untitled_rle.mov</Value>
 					<Default></Default>
 					<HasMaster>0</HasMaster>
 					<Expression></Expression>
@@ -930,12 +935,12 @@
 			<Inputs_map>
 				<count>1</count>
 				<item_version>0</item_version>
-				<item>
+				<item class_id="8" tracking_level="0" version="0">
 					<first>Source</first>
-					<second>readFile</second>
+					<second>Read1</second>
 				</item>
 			</Inputs_map>
-			<KnobsAge>48</KnobsAge>
+			<KnobsAge>54</KnobsAge>
 			<MasterNode></MasterNode>
 			<HasRotoContext>0</HasRotoContext>
 			<HasTrackerContext>0</HasTrackerContext>
@@ -953,7 +958,7 @@
 			<CacheID>Write1</CacheID>
 		</item>
 	</NodesCollection>
-	<ProjectKnobsCount>4</ProjectKnobsCount>
+	<ProjectKnobsCount>3</ProjectKnobsCount>
 	<item>
 		<Name>projectPaths</Name>
 		<Type>Path</Type>
@@ -963,34 +968,8 @@
 		<item>
 			<Enabled>1</Enabled>
 			<HasAnimation>0</HasAnimation>
-			<Value>&lt;Name&gt;OCIO&lt;/Name&gt;&lt;Value&gt;/opt/Natron2.1.9/Resources/OpenColorIO-Configs/blender&lt;/Value&gt;&lt;Name&gt;Project&lt;/Name&gt;&lt;Value&gt;/home/shrinidhi/bin/gitHub/rbhus/tools/rbhus&lt;/Value&gt;</Value>
+			<Value>&lt;Name&gt;Project&lt;/Name&gt;&lt;Value&gt;/home/shrinidhi/bin/gitHub/rbhus/tools/rbhus&lt;/Value&gt;</Value>
 			<Default></Default>
-			<HasMaster>0</HasMaster>
-			<Expression></Expression>
-			<ExprHasRet>0</ExprHasRet>
-		</item>
-		<UserKnob>0</UserKnob>
-	</item>
-	<item>
-		<Name>frameRange</Name>
-		<Type>Int</Type>
-		<Dimension>2</Dimension>
-		<Secret>0</Secret>
-		<MasterIsAlias>0</MasterIsAlias>
-		<item>
-			<Enabled>1</Enabled>
-			<HasAnimation>0</HasAnimation>
-			<Value>1</Value>
-			<Default>1</Default>
-			<HasMaster>0</HasMaster>
-			<Expression></Expression>
-			<ExprHasRet>0</ExprHasRet>
-		</item>
-		<item>
-			<Enabled>1</Enabled>
-			<HasAnimation>0</HasAnimation>
-			<Value>268</Value>
-			<Default>250</Default>
 			<HasMaster>0</HasMaster>
 			<Expression></Expression>
 			<ExprHasRet>0</ExprHasRet>
@@ -1024,7 +1003,7 @@
 		<item>
 			<Enabled>0</Enabled>
 			<HasAnimation>0</HasAnimation>
-			<Value>Tue Jan 31 16:39:04 2017</Value>
+			<Value>Wed Feb 1 15:10:54 2017</Value>
 			<Default></Default>
 			<HasMaster>0</HasMaster>
 			<Expression></Expression>
@@ -1045,24 +1024,10 @@
 </Project>
 <ProjectGui class_id="10" tracking_level="0" version="11">
 	<NodesGui class_id="11" tracking_level="0" version="0">
-		<count>3</count>
+		<count>2</count>
 		<item_version>6</item_version>
 		<item class_id="12" tracking_level="0" version="6">
-			<Name>Viewer1</Name>
-			<X_position>1217.2120803738003</X_position>
-			<Y_position>370.60305868017349</Y_position>
-			<Preview_enabled>0</Preview_enabled>
-			<r>0.69999236</r>
-			<g>0.69999236</g>
-			<b>0.69999236</b>
-			<Selected>0</Selected>
-			<Width>95</Width>
-			<Height>28</Height>
-			<HasOverlayColor>0</HasOverlayColor>
-			<Children>0</Children>
-		</item>
-		<item>
-			<Name>readFile</Name>
+			<Name>Read1</Name>
 			<X_position>410.14588227758162</X_position>
 			<Y_position>136.76343435291005</Y_position>
 			<Preview_enabled>1</Preview_enabled>
@@ -1104,11 +1069,10 @@
 					<ChildIsSplitter>0</ChildIsSplitter>
 					<Child class_id="16" tracking_level="1" version="5" object_id="_2">
 						<Tabs class_id="17" tracking_level="0" version="0">
-							<count>1</count>
+							<count>0</count>
 							<item_version>0</item_version>
-							<item>Viewer1</item>
 						</Tabs>
-						<Index>0</Index>
+						<Index>-1</Index>
 						<Name>pane1</Name>
 						<IsAnchor>1</IsAnchor>
 					</Child>
@@ -1146,51 +1110,8 @@
 		</Window>
 	</Gui_Layout>
 	<ViewersData class_id="18" tracking_level="0" version="0">
-		<count>1</count>
+		<count>0</count>
 		<item_version>0</item_version>
-		<item class_id="19" tracking_level="0" version="0">
-			<first>Viewer1</first>
-			<second class_id="20" tracking_level="0" version="14">
-				<zoomLeft>-764.31561767453763</zoomLeft>
-				<zoomBottom>-102.09129430467613</zoomBottom>
-				<zoomFactor>0.36108943047695896</zoomFactor>
-				<UserRoIEnabled>0</UserRoIEnabled>
-				<UserRoI class_id="21" tracking_level="0" version="0">
-					<Left>640</Left>
-					<Bottom>360</Bottom>
-					<Right>1280</Right>
-					<Top>720</Top>
-				</UserRoI>
-				<ClippedToProject>0</ClippedToProject>
-				<AutoContrast>0</AutoContrast>
-				<Gain>1</Gain>
-				<Gain>1</Gain>
-				<ColorSpace>sRGB</ColorSpace>
-				<Layer>Color.RGB</Layer>
-				<AlphaLayer>-</AlphaLayer>
-				<Channels>RGB</Channels>
-				<RenderScaleActivated>0</RenderScaleActivated>
-				<MipMapLevel>0</MipMapLevel>
-				<ZoomOrPanSinceFit>1</ZoomOrPanSinceFit>
-				<CompositingOP>0</CompositingOP>
-				<LeftBound>1</LeftBound>
-				<RightBound>51</RightBound>
-				<LeftToolbarVisible>1</LeftToolbarVisible>
-				<RightToolbarVisible>1</RightToolbarVisible>
-				<TopToolbarVisible>1</TopToolbarVisible>
-				<PlayerVisible>1</PlayerVisible>
-				<TimelineVisible>1</TimelineVisible>
-				<InfobarVisible>1</InfobarVisible>
-				<isInputAPaused>0</isInputAPaused>
-				<isInputBPaused>0</isInputBPaused>
-				<CheckerboardEnabled>0</CheckerboardEnabled>
-				<Fps>24</Fps>
-				<FpsLocked>1</FpsLocked>
-				<aInput>0</aInput>
-				<bInput>0</bInput>
-				<fullFrame>0</fullFrame>
-			</second>
-		</item>
 	</ViewersData>
 	<Histograms>
 		<count>0</count>
@@ -1199,8 +1120,8 @@
 	<OpenedPanels>
 		<count>3</count>
 		<item_version>0</item_version>
+		<item>Read1</item>
 		<item>writeFile</item>
-		<item>readFile</item>
 		<item>Natron_Project_Settings_Panel</item>
 	</OpenedPanels>
 	<ScriptEditorInput></ScriptEditorInput>
