@@ -4,11 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" line="0" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/rbhus/resetNatronFrames.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/natron_exr_to_mov_rle.ntp" afterPath="$PROJECT_DIR$/tools/rbhus/natron_exr_to_mov_rle.ntp" />
+    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="fixing">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" afterPath="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,36 +39,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10206">
-              <caret line="578" column="28" lean-forward="false" selection-start-line="578" selection-start-column="28" selection-end-line="578" selection-end-column="28" />
-              <folding>
-                <marker date="1485446091533" expanded="true" signature="4826:4869" ph="select * fro... main" />
-                <marker date="1485446091533" expanded="true" signature="6227:6315" ph="select * fro... hostSystem" />
-                <marker date="1485446091533" expanded="true" signature="6538:6687" ph="update hostS... " />
-                <marker date="1485446091533" expanded="true" signature="6785:6888" ph="update hostS... " />
-                <marker date="1485446091533" expanded="true" signature="7016:7119" ph="update hostS... " />
-                <marker date="1485446091533" expanded="true" signature="7216:7362" ph="update hostS... " />
-                <marker date="1485446091533" expanded="true" signature="7414:7560" ph="update hostS... " />
-                <marker date="1485446091533" expanded="true" signature="7642:7788" ph="update hostS... " />
-                <marker date="1485446091533" expanded="true" signature="8428:8506" ph="UPDATE hostA... " />
-                <marker date="1485446091533" expanded="true" signature="16670:16768" ph="update frame... " />
-                <marker date="1485446091533" expanded="true" signature="39810:39888" ph="SELECT defSc... fileType" />
-                <marker date="1485446091533" expanded="true" signature="40660:40726" ph="SELECT * FRO... hostEffectiveResource" />
-                <marker date="1485446091533" expanded="true" signature="44693:44767" ph="select group... hostGroups" />
-                <marker date="1485446091533" expanded="true" signature="45174:45227" ph="select * fro... hostStates" />
-                <marker date="1485446091533" expanded="true" signature="46226:46275" ph="delete from " />
-                <marker date="1485446091533" expanded="true" signature="49046:49102" ph="insert into hostStates... " />
-                <marker date="1485446091533" expanded="true" signature="49250:49337" ph="insert into hostSystem... " />
-                <marker date="1485446091533" expanded="true" signature="49722:49970" ph="UPDATE hostR... " />
-                <marker date="1485446091533" expanded="true" signature="50193:50423" ph="UPDATE hostR... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="rbhusPipeReview.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -124,11 +92,19 @@
       <file leaf-file-name="convert_exr_mov_rle.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
+            <state relative-caret-position="594">
               <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-              <folding>
-                <element signature="e#133#143#0" expanded="true" />
-              </folding>
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="convert_exr_mp4.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="522">
+              <caret line="30" column="46" lean-forward="false" selection-start-line="30" selection-start-column="46" selection-end-line="30" selection-end-column="46" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -215,7 +191,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tests/zmq_client.py" />
         <option value="$PROJECT_DIR$/rbhus/dbTrayServer.py" />
         <option value="$PROJECT_DIR$/tests/blenderMoviePerSequenceStrip.py" />
         <option value="$PROJECT_DIR$/etc/mercurial/local/.hgignore" />
@@ -266,6 +241,7 @@
         <option value="$PROJECT_DIR$/rbhusDrone.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/resetNatronFrames.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" />
+        <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py" />
       </list>
     </option>
   </component>
@@ -523,15 +499,15 @@
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tests" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/tools/rbhus" />
       <recent name="$PROJECT_DIR$/etc" />
       <recent name="$PROJECT_DIR$/etc/convert_png_mp4" />
       <recent name="$PROJECT_DIR$/etc/convert_png_flv" />
       <recent name="$PROJECT_DIR$/rbhus" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests" />
     </key>
   </component>
   <component name="RunManager" selected="Python.rbhusPipeProjCreate">
@@ -878,13 +854,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00030" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1478710082718</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1478710082718</updated>
-    </task>
     <task id="LOCAL-00031" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1478710095638</created>
       <option name="number" value="00031" />
@@ -1221,7 +1190,14 @@
       <option name="project" value="LOCAL" />
       <updated>1485935549876</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="fixing">
+      <created>1485948827606</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1485948827606</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1325,13 +1301,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7704">
-          <caret line="435" column="58" lean-forward="false" selection-start-line="435" selection-start-column="58" selection-end-line="435" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -1662,14 +1631,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_png.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="31" column="32" lean-forward="false" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/etc/convert_png/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
@@ -1702,13 +1663,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_png.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="31" column="32" lean-forward="false" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="30" column="46" lean-forward="false" selection-start-line="30" selection-start-column="46" selection-end-line="30" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
+        <state relative-caret-position="594">
           <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding>
-            <element signature="e#133#143#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
