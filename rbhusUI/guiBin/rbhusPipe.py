@@ -542,12 +542,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
   def run_api(self,inputDict):
     inputs = simplejson.loads(inputDict)
     temp_project = inputs['project']
+    old_project = self.set_project
     temp_asset = inputs['asset']
     temp_run = inputs['run']
     if(temp_project != self.set_project):
       self.rbhusPipeSetProject_temp(temp_project)
     if(temp_run == constantsPipe.run_api_cmd_review):
       self.reviewAss(ass = temp_asset)
+    if (temp_project != self.set_project):
+      self.rbhusPipeSetProject_temp(old_project)
+
 
 
 
