@@ -5,18 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/convert_exr/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/convert_exr/default.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tools/rbhus/natron_exr_to_mov_png.ntp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tools/rbhus/natron_exr_to_mov_rle.ntp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tools/rbhus/natron_png_to_mov_png.ntp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tools/rbhus/natron_png_to_mov_rle.ntp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tools/rbhus/natron_png_to_mp4_mp4.ntp" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/convert_png/default.py" afterPath="$PROJECT_DIR$/etc/convert_png/default.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeSubmitRenderMod.py" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeSubmitRenderMod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeSubmitRenderMod.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeSubmitRenderMod.ui" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -904,13 +893,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00033" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1478711518375</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1478711518376</updated>
-    </task>
     <task id="LOCAL-00034" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1478711899291</created>
       <option name="number" value="00034" />
@@ -1247,7 +1229,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486004533955</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="fixing">
+      <created>1486614301995</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1486614302002</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TodoView">
