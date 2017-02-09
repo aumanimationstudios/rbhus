@@ -574,6 +574,15 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
                     print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
+
+                  if (self.checkExrMov.isChecked()):
+                    flvdict = copy.copy(submitDict)
+                    flvdict['afterTasks'] = str(b)
+                    flvdict['fileType'] = "convert_exr_mov"
+                    flvdict['fRange'] = "1"
+                    flv = a.submit(flvdict)
+                    print("Submiting EXR to MOV task : " + str(b) + " : " + str(submitDict))
+
                   print("Submiting task : "+ str(b) +" : "+ str(submitDict))
                 except:
                   print("Error inserting task : "+ str(sys.exc_info()))
@@ -600,6 +609,15 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
                     print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
+
+                  if (self.checkExrMov.isChecked()):
+                    flvdict = copy.copy(submitDict)
+                    flvdict['afterTasks'] = str(b)
+                    flvdict['fileType'] = "convert_exr_mov"
+                    flvdict['fRange'] = "1"
+                    flv = a.submit(flvdict)
+                    print("Submiting EXR to MOV task : " + str(b) + " : " + str(submitDict))
+
 
               except:
                 print("Error inserting task : "+ str(sys.exc_info()))
