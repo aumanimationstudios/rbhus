@@ -306,8 +306,6 @@ class hg(object):
 
 
   def _clone(self):
-    #if(not ((os.environ['rbhusPipe_acl_user'] in self.projDets['admins'].split(",")) or (os.environ['rbhusPipe_acl_admin'] == "1") or (os.environ['rbhusPipe_acl_user'] in self.assDets['createdUser'].split(",")) or (os.environ['rbhusPipe_acl_user'] in self.assDets['assignedWorker'].split(",")))):
-      #return(0)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose clone {0} {1}".format(self.absPipePath,"."),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
