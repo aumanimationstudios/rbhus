@@ -1031,18 +1031,27 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
       for colName in self.colNamesFramesXtra:
         if(colName == "timeTaken"):
+          import datetime
+          nowTemp = datetime.datetime.now()
+          now = datetime.datetime(nowTemp.year,nowTemp.month,nowTemp.day,nowTemp.hour,nowTemp.minute,nowTemp.second,0)
+
           item = QtGui.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
           tT = 0
           if(not row['sTime']):
             tT = 0
+
           if(not row['eTime']):
             row['eTime'] = 0
 
-          elif(not row['eTime'] and row['sTime'] and (row['status'] == constants.framesRunning)):
-            tT = 0
-          elif(row['sTime'] >= row['eTime']):
-            tT = 0
+          if(row['status'] == constants.framesRunning):
+
+            if(row['sTime']):
+
+              tT = now - row['sTime']
+            # elif(row['sTime'] >= row['eTime'] ):
+            #   import datetime
+            #   tT = datetime.datetime.now() - row['sTime']
           else:
             tT = row['eTime'] - row['sTime']
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(tT).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
