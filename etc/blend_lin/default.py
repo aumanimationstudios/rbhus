@@ -115,14 +115,17 @@ if(renderer != "default"):
   RENDERCMD = RENDERCMD +" -E "+ renderer
 RENDERCMD = RENDERCMD +" -t "+ rThreads
 defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False\nbpy.context.scene.render.use_overwrite = True\nbpy.context.scene.render.use_simplify = False\nbpy.context.scene.render.fps = 24\nbpy.context.scene.render.fps_base = 1\nbpy.context.scene.render.use_single_layer = False\nbpy.context.scene.render.use_stamp = False"
-if(imType.find("PNG") >=0):
-  defaultScripts = defaultScripts +"\nbpy.context.scene.color_depth = '16'"
+if((imType.find("PNG") >=0) or (imType.find("EXR") >=0)):
+  defaultScripts = defaultScripts +"\nbpy.context.scene.render.image_settings.color_depth = '16'"
+  if(imType == "EXR"):
+    defaultScripts = defaultScripts + "\nbpy.context.scene.render.image_settings.exr_codec = 'ZIPS'"
 if(imType == "PNG-RGB"):
-  defaultScripts = defaultScripts +"\nbpy.context.scene.color_mode = 'RGB'"
+  defaultScripts = defaultScripts +"\nbpy.context.scene.render.image_settings.color_mode = 'RGB'"
   imType = "PNG"
 elif(imType == "PNG-RGBA"):
-  defaultScripts = defaultScripts + "\nbpy.context.scene.color_mode = 'RGBA'"
+  defaultScripts = defaultScripts + "\nbpy.context.scene.render.image_settings.color_mode = 'RGBA'"
   imType = "PNG"
+
 
 if(renderer == "CYCLES"):
   defaultScripts = defaultScripts + "\nbpy.context.scene.cycles.device = 'CPU'"

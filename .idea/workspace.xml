@@ -4,11 +4,10 @@
     <bookmark url="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" line="0" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="fixing">
+    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/convert_exr/default.py" afterPath="$PROJECT_DIR$/etc/convert_exr/default.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/convert_png/default.py" afterPath="$PROJECT_DIR$/etc/convert_png/default.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/blend_lin/default.py" afterPath="$PROJECT_DIR$/etc/blend_lin/default.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,15 +21,15 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/rbhus$rbhusDrone.coverage" NAME="rbhusDrone Coverage Results" MODIFIED="1478236812600" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/rbhus$zmq_inproc.coverage" NAME="zmq_inproc Coverage Results" MODIFIED="1478166330023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/rbhus$rbhusPipeProjCreate.coverage" NAME="rbhusPipeProjCreate Coverage Results" MODIFIED="1481791136023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rbhusUI/guiBin" />
+    <SUITE FILE_PATH="coverage/rbhus$zmq_client.coverage" NAME="zmq_client Coverage Results" MODIFIED="1475669074883" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/rbhus$zmq_ipc_server.coverage" NAME="zmq_ipc_server Coverage Results" MODIFIED="1478260007387" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/rbhus$mysql_backup.coverage" NAME="mysql_backup Coverage Results" MODIFIED="1480819396404" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/system" />
-    <SUITE FILE_PATH="coverage/rbhus$rbhusPipeProjCreate.coverage" NAME="rbhusPipeProjCreate Coverage Results" MODIFIED="1481791136023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rbhusUI/guiBin" />
-    <SUITE FILE_PATH="coverage/rbhus$renderPlugin.coverage" NAME="renderPlugin Coverage Results" MODIFIED="1478252716549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rbhus" />
-    <SUITE FILE_PATH="coverage/rbhus$default.coverage" NAME="default Coverage Results" MODIFIED="1478067567330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/etc/blend_lin" />
-    <SUITE FILE_PATH="coverage/rbhus$utilsTray.coverage" NAME="utilsTray Coverage Results" MODIFIED="1475666666247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rbhus" />
-    <SUITE FILE_PATH="coverage/rbhus$zmq_client.coverage" NAME="zmq_client Coverage Results" MODIFIED="1475669074883" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/rbhus$zmq_inproc_client.coverage" NAME="zmq_inproc_client Coverage Results" MODIFIED="1478165118030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/rbhus$zmq_inproc.coverage" NAME="zmq_inproc Coverage Results" MODIFIED="1478166330023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/rbhus$renderPlugin.coverage" NAME="renderPlugin Coverage Results" MODIFIED="1478252716549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rbhus" />
+    <SUITE FILE_PATH="coverage/rbhus$utilsTray.coverage" NAME="utilsTray Coverage Results" MODIFIED="1475666666247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rbhus" />
+    <SUITE FILE_PATH="coverage/rbhus$default.coverage" NAME="default Coverage Results" MODIFIED="1487301796242" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/etc/blend_lin" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -41,26 +40,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="rbhusPipeReview.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3402">
-              <caret line="195" column="49" lean-forward="false" selection-start-line="195" selection-start-column="49" selection-end-line="195" selection-end-column="49" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7254">
-              <caret line="411" column="27" lean-forward="false" selection-start-line="411" selection-start-column="20" selection-end-line="411" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="functions.py" pinned="false" current-in-tab="false">
         <entry file="file:///blueprod/STOR1/proj/standard/share/blender-2.76b-linux-glibc211-x86_64/2.76/scripts/addons/asset_sketcher_1_0/functions.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -72,16 +51,6 @@
         </entry>
       </file>
       <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="622">
-              <caret line="40" column="87" lean-forward="false" selection-start-line="40" selection-start-column="87" selection-end-line="40" selection-end-column="87" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="default.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/etc/convert_png/default.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="720">
@@ -91,82 +60,81 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
+      <file leaf-file-name="rbhusList.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22968">
-              <caret line="1291" column="22" lean-forward="false" selection-start-line="1291" selection-start-column="22" selection-end-line="1291" selection-end-column="22" />
+            <state relative-caret-position="211">
+              <caret line="280" column="51" lean-forward="false" selection-start-line="280" selection-start-column="43" selection-end-line="280" selection-end-column="51" />
               <folding>
-                <marker date="1484901789605" expanded="true" signature="1759:1780" ph="SELECT * FRO... dirMaps" />
-                <marker date="1484901789605" expanded="true" signature="2007:2030" ph="SELECT tags assets" />
-                <marker date="1484901789605" expanded="true" signature="2492:2552" ph="SELECT * FRO... dirMaps" />
-                <marker date="1484901789605" expanded="true" signature="2851:2904" ph="SELECT * FRO... projTypes" />
-                <marker date="1484901789605" expanded="true" signature="3033:3070" ph="SELECT * FRO... projTypes" />
-                <marker date="1484901789605" expanded="true" signature="3329:3383" ph="SELECT * FRO... stageTypes" />
-                <marker date="1484901789605" expanded="true" signature="3512:3550" ph="SELECT * FRO... stageTypes" />
-                <marker date="1484901789605" expanded="true" signature="3846:3913" ph="SELECT * FRO... nodeTypes" />
-                <marker date="1484901789605" expanded="true" signature="4042:4079" ph="SELECT * FRO... nodeTypes" />
-                <marker date="1484901789605" expanded="true" signature="4337:4404" ph="SELECT * FRO... fileTypes" />
-                <marker date="1484901789605" expanded="true" signature="4533:4570" ph="SELECT * FRO... fileTypes" />
-                <marker date="1484901789605" expanded="true" signature="4861:4918" ph="SELECT * FRO... assetTypes" />
-                <marker date="1484901789605" expanded="true" signature="5093:5166" ph="SELECT * FRO... assetTypes" />
-                <marker date="1484901789605" expanded="true" signature="5229:5267" ph="SELECT * FRO... assetTypes" />
-                <marker date="1484901789605" expanded="true" signature="5563:5677" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1484901789605" expanded="true" signature="5758:5884" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1484901789605" expanded="true" signature="5943:6036" ph="SELECT * FRO... sequenceScenes" />
-                <marker date="1484901789605" expanded="true" signature="6573:6608" ph="select * fro... admins" />
-                <marker date="1484901789605" expanded="true" signature="11348:11494" ph="update proj " />
-                <marker date="1484901789605" expanded="true" signature="11715:11860" ph="update proj " />
-                <marker date="1484901789605" expanded="true" signature="11899:12042" ph="update proj " />
-                <marker date="1484901789605" expanded="true" signature="13049:13179" ph="select * fro... sequenceScenes" />
-                <marker date="1484901789605" expanded="true" signature="13862:13917" ph="select * fro... proj" />
-                <marker date="1484901789605" expanded="true" signature="14238:14305" ph="select * fro... proj" />
-                <marker date="1484901789605" expanded="true" signature="14500:14536" ph="select * fro... proj" />
-                <marker date="1484901789605" expanded="true" signature="15643:15751" ph="insert into sequenceScenes... " />
-                <marker date="1484901789605" expanded="true" signature="15830:15938" ph="insert into sequenceScenes... " />
-                <marker date="1484901789605" expanded="true" signature="18338:18391" ph="select * fro... assets" />
-                <marker date="1484901789605" expanded="true" signature="18694:18746" ph="select * fro... assets" />
-                <marker date="1484901789605" expanded="true" signature="20382:20515" ph="select * fro... assets" />
-                <marker date="1484901789605" expanded="true" signature="21157:21297" ph="select * fro... assets" />
-                <marker date="1484901789605" expanded="true" signature="22314:22459" ph="select * fro... assets" />
-                <marker date="1484901789605" expanded="true" signature="23101:23253" ph="select * fro... assets" />
-                <marker date="1484901789605" expanded="true" signature="24259:24404" ph="select * fro... assets" />
-                <marker date="1484901789605" expanded="true" signature="25046:25198" ph="select * fro... assets" />
-                <marker date="1484901789605" expanded="true" signature="25429:25460" ph="select * fro... users" />
-                <marker date="1484901789605" expanded="true" signature="25742:25807" ph="select admin... stageTypes" />
-                <marker date="1484901789605" expanded="true" signature="27837:27872" ph="insert into assets... " />
-                <marker date="1484901789605" expanded="true" signature="28864:28923" ph="select disti... assets" />
-                <marker date="1484901789605" expanded="true" signature="34504:34982" ph="insert into assetReviews... " />
-                <marker date="1484901789605" expanded="true" signature="35124:35281" ph="update asset... " />
-                <marker date="1484901789605" expanded="true" signature="36208:36288" ph="select * fro... assetReviews" />
-                <marker date="1484901789605" expanded="true" signature="36517:36614" ph="select * fro... assetReviews" />
-                <marker date="1484901789605" expanded="true" signature="42231:42338" ph="update asset... " />
-                <marker date="1484901789605" expanded="true" signature="43507:43571" ph="delete from " />
-                <marker date="1484901789605" expanded="true" signature="44081:44227" ph="update asset... " />
-                <marker date="1484901789605" expanded="true" signature="44597:44768" ph="update asset... " />
+                <marker date="1486967938034" expanded="true" signature="8412:8442" ph="select * fro... frames" />
+                <marker date="1486967938034" expanded="true" signature="17899:18016" ph="update frame... " />
+                <marker date="1486967938034" expanded="true" signature="18922:19033" ph="update frame... " />
+                <marker date="1486967938034" expanded="true" signature="40578:40639" ph="select ip fr... hostInfo" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="peep.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/peep.py">
+      <file leaf-file-name="rbhusPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/rbhusPipe.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="auth.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/auth.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <marker date="1483088239540" expanded="true" signature="3865:3897" ph="select * fro... proj" />
+                <marker date="1483088239540" expanded="true" signature="3981:4046" ph="select * fro... admins" />
+                <marker date="1483088239540" expanded="true" signature="4106:4174" ph="select * fro... adminsSys" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusPipeRenderSubmit.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py">
+      <file leaf-file-name="dbRbhus.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11016">
-              <caret line="619" column="0" lean-forward="false" selection-start-line="619" selection-start-column="0" selection-end-line="619" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="216">
+              <caret line="12" column="42" lean-forward="false" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+                <marker date="1477298195148" expanded="true" signature="7631:7687" ph="select frang... batch" />
+                <marker date="1477298195148" expanded="true" signature="8042:8134" ph="select batch... frames" />
+                <marker date="1477298195148" expanded="true" signature="8515:8562" ph="delete from " />
+                <marker date="1477298195148" expanded="true" signature="9544:9655" ph="UPDATE tasks... " />
+                <marker date="1477298195148" expanded="true" signature="9825:9908" ph="UPDATE tasks... " />
+                <marker date="1477298195148" expanded="true" signature="10330:10367" ph="SELECT * FRO... frames" />
+                <marker date="1477298195148" expanded="true" signature="10898:11092" ph="delete from " />
+                <marker date="1477298195148" expanded="true" signature="11133:11409" ph="delete from " />
+                <marker date="1477298195148" expanded="true" signature="11882:12069" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="12106:12375" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="12812:12899" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="12936:13106" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="13307:13341" ph="SELECT * FRO... proj" />
+                <marker date="1477298195148" expanded="true" signature="13573:13731" ph="SELECT tasks... tasks" />
+                <marker date="1477298195148" expanded="true" signature="18512:18595" ph="select count... frames" />
+                <marker date="1477298195148" expanded="true" signature="18835:19039" ph="UPDATE frame... " />
+                <marker date="1477298195148" expanded="true" signature="19670:19694" ph="SELECT * FRO... clientPref" />
+                <marker date="1477298195148" expanded="true" signature="20926:20948" ph="SELECT * FRO... hostInfomissing_value" />
+                <marker date="1477298195148" expanded="true" signature="21053:21089" ph="SELECT * FRO... hostInfo" />
+                <marker date="1477298195148" expanded="true" signature="21203:21239" ph="SELECT * FRO... hostInfo" />
+                <marker date="1477298195148" expanded="true" signature="21488:21569" ph="UPDATE hostA... " />
+                <marker date="1477298195148" expanded="true" signature="21712:22089" ph="UPDATE frame... " />
+                <marker date="1477298195148" expanded="true" signature="23696:23732" ph="select * fro... frames" />
+                <marker date="1477298195148" expanded="true" signature="23939:24346" ph="update tasks... " />
+                <marker date="1477298195148" expanded="true" signature="24513:24564" ph="UPDATE tasks... " />
+                <marker date="1477298195148" expanded="true" signature="24818:24852" ph="select statu... tasks" />
+                <marker date="1477298195148" expanded="true" signature="25083:25112" ph="select * fro... tasks" />
+                <marker date="1477298195148" expanded="true" signature="25781:25818" ph="SELECT * FRO... frames" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -174,18 +142,30 @@
       <file leaf-file-name="rbhusPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15696">
-              <caret line="881" column="6" lean-forward="false" selection-start-line="881" selection-start-column="6" selection-end-line="881" selection-end-column="6" />
+            <state relative-caret-position="301">
+              <caret line="980" column="15" lean-forward="false" selection-start-line="980" selection-start-column="15" selection-end-line="980" selection-end-column="15" />
+              <folding>
+                <marker date="1487241666266" expanded="true" signature="19200:19653" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="default.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="119" column="22" lean-forward="true" selection-start-line="119" selection-start-column="22" selection-end-line="119" selection-end-column="22" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
+      <file leaf-file-name="env.set" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/env.set">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5616">
-              <caret line="318" column="0" lean-forward="false" selection-start-line="318" selection-start-column="0" selection-end-line="318" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -202,13 +182,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>time</find>
       <find>list</find>
       <find>thread</find>
       <find>color</find>
       <find>delete</find>
       <find>stage</find>
-      <find>template</find>
       <find>users</find>
       <find>review</find>
       <find>getStageTypes</find>
@@ -222,6 +200,9 @@
       <find>_update</find>
       <find>distance</find>
       <find>b_version_bigger_than</find>
+      <find>time</find>
+      <find>template</find>
+      <find>reset</find>
     </findStrings>
     <replaceStrings>
       <replace>strip()</replace>
@@ -244,13 +225,12 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/etc/mercurial/local/.hgignore" />
         <option value="$PROJECT_DIR$/etc/convert_png_mp4/default.py" />
         <option value="$PROJECT_DIR$/etc/convert_png_flv/default.py" />
         <option value="$PROJECT_DIR$/rbhus/db.py" />
@@ -281,7 +261,6 @@
         <option value="$PROJECT_DIR$/tools/cloning/clone/makeClone.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsTray.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/__init__.py" />
-        <option value="$PROJECT_DIR$/etc/blend_lin/default.py" />
         <option value="$PROJECT_DIR$/rbhus/renderPlugin.py" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/init.real" />
         <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
@@ -295,12 +274,14 @@
         <option value="$PROJECT_DIR$/tools/rbhus/resetNatronFrames.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py" />
-        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
         <option value="$PROJECT_DIR$/rbhus/hgmod.py" />
         <option value="/blueprod/STOR1/proj/standard/share/blender-2.76b-linux-glibc211-x86_64/2.76/scripts/addons/asset_sketcher_1_0/functions.py" />
         <option value="$PROJECT_DIR$/etc/convert_png/default.py" />
         <option value="$PROJECT_DIR$/etc/convert_exr/default.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" />
+        <option value="$PROJECT_DIR$/etc/blend_lin/default.py" />
       </list>
     </option>
   </component>
@@ -312,7 +293,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1920" />
-    <option name="width" value="1664" />
+    <option name="width" value="1670" />
     <option name="height" value="1024" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -352,6 +333,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -528,24 +510,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="convert_exr" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rbhus" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rbhus" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="etc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="blend_lin" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -553,7 +517,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -587,25 +550,7 @@
       <recent name="$PROJECT_DIR$/etc/convert_png_mp4" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.rbhusPipeProjCreate">
-    <configuration default="false" name="rbhusDrone" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="rbhus" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rbhusDrone.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.default">
     <configuration default="false" name="renderPlugin" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -674,6 +619,24 @@
       <module name="rbhus" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeProjCreate.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="default" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/etc/blend_lin" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="rbhus" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/etc/blend_lin/default.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -893,19 +856,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.rbhusDrone" />
-      <item index="1" class="java.lang.String" itemvalue="Python.renderPlugin" />
-      <item index="2" class="java.lang.String" itemvalue="Python.zmq_ipc_server" />
-      <item index="3" class="java.lang.String" itemvalue="Python.mysql_backup" />
-      <item index="4" class="java.lang.String" itemvalue="Python.rbhusPipeProjCreate" />
+      <item index="0" class="java.lang.String" itemvalue="Python.renderPlugin" />
+      <item index="1" class="java.lang.String" itemvalue="Python.zmq_ipc_server" />
+      <item index="2" class="java.lang.String" itemvalue="Python.mysql_backup" />
+      <item index="3" class="java.lang.String" itemvalue="Python.rbhusPipeProjCreate" />
+      <item index="4" class="java.lang.String" itemvalue="Python.default" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.rbhusPipeProjCreate" />
-        <item index="1" class="java.lang.String" itemvalue="Python.mysql_backup" />
-        <item index="2" class="java.lang.String" itemvalue="Python.zmq_ipc_server" />
-        <item index="3" class="java.lang.String" itemvalue="Python.renderPlugin" />
-        <item index="4" class="java.lang.String" itemvalue="Python.rbhusDrone" />
+        <item index="0" class="java.lang.String" itemvalue="Python.default" />
+        <item index="1" class="java.lang.String" itemvalue="Python.rbhusPipeProjCreate" />
+        <item index="2" class="java.lang.String" itemvalue="Python.mysql_backup" />
+        <item index="3" class="java.lang.String" itemvalue="Python.zmq_ipc_server" />
+        <item index="4" class="java.lang.String" itemvalue="Python.renderPlugin" />
       </list>
     </recent_temporary>
   </component>
@@ -930,20 +893,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
-    </task>
-    <task id="LOCAL-00035" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1478711972269</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1478711972269</updated>
-    </task>
-    <task id="LOCAL-00036" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1478711990563</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1478711990563</updated>
     </task>
     <task id="LOCAL-00037" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1478712360128</created>
@@ -1274,7 +1223,21 @@
       <option name="project" value="LOCAL" />
       <updated>1486615947876</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="fixing">
+      <created>1486960609833</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1486960609834</updated>
+    </task>
+    <task id="LOCAL-00085" summary="fixing">
+      <created>1486972817016</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1486972817016</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1287,18 +1250,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1664" height="1024" extended-state="4" />
+    <frame x="1920" y="0" width="1670" height="1024" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29937887" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3069307" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281075" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17133258" sideWeight="0.5160296" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26651737" sideWeight="0.4960464" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2206047" sideWeight="0.49082008" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24412094" sideWeight="0.47676525" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17133258" sideWeight="0.4839704" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39977604" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1306,11 +1271,9 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Run Dashboard" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24412094" sideWeight="0.47676525" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33034715" sideWeight="0.4864365" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1373,46 +1336,18 @@
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
       <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/constants.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/dbRbhus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11826">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/dbHosts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1620">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/system/add_new_system.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="28" column="27" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="31" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_vse.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1296">
-          <caret line="76" column="42" lean-forward="false" selection-start-line="76" selection-start-column="42" selection-end-line="76" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/blenderMoviePerSequenceStrip.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1502,20 +1437,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18666">
-          <caret line="1044" column="18" lean-forward="false" selection-start-line="1044" selection-start-column="17" selection-end-line="1044" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3006">
-          <caret line="173" column="11" lean-forward="false" selection-start-line="173" selection-start-column="11" selection-end-line="173" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -1610,13 +1531,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/resetNatronFrames.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="23" lean-forward="false" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/resetNatronFrames.py" />
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_png_flv.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -1645,13 +1560,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="30" column="46" lean-forward="false" selection-start-line="30" selection-start-column="46" selection-end-line="30" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py" />
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_png.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="486">
@@ -1670,7 +1579,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="11016">
           <caret line="619" column="0" lean-forward="false" selection-start-line="619" selection-start-column="0" selection-end-line="619" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1678,14 +1586,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3402">
           <caret line="195" column="49" lean-forward="false" selection-start-line="195" selection-start-column="49" selection-end-line="195" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15696">
-          <caret line="881" column="6" lean-forward="false" selection-start-line="881" selection-start-column="6" selection-end-line="881" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -1758,8 +1658,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5616">
-          <caret line="318" column="0" lean-forward="false" selection-start-line="318" selection-start-column="0" selection-end-line="318" selection-end-column="0" />
+        <state relative-caret-position="5562">
+          <caret line="315" column="0" lean-forward="false" selection-start-line="315" selection-start-column="0" selection-end-line="315" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1780,18 +1680,116 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="622">
-          <caret line="40" column="87" lean-forward="false" selection-start-line="40" selection-start-column="87" selection-end-line="40" selection-end-column="87" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py" />
     <entry file="file://$PROJECT_DIR$/etc/convert_png/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="45" column="31" lean-forward="false" selection-start-line="45" selection-start-column="31" selection-end-line="45" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/env.set">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/rbhusPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/auth.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1483088239540" expanded="true" signature="3865:3897" ph="select * fro... proj" />
+            <marker date="1483088239540" expanded="true" signature="3981:4046" ph="select * fro... admins" />
+            <marker date="1483088239540" expanded="true" signature="4106:4174" ph="select * fro... adminsSys" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="12" column="42" lean-forward="false" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1477298195148" expanded="true" signature="7631:7687" ph="select frang... batch" />
+            <marker date="1477298195148" expanded="true" signature="8042:8134" ph="select batch... frames" />
+            <marker date="1477298195148" expanded="true" signature="8515:8562" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="9544:9655" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="9825:9908" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="10330:10367" ph="SELECT * FRO... frames" />
+            <marker date="1477298195148" expanded="true" signature="10898:11092" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="11133:11409" ph="delete from " />
+            <marker date="1477298195148" expanded="true" signature="11882:12069" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12106:12375" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12812:12899" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="12936:13106" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="13307:13341" ph="SELECT * FRO... proj" />
+            <marker date="1477298195148" expanded="true" signature="13573:13731" ph="SELECT tasks... tasks" />
+            <marker date="1477298195148" expanded="true" signature="18512:18595" ph="select count... frames" />
+            <marker date="1477298195148" expanded="true" signature="18835:19039" ph="UPDATE frame... " />
+            <marker date="1477298195148" expanded="true" signature="19670:19694" ph="SELECT * FRO... clientPref" />
+            <marker date="1477298195148" expanded="true" signature="20926:20948" ph="SELECT * FRO... hostInfomissing_value" />
+            <marker date="1477298195148" expanded="true" signature="21053:21089" ph="SELECT * FRO... hostInfo" />
+            <marker date="1477298195148" expanded="true" signature="21203:21239" ph="SELECT * FRO... hostInfo" />
+            <marker date="1477298195148" expanded="true" signature="21488:21569" ph="UPDATE hostA... " />
+            <marker date="1477298195148" expanded="true" signature="21712:22089" ph="UPDATE frame... " />
+            <marker date="1477298195148" expanded="true" signature="23696:23732" ph="select * fro... frames" />
+            <marker date="1477298195148" expanded="true" signature="23939:24346" ph="update tasks... " />
+            <marker date="1477298195148" expanded="true" signature="24513:24564" ph="UPDATE tasks... " />
+            <marker date="1477298195148" expanded="true" signature="24818:24852" ph="select statu... tasks" />
+            <marker date="1477298195148" expanded="true" signature="25083:25112" ph="select * fro... tasks" />
+            <marker date="1477298195148" expanded="true" signature="25781:25818" ph="SELECT * FRO... frames" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="280" column="51" lean-forward="false" selection-start-line="280" selection-start-column="43" selection-end-line="280" selection-end-column="51" />
+          <folding>
+            <marker date="1486967938034" expanded="true" signature="8412:8442" ph="select * fro... frames" />
+            <marker date="1486967938034" expanded="true" signature="17899:18016" ph="update frame... " />
+            <marker date="1486967938034" expanded="true" signature="18922:19033" ph="update frame... " />
+            <marker date="1486967938034" expanded="true" signature="40578:40639" ph="select ip fr... hostInfo" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="980" column="15" lean-forward="false" selection-start-line="980" selection-start-column="15" selection-end-line="980" selection-end-column="15" />
+          <folding>
+            <marker date="1487241666266" expanded="true" signature="19200:19653" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="973" column="0" lean-forward="false" selection-start-line="973" selection-start-column="0" selection-end-line="973" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="119" column="22" lean-forward="true" selection-start-line="119" selection-start-column="22" selection-end-line="119" selection-end-column="22" />
           <folding />
         </state>
       </provider>

@@ -974,14 +974,17 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def resetTemplateFiles(self,hard=False):
+    yn = False
     if(hard):
       yn = self.messageBoxTemplateHard()
-      if(yn):
-        selass = self.selectedAsses()
-        for x in range(0,len(selass)):
-          debug.info(selass[x])
-          assDets = utilsPipe.getAssDetails(assPath = selass[x])
-          utilsPipe.setAssTemplate(assDets,hard=hard)
+    else:
+      yn = True
+    if(yn):
+      selass = self.selectedAsses()
+      for x in range(0,len(selass)):
+        debug.info(selass[x])
+        assDets = utilsPipe.getAssDetails(assPath = selass[x])
+        utilsPipe.setAssTemplate(assDets,hard=hard)
 
 
   def resetAssToTemplateFiles(self,hard=False):
