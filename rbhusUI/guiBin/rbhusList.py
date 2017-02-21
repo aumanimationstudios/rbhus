@@ -127,7 +127,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.dockWidgetTasks.setTitleBarWidget(self.titleBarWidgetTasks)
     self.dockWidgetFrames.setTitleBarWidget(self.titleBarWidgetFrames)
     self.authL = auth.login()
-    self.colNamesTask = ["id","fileName","user","camera","resolution","outDir","outName","hostGroups","os","fileType","layer","renderer","fRange","pad","afterTasks","afterTaskSloppy","priority","submitTime","doneTime","afterTime","status","batch","description","fastAssign"]
+    self.colNamesTask = ["id","fileName","fRange","resolution","priority","fastAssign","user","outDir","hostGroups","afterTasks","submitTime","doneTime","afterTime","status"]
     self.colNamesFrames = ["id","frameId","hostName","ram","sTime","eTime","runCount","status","fThreads","efficiency"]
     self.colNamesFramesXtra = ["timeTaken"]
     self.colNamesTaskXtra = ["pending"]
@@ -786,7 +786,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       colIndx = 0
       for colName in self.colNamesTask:
         item = QtGui.QTableWidgetItem()
-        item.setToolTip(str(row['id']) +":"+ str(row['fileName']))
+        # item.setToolTip(str(row['fileName']))
         if(colName == "status"):
           self.tableList.setItem(indx, colIndx, item)
           self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
@@ -800,13 +800,19 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           colIndx = colIndx + 1
           continue
 
+        if (colName == "fileName"):
+          self.tableList.setItem(indx, colIndx, item)
+          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).split(os.sep)[-1], None, QtGui.QApplication.UnicodeUTF8))
+          colIndx = colIndx + 1
+          continue
 
         self.tableList.setItem(indx, colIndx, item)
         self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
+
       for colName in self.colNamesTaskXtra:
         item = QtGui.QTableWidgetItem()
-        item.setToolTip(str(row['id']) +":"+ str(row['fileName']))
+        # item.setToolTip(str(row['id']) +":"+ str(row['fileName']))
         if(colName == "pending"):
           self.tableList.setItem(indx, colIndx, item)
           totalPend = 0
@@ -1039,6 +1045,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           self.tableFrames.setItem(indx, colIndx, item)
           tT = 0
           if(not row['sTime']):
+            row['sTime'] = 0
             tT = 0
 
           if(not row['eTime']):
