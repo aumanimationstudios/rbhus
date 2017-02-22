@@ -625,12 +625,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       return(0)
 
     menu = QtGui.QMenu()
+    menuTools = QtGui.QMenu()
     menuProgress = QtGui.QMenu()
     menuCopy = QtGui.QMenu()
     menuTemplate = QtGui.QMenu()
     menuCopy.setTitle("copy to clipboard")
     menuProgress.setTitle("progress status")
     menuTemplate.setTitle("template tools")
+    menuTools.setTitle("tools")
 
 
     inProgressAction = menuProgress.addAction("set to inProgress")
@@ -644,25 +646,26 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     #openFileAction = menu.addAction("open file")
     openFolderAction = menu.addAction("open")
-    noAction1 = menu.addAction("-")
-    noAction2 = menu.addAction("-")
-    addToFavAction = menu.addAction("add to shortcuts")
+    # noAction1 = menu.addAction("-")
+    # noAction2 = menu.addAction("-")
+    addToFavAction = menuTools.addAction("add to shortcuts")
     #versionAction = menu.addAction("versioning")
-    assEditAction = menu.addAction("edit")
+    assEditAction = menuTools.addAction("edit")
 
-    assReviewAction = menu.addAction("check review")
+    assReviewAction = menuTools.addAction("check review")
 
-    menu.addMenu(menuCopy)
-    menu.addMenu(menuProgress)
-    menu.addMenu(menuTemplate)
+    menuTools.addMenu(menuCopy)
+    menuTools.addMenu(menuProgress)
+    menuTools.addMenu(menuTemplate)
     # assCopyNew = menu.addAction("copy/new")
     assGetTemplate = menuTemplate.addAction("reset from templates")
     assGetTemplateUpdate = menuTemplate.addAction("update to templates")
     hardAssGetTemplate = menuTemplate.addAction("hard reset from templates")
     #assCmdLine = menu.addAction("cmd line")
-    assRender = menu.addAction("submit to render")
-    assDeleteAction = menu.addAction("delete - database only")
+    assRender = menuTools.addAction("submit to render")
+    assDeleteAction = menuTools.addAction("delete - database only")
 
+    menu.addMenu(menuTools)
     #assDeleteActionHard = menu.addAction("delete - database and disk")
 
     action = menu.exec_(self.tableWidget.mapToGlobal(pos))
@@ -2055,16 +2058,16 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def rbhusPipeSetProject_temp(self,proj):
     utilsPipe.exportProj(proj)
-    self.form.setWindowTitle(proj)
-    self.actionSet_project.setText("set project (" + proj + ")")
-    self.updateAll()
-    self.loadSearch()
-    self.loadAssetShortcut()
-    try:
-      self.trayIcon.setToolTip(proj)
-    except:
-      debug.error(sys.exc_info())
-    self.set_project = proj
+    # self.form.setWindowTitle(proj)
+    # self.actionSet_project.setText("set project (" + proj + ")")
+    # self.updateAll()
+    # self.loadSearch()
+    # self.loadAssetShortcut()
+    # try:
+    #   self.trayIcon.setToolTip(proj)
+    # except:
+    #   debug.error(sys.exc_info())
+    # self.set_project = proj
 
 
 
