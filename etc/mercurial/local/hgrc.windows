@@ -1,5 +1,6 @@
 [extensions]
-largefiles = 
+largefiles =
+purge =
 
 [largefiles]
 minsize = 1

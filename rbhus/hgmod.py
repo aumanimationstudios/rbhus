@@ -329,6 +329,20 @@ class hg(object):
     else:
       debug.info(str(out))
 
+  def _purge(self):
+    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+      debug.warn("user not allowed")
+      return(0)
+    if(sys.platform.lower().find("linux") >= 0):
+      p = subprocess.Popen("hg --verbose purge",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    else:
+      p = subprocess.Popen(["hg","--verbose","purge"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.communicate()[0]
+    if (p.returncode != 0):
+      debug.error(str(out))
+    else:
+      debug.info(str(out))
+
   def _log(self):
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose log --template {rev}###{author}###{date}###{desc}@@@ --cwd "+ self.absPipePath,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
