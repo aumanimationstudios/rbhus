@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/mercurial/local/hgrc" afterPath="$PROJECT_DIR$/etc/mercurial/local/hgrc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/mercurial/local/hgrc.linux" afterPath="$PROJECT_DIR$/etc/mercurial/local/hgrc.linux" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/mercurial/local/hgrc.windows" afterPath="$PROJECT_DIR$/etc/mercurial/local/hgrc.windows" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1033,13 +1028,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00041" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1478713847026</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1478713847026</updated>
-    </task>
     <task id="LOCAL-00042" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1478716327974</created>
       <option name="number" value="00042" />
@@ -1376,7 +1364,14 @@
       <option name="project" value="LOCAL" />
       <updated>1487734693681</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="fixing">
+      <created>1487742565399</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1487742565399</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="TodoView">
