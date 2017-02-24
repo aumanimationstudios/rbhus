@@ -4,9 +4,8 @@
     <bookmark url="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" line="0" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
+    <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="fixing">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -104,8 +103,8 @@
       <file leaf-file-name="rbhusList.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="289" column="26" lean-forward="true" selection-start-line="289" selection-start-column="26" selection-end-line="289" selection-end-column="26" />
+            <state relative-caret-position="314">
+              <caret line="291" column="40" lean-forward="true" selection-start-line="291" selection-start-column="40" selection-end-line="291" selection-end-column="40" />
               <folding>
                 <marker date="1487842274551" expanded="true" signature="8312:8342" ph="select * fro... frames" />
                 <marker date="1487842274551" expanded="true" signature="17891:18008" ph="update frame... " />
@@ -986,13 +985,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00043" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1478716466250</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1478716466250</updated>
-    </task>
     <task id="LOCAL-00044" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1478716595842</created>
       <option name="number" value="00044" />
@@ -1329,7 +1321,14 @@
       <option name="project" value="LOCAL" />
       <updated>1487821469238</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="fixing">
+      <created>1487906337621</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1487906337622</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1890,8 +1889,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="289" column="26" lean-forward="true" selection-start-line="289" selection-start-column="26" selection-end-line="289" selection-end-column="26" />
+        <state relative-caret-position="314">
+          <caret line="291" column="40" lean-forward="true" selection-start-line="291" selection-start-column="40" selection-end-line="291" selection-end-column="40" />
           <folding>
             <marker date="1487842274551" expanded="true" signature="8312:8342" ph="select * fro... frames" />
             <marker date="1487842274551" expanded="true" signature="17891:18008" ph="update frame... " />
