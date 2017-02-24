@@ -285,12 +285,14 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
 
   def popupTask(self, pos):
+    mainMenu = QtGui.QMenu()
     menu = QtGui.QMenu()
+    menu.setTitle("tools")
     test1Action = menu.addAction("activate")
     test2Action = menu.addAction("hold")
     test3Action = menu.addAction("rerun")
     test4Action = menu.addAction("edit")
-    test5Action = menu.addAction("open dir")
+    test5Action = mainMenu.addAction("open dir")
     test10Action = menu.addAction("exr2png(linux)")
     test11Action = menu.addAction("png2flv(linux)")
     test12Action = menu.addAction("png2mp4(linux)")
@@ -299,7 +301,9 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test8Action = menu.addAction("fastAssign disable")
     test9Action = menu.addAction("delete")
 
-    action = menu.exec_(self.tableList.mapToGlobal(pos))
+    mainMenu.addMenu(menu)
+
+    action = mainMenu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
       self.activateTask()
     if(action == test2Action):
