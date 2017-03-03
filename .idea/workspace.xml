@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
     </list>
     <ignored path="rbhus.iws" />
@@ -44,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="223">
-              <caret line="404" column="88" lean-forward="false" selection-start-line="404" selection-start-column="88" selection-end-line="404" selection-end-column="88" />
+              <caret line="404" column="73" lean-forward="true" selection-start-line="404" selection-start-column="73" selection-end-line="404" selection-end-column="73" />
               <folding />
             </state>
           </provider>
@@ -964,13 +963,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00048" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1480503088809</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1480503088809</updated>
-    </task>
     <task id="LOCAL-00049" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1480658879696</created>
       <option name="number" value="00049" />
@@ -1307,7 +1299,14 @@
       <option name="project" value="LOCAL" />
       <updated>1488539327234</updated>
     </task>
-    <option name="localTasksCounter" value="97" />
+    <task id="LOCAL-00097" summary="fixing">
+      <created>1488541064349</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1488541064349</updated>
+    </task>
+    <option name="localTasksCounter" value="98" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1777,7 +1776,7 @@
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
-          <caret line="404" column="88" lean-forward="false" selection-start-line="404" selection-start-column="88" selection-end-line="404" selection-end-column="88" />
+          <caret line="404" column="73" lean-forward="true" selection-start-line="404" selection-start-column="73" selection-end-line="404" selection-end-column="73" />
           <folding />
         </state>
       </provider>
