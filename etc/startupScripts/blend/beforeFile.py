@@ -1,6 +1,8 @@
 import bpy
 import addon_utils
 bpy.context.user_preferences.filepaths.use_relative_paths= False
+if(str(bpy.app.version).find("(2, 78") < 0 ):
+  bpy.context.user_preferences.filepaths.use_load_ui = False
 bpy.context.user_preferences.filepaths.save_version=0
 bpy.context.user_preferences.system.use_scripts_auto_execute = True
 addon_utils.disable("ui_layer_manager")

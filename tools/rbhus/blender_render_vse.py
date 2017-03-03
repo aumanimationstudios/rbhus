@@ -52,7 +52,7 @@ if(batch_by <= (end_frame-start_frame)+1):
     tmp_bpy_file_fd.flush()
     tmp_bpy_file_fd.close()
 
-    blender_cmd = "blender -b "+ filename +" --python "+ tmp_bpy_file +" -s "+ str(s) +" -e "+ str(e) +" -a"
+    blender_cmd = "blender_beta -b "+ filename +" --python "+ tmp_bpy_file +" -s "+ str(s) +" -e "+ str(e) +" -a"
     print (blender_cmd)
     p = subprocess.Popen(blender_cmd,shell=True)
     p.wait()
