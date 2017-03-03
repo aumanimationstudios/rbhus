@@ -398,11 +398,26 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   
   def noData(self):
     sys.exit(0)
-  
+
+
+  def messageBoxWarn(self, hard=False):
+    msgbox = QtGui.QMessageBox()
+    msgbox.setText(unicode("NOT COMMITING ! \nAsset is not in your name!!!\nPLEASE CHECK"))
+    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger_128.png")))
+    #noBut = QtGui.QPushButton("cancel")
+    #yesBut = QtGui.QPushButton("yes")
+    noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
+    msgbox.setDefaultButton(noBut)
+    msgbox.exec_()
+
   def commit(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     self.convertPreview()
-    self.versionsHg._add()
+    perm = self.versionsHg._add()
+    debug.info("returned : "+ str(perm))
+    if(perm == 111):
+      self.messageBoxWarn()
+
     self.versionsHg._addremove()
     self.versionsHg._pull()
     self.versionsHg._merge()
