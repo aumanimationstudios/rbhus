@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py" afterPath="$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh" afterPath="$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/blender_render_vse.py" afterPath="$PROJECT_DIR$/tools/rbhus/blender_render_vse.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,7 +64,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="beforeFile.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="beforeFile.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="54">
@@ -126,11 +124,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5976">
-              <caret line="338" column="51" lean-forward="false" selection-start-line="338" selection-start-column="51" selection-end-line="338" selection-end-column="51" />
+            <state relative-caret-position="277">
+              <caret line="206" column="27" lean-forward="true" selection-start-line="206" selection-start-column="27" selection-end-line="206" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -185,6 +183,7 @@
       <find>commit</find>
       <find>ZMQ_SNDTIMEO</find>
       <find>SNDTIMEO</find>
+      <find>getcwd</find>
     </findStrings>
     <replaceStrings>
       <replace>strip()</replace>
@@ -262,11 +261,11 @@
         <option value="$PROJECT_DIR$/etc/mercurial/local/hgrc" />
         <option value="$PROJECT_DIR$/etc/mercurial/local/hgrc.linux" />
         <option value="$PROJECT_DIR$/etc/mercurial/local/hgrc.windows" />
-        <option value="$PROJECT_DIR$/rbhus/hgmod.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/blender_render_vse.py" />
         <option value="$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py" />
+        <option value="$PROJECT_DIR$/rbhus/hgmod.py" />
       </list>
     </option>
   </component>
@@ -961,13 +960,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00045" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1478716710613</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1478716710613</updated>
-    </task>
     <task id="LOCAL-00046" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1478717377882</created>
       <option name="number" value="00046" />
@@ -1304,7 +1296,14 @@
       <option name="project" value="LOCAL" />
       <updated>1487906349357</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="fixing">
+      <created>1488537565509</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1488537565510</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1725,14 +1724,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5976">
-          <caret line="338" column="51" lean-forward="false" selection-start-line="338" selection-start-column="51" selection-end-line="338" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7236">
@@ -1774,6 +1765,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="4" column="60" lean-forward="true" selection-start-line="4" selection-start-column="60" selection-end-line="4" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="206" column="27" lean-forward="true" selection-start-line="206" selection-start-column="27" selection-end-line="206" selection-end-column="27" />
           <folding />
         </state>
       </provider>
