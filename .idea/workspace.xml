@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c72a411e-b5ea-4be3-bf2b-2e692cf50cba" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/etc/icons/rbhus.svg" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
     </list>
     <ignored path="rbhus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,8 +41,8 @@
       <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="404" column="111" lean-forward="false" selection-start-line="404" selection-start-column="111" selection-end-line="404" selection-end-column="111" />
+            <state relative-caret-position="777">
+              <caret line="413" column="54" lean-forward="true" selection-start-line="413" selection-start-column="54" selection-end-line="413" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -972,13 +970,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00052" summary="added a script to render out HUGE movie files from HUGE blender vse files with a large number of video strips.">
-      <created>1481170552089</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1481170552090</updated>
-    </task>
     <task id="LOCAL-00053" summary="fixing">
       <created>1481283650788</created>
       <option name="number" value="00053" />
@@ -1315,7 +1306,14 @@
       <option name="project" value="LOCAL" />
       <updated>1488598086330</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="fixing">
+      <created>1488604026952</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1488604026952</updated>
+    </task>
+    <option name="localTasksCounter" value="102" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1780,8 +1778,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="404" column="111" lean-forward="false" selection-start-line="404" selection-start-column="111" selection-end-line="404" selection-end-column="111" />
+        <state relative-caret-position="777">
+          <caret line="413" column="54" lean-forward="true" selection-start-line="413" selection-start-column="54" selection-end-line="413" selection-end-column="54" />
           <folding />
         </state>
       </provider>
