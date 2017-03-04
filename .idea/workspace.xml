@@ -42,8 +42,8 @@
       <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="404" column="70" lean-forward="false" selection-start-line="404" selection-start-column="70" selection-end-line="404" selection-end-column="70" />
+            <state relative-caret-position="633">
+              <caret line="405" column="161" lean-forward="false" selection-start-line="405" selection-start-column="161" selection-end-line="405" selection-end-column="161" />
               <folding />
             </state>
           </provider>
@@ -80,7 +80,7 @@
         <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="54">
-              <caret line="4" column="60" lean-forward="true" selection-start-line="4" selection-start-column="60" selection-end-line="4" selection-end-column="60" />
+              <caret line="4" column="60" lean-forward="false" selection-start-line="4" selection-start-column="60" selection-end-line="4" selection-end-column="60" />
               <folding />
             </state>
           </provider>
@@ -100,7 +100,7 @@
         <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="450">
-              <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="39" />
+              <caret line="27" column="39" lean-forward="false" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -130,7 +130,7 @@
         <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-357">
-              <caret line="388" column="9" lean-forward="true" selection-start-line="388" selection-start-column="9" selection-end-line="388" selection-end-column="9" />
+              <caret line="388" column="9" lean-forward="false" selection-start-line="388" selection-start-column="9" selection-end-line="388" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -963,13 +963,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00050" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1480660149646</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1480660149647</updated>
-    </task>
     <task id="LOCAL-00051" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1480819926582</created>
       <option name="number" value="00051" />
@@ -1306,7 +1299,14 @@
       <option name="project" value="LOCAL" />
       <updated>1488541112394</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="fixing">
+      <created>1488593502299</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1488593502300</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1732,7 +1732,7 @@
     <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
-          <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="39" />
+          <caret line="27" column="39" lean-forward="false" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="39" />
           <folding />
         </state>
       </provider>
@@ -1740,7 +1740,7 @@
     <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
-          <caret line="4" column="60" lean-forward="true" selection-start-line="4" selection-start-column="60" selection-end-line="4" selection-end-column="60" />
+          <caret line="4" column="60" lean-forward="false" selection-start-line="4" selection-start-column="60" selection-end-line="4" selection-end-column="60" />
           <folding />
         </state>
       </provider>
@@ -1766,15 +1766,15 @@
     <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-357">
-          <caret line="388" column="9" lean-forward="true" selection-start-line="388" selection-start-column="9" selection-end-line="388" selection-end-column="9" />
+          <caret line="388" column="9" lean-forward="false" selection-start-line="388" selection-start-column="9" selection-end-line="388" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="404" column="70" lean-forward="false" selection-start-line="404" selection-start-column="70" selection-end-line="404" selection-end-column="70" />
+        <state relative-caret-position="633">
+          <caret line="405" column="161" lean-forward="false" selection-start-line="405" selection-start-column="161" selection-end-line="405" selection-end-column="161" />
           <folding />
         </state>
       </provider>

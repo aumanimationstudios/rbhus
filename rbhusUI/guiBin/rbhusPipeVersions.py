@@ -403,7 +403,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   def messageBoxWarn(self, hard=False):
     msgbox = QtGui.QMessageBox()
     msgbox.setText(unicode("NOT COMMITING !\nAsset not assigned to you!!!"))
-    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger_128.png")))
+    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
     noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
