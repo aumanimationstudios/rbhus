@@ -42,8 +42,8 @@
       <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="404" column="73" lean-forward="true" selection-start-line="404" selection-start-column="73" selection-end-line="404" selection-end-column="73" />
+            <state relative-caret-position="615">
+              <caret line="404" column="70" lean-forward="false" selection-start-line="404" selection-start-column="70" selection-end-line="404" selection-end-column="70" />
               <folding />
             </state>
           </provider>
@@ -52,8 +52,8 @@
       <file leaf-file-name="rbhusPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="1605" column="12" lean-forward="true" selection-start-line="1597" selection-start-column="2" selection-end-line="1614" selection-end-column="15" />
+            <state relative-caret-position="28728">
+              <caret line="1605" column="12" lean-forward="false" selection-start-line="1597" selection-start-column="2" selection-end-line="1614" selection-end-column="15" />
               <folding>
                 <marker date="1487734167518" expanded="true" signature="19200:19653" ph="..." />
               </folding>
@@ -99,7 +99,7 @@
       <file leaf-file-name="renderPlugin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
+            <state relative-caret-position="450">
               <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="39" />
               <folding />
             </state>
@@ -129,8 +129,8 @@
       <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="796">
-              <caret line="400" column="16" lean-forward="false" selection-start-line="400" selection-start-column="16" selection-end-line="400" selection-end-column="16" />
+            <state relative-caret-position="-357">
+              <caret line="388" column="9" lean-forward="true" selection-start-line="388" selection-start-column="9" selection-end-line="388" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -139,7 +139,7 @@
       <file leaf-file-name="rbhusPipeReview.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="827">
+            <state relative-caret-position="3402">
               <caret line="195" column="49" lean-forward="false" selection-start-line="195" selection-start-column="49" selection-end-line="195" selection-end-column="49" />
               <folding />
             </state>
@@ -185,8 +185,8 @@
       <find>ZMQ_SNDTIMEO</find>
       <find>SNDTIMEO</find>
       <find>msg</find>
-      <find>commit</find>
       <find>getcwd</find>
+      <find>commit</find>
     </findStrings>
     <replaceStrings>
       <replace>strip()</replace>
@@ -280,7 +280,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1920" />
-    <option name="width" value="1654" />
+    <option name="width" value="1652" />
     <option name="height" value="1024" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -582,8 +582,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -963,13 +963,6 @@
       <option name="presentableId" value="Default" />
       <updated>1386423307120</updated>
     </task>
-    <task id="LOCAL-00049" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
-      <created>1480658879696</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1480658879696</updated>
-    </task>
     <task id="LOCAL-00050" summary="integrating rbhusPipe and Render to allow for per asset blender versions">
       <created>1480660149646</created>
       <option name="number" value="00050" />
@@ -1306,7 +1299,14 @@
       <option name="project" value="LOCAL" />
       <updated>1488541064349</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="fixing">
+      <created>1488541112394</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1488541112394</updated>
+    </task>
+    <option name="localTasksCounter" value="99" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1319,14 +1319,13 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1654" height="1024" extended-state="4" />
+    <frame x="1920" y="0" width="1652" height="1024" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.345625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35043806" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281075" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17133258" sideWeight="0.5160296" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33034715" sideWeight="0.4864365" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26651737" sideWeight="0.4960464" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2206047" sideWeight="0.49082008" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1341,6 +1340,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24412094" sideWeight="0.47676525" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33034715" sideWeight="0.4864365" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39977604" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1682,7 +1682,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1690,7 +1689,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
           <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1733,7 +1731,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
+        <state relative-caret-position="450">
           <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="39" />
           <folding />
         </state>
@@ -1749,7 +1747,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="827">
+        <state relative-caret-position="3402">
           <caret line="195" column="49" lean-forward="false" selection-start-line="195" selection-start-column="49" selection-end-line="195" selection-end-column="49" />
           <folding />
         </state>
@@ -1757,8 +1755,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="1605" column="12" lean-forward="true" selection-start-line="1597" selection-start-column="2" selection-end-line="1614" selection-end-column="15" />
+        <state relative-caret-position="28728">
+          <caret line="1605" column="12" lean-forward="false" selection-start-line="1597" selection-start-column="2" selection-end-line="1614" selection-end-column="15" />
           <folding>
             <marker date="1487734167518" expanded="true" signature="19200:19653" ph="..." />
           </folding>
@@ -1767,16 +1765,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="796">
-          <caret line="400" column="16" lean-forward="false" selection-start-line="400" selection-start-column="16" selection-end-line="400" selection-end-column="16" />
+        <state relative-caret-position="-357">
+          <caret line="388" column="9" lean-forward="true" selection-start-line="388" selection-start-column="9" selection-end-line="388" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="404" column="73" lean-forward="true" selection-start-line="404" selection-start-column="73" selection-end-line="404" selection-end-column="73" />
+        <state relative-caret-position="615">
+          <caret line="404" column="70" lean-forward="false" selection-start-line="404" selection-start-column="70" selection-end-line="404" selection-end-column="70" />
           <folding />
         </state>
       </provider>
