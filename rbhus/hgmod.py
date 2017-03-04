@@ -365,16 +365,18 @@ class hg(object):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(0)
+
+    pubpath = os.path.join(self.absPipePath,"publish")
     if(not rev):
       rev = 0
     os.chdir(self.absPipePath)
-    if(os.path.exists("./publish/")):
+    if(os.path.exists(pubpath)):
       try:
-        shutil.rmtree("./publish/")
+        shutil.rmtree(pubpath)
       except:
         debug.warn(sys.exc_info())
     try:
-      os.makedirs(os.path.join(self.absPipePath,"publish"))
+      os.makedirs(pubpath)
     except:
       debug.warn(sys.exc_info())
     if(sys.platform.lower().find("linux") >= 0):

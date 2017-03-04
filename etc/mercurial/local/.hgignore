@@ -4,6 +4,6 @@ syntax: glob
 *.pyc
 *~
 .~*
-publish/*
+publish
 export_*
 review_*

@@ -9,11 +9,11 @@ addon_utils.disable("ui_layer_manager")
 addon_utils.enable("ui_layer_manager")
 if(str(bpy.app.version).find("(2, 78") < 0 ):
   bpy.context.user_preferences.filepaths.use_load_ui = False
-  addon_utils.disable("bone_selection_sets")
-  addon_utils.enable("bone_selection_sets")
-else:
   addon_utils.disable("bone_selection_groups")
   addon_utils.enable("bone_selection_groups")
+else:
+  addon_utils.disable("bone_selection_sets")
+  addon_utils.enable("bone_selection_sets")
 # addon_utils.disable("camera_add_title_safe")
 # addon_utils.enable("camera_add_title_safe")
 
