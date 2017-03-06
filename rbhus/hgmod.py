@@ -114,15 +114,15 @@ class hg(object):
     os.chdir(self.absPipePath)
     if(self.isMainInitialized()):
       debug.info("already initialized")
+      self._copyIgnore()
       self._add()
       self._commit()
       self._update()
-      self._copyIgnore()
     else:
+      self._copyIgnore()
       self._init()
       self._add()
       self._commit()
-      self._copyIgnore()
     debug.info("initialization done")
     return(True)
 
