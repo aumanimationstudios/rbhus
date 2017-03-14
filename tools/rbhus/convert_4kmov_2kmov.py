@@ -10,6 +10,9 @@ import glob
 
 path = sys.argv[1]
 movs = glob.glob(os.path.join(path,"*.mov"))
+
+path1080 =
+
 for x in movs:
   print(x)
 
