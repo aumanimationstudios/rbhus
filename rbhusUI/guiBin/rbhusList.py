@@ -119,7 +119,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.framesRefresh.setIcon(iconRefresh)
     self.checkRefresh.setIcon(iconTime)
     self.checkDateTask.setIcon(iconDate)
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
 
     self.taskThreads = []
