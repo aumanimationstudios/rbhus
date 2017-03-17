@@ -46,7 +46,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
   def setupUi(self, Form):
     rbhusPipeSubmitRenderMod.Ui_rbhusSubmit.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     self.assDets = utilsPipe.getAssDetails(assPath=args.assPath)
