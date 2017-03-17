@@ -246,8 +246,8 @@ class dbRbhusHost:
 
 class dbRbhus:
   """database querying class for rbhus"""
-  def __init__(self):
-    self.__conn = self._connRbhus()
+  # def __init__(self):
+  #   self.__conn = self._connRbhus()
 
   def __del__(self):
     self.__conn.close()
@@ -275,6 +275,7 @@ class dbRbhus:
   def execute(self,query,dictionary=False):
     while(1):
       try:
+        self.__conn = self._connRbhus()
         if(dictionary):
           cur = self.__conn.cursor(MySQLdb.cursors.DictCursor)
         else:
@@ -288,12 +289,22 @@ class dbRbhus:
             modLogger.error("fetching failed : "+ str(sys.exc_info()))
           
           cur.close()
+          try:
+            self._conn.close()
+          except:
+            pass
+
           if(rows):
             return(rows)
           else:
             return(0)
         else:
+
           cur.close()
+          try:
+            self._conn.close()
+          except:
+            pass
           return(1)
       except:
         modLogger.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
@@ -307,11 +318,15 @@ class dbRbhus:
             self._conn.close()
           except:
             pass
-          self.__conn = self._connRbhus()
           continue
         else:
           try:
             cur.close()
+          except:
+            pass
+
+          try:
+            self._conn.close()
           except:
             pass
           raise
