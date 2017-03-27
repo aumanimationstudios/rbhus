@@ -320,9 +320,9 @@ class hg(object):
       debug.warn("user not allowed")
       return(111)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg --verbose update",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose update --check",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","--verbose","update"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","update","--check"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
