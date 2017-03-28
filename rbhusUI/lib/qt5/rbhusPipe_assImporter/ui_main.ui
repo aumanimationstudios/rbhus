@@ -143,9 +143,9 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QComboBox" name="comboBoxAssetType">
+               <widget class="QComboBox" name="comboAssType">
                 <property name="editable">
-                 <bool>true</bool>
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -160,9 +160,6 @@
                <widget class="QComboBox" name="comboStage">
                 <property name="editable">
                  <bool>true</bool>
-                </property>
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::AdjustToContents</enum>
                 </property>
                 <property name="frame">
                  <bool>true</bool>
@@ -188,6 +185,11 @@
                 <property name="editable">
                  <bool>true</bool>
                 </property>
+                <item>
+                 <property name="text">
+                  <string>default</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item row="5" column="0">
@@ -195,6 +197,11 @@
                 <property name="editable">
                  <bool>true</bool>
                 </property>
+                <item>
+                 <property name="text">
+                  <string>default</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item row="8" column="1">

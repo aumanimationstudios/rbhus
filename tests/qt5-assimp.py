@@ -36,44 +36,49 @@ class updateAssQthread(QtCore.QThread):
   progressSignal = QtCore.pyqtSignal(int,int,int)
   totalAssets = QtCore.pyqtSignal(int)
 
-  def __init__(self,project,parent=None):
+  def __init__(self,project,whereDict,parent=None):
     super(updateAssQthread, self).__init__(parent)
     self.projSelected = project
     self.dbcon = rbhus.dbPipe.dbPipe()
+    self.whereDict = whereDict
 
   def __del__(self):
     self.dbcon.disconnect()
 
   def run(self):
-      if(self.projSelected):
-        print("started thread")
-        projWhere = []
-        projWhereString = " where "
-        for x in self.projSelected:
-          projWhere.append("projName = '" + x + "'")
-        projWhereString = "where " + " or ".join(projWhere)
-        print(projWhereString)
+    if(self.projSelected):
+      print("started thread")
+      projWhere = []
+      projWhereString = " where "
+      assesUnsorted = []
+      for x in self.projSelected:
+        assesForProj = rbhus.utilsPipe.getProjAsses(x,whereDict=self.whereDict)
+        if(assesForProj):
+          assesUnsorted.extend(assesForProj)
+      #   projWhere.append("projName = '" + x + "'")
+      # projWhereString = "where " + " or ".join(projWhere)
+      # print(projWhereString)
 
-        assesUnsorted = self.dbcon.execute("select * from assets " + projWhereString + " and status = " + str(rbhus.constantsPipe.assetStatusActive), dictionary=True)
 
-        if (assesUnsorted):
-          asses = sorted(assesUnsorted, key=lambda k: k['path'])
-          minLength = 0
-          maxLength = len(asses)
-          self.totalAssets.emit(maxLength)
-          current = 0
-          for x in asses:
-            current = current + 1
-            asset = rbhus.utilsPipe.assPathColorCoded(x)
-            textAssArr = []
-            for fc in asset.split(":"):
-              textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
-            richAss = " " + "<b><i> : </i></b>".join(textAssArr)
-            textAss = x['path']
-            self.assSignal.emit(textAss,richAss)
-            self.progressSignal.emit(minLength,maxLength,current)
-            time.sleep(0.01)
-            #
+      # assesUnsorted = self.dbcon.execute("select * from assets " + projWhereString + " and status = " + str(rbhus.constantsPipe.assetStatusActive), dictionary=True)
+
+      if (assesUnsorted):
+        asses = sorted(assesUnsorted, key=lambda k: k['path'])
+        minLength = 0
+        maxLength = len(asses)
+        self.totalAssets.emit(maxLength)
+        current = 0
+        for x in asses:
+          current = current + 1
+          asset = rbhus.utilsPipe.assPathColorCoded(x)
+          textAssArr = []
+          for fc in asset.split(":"):
+            textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
+          richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+          textAss = x['path']
+          self.assSignal.emit(textAss,richAss)
+          self.progressSignal.emit(minLength,maxLength,current)
+          time.sleep(0.01)
 
 
 
@@ -87,6 +92,21 @@ def updateAssets(mainUid):
   for x in items:
     project.append(str(x.text()))
   setSequence(mainUid)
+  whereDict = {}
+
+  if (mainUid.comboStage.currentText() != "default"):
+    whereDict['stageType'] = str(mainUid.comboStage.currentText())
+  if (mainUid.comboNode.currentText() != "default"):
+    whereDict['nodeType'] = str(mainUid.comboNode.currentText())
+  if (mainUid.comboSeq.currentText() != "default"):
+    whereDict['sequenceName'] = str(mainUid.comboSeq.currentText())
+  if (mainUid.comboScn.currentText() != "default"):
+    whereDict['sceneName'] = str(mainUid.comboScn.currentText())
+  if (mainUid.comboFile.currentText() != "default"):
+    whereDict['fileType'] = str(mainUid.comboFile.currentText())
+  if (mainUid.comboAssType.currentText() != "default"):
+    whereDict['assetType'] = str(mainUid.comboAssType.currentText())
+
   if(updateAssThreads):
     updateAssThreads.assSignal.disconnect()
     updateAssThreads.progressSignal.disconnect()
@@ -94,7 +114,7 @@ def updateAssets(mainUid):
     updateAssThreads.terminate()
     updateAssThreads.wait()
     del(updateAssThreads)
-  updateAssThreads = updateAssQthread(project = project,parent=mainUid)
+  updateAssThreads = updateAssQthread(project = project,whereDict=whereDict,parent=mainUid)
   updateAssThreads.start()
   updateAssThreads.assSignal.connect(lambda textAss,richAss, mainUid=mainUid: updateAssSlot(mainUid, textAss, richAss))
   updateAssThreads.progressSignal.connect(lambda minLength, maxLength , current, mainUid = mainUid: updateProgressBar(minLength,maxLength,current,mainUid))
@@ -121,6 +141,10 @@ def updateAssSlot(mainUid, textAss,richAss):
 
 def setSequence(mainUid):
   global project
+  try:
+    mainUid.comboSeq.view().clicked.disconnect()
+  except:
+    pass
   mainUid.comboSeq.clear()
   seq = {}
   indx =  0
@@ -145,7 +169,6 @@ def setSequence(mainUid):
     for row in sortedsc:
       item = QtGui.QStandardItem(row)
       item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-      #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
       item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
       model.setItem(indx,0,item)
       abrush = QtGui.QBrush()
@@ -192,6 +215,85 @@ def itemChangedSequence(modelIndex, mainUid):
   else:
     mainUid.comboSeq.setEditText("default")
 
+
+def setScene(mainUid):
+  global project
+  seqNames = str(mainUid.comboSeq.currentText()).split(",")
+  try:
+    mainUid.comboScn.view().clicked.disconnect()
+  except:
+    pass
+
+  mainUid.comboScn.clear()
+  scenes = {}
+  indx =  0
+  foundIndx = -1
+
+  for proj in project:
+    for x in seqNames:
+      rows = rbhus.utilsPipe.getSequenceScenes(proj,seq=x)
+      if(rows):
+        for x in rows:
+          scenes[x['sceneName']] = 1
+  if(scenes):
+    sortedsc = []
+    for s in scenes.keys():
+      if(s):
+        sortedsc.append(s)
+
+    sortedsc.sort()
+    model = QtGui.QStandardItemModel(len(scenes),1)
+    for x in sortedsc:
+      item = QtGui.QStandardItem(x)
+      item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+      #item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+      item.setData(QtCore.Qt.Unchecked, QtCore.Qt.CheckStateRole)
+      model.setItem(indx,0,item)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setAlpha(0)
+      abrush.setColor(color)
+      model.item(indx).setForeground(abrush)
+      indx = indx + 1
+    mainUid.comboScn.setModel(model)
+    mainUid.comboScn.setEditText("default")
+    mainUid.comboScn.view().clicked.connect(lambda modelIndex, mainUid=mainUid: itemChangedScenes(modelIndex, mainUid))
+    return(1)
+  return(0)
+
+
+def itemChangedScenes(modelIndex,mainUid):
+  item = mainUid.comboScn.model().itemFromIndex(modelIndex)
+  if(item.checkState() == QtCore.Qt.Checked):
+    item.setCheckState(QtCore.Qt.Unchecked)
+    abrush = QtGui.QBrush()
+    color = QtGui.QColor()
+    color.setAlpha(0)
+    abrush.setColor(color)
+    item.setForeground(abrush)
+  else:
+    item.setCheckState(QtCore.Qt.Checked)
+    abrush = QtGui.QBrush()
+    color = QtGui.QColor()
+    color.setGreen(10)
+    color.setBlue(125)
+    color.setRed(225)
+    abrush.setColor(color)
+    item.setForeground(abrush)
+
+
+
+  selectedStages = []
+
+  for i in range(0,mainUid.comboScn.model().rowCount()):
+    if(mainUid.comboScn.model().item(i).checkState() == QtCore.Qt.Checked):
+      selectedStages.append(str(mainUid.comboScn.model().item(i).text()))
+
+  #debug.info("EVENT CALLED : "+ str(index.row()))
+  if(selectedStages):
+    mainUid.comboScn.setEditText(",".join(selectedStages))
+  else:
+    mainUid.comboScn.setEditText("default")
 
 def setStageTypes(mainUid):
   rows = rbhus.utilsPipe.getStageTypes()
@@ -300,7 +402,7 @@ def itemChangedNodeType(modelIndex, mainUid):
 
   selectedStages = []
 
-  for i in range(0, mainUid.comboStage.model().rowCount()):
+  for i in range(0, mainUid.comboNode.model().rowCount()):
     if (mainUid.comboNode.model().item(i).checkState() == QtCore.Qt.Checked):
       selectedStages.append(str(mainUid.comboNode.model().item(i).text()))
 
@@ -371,7 +473,18 @@ def itemChangedFileType(modelIndex, mainUid):
   else:
     mainUid.comboFile.setEditText("default")
 
-
+def setAssTypes(mainUid):
+  rows = rbhus.utilsPipe.getAssTypes()
+  mainUid.comboAssType.clear()
+  indx = 0
+  foundIndx = -1
+  if(rows):
+    for row in rows:
+      mainUid.comboAssType.addItem(row['type'])
+      indx = indx + 1
+    mainUid.comboAssType.setEditText("default")
+    return(1)
+  return(0)
 
 
 def main():
@@ -400,6 +513,11 @@ def main():
   setStageTypes(mainUid)
   setNodeTypes(mainUid)
   setFileTypes(mainUid)
+  setAssTypes(mainUid)
+  mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: setScene(mainUid))
+  mainUid.comboStage.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssets(mainUid))
+  mainUid.comboNode.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssets(mainUid))
+  mainUid.comboFile.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssets(mainUid))
 
 
 
