@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>ASSET IMPORTER</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -59,7 +59,7 @@
             <bool>true</bool>
            </property>
            <property name="selectionMode">
-            <enum>QAbstractItemView::SingleSelection</enum>
+            <enum>QAbstractItemView::ExtendedSelection</enum>
            </property>
            <property name="movement">
             <enum>QListView::Free</enum>
@@ -145,7 +145,10 @@
               <item row="2" column="0">
                <widget class="QComboBox" name="comboAssType">
                 <property name="editable">
-                 <bool>false</bool>
+                 <bool>true</bool>
+                </property>
+                <property name="insertPolicy">
+                 <enum>QComboBox::InsertAlphabetically</enum>
                 </property>
                </widget>
               </item>
@@ -160,6 +163,9 @@
                <widget class="QComboBox" name="comboStage">
                 <property name="editable">
                  <bool>true</bool>
+                </property>
+                <property name="insertPolicy">
+                 <enum>QComboBox::InsertAlphabetically</enum>
                 </property>
                 <property name="frame">
                  <bool>true</bool>
@@ -185,11 +191,9 @@
                 <property name="editable">
                  <bool>true</bool>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>default</string>
-                 </property>
-                </item>
+                <property name="insertPolicy">
+                 <enum>QComboBox::InsertAlphabetically</enum>
+                </property>
                </widget>
               </item>
               <item row="5" column="0">
@@ -197,17 +201,18 @@
                 <property name="editable">
                  <bool>true</bool>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>default</string>
-                 </property>
-                </item>
+                <property name="insertPolicy">
+                 <enum>QComboBox::InsertAlphabetically</enum>
+                </property>
                </widget>
               </item>
               <item row="8" column="1">
                <widget class="QComboBox" name="comboNode">
                 <property name="editable">
                  <bool>true</bool>
+                </property>
+                <property name="insertPolicy">
+                 <enum>QComboBox::InsertAlphabetically</enum>
                 </property>
                </widget>
               </item>
@@ -230,12 +235,39 @@
                 <property name="editable">
                  <bool>true</bool>
                 </property>
+                <property name="insertPolicy">
+                 <enum>QComboBox::InsertAlphabetically</enum>
+                </property>
                </widget>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="label_7">
                 <property name="text">
                  <string>assetType</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushRefreshFilters">
+                <property name="text">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -312,12 +344,26 @@
              </property>
             </spacer>
            </item>
+           <item>
+            <widget class="QPushButton" name="pushRefresh">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
         </layout>
        </widget>
       </item>
      </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pushImport">
+      <property name="text">
+       <string>IMPORT TO PROJECT : </string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

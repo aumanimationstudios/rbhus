@@ -98,13 +98,16 @@ if(not rbhus_isRendering):
       bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mp4"
 
     try:
-      if(os.environ['rp_sequenceScenes_sFrame'] != os.environ['rp_sequenceScenes_eFrame']):
-        bpy.context.scene.frame_start = int(os.environ['rp_sequenceScenes_sFrame'])
-        bpy.context.scene.frame_end = int(os.environ['rp_sequenceScenes_eFrame'])
+      if (os.environ['rp_assets_fRange'] != "1"):
+        bpy.context.scene.frame_start = int(os.environ['rp_assets_fRange'].split("-")[0])
+        bpy.context.scene.frame_end = int(os.environ['rp_assets_fRange'].split("-")[1])
       else:
-        if(os.environ['rp_assets_fRange'] != "1"):
-          bpy.context.scene.frame_start = int(os.environ['rp_assets_fRange'].split("-")[0])
-          bpy.context.scene.frame_end = int(os.environ['rp_assets_fRange'].split("-")[1])
+        if (os.environ['rp_sequenceScenes_sFrame'] != os.environ['rp_sequenceScenes_eFrame']):
+          bpy.context.scene.frame_start = int(os.environ['rp_sequenceScenes_sFrame'])
+          bpy.context.scene.frame_end = int(os.environ['rp_sequenceScenes_eFrame'])
+        # if(os.environ['rp_assets_fRange'] != "1"):
+        #   bpy.context.scene.frame_start = int(os.environ['rp_assets_fRange'].split("-")[0])
+        #   bpy.context.scene.frame_end = int(os.environ['rp_assets_fRange'].split("-")[1])
     except:
       print(str(sys.exc_info()))
 

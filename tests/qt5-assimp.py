@@ -16,6 +16,8 @@ sys.path.append(base_dir)
 import rbhus.dbPipe
 import rbhus.constantsPipe
 import rbhus.utilsPipe
+import rbhus.debug
+import copy
 
 import time
 
@@ -28,7 +30,7 @@ ui_ass_icon = os.path.join(ui_dir,"ui_ass_icon.ui")
 
 
 
-updateAssThreads = None
+updateAssThreads = []
 
 
 class updateAssQthread(QtCore.QThread):
@@ -42,12 +44,13 @@ class updateAssQthread(QtCore.QThread):
     self.dbcon = rbhus.dbPipe.dbPipe()
     self.whereDict = whereDict
 
-  def __del__(self):
-    self.dbcon.disconnect()
+  # def __del__(self):
+  #
+  #   self.dbcon.disconnect()
 
   def run(self):
     if(self.projSelected):
-      print("started thread")
+      rbhus.debug.debug("started thread")
       projWhere = []
       projWhereString = " where "
       assesUnsorted = []
@@ -79,46 +82,69 @@ class updateAssQthread(QtCore.QThread):
           self.assSignal.emit(textAss,richAss)
           self.progressSignal.emit(minLength,maxLength,current)
           time.sleep(0.01)
+      else:
+        minLength = 0
+        maxLength = 1
+        current = 1
+        self.totalAssets.emit(0)
+        self.progressSignal.emit(minLength, maxLength, current)
+
+
 
 
 
 def updateAssets(mainUid):
-  global updateAssThreads
-  global project
+
+  updateProjSelect(mainUid)
+  setSequence(mainUid)
+  updateAssetsForProjSelect(mainUid)
+
+def pushRefresh(mainUid):
+  updateProjSelect(mainUid)
+  updateAssetsForProjSelect(mainUid)
+
+def updateProjSelect(mainUid):
+  global projects
   mainUid.listWidgetAssets.clear()
   items = mainUid.listWidgetProj.selectedItems()
 
-  project = []
+  projects = []
   for x in items:
-    project.append(str(x.text()))
-  setSequence(mainUid)
+    projects.append(str(x.text()))
+
+
+def updateAssetsForProjSelect(mainUid):
+  global updateAssThreads
+  global projects
+  mainUid.listWidgetAssets.clear()
   whereDict = {}
 
-  if (mainUid.comboStage.currentText() != "default"):
+  if (mainUid.comboStage.currentText() and mainUid.comboStage.currentText() != "default"):
     whereDict['stageType'] = str(mainUid.comboStage.currentText())
-  if (mainUid.comboNode.currentText() != "default"):
+  if (mainUid.comboNode.currentText() and mainUid.comboNode.currentText() != "default"):
     whereDict['nodeType'] = str(mainUid.comboNode.currentText())
-  if (mainUid.comboSeq.currentText() != "default"):
+  if (mainUid.comboSeq.currentText() and mainUid.comboSeq.currentText() != "default"):
     whereDict['sequenceName'] = str(mainUid.comboSeq.currentText())
-  if (mainUid.comboScn.currentText() != "default"):
+  if (mainUid.comboScn.currentText() and mainUid.comboScn.currentText() != "default"):
     whereDict['sceneName'] = str(mainUid.comboScn.currentText())
-  if (mainUid.comboFile.currentText() != "default"):
+  if (mainUid.comboFile.currentText() and mainUid.comboFile.currentText() != "default"):
     whereDict['fileType'] = str(mainUid.comboFile.currentText())
-  if (mainUid.comboAssType.currentText() != "default"):
+  if (mainUid.comboAssType.currentText() and mainUid.comboAssType.currentText() != "default"):
     whereDict['assetType'] = str(mainUid.comboAssType.currentText())
-
   if(updateAssThreads):
-    updateAssThreads.assSignal.disconnect()
-    updateAssThreads.progressSignal.disconnect()
-    updateAssThreads.totalAssets.disconnect()
-    updateAssThreads.terminate()
-    updateAssThreads.wait()
-    del(updateAssThreads)
-  updateAssThreads = updateAssQthread(project = project,whereDict=whereDict,parent=mainUid)
-  updateAssThreads.start()
-  updateAssThreads.assSignal.connect(lambda textAss,richAss, mainUid=mainUid: updateAssSlot(mainUid, textAss, richAss))
-  updateAssThreads.progressSignal.connect(lambda minLength, maxLength , current, mainUid = mainUid: updateProgressBar(minLength,maxLength,current,mainUid))
-  updateAssThreads.totalAssets.connect(lambda total: mainUid.labelTotal.setText(str(total)))
+    for runingThread in updateAssThreads:
+      if(runingThread.isRunning()):
+        runingThread.assSignal.disconnect()
+        runingThread.progressSignal.disconnect()
+        runingThread.totalAssets.disconnect()
+      updateAssThreads.remove(runingThread)
+
+  updateAssThread = updateAssQthread(project = projects,whereDict=whereDict,parent=mainUid)
+  updateAssThread.assSignal.connect(lambda textAss,richAss, mainUid=mainUid: updateAssSlot(mainUid, textAss, richAss))
+  updateAssThread.progressSignal.connect(lambda minLength, maxLength , current, mainUid = mainUid: updateProgressBar(minLength,maxLength,current,mainUid))
+  updateAssThread.totalAssets.connect(lambda total: mainUid.labelTotal.setText(str(total)))
+  updateAssThread.start()
+  updateAssThreads.append(updateAssThread)
 
 
 
@@ -140,23 +166,24 @@ def updateAssSlot(mainUid, textAss,richAss):
 
 
 def setSequence(mainUid):
-  global project
+  global projects
+  mainUid.comboSeq.clear()
+  mainUid.comboSeq.model().clear()
   try:
     mainUid.comboSeq.view().clicked.disconnect()
   except:
-    pass
-  mainUid.comboSeq.clear()
+    rbhus.debug.error(sys.exc_info())
   seq = {}
   indx =  0
   foundIndx = -1
 
-  for proj in project:
+  for proj in projects:
     rows = rbhus.utilsPipe.getSequenceScenes(proj)
     print(rows)
     if(rows):
       for row in rows:
         seq[row['sequenceName']] = 1
-
+  print(seq)
   model = QtGui.QStandardItemModel(len(seq),1)
 
   if(seq):
@@ -178,7 +205,7 @@ def setSequence(mainUid):
       model.item(indx).setForeground(abrush)
       indx = indx + 1
     mainUid.comboSeq.setModel(model)
-    mainUid.comboSeq.setEditText("default")
+    mainUid.comboSeq.lineEdit().clear()
     mainUid.comboSeq.view().clicked.connect(lambda modelIndex, mainUid=mainUid: itemChangedSequence(modelIndex, mainUid))
     return(1)
   return(0)
@@ -213,23 +240,44 @@ def itemChangedSequence(modelIndex, mainUid):
   if(selectedStages):
     mainUid.comboSeq.setEditText(",".join(selectedStages))
   else:
-    mainUid.comboSeq.setEditText("default")
+    mainUid.comboSeq.lineEdit().clear()
+
+def updateAssetsSeq(mainUid):
+  textSelected = unicode(mainUid.comboSeq.lineEdit().text()).split(",")
+  rbhus.debug.info(textSelected)
+  # rbhus.debug.info(mainUid.comboSeq.model())
+  # rbhus.debug.info(mainUid.comboSeq.model().rowCount())
+  #
+  # for i in range(0,mainUid.comboSeq.model().rowCount()):
+  #   # mainUid.comboSeq.model().item(i).setCheckState(QtCore.Qt.Unchecked)
+  #   rbhus.debug.info(mainUid.comboSeq.model().item(i).text())
+  #   # if(mainUid.comboSeq.model().item(i).checkState() == QtCore.Qt.Checked):
+  updateAssetsForProjSelect(mainUid)
 
 
 def setScene(mainUid):
-  global project
+  global projects
+  mainUid.comboScn.clear()
+  mainUid.comboScn.model().clear()
+  try:
+    mainUid.comboScn.view().clicked.disconnect()
+  except:
+    rbhus.debug.error(sys.exc_info())
+  if(not projects):
+    return
   seqNames = str(mainUid.comboSeq.currentText()).split(",")
+
   try:
     mainUid.comboScn.view().clicked.disconnect()
   except:
     pass
 
-  mainUid.comboScn.clear()
+  # mainUid.comboScn.clear()
   scenes = {}
   indx =  0
   foundIndx = -1
 
-  for proj in project:
+  for proj in projects:
     for x in seqNames:
       rows = rbhus.utilsPipe.getSequenceScenes(proj,seq=x)
       if(rows):
@@ -256,7 +304,7 @@ def setScene(mainUid):
       model.item(indx).setForeground(abrush)
       indx = indx + 1
     mainUid.comboScn.setModel(model)
-    mainUid.comboScn.setEditText("default")
+    mainUid.comboScn.lineEdit().clear()
     mainUid.comboScn.view().clicked.connect(lambda modelIndex, mainUid=mainUid: itemChangedScenes(modelIndex, mainUid))
     return(1)
   return(0)
@@ -293,12 +341,17 @@ def itemChangedScenes(modelIndex,mainUid):
   if(selectedStages):
     mainUid.comboScn.setEditText(",".join(selectedStages))
   else:
-    mainUid.comboScn.setEditText("default")
+    mainUid.comboScn.lineEdit().clear()
 
 def setStageTypes(mainUid):
   rows = rbhus.utilsPipe.getStageTypes()
   #defStage = utilsPipe.getDefaults("stageTypes")
   mainUid.comboStage.clear()
+  mainUid.comboStage.model().clear()
+  try:
+    mainUid.comboStage.view().clicked.disconnect()
+  except:
+    rbhus.debug.error(sys.exc_info())
   indx = 0
   model = QtGui.QStandardItemModel(len(rows),1)
   if(rows):
@@ -314,7 +367,7 @@ def setStageTypes(mainUid):
       model.item(indx).setForeground(abrush)
       indx = indx + 1
     mainUid.comboStage.setModel(model)
-    mainUid.comboStage.setEditText("default")
+    mainUid.comboStage.lineEdit().clear()
     mainUid.comboStage.view().clicked.connect(lambda modelIndex, mainUid=mainUid : itemChangedStageType(modelIndex, mainUid))
     return(1)
   return(0)
@@ -351,13 +404,18 @@ def itemChangedStageType(modelIndex, mainUid):
   if (selectedStages):
     mainUid.comboStage.setEditText(",".join(selectedStages))
   else:
-    mainUid.comboStage.setEditText("default")
+    mainUid.comboStage.lineEdit().clear()
 
 
 def setNodeTypes(mainUid):
   rows = rbhus.utilsPipe.getNodeTypes()
   #defStage = utilsPipe.getDefaults("stageTypes")
   mainUid.comboNode.clear()
+  mainUid.comboNode.model().clear()
+  try:
+    mainUid.comboNode.view().clicked.disconnect()
+  except:
+    rbhus.debug.error(sys.exc_info())
   indx = 0
   model = QtGui.QStandardItemModel(len(rows),1)
   if(rows):
@@ -373,7 +431,7 @@ def setNodeTypes(mainUid):
       model.item(indx).setForeground(abrush)
       indx = indx + 1
     mainUid.comboNode.setModel(model)
-    mainUid.comboNode.setEditText("default")
+    mainUid.comboNode.lineEdit().clear()
     mainUid.comboNode.view().clicked.connect(lambda modelIndex, mainUid=mainUid : itemChangedNodeType(modelIndex, mainUid))
     return(1)
   return(0)
@@ -410,7 +468,7 @@ def itemChangedNodeType(modelIndex, mainUid):
   if (selectedStages):
     mainUid.comboNode.setEditText(",".join(selectedStages))
   else:
-    mainUid.comboNode.setEditText("default")
+    mainUid.comboNode.lineEdit().clear()
 
 
 
@@ -418,6 +476,11 @@ def setFileTypes(mainUid):
   rows = rbhus.utilsPipe.getFileTypes()
   #defStage = utilsPipe.getDefaults("stageTypes")
   mainUid.comboFile.clear()
+  mainUid.comboFile.model().clear()
+  try:
+    mainUid.comboFile.view().clicked.disconnect()
+  except:
+    rbhus.debug.error(sys.exc_info())
   indx = 0
   model = QtGui.QStandardItemModel(len(rows),1)
   if(rows):
@@ -434,7 +497,7 @@ def setFileTypes(mainUid):
       indx = indx + 1
 
     mainUid.comboFile.setModel(model)
-    mainUid.comboFile.setEditText("default")
+    mainUid.comboFile.lineEdit().clear()
     mainUid.comboFile.view().clicked.connect(lambda modelIndex, mainUid=mainUid : itemChangedFileType(modelIndex, mainUid))
     return(1)
   return(0)
@@ -471,29 +534,55 @@ def itemChangedFileType(modelIndex, mainUid):
   if (selectedStages):
     mainUid.comboFile.setEditText(",".join(selectedStages))
   else:
-    mainUid.comboFile.setEditText("default")
+    mainUid.comboFile.lineEdit().clear()
 
 def setAssTypes(mainUid):
   rows = rbhus.utilsPipe.getAssTypes()
   mainUid.comboAssType.clear()
+  mainUid.comboAssType.model().clear()
+  try:
+    mainUid.comboAssType.view().clicked.disconnect()
+  except:
+    rbhus.debug.error(sys.exc_info())
   indx = 0
   foundIndx = -1
   if(rows):
     for row in rows:
       mainUid.comboAssType.addItem(row['type'])
       indx = indx + 1
-    mainUid.comboAssType.setEditText("default")
+    mainUid.comboAssType.lineEdit().clear()
     return(1)
   return(0)
 
 
-def main():
+def refreshFilter(mainUid):
+  setStageTypes(mainUid)
+  setNodeTypes(mainUid)
+  setFileTypes(mainUid)
+  setAssTypes(mainUid)
+  setSequence(mainUid)
+  setScene(mainUid)
 
-  # projects = dbcon.execute("select projName from proj where projName like '%pipe%'",dictionary=True)
-  dbcon = rbhus.dbPipe.dbPipe()
-  projects = dbcon.execute("select projName from proj",dictionary=True)
+
+def main():
   mainUid = uic.loadUi(ui_main)
   mainUid.listWidgetProj.clear()
+
+  iconRefresh = QtGui.QIcon()
+  iconRefresh.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+  mainUid.pushRefresh.setIcon(iconRefresh)
+  mainUid.pushRefreshFilters.setIcon(iconRefresh)
+
+  dbcon = rbhus.dbPipe.dbPipe()
+  projects = dbcon.execute("select projName from proj",dictionary=True)
+
+
+  icon = QtGui.QIcon()
+  icon.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+  mainUid.setWindowIcon(icon)
+
+
+
   maxlen = 0
   for x in projects:
     item = QtWidgets.QListWidgetItem()
@@ -514,10 +603,28 @@ def main():
   setNodeTypes(mainUid)
   setFileTypes(mainUid)
   setAssTypes(mainUid)
+  mainUid.comboSeq.lineEdit().setClearButtonEnabled(True)
+  mainUid.comboSeq.lineEdit().setPlaceholderText("default")
+  mainUid.comboScn.lineEdit().setClearButtonEnabled(True)
+  mainUid.comboScn.lineEdit().setPlaceholderText("default")
+  mainUid.comboStage.lineEdit().setClearButtonEnabled(True)
+  mainUid.comboStage.lineEdit().setPlaceholderText("default")
+  mainUid.comboNode.lineEdit().setClearButtonEnabled(True)
+  mainUid.comboNode.lineEdit().setPlaceholderText("default")
+  mainUid.comboFile.lineEdit().setClearButtonEnabled(True)
+  mainUid.comboFile.lineEdit().setPlaceholderText("default")
+  mainUid.comboAssType.lineEdit().setClearButtonEnabled(True)
+  mainUid.comboAssType.lineEdit().setPlaceholderText("default")
+
   mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: setScene(mainUid))
-  mainUid.comboStage.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssets(mainUid))
-  mainUid.comboNode.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssets(mainUid))
-  mainUid.comboFile.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssets(mainUid))
+  mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsSeq(mainUid))
+  mainUid.comboStage.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  mainUid.comboNode.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  mainUid.comboFile.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  mainUid.comboScn.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  mainUid.comboAssType.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  mainUid.pushRefresh.clicked.connect(lambda clicked,mainUid = mainUid: pushRefresh(mainUid))
+  mainUid.pushRefreshFilters.clicked.connect(lambda clicked, mainUid=mainUid: refreshFilter(mainUid))
 
 
 
