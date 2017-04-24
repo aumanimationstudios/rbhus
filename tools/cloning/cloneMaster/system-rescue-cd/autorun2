@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+rsync -avHAX /mnt/gentooOnesis/ /mnt/realroot/
+
+exit 0
