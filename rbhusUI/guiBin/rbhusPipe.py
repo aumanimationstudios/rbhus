@@ -28,6 +28,8 @@ vc = "rbhusPipeVersions.py"
 rS = "rbhusPipeRenderSubmit.py"
 rR = "rbhusPipeReview.py"
 
+assImporter = "rbhusAssetImport.py"
+
 
 selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
 #selectCheckBoxCmd = selectCheckBoxCmd.replace("\\","/")
@@ -40,6 +42,7 @@ fileSelectCmd = dirSelf.rstrip(os.sep) + os.sep + fileSelect
 versionCmd = dirSelf.rstrip(os.sep) + os.sep + vc
 rbhusPipeRenderSubmitCmd = dirSelf.rstrip(os.sep) + os.sep + rS
 rbhusPipeReviewCmd = dirSelf.rstrip(os.sep) + os.sep + rR
+rbhusPipeAssetImportCmd = dirSelf.rstrip(os.sep) + os.sep + assImporter
 
 
 
@@ -309,7 +312,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     self.form.setWindowIcon(icon)
-
+    self.checkLinkedProjects.hide()
+    self.comboLinked.hide()
+    self.pushResetLinked.hide()
 
 
     self.menuMine = QtGui.QMenu()
@@ -409,6 +414,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.filterRefresh.clicked.connect(self.resetFilterDefault)
     self.assRefresh.clicked.connect(self.assRefreshPressed)
     self.previewEnabled.clicked.connect(self.previewCheck)
+
+    self.pushAssImport.clicked.connect(self.rbhusAssImport)
 
 
 
@@ -553,6 +560,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       self.rbhusPipeSetProject_temp(old_project)
 
 
+  def rbhusAssImport(self):
+    global rbhusPipeAssetImportCmd
+    p = QtCore.QProcess(parent=self.form)
+    p.setStandardOutputFile(tempDir + os.sep + "rbhusPipeAssetImport_" + self.username + ".log")
+    p.setStandardErrorFile(tempDir + os.sep + "rbhusPipeAssetImport_" + self.username + ".err")
+    self.pushAssImport.setEnabled(False)
+    rbhusPipeAssetImportCmdExe = rbhusPipeAssetImportCmd +" "+ os.environ['rp_proj_projName']
+    p.start(sys.executable, rbhusPipeAssetImportCmdExe.split())
+    p.finished.connect(self.rbhusPipeAssImportEnable)
 
 
 
@@ -2359,6 +2375,9 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def rbhusPipeAssCreateEnable(self,exitStatus):
     self.pushNewAsset.setEnabled(True)
+
+  def rbhusPipeAssImportEnable(self,exitStatus):
+    self.pushAssImport.setEnabled(True)
 
   def rbhusPipeSeqSceCreateEnable(self,exitStatus):
     self.actionNew_seq_scn.setEnabled(True)

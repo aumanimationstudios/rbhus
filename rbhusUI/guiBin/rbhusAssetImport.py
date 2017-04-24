@@ -8,7 +8,7 @@ import sys
 import os
 
 file_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1])
-base_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2])
+base_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3])
 ui_dir = os.path.join(base_dir,"rbhusUI","lib","qt5","rbhusPipe_assImporter")
 rbhus_lib_dir = os.path.join(base_dir,"rbhus")
 
@@ -24,14 +24,64 @@ from PyQt5 import QtWidgets, QtGui, QtCore, uic
 
 projects = []
 projectToImportTo = sys.argv[1]
+origWhereDict = {}
+origWhereDict['assignedWorker'] = os.environ['rbhusPipe_acl_user']
+
+originalAssets = rbhus.utilsPipe.getProjAsses(projectToImportTo,whereDict=origWhereDict)
+originalAssetsColord = []
+for x in originalAssets:
+  originalAssetsColord.append(x['path'])
+  # asset = rbhus.utilsPipe.assPathColorCoded(x)
+  # textAssArr = []
+  # for fc in asset.split(":"):
+  #   textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
+  # richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+  # originalAssetsColord.append(richAss)
+originalAssetsColord.sort()
+originalAssetsColord.insert(0,"default")
+
+
 
 
 ui_main = os.path.join(ui_dir,"ui_main.ui")
-ui_ass_icon = os.path.join(ui_dir,"ui_ass_icon.ui")
-
+ui_ass_for_import = os.path.join(ui_dir,"ui_ass_for_import.ui")
+ui_progress_list = os.path.join(ui_dir,"progress_list.ui")
+ui_progress_list_dict = {}
 
 
 updateAssThreads = []
+
+
+class importAssQthread(QtCore.QThread):
+  impStarted = QtCore.pyqtSignal()
+  impFinished = QtCore.pyqtSignal()
+  impAssetStart = QtCore.pyqtSignal(str,str,bool)
+  impAssetResult = QtCore.pyqtSignal(str,bool,str)
+
+  def __init__(self,projectToImportTo,assetList,parent=None):
+    super(importAssQthread, self).__init__(parent)
+    self.assets = assetList
+    self.project = projectToImportTo
+
+  def run(self):
+    if (self.assets):
+      self.impStarted.emit()
+      for impAsset in self.assets:
+        self.impAssetStart.emit(str(impAsset['assetPath']),str(impAsset['assetPathColor']),impAsset['getVersions'])
+        returnStatus = rbhus.utilsPipe.importAssets(toProject=self.project, assetPath=impAsset['assetPath'], toAssetPath=impAsset['toAssetPath'], getVersions=impAsset['getVersions'],force=impAsset['force'])
+
+        time.sleep(0.5)
+        if(returnStatus == 1):
+          self.impAssetResult.emit(str(impAsset['assetPath']),True,"done")
+        elif (returnStatus == 3):
+          self.impAssetResult.emit(str(impAsset['assetPath']), False, "no permission")
+        elif (returnStatus == 4):
+          self.impAssetResult.emit(str(impAsset['assetPath']), False, "asset exists. use force")
+        else:
+          self.impAssetResult.emit(str(impAsset['assetPath']), False, "fail")
+      self.impFinished.emit()
+
+
 
 
 class updateAssQthread(QtCore.QThread):
@@ -132,6 +182,18 @@ def updateAssetsForProjSelect(mainUid):
     whereDict['fileType'] = str(mainUid.comboFile.currentText())
   if (mainUid.comboAssType.currentText() and mainUid.comboAssType.currentText() != "default"):
     whereDict['assetType'] = str(mainUid.comboAssType.currentText())
+  if(mainUid.checkTag.isChecked()):
+    if(str(mainUid.lineEditSearch.text())):
+      whereDict['tags'] = str(mainUid.lineEditSearch.text())
+  if (mainUid.checkAssName.isChecked()):
+    if(str(mainUid.lineEditSearch.text())):
+      whereDict['assName'] = str(mainUid.lineEditSearch.text())
+  if (mainUid.checkAssPath.isChecked()):
+    if(str(mainUid.lineEditSearch.text())):
+      whereDict['path'] = str(mainUid.lineEditSearch.text())
+
+  rbhus.debug.info(whereDict)
+
   if(updateAssThreads):
     for runingThread in updateAssThreads:
       if(runingThread.isRunning()):
@@ -161,6 +223,7 @@ def updateAssSlot(mainUid, textAss,richAss):
   label.setTextFormat(QtCore.Qt.RichText)
   label.setText(richAss)
   item.assetPath = textAss
+  item.assetPathColor = richAss
   mainUid.listWidgetAssets.addItem(item)
   mainUid.listWidgetAssets.setItemWidget(item, label)
 
@@ -180,11 +243,11 @@ def setSequence(mainUid):
 
   for proj in projects:
     rows = rbhus.utilsPipe.getSequenceScenes(proj)
-    print(rows)
+    # print(rows)
     if(rows):
       for row in rows:
         seq[row['sequenceName']] = 1
-  print(seq)
+  # print(seq)
   model = QtGui.QStandardItemModel(len(seq),1)
 
   if(seq):
@@ -237,7 +300,6 @@ def itemChangedSequence(modelIndex, mainUid):
     if(mainUid.comboSeq.model().item(i).checkState() == QtCore.Qt.Checked):
       selectedStages.append(str(mainUid.comboSeq.model().item(i).text()))
 
-  #debug.info("EVENT CALLED : "+ str(index.row()))
   if(selectedStages):
     mainUid.comboSeq.setEditText(",".join(selectedStages))
   else:
@@ -246,13 +308,6 @@ def itemChangedSequence(modelIndex, mainUid):
 def updateAssetsSeq(mainUid):
   textSelected = unicode(mainUid.comboSeq.lineEdit().text()).split(",")
   rbhus.debug.info(textSelected)
-  # rbhus.debug.info(mainUid.comboSeq.model())
-  # rbhus.debug.info(mainUid.comboSeq.model().rowCount())
-  #
-  # for i in range(0,mainUid.comboSeq.model().rowCount()):
-  #   # mainUid.comboSeq.model().item(i).setCheckState(QtCore.Qt.Unchecked)
-  #   rbhus.debug.info(mainUid.comboSeq.model().item(i).text())
-  #   # if(mainUid.comboSeq.model().item(i).checkState() == QtCore.Qt.Checked):
   updateAssetsForProjSelect(mainUid)
 
 
@@ -268,10 +323,7 @@ def setScene(mainUid):
     return
   seqNames = str(mainUid.comboSeq.currentText()).split(",")
 
-  try:
-    mainUid.comboScn.view().clicked.disconnect()
-  except:
-    pass
+
 
   # mainUid.comboScn.clear()
   scenes = {}
@@ -564,6 +616,68 @@ def refreshFilter(mainUid):
   setSequence(mainUid)
   setScene(mainUid)
 
+def impProgressStart(mainUid):
+  mainUid.pushImport.setEnabled(False)
+  mainUid.progressLeft.setMinimum(0)
+  mainUid.progressLeft.setMaximum(0)
+  mainUid.progressLeft.setValue(0)
+
+  mainUid.progressRight.setMinimum(0)
+  mainUid.progressRight.setMaximum(0)
+  mainUid.progressRight.setValue(0)
+
+
+def impProgressEnd(mainUid):
+  mainUid.pushImport.setEnabled(True)
+  mainUid.progressLeft.setMinimum(0)
+  mainUid.progressLeft.setMaximum(1)
+  mainUid.progressLeft.setValue(0)
+
+  mainUid.progressRight.setMinimum(0)
+  mainUid.progressRight.setMaximum(1)
+  mainUid.progressRight.setValue(0)
+
+
+
+
+
+def importAssetsWithImportWidget(mainUid,importUid):
+  items = mainUid.listWidgetAssets.selectedItems()
+  importUid.tableWidget.clear()
+  importUid.tableWidget.setRowCount(len(items))
+  importUid.tableWidget.setColumnCount(4)
+  impAssets = []
+  row = 0
+  for x in items:
+    impAssets.append(str(x.assetPathColor))
+    label = QtWidgets.QLabel()
+    checkVersion = QtWidgets.QCheckBox()
+    checkVersion.setText("import versions")
+
+    checkForce = QtWidgets.QCheckBox()
+    checkForce.setText("force")
+
+    # checkAssName = QtWidgets.QCheckBox()
+    # checkAssName.setText("disable assName")
+    comboBox = QtWidgets.QComboBox()
+    comboBox.addItems(originalAssetsColord)
+    label.setTextFormat(QtCore.Qt.RichText)
+    label.setText(x.assetPathColor)
+    label.assetPath = str(x.assetPath)
+    importUid.tableWidget.setCellWidget(row,0,label)
+    importUid.tableWidget.setCellWidget(row, 1, comboBox)
+    importUid.tableWidget.setCellWidget(row, 2, checkVersion)
+    importUid.tableWidget.setCellWidget(row, 3, checkForce)
+    # importUid.tableWidget.setCellWidget(row, 3, checkAssName)
+    importUid.tableWidget.resizeColumnsToContents()
+    # header = importUid.tableWidget.horizontalHeader()
+    # # header.setResizeMode(0, QtGui.QHeaderView.Stretch)
+    # # header.setResizeMode(1, QtGui.QHeaderView.ResizeToContents)
+    # header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+    row = row + 1
+  rbhus.debug.info(impAssets)
+  importUid.show()
+
 
 def importAssets(mainUid):
   items = mainUid.listWidgetAssets.selectedItems()
@@ -571,14 +685,77 @@ def importAssets(mainUid):
   impAssets = []
   for x in items:
     impAssets.append(str(x.assetPath))
-  if(impAssets):
-    for impAsset in impAssets:
-      rbhus.utilsPipe.importAssets(toProject=projectToImportTo,assetPath=impAsset)
+
+
+  assImpThread = importAssQthread(projectToImportTo,impAssets,parent=mainUid)
+  assImpThread.impStarted.connect(lambda mainUid=mainUid: impProgressStart(mainUid))
+  assImpThread.impFinished.connect(lambda mainUid=mainUid: impProgressEnd(mainUid))
+  assImpThread.start()
+
+def importingStart(mainUid, text,textColor,version):
+  ui_progress = uic.loadUi(ui_progress_list)
+  ui_progress.setParent(mainUid.scrollArea)
+  ui_progress.labelAssetName.setTextFormat(QtCore.Qt.RichText)
+  ui_progress.labelAssetName.setText(textColor)
+
+  # item = QtWidgets.QListWidgetItem()
+  mainUid.verticalLayout_4.addWidget(ui_progress)
+  # mainUid.listWidgetProgress.setItemWidget(item, ui_progress)
+  ui_progress_list_dict[text] = ui_progress
+  vsb = mainUid.scrollArea.verticalScrollBar()
+  vsb.setValue(vsb.maximum())
+
+
+def importingResult(mainUid,ass,toColor,progText):
+  if(ui_progress_list_dict.has_key(ass)):
+    ui_progress_list_dict[ass].labelStatus.setText(progText)
+    ui_progress_list_dict[ass].progressBar.setMinimum(0)
+    ui_progress_list_dict[ass].progressBar.setMaximum(1)
+    ui_progress_list_dict[ass].progressBar.setValue(1)
+
+def getImportUidAssets(mainUid,importUid):
+  rows = importUid.tableWidget.rowCount()
+  rbhus.debug.info(rows)
+  assetsToImport = []
+  for row in range(0,rows):
+    assetToImport = {}
+    label = importUid.tableWidget.cellWidget(row,0)
+    toAsset = str(importUid.tableWidget.cellWidget(row,1).currentText())
+    if(importUid.tableWidget.cellWidget(row,2).checkState() == QtCore.Qt.Checked):
+      version = True
+    else:
+      version = False
+
+    if (importUid.tableWidget.cellWidget(row, 3).checkState() == QtCore.Qt.Checked):
+      force = True
+    else:
+      force = False
+
+    assetToImport['assetPath'] = str(label.assetPath)
+    assetToImport['assetPathColor'] = str(label.text())
+    assetToImport['toAssetPath'] = str(toAsset)
+    assetToImport['getVersions'] = version
+    assetToImport['force'] = force
+    assetsToImport.append(assetToImport)
+
+  if(assetsToImport):
+    assImpThread = importAssQthread(projectToImportTo, assetsToImport, parent=mainUid)
+    assImpThread.impStarted.connect(lambda mainUid=mainUid: impProgressStart(mainUid))
+    assImpThread.impFinished.connect(lambda mainUid=mainUid: impProgressEnd(mainUid))
+    assImpThread.impAssetStart.connect(lambda text, textColor,version, mainUid=mainUid: importingStart(mainUid, text,textColor,version))
+    assImpThread.impAssetResult.connect(lambda ass, color, text, mainUid=mainUid: importingResult(mainUid, ass, color, text))
+    assImpThread.start()
+
+  rbhus.debug.info(assetsToImport)
+  importUid.hide()
 
 
 def main():
   mainUid = uic.loadUi(ui_main)
   mainUid.listWidgetProj.clear()
+
+
+  importUid = uic.loadUi(ui_ass_for_import)
 
   iconRefresh = QtGui.QIcon()
   iconRefresh.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -636,9 +813,20 @@ def main():
   mainUid.comboFile.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
   mainUid.comboScn.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
   mainUid.comboAssType.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
-  mainUid.pushRefresh.clicked.connect(lambda clicked,mainUid = mainUid: pushRefresh(mainUid))
+  mainUid.pushRefresh.clicked.connect(lambda clicked, mainUid=mainUid: pushRefresh(mainUid))
   mainUid.pushRefreshFilters.clicked.connect(lambda clicked, mainUid=mainUid: refreshFilter(mainUid))
-  mainUid.pushImport.clicked.connect(lambda clicked, mainUid=mainUid: importAssets(mainUid))
+  mainUid.checkTag.clicked.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  mainUid.checkAssName.clicked.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  mainUid.checkAssPath.clicked.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+
+  mainUid.lineEditSearch.textChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  # mainUid.pushImport.clicked.connect(lambda clicked, mainUid=mainUid: importAssets(mainUid))
+  mainUid.pushImport.clicked.connect(lambda clicked,importUid=importUid, mainUid=mainUid: importAssetsWithImportWidget(mainUid,importUid))
+
+
+  importUid.pushButtonOk.clicked.connect(lambda clicked, importUid=importUid, mainUid=mainUid: getImportUidAssets(mainUid, importUid))
+
+  # mainUid.lineEditSearch.textChanged.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
 
 

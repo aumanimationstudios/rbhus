@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeMainMod_splitter.ui'
 #
-# Created: Tue Nov 17 10:44:35 2015
-#      by: PyQt4 UI code generator 4.10.4
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -27,7 +26,7 @@ class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
     MainWindow.setWindowModality(QtCore.Qt.WindowModal)
-    MainWindow.resize(1288, 719)
+    MainWindow.resize(1414, 747)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Maximum)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -48,7 +47,6 @@ class Ui_MainWindow(object):
     self.layoutWidget = QtGui.QWidget(self.splitterFilter)
     self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
     self.horizontalLayout_10 = QtGui.QHBoxLayout(self.layoutWidget)
-    self.horizontalLayout_10.setMargin(0)
     self.horizontalLayout_10.setObjectName(_fromUtf8("horizontalLayout_10"))
     self.verticalLayout_4 = QtGui.QVBoxLayout()
     self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
@@ -278,8 +276,13 @@ class Ui_MainWindow(object):
     self.horizontalLayout_7 = QtGui.QHBoxLayout(self.groupBox_2)
     self.horizontalLayout_7.setObjectName(_fromUtf8("horizontalLayout_7"))
     self.pushNewAsset = QtGui.QPushButton(self.groupBox_2)
+    self.pushNewAsset.setFocusPolicy(QtCore.Qt.ClickFocus)
     self.pushNewAsset.setObjectName(_fromUtf8("pushNewAsset"))
     self.horizontalLayout_7.addWidget(self.pushNewAsset)
+    self.pushAssImport = QtGui.QPushButton(self.groupBox_2)
+    self.pushAssImport.setFocusPolicy(QtCore.Qt.ClickFocus)
+    self.pushAssImport.setObjectName(_fromUtf8("pushAssImport"))
+    self.horizontalLayout_7.addWidget(self.pushAssImport)
     self.radioMineAss = QtGui.QRadioButton(self.groupBox_2)
     self.radioMineAss.setChecked(True)
     self.radioMineAss.setObjectName(_fromUtf8("radioMineAss"))
@@ -411,7 +414,6 @@ class Ui_MainWindow(object):
     self.layoutWidget1 = QtGui.QWidget(self.splitterFilter)
     self.layoutWidget1.setObjectName(_fromUtf8("layoutWidget1"))
     self.verticalLayout_5 = QtGui.QVBoxLayout(self.layoutWidget1)
-    self.verticalLayout_5.setMargin(0)
     self.verticalLayout_5.setObjectName(_fromUtf8("verticalLayout_5"))
     self.line_4 = QtGui.QFrame(self.layoutWidget1)
     self.line_4.setFrameShape(QtGui.QFrame.HLine)
@@ -508,7 +510,6 @@ class Ui_MainWindow(object):
     self.layoutWidget2.setObjectName(_fromUtf8("layoutWidget2"))
     self.verticalLayout_3 = QtGui.QVBoxLayout(self.layoutWidget2)
     self.verticalLayout_3.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
-    self.verticalLayout_3.setMargin(0)
     self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
     self.label_3 = QtGui.QLabel(self.layoutWidget2)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Preferred)
@@ -544,7 +545,6 @@ class Ui_MainWindow(object):
     self.line.setLineWidth(1)
     self.line.setMidLineWidth(3)
     self.line.setFrameShape(QtGui.QFrame.HLine)
-    self.line.setFrameShadow(QtGui.QFrame.Sunken)
     self.line.setObjectName(_fromUtf8("line"))
     self.verticalLayout_2.addWidget(self.line)
     self.horizontalLayout_4 = QtGui.QHBoxLayout()
@@ -582,7 +582,7 @@ class Ui_MainWindow(object):
     self.verticalLayout_2.addLayout(self.horizontalLayout_4)
     MainWindow.setCentralWidget(self.centralwidget)
     self.menuBar = QtGui.QMenuBar(MainWindow)
-    self.menuBar.setGeometry(QtCore.QRect(0, 0, 1288, 21))
+    self.menuBar.setGeometry(QtCore.QRect(0, 0, 1414, 31))
     self.menuBar.setObjectName(_fromUtf8("menuBar"))
     self.menuAdmin = QtGui.QMenu(self.menuBar)
     self.menuAdmin.setObjectName(_fromUtf8("menuAdmin"))
@@ -635,6 +635,7 @@ class Ui_MainWindow(object):
     self.labelFileType.setText(_translate("MainWindow", "fileType", None))
     self.label.setText(_translate("MainWindow", "stageType", None))
     self.pushNewAsset.setText(_translate("MainWindow", "new", None))
+    self.pushAssImport.setText(_translate("MainWindow", "import", None))
     self.radioMineAss.setText(_translate("MainWindow", "mine", None))
     self.radioAllAss.setText(_translate("MainWindow", "all", None))
     self.checkLinkedProjects.setText(_translate("MainWindow", "linkedProjects", None))

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1288</width>
-    <height>719</height>
+    <width>1414</width>
+    <height>747</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -453,8 +453,21 @@
                  <layout class="QHBoxLayout" name="horizontalLayout_7">
                   <item>
                    <widget class="QPushButton" name="pushNewAsset">
+                    <property name="focusPolicy">
+                     <enum>Qt::ClickFocus</enum>
+                    </property>
                     <property name="text">
                      <string>new</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushAssImport">
+                    <property name="focusPolicy">
+                     <enum>Qt::ClickFocus</enum>
+                    </property>
+                    <property name="text">
+                     <string>import</string>
                     </property>
                    </widget>
                   </item>
@@ -1077,8 +1090,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1288</width>
-     <height>21</height>
+     <width>1414</width>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdmin">

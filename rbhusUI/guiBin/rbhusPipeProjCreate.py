@@ -106,8 +106,9 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     pRI = 1 if(self.checkRI.isChecked()) else 0
     pDesc = str(self.lineEditDesc.text()).rstrip().lstrip() if(self.lineEditDesc.text()) else None
     linked = str(self.lineEditLinked.text()).rstrip().lstrip()
+    createdUser = os.environ['rbhusPipe_acl_user']
     self.wtf = "connecting"
-    utilsPipe.createProj(projType=pType,
+    utilsPipe.setupProj(projType=pType,
                             projName=pName,
                             directory=pDir,
                             admins=pAdmins,
@@ -117,7 +118,7 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
                             aclGroup=pAclGroup,
                             dueDate=pDueDate,
                             description=pDesc,
-                            linkedProjs=linked)
+                            createdUser=createdUser)
     
     
   def setUsers(self):

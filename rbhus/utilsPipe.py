@@ -232,6 +232,59 @@ def getAssTypes(atype=None, status=constantsPipe.typesActive):
     return(0)
 
 
+def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True,force=False):
+  assDets = getAssDetails(assPath=assetPath)
+  origAssPath = getAbsPath(assetPath)
+  toAsset = None
+  if(toAssetPath != 'default'):
+    toAsset = getAssDetails(assPath=toAssetPath)
+    if(getVersions):
+      toAsset['versioning'] = assDets['versioning']
+
+  else:
+    newAsset = copy.copy(assDets)
+    newAsset['projName'] = toProject
+    newAsset['assignedWorker'] = os.environ['rbhusPipe_acl_user']
+    newAsset['reviewUser'] = os.environ['rbhusPipe_acl_user']
+    newAsset['importedFrom'] = assDets['projName']
+
+    newAssId = assRegister(newAsset,copyFromTemplate=False)
+    if(newAssId):
+      toAsset = getAssDetails(assId=newAssId)
+    else:
+      if(force):
+        newAssPath = getAssPath(newAsset)
+        toAsset = getAssDetails(assPath=newAssPath)
+      else:
+        return(4)
+
+
+  if(toAsset):
+    if (not isAssAssigned(toAsset)):
+      return (3)
+    newAssPath = getAbsPath(toAsset['path'])
+    if((toAsset['sequenceName'] != "default" or toAsset['sceneName'] != "default") and toAssetPath == 'default'):
+      seqScnDict = {}
+      seqScnDict['sequenceName'] = newAsset['sequenceName']
+      seqScnDict['projName'] = toProject
+      seqScnDict['sceneName'] = newAsset['sceneName']
+      seqScnDict['createdUser'] = os.environ['rbhusPipe_acl_user']
+      setupSequenceScene(seqScnDict)
+
+    debug.info(newAssPath)
+    debug.info(origAssPath)
+    if(sys.platform.lower().find("linux") >= 0):
+      if(getVersions):
+        os.system("rsync -av "+ origAssPath +"/ "+ newAssPath +"/")
+      else:
+        os.system("rsync -av " + origAssPath + "/ " + newAssPath + "/ --exclude=.hg")
+    return(1)
+  else:
+    return(0)
+
+
+
+
 def getSequenceScenes(proj,seq=None,sce=None):
   dbconn = dbPipe.dbPipe()
   try:
@@ -314,7 +367,11 @@ def createProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRe
 
 #always called by the server
 def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRenderServer,aclUser,aclGroup,createdUser,dueDate,description):
+  if (os.environ['rbhusPipe_acl_user'] not in getAdmins()):
+    debug.info("User not allowed to create projects. Please ask the pipe admin to create a project for you")
+    return (0)
   dbconn = dbPipe.dbPipe()
+  pDefs = getDefaults("proj")
   pTypes = getProjTypes()
   cScript = ""
   for pT in pTypes:
@@ -324,7 +381,7 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
   os.environ['rp_proj_projName'] = str(projName).rstrip().lstrip()
   os.environ['rp_proj_projType'] = str(projType).rstrip().lstrip()
   os.environ['rp_proj_directory'] = str(directory).rstrip().lstrip()
-  os.environ['rp_proj_admins'] = str(admins).rstrip().lstrip()
+  os.environ['rp_proj_admins'] = str(admins) if(admins) else pDefs['admins']
   os.environ['rp_proj_rbhusRenderIntegration'] = str(rbhusRenderIntegration).rstrip().lstrip()
   os.environ['rp_proj_rbhusRenderServer'] = str(rbhusRenderServer).rstrip().lstrip()
   os.environ['rp_proj_description'] = str(description).rstrip().lstrip()
@@ -764,38 +821,28 @@ def getProjAsses(projName,limit=None,whereDict={}):
         whereDicts = []
         y = whereDictTemp[x].split(",")
         for z in y:
-          if(x == "assName"):
+          if(x == "assName" or x == "tags" or x == "assignedWorker" or x == "path"):
             if(z):
-              whereDicts.append(x +" like '%"+ z +"%'")
-          elif(x == "tags"):
-            if(z):
-              whereDicts.append(x +" like '%"+ z +"%'")
-          elif(x == "assignedWorker"):
-            if(z):
-              whereDicts.append(x +" like '%"+ z +"%'")
+              whereDicts.append("LOWER("+ x +") like '%"+ str(z).lower() +"%'")
           else:
             if(z):
               whereDicts.append(x +"='"+ z +"'")
         whereString.append("("+ " or ".join(whereDicts) +")")
+      debug.debug(whereString)
       rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
       for x in whereDictTemp:
         whereDicts = []
         y = whereDictTemp[x].split(",")
         for z in y:
-          if(x == "assName"):
-            if(z):
-              whereDicts.append(x +" like '%"+ z +"%'")
-          elif(x == "tags"):
-            if(z):
-              whereDicts.append(x +" like '%"+ z +"%'")
-          elif(x == "assignedWorker"):
-            if(z):
-              whereDicts.append(x +" like '%"+ z +"%'")
+          if (x == "assName" or x == "tags" or x == "assignedWorker" or x == "path"):
+            if (z):
+              whereDicts.append("LOWER(" + x + ") like '%" + str(z).lower() + "%'")
           else:
             if(z):
               whereDicts.append(x +"='"+ z +"'")
         whereString.append("("+ " or ".join(whereDicts) +")")
+      debug.debug(whereString)
       rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
     if(rows):
       return(rows)
@@ -853,7 +900,7 @@ def getBestDir(assDetDict):
 
 
 
-def assRegister(assDetDict):
+def assRegister(assDetDict,copyFromTemplate=True):
   assPath = getAssPath(assDetDict)
   #assPath = str(assDetDict['projName'])
   assId = ""
@@ -889,8 +936,9 @@ def assRegister(assDetDict):
       os.makedirs(corePath,0775)
     except:
       debug.debug(str(sys.exc_info()))
-    if(assDetDict['assetType'].rstrip().lstrip() != "output" and assDetDict['assetType'].rstrip().lstrip() != "share" and assDetDict['assetType'].rstrip().lstrip() != "template"):
-      setAssTemplate(assDetDict)
+    if(copyFromTemplate):
+      if(assDetDict['assetType'].rstrip().lstrip() != "output" and assDetDict['assetType'].rstrip().lstrip() != "share" and assDetDict['assetType'].rstrip().lstrip() != "template"):
+        setAssTemplate(assDetDict)
   except:
     debug.debug(str(sys.exc_info()))
     return(0)

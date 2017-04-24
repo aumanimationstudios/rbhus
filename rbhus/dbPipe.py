@@ -49,12 +49,12 @@ class dbPipe:
   # def __init__(self):
   #   self.__conn = self._connRbhus()
 
-  def __del__(self):
-    try:
-      self.__conn.close()
-    except:
-      debug.error(str(sys.exc_info()))
-    debug.debug("Db connection closed" +"\n")
+  # def __del__(self):
+  #   try:
+  #     self.__conn.close()
+  #   except:
+  #     debug.error(str(sys.exc_info()))
+  #   debug.debug("Db connection closed" +"\n")
 
   def disconnect(self):
     try:
