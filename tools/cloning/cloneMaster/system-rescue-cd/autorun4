@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+chroot /mnt/realroot/ bash <<EOF
+source /etc/profile
+ln -s /proc/mounts /etc/mtab
+grub-install /dev/sda --force
+update-grub
+EOF
