@@ -3,6 +3,10 @@
 mkdir -p /mnt/tftpServer
 mount tftpServer:/srv/tftp/tftpboot/pxelinux.cfg/ /mnt/tftpServer
 ip a | grep -i ether | gawk '{print "01-"$2}' | sed 's/:/-/g' | sed 's/\([A-Z]\)/\L\1/g' | gawk '{print "rm -f /mnt/tftpServer/"$1}' | sh -v
+sync
+reboot -f
+exit 0
+
 
 
 
