@@ -2,7 +2,7 @@
 
 mkdir -p /mnt/tftpServer
 mount tftpServer:/srv/tftp/tftpboot/pxelinux.cfg/ /mnt/tftpServer
-ifconfig -a | grep HWaddr | gawk '{print "01-"$5}' | sed 's/:/-/g' | sed 's/\([A-Z]\)/\L\1/g' | gawk '{print "rm -f /mnt/tftpServer/"$1}' | sh -v
+ip a | grep -i ether | gawk '{print "01-"$2}' | sed 's/:/-/g' | sed 's/\([A-Z]\)/\L\1/g' | gawk '{print "rm -f /mnt/tftpServer/"$1}' | sh -v
 
 
 
