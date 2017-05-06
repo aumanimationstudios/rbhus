@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+yes|parted /dev/sda mklabel msdos
+partprobe
+
 fdisk /dev/sda -l -o device | egrep 'sda[0-9].*' | sed 's/\/dev\/sda//g' | gawk '{print "parted -s /dev/sda rm "$1}' | sh -v
 
 fdisk /dev/sda <<EOF
@@ -19,6 +22,21 @@ p
 
 w
 EOF
+partprobe
+
+fdisk /dev/sda <<EOF
+x
+A
+1
+r
+w
+EOF
+partprobe
+
+yes|parted /dev/sda set 1 boot on
+partprobe
+
+
 
 mkfs.ext4 /dev/sda1 -L bp_boot
 mkswap /dev/sda2 -L bp_swap

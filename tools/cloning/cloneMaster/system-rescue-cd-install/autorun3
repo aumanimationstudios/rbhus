@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+mount -t proc /proc /mnt/realroot/proc
+mount --rbind /sys /mnt/realroot/sys
+mount --make-rslave /mnt/realroot/sys
+mount --rbind /dev /mnt/realroot/dev
+mount --make-rslave /mnt/realroot/dev

@@ -676,6 +676,7 @@ def importAssetsWithImportWidget(mainUid,importUid):
     # header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
     row = row + 1
   rbhus.debug.info(impAssets)
+  importUid.move(QtWidgets.QApplication.desktop().screen().rect().center() - importUid.rect().center())
   importUid.show()
 
 
@@ -769,6 +770,8 @@ def main():
   icon = QtGui.QIcon()
   icon.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
   mainUid.setWindowIcon(icon)
+  importUid.setWindowIcon(icon)
+  importUid.setWindowTitle("Import List")
 
 
 
@@ -784,6 +787,8 @@ def main():
   mainUid.pushImport.setText("IMPORT TO PROJECT : "+ str(projectToImportTo))
   mainUid.listWidgetProj.itemSelectionChanged.connect(lambda mainUid=mainUid : updateAssets(mainUid))
   mainUid.listWidgetProj.setSortingEnabled(True)
+  mainUid.move(QtWidgets.QApplication.desktop().screen().rect().center() - mainUid.rect().center())
+  mainUid.showMaximized()
   mainUid.show()
 
   font = mainUid.listWidgetProj.font()

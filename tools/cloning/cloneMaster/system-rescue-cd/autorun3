@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-mount -t proc none /mnt/realroot/proc
-mount --rbind /dev /mnt/realroot/dev
-mount --rbind /sys /mnt/realroot/sys
