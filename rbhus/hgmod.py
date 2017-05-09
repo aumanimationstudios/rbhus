@@ -137,7 +137,7 @@ class hg(object):
     else:
       self._clone()
     self._pull()
-    self._update()
+    self._update(local=True)
     debug.info("cloning done")
     return(True)
 
@@ -315,10 +315,11 @@ class hg(object):
     debug.info("_clone"+ str(out))
 
 
-  def _update(self):
-    if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
-      debug.warn("user not allowed")
-      return(111)
+  def _update(self,local=False):
+    if(not local):
+      if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
+        debug.warn("user not allowed")
+        return(111)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose update --check",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
