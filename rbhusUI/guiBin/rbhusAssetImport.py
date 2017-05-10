@@ -753,6 +753,18 @@ def getImportUidAssets(mainUid,importUid):
   importUid.hide()
 
 
+def comboClear(comboBox):
+  rbhus.debug.info("testing clear button shit")
+  for i in range(0, comboBox.model().rowCount()):
+    if (comboBox.model().item(i).checkState() == QtCore.Qt.Checked):
+      comboBox.model().item(i).setCheckState(QtCore.Qt.Unchecked)
+      abrush = QtGui.QBrush()
+      color = QtGui.QColor()
+      color.setAlpha(0)
+      abrush.setColor(color)
+      comboBox.model().item(i).setForeground(abrush)
+
+
 def main():
   mainUid = uic.loadUi(ui_main)
   mainUid.listWidgetProj.clear()
@@ -801,20 +813,46 @@ def main():
   setFileTypes(mainUid)
   setAssTypes(mainUid)
   mainUid.comboSeq.lineEdit().setClearButtonEnabled(True)
-  for kids in mainUid.comboSeq.lineEdit().children():
-      rbhus.debug.info(kids)
-
   mainUid.comboSeq.lineEdit().setPlaceholderText("default")
+  for kids in mainUid.comboSeq.lineEdit().children():
+    if(type(kids) == QtWidgets.QToolButton):
+      kids.triggered.connect(lambda action, comboBox = mainUid.comboSeq:comboClear(comboBox))
+
+
   mainUid.comboScn.lineEdit().setClearButtonEnabled(True)
   mainUid.comboScn.lineEdit().setPlaceholderText("default")
+  for kids in mainUid.comboScn.lineEdit().children():
+    if(type(kids) == QtWidgets.QToolButton):
+      kids.triggered.connect(lambda action, comboBox = mainUid.comboScn:comboClear(comboBox))
+
+
   mainUid.comboStage.lineEdit().setClearButtonEnabled(True)
   mainUid.comboStage.lineEdit().setPlaceholderText("default")
+  for kids in mainUid.comboStage.lineEdit().children():
+    if(type(kids) == QtWidgets.QToolButton):
+      kids.triggered.connect(lambda action, comboBox = mainUid.comboStage:comboClear(comboBox))
+
+
   mainUid.comboNode.lineEdit().setClearButtonEnabled(True)
   mainUid.comboNode.lineEdit().setPlaceholderText("default")
+  for kids in mainUid.comboNode.lineEdit().children():
+    if(type(kids) == QtWidgets.QToolButton):
+      kids.triggered.connect(lambda action, comboBox = mainUid.comboNode:comboClear(comboBox))
+
+
   mainUid.comboFile.lineEdit().setClearButtonEnabled(True)
   mainUid.comboFile.lineEdit().setPlaceholderText("default")
+  for kids in mainUid.comboFile.lineEdit().children():
+    if(type(kids) == QtWidgets.QToolButton):
+      kids.triggered.connect(lambda action, comboBox = mainUid.comboFile:comboClear(comboBox))
+
+
   mainUid.comboAssType.lineEdit().setClearButtonEnabled(True)
   mainUid.comboAssType.lineEdit().setPlaceholderText("default")
+  for kids in mainUid.comboAssType.lineEdit().children():
+    if(type(kids) == QtWidgets.QToolButton):
+      kids.triggered.connect(lambda action, comboBox = mainUid.comboAssType:comboClear(comboBox))
+
 
   mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: setScene(mainUid))
   mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsSeq(mainUid))
