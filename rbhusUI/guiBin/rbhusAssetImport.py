@@ -52,6 +52,8 @@ ui_progress_list_dict = {}
 updateAssThreads = []
 
 
+
+
 class importAssQthread(QtCore.QThread):
   impStarted = QtCore.pyqtSignal()
   impFinished = QtCore.pyqtSignal()
@@ -799,6 +801,9 @@ def main():
   setFileTypes(mainUid)
   setAssTypes(mainUid)
   mainUid.comboSeq.lineEdit().setClearButtonEnabled(True)
+  for kids in mainUid.comboSeq.lineEdit().children():
+      rbhus.debug.info(kids)
+
   mainUid.comboSeq.lineEdit().setPlaceholderText("default")
   mainUid.comboScn.lineEdit().setClearButtonEnabled(True)
   mainUid.comboScn.lineEdit().setPlaceholderText("default")
