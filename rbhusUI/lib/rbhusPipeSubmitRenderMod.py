@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeSubmitRenderMod.ui'
 #
-# Created by: PyQt4 UI code generator 4.12
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -380,7 +380,7 @@ class Ui_rbhusSubmit(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.checkBatching.sizePolicy().hasHeightForWidth())
     self.checkBatching.setSizePolicy(sizePolicy)
-    self.checkBatching.setChecked(True)
+    self.checkBatching.setChecked(False)
     self.checkBatching.setObjectName(_fromUtf8("checkBatching"))
     self.gridLayout.addWidget(self.checkBatching, 20, 2, 1, 1)
     self.labeFileType = QtGui.QLabel(self.centralwidget)
@@ -461,8 +461,8 @@ class Ui_rbhusSubmit(object):
     self.afterTimeEdit.setDisplayFormat(_translate("rbhusSubmit", "yyyy-M-d h:mm A", None))
     self.lineEditHostGroups.setToolTip(_translate("rbhusSubmit", "comma seperated list of cameras to render", None))
     self.lineEditHostGroups.setText(_translate("rbhusSubmit", "default", None))
-    self.comboPrio.setItemText(0, _translate("rbhusSubmit", "low", None))
-    self.comboPrio.setItemText(1, _translate("rbhusSubmit", "normal", None))
+    self.comboPrio.setItemText(0, _translate("rbhusSubmit", "normal", None))
+    self.comboPrio.setItemText(1, _translate("rbhusSubmit", "low", None))
     self.comboPrio.setItemText(2, _translate("rbhusSubmit", "high", None))
     self.lineEditOutName.setToolTip(_translate("rbhusSubmit", "name of the image file. eg: wtf.png", None))
     self.lineEditOutName.setWhatsThis(_translate("rbhusSubmit", "<html><head/><body><p>name of the image file. eg: <span style=\" font-weight:600;\">wtfigo.png</span></p></body></html>", None))

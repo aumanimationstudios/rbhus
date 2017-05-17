@@ -280,12 +280,12 @@
       </property>
       <item>
        <property name="text">
-        <string>low</string>
+        <string>normal</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>normal</string>
+        <string>low</string>
        </property>
       </item>
       <item>
@@ -653,7 +653,7 @@
        <string>enable</string>
       </property>
       <property name="checked">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
      </widget>
     </item>
