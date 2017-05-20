@@ -1187,27 +1187,24 @@ def reviewDetails(assId = 0,revCount=0):
     return(0)
 
 
-def isReviewChecked():
-  os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
-
-
-
-
-
 
 
 
 def assDetails(assDetDict={},assId=0):
   pass
 
+
 def assOpen(assId):
   pass
+
 
 def assLinks(assId):
   pass
 
+
 def assLinkedTo(assId):
   pass
+
 
 def getTemplatePath(assdetsTemp = {}):
   debug.info("in getTemplatePath")
