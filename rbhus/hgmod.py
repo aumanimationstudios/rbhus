@@ -268,14 +268,16 @@ class hg(object):
       debug.warn("user not allowed")
       return(111)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg --verbose commit -A --message \'ignore for now\' --user {0}".format(os.environ['rbhusPipe_acl_user']),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose commit -A --message \'ignore now\' --user {0}".format(os.environ['rbhusPipe_acl_user']),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
+      return(0)
     else:
       debug.info(str(out))
+      return(1)
 
 
   def _push(self):

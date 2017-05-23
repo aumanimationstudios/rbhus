@@ -35,6 +35,7 @@ import authPipe
 import utilsPipe
 import hgmod
 import debug
+import pyperclip
 
 
 
@@ -204,6 +205,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg = None
 
     #self.versionsHg = hgmod.hg(args.assPath)
+    self.toolButton.setMenu(self.popupToolButton())
+    self.toolButton.triggered.connect(self.popupToolButtonTriggered)
     self.initialize()
     
     #self.hglog()
@@ -237,7 +240,18 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       self.openVersion()
     if(action == reviewAction):
       self.reviewVersion()
-    
+
+  def popupToolButton(self):
+    menu = QtGui.QMenu()
+    copyVersionPath = menu.addAction("get version path")
+    return(menu)
+
+  def popupToolButtonTriggered(self,action):
+    if(action.text() == "get version path"):
+      versionPath = self.versionsHg.localPath
+      pyperclip.copy(versionPath)
+
+
   def reInit(self):
     self.versionsHg.reInitLocal()
     self.hglog()
@@ -421,13 +435,19 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg._addremove()
     self.versionsHg._pull()
     self.versionsHg._merge()
-    self.versionsHg._commit()
+    commit_status = self.versionsHg._commit()
+    if(not commit_status):
+      debug.info("NOTHING TO COMMIT")
+      self.hglog()
+      self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+      return(0)
     self.versionsHg._push()
     os.chdir(self.versionsHg.absPipePath)
     self.versionsHg._purge()
     self.versionsHg._update()
     os.chdir(self.versionsHg.localPath)
     self.hglog()
+    utilsPipe.updateAssModifies(self.versionsHg.assDets['assetId'])
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     
     

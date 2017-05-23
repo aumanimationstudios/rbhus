@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeVersionsMod.ui'
 #
-# Created by: PyQt4 UI code generator 4.12.dev1606101416
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,14 +25,11 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(489, 453)
+    MainWindow.resize(573, 486)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
     self.gridLayout = QtGui.QGridLayout(self.centralwidget)
     self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-    self.pushCommit = QtGui.QPushButton(self.centralwidget)
-    self.pushCommit.setObjectName(_fromUtf8("pushCommit"))
-    self.gridLayout.addWidget(self.pushCommit, 3, 2, 1, 1)
     self.verticalLayout = QtGui.QVBoxLayout()
     self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
     self.groupVersions = QtGui.QGroupBox(self.centralwidget)
@@ -67,12 +64,24 @@ class Ui_MainWindow(object):
     self.verticalLayout_2.addWidget(self.tableVersions)
     self.verticalLayout.addWidget(self.groupVersions)
     self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 3)
+    self.horizontalLayout = QtGui.QHBoxLayout()
+    self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
     self.pushWork = QtGui.QPushButton(self.centralwidget)
     self.pushWork.setObjectName(_fromUtf8("pushWork"))
-    self.gridLayout.addWidget(self.pushWork, 3, 0, 1, 1)
+    self.horizontalLayout.addWidget(self.pushWork)
     self.pushReInit = QtGui.QPushButton(self.centralwidget)
     self.pushReInit.setObjectName(_fromUtf8("pushReInit"))
-    self.gridLayout.addWidget(self.pushReInit, 3, 1, 1, 1)
+    self.horizontalLayout.addWidget(self.pushReInit)
+    self.pushCommit = QtGui.QPushButton(self.centralwidget)
+    self.pushCommit.setObjectName(_fromUtf8("pushCommit"))
+    self.horizontalLayout.addWidget(self.pushCommit)
+    self.toolButton = QtGui.QToolButton(self.centralwidget)
+    self.toolButton.setPopupMode(QtGui.QToolButton.InstantPopup)
+    self.toolButton.setAutoRaise(False)
+    self.toolButton.setArrowType(QtCore.Qt.RightArrow)
+    self.toolButton.setObjectName(_fromUtf8("toolButton"))
+    self.horizontalLayout.addWidget(self.toolButton)
+    self.gridLayout.addLayout(self.horizontalLayout, 3, 0, 1, 3)
     MainWindow.setCentralWidget(self.centralwidget)
     self.statusbar = QtGui.QStatusBar(MainWindow)
     self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -83,9 +92,10 @@ class Ui_MainWindow(object):
 
   def retranslateUi(self, MainWindow):
     MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-    self.pushCommit.setText(_translate("MainWindow", "commit", None))
     self.groupVersions.setTitle(_translate("MainWindow", "versions", None))
     self.tableVersions.setSortingEnabled(True)
     self.pushWork.setText(_translate("MainWindow", "open", None))
     self.pushReInit.setText(_translate("MainWindow", "re-initialize", None))
+    self.pushCommit.setText(_translate("MainWindow", "commit", None))
+    self.toolButton.setText(_translate("MainWindow", "...", None))
 

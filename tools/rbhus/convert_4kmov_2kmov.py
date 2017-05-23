@@ -12,7 +12,7 @@ import glob
 
 path = sys.argv[1]
 movs = glob.glob(os.path.join(path,"*.mov"))
-
+movs.sort()
 path1080 = os.path.join(path,"1080p")
 try:
   os.makedirs(path1080)
