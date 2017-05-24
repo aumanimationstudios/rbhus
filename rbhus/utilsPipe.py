@@ -406,7 +406,7 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
   os.environ['rp_proj_aclGroup'] = str(aclGroup).rstrip().lstrip()
   os.environ['rp_proj_dueDate'] = str(dueDate).rstrip().lstrip()
   os.environ['rp_proj_createdUser'] = str(createdUser).rstrip().lstrip()
-
+  standardAsses = getProjAsses("standard")
   exportDirMaps(directory)
   exportProjTypes(projType)
   debug.debug(description)
@@ -448,6 +448,8 @@ def setupProj(projType,projName,directory,admins,rbhusRenderIntegration,rbhusRen
         dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusFailed).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
       else:
         dbconn.execute("update proj set createStatus="+ str(constantsPipe.createStatusDone).rstrip().lstrip() +" where projName='"+ str(projName).rstrip().lstrip() +"'")
+      for standardAss in standardAsses:
+        importAssets(str(projName).rstrip().lstrip(),standardAss['path'])
       return(1)
   except:
     debug.debug(str(sys.exc_info()))
