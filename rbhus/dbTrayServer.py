@@ -8,7 +8,7 @@ import os
 import tempfile
 import debug
 
-os.environ["QT_GRAPHICSSYSTEM"] = "native"
+# os.environ["QT_GRAPHICSSYSTEM"] = "native"
 
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()

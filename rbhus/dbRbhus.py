@@ -10,7 +10,7 @@ import os
 import tempfile
 import debug
 
-os.environ["QT_GRAPHICSSYSTEM"] = "native"
+# os.environ["QT_GRAPHICSSYSTEM"] = "native"
 
 hostname = socket.gethostname()
 tempDir = os.path.abspath(tempfile.gettempdir())
@@ -151,7 +151,7 @@ class dbRbhusLog:
           return(1)
       except:
         modLogger.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
-        if(str(sys.exc_info()).find("OperationalError") >= 0):
+        if(str(sys.exc_info()).find("Can't connect to MySQL") >= 0):
           time.sleep(1)
           try:
             cur.close()

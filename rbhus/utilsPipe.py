@@ -1014,7 +1014,7 @@ def setAssTemplate(assDetDict,hard=False):
         debug.debug("file already exits. not copying template")
 
 
-def setTemplateAss(assDetDict,hard=False):
+def setTemplateAss(assDetDict):
   templateFile = getTemplatePath(assDetDict)
   assPath = getAssPath(assDetDict)
   dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))

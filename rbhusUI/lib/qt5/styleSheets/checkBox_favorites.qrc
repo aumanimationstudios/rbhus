@@ -1,0 +1,13 @@
+QCheckBox::indicator {
+     width: 18px;
+     height: 18px;
+ }
+
+QCheckBox::indicator:checked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/ic_action_star_active.png);
+}
+QCheckBox::indicator:unchecked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/ic_action_star_inactive.png);
+}

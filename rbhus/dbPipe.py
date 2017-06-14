@@ -8,7 +8,7 @@ import os
 import tempfile
 import debug
 
-os.environ["QT_GRAPHICSSYSTEM"] = "native"
+# os.environ["QT_GRAPHICSSYSTEM"] = "native"
 
 hostname = socket.gethostname()
 tempDir = tempfile.gettempdir()
@@ -46,15 +46,15 @@ except:
 
 class dbPipe:
   """database querying class for rbhus"""
-  # def __init__(self):
-  #   self.__conn = self._connRbhus()
+  def __init__(self):
+    self.__conn = self._connRbhus()
 
-  # def __del__(self):
-  #   try:
-  #     self.__conn.close()
-  #   except:
-  #     debug.error(str(sys.exc_info()))
-  #   debug.debug("Db connection closed" +"\n")
+  def __del__(self):
+    try:
+      self.__conn.close()
+    except:
+      debug.error(str(sys.exc_info()))
+    debug.debug("Db connection closed" +"\n")
 
   def disconnect(self):
     try:
@@ -87,7 +87,7 @@ class dbPipe:
   def execute(self,query,dictionary=False):
     while(1):
       try:
-        self.__conn = self._connRbhus()
+        # self.__conn = self._connRbhus()
         if(dictionary):
           cur = self.__conn.cursor(MySQLdb.cursors.DictCursor)
         else:
@@ -101,25 +101,25 @@ class dbPipe:
             debug.error("fetching failed : "+ str(sys.exc_info()))
           
           cur.close()
-          self.disconnect()
+          # self.disconnect()
           if(rows):
             return(rows)
           else:
             return(0)
         else:
           cur.close()
-          self.disconnect()
+          # self.disconnect()
           return(1)
       except:
         debug.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
-        if(str(sys.exc_info()).find("OperationalError") >= 0):
+        if(str(sys.exc_info()).find("Can't connect to MySQL") >= 0):
           time.sleep(1)
           try:
             cur.close()
           except:
             pass
           self.disconnect()
-          # self.__conn = self._connRbhus()
+          self.__conn = self._connRbhus()
           continue
         else:
           try:

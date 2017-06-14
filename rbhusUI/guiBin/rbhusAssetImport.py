@@ -24,23 +24,6 @@ from PyQt5 import QtWidgets, QtGui, QtCore, uic
 
 projects = []
 projectToImportTo = sys.argv[1]
-origWhereDict = {}
-origWhereDict['assignedWorker'] = os.environ['rbhusPipe_acl_user']
-
-originalAssets = rbhus.utilsPipe.getProjAsses(projectToImportTo,whereDict=origWhereDict)
-originalAssetsColord = []
-for x in originalAssets:
-  originalAssetsColord.append(x['path'])
-  # asset = rbhus.utilsPipe.assPathColorCoded(x)
-  # textAssArr = []
-  # for fc in asset.split(":"):
-  #   textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
-  # richAss = " " + "<b><i> : </i></b>".join(textAssArr)
-  # originalAssetsColord.append(richAss)
-originalAssetsColord.sort()
-originalAssetsColord.insert(0,"default")
-
-
 
 
 ui_main = os.path.join(ui_dir,"ui_main.ui")
@@ -96,6 +79,7 @@ class updateAssQthread(QtCore.QThread):
     self.projSelected = project
     self.dbcon = rbhus.dbPipe.dbPipe()
     self.whereDict = whereDict
+    self.pleaseStop = False
 
   # def __del__(self):
   #
@@ -125,16 +109,20 @@ class updateAssQthread(QtCore.QThread):
         self.totalAssets.emit(maxLength)
         current = 0
         for x in asses:
-          current = current + 1
-          asset = rbhus.utilsPipe.assPathColorCoded(x)
-          textAssArr = []
-          for fc in asset.split(":"):
-            textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
-          richAss = " " + "<b><i> : </i></b>".join(textAssArr)
-          textAss = x['path']
-          self.assSignal.emit(textAss,richAss)
-          self.progressSignal.emit(minLength,maxLength,current)
-          time.sleep(0.01)
+          if(self.pleaseStop == False):
+            current = current + 1
+            asset = rbhus.utilsPipe.assPathColorCoded(x)
+            textAssArr = []
+            for fc in asset.split(":"):
+              textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
+            richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+            textAss = x['path']
+            self.assSignal.emit(textAss,richAss)
+            self.progressSignal.emit(minLength,maxLength,current)
+            time.sleep(0.01)
+          else:
+            rbhus.debug.info("STOPPING THREAD")
+            break
       else:
         minLength = 0
         maxLength = 1
@@ -143,6 +131,24 @@ class updateAssQthread(QtCore.QThread):
         self.progressSignal.emit(minLength, maxLength, current)
 
 
+
+def getOriginalAsses(projectToImportTo):
+  origWhereDict = {}
+  origWhereDict['assignedWorker'] = os.environ['rbhusPipe_acl_user']
+
+  originalAssets = rbhus.utilsPipe.getProjAsses(projectToImportTo, whereDict=origWhereDict)
+  originalAssetsColord = []
+  for x in originalAssets:
+    originalAssetsColord.append(x['path'])
+    # asset = rbhus.utilsPipe.assPathColorCoded(x)
+    # textAssArr = []
+    # for fc in asset.split(":"):
+    #   textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
+    # richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+    # originalAssetsColord.append(richAss)
+  originalAssetsColord.sort()
+  originalAssetsColord.insert(0, "default")
+  return(originalAssetsColord)
 
 
 
@@ -644,6 +650,8 @@ def impProgressEnd(mainUid):
 
 
 def importAssetsWithImportWidget(mainUid,importUid):
+  global projectToImportTo
+  originalAssetsColord = getOriginalAsses(projectToImportTo)
   items = mainUid.listWidgetAssets.selectedItems()
   importUid.tableWidget.clear()
   importUid.tableWidget.setRowCount(len(items))
