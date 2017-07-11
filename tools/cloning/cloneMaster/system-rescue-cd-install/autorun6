@@ -3,7 +3,7 @@
 chroot /mnt/realroot/ bash <<EOF
 source /etc/profile
 ln -s /proc/mounts /etc/mtab
-grub-install /dev/sda --force
-chmod +t /tmp
-update-grub
+grub2-install /dev/sda --force
+chmod +t /tmp/
+grub2-mkconfig -o /boot/grub2/grub.cfg
 EOF

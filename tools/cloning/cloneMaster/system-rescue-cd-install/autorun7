@@ -7,6 +7,6 @@ mount /dev/sda1 /mnt/realroot/boot/
 
 mkdir -p /mnt/cloneMaster/
 mount cloneMaster:/cloneMaster/ /mnt/cloneMaster/
-mkdir -p /mnt/gentooOnesis-ubuntu/
-mount cloneMaster:/crap/gentooOnesis-ubuntu/ /mnt/gentooOnesis-ubuntu/
+mkdir -p /mnt/gentooOnesis-centos/
+mount cloneMaster:/crap/gentooOnesis-centos/ /mnt/gentooOnesis-centos/
 exit 0

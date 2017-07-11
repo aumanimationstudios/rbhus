@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+rsync -aHAXW /mnt/gentooOnesis-centos/ /mnt/realroot/
+
+exit 0

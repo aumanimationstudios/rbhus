@@ -17,14 +17,14 @@ base_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-5])
 icon_dir = os.path.join(base_dir,"etc","icons")
 checkActiveIcon = os.path.join(icon_dir,"ic_action_star_active.png")
 checkInActiveIcon = os.path.join(icon_dir,"ic_action_star_inactive.png")
+checkNotesTrue = os.path.join(icon_dir,"notes_true.png")
+checkNotesFalse = os.path.join(icon_dir,"notes_false.png")
 
 # print (file_dir)
 # print(base_dir)
 
-class checkBox(QtWidgets.QCheckBox):
-  def __init__(self,parent=None):
-    super(checkBox, self).__init__(parent)
-    styleSheetCuston = """
+
+styleNotesCheckBox = """
 QCheckBox::indicator {
  width: 18px;
  height: 18px;
@@ -32,19 +32,44 @@ QCheckBox::indicator {
 
 QCheckBox::indicator:checked
 {
-  image: url("""+ checkActiveIcon +""");
+  image: url(""" + checkNotesTrue +""");
 }
 QCheckBox::indicator:unchecked
 {
-  image: url("""+ checkInActiveIcon +""");
+  image: url(""" + checkNotesFalse +""");
 }
-    """
-    self.setStyleSheet(styleSheetCuston)
+"""
+
+styleStarCheckBox = """
+QCheckBox::indicator {
+ width: 18px;
+ height: 18px;
+}
+
+QCheckBox::indicator:checked
+{
+  image: url(""" + checkActiveIcon +""");
+}
+QCheckBox::indicator:unchecked
+{
+  image: url(""" + checkInActiveIcon +""");
+}
+"""
 
 
+styleStarRadioButton = """
+QRadioButton::indicator {
+ width: 18px;
+ height: 18px;
+}
 
-if __name__ == '__main__':
-  app = QtWidgets.QApplication(sys.argv)
-  checkBoxW = checkBox()
-  checkBoxW.show()
-  os._exit((app.exec_()))
+QRadioButton::indicator:checked
+{
+  image: url(""" + checkActiveIcon +""");
+}
+QRadioButton::indicator:unchecked
+{
+  image: url(""" + checkInActiveIcon +""");
+}
+"""
+

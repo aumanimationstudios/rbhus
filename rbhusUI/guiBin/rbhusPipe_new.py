@@ -1,5 +1,4 @@
 #!/usr/bin/env python2
-#!/usr/bin/python -m pdb
 #-*- coding: utf-8 -*-
 __author__ = "Shrinidhi Rao"
 __license__ = "GPL"
@@ -28,12 +27,13 @@ import rbhus.dbPipe
 import rbhus.constantsPipe
 import rbhus.utilsPipe
 import rbhus.debug
-import rbhusUI.lib.qt5.customWidgets.checkBox_favorite
+import rbhusUI.lib.qt5.customWidgets.checkBox_style
 import rbhus.pyperclip
 import rbhus.hgmod
 import time
-
+import zmq
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
+
 
 projects = []
 
@@ -50,6 +50,7 @@ scb = "selectCheckBox.py"
 vc = "rbhusPipeVersions.py"
 rS = "rbhusPipeRenderSubmit.py"
 rR = "rbhusPipeReview.py"
+rN = "rbhusPipeNotes.py"
 
 assImporter = "rbhusAssetImport.py"
 
@@ -64,33 +65,57 @@ fileSelectCmd = os.path.join(file_dir, fileSelect)
 versionCmd = os.path.join(file_dir, vc)
 rbhusPipeRenderSubmitCmd = os.path.join(file_dir, rS)
 rbhusPipeReviewCmd = os.path.join(file_dir, rR)
+rbhusPipeNotesCmd = os.path.join(file_dir, rN)
 rbhusPipeAssetImportCmd = os.path.join(file_dir, assImporter)
 selectRadioBoxCmd = os.path.join(file_dir, srb)
 
 
 updateAssThreads = []
 updateAssThreadsFav = []
+favWidgets = []
+ImageWidgets = []
+noteWidgets = []
 
-assColumnList = ['','asset','assigned','reviewer','modified','v','review','publish','']
+
+assColumnList = ['','','asset','assigned','reviewer','modified','v','review','publish','']
 
 try:
   username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
 except:
   pass
 
-favLock = QtCore.QReadWriteLock()
+favLock = QtCore.QMutex()
 updateAssTimer = QtCore.QTimer()
 updateAssFavTimer = QtCore.QTimer()
 
 
+class api_serv(QtCore.QThread):
+  msg_recved = QtCore.pyqtSignal(object)
+  def __init__(self,parent):
+    super(api_serv, self).__init__(parent)
+
+    self.context = zmq.Context()
+
+    # Define the socket using the "Context"
+    self.sock = self.context.socket(zmq.REP)
+    self.sock.bind("tcp://127.0.0.1:8989")
+    rbhus.debug.info("API-SERV")
+  def run(self):
+    # Run a simple "Echo" server
+    while True:
+      (id, msg) = self.sock.recv_multipart()
+      self.msg_recved.emit(msg)
+      self.sock.send_multipart([bytes(id), "ack"])
+
+
+
 class QTableWidgetItemSort(QtWidgets.QTableWidgetItem):
 
-    def __lt__(self, other):
-        return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
+  def __lt__(self, other):
+    return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
 
-    def __ge__(self, other):
-        return self.data(QtCore.Qt.UserRole) > other.data(QtCore.Qt.UserRole)
-
+  def __ge__(self, other):
+    return self.data(QtCore.Qt.UserRole) > other.data(QtCore.Qt.UserRole)
 
 
 class ImageWidget(QtWidgets.QPushButton):
@@ -110,120 +135,41 @@ class ImageWidget(QtWidgets.QPushButton):
 
 
 
-
-class updateAssQthreadFav(QtCore.QThread):
-  assSignal = QtCore.pyqtSignal(str,str,object,int)
-  progressSignal = QtCore.pyqtSignal(int,int,int)
-  totalAssets = QtCore.pyqtSignal(int)
-
-  def __init__(self, projects, parent=None):
-    super(updateAssQthreadFav, self).__init__(parent)
-    self.projSelected = copy.copy(projects)
-    self.dbcon = rbhus.dbPipe.dbPipe()
-    self.pleaseStop = False
-
-
-  def exitshit(self):
-    self.pleaseStop = True
-
-  def run(self):
-    if(self.projSelected):
-      rbhus.debug.debug("started thread")
-      assesUnsorted = []
-      for x in self.projSelected:
-        assesForProj = getAllFavorite(x)
-        if(assesForProj):
-          for ass in assesForProj:
-            assdets = rbhus.utilsPipe.getAssDetails(assPath=ass)
-            assesUnsorted.append(assdets)
-
-      if (assesUnsorted):
-        asses = sorted(assesUnsorted, key=lambda k: k['path'])
-        minLength = 0
-        maxLength = len(asses)
-        self.totalAssets.emit(maxLength)
-        current = 0
-        for x in asses:
-          if(self.pleaseStop == False):
-            current = current + 1
-            asset = rbhus.utilsPipe.assPathColorCoded(x)
-            textAssArr = []
-            if(len(self.projSelected) > 1):
-              for fc in asset.split(":"):
-                textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
-            else:
-              for fc in asset.split(":")[1:]:
-                textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
-            richAss = " " + "<b><i> : </i></b>".join(textAssArr)
-            textAss = x['path']
-            absPathAss = rbhus.utilsPipe.getAbsPath(x['path'])
-            x['fav']  = isFavorite(x['path'])
-            x['absPath'] = absPathAss
-            if (sys.platform.find("linux") >= 0):
-              try:
-                x['modified'] = time.strftime("%Y/%m/%d # %I:%M %p", time.localtime(os.path.getctime(absPathAss)))
-              except:
-                x['modified'] = "not found"
-            elif (sys.platform.find("win") >= 0):
-              try:
-                x['modified'] = time.strftime("%Y/%m/%d # %I:%M %p", time.localtime(os.path.getmtime(absPathAss)))
-              except:
-                x['modified'] = "not found"
-
-            x['preview_low'] = os.path.join(absPathAss,'preview_low.png')
-            x['preview'] = os.path.join(absPathAss, 'preview.png')
-            if(not os.path.exists(x['preview_low'])):
-              x['preview_low'] = None
-
-
-
-            self.assSignal.emit(textAss,richAss,x,current-1)
-            self.progressSignal.emit(minLength,maxLength,current)
-            time.sleep(0.02)
-          else:
-            rbhus.debug.info("STOPPING THREAD")
-            break
-      else:
-        minLength = 0
-        maxLength = 1
-        current = 1
-        self.totalAssets.emit(0)
-        self.progressSignal.emit(minLength, maxLength, current)
-    self.finished.emit()
-
-
-
 class updateAssQthread(QtCore.QThread):
   assSignal = QtCore.pyqtSignal(str,str,object,int)
   progressSignal = QtCore.pyqtSignal(int,int,int)
   totalAssets = QtCore.pyqtSignal(int)
 
-  def __init__(self,project,whereDict,parent=None):
+  def __init__(self,project,whereDict,parent=None,isFav=False):
     super(updateAssQthread, self).__init__(parent)
     self.projSelected = copy.copy(project)
     self.dbcon = rbhus.dbPipe.dbPipe()
     self.whereDict = whereDict
     self.pleaseStop = False
+    self.isFav = isFav
 
   def exitshit(self):
     self.pleaseStop = True
 
   def run(self):
     if(self.projSelected):
-      rbhus.debug.debug("started thread")
+      rbhus.debug.info("started thread")
       projWhere = []
       projWhereString = " where "
       assesUnsorted = []
-      for x in self.projSelected:
-        assesForProj = rbhus.utilsPipe.getProjAsses(x,whereDict=self.whereDict)
-        if(assesForProj):
-          assesUnsorted.extend(assesForProj)
-      #   projWhere.append("projName = '" + x + "'")
-      # projWhereString = "where " + " or ".join(projWhere)
-      # print(projWhereString)
 
-
-      # assesUnsorted = self.dbcon.execute("select * from assets " + projWhereString + " and status = " + str(rbhus.constantsPipe.assetStatusActive), dictionary=True)
+      if(self.isFav):
+        for x in self.projSelected:
+          assesForProj = getAllFavorite(x)
+          if (assesForProj):
+            for ass in assesForProj:
+              assdets = rbhus.utilsPipe.getAssDetails(assPath=ass)
+              assesUnsorted.append(assdets)
+      else:
+        for x in self.projSelected:
+          assesForProj = rbhus.utilsPipe.getProjAsses(x,whereDict=self.whereDict)
+          if(assesForProj):
+            assesUnsorted.extend(assesForProj)
 
       if (assesUnsorted):
         asses = sorted(assesUnsorted, key=lambda k: k['path'])
@@ -245,6 +191,12 @@ class updateAssQthread(QtCore.QThread):
             richAss = " " + "<b><i> : </i></b>".join(textAssArr)
             textAss = x['path']
             absPathAss = rbhus.utilsPipe.getAbsPath(x['path'])
+            notes = rbhus.utilsPipe.notesDetails(x['assetId'])
+            if(notes):
+              x['isNotes'] = True
+            else:
+              x['isNotes'] = False
+
             x['fav']  = isFavorite(x['path'])
             x['absPath'] = absPathAss
             if (sys.platform.find("linux") >= 0):
@@ -277,8 +229,8 @@ class updateAssQthread(QtCore.QThread):
         current = 1
         self.totalAssets.emit(0)
         self.progressSignal.emit(minLength, maxLength, current)
+    rbhus.debug.info("thread stopped")
     self.finished.emit()
-
 
 
 def updateFavorite(mainUid,assPath,starObj):
@@ -286,38 +238,38 @@ def updateFavorite(mainUid,assPath,starObj):
 
   fav_file = os.path.join(home_dir,".rbhusPipe__"+ str(proj) +".fav")
   fav_asses = []
+  favLock.lock()
   if(os.path.exists(fav_file)):
-    favLock.lockForRead()
     fd = open(fav_file,"r")
     try:
       fav_asses = simplejson.load(fd)
     except:
-      rbhus.debug.warning(sys.exc_info())
+      rbhus.debug.error(sys.exc_info())
     fd.close()
-    favLock.unlock()
   if(not starObj.isChecked()):
     if(assPath in fav_asses):
       try:
         fav_asses.remove(assPath)
       except:
-        rbhus.debug.warning(sys.exc_info())
+        rbhus.debug.error(sys.exc_info())
     else:
+      favLock.unlock()
       return
   else:
     if(assPath not in fav_asses):
       fav_asses.append(assPath)
     else:
+      favLock.unlock()
       return
-  favLock.lockForWrite()
   fd = open(fav_file,"w")
   try:
     simplejson.dump(fav_asses,fd)
   except:
-    rbhus.debug.warning(sys.exc_info())
+    rbhus.debug.error(sys.exc_info())
   fd.flush()
   fd.close()
   favLock.unlock()
-  updateAssetsForProjSelectFav(mainUid)
+  # updateAssetsForProjSelectFav(mainUid)
 
 
 def isFavorite(assPath):
@@ -325,7 +277,7 @@ def isFavorite(assPath):
   fav_file = os.path.join(home_dir, ".rbhusPipe__" + str(proj) + ".fav")
   fav_asses = []
   if (os.path.exists(fav_file)):
-    favLock.lockForRead()
+    favLock.lock()
     fd = open(fav_file, "r")
     try:
       fav_asses = simplejson.load(fd)
@@ -340,11 +292,12 @@ def isFavorite(assPath):
   else:
     return False
 
+
 def getAllFavorite(proj):
   fav_file = os.path.join(home_dir, ".rbhusPipe__" + str(proj) + ".fav")
   fav_asses = []
   if (os.path.exists(fav_file)):
-    favLock.lockForRead()
+    favLock.lock()
     fd = open(fav_file, "r")
     try:
       fav_asses = simplejson.load(fd)
@@ -360,18 +313,12 @@ def changeProject(mainUid):
   updateProjSelect(mainUid)
   setSequence(mainUid)
   updateAssetsForProjSelect(mainUid)
-  updateAssetsForProjSelectFav(mainUid)
+  # updateAssetsForProjSelectFav(mainUid)
 
 
 def pushRefresh(mainUid):
   # updateProjSelect(mainUid)
   updateAssetsForProjSelect(mainUid)
-
-
-def pushRefreshFav(mainUid):
-  # updateProjSelect(mainUid)
-  updateAssetsForProjSelectFav(mainUid)
-
 
 
 
@@ -383,52 +330,15 @@ def updateProjSelect(mainUid):
   for x in items:
     projects.append(str(x.text()))
   saveSelectedProjects(projects)
+  rbhus.utilsPipe.exportProj(projects[-1])
 
-
-
-
-
-def updateAssetsForProjSelectFav(mainUid):
-  updateAssFavTimer.stop()
-  updateAssFavTimer.start(500)
-
-
-
-def updateAssetsForProjSelectFavTimed(mainUid):
-  updateAssFavTimer.stop()
-  global updateAssThreadsFav
-  global projects
-
-  if(updateAssThreadsFav):
-    for runingThread in updateAssThreadsFav:
-      try:
-        runingThread.disconnect()
-      except:
-        rbhus.debug.info(sys.exc_info())
-      # try:
-      #   runingThread.progressSignal.disconnect()
-      # except:
-      #   pass
-      # try:
-      #   runingThread.totalAssets.disconnect()
-      # except:
-      #   pass
-      runingThread.exitshit()
-      updateAssThreadsFav.remove(runingThread)
-
-  updateAssThread = updateAssQthreadFav(projects,parent=mainUid)
-  updateAssThread.totalAssets.connect(lambda total,mainUid=mainUid: updateTotalAssFav(mainUid,total))
-  updateAssThread.assSignal.connect(lambda textAss,richAss,assetDets, current, mainUid=mainUid: updateAssSlotFav(mainUid, textAss, richAss,assetDets,current))
-  updateAssThread.progressSignal.connect(lambda minLength, maxLength , current, mainUid = mainUid: updateProgressBarFav(minLength,maxLength,current,mainUid))
-  updateAssThread.start()
-  updateAssThreadsFav.append(updateAssThread)
 
 
 
 
 def updateAssetsForProjSelect(mainUid):
   updateAssTimer.stop()
-  updateAssTimer.start(1000)
+  updateAssTimer.start(2000)
 
 
 def updateAssetsForProjSelectTimed(mainUid):
@@ -469,37 +379,25 @@ def updateAssetsForProjSelectTimed(mainUid):
 
   if(updateAssThreads):
     for runingThread in updateAssThreads:
+      runingThread.exitshit()
+      runingThread.wait()
       try:
         runingThread.disconnect()
       except:
         rbhus.debug.info(runingThread)
-      # try:
-      #   runingThread.progressSignal.disconnect()
-      # except:
-      #   pass
-      # try:
-      #   runingThread.totalAssets.disconnect()
-      # except:
-      #   pass
-      runingThread.exitshit()
+      try:
+        runingThread.deleteLater()
+      except:
+        rbhus.debug.info(sys.exc_info())
       updateAssThreads.remove(runingThread)
 
-  updateAssThread = updateAssQthread(project = projects,whereDict=whereDict,parent=mainUid)
+  updateAssThread = updateAssQthread(project = projects,whereDict=whereDict,parent=mainUid,isFav=mainUid.radioStarred.isChecked())
   updateAssThread.totalAssets.connect(lambda total,mainUid=mainUid: updateTotalAss(mainUid,total))
   updateAssThread.progressSignal.connect(lambda minLength, maxLength , current, mainUid = mainUid: updateProgressBar(minLength,maxLength,current,mainUid))
   updateAssThread.assSignal.connect(lambda textAss,richAss,assetDets, current, mainUid=mainUid: updateAssSlot(mainUid, textAss, richAss,assetDets,current))
+  updateAssThread.finished.connect(lambda mainUid=mainUid: updateSorting(mainUid))
   updateAssThread.start()
   updateAssThreads.append(updateAssThread)
-
-  # for x in runingThreads:
-  #   try:
-  #     x.exitshit()
-  #   except:
-  #     rbhus.debug.warning(sys.exc_info())
-  #   try:
-  #     runingThreads.remove(x)
-  #   except:
-  #     rbhus.debug.warning(sys.exc_info())
 
 
 
@@ -509,24 +407,12 @@ def updateProgressBar(minLength,maxLength,current,mainUid):
   mainUid.progressBar.setValue(current)
 
 
-def updateProgressBarFav(minLength,maxLength,current,mainUid):
-  mainUid.progressBarFav.setMinimum(minLength)
-  mainUid.progressBarFav.setMaximum(maxLength)
-  mainUid.progressBarFav.setValue(current)
-
-
-
-
-
-def updateProgressBarFav(minLength,maxLength,current,mainUid):
-  mainUid.progressBarFav.setMinimum(minLength)
-  mainUid.progressBarFav.setMaximum(maxLength)
-  mainUid.progressBarFav.setValue(current)
-
-
-
+def updateSorting(mainUid):
+  mainUid.tableWidgetAssets.setSortingEnabled(True)
 
 def updateTotalAss(mainUid,totalRows):
+  global favWidgets
+  global ImageWidgets
   # global assColumnList
   mainUid.labelTotal.setText(str(totalRows))
   # try:
@@ -537,8 +423,27 @@ def updateTotalAss(mainUid,totalRows):
   # mainUid.tableWidgetAssets.clearContents()
   mainUid.tableWidgetAssets.setSortingEnabled(False)
   mainUid.tableWidgetAssets.clear()
+  for x in favWidgets:
+    try:
+      x.deleteLater()
+    except:
+      rbhus.debug.info(sys.exc_info())
+  for x in ImageWidgets:
+    try:
+      x.deleteLater()
+    except:
+      rbhus.debug.info(sys.exc_info())
+  for x in noteWidgets:
+    try:
+      x.deleteLater()
+    except:
+      rbhus.debug.info(sys.exc_info())
+
+  del favWidgets[:]
+  del ImageWidgets[:]
+  del noteWidgets[:]
   mainUid.tableWidgetAssets.setRowCount(totalRows)
-  mainUid.tableWidgetAssets.setColumnCount(9)
+  mainUid.tableWidgetAssets.setColumnCount(10)
   # mainUid.tableWidgetAssets.customContextMenuRequested.connect(lambda pos,mainUid=mainUid: popupAss(mainUid,pos))
 
 
@@ -550,49 +455,41 @@ def updateTotalAss(mainUid,totalRows):
     cn += 1
 
 
-def updateTotalAssFav(mainUid,totalRows):
-  # global assColumnList
-  mainUid.labelTotalFav.setText(str(totalRows))
-  # try:
-  #   mainUid.tableWidgetAssetsFav.disconnect()
-  # except:
-  #   pass
-  # mainUid.tableWidgetAssetsFav.clearContents()
-  mainUid.tableWidgetAssetsFav.setSortingEnabled(False)
-  mainUid.tableWidgetAssetsFav.clear()
-  mainUid.tableWidgetAssetsFav.setRowCount(totalRows)
-  mainUid.tableWidgetAssetsFav.setColumnCount(9)
-  # mainUid.tableWidgetAssetsFav.customContextMenuRequested.connect(lambda pos,mainUid=mainUid: popupAss(mainUid,pos))
-
-
-  cn = 0
-  for x in assColumnList:
-    itemcn = QtWidgets.QTableWidgetItem()
-    itemcn.setText(x)
-    mainUid.tableWidgetAssetsFav.setHorizontalHeaderItem(cn, itemcn)
-    cn += 1
-
-
-
-
 
 def updateAssSlot(mainUid, textAss,richAss,assetDets,currentRow):
-  fav = rbhusUI.lib.qt5.customWidgets.checkBox_favorite.checkBox()
-  fav.assetDets = assetDets
+  global favWidgets
+  global ImageWidgets
+  global noteWidgets
+  fav = QtWidgets.QCheckBox()
   fav.setParent(mainUid)
+  fav.assetDets = assetDets
   fav.clicked.connect(lambda clicked,assPath=assetDets['path'], starObj = fav, mainUid=mainUid : updateFavorite(mainUid,assPath,starObj))
 
   if(assetDets['fav']):
     fav.setChecked(True)
+  fav.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarCheckBox)
+  favWidgets.append(fav)
+
+  note = QtWidgets.QCheckBox()
+  note.setParent(mainUid)
+  note.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleNotesCheckBox)
+
+  if(assetDets['isNotes']):
+    note.setChecked(True)
+  else:
+    note.setChecked(False)
+  note.setEnabled(False)
+  noteWidgets.append(note)
+
 
   labelAss = QtWidgets.QLabel()
+  labelAss.setParent(mainUid)
   labelAss.setTextFormat(QtCore.Qt.RichText)
   labelAss.setText(richAss)
   labelAss.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-  labelAss.setParent(mainUid)
 
-  # itemAssPath = QTableWidgetItemSort()
-  # itemAssPath.setData(QtCore.Qt.UserRole,assetDets['path'])
+  itemAssPath = QTableWidgetItemSort()
+  itemAssPath.setData(QtCore.Qt.UserRole,assetDets['path'])
   # itemAssPath.setFlags(QtCore.Qt.NoItemFlags)
 
   itemModified = QtWidgets.QTableWidgetItem()
@@ -677,144 +574,30 @@ def updateAssSlot(mainUid, textAss,richAss,assetDets,currentRow):
     # previewWidget = ImageWidget(assetDets['preview_low'],48)
     previewWidget = ImageWidget(assetDets['preview_low'],48,parent=mainUid)
     previewWidget.clicked.connect(lambda x, imagePath = assetDets['preview']: imageWidgetClicked(imagePath))
+    ImageWidgets.append(previewWidget)
   else:
     previewWidget = None
 
 
 
   mainUid.tableWidgetAssets.setCellWidget(currentRow,0,fav)
-  # mainUid.tableWidgetAssets.setItem(currentRow, 1, itemAssPath)
-  mainUid.tableWidgetAssets.setCellWidget(currentRow, 1, labelAss)
+  mainUid.tableWidgetAssets.setCellWidget(currentRow,1,note)
+  mainUid.tableWidgetAssets.setItem(currentRow, 2, itemAssPath)
+  mainUid.tableWidgetAssets.setCellWidget(currentRow, 2, labelAss)
 
-  mainUid.tableWidgetAssets.setItem(currentRow, 2, itemAssigned)
-  mainUid.tableWidgetAssets.setItem(currentRow, 3, itemReviewer)
-  mainUid.tableWidgetAssets.setItem(currentRow, 4, itemModified)
-  mainUid.tableWidgetAssets.setItem(currentRow, 5, itemVersion)
-  mainUid.tableWidgetAssets.setItem(currentRow, 6, itemReviewStatus)
-  mainUid.tableWidgetAssets.setItem(currentRow, 7, itemPublished)
+  mainUid.tableWidgetAssets.setItem(currentRow, 3, itemAssigned)
+  mainUid.tableWidgetAssets.setItem(currentRow, 4, itemReviewer)
+  mainUid.tableWidgetAssets.setItem(currentRow, 5, itemModified)
+  mainUid.tableWidgetAssets.setItem(currentRow, 6, itemVersion)
+  mainUid.tableWidgetAssets.setItem(currentRow, 7, itemReviewStatus)
+  mainUid.tableWidgetAssets.setItem(currentRow, 8, itemPublished)
 
   if(previewWidget):
-    mainUid.tableWidgetAssets.setCellWidget(currentRow, 8, previewWidget)
+    mainUid.tableWidgetAssets.setCellWidget(currentRow, 9, previewWidget)
 
   mainUid.tableWidgetAssets.resizeColumnsToContents()
   # mainUid.tableWidgetAssets.setItemWidget(item, label)
 
-
-def updateAssSlotFav(mainUid, textAss,richAss,assetDets,currentRow):
-  fav = rbhusUI.lib.qt5.customWidgets.checkBox_favorite.checkBox()
-  fav.assetDets = assetDets
-  fav.setParent(mainUid.tableWidgetAssetsFav)
-  fav.clicked.connect(lambda clicked,assPath=assetDets['path'], starObj = fav, mainUid=mainUid : updateFavorite(mainUid,assPath,starObj))
-
-  if(assetDets['fav']):
-    fav.setChecked(True)
-
-  labelAss = QtWidgets.QLabel()
-  labelAss.setTextFormat(QtCore.Qt.RichText)
-  labelAss.setText(richAss)
-  labelAss.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-  labelAss.setParent(mainUid)
-
-  itemModified = QtWidgets.QTableWidgetItem()
-  itemModified.setText(assetDets['modified'])
-
-  itemAssigned = QtWidgets.QTableWidgetItem()
-  itemAssigned.setText(assetDets['assignedWorker'])
-  # itemAssigned.setTextAlignment(QtCore.Qt.AlignCenter)
-
-  itemReviewer = QtWidgets.QTableWidgetItem()
-  itemReviewer.setText(assetDets['reviewUser'])
-  # itemReviewer.setTextAlignment(QtCore.Qt.AlignCenter)
-
-  itemVersion = QtWidgets.QTableWidgetItem()
-  if (not assetDets['versioning']):
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(250, 100, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    # itemVersion.setText("")
-    # itemReviewStatus.setText("notDone")
-    itemVersion.setBackground(brush1)
-  else:
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(0, 150, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    # itemVersion.setText(str(assetDets['reviewVersion']))
-    itemVersion.setTextAlignment(QtCore.Qt.AlignCenter)
-    # itemReviewStatus.setText("inProgress : " + str(assetDets['reviewVersion']))
-    itemVersion.setBackground(brush1)
-
-  itemReviewStatus = QtWidgets.QTableWidgetItem()
-  if (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusNotDone):
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(250, 100, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemReviewStatus.setText("")
-    # itemReviewStatus.setText("notDone")
-    itemReviewStatus.setBackground(brush1)
-  elif (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusInProgress):
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(0, 150, 250))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemReviewStatus.setText(str(assetDets['reviewVersion']))
-    itemReviewStatus.setTextAlignment(QtCore.Qt.AlignCenter)
-    # itemReviewStatus.setText("inProgress : " + str(assetDets['reviewVersion']))
-    itemReviewStatus.setBackground(brush1)
-  else:
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(0, 150, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemReviewStatus.setText(str(assetDets['reviewVersion']))
-    itemReviewStatus.setTextAlignment(QtCore.Qt.AlignCenter)
-    itemReviewStatus.setBackground(brush1)
-
-  itemPublished = QtWidgets.QTableWidgetItem()
-  if (assetDets['publishVersion']):
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(0, 150, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemPublished.setText(str(assetDets['publishVersion']))
-    itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
-    # itemReviewStatus.setText("notDone")
-    itemPublished.setBackground(brush1)
-    if(assetDets['reviewVersion']):
-      if(assetDets['publishVersion'] != assetDets['reviewVersion']):
-        brush1 = QtGui.QBrush()
-        brush1.setColor(QtGui.QColor(255,192,203))
-        brush1.setStyle(QtCore.Qt.SolidPattern)
-        itemPublished.setText(str(assetDets['publishVersion']))
-        itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
-        # itemReviewStatus.setText("notDone")
-        itemPublished.setBackground(brush1)
-  else:
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(250, 100, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemPublished.setText("")
-    itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
-    itemPublished.setBackground(brush1)
-
-  if(assetDets['preview_low']):
-    previewWidget = ImageWidget(assetDets['preview_low'],48,mainUid.tableWidgetAssetsFav)
-    previewWidget.clicked.connect(lambda x, imagePath = assetDets['preview']: imageWidgetClicked(imagePath))
-  else:
-    previewWidget = None
-
-
-
-  mainUid.tableWidgetAssetsFav.setCellWidget(currentRow,0,fav)
-  mainUid.tableWidgetAssetsFav.setCellWidget(currentRow, 1, labelAss)
-  mainUid.tableWidgetAssetsFav.setItem(currentRow, 2, itemAssigned)
-  mainUid.tableWidgetAssetsFav.setItem(currentRow, 3, itemReviewer)
-  mainUid.tableWidgetAssetsFav.setItem(currentRow, 4, itemModified)
-  mainUid.tableWidgetAssetsFav.setItem(currentRow, 5, itemVersion)
-  mainUid.tableWidgetAssetsFav.setItem(currentRow, 6, itemReviewStatus)
-  mainUid.tableWidgetAssetsFav.setItem(currentRow, 7, itemPublished)
-
-  if(previewWidget):
-    mainUid.tableWidgetAssetsFav.setCellWidget(currentRow, 8, previewWidget)
-
-  mainUid.tableWidgetAssetsFav.resizeColumnsToContents()
-  # mainUid.tableWidgetAssets.setItemWidget(item, label)
 
 
 def imageWidgetClicked(imagePath):
@@ -1227,40 +1010,6 @@ def setAssTypes(mainUid):
 
 
 def refreshFilter(mainUid):
-  # try:
-  #   mainUid.comboSeq.disconnect()
-  # except:
-  #   pass
-  #
-  # try:
-  #   mainUid.comboSeq.disconnect()
-  # except:
-  #   pass
-  #
-  # try:
-  #   mainUid.comboStage.disconnect()
-  # except:
-  #   pass
-  #
-  # try:
-  #   mainUid.comboNode.disconnect()
-  # except:
-  #   pass
-  #
-  # try:
-  #   mainUid.comboFile.disconnect()
-  # except:
-  #   pass
-  #
-  # try:
-  #   mainUid.comboScn.disconnect()
-  # except:
-  #   pass
-  #
-  # try:
-  #   mainUid.comboAssType.disconnect()
-  # except:
-  #   pass
 
   setStageTypes(mainUid)
   setNodeTypes(mainUid)
@@ -1269,14 +1018,6 @@ def refreshFilter(mainUid):
   setSequence(mainUid)
   setScene(mainUid)
 
-  # mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: setScene(mainUid))
-  # mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsSeq(mainUid))
-  # mainUid.comboStage.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
-  # mainUid.comboNode.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
-  # mainUid.comboFile.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
-  # mainUid.comboScn.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
-  # mainUid.comboAssType.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
-  # updateAssetsForProjSelect(mainUid)
 
 
 
@@ -1361,6 +1102,7 @@ def popupAss(mainUid,pos,isFav=False):
   assEditAction = menuTools.addAction("edit")
 
   assReviewAction = menuTools.addAction("check review")
+  assNotesAction = menuTools.addAction("asset notes")
 
   menuTools.addMenu(menuCopy)
   # menuTools.addMenu(menuProgress)
@@ -1399,6 +1141,10 @@ def popupAss(mainUid,pos,isFav=False):
 
   if(action == assReviewAction):
     reviewAss(mainUid,assetList=listAsses)
+
+  if(action == assNotesAction):
+    notesAss(mainUid,assetList=listAsses)
+
   if(action == assPublishPath):
     copyPublishPath(mainUid,assetList=listAsses)
   if(action == assVersionPath):
@@ -1415,12 +1161,30 @@ def popupAss(mainUid,pos,isFav=False):
 def reviewAss(mainUid,assetList=None):
   if(assetList):
     listAsses = assetList
+  if(isinstance(assetList,str)):
+    assPath = assetList
+  else:
+    listedAss = listAsses[0]
+    assPath = listedAss['path']
 
-  listedAss = listAsses[0]
   if(sys.platform.find("win") >= 0):
-    subprocess.Popen([rbhusPipeReviewCmd,"--assetpath",listedAss['path']],shell = True)
+    subprocess.Popen([rbhusPipeReviewCmd,"--assetpath",assPath],shell = True)
   elif(sys.platform.find("linux") >= 0):
-    subprocess.Popen(rbhusPipeReviewCmd +" --assetpath "+ listedAss['path'],shell = True)
+    subprocess.Popen(rbhusPipeReviewCmd +" --assetpath "+ assPath,shell = True)
+
+def notesAss(mainUid,assetList=None):
+  if(assetList):
+    listAsses = assetList
+  if(isinstance(assetList,str)):
+    assPath = assetList
+  else:
+    listedAss = listAsses[0]
+    assPath = listedAss['path']
+
+  if(sys.platform.find("win") >= 0):
+    subprocess.Popen([rbhusPipeNotesCmd,"--assetpath",assPath],shell = True)
+  elif(sys.platform.find("linux") >= 0):
+    subprocess.Popen(rbhusPipeNotesCmd +" --assetpath "+ assPath,shell = True)
 
 
 
@@ -1593,6 +1357,60 @@ def editAss(mainUid,assetList=None):
 
 
 
+def rbhusPipeSeqSceCreate(mainUid):
+  p = QtCore.QProcess(parent=mainUid)
+  p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeSeqSceCreate_"+ username +".log")
+  p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeSeqSceCreate_"+ username +".err")
+  mainUid.actionNew_seq_scn.setEnabled(False)
+  p.start(sys.executable,rbhusPipeSeqSceCreateCmd.split())
+  p.finished.connect(lambda exitstatus ,test, mainUid=mainUid:rbhusPipeSeqSceCreateEnable(mainUid,exitstatus))
+
+def rbhusPipeSeqSceCreateEnable(mainUid,exitStatus):
+  mainUid.actionNew_seq_scn.setEnabled(True)
+
+
+def rbhusPipeSeqSceEdit(mainUid):
+  p = QtCore.QProcess(parent=mainUid)
+  p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeSeqSceEdit_"+ username +".log")
+  p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeSeqSceEdit_"+ username +".err")
+  mainUid.actionEdit_seq_scn.setEnabled(False)
+  p.start(sys.executable,rbhusPipeSeqSceEditCmd.split())
+  p.finished.connect(lambda exitstatus , test, mainUid=mainUid:rbhusPipeSeqSceEditEnable(mainUid,exitstatus))
+
+def rbhusPipeSeqSceEditEnable(mainUid,exitStatus):
+  mainUid.actionEdit_seq_scn.setEnabled(True)
+
+
+
+def rbhusPipeAssetCreate(mainUid):
+  p = QtCore.QProcess(parent=mainUid)
+  p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAssetCreate_"+ username +".log")
+  p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeAssetCreate_"+ username +".err")
+  mainUid.pushNewAsset.setEnabled(False)
+  rbhus.debug.info("wtf1 : "+ rbhusPipeAssetCreateCmd)
+  p.start(sys.executable,rbhusPipeAssetCreateCmd.split())
+  p.finished.connect(lambda exitstatus,test, mainUid=mainUid: rbhusPipeAssCreateEnable(exitstatus,mainUid))
+
+
+def rbhusPipeAssCreateEnable(exitStatus,mainUid):
+  mainUid.pushNewAsset.setEnabled(True)
+
+
+def rbhusAssImport(mainUid):
+  global rbhusPipeAssetImportCmd
+  p = QtCore.QProcess(parent=mainUid)
+  p.setStandardOutputFile(tempDir + os.sep + "rbhusPipeAssetImport_" + username + ".log")
+  p.setStandardErrorFile(tempDir + os.sep + "rbhusPipeAssetImport_" + username + ".err")
+  mainUid.pushAssImport.setEnabled(False)
+  rbhusPipeAssetImportCmdExe = rbhusPipeAssetImportCmd +" "+ os.environ['rp_proj_projName']
+  p.start(sys.executable, rbhusPipeAssetImportCmdExe.split())
+  p.finished.connect(lambda exitstatus,test, mainUid=mainUid: rbhusPipeAssImportEnable(mainUid))
+
+
+def rbhusPipeAssImportEnable(mainUid):
+  mainUid.pushAssImport.setEnabled(True)
+
+
 def setUsers(mainUid):
   users = rbhus.utilsPipe.getUsers()
   outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(mainUid.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
@@ -1616,6 +1434,7 @@ def saveSearchItem(mainUid):
   searchBoxSave = str(mainUid.lineEditSearch.text())
   isAssetNameSave = str(mainUid.checkAssName.isChecked())
   isAssetPathSave = str(mainUid.checkAssPath.isChecked())
+  isStarred = str(mainUid.radioStarred.isChecked())
   saveString = assetTypeSave +"###"+ \
                seqSave +"###"+ \
                scnSave +"###"+ \
@@ -1628,6 +1447,7 @@ def saveSearchItem(mainUid):
                isUsersSave +"###"+ \
                searchBoxSave +"###"+ \
                isAssetNameSave +"###"+ \
+               isStarred +"###"+ \
                isAssetPathSave
 
 
@@ -1669,12 +1489,13 @@ def searchItemLoad():
 def loadSearch(mainUid):
   mainUid.listWidgetSearch.clear()
   saveSearchArray = searchItemLoad()
-  for x in saveSearchArray:
-    item = QtWidgets.QListWidgetItem()
-    item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
-    item.setText(x[x.keys()[-1]])
-    item.assFilter = x.keys()[-1]
-    mainUid.listWidgetSearch.addItem(item)
+  if(saveSearchArray):
+    for x in saveSearchArray:
+      item = QtWidgets.QListWidgetItem()
+      item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
+      item.setText(x[x.keys()[-1]])
+      item.assFilter = x.keys()[-1]
+      mainUid.listWidgetSearch.addItem(item)
 
 
 def searchItemSave(itemDict):
@@ -1794,10 +1615,17 @@ def searchItemActivate(mainUid):
     mainUid.checkAssName.setChecked(False)
 
   if(s[12] == "True"):
+    mainUid.radioStarred.setChecked(True)
+  else:
+    mainUid.radioStarred.setChecked(False)
+
+
+
+  if(s[13] == "True"):
     mainUid.checkAssPath.setChecked(True)
   else:
     mainUid.checkAssPath.setChecked(False)
-
+  updateAssetsForProjSelect(mainUid)
 
 
 def saveSelectedProjects(project):
@@ -1822,30 +1650,57 @@ def loadDefaultProject(mainUid):
 
 
 
+def run_api(mainUid,inputDict):
+  inputs = simplejson.loads(inputDict)
+  temp_project = inputs['project']
+  # old_project = self.set_project
+  temp_asset = inputs['asset']
+  temp_run = inputs['run']
+  # if(temp_project != self.set_project):
+  #   rbhusPipeSetProject_temp(temp_project)
+  if(temp_run == rbhus.constantsPipe.run_api_cmd_review):
+    reviewAss(mainUid,assetList= temp_asset)
+  # if (temp_project != self.set_project):
+  #   rbhusPipeSetProject_temp(old_project)
 
 
 
-def main():
-  mainUid = uic.loadUi(ui_main)
+def main(mainUid):
   mainUid.listWidgetProj.clear()
 
 
   # importUid = uic.loadUi(ui_ass_for_import)
 
   iconRefresh = QtGui.QIcon()
-  iconRefresh.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+  iconRefresh.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/ic_loop_black_48dp_2x.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
   iconNew = QtGui.QIcon()
-  iconNew.addPixmap(QtGui.QPixmap(os.path.join(base_dir, "etc/icons/ic_action_new.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+  iconNew.addPixmap(QtGui.QPixmap(os.path.join(base_dir, "etc/icons/ic_forward_black_48dp_2x.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+
+  iconNewAsset = QtGui.QIcon()
+  iconNewAsset.addPixmap(QtGui.QPixmap(os.path.join(base_dir, "etc/icons/ic_add_box_black_48dp_2x.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+
+
+
+  iconImportAsset = QtGui.QIcon()
+  iconImportAsset.addPixmap(QtGui.QPixmap(os.path.join(base_dir, "etc/icons/ic_move_to_inbox_black_48dp_2x.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+
+
+
+
+  mainUid.pushNewAsset.setIcon(iconNewAsset)
+
+  mainUid.pushAssImport.setIcon(iconImportAsset)
 
   mainUid.pushRefresh.setIcon(iconRefresh)
-  mainUid.pushRefreshFav.setIcon(iconRefresh)
+  # mainUid.pushRefreshFav.setIcon(iconRefresh)
   mainUid.pushRefreshFilters.setIcon(iconRefresh)
   mainUid.pushSaveFilters.setIcon(iconNew)
+  mainUid.radioStarred.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarRadioButton)
 
 
   dbcon = rbhus.dbPipe.dbPipe()
-  projects = dbcon.execute("select projName from proj",dictionary=True)
+  projects = dbcon.execute("select projName from proj where status=\""+ str(rbhus.constantsPipe.projActive) +"\"",dictionary=True)
 
 
   icon = QtGui.QIcon()
@@ -1931,13 +1786,13 @@ def main():
 
 
   mainUid.pushRefresh.clicked.connect(lambda clicked, mainUid=mainUid: pushRefresh(mainUid))
-  mainUid.pushRefreshFav.clicked.connect(lambda clicked, mainUid=mainUid: pushRefreshFav(mainUid))
 
 
   mainUid.pushRefreshFilters.clicked.connect(lambda clicked, mainUid=mainUid: refreshFilter(mainUid))
 
   mainUid.radioMineAss.clicked.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
   mainUid.radioAllAss.clicked.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
+  mainUid.radioStarred.clicked.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
   mainUid.pushSaveFilters.clicked.connect(lambda clicked,mainUid=mainUid: saveSearchItem(mainUid))
 
@@ -1948,7 +1803,6 @@ def main():
 
 
   updateAssTimer.timeout.connect(lambda mainUid=mainUid: updateAssetsForProjSelectTimed(mainUid))
-  updateAssFavTimer.timeout.connect(lambda mainUid=mainUid: updateAssetsForProjSelectFavTimed(mainUid))
 
 
   mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: setScene(mainUid))
@@ -1959,17 +1813,22 @@ def main():
   mainUid.comboScn.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
   mainUid.comboAssType.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
-  mainUid.tableWidgetAssetsFav.customContextMenuRequested.connect(lambda pos, mainUid=mainUid,isFav = True: popupAss(mainUid, pos,isFav))
   mainUid.tableWidgetAssets.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupAss(mainUid, pos))
 
+
+  mainUid.pushAssImport.clicked.connect(lambda clicked, mainUid=mainUid: rbhusAssImport(mainUid))
+  mainUid.pushNewAsset.clicked.connect(lambda clicked, mainUid=mainUid: rbhusPipeAssetCreate(mainUid))
+  mainUid.actionNew_seq_scn.triggered.connect(lambda clicked, mainUid=mainUid: rbhusPipeSeqSceCreate(mainUid))
+  mainUid.actionEdit_seq_scn.triggered.connect(lambda clicked, mainUid=mainUid: rbhusPipeSeqSceEdit(mainUid))
 
 
   loadDefaultProject(mainUid)
 
   mainUid.splitter.setStretchFactor(0,10)
 
-
-
+  api = api_serv(mainUid)
+  api.msg_recved.connect(lambda inputDict,mainUid=mainUid :run_api(mainUid,inputDict))
+  api.start()
 
 
 
@@ -1977,5 +1836,6 @@ def main():
 
 if __name__ == '__main__':
   app = QtWidgets.QApplication(sys.argv)
-  main()
+  mainUid = uic.loadUi(ui_main)
+  main(mainUid)
   os._exit((app.exec_()))

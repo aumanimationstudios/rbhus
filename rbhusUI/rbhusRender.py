@@ -10,7 +10,7 @@ dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
-
+# os.environ['QT_STYLE_OVERRIDE'] = "windows"
 
 import rbhusAuthMod
 print(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")

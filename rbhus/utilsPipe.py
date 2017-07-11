@@ -1146,6 +1146,17 @@ def reviewAdd(assdict={}):
   except:
     debug.debug(str(sys.exc_info()))
 
+def notesAdd(assdict={}):
+  dbconn = dbPipe.dbPipe()
+  try:
+    dbconn.execute("insert into assetNotes (assetId,notes,username,datetime) value (\""\
+      + str(assdict['assetId']).rstrip().lstrip() +"\",\""\
+      + str(assdict['notes']).rstrip().lstrip() +"\",\""\
+      + str(assdict['username']).rstrip().lstrip() +"\",\""\
+      + str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"\")")
+  except:
+    debug.debug(str(sys.exc_info()))
+
 
 def reviewVersion(asspath,version):
   dbconn = dbPipe.dbPipe()
@@ -1202,6 +1213,22 @@ def reviewDetails(assId = 0,revCount=0):
         return(0)
       else:
         return(rows[0])
+  else:
+    return(0)
+
+
+def notesDetails(assId = 0):
+  if(assId):
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("select * from assetNotes where assetId='"+ str(assId) +"' order by notesCount", dictionary=True)
+    except:
+      debug.debug(str(sys.exc_info()))
+      return(0)
+    if(isinstance(rows, int)):
+      return(0)
+    else:
+      return(rows)
   else:
     return(0)
 

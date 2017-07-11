@@ -264,10 +264,10 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
         if (self.checkReviewNotifiers.isChecked()):
           assdict['reviewNotifyUsers'] = str(self.lineEditReviewNotifiers.text()).strip()
           
-        if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username or assdets['assignedWorker'] == self.username)):
+        if(utilsPipe.isAssAssigned(assdets) or utilsPipe.isProjAdmin(assdets)):
           print("user not allowed to edit . not an admin or an asset founder!!")
           self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-          return(0)
+          return(111)
 
         if(assdict):
           utilsPipe.assEdit(assid = xid , assdict=assdict)

@@ -222,9 +222,10 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   def popupPublish(self, pos):
     menu = QtGui.QMenu()
     #openFileAction = menu.addAction("open file")
-    reviewAction = menu.addAction("send for review")
+    punkaction1 = menu.addAction("-")
     publishAction = menu.addAction("publish")
     reviseAction = menu.addAction("revise")
+    reviewAction = menu.addAction("send for review")
     exportAction = menu.addAction("export")
     openVersionAction = menu.addAction("open version")
     action = menu.exec_(self.tableVersions.mapToGlobal(pos))
@@ -416,7 +417,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
   def messageBoxWarn(self, hard=False):
     msgbox = QtGui.QMessageBox()
-    msgbox.setText(unicode("NOT COMMITING !\nAsset not assigned to you!!!\nThank Mr. BHARATH NAG for this popup"))
+    msgbox.setText(unicode("NOT COMMITING !\nAsset not assigned to you!!!"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
