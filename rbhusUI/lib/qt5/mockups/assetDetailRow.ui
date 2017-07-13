@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>831</width>
+    <height>86</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QCheckBox" name="checkBox_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QCheckBox::indicator {
+ width: 18px;
+ height: 18px;
+}
+
+QCheckBox::indicator:checked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/ic_action_star_active.png);
+}
+QCheckBox::indicator:unchecked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/ic_action_star_inactive.png);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QCheckBox::indicator {
+ width: 18px;
+ height: 18px;
+}
+
+QCheckBox::indicator:checked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/notes_true.png);
+}
+QCheckBox::indicator:unchecked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/notes_false.png);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QCheckBox::indicator {
+ width: 18px;
+ height: 18px;
+}
+
+QCheckBox::indicator:checked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/review_approved.png);
+}
+QCheckBox::indicator:indeterminate
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/review_inprogress.png);
+}
+QCheckBox::indicator:unchecked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/review_notdone.png);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="tristate">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox_4">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QCheckBox::indicator {
+ width: 18px;
+ height: 18px;
+}
+
+QCheckBox::indicator:checked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/published_true.png);
+}
+QCheckBox::indicator:unchecked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/published_false.png);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="tristate">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>AndePirki_se01_ep001_ballThrow:library:Dumbbells:model:lookdev:blend</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
