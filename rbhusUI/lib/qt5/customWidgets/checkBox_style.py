@@ -73,3 +73,8 @@ QRadioButton::indicator:unchecked
 }
 """
 
+
+if __name__ == '__main__':
+  print (styleNotesCheckBox)
+  print (styleStarCheckBox)
+  print (styleStarRadioButton)

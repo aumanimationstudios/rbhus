@@ -301,6 +301,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     if(selvers):
       sv = selvers[-1]
       self.versionsHg._archive(sv)
+      utilsPipe.updateAssModifies(self.versionsHg.assDets['assetId'], "published version :" + str(sv))
     self.hglog()
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
         
@@ -432,6 +433,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     debug.info("returned : "+ str(perm))
     if(perm == 111):
       self.messageBoxWarn()
+      return(0)
 
     self.versionsHg._addremove()
     self.versionsHg._pull()
@@ -448,7 +450,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg._update()
     os.chdir(self.versionsHg.localPath)
     self.hglog()
-    utilsPipe.updateAssModifies(self.versionsHg.assDets['assetId'])
+    utilsPipe.updateAssModifies(self.versionsHg.assDets['assetId'],"commited")
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     
     

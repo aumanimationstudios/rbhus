@@ -413,6 +413,7 @@ def updateSorting(mainUid):
 def updateTotalAss(mainUid,totalRows):
   global favWidgets
   global ImageWidgets
+  global noteWidgets
   # global assColumnList
   mainUid.labelTotal.setText(str(totalRows))
   # try:
@@ -525,14 +526,14 @@ def updateAssSlot(mainUid, textAss,richAss,assetDets,currentRow):
     brush1 = QtGui.QBrush()
     brush1.setColor(QtGui.QColor(250, 100, 100))
     brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemReviewStatus.setText("")
+    # itemReviewStatus.setText("")
     # itemReviewStatus.setText("notDone")
     itemReviewStatus.setBackground(brush1)
   elif (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusInProgress):
     brush1 = QtGui.QBrush()
     brush1.setColor(QtGui.QColor(0, 150, 250))
     brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemReviewStatus.setText(str(assetDets['reviewVersion']))
+    # itemReviewStatus.setText(str(assetDets['reviewVersion']))
     itemReviewStatus.setTextAlignment(QtCore.Qt.AlignCenter)
     # itemReviewStatus.setText("inProgress : " + str(assetDets['reviewVersion']))
     itemReviewStatus.setBackground(brush1)
@@ -540,7 +541,7 @@ def updateAssSlot(mainUid, textAss,richAss,assetDets,currentRow):
     brush1 = QtGui.QBrush()
     brush1.setColor(QtGui.QColor(0, 150, 100))
     brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemReviewStatus.setText(str(assetDets['reviewVersion']))
+    # itemReviewStatus.setText(str(assetDets['reviewVersion']))
     itemReviewStatus.setTextAlignment(QtCore.Qt.AlignCenter)
     itemReviewStatus.setBackground(brush1)
 
@@ -549,19 +550,19 @@ def updateAssSlot(mainUid, textAss,richAss,assetDets,currentRow):
     brush1 = QtGui.QBrush()
     brush1.setColor(QtGui.QColor(0, 150, 100))
     brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemPublished.setText(str(assetDets['publishVersion']))
+    # itemPublished.setText(str(assetDets['publishVersion']))
     itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
     # itemReviewStatus.setText("notDone")
     itemPublished.setBackground(brush1)
-    if(assetDets['reviewVersion']):
-      if(assetDets['publishVersion'] != assetDets['reviewVersion']):
-        brush1 = QtGui.QBrush()
-        brush1.setColor(QtGui.QColor(255,192,203))
-        brush1.setStyle(QtCore.Qt.SolidPattern)
-        itemPublished.setText(str(assetDets['publishVersion']))
-        itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
-        # itemReviewStatus.setText("notDone")
-        itemPublished.setBackground(brush1)
+    # if(assetDets['reviewVersion']):
+    #   if(assetDets['publishVersion'] != assetDets['reviewVersion']):
+    #     brush1 = QtGui.QBrush()
+    #     brush1.setColor(QtGui.QColor(255,192,203))
+    #     brush1.setStyle(QtCore.Qt.SolidPattern)
+    #     # itemPublished.setText(str(assetDets['publishVersion']))
+    #     itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
+    #     # itemReviewStatus.setText("notDone")
+    #     itemPublished.setBackground(brush1)
   else:
     brush1 = QtGui.QBrush()
     brush1.setColor(QtGui.QColor(250, 100, 100))

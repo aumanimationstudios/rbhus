@@ -138,15 +138,16 @@ def getOriginalAsses(projectToImportTo):
 
   originalAssets = rbhus.utilsPipe.getProjAsses(projectToImportTo, whereDict=origWhereDict)
   originalAssetsColord = []
-  for x in originalAssets:
-    originalAssetsColord.append(x['path'])
-    # asset = rbhus.utilsPipe.assPathColorCoded(x)
-    # textAssArr = []
-    # for fc in asset.split(":"):
-    #   textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
-    # richAss = " " + "<b><i> : </i></b>".join(textAssArr)
-    # originalAssetsColord.append(richAss)
-  originalAssetsColord.sort()
+  if(originalAssets):
+    for x in originalAssets:
+      originalAssetsColord.append(x['path'])
+      # asset = rbhus.utilsPipe.assPathColorCoded(x)
+      # textAssArr = []
+      # for fc in asset.split(":"):
+      #   textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
+      # richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+      # originalAssetsColord.append(richAss)
+    originalAssetsColord.sort()
   originalAssetsColord.insert(0, "default")
   return(originalAssetsColord)
 

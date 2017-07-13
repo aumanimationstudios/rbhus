@@ -34,6 +34,7 @@ import db
 import constants
 import utils as rUtils
 import dbRbhus
+import dbTrayServer
 
 
 
@@ -388,8 +389,21 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.cloneinfos = hostsSys
     print(hostsSys)
     #self.finished.emit(rows)
-  
-  
+
+  def getUsers(self):
+    dbcon = dbTrayServer.dbTray()
+    userHost = {}
+    try:
+      rows = dbcon.execute("select * from users", dictionary=True)
+      if (rows):
+        if (not isinstance(rows, int)):
+          for x in rows:
+            userHost[x['host']] = x['user']
+          return (userHost)
+    except:
+      debug.error(sys.exc_info())
+    return (0)
+
   def popTableHost_thread(self):
     rows = self.hostinfos
     rSelected = self.selectedHosts()

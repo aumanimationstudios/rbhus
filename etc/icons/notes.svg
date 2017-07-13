@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="399.77773"
-     inkscape:cy="190.82626"
+     inkscape:zoom="1.979899"
+     inkscape:cx="24.826752"
+     inkscape:cy="137.89322"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,7 +53,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#ff7f2a;stroke:#ff6600;stroke-width:1.38632989"
+       style="fill:#00ff00;stroke:#ff6600;stroke-width:1.38632989;fill-opacity:1"
        id="path3354"
        cx="143.79643"
        cy="550.21936"
@@ -96,5 +96,169 @@
          x="207.9438"
          id="tspan3352"
          sodipodi:role="line">N</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3347"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion3349"><rect
+           id="rect3351"
+           width="154.28572"
+           height="180.71428"
+           x="37.857143"
+           y="477.36221" /></flowRegion><flowPara
+         id="flowPara3353" /></flowRoot>    <circle
+       inkscape:export-ydpi="27.232201"
+       inkscape:export-xdpi="27.232201"
+       r="25.746126"
+       cy="660.93365"
+       cx="147.36786"
+       id="circle3355"
+       style="fill:#00ff00;stroke:#ff6600;stroke-width:1.38632989" />
+    <text
+       inkscape:export-ydpi="95.700935"
+       inkscape:export-xdpi="95.700935"
+       sodipodi:linespacing="125%"
+       id="text3357"
+       y="675.211"
+       x="132.36786"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#0055d4;fill-opacity:1;stroke:#0055d4;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#0055d4;stroke:#0055d4"
+         y="675.211"
+         x="132.36786"
+         id="tspan3359"
+         sodipodi:role="line">R</tspan></text>
+    <circle
+       inkscape:export-ydpi="27.232201"
+       inkscape:export-xdpi="27.232201"
+       style="fill:#cccccc;fill-opacity:1;stroke:#ececec;stroke-width:1.38632989"
+       id="circle3361"
+       cx="252.77499"
+       cy="658.07648"
+       r="25.746126" />
+    <text
+       inkscape:export-ydpi="95.700935"
+       inkscape:export-xdpi="95.700935"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#999999;fill-opacity:1;stroke:#ececec;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="237.77499"
+       y="672.35382"
+       id="text3363"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3365"
+         x="237.77499"
+         y="672.35382"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#999999;stroke:#ececec">R</tspan></text>
+    <circle
+       style="fill:#0055d4;stroke:#ff6600;stroke-width:1.38632989;fill-opacity:1"
+       id="circle3367"
+       cx="58.796429"
+       cy="662.36224"
+       r="25.746126"
+       inkscape:export-xdpi="27.232201"
+       inkscape:export-ydpi="27.232201" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#ff7f2a;fill-opacity:1;stroke:#ff7f2a;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+       x="43.796429"
+       y="676.63959"
+       id="text3369"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="95.700935"
+       inkscape:export-ydpi="95.700935"><tspan
+         sodipodi:role="line"
+         id="tspan3371"
+         x="43.796429"
+         y="676.63959"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#ff7f2a;stroke:#ff7f2a;fill-opacity:1;stroke-opacity:1;">R</tspan></text>
+    <circle
+       style="fill:#00ff00;stroke:#ff6600;stroke-width:1.38632989"
+       id="circle3366"
+       cx="148.79643"
+       cy="803.79077"
+       r="25.746126"
+       inkscape:export-xdpi="27.232201"
+       inkscape:export-ydpi="27.232201" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#0055d4;fill-opacity:1;stroke:#0055d4;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="135.3394"
+       y="818.06812"
+       id="text3368"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="95.700935"
+       inkscape:export-ydpi="95.700935"><tspan
+         sodipodi:role="line"
+         id="tspan3370"
+         x="135.3394"
+         y="818.06812"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#0055d4;stroke:#0055d4">P</tspan></text>
+    <circle
+       r="25.746126"
+       cy="803.53845"
+       cx="234.59225"
+       id="circle3372"
+       style="fill:#cccccc;fill-opacity:1;stroke:#ececec;stroke-width:1.38632989"
+       inkscape:export-xdpi="27.232201"
+       inkscape:export-ydpi="27.232201" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3374"
+       y="817.8158"
+       x="221.13522"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#999999;fill-opacity:1;stroke:#ececec;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-xdpi="95.700935"
+       inkscape:export-ydpi="95.700935"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#999999;stroke:#ececec"
+         y="817.8158"
+         x="221.13522"
+         id="tspan3376"
+         sodipodi:role="line">P</tspan></text>
+    <circle
+       inkscape:export-ydpi="27.232201"
+       inkscape:export-xdpi="27.232201"
+       r="25.746126"
+       cy="911.79077"
+       cx="148.79643"
+       id="circle3368"
+       style="fill:#00ff00;stroke:#ff6600;stroke-width:1.38632989" />
+    <text
+       inkscape:export-ydpi="95.700935"
+       inkscape:export-xdpi="95.700935"
+       sodipodi:linespacing="125%"
+       id="text3370"
+       y="926.06812"
+       x="135.79839"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#0055d4;fill-opacity:1;stroke:#0055d4;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#0055d4;stroke:#0055d4"
+         y="926.06812"
+         x="135.79839"
+         id="tspan3372"
+         sodipodi:role="line">V</tspan></text>
+    <circle
+       inkscape:export-ydpi="27.232201"
+       inkscape:export-xdpi="27.232201"
+       style="fill:#cccccc;fill-opacity:1;stroke:#ececec;stroke-width:1.38632989"
+       id="circle3374"
+       cx="234.59225"
+       cy="911.53845"
+       r="25.746126" />
+    <text
+       inkscape:export-ydpi="95.700935"
+       inkscape:export-xdpi="95.700935"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#999999;fill-opacity:1;stroke:#ececec;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="221.59421"
+       y="925.8158"
+       id="text3376"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3378"
+         x="221.59421"
+         y="925.8158"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#999999;stroke:#ececec">V</tspan></text>
   </g>
 </svg>

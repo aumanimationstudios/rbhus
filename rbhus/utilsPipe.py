@@ -302,20 +302,13 @@ def getSequenceScenes(proj,seq=None,sce=None):
     debug.debug(str(sys.exc_info()))
     return(0)
 
-def updateAssModifies(assId):
+def updateAssModifies(assId,notes):
   username = os.environ['rbhusPipe_acl_user']
   dbconn = dbPipe.dbPipe()
   try:
-    dbconn.execute("insert into assetModifies (assetId,username,datetime) values ('"+ assId +"','"+ username +"', now())")
+    dbconn.execute("insert into assetModifies (assetId,username,notes,datetime) values ('"+ assId +"','"+ username +"','"+ notes +"', now())")
   except:
-    try:
-      dbconn.execute("delete from assetModifies where assetId='"+ assId +"' and username='"+ username +"'")
-    except:
-      debug.debug(sys.exc_info())
-    try:
-      dbconn.execute("insert into assetModifies (assetId,username,datetime) values ('" + assId + "','" + username + "', now())")
-    except:
-      debug.error(sys.exc_info())
+    debug.error(sys.exc_info())
 
 
 
