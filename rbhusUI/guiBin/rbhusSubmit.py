@@ -246,7 +246,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     if(self.taskValues):
       if(len(sys.argv) == 2):
         self.lineEditFileName.setText(self.taskValues['fileName'])
-        #self.lineEditOutDir.setText(self.taskValues['outDir'])
+        self.lineEditOutDir.setText(self.taskValues['outDir'])
         self.lineEditOutName.setText(self.taskValues['outName'])
         self.afterTimeEdit.setTime(QtCore.QTime(self.taskValues['afterTime'].hour, self.taskValues['afterTime'].minute, self.taskValues['afterTime'].second))
         self.afterTimeEdit.setDate(QtCore.QDate(self.taskValues['afterTime'].year, self.taskValues['afterTime'].month, self.taskValues['afterTime'].day))
