@@ -38,6 +38,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore, uic
 projects = []
 
 ui_main = os.path.join(ui_dir,"ui_main.ui")
+ui_asset_details = os.path.join(ui_dir,"assetDetailRow.ui")
 
 rpA = "rbhusPipeProjCreate.py"
 rpAss = "rbhusPipeAssetCreate.py"
@@ -110,6 +111,21 @@ class api_serv(QtCore.QThread):
 
 
 class QTableWidgetItemSort(QtWidgets.QTableWidgetItem):
+
+
+  def __lt__(self, other):
+    return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
+
+  def __ge__(self, other):
+    return self.data(QtCore.Qt.UserRole) > other.data(QtCore.Qt.UserRole)
+
+
+class QListWidgetItemSort(QtWidgets.QListWidgetItem):
+  def __init__(self):
+    super(QListWidgetItemSort, self).__init__()
+
+
+
 
   def __lt__(self, other):
     return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
@@ -408,195 +424,243 @@ def updateProgressBar(minLength,maxLength,current,mainUid):
 
 
 def updateSorting(mainUid):
-  mainUid.tableWidgetAssets.setSortingEnabled(True)
+  pass
+  # mainUid.tableWidgetAssets.setSortingEnabled(True)
 
 def updateTotalAss(mainUid,totalRows):
-  global favWidgets
-  global ImageWidgets
-  global noteWidgets
+  # global favWidgets
+  # global ImageWidgets
+  # global noteWidgets
   # global assColumnList
   mainUid.labelTotal.setText(str(totalRows))
+  mainUid.listWidgetAssets.clear()
   # try:
   #   mainUid.tableWidgetAssets.disconnect()
   # except:
   #   pass
 
   # mainUid.tableWidgetAssets.clearContents()
-  mainUid.tableWidgetAssets.setSortingEnabled(False)
-  mainUid.tableWidgetAssets.clear()
-  for x in favWidgets:
-    try:
-      x.deleteLater()
-    except:
-      rbhus.debug.info(sys.exc_info())
-  for x in ImageWidgets:
-    try:
-      x.deleteLater()
-    except:
-      rbhus.debug.info(sys.exc_info())
-  for x in noteWidgets:
-    try:
-      x.deleteLater()
-    except:
-      rbhus.debug.info(sys.exc_info())
-
-  del favWidgets[:]
-  del ImageWidgets[:]
-  del noteWidgets[:]
-  mainUid.tableWidgetAssets.setRowCount(totalRows)
-  mainUid.tableWidgetAssets.setColumnCount(10)
-  # mainUid.tableWidgetAssets.customContextMenuRequested.connect(lambda pos,mainUid=mainUid: popupAss(mainUid,pos))
-
-
-  cn = 0
-  for x in assColumnList:
-    itemcn = QtWidgets.QTableWidgetItem()
-    itemcn.setText(x)
-    mainUid.tableWidgetAssets.setHorizontalHeaderItem(cn, itemcn)
-    cn += 1
+  # mainUid.tableWidgetAssets.setSortingEnabled(False)
+  # mainUid.tableWidgetAssets.clear()
+  # for x in favWidgets:
+  #   try:
+  #     x.deleteLater()
+  #   except:
+  #     rbhus.debug.info(sys.exc_info())
+  # for x in ImageWidgets:
+  #   try:
+  #     x.deleteLater()
+  #   except:
+  #     rbhus.debug.info(sys.exc_info())
+  # for x in noteWidgets:
+  #   try:
+  #     x.deleteLater()
+  #   except:
+  #     rbhus.debug.info(sys.exc_info())
+  #
+  # del favWidgets[:]
+  # del ImageWidgets[:]
+  # del noteWidgets[:]
+  # mainUid.tableWidgetAssets.setRowCount(totalRows)
+  # mainUid.tableWidgetAssets.setColumnCount(10)
+  # # mainUid.tableWidgetAssets.customContextMenuRequested.connect(lambda pos,mainUid=mainUid: popupAss(mainUid,pos))
+  #
+  #
+  # cn = 0
+  # for x in assColumnList:
+  #   itemcn = QtWidgets.QTableWidgetItem()
+  #   itemcn.setText(x)
+  #   mainUid.tableWidgetAssets.setHorizontalHeaderItem(cn, itemcn)
+  #   cn += 1
 
 
 
 def updateAssSlot(mainUid, textAss,richAss,assetDets,currentRow):
-  global favWidgets
-  global ImageWidgets
-  global noteWidgets
-  fav = QtWidgets.QCheckBox()
-  fav.setParent(mainUid)
-  fav.assetDets = assetDets
-  fav.clicked.connect(lambda clicked,assPath=assetDets['path'], starObj = fav, mainUid=mainUid : updateFavorite(mainUid,assPath,starObj))
+  assDetsWidget = uic.loadUi(ui_asset_details)
+  assDetsWidget.checkBoxStar.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarCheckBox)
+  if (assetDets['fav']):
+    assDetsWidget.checkBoxStar.setChecked(True)
+  assDetsWidget.checkBoxStar.clicked.connect(lambda clicked, assPath=assetDets['path'], starObj=assDetsWidget.checkBoxStar, mainUid=mainUid: updateFavorite(mainUid, assPath, starObj))
 
-  if(assetDets['fav']):
-    fav.setChecked(True)
-  fav.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarCheckBox)
-  favWidgets.append(fav)
+  assDetsWidget.checkBoxNotes.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleNotesCheckBox)
+  if (assetDets['isNotes']):
+    assDetsWidget.checkBoxNotes.setChecked(True)
 
-  note = QtWidgets.QCheckBox()
-  note.setParent(mainUid)
-  note.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleNotesCheckBox)
-
-  if(assetDets['isNotes']):
-    note.setChecked(True)
-  else:
-    note.setChecked(False)
-  note.setEnabled(False)
-  noteWidgets.append(note)
-
-
-  labelAss = QtWidgets.QLabel()
-  labelAss.setParent(mainUid)
-  labelAss.setTextFormat(QtCore.Qt.RichText)
-  labelAss.setText(richAss)
-  labelAss.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-
-  itemAssPath = QTableWidgetItemSort()
-  itemAssPath.setData(QtCore.Qt.UserRole,assetDets['path'])
-  # itemAssPath.setFlags(QtCore.Qt.NoItemFlags)
-
-  itemModified = QtWidgets.QTableWidgetItem()
-  itemModified.setText(assetDets['modified'])
-
-  itemAssigned = QtWidgets.QTableWidgetItem()
-  itemAssigned.setText(assetDets['assignedWorker'])
-  # itemAssigned.setTextAlignment(QtCore.Qt.AlignCenter)
-
-  itemReviewer = QtWidgets.QTableWidgetItem()
-  itemReviewer.setText(assetDets['reviewUser'])
-  # itemReviewer.setTextAlignment(QtCore.Qt.AlignCenter)
-
-  itemVersion = QtWidgets.QTableWidgetItem()
-  if (not assetDets['versioning']):
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(250, 100, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    # itemVersion.setText("")
-    # itemReviewStatus.setText("notDone")
-    itemVersion.setBackground(brush1)
-  else:
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(0, 150, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    # itemVersion.setText(str(assetDets['reviewVersion']))
-    itemVersion.setTextAlignment(QtCore.Qt.AlignCenter)
-    # itemReviewStatus.setText("inProgress : " + str(assetDets['reviewVersion']))
-    itemVersion.setBackground(brush1)
-
-  itemReviewStatus = QtWidgets.QTableWidgetItem()
+  assDetsWidget.checkBoxReview.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleReviewCheckBox)
   if (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusNotDone):
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(250, 100, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    # itemReviewStatus.setText("")
-    # itemReviewStatus.setText("notDone")
-    itemReviewStatus.setBackground(brush1)
-  elif (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusInProgress):
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(0, 150, 250))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    # itemReviewStatus.setText(str(assetDets['reviewVersion']))
-    itemReviewStatus.setTextAlignment(QtCore.Qt.AlignCenter)
-    # itemReviewStatus.setText("inProgress : " + str(assetDets['reviewVersion']))
-    itemReviewStatus.setBackground(brush1)
+    assDetsWidget.checkBoxReview.setCheckState(QtCore.Qt.Unchecked)
+  elif(assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusInProgress):
+    assDetsWidget.checkBoxReview.setCheckState(QtCore.Qt.PartiallyChecked)
   else:
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(0, 150, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    # itemReviewStatus.setText(str(assetDets['reviewVersion']))
-    itemReviewStatus.setTextAlignment(QtCore.Qt.AlignCenter)
-    itemReviewStatus.setBackground(brush1)
+    assDetsWidget.checkBoxReview.setCheckState(QtCore.Qt.Checked)
 
-  itemPublished = QtWidgets.QTableWidgetItem()
+  assDetsWidget.checkBoxPublish.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.stylePublishCheckBox)
   if (assetDets['publishVersion']):
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(0, 150, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    # itemPublished.setText(str(assetDets['publishVersion']))
-    itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
-    # itemReviewStatus.setText("notDone")
-    itemPublished.setBackground(brush1)
-    # if(assetDets['reviewVersion']):
-    #   if(assetDets['publishVersion'] != assetDets['reviewVersion']):
-    #     brush1 = QtGui.QBrush()
-    #     brush1.setColor(QtGui.QColor(255,192,203))
-    #     brush1.setStyle(QtCore.Qt.SolidPattern)
-    #     # itemPublished.setText(str(assetDets['publishVersion']))
-    #     itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
-    #     # itemReviewStatus.setText("notDone")
-    #     itemPublished.setBackground(brush1)
+    assDetsWidget.checkBoxPublish.setChecked(True)
   else:
-    brush1 = QtGui.QBrush()
-    brush1.setColor(QtGui.QColor(250, 100, 100))
-    brush1.setStyle(QtCore.Qt.SolidPattern)
-    itemPublished.setText("")
-    itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
-    itemPublished.setBackground(brush1)
+    assDetsWidget.checkBoxPublish.setChecked(False)
+
+
+  assDetsWidget.labelAsset.setTextFormat(QtCore.Qt.RichText)
+  assDetsWidget.labelAsset.setText(richAss)
 
   if(assetDets['preview_low']):
-    # previewWidget = ImageWidget(assetDets['preview_low'],48)
-    previewWidget = ImageWidget(assetDets['preview_low'],48,parent=mainUid)
+    previewWidget = ImageWidget(assetDets['preview_low'],40,parent=mainUid)
     previewWidget.clicked.connect(lambda x, imagePath = assetDets['preview']: imageWidgetClicked(imagePath))
-    ImageWidgets.append(previewWidget)
+    # ImageWidgets.append(previewWidget)
   else:
     previewWidget = None
 
-
-
-  mainUid.tableWidgetAssets.setCellWidget(currentRow,0,fav)
-  mainUid.tableWidgetAssets.setCellWidget(currentRow,1,note)
-  mainUid.tableWidgetAssets.setItem(currentRow, 2, itemAssPath)
-  mainUid.tableWidgetAssets.setCellWidget(currentRow, 2, labelAss)
-
-  mainUid.tableWidgetAssets.setItem(currentRow, 3, itemAssigned)
-  mainUid.tableWidgetAssets.setItem(currentRow, 4, itemReviewer)
-  mainUid.tableWidgetAssets.setItem(currentRow, 5, itemModified)
-  mainUid.tableWidgetAssets.setItem(currentRow, 6, itemVersion)
-  mainUid.tableWidgetAssets.setItem(currentRow, 7, itemReviewStatus)
-  mainUid.tableWidgetAssets.setItem(currentRow, 8, itemPublished)
-
   if(previewWidget):
-    mainUid.tableWidgetAssets.setCellWidget(currentRow, 9, previewWidget)
+    assDetsWidget.horizontalLayoutPreview.addWidget(previewWidget)
 
-  mainUid.tableWidgetAssets.resizeColumnsToContents()
+
+  item = QtWidgets.QListWidgetItem()
+  item.assetDets = assetDets
+  mainUid.listWidgetAssets.addItem(item)
+  mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
+  item.setSizeHint(assDetsWidget.sizeHint())
+
+
+  # global favWidgets
+  # global ImageWidgets
+  # global noteWidgets
+  # fav = QtWidgets.QCheckBox()
+  # fav.setParent(mainUid)
+  # fav.assetDets = assetDets
+  # fav.clicked.connect(lambda clicked,assPath=assetDets['path'], starObj = fav, mainUid=mainUid : updateFavorite(mainUid,assPath,starObj))
+  #
+  # if(assetDets['fav']):
+  #   fav.setChecked(True)
+  # fav.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarCheckBox)
+  # favWidgets.append(fav)
+  #
+  # note = QtWidgets.QCheckBox()
+  # note.setParent(mainUid)
+  # note.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleNotesCheckBox)
+  #
+  # if(assetDets['isNotes']):
+  #   note.setChecked(True)
+  # else:
+  #   note.setChecked(False)
+  # note.setEnabled(False)
+  # noteWidgets.append(note)
+  #
+  #
+  # labelAss = QtWidgets.QLabel()
+  # labelAss.setParent(mainUid)
+  # labelAss.setTextFormat(QtCore.Qt.RichText)
+  # labelAss.setText(richAss)
+  # labelAss.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+  #
+  # itemAssPath = QTableWidgetItemSort()
+  # itemAssPath.setData(QtCore.Qt.UserRole,assetDets['path'])
+  # # itemAssPath.setFlags(QtCore.Qt.NoItemFlags)
+  #
+  # itemModified = QtWidgets.QTableWidgetItem()
+  # itemModified.setText(assetDets['modified'])
+  #
+  # itemAssigned = QtWidgets.QTableWidgetItem()
+  # itemAssigned.setText(assetDets['assignedWorker'])
+  # # itemAssigned.setTextAlignment(QtCore.Qt.AlignCenter)
+  #
+  # itemReviewer = QtWidgets.QTableWidgetItem()
+  # itemReviewer.setText(assetDets['reviewUser'])
+  # # itemReviewer.setTextAlignment(QtCore.Qt.AlignCenter)
+  #
+  # itemVersion = QtWidgets.QTableWidgetItem()
+  # if (not assetDets['versioning']):
+  #   brush1 = QtGui.QBrush()
+  #   brush1.setColor(QtGui.QColor(250, 100, 100))
+  #   brush1.setStyle(QtCore.Qt.SolidPattern)
+  #   # itemVersion.setText("")
+  #   # itemReviewStatus.setText("notDone")
+  #   itemVersion.setBackground(brush1)
+  # else:
+  #   brush1 = QtGui.QBrush()
+  #   brush1.setColor(QtGui.QColor(0, 150, 100))
+  #   brush1.setStyle(QtCore.Qt.SolidPattern)
+  #   # itemVersion.setText(str(assetDets['reviewVersion']))
+  #   itemVersion.setTextAlignment(QtCore.Qt.AlignCenter)
+  #   # itemReviewStatus.setText("inProgress : " + str(assetDets['reviewVersion']))
+  #   itemVersion.setBackground(brush1)
+  #
+  # itemReviewStatus = QtWidgets.QTableWidgetItem()
+  # if (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusNotDone):
+  #   brush1 = QtGui.QBrush()
+  #   brush1.setColor(QtGui.QColor(250, 100, 100))
+  #   brush1.setStyle(QtCore.Qt.SolidPattern)
+  #   # itemReviewStatus.setText("")
+  #   # itemReviewStatus.setText("notDone")
+  #   itemReviewStatus.setBackground(brush1)
+  # elif (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusInProgress):
+  #   brush1 = QtGui.QBrush()
+  #   brush1.setColor(QtGui.QColor(0, 150, 250))
+  #   brush1.setStyle(QtCore.Qt.SolidPattern)
+  #   # itemReviewStatus.setText(str(assetDets['reviewVersion']))
+  #   itemReviewStatus.setTextAlignment(QtCore.Qt.AlignCenter)
+  #   # itemReviewStatus.setText("inProgress : " + str(assetDets['reviewVersion']))
+  #   itemReviewStatus.setBackground(brush1)
+  # else:
+  #   brush1 = QtGui.QBrush()
+  #   brush1.setColor(QtGui.QColor(0, 150, 100))
+  #   brush1.setStyle(QtCore.Qt.SolidPattern)
+  #   # itemReviewStatus.setText(str(assetDets['reviewVersion']))
+  #   itemReviewStatus.setTextAlignment(QtCore.Qt.AlignCenter)
+  #   itemReviewStatus.setBackground(brush1)
+  #
+  # itemPublished = QtWidgets.QTableWidgetItem()
+  # if (assetDets['publishVersion']):
+  #   brush1 = QtGui.QBrush()
+  #   brush1.setColor(QtGui.QColor(0, 150, 100))
+  #   brush1.setStyle(QtCore.Qt.SolidPattern)
+  #   # itemPublished.setText(str(assetDets['publishVersion']))
+  #   itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
+  #   # itemReviewStatus.setText("notDone")
+  #   itemPublished.setBackground(brush1)
+  #   # if(assetDets['reviewVersion']):
+  #   #   if(assetDets['publishVersion'] != assetDets['reviewVersion']):
+  #   #     brush1 = QtGui.QBrush()
+  #   #     brush1.setColor(QtGui.QColor(255,192,203))
+  #   #     brush1.setStyle(QtCore.Qt.SolidPattern)
+  #   #     # itemPublished.setText(str(assetDets['publishVersion']))
+  #   #     itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
+  #   #     # itemReviewStatus.setText("notDone")
+  #   #     itemPublished.setBackground(brush1)
+  # else:
+  #   brush1 = QtGui.QBrush()
+  #   brush1.setColor(QtGui.QColor(250, 100, 100))
+  #   brush1.setStyle(QtCore.Qt.SolidPattern)
+  #   itemPublished.setText("")
+  #   itemPublished.setTextAlignment(QtCore.Qt.AlignCenter)
+  #   itemPublished.setBackground(brush1)
+  #
+  # if(assetDets['preview_low']):
+  #   # previewWidget = ImageWidget(assetDets['preview_low'],48)
+  #   previewWidget = ImageWidget(assetDets['preview_low'],48,parent=mainUid)
+  #   previewWidget.clicked.connect(lambda x, imagePath = assetDets['preview']: imageWidgetClicked(imagePath))
+  #   ImageWidgets.append(previewWidget)
+  # else:
+  #   previewWidget = None
+  #
+  #
+  #
+  # mainUid.tableWidgetAssets.setCellWidget(currentRow,0,fav)
+  # mainUid.tableWidgetAssets.setCellWidget(currentRow,1,note)
+  # mainUid.tableWidgetAssets.setItem(currentRow, 2, itemAssPath)
+  # mainUid.tableWidgetAssets.setCellWidget(currentRow, 2, labelAss)
+  #
+  # mainUid.tableWidgetAssets.setItem(currentRow, 3, itemAssigned)
+  # mainUid.tableWidgetAssets.setItem(currentRow, 4, itemReviewer)
+  # mainUid.tableWidgetAssets.setItem(currentRow, 5, itemModified)
+  # mainUid.tableWidgetAssets.setItem(currentRow, 6, itemVersion)
+  # mainUid.tableWidgetAssets.setItem(currentRow, 7, itemReviewStatus)
+  # mainUid.tableWidgetAssets.setItem(currentRow, 8, itemPublished)
+  #
+  # if(previewWidget):
+  #   mainUid.tableWidgetAssets.setCellWidget(currentRow, 9, previewWidget)
+  #
+  # mainUid.tableWidgetAssets.resizeColumnsToContents()
   # mainUid.tableWidgetAssets.setItemWidget(item, label)
 
 
@@ -1670,7 +1734,6 @@ def main(mainUid):
   mainUid.listWidgetProj.clear()
 
 
-  # importUid = uic.loadUi(ui_ass_for_import)
 
   iconRefresh = QtGui.QIcon()
   iconRefresh.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/ic_loop_black_48dp_2x.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -1694,7 +1757,6 @@ def main(mainUid):
   mainUid.pushAssImport.setIcon(iconImportAsset)
 
   mainUid.pushRefresh.setIcon(iconRefresh)
-  # mainUid.pushRefreshFav.setIcon(iconRefresh)
   mainUid.pushRefreshFilters.setIcon(iconRefresh)
   mainUid.pushSaveFilters.setIcon(iconNew)
   mainUid.radioStarred.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarRadioButton)
@@ -1814,7 +1876,7 @@ def main(mainUid):
   mainUid.comboScn.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
   mainUid.comboAssType.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
-  mainUid.tableWidgetAssets.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupAss(mainUid, pos))
+  # mainUid.tableWidgetAssets.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupAss(mainUid, pos))
 
 
   mainUid.pushAssImport.clicked.connect(lambda clicked, mainUid=mainUid: rbhusAssImport(mainUid))
@@ -1826,6 +1888,9 @@ def main(mainUid):
   loadDefaultProject(mainUid)
 
   mainUid.splitter.setStretchFactor(0,10)
+  # mainUid.splitterAssetDetails.setStretchFactor(0,0.75)
+  # mainUid.splitterAssetDetails.setStretchFactor(2,0.25)
+  mainUid.splitterAssetDetails.setSizes((200,100))
 
   api = api_serv(mainUid)
   api.msg_recved.connect(lambda inputDict,mainUid=mainUid :run_api(mainUid,inputDict))

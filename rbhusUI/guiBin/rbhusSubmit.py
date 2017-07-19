@@ -39,7 +39,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.authL = auth.login()
-    
+    self.copySubmit = False
     self.taskValues = 0
     try:
       self.task = rUtils.tasks()
@@ -50,6 +50,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
       try:
         self.task = rUtils.tasks(int(sys.argv[1]))
         self.taskValues = self.task.taskDetails
+        self.copySubmit = True
       except:
         pass
     
@@ -464,14 +465,22 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
                 for l in layers.split(","):
                   sdcd = sdc.rstrip("/") +"/"+ l.lstrip().rstrip() + "/"
                   submitDict['layer'] = l
-                  submitDict['outDir'] = sdcd
+                  if(not self.copySubmit):
+                    submitDict['outDir'] = sdcd
+                  else:
+                    submitDict['outDir'] = str(self.lineEditOutDir.text())
+
                   try:
                     b = a.submit(submitDict)
                     print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))
                   except:
                     print("Error inserting task : "+ str(sys.exc_info()))
               else:
-                submitDict['outDir'] = sdc
+                if (not self.copySubmit):
+                  submitDict['outDir'] = sdc
+                else:
+                  submitDict['outDir'] = str(self.lineEditOutDir.text())
+
                 try:
                   b = a.submit(submitDict)
                   print("Submiting task : "+ str(b) +" : "+ str(submitDict['fileName']))

@@ -548,7 +548,7 @@ def getProjDetails(projName=None,status=None):
 
 
 def setupSequenceScene(seqSceDict):
-  dbconn = dbPipe.dbPipe()
+
   projDets = getProjDetails(str(seqSceDict['projName']))
   dirMapsDets = getDirMapsDetails(str(projDets['directory']))
   defaultSeq = {}
@@ -575,6 +575,7 @@ def setupSequenceScene(seqSceDict):
 
 
   try:
+    dbconn = dbPipe.dbPipe()
     dbconn.execute("insert into sequenceScenes ("+ ",".join(defKeys) +") \
                     values("+ ",".join(defValues) +")")
   except:
@@ -582,6 +583,7 @@ def setupSequenceScene(seqSceDict):
 
 
   try:
+    dbconn = dbPipe.dbPipe()
     dbconn.execute("insert into sequenceScenes ("+ ",".join(seqKeys) +") \
                     values("+ ",".join(seqValues) +")")
   except:
