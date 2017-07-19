@@ -47,7 +47,7 @@ except:
 class dbPipe:
   """database querying class for rbhus"""
   def __init__(self):
-    self.__conn = self._connRbhus()
+    self.__conn = None
 
   def __del__(self):
     try:
@@ -87,7 +87,7 @@ class dbPipe:
   def execute(self,query,dictionary=False):
     while(1):
       try:
-        # self.__conn = self._connRbhus()
+        self.__conn = self._connRbhus()
         if(dictionary):
           cur = self.__conn.cursor(MySQLdb.cursors.DictCursor)
         else:
@@ -101,14 +101,14 @@ class dbPipe:
             debug.error("fetching failed : "+ str(sys.exc_info()))
           
           cur.close()
-          # self.disconnect()
+          self.disconnect()
           if(rows):
             return(rows)
           else:
             return(0)
         else:
           cur.close()
-          # self.disconnect()
+          self.disconnect()
           return(1)
       except:
         debug.error("Failed query : "+ str(query) +" : "+ str(sys.exc_info()))
