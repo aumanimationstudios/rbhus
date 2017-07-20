@@ -117,6 +117,7 @@ class dbPipe:
           try:
             cur.close()
           except:
+          except:
             pass
           self.disconnect()
           self.__conn = self._connRbhus()

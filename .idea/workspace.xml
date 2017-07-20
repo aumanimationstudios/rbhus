@@ -5,26 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="lots of changes">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/fileBrowser.qml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/rbhus/blender_refresh_sequencer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/ic_action_star_active.png" afterPath="$PROJECT_DIR$/etc/icons/ic_action_star_active.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/ic_action_star_inactive.png" afterPath="$PROJECT_DIR$/etc/icons/ic_action_star_inactive.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/notes_false.png" afterPath="$PROJECT_DIR$/etc/icons/notes_false.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/notes_true.png" afterPath="$PROJECT_DIR$/etc/icons/notes_true.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/published_false.png" afterPath="$PROJECT_DIR$/etc/icons/published_false.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/published_true.png" afterPath="$PROJECT_DIR$/etc/icons/published_true.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/review_approved.png" afterPath="$PROJECT_DIR$/etc/icons/review_approved.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/review_inprogress.png" afterPath="$PROJECT_DIR$/etc/icons/review_inprogress.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/review_notdone.png" afterPath="$PROJECT_DIR$/etc/icons/review_notdone.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/versioning_false.png" afterPath="$PROJECT_DIR$/etc/icons/versioning_false.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/versioning_true.png" afterPath="$PROJECT_DIR$/etc/icons/versioning_true.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/favorites.svg" afterPath="$PROJECT_DIR$/etc/icons/favorites.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/notes.svg" afterPath="$PROJECT_DIR$/etc/icons/notes.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusSubmit.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusSubmit.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/dbPipe.py" afterPath="$PROJECT_DIR$/rbhus/dbPipe.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -48,11 +29,9 @@
       <file leaf-file-name="rbhusPipe_new.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-              <folding>
-                <marker date="1500274532690" expanded="true" signature="55674:55699" ph="select projN... proj" />
-              </folding>
+            <state relative-caret-position="451">
+              <caret line="136" column="0" lean-forward="false" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -61,7 +40,7 @@
         <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_opengl_sequencer.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
-              <caret line="9" column="29" lean-forward="true" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+              <caret line="9" column="29" lean-forward="false" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -87,22 +66,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="blender_refresh_sequencer.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_refresh_sequencer.py">
+      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state relative-caret-position="278">
+              <caret line="89" column="27" lean-forward="false" selection-start-line="89" selection-start-column="20" selection-end-line="89" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
+      <file leaf-file-name="Copy_Render_Layer.py" pinned="false" current-in-tab="false">
+        <entry file="file:///blueprod/STOR2/stor2/stor1/prod/proj/standard/share/blender-2.78.5-ubuntu/2.78/scripts/addons/Copy_Render_Layer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="562" column="16" lean-forward="false" selection-start-line="562" selection-start-column="16" selection-end-line="562" selection-end-column="16" />
-              <folding />
+            <state relative-caret-position="350">
+              <caret line="89" column="41" lean-forward="true" selection-start-line="89" selection-start-column="41" selection-end-line="89" selection-end-column="41" />
+              <folding>
+                <element signature="e#1372#1382#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dbRbhus.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1836">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -132,16 +125,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-2196">
               <caret line="11" column="6" lean-forward="false" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="checkBox_style.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="89">
-              <caret line="92" column="30" lean-forward="true" selection-start-line="92" selection-start-column="30" selection-end-line="92" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -218,7 +201,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd/autorun1" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd/autorun0" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd/autorun2" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd/autorun3" />
@@ -234,7 +216,6 @@
         <option value="$PROJECT_DIR$/rbhusUI/lib/qt5/styleSheets/checkBox_favorites.qrc" />
         <option value="$PROJECT_DIR$/rbhusUI/lib/qt5/__init__.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/blenderMoviePerSequenceStrip.py" />
-        <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
         <option value="$PROJECT_DIR$/rbhus/dbRbhus.py" />
         <option value="$PROJECT_DIR$/rbhus/dbTrayServer.py" />
         <option value="$PROJECT_DIR$/tests/qt5/columnview.py" />
@@ -269,6 +250,8 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/blender_refresh_sequencer.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+        <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
+        <option value="/blueprod/STOR2/stor2/stor1/prod/proj/standard/share/blender-2.78.5-ubuntu/2.78/scripts/addons/Copy_Render_Layer.py" />
       </list>
     </option>
   </component>
@@ -626,7 +609,7 @@
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="editor.preferences.smartKeys" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tray-server" />
+    <property name="last_opened_file_path" value="/blueprod/STOR2/stor2/stor1/prod/proj/standard/share/blender-2.78.5-ubuntu/2.78/scripts/addons/Copy_Render_Layer.py" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
   </component>
   <component name="RecentsManager">
@@ -1027,14 +1010,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.PyCharm2017.1/system/python_stubs/-1247972723/PyQt5/QtWidgets/QTableWidgetItem.py" />
-    <entry file="file://$PROJECT_DIR$/rbhusUI/lib/rbhusPipeMainMod.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5310">
-          <caret line="295" column="9" lean-forward="false" selection-start-line="295" selection-start-column="9" selection-end-line="295" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_4kmov_2kmov.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -1103,7 +1078,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1854">
           <caret line="103" column="8" lean-forward="false" selection-start-line="103" selection-start-column="8" selection-end-line="103" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1186,8 +1160,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1658">
-          <caret line="12" column="19" lean-forward="false" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="19" />
+        <state relative-caret-position="593">
+          <caret line="119" column="17" lean-forward="false" selection-start-line="119" selection-start-column="17" selection-end-line="119" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1223,7 +1198,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1231,7 +1205,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5292">
           <caret line="302" column="0" lean-forward="false" selection-start-line="302" selection-start-column="0" selection-end-line="302" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1239,7 +1212,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3798">
           <caret line="217" column="60" lean-forward="false" selection-start-line="217" selection-start-column="60" selection-end-line="217" selection-end-column="60" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1247,7 +1219,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1255,7 +1226,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1263,7 +1233,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4068">
           <caret line="229" column="8" lean-forward="false" selection-start-line="229" selection-start-column="8" selection-end-line="229" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1279,7 +1248,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="296">
           <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1287,7 +1255,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3329">
           <caret line="477" column="19" lean-forward="false" selection-start-line="477" selection-start-column="19" selection-end-line="477" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1295,7 +1262,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2330">
           <caret line="235" column="26" lean-forward="false" selection-start-line="235" selection-start-column="10" selection-end-line="235" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1303,7 +1269,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="14" column="58" lean-forward="false" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1311,7 +1276,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
           <caret line="391" column="1" lean-forward="false" selection-start-line="391" selection-start-column="1" selection-end-line="391" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1319,15 +1283,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="13" column="6" lean-forward="false" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89">
-          <caret line="92" column="30" lean-forward="true" selection-start-line="92" selection-start-column="30" selection-end-line="92" selection-end-column="30" />
-          <folding />
+        <state relative-caret-position="791">
+          <caret line="131" column="1" lean-forward="false" selection-start-line="131" selection-start-column="1" selection-end-line="131" selection-end-column="1" />
+          <folding>
+            <marker date="1500438064249" expanded="true" signature="2796:2884" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1341,18 +1306,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-          <folding>
-            <marker date="1500274532690" expanded="true" signature="55674:55699" ph="select projN... proj" />
-          </folding>
+        <state relative-caret-position="451">
+          <caret line="136" column="0" lean-forward="false" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_opengl_sequencer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
-          <caret line="9" column="29" lean-forward="true" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+          <caret line="9" column="29" lean-forward="false" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -1377,7 +1340,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1399,9 +1361,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="562" column="16" lean-forward="false" selection-start-line="562" selection-start-column="16" selection-end-line="562" selection-end-column="16" />
+        <state relative-caret-position="278">
+          <caret line="89" column="27" lean-forward="false" selection-start-line="89" selection-start-column="20" selection-end-line="89" selection-end-column="27" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///blueprod/STOR2/stor2/stor1/prod/proj/standard/share/blender-2.78.5-ubuntu/2.78/scripts/addons/Copy_Render_Layer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="89" column="41" lean-forward="true" selection-start-line="89" selection-start-column="41" selection-end-line="89" selection-end-column="41" />
+          <folding>
+            <element signature="e#1372#1382#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1836">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
