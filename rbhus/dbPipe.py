@@ -50,17 +50,13 @@ class dbPipe:
     self.__conn = None
 
   def __del__(self):
-    try:
-      self.__conn.close()
-    except:
-      debug.error(str(sys.exc_info()))
-    debug.debug("Db connection closed" +"\n")
+    self.disconnect()
 
   def disconnect(self):
     try:
       self.__conn.close()
     except:
-      debug.error(str(sys.exc_info()))
+      debug.warn(str(sys.exc_info()))
     debug.debug("Db connection closed" +"\n")
 
 
