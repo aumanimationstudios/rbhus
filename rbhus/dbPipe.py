@@ -56,7 +56,7 @@ class dbPipe:
     try:
       self.__conn.close()
     except:
-      debug.warn(str(sys.exc_info()))
+      debug.debug(str(sys.exc_info()))
     debug.debug("Db connection closed" +"\n")
 
 

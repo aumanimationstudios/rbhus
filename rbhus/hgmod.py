@@ -433,20 +433,30 @@ class hg(object):
       revdets['message'] = "please review the given version."
       revdets['username'] = str(self.username)
       utilsPipe.reviewAdd(revdets)
-      reviewmsg = ":".join(self.assDets['path'].split(":")[1:])
+
+      assetColor = utilsPipe.assPathColorCoded(self.assDets)
+      textAssArr = []
+      for fc in assetColor.split(":"):
+        textAssArr.append('<font color=' + fc.split("#")[1] + '>' + fc.split("#")[0] + '</font>')
+      richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+
+      reviewmsg = str(richAss) +"\n\nstatus : inProgress"
+
+
+
       if (self.username != self.assDets['assignedWorker']):
         reviewID = self.assDets['path'] + ":" + self.assDets['assignedWorker']
-        utilsTray.addNotifications(self.assDets['assignedWorker'], "rbhusReview", self.assDets['path'], "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'],reviewID)
+        utilsTray.addNotifications(self.assDets['assignedWorker'], "rbhusReview", reviewmsg, "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'],reviewID)
 
       if (self.username != self.assDets['reviewUser']):
         reviewID = self.assDets['path'] + ":" + self.assDets['reviewUser']
-        utilsTray.addNotifications(self.assDets['reviewUser'], "rbhusReview", self.assDets['path'], "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'],reviewID)
+        utilsTray.addNotifications(self.assDets['reviewUser'], "rbhusReview", reviewmsg, "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'],reviewID)
 
       if (self.assDets['reviewNotifyUsers'] != "default"):
         for ru in self.assDets['reviewNotifyUsers'].split(","):
           reviewID = self.assDets['path'] + ":" + ru
           debug.info(ru)
-          utilsTray.addNotifications(ru, "rbhusReview", self.assDets['path'], "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'], reviewID)
+          utilsTray.addNotifications(ru, "rbhusReview", reviewmsg, "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'], reviewID)
 
 
     os.chdir(self.localPath)

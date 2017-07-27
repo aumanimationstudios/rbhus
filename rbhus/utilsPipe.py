@@ -14,6 +14,8 @@ import re
 import shutil
 import copy
 import debug
+import simplejson
+import lockfile
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -49,28 +51,21 @@ if(sys.platform.find("linux") >= 0):
 
 
 
+class thumbz_db(object):
+  absPath = None
+  subPath = None
+  mimeType = None
+  mainFile = None
+  thumbFile = None
+
+
+
 
 
 
 
 hostname = socket.gethostname()
 tempDir = os.path.abspath(tempfile.gettempdir())
-
-
-# LOG_FILENAME = logging.FileHandler(tempDir + os.sep +"rbhusPipe_utilsPipe_module_"+ username +"_"+ str(hostname) +".log")
-#   #LOG_FILENAME = logging.FileHandler('z:/pythonTestWindoze.DONOTDELETE/clientLogs/rbhusDb_'+ hostname +'.log')
-#
-# #LOG_FILENAME = logging.FileHandler('/var/log/rbhusDb_module.log')
-# debug = logging.getLogger("debug")
-# debug.setLevel(logging.DEBUG)
-#
-#
-# #ROTATE_FILENAME = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=104857600, backupCount=3)
-# BASIC_FORMAT = logging.Formatter("%(asctime)s - %(funcName)s - %(levelname)s - %(message)s")
-# LOG_FILENAME.setFormatter(BASIC_FORMAT)
-# debug.addHandler(LOG_FILENAME)
-
-
 
 
 def getDirMaps():
@@ -281,6 +276,154 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True,f
     return(1)
   else:
     return(0)
+
+def getMediaFiles(assPath=None):
+  validMedia = {}
+  if(assPath):
+    absPath = getAbsPath(assPath)
+    if(os.path.exists(absPath)):
+      for root,dir,filenames in os.walk(absPath):
+        if(not (root.endswith(".hg") or root.endswith(".hglf") or root.endswith(".thumbz.db"))):
+          for filename in filenames:
+            for mimeType in constantsPipe.mediaMime.keys():
+              for mimeExt in constantsPipe.mediaMime[mimeType]:
+                if(filename.endswith(mimeExt)):
+                  try:
+                    validMedia[root].append(filename)
+                  except:
+                    validMedia[root] = []
+                    validMedia[root].append(filename)
+
+
+  return(validMedia)
+
+
+
+def getUpdatedMediaThumbs(assPath=None):
+  """
+
+  :param assPath:
+  :return: a dictionary containing mimeType->thumbnail_file -> original_file
+  """
+  def jsonWrite(jFile,jData):
+    try:
+      fJsonFD = open(jFile, "w")
+      simplejson.dump(jData, fJsonFD)
+      fJsonFD.flush()
+      fJsonFD.close()
+      return(1)
+    except:
+      return(0)
+
+  def jsonRead(jFile):
+    try:
+      fJsonFD = open(jFile, "r")
+      fThumbzDetails = simplejson.load(fJsonFD)
+      fJsonFD.close()
+      return(fThumbzDetails)
+    except:
+      return(0)
+
+  validMedia = []
+  if (assPath):
+    absPath = getAbsPath(assPath)
+    if (os.path.exists(absPath)):
+      for root, dir, filenames in os.walk(absPath):
+        if (not (root.find(".hg") >= 0 or root.find(".hglf") >= 0 or root.find(".thumbz.db") >= 0)):
+          for filename in filenames:
+            for mimeType in constantsPipe.mediaMime.keys():
+              for mimeExt in constantsPipe.mediaMime[mimeType]:
+                if(not filename.startswith(".")):
+                  if (filename.endswith(mimeExt)):
+                    fAbsPath = os.path.join(root,filename)
+                    fLockPath = lockfile.LockFile(fAbsPath,timeout=0)
+                    fDir = os.path.dirname(fAbsPath)
+                    fName = os.path.basename(fAbsPath)
+                    fThumbzDbDir = os.path.join(fDir,".thumbz.db")
+                    fJson = os.path.join(fThumbzDbDir,fName + ".json")
+                    fThumbz = os.path.join(fThumbzDbDir,fName + ".png")
+                    fModifiedTime = os.path.getmtime(fAbsPath)
+                    if(os.path.exists(fThumbzDbDir)):
+                      if(os.path.exists(fJson)):
+                        try:
+                          with fLockPath:
+                            fThumbzDetails = jsonRead(fJson)
+                            if(fThumbzDetails[fName] < fModifiedTime):
+                              if(mimeType == "video"):
+                                thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath +"[24]",fThumbz)
+                              elif(mimeType == "image"):
+                                thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath,fThumbz)
+                              else:
+                                thumbzCmd = None
+                              if (thumbzCmd):
+                                print(thumbzCmd)
+                                p = subprocess.Popen(thumbzCmd, shell=True)
+                                p.wait()
+                                fThumbzDetails = {fName: fModifiedTime}
+                                jsonWrite(fJson, fThumbzDetails)
+                        except:
+                          debug.debug("file is updated by someone : "+ str(fAbsPath))
+
+                      else:
+                        try:
+                          with fLockPath:
+                            if (mimeType == "video"):
+                              thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath + "[24]", fThumbz)
+                            elif (mimeType == "image"):
+                              thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath, fThumbz)
+                            else:
+                              thumbzCmd = None
+                            if (thumbzCmd):
+                              print(thumbzCmd)
+                              p = subprocess.Popen(thumbzCmd, shell=True)
+                              p.wait()
+                              fThumbzDetails = {fName: fModifiedTime}
+                              jsonWrite(fJson, fThumbzDetails)
+                        except:
+                          debug.debug("file is updated by someone : "+ str(fAbsPath))
+
+                    else:
+                      try:
+                        with fLockPath:
+                          os.makedirs(fThumbzDbDir)
+                          if (mimeType == "video"):
+                            thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath + "[24]", fThumbz)
+                          elif (mimeType == "image"):
+                            thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath, fThumbz)
+                          else:
+                            thumbzCmd = None
+                          if(thumbzCmd):
+                            print(thumbzCmd)
+                            p = subprocess.Popen(thumbzCmd, shell=True)
+                            p.wait()
+                            fThumbzDetails = {fName: fModifiedTime}
+                            jsonWrite(fJson, fThumbzDetails)
+                      except:
+                        debug.debug("file is updated by someone : "+ str(fAbsPath))
+
+                    thumbDetails = thumbz_db()
+                    thumbDetails.mimeType = mimeType
+                    thumbDetails.mainFile = fAbsPath
+                    thumbDetails.thumbFile = fThumbz
+                    thumbDetails.absPath = absPath
+                    thumbDetails.subPath = root.replace(absPath,"")
+
+                    validMedia.append(thumbDetails)
+  return(validMedia)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

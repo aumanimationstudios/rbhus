@@ -217,7 +217,15 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
         else:
           assedit['reviewStatus'] = constantsPipe.reviewStatusDone
 
-      reviewmsg = ":".join(self.assdets['path'].split(":")[1:]) +"\n\nstatus : " + str(self.comboProgress.currentText())
+
+      assetColor = utilsPipe.assPathColorCoded(self.assdets)
+      textAssArr = []
+      for fc in assetColor.split(":"):
+        textAssArr.append('<font color=' + fc.split("#")[1] + '>' + fc.split("#")[0] + '</font>')
+      richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+
+      reviewmsg = str(richAss) +"\n\nstatus : " + str(self.comboProgress.currentText())
+
 
       if (username != self.assdets['assignedWorker']):
         reviewID = self.assdets['path'] + ":" + self.assdets['assignedWorker']
@@ -266,13 +274,12 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
     hdoc.setPlainText(ui_msg.textEditContent.toPlainText())
     h = hdoc.size().height() + 40
     ui_msg.textEditContent.setMinimumHeight(h)
-    debug.info("height : " + str(h))
 
     # ui_msg.textEditContent.setFixedHeight(height)
 
     self.verticalLayout_2.addWidget(ui_msg)
     self.verticalLayout_2.addItem(self.spacerForMsgBox)
-    debug.info("reference folder : {0}".format(len(rFolder)))
+    debug.debug("reference folder : {0}".format(len(rFolder)))
     if(not len(rFolder)):
       ui_msg.pushReference.setEnabled(False)
       ui_msg.pushReference.hide()

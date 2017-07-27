@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70000001"
-     inkscape:cx="-243.50641"
-     inkscape:cy="492.7651"
+     inkscape:zoom="3.959798"
+     inkscape:cx="13.25335"
+     inkscape:cy="843.46611"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -58,8 +58,8 @@
        cx="143.79643"
        cy="550.21936"
        r="25.746126"
-       inkscape:export-xdpi="30.636225"
-       inkscape:export-ydpi="30.636225" />
+       inkscape:export-xdpi="27.232201"
+       inkscape:export-ydpi="27.232201" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#0055d4;fill-opacity:1;stroke:#0055d4;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
@@ -80,8 +80,8 @@
        cx="224.20357"
        id="circle3356"
        style="fill:#cccccc;stroke:#ececec;stroke-width:1.38632989;fill-opacity:1"
-       inkscape:export-xdpi="30.636229"
-       inkscape:export-ydpi="30.636229" />
+       inkscape:export-xdpi="27.232201"
+       inkscape:export-ydpi="27.232201" />
     <text
        sodipodi:linespacing="125%"
        id="text3350"
@@ -107,8 +107,8 @@
            x="37.857143"
            y="477.36221" /></flowRegion><flowPara
          id="flowPara3353" /></flowRoot>    <circle
-       inkscape:export-ydpi="30.636225"
-       inkscape:export-xdpi="30.636225"
+       inkscape:export-ydpi="27.232201"
+       inkscape:export-xdpi="27.232201"
        r="25.746126"
        cy="660.93365"
        cx="147.36786"
@@ -129,8 +129,8 @@
          id="tspan3359"
          sodipodi:role="line">R</tspan></text>
     <circle
-       inkscape:export-ydpi="30.636221"
-       inkscape:export-xdpi="30.636221"
+       inkscape:export-ydpi="27.232201"
+       inkscape:export-xdpi="27.232201"
        style="fill:#cccccc;fill-opacity:1;stroke:#ececec;stroke-width:1.38632989"
        id="circle3361"
        cx="252.77499"
@@ -156,8 +156,8 @@
        cx="58.796429"
        cy="662.36224"
        r="25.746126"
-       inkscape:export-xdpi="30.636223"
-       inkscape:export-ydpi="30.636223" />
+       inkscape:export-xdpi="27.232201"
+       inkscape:export-ydpi="27.232201" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#ff7f2a;fill-opacity:1;stroke:#ff7f2a;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
@@ -178,8 +178,8 @@
        cx="148.79643"
        cy="803.79077"
        r="25.746126"
-       inkscape:export-xdpi="30.636225"
-       inkscape:export-ydpi="30.636225" />
+       inkscape:export-xdpi="27.232201"
+       inkscape:export-ydpi="27.232201" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Noto Naskh Arabic';-inkscape-font-specification:'Noto Naskh Arabic';letter-spacing:0px;word-spacing:0px;fill:#0055d4;fill-opacity:1;stroke:#0055d4;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -200,8 +200,8 @@
        cx="234.59225"
        id="circle3372"
        style="fill:#cccccc;fill-opacity:1;stroke:#ececec;stroke-width:1.38632989"
-       inkscape:export-xdpi="30.636221"
-       inkscape:export-ydpi="30.636221" />
+       inkscape:export-xdpi="27.232201"
+       inkscape:export-ydpi="27.232201" />
     <text
        sodipodi:linespacing="125%"
        id="text3374"
@@ -217,8 +217,8 @@
          id="tspan3376"
          sodipodi:role="line">P</tspan></text>
     <circle
-       inkscape:export-ydpi="30.636225"
-       inkscape:export-xdpi="30.636225"
+       inkscape:export-ydpi="27.232201"
+       inkscape:export-xdpi="27.232201"
        r="25.746126"
        cy="911.79077"
        cx="148.79643"
@@ -239,8 +239,8 @@
          id="tspan3372"
          sodipodi:role="line">V</tspan></text>
     <circle
-       inkscape:export-ydpi="30.636221"
-       inkscape:export-xdpi="30.636221"
+       inkscape:export-ydpi="27.232201"
+       inkscape:export-xdpi="27.232201"
        style="fill:#cccccc;fill-opacity:1;stroke:#ececec;stroke-width:1.38632989"
        id="circle3374"
        cx="234.59225"
@@ -260,5 +260,156 @@
          x="221.59421"
          y="925.8158"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#999999;stroke:#ececec">V</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;"
+       id="rect3372"
+       width="48.279392"
+       height="48.279392"
+       x="42.199623"
+       y="128.41548"
+       inkscape:export-xdpi="29.826387"
+       inkscape:export-ydpi="29.826387" />
+    <g
+       id="g3539"
+       inkscape:export-xdpi="29.826387"
+       inkscape:export-ydpi="29.826387">
+      <g
+         transform="matrix(2.7831075,0,0,2.7831075,-107.70533,-280.38249)"
+         id="g3449">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:35.51398849px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="64.597885"
+           y="172.41544"
+           id="text3387"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan3389"
+             x="64.597885"
+             y="172.41544"
+             style="font-size:6.6588726px">1</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:35.51398849px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="64.680794"
+           y="181.58325"
+           id="text3387-3"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             x="64.680794"
+             y="181.58325"
+             style="font-size:6.6588726px"
+             id="tspan3411">9</tspan></text>
+        <circle
+           r="0.36295852"
+           cy="174.08046"
+           cx="66.774696"
+           id="path3469"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.3593106" />
+        <circle
+           r="0.36295852"
+           cy="175.36539"
+           cx="66.774696"
+           id="path3469-0"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.3593106" />
+      </g>
+      <g
+         id="g3486">
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.79475498"
+           id="rect3374-7"
+           width="5.0721798"
+           height="32.530128"
+           x="57.567989"
+           y="-217.05501"
+           transform="scale(1,-1)" />
+        <path
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.24200344"
+           d="m 60.104076,226.10159 8.671566,-10.4884 -17.343132,0 z"
+           id="rect3384-5"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="g3527"
+       inkscape:export-xdpi="29.826387"
+       inkscape:export-ydpi="29.826387">
+      <g
+         transform="translate(-0.378807,0)"
+         id="g3490">
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.79475498"
+           id="rect3374"
+           width="5.0721798"
+           height="32.530128"
+           x="57.946793"
+           y="141.10201" />
+        <path
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.24200344"
+           d="m 60.482883,132.05543 8.671566,10.4884 -17.343132,0 z"
+           id="rect3384"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cccc" />
+      </g>
+      <g
+         transform="matrix(2.7831075,0,0,2.7831075,-107.70533,-333.42915)"
+         id="g3449-9">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:35.51398849px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="64.597885"
+           y="172.41544"
+           id="text3387-36"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan3389-0"
+             x="64.597885"
+             y="172.41544"
+             style="font-size:6.6588726px">9</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:35.51398849px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="64.680794"
+           y="181.58325"
+           id="text3387-3-6"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             x="64.680794"
+             y="181.58325"
+             style="font-size:6.6588726px"
+             id="tspan3411-2">1</tspan></text>
+        <circle
+           r="0.36295852"
+           cy="174.08046"
+           cx="66.774696"
+           id="path3469-6"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.3593106" />
+        <circle
+           r="0.36295852"
+           cy="175.36539"
+           cx="66.774696"
+           id="path3469-0-1"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.3593106" />
+      </g>
+    </g>
+    <rect
+       y="128.41548"
+       x="42.199623"
+       height="48.279392"
+       width="48.279392"
+       id="rect3551"
+       style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.70285529"
+       inkscape:export-xdpi="29.826387"
+       inkscape:export-ydpi="29.826387" />
+    <rect
+       y="181.46214"
+       x="42.314995"
+       height="48.279392"
+       width="48.279392"
+       id="rect3551-8"
+       style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.70285529"
+       inkscape:export-xdpi="29.826387"
+       inkscape:export-ydpi="29.826387" />
   </g>
 </svg>

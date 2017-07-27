@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1043</width>
-    <height>73</height>
+    <width>1047</width>
+    <height>72</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -46,6 +46,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
  width: 18px;
@@ -77,6 +80,9 @@ QCheckBox::indicator:unchecked
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
  width: 18px;
@@ -107,6 +113,9 @@ QCheckBox::indicator:unchecked
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
         </property>
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
@@ -148,6 +157,49 @@ QCheckBox::indicator:unchecked
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+ width: 18px;
+ height: 18px;
+}
+
+QCheckBox::indicator:checked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/published_true.png);
+}
+QCheckBox::indicator:unchecked
+{
+  image: url(/home/shrinidhi/bin/gitHub/rbhus/etc/icons/published_false.png);
+}</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <property name="tristate">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBoxVersion">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
         </property>
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {

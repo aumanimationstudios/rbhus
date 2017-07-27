@@ -234,7 +234,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   def getAssNames(self):
     asses = utilsPipe.getDistinctAssNames(projName=os.environ['rp_proj_projName'])
     if(asses):
-      selectedAss = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(asses),"-d",str(self.lineEditAssName.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+      selectedAss = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(asses),"-d",str(self.lineEditAssName.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
       if (selectedAss == ""):
         selectedAss = ""
       self.lineEditAssName.setText(_fromUtf8(selectedAss))

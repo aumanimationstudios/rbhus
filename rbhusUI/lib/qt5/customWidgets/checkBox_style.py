@@ -26,6 +26,8 @@ checkPublishedTrue = os.path.join(icon_dir,"published_true.png")
 checkReviewNotDone = os.path.join(icon_dir,"review_notdone.png")
 checkReviewInProgress = os.path.join(icon_dir,"review_inprogress.png")
 checkReviewApproved = os.path.join(icon_dir,"review_approved.png")
+checkSortAscending = os.path.join(icon_dir,"sort_ascending.png")
+checkSortDescending = os.path.join(icon_dir,"sort_descending.png")
 
 # print (file_dir)
 # print(base_dir)
@@ -109,6 +111,22 @@ QCheckBox::indicator:checked
 QCheckBox::indicator:unchecked
 {
   image: url(""" + checkPublishedFalse + """);
+}
+"""
+
+styleSortCheckBox = """
+QCheckBox::indicator {
+ width: 24px;
+ height: 24px;
+}
+
+QCheckBox::indicator:checked
+{
+  image: url(""" + checkSortAscending + """);
+}
+QCheckBox::indicator:unchecked
+{
+  image: url(""" + checkSortDescending + """);
 }
 """
 

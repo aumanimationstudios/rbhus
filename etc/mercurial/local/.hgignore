@@ -7,3 +7,5 @@ syntax: glob
 publish
 export_*
 review_*
+.thumbz.db
+*.lock

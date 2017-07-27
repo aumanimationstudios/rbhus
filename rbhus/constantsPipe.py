@@ -56,3 +56,9 @@ typesActive = 1
 typesDeactive = 2
 typesHidden = 3
 typesAll = 4
+
+mediaMime = {
+             "image":[".png",".jpg",".jpeg",".exr"],
+             "video":[".avi",".mp4",".mpg",".mov"],
+             "audio":[".mp3",".wav",".flac"]
+            }
