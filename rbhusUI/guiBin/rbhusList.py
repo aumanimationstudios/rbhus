@@ -1064,7 +1064,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             #   import datetime
             #   tT = datetime.datetime.now() - row['sTime']
           else:
-            tT = row['eTime'] - row['sTime']
+            print(row['eTime'])
+            print(row['sTime'])
+            try:
+              tT = row['eTime'] - row['sTime']
+            except:
+              print("FUCKED UP")
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(tT).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
