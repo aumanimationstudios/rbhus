@@ -1069,7 +1069,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             try:
               tT = row['eTime'] - row['sTime']
             except:
-              print("FUCKED UP")
+              pass
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(tT).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue

@@ -13,6 +13,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ###
+import os
+import tempfile
+import sys
+import debug
+
+tempDir = tempfile.gettempdir()
+file_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1])
+base_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2])
+debug.info(base_dir)
 
 #proj table
 
@@ -62,3 +71,13 @@ mediaMime = {
              "video":[".avi",".mp4",".mpg",".mov"],
              "audio":[".mp3",".wav",".flac"]
             }
+
+mimeLogo = {
+  "image" : os.path.join(base_dir,"etc","icons","mime_type_image.png"),
+  "video" : os.path.join(base_dir,"etc","icons","mime_type_video.png")
+}
+
+mimeConvertCmd = {
+  "image": "/usr/bin/composite -gravity southwest \\( {0} -resize 48x48 \\) \\( {1} -resize 256x256 \\) {2}",
+  "video": "/usr/bin/composite -gravity southwest \\( {0} -resize 48x48 \\) \\( {1}[23] -resize 256x256 \\) {2}"
+}

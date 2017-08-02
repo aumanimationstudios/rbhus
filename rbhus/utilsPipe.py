@@ -299,11 +299,13 @@ def getMediaFiles(assPath=None):
 
 
 
-def getUpdatedMediaThumbs(assPath=None):
+def getUpdatedMediaThumbs(assPath=None, QT_callback_signalThumbz=None, QT_callback_isStopped=None):
   """
 
   :param assPath:
-  :return: a dictionary containing mimeType->thumbnail_file -> original_file
+  :param QT_callback_signalThumbz: callback function should emit a signal and take an object as a parameter (this is used in QT Threads)
+  :param QT_callback_isStopped: callback function to check if the thread is asked to stop (this is used in QT Threads)
+  :return: return a list of thumbz_db object
   """
   def jsonWrite(jFile,jData):
     try:
@@ -333,6 +335,9 @@ def getUpdatedMediaThumbs(assPath=None):
           for filename in filenames:
             for mimeType in constantsPipe.mediaMime.keys():
               for mimeExt in constantsPipe.mediaMime[mimeType]:
+                if(QT_callback_isStopped):
+                  if(QT_callback_isStopped()):
+                    return(0)
                 if(not filename.startswith(".")):
                   if (filename.endswith(mimeExt)):
                     fAbsPath = os.path.join(root,filename)
@@ -343,17 +348,16 @@ def getUpdatedMediaThumbs(assPath=None):
                     fJson = os.path.join(fThumbzDbDir,fName + ".json")
                     fThumbz = os.path.join(fThumbzDbDir,fName + ".png")
                     fModifiedTime = os.path.getmtime(fAbsPath)
+
                     if(os.path.exists(fThumbzDbDir)):
                       if(os.path.exists(fJson)):
                         try:
                           with fLockPath:
                             fThumbzDetails = jsonRead(fJson)
                             if(fThumbzDetails[fName] < fModifiedTime):
-                              if(mimeType == "video"):
-                                thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath +"[24]",fThumbz)
-                              elif(mimeType == "image"):
-                                thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath,fThumbz)
-                              else:
+                              try:
+                                thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(constantsPipe.mimeLogo[mimeType],fAbsPath ,fThumbz)
+                              except:
                                 thumbzCmd = None
                               if (thumbzCmd):
                                 print(thumbzCmd)
@@ -367,11 +371,9 @@ def getUpdatedMediaThumbs(assPath=None):
                       else:
                         try:
                           with fLockPath:
-                            if (mimeType == "video"):
-                              thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath + "[24]", fThumbz)
-                            elif (mimeType == "image"):
-                              thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath, fThumbz)
-                            else:
+                            try:
+                              thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(constantsPipe.mimeLogo[mimeType], fAbsPath, fThumbz)
+                            except:
                               thumbzCmd = None
                             if (thumbzCmd):
                               print(thumbzCmd)
@@ -386,11 +388,9 @@ def getUpdatedMediaThumbs(assPath=None):
                       try:
                         with fLockPath:
                           os.makedirs(fThumbzDbDir)
-                          if (mimeType == "video"):
-                            thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath + "[24]", fThumbz)
-                          elif (mimeType == "image"):
-                            thumbzCmd = "/usr/bin/convert -resize 256x256 {0} {1}".format(fAbsPath, fThumbz)
-                          else:
+                          try:
+                            thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(constantsPipe.mimeLogo[mimeType], fAbsPath, fThumbz)
+                          except:
                             thumbzCmd = None
                           if(thumbzCmd):
                             print(thumbzCmd)
@@ -407,8 +407,10 @@ def getUpdatedMediaThumbs(assPath=None):
                     thumbDetails.thumbFile = fThumbz
                     thumbDetails.absPath = absPath
                     thumbDetails.subPath = root.replace(absPath,"")
-
-                    validMedia.append(thumbDetails)
+                    if(QT_callback_signalThumbz):
+                      QT_callback_signalThumbz(thumbDetails)
+                    else:
+                      validMedia.append(thumbDetails)
   return(validMedia)
 
 

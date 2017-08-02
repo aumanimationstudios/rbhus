@@ -258,8 +258,6 @@ class updateAssQthread(QtCore.QThread):
             x['absPath'] = absPathAss
             try:
               x['modified'] = os.path.getmtime(absPathAss)
-              # x['modified'] = time.strftime("%Y/%m/%d # %I:%M %p", time.localtime(os.path.getctime(absPathAss)))
-              # x['modified'] = time.strftime("%Y %B %d %A # %I:%M %p", time.localtime(os.path.getctime(absPathAss)))
             except:
               x['modified'] = None
 
@@ -514,49 +512,30 @@ def updateTotalAss(mainUid,totalRows):
   global assDetsItems
   global ImageWidgets
   global assDetsWidgets
-  # global ImageWidgets
-  # global noteWidgets
-  # global assColumnList
   mainUid.labelTotal.setText(str(totalRows))
   mainUid.listWidgetAssets.clear()
-  # try:
-  #   mainUid.tableWidgetAssets.disconnect()
-  # except:
-  #   pass
 
-  # mainUid.tableWidgetAssets.clearContents()
-  # mainUid.tableWidgetAssets.setSortingEnabled(False)
-  # mainUid.tableWidgetAssets.clear()
   for x in assDetsItems:
     try:
       x.deleteLater()
     except:
       rbhus.debug.info(sys.exc_info())
+
   for x in ImageWidgets:
     try:
       x.deleteLater()
     except:
       rbhus.debug.info(sys.exc_info())
+
   for x in assDetsWidgets:
     try:
       x.deleteLater()
     except:
       rbhus.debug.info(sys.exc_info())
-  #
+
   del assDetsItems[:]
   del ImageWidgets[:]
   del assDetsWidgets[:]
-  # mainUid.tableWidgetAssets.setRowCount(totalRows)
-  # mainUid.tableWidgetAssets.setColumnCount(10)
-  # # mainUid.tableWidgetAssets.customContextMenuRequested.connect(lambda pos,mainUid=mainUid: popupAss(mainUid,pos))
-  #
-  #
-  # cn = 0
-  # for x in assColumnList:
-  #   itemcn = QtWidgets.QTableWidgetItem()
-  #   itemcn.setText(x)
-  #   mainUid.tableWidgetAssets.setHorizontalHeaderItem(cn, itemcn)
-  #   cn += 1
 
 
 
@@ -636,63 +615,75 @@ def updateDetailsPanel(mainUid):
     mainUid.labelAssigned.setText(assetDets['assignedWorker'])
     mainUid.labelReviewer.setText(assetDets['reviewUser'])
     mainUid.labelCreator.setText(assetDets['createdUser'])
+
     if(assetDets['modified']):
       mainUid.labelModified.setText(time.strftime("%Y %B %d %A # %I:%M %p", time.localtime(assetDets['modified'])))
     else:
       mainUid.labelModified.setText("NOT FOUND")
-
-    # mimeFileter = []
-    # history = []
-    # mimeFileter.append("image/png")
-    # mimeFileter.append("image/x-exr")
-    # mimeFileter.append("image/jpeg")
-    # mimeFileter.append("video/avi")
-    # mimeFileter.append("video/mp4")
-    # mimeFileter.append("video/quicktime")
-    # history.append("./")
-    #
-    # # mimeFileter.append("video/*")
-    # fileDialogWidget = QtWidgets.QFileDialog(parent=mainUid.groupBoxMedia)
-    # fileDialogWidget.setDirectory(assetDets['absPath'])
-    # fileDialogWidget.setViewMode(QtWidgets.QFileDialog.Detail)
-    # fileDialogWidget.setOption(QtWidgets.QFileDialog.ReadOnly)
-    # fileDialogWidget.setMimeTypeFilters(mimeFileter)
-    # fileDialogWidget.setParent(mainUid.groupBoxMedia)
-    #
-    #
-    #
-    #
-    # fileDialogWidget.setHistory(history)
-    #
-    # mainUid.layoutMedia.addWidget(fileDialogWidget)
+    mainUid.listWidgetSubDir.clear()
     medias = rbhus.utilsPipe.getUpdatedMediaThumbs(assetDets['path'])
     # medias = rbhus.utilsPipe.getMediaFiles(assetDets['path'])
     mediaWidgets = {}
     for x in medias:
       print(x.mimeType,x.subPath, x.mainFile, x.thumbFile)
       if(not mediaWidgets.has_key(x.subPath)):
-        mediaWidget = uic.loadUi(ui_asset_media_list)
-        mediaWidget.labelSubDir.setText(x.subPath)
+
         item = QtWidgets.QListWidgetItem()
-        icon = QtGui.QIcon(x.thumbFile)
-        item.setIcon(icon)
-        mediaWidget.listWidgetMedia.addItem(item)
-        mainItem = QtWidgets.QListWidgetItem()
-        mainUid.listWidgetMedia.addItem(mainItem)
-        mainUid.listWidgetMedia.setItemWidget(mainItem,mediaWidget)
-        mainItem.setSizeHint(mediaWidget.sizeHint())
-        mediaWidgets[x.subPath] = mediaWidget
+        if(x.subPath):
+          item.setText(x.subPath)
+          item.setToolTip(x.subPath)
+        else:
+          item.setText("-")
+          item.setToolTip("-")
+        try:
+          item.medias.append(x)
+        except:
+          item.medias = []
+          item.medias.append(x)
+
+        mainUid.listWidgetSubDir.addItem(item)
+        mediaWidgets[x.subPath] = item
       else:
-        mediaWidget = mediaWidgets[x.subPath]
-        icon = QtGui.QIcon(x.thumbFile)
+        mediaWidgets[x.subPath].medias.append(x)
+
+
+def updateDetailsPanelMedia(mainUid):
+  medias = selectedSubDir(mainUid)
+  mainUid.listWidgetMedia.clear()
+  if(medias):
+    for x in medias:
+      for y in x:
+        # print(y.mimeType, y.subPath, y.mainFile, y.thumbFile)
         item = QtWidgets.QListWidgetItem()
-        item.setIcon(icon)
-        mediaWidget.listWidgetMedia.addItem(item)
-        mainItem.setSizeHint(mediaWidget.sizeHint())
+        item.setIcon(QtGui.QIcon(y.thumbFile))
+        item.setText(os.path.basename(y.mainFile))
+        item.setToolTip(y.subPath)
+        item.media = y
+        mainUid.listWidgetMedia.addItem(item)
 
 
 
 
+
+
+def selectedMedia(mainUid):
+  items = mainUid.listWidgetMedia.selectedItems()
+  rowsmedias = []
+  for x in items:
+    rowsmedias.append(x.media)
+  return (rowsmedias)
+
+
+
+
+
+
+def selectedSubDir(mainUid):
+  items = mainUid.listWidgetSubDir.selectedItems()
+  rowsmedias = []
+  for x in items:
+    rowsmedias.append(x.medias)
+  return (rowsmedias)
 
 
 
@@ -702,27 +693,6 @@ def selectedAsses(mainUid,isFav=False):
   rowstask = []
   for x in items:
     rowstask.append(x.assetDets)
-  # rowstask=[]
-  # rowsSelected = []
-  # if(isFav):
-  #   rowsModel = mainUid.tableWidgetAssetsFav.selectionModel().selectedRows()
-  # else:
-  #   rowsModel = mainUid.tableWidgetAssets.selectionModel().selectedRows()
-  #
-  # for idx in rowsModel:
-  #   #debug.info(dir(idx.model()))
-  #   rowsSelected.append(idx.row())
-  # for row in rowsSelected:
-  #   try:
-  #     if(isFav):
-  #       rowstask.append(mainUid.tableWidgetAssetsFav.cellWidget(row,0).assetDets)
-  #     else:
-  #       rowstask.append(mainUid.tableWidgetAssets.cellWidget(row,0).assetDets)
-  #
-  #   except:
-  #     rbhus.debug.info(sys.exc_info())
-  # # rbhus.debug.info("1 : "+ str(rowstask))
-
   return(rowstask)
 
 
@@ -1162,6 +1132,17 @@ def messageBoxTemplateHard():
     return (1)
   else:
     return (0)
+
+
+def popupMedia(mainUid,pos):
+  menu = QtWidgets.QMenu()
+  openAction = menu.addAction("open")
+  compareAction = menu.addAction("compare")
+
+
+
+
+
 
 def popupAss(mainUid,pos,isFav=False):
   listAssesFull = selectedAsses(mainUid,isFav=isFav)
@@ -1923,13 +1904,17 @@ def main(mainUid):
   mainUid.comboBoxSort.currentTextChanged.connect(lambda textChanged, mainUid=mainUid: updateSorting(mainUid))
 
   mainUid.listWidgetAssets.itemSelectionChanged.connect(lambda mainUid=mainUid: updateDetailsPanel(mainUid))
+  mainUid.listWidgetSubDir.itemSelectionChanged.connect(lambda mainUid=mainUid: updateDetailsPanelMedia(mainUid))
 
   loadDefaultProject(mainUid)
 
   mainUid.splitter.setStretchFactor(0,10)
   # mainUid.splitterAssetDetails.setStretchFactor(0,0.75)
   # mainUid.splitterAssetDetails.setStretchFactor(2,0.25)
-  mainUid.splitterAssetDetails.setSizes((500,50))
+  mainUid.splitterAssetDetails.setSizes((1000,50))
+  mainUid.splitterMedia.setSizes((1,200))
+
+  # mainUid.groupBoxUpdates.hide()
 
   api = api_serv(mainUid)
   api.msg_recved.connect(lambda inputDict,mainUid=mainUid :run_api(mainUid,inputDict))
