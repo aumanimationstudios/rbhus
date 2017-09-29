@@ -1067,7 +1067,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             print(row['eTime'])
             print(row['sTime'])
             try:
-              tT = row['eTime'] - row['sTime']
+              if(row['eTime'] < row['sTime']):
+                tT = 0
+              else:
+                tT = row['eTime'] - row['sTime']
             except:
               pass
           self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(tT).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))

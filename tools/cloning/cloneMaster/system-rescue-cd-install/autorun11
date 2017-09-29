@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+chroot /mnt/realroot/ bash <<EOF
+source /etc/profile
+grub-install /dev/sda --force
+chmod +t /tmp/
+grub-mkconfig -o /boot/grub/grub.cfg
+eselect opengl set nvidia
+EOF

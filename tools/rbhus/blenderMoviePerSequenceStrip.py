@@ -16,11 +16,11 @@ while('FINISHED' in b):
   frame_end = bpy.context.scene.frame_current - 1
   bpy.context.scene.frame_start = frame_start
   bpy.context.scene.frame_end = frame_end
-  bpy.data.scenes['Scene'].render.filepath = os.path.join(filepath, str(i).zfill(4) +".mov")
+  bpy.data.scenes['Scene'].render.filepath = os.path.join(filepath, str(i).zfill(4) +".avi")
 
-  bpy.context.scene.render.image_settings.file_format = 'AVI_JPEG'
-  bpy.context.scene.render.image_settings.quality = 50
-
+  # bpy.context.scene.render.image_settings.file_format = 'AVI_JPEG'
+  # bpy.context.scene.render.image_settings.quality = 50
+  #
   # bpy.context.scene.render.image_settings.file_format = 'H264'
   # bpy.context.scene.render.ffmpeg.format = 'QUICKTIME'
   # bpy.context.scene.render.ffmpeg.codec = 'H264'

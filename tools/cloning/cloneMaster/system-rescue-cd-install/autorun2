@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-rsync -aHAXW /mnt/gentooOnesis-ubuntu/ /mnt/realroot/
+rsync -aHXW --info=progress2 /mnt/gentooOnesis-ubuntu/ /mnt/realroot/
 
 exit 0

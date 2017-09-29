@@ -72,7 +72,7 @@ if(args.prot):
 else:
   p = "--rsh=rsh"
 
-os.system(rsync +" -avHAX "+ root_dir_h +" "+ target +" "+ xclude_option +" "+ p)
+os.system(rsync +" -avHX "+ root_dir_h +" "+ target +" "+ xclude_option +" "+ p)
 
 
 if(args.makeDir):

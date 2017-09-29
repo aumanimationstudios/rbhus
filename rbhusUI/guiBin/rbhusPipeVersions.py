@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, uic
 import glob
 import os
 import sys
@@ -16,6 +16,9 @@ dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 
+base_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3])
+ui_dir = os.path.join(base_dir,"rbhusUI","lib")
+relatedAsset_ui = os.path.join(ui_dir,"rbhusPipeVersionsMod_relatedAsset.ui")
 
 scb = "selectCheckBox.py"
 srb = "selectRadioBox.py"
@@ -40,6 +43,10 @@ import pyperclip
 
 
 
+try:
+  _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+  _fromUtf8 = lambda s: s
 
 
 parser = argparse.ArgumentParser()
@@ -52,6 +59,7 @@ preview_files = ["preview.png"]
 
 class ImagePlayer(QtGui.QWidget):
   def __init__(self, filename, parent):
+    # Create the layout
     super(ImagePlayer,self).__init__(parent)
     self.parent = parent
 
@@ -68,29 +76,28 @@ class ImagePlayer(QtGui.QWidget):
     self.movie.setCacheMode(QtGui.QMovie.CacheAll)
     self.movie.setSpeed(100)
     self.movie_screen.setMovie(self.movie)
-    
-    
-    # Create the layout
+
+
     main_layout = QtGui.QVBoxLayout()
     main_layout.addWidget(self.movie_screen)
     self.setLayout(main_layout)
     self.movie.start()
-    
-    
+
+
   def resizeEvent(self, event):
     self.move((self.parent.geometry().width()-100)/2,(self.parent.geometry().height()-100)/2)
-    
+
   def showEvent(self,event):
+    #self.show()
     #self.movie.setEnabled(True)
     self.movie.start()
-    #self.show()
-    
-    
+
+
   def hideEvent(self,event):
-    self.movie.stop()
-    #self.movie.setEnabled(False)
     #self.hide()
-    
+    #self.movie.setEnabled(False)
+    self.movie.stop()
+
 
 
 
@@ -98,29 +105,25 @@ class workerInitialize(QtCore.QObject):
   dataPending = QtCore.pyqtSignal()
   dataReady = QtCore.pyqtSignal(object,dict)
   dataNotAvailable = QtCore.pyqtSignal()
-  
+
   def __init__(self):
     super(workerInitialize, self).__init__()
     self.versionPath = None
-    
-    
+
+
   def initialize(self):
     self.dataPending.emit()
     if(self.versionPath):
+      # print("EEEEEE :"+ str(versionsHg._log()))
       assetDetails = utilsPipe.getAssDetails(assPath=self.versionPath)
       versionsHg = hgmod.hg(self.versionPath)
       versionsHg.initialize()
       versionsHg.initializeLocal()
-      # print("EEEEEE :"+ str(versionsHg._log()))
       self.dataReady.emit(versionsHg,assetDetails)
     else:
       self.dataNotAvailable.emit()
 
 
-try:
-  _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-  _fromUtf8 = lambda s: s
 
 
 
@@ -181,44 +184,45 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     Form.setWindowIcon(icon)
     Form.setWindowTitle(args.assPath)
     self.assetDetails = None
-    
+
     self.centralwidget.resizeEvent  = self.resizeEvent
     # self.tableVersions.resizeEvent = self.resizeEvent
-    
-    
+    self.splitter.setStretchFactor(0, 110)
+
     self.initThread = None
-    
+
     self.loadingGif = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/loading.gif"
-    
+
     self.loader = ImagePlayer(self.loadingGif,parent=self.tableVersions)
     self.loader.hide()
-    
+
     self.pushWork.clicked.connect(self.openfolder)
     self.pushCommit.clicked.connect(self.commit)
     self.pushReInit.clicked.connect(self.reInit)
-    
-    
+
+
     self.tableVersions.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.tableVersions.customContextMenuRequested.connect(self.popupPublish)
-    
-    
+
+
     self.versionsHg = None
+    self.relatedAssetWidgets = {}
 
     #self.versionsHg = hgmod.hg(args.assPath)
     self.toolButton.setMenu(self.popupToolButton())
     self.toolButton.triggered.connect(self.popupToolButtonTriggered)
     self.initialize()
-    
+
     #self.hglog()
 
-  
+
   def updateAssDetails(self):
     if(args.assId):
       self.assetDetails = utilsPipe.getAssDetails(assId=args.assId)
     if(args.assPath):
       self.assetDetails = utilsPipe.getAssDetails(assPath=args.assPath)
-  
-  
+
+
   def popupPublish(self, pos):
     menu = QtGui.QMenu()
     #openFileAction = menu.addAction("open file")
@@ -230,7 +234,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     openVersionAction = menu.addAction("open version")
     action = menu.exec_(self.tableVersions.mapToGlobal(pos))
     #if(action == openFileAction):
-      #self.openFileAss()
+    #self.openFileAss()
     if(action == publishAction):
       self.publishVersion()
     if(action == reviseAction):
@@ -244,19 +248,31 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
   def popupToolButton(self):
     menu = QtGui.QMenu()
-    copyVersionPath = menu.addAction("get version path")
+    copyVersionPath = menu.addAction("version path")
+    copyPublishPath = menu.addAction("publish path")
+    copyAssetPath = menu.addAction("asset path")
+    copyPath = menu.addAction("path")
     return(menu)
 
   def popupToolButtonTriggered(self,action):
-    if(action.text() == "get version path"):
+    if(action.text() == "version path"):
       versionPath = self.versionsHg.localPath
+
       pyperclip.copy(versionPath)
+    if(action.text() == "publish path"):
+      publishPath = os.path.join(self.versionsHg.absPipePath, "publish")
+      pyperclip.copy(publishPath)
+    if(action.text() == "path"):
+      pyperclip.copy(self.versionsHg.absPipePath)
+    if(action.text() == "asset path"):
+      pyperclip.copy(self.versionsHg.pipepath)
+
 
 
   def reInit(self):
     self.versionsHg.reInitLocal()
     self.hglog()
-  
+
   def reviewVersion(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     selvers = self.selectedVersions()
@@ -282,10 +298,10 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       import webbrowser
       webbrowser.open(verpath)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-  
-  
-  
-    
+
+
+
+
   def exportVersion(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     selvers = self.selectedVersions()
@@ -294,7 +310,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       self.versionsHg._archiveVersion(sv)
     self.hglog()
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-  
+
   def publishVersion(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     selvers = self.selectedVersions()
@@ -304,11 +320,11 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       utilsPipe.updateAssModifies(self.versionsHg.assDets['assetId'], "published version :" + str(sv))
     self.hglog()
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-        
-    
-    
-  
-  
+
+
+
+
+
   def reviseVersion(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     selvers = self.selectedVersions()
@@ -316,7 +332,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       sv = selvers[-1]
       self.versionsHg._revert(sv)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-  
+
   def selectedVersions(self):
     rowstask=[]
     rowsSelected = []
@@ -326,8 +342,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     for rows in rowsSelected:
       rowstask.append(str(self.tableVersions.item(rows.row(), 0).text()).lstrip("0"))
     return(rowstask)
-  
-  
+
+
   def hglog(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     self.updateAssDetails()
@@ -375,56 +391,101 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.tableVersions.setSortingEnabled(True)
     self.tableVersions.resizeColumnsToContents()
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-  
-  
+
+
   def push(self):
     pass
-  
+
   def resizeEvent(self,event):
     self.loader.resizeEvent(event)
     self.tableVersions.resizeColumnsToContents()
-    
-    
+
+
   def initialize(self):
     if(self.initThread):
       if(self.initThread.isRunning()):
         return(0)
     self.initThread = QtCore.QThread(parent=self.tableVersions)
-    
+
     initVers = workerInitialize()
     initVers.dataPending.connect(self.loader.show)
     initVers.dataReady.connect(self.iniLog)
     initVers.dataNotAvailable.connect(self.noData)
-    
+
     initVers.versionPath = args.assPath
-    
+
     self.initThread.setTerminationEnabled(True)
     self.initThread.run = initVers.initialize
     self.initThread.start()
-    
+
     #self.versionsHg.initialize()
     #self.versionsHg.initializeLocal()
     #self.hglog()
-  
+
   def iniLog(self,versionHgReturned,assdets):
     self.assetDetails = assdets
     self.versionsHg = versionHgReturned
     self.loader.hide()
     self.hglog()
-  
+    self.updateRelatedAssets()
+
+
+  def updateRelatedAssets(self):
+    assGroups = utilsPipe.getGroupedAssets(self.assetDetails['path'])
+    selectedForAutoCommit = utilsPipe.getGroupedForAutoCommit(self.assetDetails['path'])
+    debug.info(selectedForAutoCommit)
+    self.relatedAssetWidgets.clear()
+    self.listWidget.clear()
+    if(assGroups):
+      for x in assGroups:
+        debug.info(x)
+        assDets = utilsPipe.getAssDetails(assPath=x)
+        assLog = hgmod.hg(x)._log()
+        relatedAssetWidget = uic.loadUi(relatedAsset_ui)
+        self.relatedAssetWidgets[x] = relatedAssetWidget
+        if(assLog):
+          relatedAssetWidget.labelVersion.setText(str(assLog[0][0]).zfill(4))
+          relatedAssetWidget.labelDate.setText(str(time.ctime(float(assLog[0][2].split("-")[0]))))
+        assColored = utilsPipe.assPathColorCoded(assDets)
+        if(selectedForAutoCommit):
+          if(x in selectedForAutoCommit):
+            relatedAssetWidget.checkBox.setCheckState(QtCore.Qt.Checked)
+        relatedAssetWidget.checkBox.clicked.connect(lambda clicked,assDets=assDets,checkBox=relatedAssetWidget.checkBox : self.updateAutoCommitFile(assDets,checkBox))
+        textAssArr = []
+        for fc in assColored.split(":")[1:]:
+          textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
+        richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+        relatedAssetWidget.label.setText(richAss)
+        item = QtGui.QListWidgetItem()
+        item.assPath = x
+        self.listWidget.addItem(item)
+        self.listWidget.setItemWidget(item, relatedAssetWidget)
+        item.setSizeHint(relatedAssetWidget.sizeHint())
+
+
+  def updateAutoCommitFile(self,assDets,checkBox):
+    add = False
+    if(checkBox.checkState() == QtCore.Qt.Checked):
+      add = True
+    utilsPipe.setGroupedForAutoCommit(self.assetDetails['path'],assDets['path'],add=add)
+
   def noData(self):
     sys.exit(0)
 
 
-  def messageBoxWarn(self, hard=False):
+  def messageBoxWarn(self, hard=False, assPath=None):
     msgbox = QtGui.QMessageBox()
-    msgbox.setText(unicode("NOT COMMITING !\nAsset not assigned to you!!!"))
+    if(assPath):
+      msgbox.setText(unicode(assPath +"\nNOT COMMITING !Asset not assigned to you!!!"))
+    else:
+      msgbox.setText(unicode("NOT COMMITING !\nAsset not assigned to you!!!"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
     noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
     msgbox.setDefaultButton(noBut)
     msgbox.exec_()
+
 
   def commit(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
@@ -438,10 +499,11 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg._addremove()
     self.versionsHg._pull()
     self.versionsHg._merge()
-    commit_status = self.versionsHg._commit()
+    commit_status, versionCommited = self.versionsHg._commit()
     if(not commit_status):
       debug.info("NOTHING TO COMMIT")
       self.hglog()
+      self.commitRelated()
       self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
       return(0)
     self.versionsHg._push()
@@ -449,11 +511,28 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg._purge()
     self.versionsHg._update()
     os.chdir(self.versionsHg.localPath)
+    self.commitRelated()
     self.hglog()
     utilsPipe.updateAssModifies(self.versionsHg.assDets['assetId'],"commited")
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-    
-    
+
+  def commitRelated(self):
+    selectedForAutoCommit = utilsPipe.getGroupedForAutoCommit(self.assetDetails['path'])
+    if (selectedForAutoCommit):
+      for x in selectedForAutoCommit:
+        debug.info("commiting : " + x)
+        xver = hgmod.hg(x)
+        retValue, versionNumber = xver.commitAbsPath()
+        debug.info(versionNumber)
+        if (retValue == 111):
+          self.messageBoxWarn(assPath=x)
+        else:
+          assLog = xver._log()
+          if(versionNumber):
+            self.relatedAssetWidgets[x].labelVersion.setText(str(versionNumber).zfill(4))
+          self.relatedAssetWidgets[x].labelDate.setText(str(time.ctime(float(assLog[0][2].split("-")[0]))))
+
+
   def convertPreview(self):
     files = glob.glob(os.path.join(self.versionsHg.localPath,"*"))
     for x in files:
@@ -475,8 +554,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           debug.info(sys.exc_info())
 
 
-  
-  
+
+
   def openfolder(self):
     if(os.path.exists(self.versionsHg.localPath)):
       fila = QtGui.QFileDialog.getOpenFileNames(directory=self.versionsHg.localPath)

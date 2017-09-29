@@ -30,12 +30,13 @@ import dbPipe
 import constantsPipe
 import utilsPipe
 import utilsTray
+import re
 
 
 
 class hg(object):
 
-  def __init__(self,pipePath):
+  def __init__(self, pipePath, createLocalPath=True):
     if(sys.platform.find("win") >= 0):
       try:
         self.username = os.environ['USERNAME']
@@ -72,11 +73,12 @@ class hg(object):
 
     self._copyHomeConfig()
     # self.isMainInitialized()
-    debug.info(self.localPath)
-    try:
-      os.makedirs(self.localPath)
-    except:
-      debug.info(sys.exc_info())
+    if(createLocalPath):
+      debug.info(self.localPath)
+      try:
+        os.makedirs(self.localPath)
+      except:
+        debug.info(sys.exc_info())
 
     debug.info(os.environ['rbhusPipe_acl_user'])
     debug.info(self.projDets['admins'].split(","))
@@ -125,6 +127,31 @@ class hg(object):
       self._commit()
     debug.info("initialization done")
     return(True)
+
+  def commitAbsPath(self):
+    curdir = os.getcwd()
+    updatedVersion = None
+    os.chdir(self.absPipePath)
+    versionCommited = None
+    try:
+      self._init()
+      self._copyIgnore()
+      isAdded = self._addremove()
+      if(isAdded):
+        if(isAdded == 111):
+          return(111,None)
+      (retStatus,versionCommited) = self._commit()
+      debug.info(versionCommited)
+      self._update()
+    except:
+      debug.error(sys.exc_info())
+    os.chdir(curdir)
+    return(1,versionCommited)
+
+
+
+
+
 
   def initializeLocal(self):
     try:
@@ -248,6 +275,7 @@ class hg(object):
     else:
       debug.info(str(out))
 
+
   def _addremove(self):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
@@ -266,18 +294,32 @@ class hg(object):
   def _commit(self):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111)
+      return(111,None)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose commit -A --message \'ignore now\' --user {0}".format(os.environ['rbhusPipe_acl_user']),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = com[0]
+    debug.info(com)
+    versionCommited = None
+    try:
+      outArray = out.split("\n")
+      for x in outArray:
+        if(re.search("^committed changeset",x)):
+          changeset = x.split()
+          versionCommited = changeset[-1].split(":")[0]
+          debug.info(versionCommited)
+          break
+    except:
+      debug.warning(sys.exc_info())
+    debug.info(versionCommited)
     if (p.returncode != 0):
       debug.error(str(out))
-      return(0)
+      return(0,versionCommited)
     else:
       debug.info(str(out))
-      return(1)
+      return(1,versionCommited)
 
 
   def _push(self):

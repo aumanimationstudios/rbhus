@@ -67,17 +67,24 @@ typesHidden = 3
 typesAll = 4
 
 mediaMime = {
-             "image":[".png",".jpg",".jpeg",".exr"],
+             "image":[".png",".jpg",".jpeg",".exr",".svg"],
              "video":[".avi",".mp4",".mpg",".mov"],
-             "audio":[".mp3",".wav",".flac"]
+             "audio":[".mp3",".wav",".flac"],
+             "blender":[".blend",".blend1",".blend2"]
             }
 
 mimeLogo = {
   "image" : os.path.join(base_dir,"etc","icons","mime_type_image.png"),
-  "video" : os.path.join(base_dir,"etc","icons","mime_type_video.png")
+  "video" : os.path.join(base_dir,"etc","icons","mime_type_video.png"),
+  "blender" : os.path.join(base_dir,"etc","icons","mime_type_blender.png"),
+  "audio" : os.path.join(base_dir,"etc","icons","mime_type_audio.png")
 }
 
 mimeConvertCmd = {
-  "image": "/usr/bin/composite -gravity southwest \\( {0} -resize 48x48 \\) \\( {1} -resize 256x256 \\) {2}",
-  "video": "/usr/bin/composite -gravity southwest \\( {0} -resize 48x48 \\) \\( {1}[23] -resize 256x256 \\) {2}"
+  "image": "/usr/bin/convert '{0}' -resize 256x256 '{1}'",
+  "video": "/usr/bin/convert '{0}'[23] -resize 256x256 '{1}'",
+  "blender": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" '{0}' '{1}'"
 }
+
+
+ignoreTemplateTypes = ["share","bin","output","template"]

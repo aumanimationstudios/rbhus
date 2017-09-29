@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeVersionsMod.ui'
 #
-# Created by: PyQt4 UI code generator 4.11.4
+# Created by: PyQt4 UI code generator 4.12
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,14 +25,15 @@ except AttributeError:
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
-    MainWindow.resize(573, 486)
+    MainWindow.resize(669, 678)
     self.centralwidget = QtGui.QWidget(MainWindow)
     self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-    self.gridLayout = QtGui.QGridLayout(self.centralwidget)
-    self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-    self.verticalLayout = QtGui.QVBoxLayout()
+    self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
     self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-    self.groupVersions = QtGui.QGroupBox(self.centralwidget)
+    self.splitter = QtGui.QSplitter(self.centralwidget)
+    self.splitter.setOrientation(QtCore.Qt.Vertical)
+    self.splitter.setObjectName(_fromUtf8("splitter"))
+    self.groupVersions = QtGui.QGroupBox(self.splitter)
     sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.MinimumExpanding)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
@@ -60,10 +61,17 @@ class Ui_MainWindow(object):
     self.tableVersions.horizontalHeader().setHighlightSections(False)
     self.tableVersions.horizontalHeader().setMinimumSectionSize(5)
     self.tableVersions.horizontalHeader().setSortIndicatorShown(False)
+    self.tableVersions.horizontalHeader().setStretchLastSection(True)
     self.tableVersions.verticalHeader().setVisible(False)
     self.verticalLayout_2.addWidget(self.tableVersions)
-    self.verticalLayout.addWidget(self.groupVersions)
-    self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 3)
+    self.groupBox = QtGui.QGroupBox(self.splitter)
+    self.groupBox.setObjectName(_fromUtf8("groupBox"))
+    self.verticalLayout_3 = QtGui.QVBoxLayout(self.groupBox)
+    self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
+    self.listWidget = QtGui.QListWidget(self.groupBox)
+    self.listWidget.setObjectName(_fromUtf8("listWidget"))
+    self.verticalLayout_3.addWidget(self.listWidget)
+    self.verticalLayout.addWidget(self.splitter)
     self.horizontalLayout = QtGui.QHBoxLayout()
     self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
     self.pushWork = QtGui.QPushButton(self.centralwidget)
@@ -81,7 +89,7 @@ class Ui_MainWindow(object):
     self.toolButton.setArrowType(QtCore.Qt.RightArrow)
     self.toolButton.setObjectName(_fromUtf8("toolButton"))
     self.horizontalLayout.addWidget(self.toolButton)
-    self.gridLayout.addLayout(self.horizontalLayout, 3, 0, 1, 3)
+    self.verticalLayout.addLayout(self.horizontalLayout)
     MainWindow.setCentralWidget(self.centralwidget)
     self.statusbar = QtGui.QStatusBar(MainWindow)
     self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -94,6 +102,8 @@ class Ui_MainWindow(object):
     MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
     self.groupVersions.setTitle(_translate("MainWindow", "versions", None))
     self.tableVersions.setSortingEnabled(True)
+    self.groupBox.setToolTip(_translate("MainWindow", "Check to auto commit everytime u commit this asset. Will work only if the respected asset is ASSIGNED to you", None))
+    self.groupBox.setTitle(_translate("MainWindow", "Related Assets ", None))
     self.pushWork.setText(_translate("MainWindow", "open", None))
     self.pushReInit.setText(_translate("MainWindow", "re-initialize", None))
     self.pushCommit.setText(_translate("MainWindow", "commit", None))

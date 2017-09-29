@@ -78,8 +78,8 @@ class dbPipe:
       except:
         debug.error("Db not connected : "+ str(sys.exc_info()))
       time.sleep(1)
-      
-       
+
+
   def execute(self,query,dictionary=False):
     while(1):
       try:
@@ -88,8 +88,8 @@ class dbPipe:
           cur = self.__conn.cursor(MySQLdb.cursors.DictCursor)
         else:
           cur = self.__conn.cursor()
-        cur.execute(query)
         debug.debug(query)
+        cur.execute(query)
         if(dictionary):
           try:
             rows = cur.fetchall()

@@ -9,3 +9,5 @@ export_*
 review_*
 .thumbz.db
 *.lock
+.groupedAssets
+.autocommitGrouped

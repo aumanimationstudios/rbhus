@@ -40,6 +40,7 @@ projects = []
 ui_main = os.path.join(ui_dir,"ui_main.ui")
 ui_asset_details = os.path.join(ui_dir,"assetDetailRow.ui")
 ui_asset_media_list = os.path.join(ui_dir,"assetMediaList.ui")
+ui_asset_media_Thumbz = os.path.join(ui_dir,"mediaThumbz.ui")
 
 rpA = "rbhusPipeProjCreate.py"
 rpAss = "rbhusPipeAssetCreate.py"
@@ -77,6 +78,9 @@ updateAssThreadsFav = []
 assDetsItems = []
 ImageWidgets = []
 assDetsWidgets = []
+mediaWidgets = {}
+updateDetailsThreads = []
+updateDetailsPanelMediaThreads = []
 
 
 assColumnList = ['','','asset','assigned','reviewer','modified','v','review','publish','']
@@ -103,7 +107,6 @@ class api_serv(QtCore.QThread):
     self.sock.bind("tcp://127.0.0.1:8989")
     rbhus.debug.info("API-SERV")
   def run(self):
-    # Run a simple "Echo" server
     while True:
       (id, msg) = self.sock.recv_multipart()
       self.msg_recved.emit(msg)
@@ -122,8 +125,19 @@ class QTableWidgetItemSort(QtWidgets.QTableWidgetItem):
 
 
 class QListWidgetItemSort(QtWidgets.QListWidgetItem):
+
+
+  def __lt__(self, other):
+    return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
+
+  def __ge__(self, other):
+    return self.data(QtCore.Qt.UserRole) > other.data(QtCore.Qt.UserRole)
+
+
+
+class QListWidgetItemSortAsses(QtWidgets.QListWidgetItem):
   def __init__(self,assetDets):
-    super(QListWidgetItemSort, self).__init__()
+    super(QListWidgetItemSortAsses, self).__init__()
     self.assetDets = assetDets
     self.sortby = None
 
@@ -178,6 +192,7 @@ class ImageWidget(QtWidgets.QPushButton):
     super(ImageWidget, self).__init__(parent)
     self.imagePath = imagePath
     self.picture = QtGui.QPixmap(imagePath)
+    # rbhus.debug.debug(self.imagePath)
     self.picture  = self.picture.scaledToHeight(imageSize,0)
 
   def paintEvent(self, event):
@@ -187,6 +202,64 @@ class ImageWidget(QtWidgets.QPushButton):
 
   def sizeHint(self):
     return(self.picture.size())
+
+class updateDetailsPanelMediaQthread(QtCore.QThread):
+  mediaSignal = QtCore.pyqtSignal(object)
+  mediaStarted = QtCore.pyqtSignal()
+  mediaCountCurrent = QtCore.pyqtSignal(int)
+  mediaCountMax = QtCore.pyqtSignal(int)
+
+
+  def __init__(self,parent=None,mediaObjList=None):
+    super(updateDetailsPanelMediaQthread, self).__init__(parent)
+    self.mediaObjList = mediaObjList
+    self.pleaseStop = False
+
+  def exitshit(self):
+    self.pleaseStop = True
+
+  def run(self):
+    self.mediaStarted.emit()
+    if(self.mediaObjList):
+      self.mediaCountMax.emit(len(self.mediaObjList))
+      i = 0
+      for x in self.mediaObjList:
+        if(self.pleaseStop == False):
+          self.mediaSignal.emit(x)
+          i = i+1
+          self.mediaCountCurrent.emit(i)
+          time.sleep(0.01)
+        else:
+          break
+    self.finished.emit()
+
+
+class updateDetailsPanelQthread(QtCore.QThread):
+  thumbzSignal = QtCore.pyqtSignal(object)
+  thumbzStarted = QtCore.pyqtSignal()
+  thumbzTotal = QtCore.pyqtSignal(object)
+
+  def __init__(self,parent=None,assPath=None):
+    super(updateDetailsPanelQthread, self).__init__(parent)
+    self.assPath = assPath
+    self.pleaseStop = False
+
+  def exitshit(self):
+    self.pleaseStop = True
+
+  def callback_stop(self):
+    return(self.pleaseStop)
+
+  def callback_media(self,obj):
+    self.thumbzSignal.emit(obj)
+
+  def callback_total(self,obj):
+    self.thumbzTotal.emit(obj)
+
+  def run(self):
+    self.thumbzStarted.emit()
+    rbhus.utilsPipe.getUpdatedMediaThumbz(self.assPath, QT_callback_signalThumbz=self.callback_media, QT_callback_isStopped=self.callback_stop, QT_callback_total=self.callback_total)
+    self.finished.emit()
 
 
 
@@ -270,7 +343,7 @@ class updateAssQthread(QtCore.QThread):
 
             self.assSignal.emit(textAss,richAss,x,current-1)
             self.progressSignal.emit(minLength,maxLength,current)
-            time.sleep(0.015)
+            time.sleep(0.02)
           else:
             rbhus.debug.info("STOPPING THREAD")
             break
@@ -591,7 +664,7 @@ def updateAssSlot(mainUid, textAss,richAss,assetDets,currentRow):
 
 
 
-  item = QListWidgetItemSort(assetDets)
+  item = QListWidgetItemSortAsses(assetDets)
   mainUid.listWidgetAssets.addItem(item)
   mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
   item.setSizeHint(assDetsWidget.sizeHint())
@@ -607,7 +680,10 @@ def imageWidgetClicked(imagePath):
 
 
 
-def updateDetailsPanel(mainUid):
+
+
+
+def detailsPanelThread(mainUid):
   items = mainUid.listWidgetAssets.selectedItems()
   if(len(items) == 1):
     assetDets = items[0].assetDets
@@ -615,63 +691,181 @@ def updateDetailsPanel(mainUid):
     mainUid.labelAssigned.setText(assetDets['assignedWorker'])
     mainUid.labelReviewer.setText(assetDets['reviewUser'])
     mainUid.labelCreator.setText(assetDets['createdUser'])
+    mainUid.labelImportedFrom.setText(assetDets['importedFrom'])
+    mainUid.labelTags.setText(assetDets['tags'])
+    mainUid.labelGroup.setText(assetDets['assetGroups'])
 
     if(assetDets['modified']):
       mainUid.labelModified.setText(time.strftime("%Y %B %d %A # %I:%M %p", time.localtime(assetDets['modified'])))
     else:
       mainUid.labelModified.setText("NOT FOUND")
-    mainUid.listWidgetSubDir.clear()
-    medias = rbhus.utilsPipe.getUpdatedMediaThumbs(assetDets['path'])
-    # medias = rbhus.utilsPipe.getMediaFiles(assetDets['path'])
-    mediaWidgets = {}
-    for x in medias:
-      print(x.mimeType,x.subPath, x.mainFile, x.thumbFile)
-      if(not mediaWidgets.has_key(x.subPath)):
 
-        item = QtWidgets.QListWidgetItem()
-        if(x.subPath):
-          item.setText(x.subPath)
-          item.setToolTip(x.subPath)
-        else:
-          item.setText("-")
-          item.setToolTip("-")
+    if(updateDetailsThreads):
+      for runningThread in updateDetailsThreads:
+        runningThread.exitshit()
+        runningThread.wait()
         try:
-          item.medias.append(x)
+          runningThread.disconnect()
         except:
-          item.medias = []
-          item.medias.append(x)
+          rbhus.debug.info(runningThread)
+        try:
+          runningThread.deleteLater()
+        except:
+          rbhus.debug.info(sys.exc_info())
+        updateDetailsThreads.remove(runningThread)
 
-        mainUid.listWidgetSubDir.addItem(item)
-        mediaWidgets[x.subPath] = item
-      else:
-        mediaWidgets[x.subPath].medias.append(x)
+
+    updateDetailsThread = updateDetailsPanelQthread(assPath=assetDets['path'], parent=mainUid)
+    updateDetailsThread.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
+    updateDetailsThread.thumbzTotal.connect(lambda totalObj,mainUid=mainUid: getTotalMedia(mainUid,totalObj))
+    updateDetailsThread.finished.connect(lambda mainUid=mainUid: mediaUpdateDone(mainUid))
+    updateDetailsThread.thumbzSignal.connect(lambda mediaObj, mainUid=mainUid: updateDetailsPanel(mainUid,mediaObj))
+    updateDetailsThreads.append(updateDetailsThread)
+    updateDetailsThread.start()
+
+def clearListWidgetSubDir(mainUid):
+  global mediaWidgets
+  mediaWidgets.clear()
+  mainUid.listWidgetSubDir.clear()
+  mainUid.progressBarMedia.setMinimum(0)
+  mainUid.progressBarMedia.setMaximum(0)
+  mainUid.progressBarMedia.setValue(0)
+
+  mainUid.progressBarMediaThumbz.setMinimum(0)
+  mainUid.progressBarMediaThumbz.setMaximum(1)
+  mainUid.progressBarMediaThumbz.setValue(0)
+
+def getTotalMedia(mainUid,totalObj):
+  # rbhus.debug.info(totalObj)
+  mainUid.progressBarMediaThumbz.totalObj = totalObj
 
 
-def updateDetailsPanelMedia(mainUid):
-  medias = selectedSubDir(mainUid)
+def mediaUpdateDone(mainUid):
+  mainUid.progressBarMedia.setMinimum(0)
+  mainUid.progressBarMedia.setMaximum(1)
+  mainUid.progressBarMedia.setValue(0)
+
+def updateDetailsPanel(mainUid,mediaObj):
+  global mediaWidgets
+  # print(mediaObj.mimeType, mediaObj.subPath, mediaObj.mainFile, mediaObj.thumbFile)
+  if (not mediaWidgets.has_key(mediaObj.subPath)):
+
+    item = QtWidgets.QListWidgetItem()
+    item.subPath = mediaObj.subPath
+    if (mediaObj.subPath):
+      item.setText(mediaObj.subPath)
+      item.setToolTip(mediaObj.subPath)
+    else:
+      item.setText("-")
+      item.setToolTip("-")
+    try:
+      item.medias.append(mediaObj)
+    except:
+      item.medias = []
+      item.medias.append(mediaObj)
+
+
+    mainUid.listWidgetSubDir.addItem(item)
+    if (mediaObj.subPath == "-"):
+      mainUid.listWidgetSubDir.setCurrentItem(item)
+    mediaWidgets[mediaObj.subPath] = item
+  else:
+    mediaWidgets[mediaObj.subPath].medias.append(mediaObj)
+
+
+def detailsPanelMediaThread(mainUid):
+  global updateDetailsPanelMediaThreads
+  items = selectedSubDir(mainUid)
+
+
+
+  mediasToLoad = []
+
+  if (updateDetailsPanelMediaThreads):
+    for runningThread in updateDetailsPanelMediaThreads:
+      runningThread.exitshit()
+      runningThread.wait()
+      try:
+        runningThread.disconnect()
+      except:
+        rbhus.debug.info(runningThread)
+      try:
+        runningThread.deleteLater()
+      except:
+        rbhus.debug.info(sys.exc_info())
+      updateDetailsPanelMediaThreads.remove(runningThread)
+
   mainUid.listWidgetMedia.clear()
-  if(medias):
-    for x in medias:
-      for y in x:
-        # print(y.mimeType, y.subPath, y.mainFile, y.thumbFile)
-        item = QtWidgets.QListWidgetItem()
-        item.setIcon(QtGui.QIcon(y.thumbFile))
-        item.setText(os.path.basename(y.mainFile))
-        item.setToolTip(y.subPath)
-        item.media = y
-        mainUid.listWidgetMedia.addItem(item)
+
+  # clear the subdir thumbnails progress bar
+  mainUid.progressBarMediaThumbz.setMinimum(0)
+  mainUid.progressBarMediaThumbz.setMaximum(1)
+  mainUid.progressBarMediaThumbz.setValue(0)
+  mainUid.labelTotalThumbz.setText("0")
+
+  # mainUid.listWidgetMedia.setSortingEnabled(False)
+
+  if(items):
+    maxThumbzTrueValue = 0
+    for item in items:
+      maxThumbzTrueValue = maxThumbzTrueValue + mainUid.progressBarMediaThumbz.totalObj[str(item.text())]
+      for media in item.medias:
+        mediasToLoad.append(media)
+    mainUid.progressBarMediaThumbz.setMaximum(maxThumbzTrueValue)
+    mainUid.labelTotalThumbz.setText(str(maxThumbzTrueValue))
+
+    updateDetailsPanelMediaThread = updateDetailsPanelMediaQthread(mediaObjList=mediasToLoad,parent=mainUid)
+    updateDetailsPanelMediaThread.mediaSignal.connect(lambda mediaObj, mainUid=mainUid: updateThumbz(mainUid,mediaObj))
+    updateDetailsPanelMediaThread.mediaCountCurrent.connect(lambda value, mainUid=mainUid : updateThumbzProgress(mainUid, value))
+    # updateDetailsPanelMediaThread.mediaCountMax.connect(lambda value, mainUid=mainUid : updateThumbzProgressMax(mainUid, value))
+    # updateDetailsPanelMediaThread.thumbzTotal.connect(lambda totalObj, mainUid=mainUid: getTotalMedia(mainUid, totalObj))
+    # updateDetailsPanelMediaThread.mediaStarted.connect(lambda mainUid=mainUid: listWidgetMediaSortDisable(mainUid))
+    # updateDetailsPanelMediaThread.finished.connect(lambda mainUid=mainUid: listWidgetMediaSortEnable(mainUid))
+    # updateDetailsPanelMediaThread.thumbzSignal.connect(lambda mediaObj, mainUid=mainUid: updateDetailsPanel(mainUid, mediaObj))
+    updateDetailsPanelMediaThreads.append(updateDetailsPanelMediaThread)
+    updateDetailsPanelMediaThread.start()
+
+
+def updateThumbzProgress(mainUid,value):
+  mainUid.progressBarMediaThumbz.setValue(value)
+
+def updateThumbzProgressMax(mainUid,value):
+  mainUid.progressBarMediaThumbz.setMaximum(value)
+  mainUid.labelTotalThumbz.setText(str(value))
 
 
 
+def listWidgetMediaSortEnable(mainUid):
+  mainUid.listWidgetMedia.setSortingEnabled(True)
 
+def listWidgetMediaSortDisable(mainUid):
+  mainUid.listWidgetMedia.setSortingEnabled(False)
+
+
+def updateThumbz(mainUid,mediaObj):
+  # print(mediaObj.mimeType, mediaObj.subPath, mediaObj.mainFile, mediaObj.thumbFile)
+  itemWidget = uic.loadUi(ui_asset_media_Thumbz)
+  itemWidget.labelImageName.setText(os.path.basename(mediaObj.mainFile))
+  imageThumb = ImageWidget(mediaObj.thumbFile,64,parent=itemWidget.widgetImage)
+  itemWidget.imageLayout.addWidget(imageThumb)
+  item = QListWidgetItemSort()
+  icon = QtGui.QIcon(rbhus.constantsPipe.mimeLogo[mediaObj.mimeType])
+  itemWidget.pushButtonLogo.setIcon(icon)
+  # item.setSizeHint(QtCore.QSize(96,96))
+  item.setData(QtCore.Qt.UserRole,os.path.basename(mediaObj.mainFile))
+  item.setToolTip(mediaObj.subPath + os.sep + os.path.basename(mediaObj.mainFile))
+  item.media = mediaObj
+  item.setSizeHint(itemWidget.sizeHint() + QtCore.QSize(10,10))
+  mainUid.listWidgetMedia.addItem(item)
+  mainUid.listWidgetMedia.setItemWidget(item,itemWidget)
 
 
 def selectedMedia(mainUid):
   items = mainUid.listWidgetMedia.selectedItems()
-  rowsmedias = []
   for x in items:
-    rowsmedias.append(x.media)
-  return (rowsmedias)
+    print(x.media.mainFile)
+  return (items)
+
 
 
 
@@ -680,10 +874,7 @@ def selectedMedia(mainUid):
 
 def selectedSubDir(mainUid):
   items = mainUid.listWidgetSubDir.selectedItems()
-  rowsmedias = []
-  for x in items:
-    rowsmedias.append(x.medias)
-  return (rowsmedias)
+  return (items)
 
 
 
@@ -1497,7 +1688,7 @@ def setUsers(mainUid):
 
 
 
-def saveSearchItem(mainUid):
+def saveSearchItem(mainUid,filterFile=None):
   assetTypeSave = str(mainUid.comboAssType.currentText())
   seqSave = str(mainUid.comboSeq.currentText())
   scnSave = str(mainUid.comboScn.currentText())
@@ -1528,23 +1719,23 @@ def saveSearchItem(mainUid):
                isAssetPathSave
 
 
-  isSaveStringPresent = searchItemPresent(saveString)
+  isSaveStringPresent = searchItemPresent(saveString,filterFile=filterFile)
 
 
   if(not isSaveStringPresent):
     saveDict = {saveString:'name this'}
-    searchItemSave(saveDict)
+    searchItemSave(saveDict,filterFile=filterFile)
     item = QtWidgets.QListWidgetItem()
     item.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled)
     item.setText(saveDict[saveString])
     item.assFilter = saveString
     mainUid.listWidgetSearch.addItem(item)
 
-  testDict = searchItemLoad()
+  testDict = searchItemLoad(filterFile=filterFile)
   rbhus.debug.info(testDict)
 
-def searchItemPresent(assFilter):
-  savedDict = searchItemLoad()
+def searchItemPresent(assFilter,filterFile=None):
+  savedDict = searchItemLoad(filterFile=filterFile)
   if(savedDict):
     for x in savedDict:
       if(x):
@@ -1552,9 +1743,13 @@ def searchItemPresent(assFilter):
           return(True)
   return(False)
 
-def searchItemLoad():
+def searchItemLoad(filterFile=None):
   searchItems = None
-  filterFile = os.path.join(home_dir,".rbhusPipe.filters")
+  if (filterFile):
+    filterFile = os.path.abspath(filterFile)
+  else:
+    filterFile = os.path.join(home_dir, ".rbhusPipe.filters")
+  # filterFile = os.path.join(home_dir,".rbhusPipe.filters")
   if(os.path.exists(filterFile)):
     fd = open(filterFile,"r")
     searchItems = yaml.safe_load(fd)
@@ -1575,9 +1770,12 @@ def loadSearch(mainUid):
       mainUid.listWidgetSearch.addItem(item)
 
 
-def searchItemSave(itemDict):
+def searchItemSave(itemDict,filterFile=None):
   searchItems = []
-  filterFile = os.path.join(home_dir,".rbhusPipe.filters")
+  if(filterFile):
+    filterFile = os.path.abspath(filterFile)
+  else:
+    filterFile = os.path.join(home_dir,".rbhusPipe.filters")
   if(os.path.exists(filterFile)):
     fd = open(filterFile,"r")
     searchItems = yaml.safe_load(fd)
@@ -1769,6 +1967,8 @@ def main(mainUid):
   mainUid.pushAssImport.setIcon(iconImportAsset)
 
   mainUid.pushRefresh.setIcon(iconRefresh)
+  mainUid.pushRefreshMedia.setIcon(iconRefresh)
+  mainUid.pushRefreshMediaThumbz.setIcon(iconRefresh)
   mainUid.pushRefreshFilters.setIcon(iconRefresh)
   mainUid.pushSaveFilters.setIcon(iconNew)
   mainUid.radioStarred.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarRadioButton)
@@ -1862,6 +2062,8 @@ def main(mainUid):
 
 
   mainUid.pushRefresh.clicked.connect(lambda clicked, mainUid=mainUid: pushRefresh(mainUid))
+  mainUid.pushRefreshMedia.clicked.connect(lambda clicked, mainUid=mainUid: detailsPanelThread(mainUid))
+  mainUid.pushRefreshMediaThumbz.clicked.connect(lambda clicked, mainUid=mainUid: detailsPanelMediaThread(mainUid))
 
 
   mainUid.pushRefreshFilters.clicked.connect(lambda clicked, mainUid=mainUid: refreshFilter(mainUid))
@@ -1903,8 +2105,9 @@ def main(mainUid):
   mainUid.radioAsc.clicked.connect(lambda clicked, mainUid=mainUid: updateSorting(mainUid))
   mainUid.comboBoxSort.currentTextChanged.connect(lambda textChanged, mainUid=mainUid: updateSorting(mainUid))
 
-  mainUid.listWidgetAssets.itemSelectionChanged.connect(lambda mainUid=mainUid: updateDetailsPanel(mainUid))
-  mainUid.listWidgetSubDir.itemSelectionChanged.connect(lambda mainUid=mainUid: updateDetailsPanelMedia(mainUid))
+  mainUid.listWidgetAssets.itemSelectionChanged.connect(lambda mainUid=mainUid: detailsPanelThread(mainUid))
+  mainUid.listWidgetSubDir.itemSelectionChanged.connect(lambda mainUid=mainUid: detailsPanelMediaThread(mainUid))
+  mainUid.listWidgetMedia.itemSelectionChanged.connect(lambda mainUid=mainUid: selectedMedia(mainUid))
 
   loadDefaultProject(mainUid)
 

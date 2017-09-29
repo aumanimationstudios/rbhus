@@ -2,12 +2,9 @@ import sys
 import os
 import socket
 import MySQLdb
-import multiprocessing
 import pickle
 import datetime
 import hashlib
-import logging
-import logging.handlers
 import tempfile
 import subprocess
 import re
@@ -16,6 +13,9 @@ import copy
 import debug
 import simplejson
 import lockfile
+import collections
+import time
+
 
 progPath =  sys.argv[0].split(os.sep)
 if(len(progPath) > 1):
@@ -36,6 +36,7 @@ debug.info("utilsPipe 1: "+ str(etcpath))
 sys.path.append(cwd.rstrip(os.sep) + os.sep)
 import dbPipe
 import constantsPipe
+import dfl
 
 
 if(sys.platform.find("win") >= 0):
@@ -51,6 +52,11 @@ if(sys.platform.find("linux") >= 0):
 
 
 
+hostname = socket.gethostname()
+tempDir = os.path.abspath(tempfile.gettempdir())
+
+
+
 class thumbz_db(object):
   absPath = None
   subPath = None
@@ -58,14 +64,11 @@ class thumbz_db(object):
   mainFile = None
   thumbFile = None
 
+class thumbz_fileTypes(object):
+  absPath = None
+  mimeType = None
+  mimeExt = None
 
-
-
-
-
-
-hostname = socket.gethostname()
-tempDir = os.path.abspath(tempfile.gettempdir())
 
 
 def getDirMaps():
@@ -229,6 +232,7 @@ def getAssTypes(atype=None, status=constantsPipe.typesActive):
 
 def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True,force=False):
   assDets = getAssDetails(assPath=assetPath)
+  projDets = getProjDetails(toProject)
   origAssPath = getAbsPath(assetPath)
   toAsset = None
   if(toAssetPath != 'default'):
@@ -239,9 +243,10 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True,f
   else:
     newAsset = copy.copy(assDets)
     newAsset['projName'] = toProject
+    newAsset['directory'] = projDets['directory']
     newAsset['assignedWorker'] = os.environ['rbhusPipe_acl_user']
     newAsset['reviewUser'] = os.environ['rbhusPipe_acl_user']
-    newAsset['importedFrom'] = assDets['projName']
+    newAsset['importedFrom'] = assDets['path']
 
     newAssId = assRegister(newAsset,copyFromTemplate=False)
     if(newAssId):
@@ -299,7 +304,7 @@ def getMediaFiles(assPath=None):
 
 
 
-def getUpdatedMediaThumbs(assPath=None, QT_callback_signalThumbz=None, QT_callback_isStopped=None):
+def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callback_isStopped=None, QT_callback_total=None):
   """
 
   :param assPath:
@@ -327,6 +332,8 @@ def getUpdatedMediaThumbs(assPath=None, QT_callback_signalThumbz=None, QT_callba
       return(0)
 
   validMedia = []
+  filesForThumb = collections.OrderedDict()
+
   if (assPath):
     absPath = getAbsPath(assPath)
     if (os.path.exists(absPath)):
@@ -340,77 +347,120 @@ def getUpdatedMediaThumbs(assPath=None, QT_callback_signalThumbz=None, QT_callba
                     return(0)
                 if(not filename.startswith(".")):
                   if (filename.endswith(mimeExt)):
+                    fSubPath = root.replace(absPath,"")
                     fAbsPath = os.path.join(root,filename)
-                    fLockPath = lockfile.LockFile(fAbsPath,timeout=0)
-                    fDir = os.path.dirname(fAbsPath)
-                    fName = os.path.basename(fAbsPath)
-                    fThumbzDbDir = os.path.join(fDir,".thumbz.db")
-                    fJson = os.path.join(fThumbzDbDir,fName + ".json")
-                    fThumbz = os.path.join(fThumbzDbDir,fName + ".png")
-                    fModifiedTime = os.path.getmtime(fAbsPath)
 
-                    if(os.path.exists(fThumbzDbDir)):
-                      if(os.path.exists(fJson)):
-                        try:
-                          with fLockPath:
-                            fThumbzDetails = jsonRead(fJson)
-                            if(fThumbzDetails[fName] < fModifiedTime):
-                              try:
-                                thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(constantsPipe.mimeLogo[mimeType],fAbsPath ,fThumbz)
-                              except:
-                                thumbzCmd = None
-                              if (thumbzCmd):
-                                print(thumbzCmd)
-                                p = subprocess.Popen(thumbzCmd, shell=True)
-                                p.wait()
-                                fThumbzDetails = {fName: fModifiedTime}
-                                jsonWrite(fJson, fThumbzDetails)
-                        except:
-                          debug.debug("file is updated by someone : "+ str(fAbsPath))
+                    if(not fSubPath):
+                      fSubPath = "-"
+                    fileDets = thumbz_fileTypes()
+                    fileDets.absPath = fAbsPath
+                    fileDets.mimeType = mimeType
+                    fileDets.mimeExt = mimeExt
+                    try:
+                      filesForThumb[fSubPath].append(fileDets)
+                    except:
+                      filesForThumb[fSubPath] = []
+                      filesForThumb[fSubPath].append(fileDets)
 
-                      else:
-                        try:
-                          with fLockPath:
-                            try:
-                              thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(constantsPipe.mimeLogo[mimeType], fAbsPath, fThumbz)
-                            except:
-                              thumbzCmd = None
-                            if (thumbzCmd):
-                              print(thumbzCmd)
-                              p = subprocess.Popen(thumbzCmd, shell=True)
-                              p.wait()
-                              fThumbzDetails = {fName: fModifiedTime}
-                              jsonWrite(fJson, fThumbzDetails)
-                        except:
-                          debug.debug("file is updated by someone : "+ str(fAbsPath))
+  if(filesForThumb):
+    if (QT_callback_total):
+      totalFiles = collections.OrderedDict()
+      for subPath in filesForThumb.keys():
+        if (QT_callback_isStopped):
+          if (QT_callback_isStopped()):
+            return (0)
+        totalFiles[subPath] = len(filesForThumb[subPath])
+      QT_callback_total(totalFiles)
 
-                    else:
-                      try:
-                        with fLockPath:
-                          os.makedirs(fThumbzDbDir)
-                          try:
-                            thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(constantsPipe.mimeLogo[mimeType], fAbsPath, fThumbz)
-                          except:
-                            thumbzCmd = None
-                          if(thumbzCmd):
-                            print(thumbzCmd)
-                            p = subprocess.Popen(thumbzCmd, shell=True)
-                            p.wait()
-                            fThumbzDetails = {fName: fModifiedTime}
-                            jsonWrite(fJson, fThumbzDetails)
-                      except:
-                        debug.debug("file is updated by someone : "+ str(fAbsPath))
+    for subPath in filesForThumb.keys():
+      if(QT_callback_isStopped):
+        if(QT_callback_isStopped()):
+          return(0)
+      fSubPath = subPath
+      for fileDet in filesForThumb[subPath]:
+        if (QT_callback_isStopped):
+          if (QT_callback_isStopped()):
+            return (0)
+        fAbsPath = fileDet.absPath
+        mimeType = fileDet.mimeType
+        fLockPath = dfl.LockFile(fAbsPath,timeout=0,expiry=30)
+        fDir = os.path.dirname(fAbsPath)
+        fName = os.path.basename(fAbsPath)
+        fThumbzDbDir = os.path.join(fDir,".thumbz.db")
+        fJson = os.path.join(fThumbzDbDir,fName + ".json")
+        fThumbz = os.path.join(fThumbzDbDir,fName + ".png")
+        fModifiedTime = os.path.getmtime(fAbsPath)
 
-                    thumbDetails = thumbz_db()
-                    thumbDetails.mimeType = mimeType
-                    thumbDetails.mainFile = fAbsPath
-                    thumbDetails.thumbFile = fThumbz
-                    thumbDetails.absPath = absPath
-                    thumbDetails.subPath = root.replace(absPath,"")
-                    if(QT_callback_signalThumbz):
-                      QT_callback_signalThumbz(thumbDetails)
-                    else:
-                      validMedia.append(thumbDetails)
+        if (os.path.exists(fLockPath.lock_file)):
+          if ((time.time() - os.path.getmtime(fLockPath.lock_file)) > 60):
+            debug.info("locked file for more than 1 minute : " + str(fAbsPath))
+
+        if(os.path.exists(fThumbzDbDir)):
+          if(os.path.exists(fJson)):
+            try:
+              with fLockPath:
+                fThumbzDetails = jsonRead(fJson)
+                if(fThumbzDetails[fName] < fModifiedTime):
+                  try:
+                    thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(fAbsPath ,fThumbz)
+                  except:
+                    thumbzCmd = None
+                  if (thumbzCmd):
+                    debug.debug(thumbzCmd)
+                    p = subprocess.Popen(thumbzCmd, shell=True)
+                    retcode = p.wait()
+                    if(retcode == 0):
+                      fThumbzDetails = {fName: fModifiedTime}
+                      jsonWrite(fJson, fThumbzDetails)
+            except:
+              debug.info("file is updated by someone : "+ str(fAbsPath))
+
+
+          else:
+            try:
+              with fLockPath:
+                try:
+                  thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(fAbsPath, fThumbz)
+                except:
+                  thumbzCmd = None
+                if (thumbzCmd):
+                  debug.debug(thumbzCmd)
+                  p = subprocess.Popen(thumbzCmd, shell=True)
+                  retcode = p.wait()
+                  if (retcode == 0):
+                    fThumbzDetails = {fName: fModifiedTime}
+                    jsonWrite(fJson, fThumbzDetails)
+            except:
+              debug.info("file is updated by someone : "+ str(fAbsPath))
+
+        else:
+          try:
+            with fLockPath:
+              os.makedirs(fThumbzDbDir)
+              try:
+                thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(fAbsPath, fThumbz)
+              except:
+                thumbzCmd = None
+              if(thumbzCmd):
+                debug.debug(thumbzCmd)
+                p = subprocess.Popen(thumbzCmd, shell=True)
+                retcode = p.wait()
+                if (retcode == 0):
+                  fThumbzDetails = {fName: fModifiedTime}
+                  jsonWrite(fJson, fThumbzDetails)
+          except:
+            debug.info("file is updated by someone : "+ str(fAbsPath))
+
+        thumbDetails = thumbz_db()
+        thumbDetails.mimeType = mimeType
+        thumbDetails.mainFile = fAbsPath
+        thumbDetails.thumbFile = fThumbz
+        thumbDetails.absPath = absPath
+        thumbDetails.subPath = fSubPath
+        if(QT_callback_signalThumbz):
+          QT_callback_signalThumbz(thumbDetails)
+        else:
+          validMedia.append(thumbDetails)
   return(validMedia)
 
 
@@ -1058,18 +1108,99 @@ def getBestDir(assDetDict):
   pass
 
 
+def getGroupedAssets(assPath):
+  assdets = getAssDetails(assPath=assPath)
+  projName = assdets['projName']
+  groups = assdets['assetGroups']
+  assetsToReturn = {}
+  if(not re.search("^default$",groups)):
+    assetGroups = groups.split(",")
+    dbcon = dbPipe.dbPipe()
+    rows = dbcon.execute("select * from assetGroupsReverseLookUp where projName=\'{0}\' and groupName in {1}".format(projName,str(tuple(assetGroups))),dictionary=True)
+    if(rows):
+      for row in rows:
+        if(row['assetPath'] != assPath):
+          assetsToReturn[row['assetPath']] = 1
 
-def assRegister(assDetDict,copyFromTemplate=True):
+  debug.debug(assetsToReturn)
+  return(assetsToReturn.keys())
+
+
+def getGroupedForAutoCommit(assPath):
+  absPath = getAbsPath(assPath)
+  autoCommitFile = os.path.join(absPath,".autocommitGrouped")
+  assForAutoCommit = []
+  if(os.path.exists(autoCommitFile)):
+    lockGroupFile = dfl.LockFile(autoCommitFile)
+    with lockGroupFile:
+      fd = open(autoCommitFile,"r")
+      assForAutoCommit.extend(simplejson.load(fd))
+      fd.close()
+  return(assForAutoCommit)
+
+
+def setGroupedForAutoCommit(mainAssetPath, assetToAddPath, add=False):
+  absPath = getAbsPath(mainAssetPath)
+  autoCommitFile = os.path.join(absPath,".autocommitGrouped")
+  assForAutoCommit = []
+  lockGroupFile = dfl.LockFile(autoCommitFile)
+  with lockGroupFile:
+    if (os.path.exists(autoCommitFile)):
+      fd = open(autoCommitFile,"r")
+      assForAutoCommit.extend(simplejson.load(fd))
+      fd.close()
+    fd = open(autoCommitFile, "w")
+    if(add):
+      if(not assetToAddPath in assForAutoCommit):
+        assForAutoCommit.append(assetToAddPath)
+    else:
+      assForAutoCommit.remove(assetToAddPath)
+    simplejson.dump(assForAutoCommit,fd)
+    fd.flush()
+    fd.close()
+
+  return(assForAutoCommit)
+
+
+
+
+
+def assRegisterGroups(assDetDict,assetGroup= []):
+  assetGroups = []
+  assetGroups.extend(assetGroup)
+  if (assDetDict.has_key("assName")):
+    assetGroups.append(assDetDict['assName'])
+  if (not re.search("^default$", assDetDict['sequenceName'])):
+    if (not re.search("^default$", assDetDict['sceneName'])):
+      assetGroups.append(assDetDict['sequenceName'] + "_" + assDetDict['sceneName'])
+    else:
+      assetGroups.append(assDetDict['sequenceName'])
+  if (assetGroups):
+    assDetDict['assetGroups'] = ",".join(assetGroups)
+    for g in assetGroups:
+      dbconn = dbPipe.dbPipe()
+      try:
+        dbconn.execute("insert into assetGroupsReverseLookUp (assetId, projName, groupName, assetPath) values(\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(assDetDict['assetId'], assDetDict['projName'], g, assPath))
+      except:
+        debug.debug(sys.exc_info())
+  return(assetGroups)
+
+
+
+def assRegister(assDetDict,copyFromTemplate=True,assetGroup = []):
+
   assPath = getAssPath(assDetDict)
   #assPath = str(assDetDict['projName'])
-  assId = ""
   dirMapsDets = getDirMapsDetails(str(assDetDict['directory']))
   assDetDict['createDate'] = str(MySQLdb.Timestamp.now())
   assDetDict['createdUser']  = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
-  fileName = getAssFileName(assDetDict)
+  # fileName = getAssFileName(assDetDict)
   assId = hashlib.sha256(assPath).hexdigest()
   assDetDict['assetId'] = assId
   assDetDict['path'] = assPath
+
+  assRegisterGroups(assDetDict,assetGroup=assetGroup)
+
   fieldsA = []
   valuesA = []
   for x in assDetDict.keys():
@@ -1096,7 +1227,7 @@ def assRegister(assDetDict,copyFromTemplate=True):
     except:
       debug.debug(str(sys.exc_info()))
     if(copyFromTemplate):
-      if(assDetDict['assetType'].rstrip().lstrip() != "output" and assDetDict['assetType'].rstrip().lstrip() != "share" and assDetDict['assetType'].rstrip().lstrip() != "template"):
+      if(not assDetDict['assetType'] in constantsPipe.ignoreTemplateTypes):
         setAssTemplate(assDetDict)
   except:
     debug.debug(str(sys.exc_info()))

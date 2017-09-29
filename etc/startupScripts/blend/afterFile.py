@@ -9,6 +9,10 @@ bpy.context.scene.render.fps = 24
 bpy.context.scene.render.fps_base = 1
 bpy.context.scene.keying_sets_all.active = bpy.context.scene.keying_sets_all['LocRotScale']
 bpy.context.scene.render.engine = 'CYCLES'
+bpy.context.scene.cycles.progressive = 'BRANCHED_PATH'
+bpy.context.scene.cycles.preview_aa_samples = 1
+
+
 # bpy.context.scene.render.use_single_layer = False
 
 
