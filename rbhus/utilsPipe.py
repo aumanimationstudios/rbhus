@@ -1115,8 +1115,9 @@ def getGroupedAssets(assPath):
   assetsToReturn = {}
   if(not re.search("^default$",groups)):
     assetGroups = groups.split(",")
+    debug.info(assetGroups)
     dbcon = dbPipe.dbPipe()
-    rows = dbcon.execute("select * from assetGroupsReverseLookUp where projName=\'{0}\' and groupName in {1}".format(projName,str(tuple(assetGroups))),dictionary=True)
+    rows = dbcon.execute("select * from assetGroupsReverseLookUp where projName=\'{0}\' and groupName in ({1})".format(projName,str(",".join(["'"+ x +"'" for x in assetGroups]))),dictionary=True)
     if(rows):
       for row in rows:
         if(row['assetPath'] != assPath):
@@ -1165,11 +1166,12 @@ def setGroupedForAutoCommit(mainAssetPath, assetToAddPath, add=False):
 
 
 
-def assRegisterGroups(assDetDict,assetGroup= []):
+def assRegisterGroups(assDetDict,assetGroup= [],dryrun=False):
   assetGroups = []
   assetGroups.extend(assetGroup)
   if (assDetDict.has_key("assName")):
-    assetGroups.append(assDetDict['assName'])
+    if(not re.search("^default$", assDetDict['assName'])):
+      assetGroups.append(assDetDict['assName'])
   if (not re.search("^default$", assDetDict['sequenceName'])):
     if (not re.search("^default$", assDetDict['sceneName'])):
       assetGroups.append(assDetDict['sequenceName'] + "_" + assDetDict['sceneName'])
@@ -1177,12 +1179,13 @@ def assRegisterGroups(assDetDict,assetGroup= []):
       assetGroups.append(assDetDict['sequenceName'])
   if (assetGroups):
     assDetDict['assetGroups'] = ",".join(assetGroups)
-    for g in assetGroups:
-      dbconn = dbPipe.dbPipe()
-      try:
-        dbconn.execute("insert into assetGroupsReverseLookUp (assetId, projName, groupName, assetPath) values(\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(assDetDict['assetId'], assDetDict['projName'], g, assPath))
-      except:
-        debug.debug(sys.exc_info())
+    if(not dryrun):
+      for g in assetGroups:
+        dbconn = dbPipe.dbPipe()
+        try:
+          dbconn.execute("insert into assetGroupsReverseLookUp (assetId, projName, groupName, assetPath) values(\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(assDetDict['assetId'], assDetDict['projName'], g, assDetDict['path']))
+        except:
+          debug.info(sys.exc_info())
   return(assetGroups)
 
 
