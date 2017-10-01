@@ -692,6 +692,7 @@ def detailsPanelThread(mainUid):
     mainUid.labelReviewer.setText(assetDets['reviewUser'])
     mainUid.labelCreator.setText(assetDets['createdUser'])
     mainUid.labelImportedFrom.setText(assetDets['importedFrom'])
+    mainUid.labelDescription.setText(assetDets['description'])
     mainUid.labelTags.setText(assetDets['tags'])
     mainUid.labelGroup.setText(assetDets['assetGroups'])
 
