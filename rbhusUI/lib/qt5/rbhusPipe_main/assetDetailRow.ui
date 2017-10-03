@@ -269,6 +269,9 @@ QCheckBox::indicator:unchecked
         <property name="text">
          <string>AndePirki_se01_ep001_ballThrow:library:Dumbbells:model:lookdev:blend</string>
         </property>
+        <property name="textInteractionFlags">
+         <set>Qt::NoTextInteraction</set>
+        </property>
        </widget>
       </item>
       <item>

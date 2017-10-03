@@ -595,7 +595,7 @@
                       <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
-                      <string>assName</string>
+                      <string>ass&amp;Name</string>
                      </property>
                      <property name="checked">
                       <bool>true</bool>
@@ -806,6 +806,60 @@
             </property>
            </spacer>
           </item>
+          <item>
+           <widget class="QGroupBox" name="groupBoxShowOnly">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QLabel" name="label_15">
+               <property name="text">
+                <string>show only</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line_12">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton">
+               <property name="text">
+                <string>preview</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_2">
+               <property name="text">
+                <string>reviewer</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_3">
+               <property name="text">
+                <string>assigned</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_4">
+               <property name="text">
+                <string>modified</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -844,6 +898,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="mouseTracking">
+            <bool>false</bool>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::StrongFocus</enum>
+           </property>
            <property name="contextMenuPolicy">
             <enum>Qt::CustomContextMenu</enum>
            </property>
@@ -856,11 +916,17 @@
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
+           <property name="showDropIndicator" stdset="0">
+            <bool>false</bool>
+           </property>
+           <property name="defaultDropAction">
+            <enum>Qt::IgnoreAction</enum>
+           </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::ExtendedSelection</enum>
            </property>
            <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
+            <enum>QAbstractItemView::SelectItems</enum>
            </property>
            <property name="verticalScrollMode">
             <enum>QAbstractItemView::ScrollPerPixel</enum>
@@ -981,7 +1047,7 @@
                      <x>0</x>
                      <y>0</y>
                      <width>839</width>
-                     <height>378</height>
+                     <height>372</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -1056,7 +1122,7 @@
                          <enum>QFrame::Raised</enum>
                         </property>
                         <property name="text">
-                         <string>Reviwer</string>
+                         <string>Reviewer</string>
                         </property>
                        </widget>
                       </item>
@@ -1302,6 +1368,15 @@
                         <height>0</height>
                        </size>
                       </property>
+                      <property name="focusPolicy">
+                       <enum>Qt::NoFocus</enum>
+                      </property>
+                      <property name="showDropIndicator" stdset="0">
+                       <bool>false</bool>
+                      </property>
+                      <property name="defaultDropAction">
+                       <enum>Qt::IgnoreAction</enum>
+                      </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>
                       </property>
@@ -1330,6 +1405,12 @@
                       </property>
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
+                      </property>
+                      <property name="showDropIndicator" stdset="0">
+                       <bool>false</bool>
+                      </property>
+                      <property name="defaultDropAction">
+                       <enum>Qt::IgnoreAction</enum>
                       </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>

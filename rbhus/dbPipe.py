@@ -77,6 +77,7 @@ class dbPipe:
         return(con)
       except:
         debug.error("Db not connected : "+ str(sys.exc_info()))
+        raise 
       time.sleep(1)
 
 

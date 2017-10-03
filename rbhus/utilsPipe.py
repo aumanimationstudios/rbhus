@@ -408,7 +408,11 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                   if (thumbzCmd):
                     debug.debug(thumbzCmd)
                     p = subprocess.Popen(thumbzCmd, shell=True)
-                    retcode = p.wait()
+                    retcode = p.poll()
+                    while(retcode == None):
+                      retcode = p.poll()
+                      time.sleep(0.1)
+
                     if(retcode == 0):
                       fThumbzDetails = {fName: fModifiedTime}
                       jsonWrite(fJson, fThumbzDetails)
@@ -426,7 +430,10 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                 if (thumbzCmd):
                   debug.debug(thumbzCmd)
                   p = subprocess.Popen(thumbzCmd, shell=True)
-                  retcode = p.wait()
+                  retcode = p.poll()
+                  while (retcode == None):
+                    retcode = p.poll()
+                    time.sleep(0.1)
                   if (retcode == 0):
                     fThumbzDetails = {fName: fModifiedTime}
                     jsonWrite(fJson, fThumbzDetails)
@@ -444,7 +451,11 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
               if(thumbzCmd):
                 debug.debug(thumbzCmd)
                 p = subprocess.Popen(thumbzCmd, shell=True)
-                retcode = p.wait()
+
+                retcode = p.poll()
+                while (retcode == None):
+                  retcode = p.poll()
+                  time.sleep(0.1)
                 if (retcode == 0):
                   fThumbzDetails = {fName: fModifiedTime}
                   jsonWrite(fJson, fThumbzDetails)
@@ -459,6 +470,7 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
         thumbDetails.subPath = fSubPath
         if(QT_callback_signalThumbz):
           QT_callback_signalThumbz(thumbDetails)
+          time.sleep(0.01)
         else:
           validMedia.append(thumbDetails)
   return(validMedia)

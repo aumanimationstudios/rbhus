@@ -264,7 +264,7 @@ class updateDetailsPanelQthread(QtCore.QThread):
 
 
 class updateAssQthread(QtCore.QThread):
-  assSignal = QtCore.pyqtSignal(str,str,object,int)
+  assSignal = QtCore.pyqtSignal(str,object,int)
   progressSignal = QtCore.pyqtSignal(int,int,int)
   totalAssets = QtCore.pyqtSignal(int)
 
@@ -341,9 +341,9 @@ class updateAssQthread(QtCore.QThread):
 
 
 
-            self.assSignal.emit(textAss,richAss,x,current-1)
+            self.assSignal.emit(richAss,x,current-1)
             self.progressSignal.emit(minLength,maxLength,current)
-            time.sleep(0.02)
+            time.sleep(0.05)
           else:
             rbhus.debug.info("STOPPING THREAD")
             break
@@ -462,7 +462,7 @@ def updateProjSelect(mainUid):
 
 def updateAssetsForProjSelect(mainUid):
   updateAssTimer.stop()
-  updateAssTimer.start(2000)
+  updateAssTimer.start(1000)
 
 
 def updateAssetsForProjSelectTimed(mainUid):
@@ -518,7 +518,7 @@ def updateAssetsForProjSelectTimed(mainUid):
   updateAssThread = updateAssQthread(project = projects,whereDict=whereDict,parent=mainUid,isFav=mainUid.radioStarred.isChecked())
   updateAssThread.totalAssets.connect(lambda total,mainUid=mainUid: updateTotalAss(mainUid,total))
   updateAssThread.progressSignal.connect(lambda minLength, maxLength , current, mainUid = mainUid: updateProgressBar(minLength,maxLength,current,mainUid))
-  updateAssThread.assSignal.connect(lambda textAss,richAss,assetDets, current, mainUid=mainUid: updateAssSlot(mainUid, textAss, richAss,assetDets,current))
+  updateAssThread.assSignal.connect(lambda richAss,assetDets, current, mainUid=mainUid: updateAssSlot(mainUid, richAss, assetDets))
   updateAssThread.finished.connect(lambda mainUid=mainUid: updateSorting(mainUid))
   updateAssThread.start()
   updateAssThreads.append(updateAssThread)
@@ -612,7 +612,7 @@ def updateTotalAss(mainUid,totalRows):
 
 
 
-def updateAssSlot(mainUid, textAss,richAss,assetDets,currentRow):
+def updateAssSlot(mainUid, richAss, assetDets):
   global ImageWidgets
   global assDetsWidgets
   global assDetsItems
@@ -701,28 +701,45 @@ def detailsPanelThread(mainUid):
     else:
       mainUid.labelModified.setText("NOT FOUND")
 
-    if(updateDetailsThreads):
-      for runningThread in updateDetailsThreads:
-        runningThread.exitshit()
-        runningThread.wait()
-        try:
-          runningThread.disconnect()
-        except:
-          rbhus.debug.info(runningThread)
-        try:
-          runningThread.deleteLater()
-        except:
-          rbhus.debug.info(sys.exc_info())
-        updateDetailsThreads.remove(runningThread)
+    updateMediaTab(mainUid)
+  else:
+    stopMediaThreads(mainUid)
 
+def stopMediaThreads(mainUid):
+  global updateDetailsThreads
+  if (updateDetailsThreads):
+    for runningThread in updateDetailsThreads:
+      runningThread.exitshit()
+      runningThread.wait()
+      try:
+        runningThread.disconnect()
+      except:
+        rbhus.debug.info(runningThread)
+      try:
+        runningThread.deleteLater()
+      except:
+        rbhus.debug.info(sys.exc_info())
+      updateDetailsThreads.remove(runningThread)
 
-    updateDetailsThread = updateDetailsPanelQthread(assPath=assetDets['path'], parent=mainUid)
-    updateDetailsThread.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
-    updateDetailsThread.thumbzTotal.connect(lambda totalObj,mainUid=mainUid: getTotalMedia(mainUid,totalObj))
-    updateDetailsThread.finished.connect(lambda mainUid=mainUid: mediaUpdateDone(mainUid))
-    updateDetailsThread.thumbzSignal.connect(lambda mediaObj, mainUid=mainUid: updateDetailsPanel(mainUid,mediaObj))
-    updateDetailsThreads.append(updateDetailsThread)
-    updateDetailsThread.start()
+def updateMediaTab(mainUid):
+  items = mainUid.listWidgetAssets.selectedItems()
+  stopMediaThreads(mainUid)
+  if(len(items) == 1):
+    assetDets = items[0].assetDets
+    currentTab = mainUid.tabWidget.currentIndex()
+    if(currentTab == 1):
+      startMediaThread(assetDets,mainUid)
+
+def startMediaThread(assetDets,mainUid):
+  global updateDetailsThreads
+  updateDetailsThread = updateDetailsPanelQthread(assPath=assetDets['path'], parent=mainUid)
+  updateDetailsThread.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
+  updateDetailsThread.thumbzTotal.connect(lambda totalObj, mainUid=mainUid: getTotalMedia(mainUid, totalObj))
+  updateDetailsThread.finished.connect(lambda mainUid=mainUid: mediaUpdateDone(mainUid))
+  updateDetailsThread.thumbzSignal.connect(lambda mediaObj, mainUid=mainUid: updateDetailsPanel(mainUid, mediaObj))
+  updateDetailsThreads.append(updateDetailsThread)
+  updateDetailsThread.start()
+
 
 def clearListWidgetSubDir(mainUid):
   global mediaWidgets
@@ -1622,7 +1639,7 @@ def editAss(mainUid,assetList=None):
     p.setStandardOutputFile(tempDir + os.sep + "rbhusPipeAssetEdit_" + username + ".log")
     p.setStandardErrorFile(tempDir + os.sep + "rbhusPipeAssetEdit_" + username + ".err")
     p.start(sys.executable, rbhusAssetEditCmdMod.split())
-    p.finished.connect(lambda a ,b, mainUid=mainUid : updateAssetsForProjSelect(mainUid))
+    # p.finished.connect(lambda a ,b, mainUid=mainUid : updateAssetsForProjSelect(mainUid))
 
 
 
@@ -2109,6 +2126,7 @@ def main(mainUid):
   mainUid.listWidgetAssets.itemSelectionChanged.connect(lambda mainUid=mainUid: detailsPanelThread(mainUid))
   mainUid.listWidgetSubDir.itemSelectionChanged.connect(lambda mainUid=mainUid: detailsPanelMediaThread(mainUid))
   mainUid.listWidgetMedia.itemSelectionChanged.connect(lambda mainUid=mainUid: selectedMedia(mainUid))
+  mainUid.tabWidget.currentChanged.connect(lambda index,mainUid=mainUid: updateMediaTab(mainUid))
 
   loadDefaultProject(mainUid)
 
@@ -2117,6 +2135,8 @@ def main(mainUid):
   # mainUid.splitterAssetDetails.setStretchFactor(2,0.25)
   mainUid.splitterAssetDetails.setSizes((1000,50))
   mainUid.splitterMedia.setSizes((1,200))
+
+  mainUid.groupBoxShowOnly.hide()
 
   # mainUid.groupBoxUpdates.hide()
 
