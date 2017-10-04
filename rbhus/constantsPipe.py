@@ -81,8 +81,8 @@ mimeLogo = {
 }
 
 mimeConvertCmd = {
-  "image": "/usr/bin/convert '{0}' -resize 96x96 '{1}'",
-  "video": "/usr/bin/convert '{0}'[23] -resize 96x96 '{1}'",
+  "image": "/usr/bin/convert '{0}' -sample 96x96 '{1}'",
+  "video": "/usr/bin/convert '{0}'[23] -sample 96x96 '{1}'",
   "blender": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" '{0}' '{1}'"
 }
 

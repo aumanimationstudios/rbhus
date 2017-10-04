@@ -456,6 +456,15 @@ def updateProjSelect(mainUid):
   saveSelectedProjects(projects)
   rbhus.utilsPipe.exportProj(projects[-1])
 
+def clearProjSelect(mainUid):
+  global projects
+  items = mainUid.listWidgetProj.selectedItems()
+  projects = []
+  for x in items:
+    projects.append(str(x.text()))
+  saveSelectedProjects(projects)
+  rbhus.utilsPipe.exportProj(projects[-1])
+
 
 
 
@@ -533,6 +542,10 @@ def updateProgressBar(minLength,maxLength,current,mainUid):
 
 def updateSorting(mainUid):
   global assDetsItems
+  import inspect
+  frm  = inspect.stack()[1]
+  mod = inspect.getmodule(frm[0])
+  print '[%s] ' % (mod.__name__,)
 
   if (mainUid.comboBoxSort.currentText() == "review"):
     rbhus.debug.info("sorting for asset review")
@@ -573,7 +586,7 @@ def updateSorting(mainUid):
     rbhus.debug.info("sorting for asset")
     for x in assDetsItems:
       x.sortby_asset()
-
+  # mainUid.listWidgetAssets.setSortingEnabled(True)
   if(mainUid.radioAsc.isChecked()):
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.AscendingOrder)
   else:
@@ -587,12 +600,13 @@ def updateTotalAss(mainUid,totalRows):
   global assDetsWidgets
   mainUid.labelTotal.setText(str(totalRows))
   mainUid.listWidgetAssets.clear()
+  # mainUid.listWidgetAssets.setSortingEnabled(False)
 
-  for x in assDetsItems:
-    try:
-      x.deleteLater()
-    except:
-      rbhus.debug.info(sys.exc_info())
+  # for x in assDetsItems:
+  #   try:
+  #     x.deleteLater()
+  #   except:
+  #     rbhus.debug.info(sys.exc_info())
 
   for x in ImageWidgets:
     try:
@@ -762,6 +776,7 @@ def mediaUpdateDone(mainUid):
   mainUid.progressBarMedia.setMinimum(0)
   mainUid.progressBarMedia.setMaximum(1)
   mainUid.progressBarMedia.setValue(0)
+  detailsPanelMediaThread(mainUid)
 
 def updateDetailsPanel(mainUid,mediaObj):
   global mediaWidgets
@@ -839,6 +854,7 @@ def detailsPanelMediaThread(mainUid):
     # updateDetailsPanelMediaThread.thumbzTotal.connect(lambda totalObj, mainUid=mainUid: getTotalMedia(mainUid, totalObj))
     # updateDetailsPanelMediaThread.mediaStarted.connect(lambda mainUid=mainUid: listWidgetMediaSortDisable(mainUid))
     # updateDetailsPanelMediaThread.finished.connect(lambda mainUid=mainUid: listWidgetMediaSortEnable(mainUid))
+    # updateDetailsPanelMediaThread.finished.connect(lambda mainUid=mainUid: updateMediaTab(mainUid))
     # updateDetailsPanelMediaThread.thumbzSignal.connect(lambda mediaObj, mainUid=mainUid: updateDetailsPanel(mainUid, mediaObj))
     updateDetailsPanelMediaThreads.append(updateDetailsPanelMediaThread)
     updateDetailsPanelMediaThread.start()
@@ -1956,11 +1972,29 @@ def run_api(mainUid,inputDict):
   # if (temp_project != self.set_project):
   #   rbhusPipeSetProject_temp(old_project)
 
+def updateProjectsLists(mainUid):
+  mainUid.listWidgetProj.clear()
+  dbcon = rbhus.dbPipe.dbPipe()
+  projects = dbcon.execute("select projName from proj where status=\""+ str(rbhus.constantsPipe.projActive) +"\"",dictionary=True)
+  maxlen = 0
+  for x in projects:
+    item = QtWidgets.QListWidgetItem()
+    item.setText(x['projName'])
+    mylen = len(x['projName'])
+    if(mylen >= maxlen):
+      maxlen = mylen
+    mainUid.listWidgetProj.addItem(item)
+  loadDefaultProject(mainUid)
+  changeProject(mainUid)
+  return(maxlen)
 
 
-def main(mainUid):
+def main_func(mainUid):
   mainUid.listWidgetProj.clear()
 
+  icon = QtGui.QIcon()
+  icon.addPixmap(QtGui.QPixmap(os.path.join(base_dir, "etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+  mainUid.setWindowIcon(icon)
 
 
   iconRefresh = QtGui.QIcon()
@@ -1988,32 +2022,23 @@ def main(mainUid):
   mainUid.pushRefreshMedia.setIcon(iconRefresh)
   mainUid.pushRefreshMediaThumbz.setIcon(iconRefresh)
   mainUid.pushRefreshFilters.setIcon(iconRefresh)
+  mainUid.pushRefreshProjects.setIcon(iconRefresh)
   mainUid.pushSaveFilters.setIcon(iconNew)
   mainUid.radioStarred.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarRadioButton)
   mainUid.radioAsc.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleSortCheckBox)
 
 
-  dbcon = rbhus.dbPipe.dbPipe()
-  projects = dbcon.execute("select projName from proj where status=\""+ str(rbhus.constantsPipe.projActive) +"\"",dictionary=True)
-
-
-  icon = QtGui.QIcon()
-  icon.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-  mainUid.setWindowIcon(icon)
 
 
 
-  maxlen = 0
-  for x in projects:
-    item = QtWidgets.QListWidgetItem()
-    item.setText(x['projName'])
-    mylen = len(x['projName'])
-    if(mylen >= maxlen):
-      maxlen = mylen
-    mainUid.listWidgetProj.addItem(item)
 
-  mainUid.listWidgetProj.itemSelectionChanged.connect(lambda mainUid=mainUid : changeProject(mainUid))
-  mainUid.listWidgetProj.setSortingEnabled(True)
+
+  # mainUid.listWidgetProj.itemSelectionChanged.connect(lambda mainUid=mainUid : changeProject(mainUid))
+  mainUid.listWidgetProj.itemClicked.connect(lambda iotem ,mainUid=mainUid : changeProject(mainUid))
+  maxlen = updateProjectsLists(mainUid)
+
+
+  # mainUid.listWidgetProj.setSortingEnabled(True)
   mainUid.move(QtWidgets.QApplication.desktop().screen().rect().center() - mainUid.rect().center())
   mainUid.showMaximized()
   mainUid.show()
@@ -2082,8 +2107,7 @@ def main(mainUid):
   mainUid.pushRefresh.clicked.connect(lambda clicked, mainUid=mainUid: pushRefresh(mainUid))
   mainUid.pushRefreshMedia.clicked.connect(lambda clicked, mainUid=mainUid: detailsPanelThread(mainUid))
   mainUid.pushRefreshMediaThumbz.clicked.connect(lambda clicked, mainUid=mainUid: detailsPanelMediaThread(mainUid))
-
-
+  mainUid.pushRefreshProjects.clicked.connect(lambda clicked, mainUid=mainUid: updateProjectsLists(mainUid))
   mainUid.pushRefreshFilters.clicked.connect(lambda clicked, mainUid=mainUid: refreshFilter(mainUid))
 
   mainUid.radioMineAss.clicked.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
@@ -2125,7 +2149,7 @@ def main(mainUid):
 
   mainUid.listWidgetAssets.itemSelectionChanged.connect(lambda mainUid=mainUid: detailsPanelThread(mainUid))
   mainUid.listWidgetSubDir.itemSelectionChanged.connect(lambda mainUid=mainUid: detailsPanelMediaThread(mainUid))
-  mainUid.listWidgetMedia.itemSelectionChanged.connect(lambda mainUid=mainUid: selectedMedia(mainUid))
+  mainUid.listWidgetMedia.itemClicked.connect(lambda mainUid=mainUid: selectedMedia(mainUid))
   mainUid.tabWidget.currentChanged.connect(lambda index,mainUid=mainUid: updateMediaTab(mainUid))
 
   loadDefaultProject(mainUid)
@@ -2151,5 +2175,5 @@ def main(mainUid):
 if __name__ == '__main__':
   app = QtWidgets.QApplication(sys.argv)
   mainUid = uic.loadUi(ui_main)
-  main(mainUid)
+  main_func(mainUid)
   os._exit((app.exec_()))

@@ -8,8 +8,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/dbPipe.py" afterPath="$PROJECT_DIR$/rbhus/dbPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/debug.py" afterPath="$PROJECT_DIR$/rbhus/debug.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/assetDetailRow.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/assetDetailRow.ui" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" />
@@ -35,8 +33,8 @@
       <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="59">
-              <caret line="835" column="4" lean-forward="false" selection-start-line="835" selection-start-column="4" selection-end-line="835" selection-end-column="4" />
+            <state relative-caret-position="391">
+              <caret line="472" column="26" lean-forward="true" selection-start-line="472" selection-start-column="26" selection-end-line="472" selection-end-column="26" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -76,14 +74,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusPipe_new.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="rbhusPipe_new.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="868" column="30" lean-forward="true" selection-start-line="868" selection-start-column="30" selection-end-line="868" selection-end-column="30" />
+            <state relative-caret-position="504">
+              <caret line="2178" column="25" lean-forward="true" selection-start-line="2178" selection-start-column="25" selection-end-line="2178" selection-end-column="25" />
               <folding>
                 <element signature="e#133#143#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="authPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/authPipe.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="151" column="151" lean-forward="false" selection-start-line="151" selection-start-column="151" selection-end-line="151" selection-end-column="151" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -101,18 +109,18 @@
       <file leaf-file-name="constantsPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="83" column="35" lean-forward="false" selection-start-line="83" selection-start-column="35" selection-end-line="83" selection-end-column="35" />
+            <state relative-caret-position="222">
+              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dbPipe.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dbPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="79" column="14" lean-forward="true" selection-start-line="79" selection-start-column="14" selection-end-line="79" selection-end-column="14" />
+            <state relative-caret-position="-743">
+              <caret line="48" column="6" lean-forward="false" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -123,16 +131,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
               <caret line="14" column="37" lean-forward="false" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="autorun11" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun11">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="27" lean-forward="false" selection-start-line="6" selection-start-column="27" selection-end-line="6" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -149,20 +147,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>updatedetailspanelmedia</find>
-      <find>title</find>
-      <find>fileName</find>
-      <find>setData</find>
-      <find>messa</find>
-      <find>regis</find>
-      <find>_commit</find>
-      <find>item =</find>
-      <find>getassde</find>
-      <find>_processLock</find>
-      <find>splitt</find>
-      <find>setGroupedForAutoCommit</find>
-      <find>copy</find>
-      <find>export</find>
       <find>media</find>
       <find>register</find>
       <find>group</find>
@@ -173,12 +157,26 @@
       <find>reg</find>
       <find>labelAssig</find>
       <find>updateAssTimer</find>
-      <find>open</find>
       <find>openAss</find>
       <find>detail</find>
       <find>deta</find>
-      <find>listWidgetAssets.itemSelectionChanged</find>
       <find>getUpdatedMediaThumbz</find>
+      <find>listWidgetAssets.itemSelectionChanged</find>
+      <find>thumb</find>
+      <find>please</find>
+      <find>updateAssetsForProjSelect</find>
+      <find>open</find>
+      <find>updateto</find>
+      <find>projects</find>
+      <find>listWidgetProj</find>
+      <find>fini</find>
+      <find>mediaUpdateDone</find>
+      <find>detailspa</find>
+      <find>done</find>
+      <find>listWidgetMedia</find>
+      <find>updateAssetsForProjSelectTimed</find>
+      <find>setsort</find>
+      <find>sorting for asset</find>
     </findStrings>
     <replaceStrings>
       <replace>mainUid.comboSeq</replace>
@@ -260,11 +258,11 @@
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun10" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun11" />
         <option value="$PROJECT_DIR$/tests/fixAssetGroups.py" />
-        <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
-        <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
-        <option value="$PROJECT_DIR$/rbhus/debug.py" />
-        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
         <option value="$PROJECT_DIR$/rbhus/dbPipe.py" />
+        <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
+        <option value="$PROJECT_DIR$/rbhus/debug.py" />
+        <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
       </list>
     </option>
   </component>
@@ -423,7 +421,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="editor.preferences.smartKeys" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/tools/rbhus" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
@@ -868,13 +866,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1870">
-          <caret line="116" column="0" lean-forward="false" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="748">
@@ -1168,6 +1159,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tests/fixAssetGroups.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="46" lean-forward="false" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
+          <folding>
+            <element signature="e#133#143#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
@@ -1176,10 +1177,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/authPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="151" column="151" lean-forward="false" selection-start-line="151" selection-start-column="151" selection-end-line="151" selection-end-column="151" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="83" column="35" lean-forward="false" selection-start-line="83" selection-start-column="35" selection-end-line="83" selection-end-column="35" />
+        <state relative-caret-position="222">
+          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-743">
+          <caret line="48" column="6" lean-forward="false" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -1192,41 +1209,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/fixAssetGroups.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="46" lean-forward="false" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
-          <folding>
-            <element signature="e#133#143#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="868" column="30" lean-forward="true" selection-start-line="868" selection-start-column="30" selection-end-line="868" selection-end-column="30" />
-          <folding>
-            <element signature="e#133#143#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="59">
-          <caret line="835" column="4" lean-forward="false" selection-start-line="835" selection-start-column="4" selection-end-line="835" selection-end-column="4" />
+        <state relative-caret-position="391">
+          <caret line="472" column="26" lean-forward="true" selection-start-line="472" selection-start-column="26" selection-end-line="472" selection-end-column="26" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="79" column="14" lean-forward="true" selection-start-line="79" selection-start-column="14" selection-end-line="79" selection-end-column="14" />
-          <folding />
+        <state relative-caret-position="504">
+          <caret line="2178" column="25" lean-forward="true" selection-start-line="2178" selection-start-column="25" selection-end-line="2178" selection-end-column="25" />
+          <folding>
+            <element signature="e#133#143#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
