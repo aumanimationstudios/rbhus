@@ -93,6 +93,7 @@ except:
 favLock = QtCore.QMutex()
 updateAssTimer = QtCore.QTimer()
 updateAssFavTimer = QtCore.QTimer()
+updateSortingTimer = QtCore.QTimer()
 
 
 class api_serv(QtCore.QThread):
@@ -541,11 +542,14 @@ def updateProgressBar(minLength,maxLength,current,mainUid):
 
 
 def updateSorting(mainUid):
+  updateSortingTimer.stop()
+  updateSortingTimer.setSingleShot(True)
+  updateSortingTimer.start(100)
+
+
+
+def updateSortingTimed(mainUid):
   global assDetsItems
-  import inspect
-  frm  = inspect.stack()[1]
-  mod = inspect.getmodule(frm[0])
-  print '[%s] ' % (mod.__name__,)
 
   if (mainUid.comboBoxSort.currentText() == "review"):
     rbhus.debug.info("sorting for asset review")
@@ -591,6 +595,8 @@ def updateSorting(mainUid):
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.AscendingOrder)
   else:
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.DescendingOrder)
+  # mainUid.listWidgetAssets.repaint()
+
 
 
 
@@ -683,14 +689,21 @@ def updateAssSlot(mainUid, richAss, assetDets):
   mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
   item.setSizeHint(assDetsWidget.sizeHint())
 
+  # mainUid.listWidgetAssets.repaint()
+
   assDetsWidgets.append(assDetsWidget)
   assDetsItems.append(item)
 
 
 
-def imageWidgetClicked(imagePath):
-  import webbrowser
-  webbrowser.open(imagePath)
+def imageWidgetClicked(imagePath,mimeType=None):
+  if(mimeType):
+    if(mimeType != "blender"):
+      import webbrowser
+      webbrowser.open(imagePath)
+  else:
+    import webbrowser
+    webbrowser.open(imagePath)
 
 
 
@@ -881,6 +894,7 @@ def updateThumbz(mainUid,mediaObj):
   itemWidget = uic.loadUi(ui_asset_media_Thumbz)
   itemWidget.labelImageName.setText(os.path.basename(mediaObj.mainFile))
   imageThumb = ImageWidget(mediaObj.thumbFile,64,parent=itemWidget.widgetImage)
+  imageThumb.clicked.connect(lambda x, imagePath = mediaObj.mainFile,mimeType=mediaObj.mimeType: imageWidgetClicked(imagePath,mimeType=mimeType))
   itemWidget.imageLayout.addWidget(imageThumb)
   item = QListWidgetItemSort()
   icon = QtGui.QIcon(rbhus.constantsPipe.mimeLogo[mediaObj.mimeType])
@@ -2126,6 +2140,7 @@ def main_func(mainUid):
 
 
   updateAssTimer.timeout.connect(lambda mainUid=mainUid: updateAssetsForProjSelectTimed(mainUid))
+  updateSortingTimer.timeout.connect(lambda mainUid=mainUid: updateSortingTimed(mainUid))
 
 
   mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: setScene(mainUid))

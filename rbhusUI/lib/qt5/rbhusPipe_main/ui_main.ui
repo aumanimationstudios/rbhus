@@ -965,7 +965,7 @@
             <enum>QAbstractItemView::ScrollPerPixel</enum>
            </property>
            <property name="movement">
-            <enum>QListView::Free</enum>
+            <enum>QListView::Static</enum>
            </property>
            <property name="isWrapping" stdset="0">
             <bool>false</bool>
@@ -1056,7 +1056,7 @@
                </size>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="tab">
                <attribute name="title">
