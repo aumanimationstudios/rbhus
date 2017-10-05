@@ -139,6 +139,7 @@ class hg(object):
       isAdded = self._addremove()
       if(isAdded):
         if(isAdded == 111):
+          os.chdir(curdir)
           return(111,None)
       (retStatus,versionCommited) = self._commit()
       debug.info(versionCommited)
