@@ -2164,7 +2164,7 @@ def main_func(mainUid):
 
   mainUid.listWidgetAssets.itemSelectionChanged.connect(lambda mainUid=mainUid: detailsPanelThread(mainUid))
   mainUid.listWidgetSubDir.itemSelectionChanged.connect(lambda mainUid=mainUid: detailsPanelMediaThread(mainUid))
-  mainUid.listWidgetMedia.itemClicked.connect(lambda mainUid=mainUid: selectedMedia(mainUid))
+  # mainUid.listWidgetMedia.itemSelectionChanged.connect(lambda mainUid=mainUid: selectedMedia(mainUid))
   mainUid.tabWidget.currentChanged.connect(lambda index,mainUid=mainUid: updateMediaTab(mainUid))
 
   loadDefaultProject(mainUid)

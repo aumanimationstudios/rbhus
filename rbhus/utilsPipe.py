@@ -275,9 +275,9 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True,f
     debug.info(origAssPath)
     if(sys.platform.lower().find("linux") >= 0):
       if(getVersions):
-        os.system("rsync -av "+ origAssPath +"/ "+ newAssPath +"/")
+        os.system("rsync -a "+ origAssPath +"/ "+ newAssPath +"/ --exclude=.autocommitGrouped")
       else:
-        os.system("rsync -av " + origAssPath + "/ " + newAssPath + "/ --exclude=.hg")
+        os.system("rsync -a " + origAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.hg --exclude=.hglf")
     return(1)
   else:
     return(0)

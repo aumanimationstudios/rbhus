@@ -1056,7 +1056,7 @@
                </size>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="tab">
                <attribute name="title">
@@ -1399,7 +1399,7 @@
                        </size>
                       </property>
                       <property name="focusPolicy">
-                       <enum>Qt::NoFocus</enum>
+                       <enum>Qt::StrongFocus</enum>
                       </property>
                       <property name="showDropIndicator" stdset="0">
                        <bool>false</bool>
@@ -1438,6 +1438,12 @@
                       </property>
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
+                      </property>
+                      <property name="sizeAdjustPolicy">
+                       <enum>QAbstractScrollArea::AdjustToContents</enum>
+                      </property>
+                      <property name="editTriggers">
+                       <set>QAbstractItemView::NoEditTriggers</set>
                       </property>
                       <property name="showDropIndicator" stdset="0">
                        <bool>false</bool>
