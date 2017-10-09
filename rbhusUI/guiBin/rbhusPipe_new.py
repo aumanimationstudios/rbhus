@@ -472,11 +472,12 @@ def clearProjSelect(mainUid):
 
 def updateAssetsForProjSelect(mainUid):
   updateAssTimer.stop()
+  updateAssTimer.setSingleShot(True)
   updateAssTimer.start(1000)
 
 
 def updateAssetsForProjSelectTimed(mainUid):
-  updateAssTimer.stop()
+  # updateAssTimer.stop()
   global updateAssThreads
   global projects
   whereDict = {}
@@ -550,7 +551,6 @@ def updateSorting(mainUid):
 
 def updateSortingTimed(mainUid):
   global assDetsItems
-
   if (mainUid.comboBoxSort.currentText() == "review"):
     rbhus.debug.info("sorting for asset review")
     for x in assDetsItems:
@@ -595,7 +595,12 @@ def updateSortingTimed(mainUid):
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.AscendingOrder)
   else:
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.DescendingOrder)
-  # mainUid.listWidgetAssets.repaint()
+
+  global app
+  if(app):
+    mainUid.listWidgetAssets.update()
+    app.processEvents()
+
 
 
 
@@ -639,6 +644,10 @@ def updateAssSlot(mainUid, richAss, assetDets):
 
 
   assDetsWidget = uic.loadUi(ui_asset_details)
+  # assDetsWidget.labelAsset.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents,True)
+  # assDetsWidget.checkBoxStar.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents,False)
+  # assDetsWidget.widgetPreview.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents,False)
+
   assDetsWidget.checkBoxStar.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarCheckBox)
   if (assetDets['fav']):
     assDetsWidget.checkBoxStar.setChecked(True)
@@ -685,11 +694,10 @@ def updateAssSlot(mainUid, richAss, assetDets):
 
 
   item = QListWidgetItemSortAsses(assetDets)
+  item.setSizeHint(assDetsWidget.sizeHint())
   mainUid.listWidgetAssets.addItem(item)
   mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
-  item.setSizeHint(assDetsWidget.sizeHint())
 
-  # mainUid.listWidgetAssets.repaint()
 
   assDetsWidgets.append(assDetsWidget)
   assDetsItems.append(item)
@@ -789,6 +797,9 @@ def mediaUpdateDone(mainUid):
   mainUid.progressBarMedia.setMinimum(0)
   mainUid.progressBarMedia.setMaximum(1)
   mainUid.progressBarMedia.setValue(0)
+  item = mainUid.listWidgetSubDir.item(0)
+  if(item):
+    mainUid.listWidgetSubDir.setCurrentItem(item)
   detailsPanelMediaThread(mainUid)
 
 def updateDetailsPanel(mainUid,mediaObj):
@@ -812,8 +823,6 @@ def updateDetailsPanel(mainUid,mediaObj):
 
 
     mainUid.listWidgetSubDir.addItem(item)
-    if (mediaObj.subPath == "-"):
-      mainUid.listWidgetSubDir.setCurrentItem(item)
     mediaWidgets[mediaObj.subPath] = item
   else:
     mediaWidgets[mediaObj.subPath].medias.append(mediaObj)
@@ -2184,10 +2193,11 @@ def main_func(mainUid):
   api.start()
 
 
-
+app = None
 
 
 if __name__ == '__main__':
+  global app
   app = QtWidgets.QApplication(sys.argv)
   mainUid = uic.loadUi(ui_main)
   main_func(mainUid)
