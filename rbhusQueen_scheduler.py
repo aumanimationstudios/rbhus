@@ -386,7 +386,7 @@ def scheduler():
         assigned = 0
         for activeTask in activeTasks:
           taskFrames = db_conn.getUnassignedFrames(activeTask["id"])
-          batchFlag = activeTask["batch"]
+          batchFlag = int(activeTask["batch"])
           minBatch = activeTask["minBatch"]
           maxBatch = activeTask["maxBatch"]
 
@@ -412,8 +412,12 @@ def scheduler():
                 minCpu = int(minMaxCpus['min(hostInfo.totalCpus)'])
                 cpuRange = maxCpu - minCpu
                 batchRange = maxBatch - minBatch
-                bestBatch = (((int(assignedHost['totalCpus']) - minCpu)*batchRange)/cpuRange) + minBatch
-                
+                try:
+                  bestBatch = (((int(assignedHost['totalCpus']) - minCpu)*batchRange)/cpuRange) + minBatch
+                except:
+                  logging.debug(sys.exc_info())
+                  bestBatch = 1
+
                 if(bestBatch < minBatch):
                   bestBatch = minBatch
                 if(bestBatch > maxBatch):

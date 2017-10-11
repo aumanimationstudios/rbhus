@@ -141,6 +141,7 @@ class QListWidgetItemSortAsses(QtWidgets.QListWidgetItem):
     super(QListWidgetItemSortAsses, self).__init__()
     self.assetDets = assetDets
     self.sortby = None
+    # self.setData(QtCore.Qt.UserRole,self.assetDets)
 
   def update_assetDets(self,assetDets):
     self.assetDets = assetDets
@@ -232,7 +233,7 @@ class updateDetailsPanelMediaQthread(QtCore.QThread):
           time.sleep(0.01)
         else:
           break
-    self.finished.emit()
+    # self.finished.emit()
 
 
 class updateDetailsPanelQthread(QtCore.QThread):
@@ -260,7 +261,7 @@ class updateDetailsPanelQthread(QtCore.QThread):
   def run(self):
     self.thumbzStarted.emit()
     rbhus.utilsPipe.getUpdatedMediaThumbz(self.assPath, QT_callback_signalThumbz=self.callback_media, QT_callback_isStopped=self.callback_stop, QT_callback_total=self.callback_total)
-    self.finished.emit()
+    # self.finished.emit()
 
 
 
@@ -355,7 +356,7 @@ class updateAssQthread(QtCore.QThread):
         self.totalAssets.emit(0)
         self.progressSignal.emit(minLength, maxLength, current)
     rbhus.debug.info("thread stopped")
-    self.finished.emit()
+    # self.finished.emit()
 
 
 def updateFavorite(mainUid,assPath,starObj):
@@ -530,7 +531,7 @@ def updateAssetsForProjSelectTimed(mainUid):
   updateAssThread.totalAssets.connect(lambda total,mainUid=mainUid: updateTotalAss(mainUid,total))
   updateAssThread.progressSignal.connect(lambda minLength, maxLength , current, mainUid = mainUid: updateProgressBar(minLength,maxLength,current,mainUid))
   updateAssThread.assSignal.connect(lambda richAss,assetDets, current, mainUid=mainUid: updateAssSlot(mainUid, richAss, assetDets))
-  updateAssThread.finished.connect(lambda mainUid=mainUid: updateSorting(mainUid))
+  updateAssThread.finished.connect(lambda mainUid=mainUid: updateAssFinished(mainUid))
   updateAssThread.start()
   updateAssThreads.append(updateAssThread)
 
@@ -540,6 +541,12 @@ def updateProgressBar(minLength,maxLength,current,mainUid):
   mainUid.progressBar.setMinimum(minLength)
   mainUid.progressBar.setMaximum(maxLength)
   mainUid.progressBar.setValue(current)
+
+
+def updateAssFinished(mainUid):
+  print"calling updateFinished"
+  updateSorting(mainUid)
+  mainUid.listWidgetAssets.updateGeometry()
 
 
 def updateSorting(mainUid):
@@ -596,10 +603,14 @@ def updateSortingTimed(mainUid):
   else:
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.DescendingOrder)
 
-  global app
-  if(app):
-    mainUid.listWidgetAssets.update()
-    app.processEvents()
+
+  # global app
+  # if(app):
+  for x in assDetsItems:
+    print(x.sizeHint())
+  # mainUid.splitterAssetDetails.repaint()
+  # mainUid.listWidgetAssets.updateGeometry()
+  # app.updateGeometry()
 
 
 
@@ -611,6 +622,7 @@ def updateTotalAss(mainUid,totalRows):
   global assDetsWidgets
   mainUid.labelTotal.setText(str(totalRows))
   mainUid.listWidgetAssets.clear()
+  # mainUid.listWidgetAssets.setMinimumHeight(56)
   # mainUid.listWidgetAssets.setSortingEnabled(False)
 
   # for x in assDetsItems:
@@ -644,9 +656,7 @@ def updateAssSlot(mainUid, richAss, assetDets):
 
 
   assDetsWidget = uic.loadUi(ui_asset_details)
-  # assDetsWidget.labelAsset.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents,True)
-  # assDetsWidget.checkBoxStar.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents,False)
-  # assDetsWidget.widgetPreview.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents,False)
+  assDetsWidget.labelAsset.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, True)
 
   assDetsWidget.checkBoxStar.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarCheckBox)
   if (assetDets['fav']):
@@ -694,13 +704,13 @@ def updateAssSlot(mainUid, richAss, assetDets):
 
 
   item = QListWidgetItemSortAsses(assetDets)
-  item.setSizeHint(assDetsWidget.sizeHint())
   mainUid.listWidgetAssets.addItem(item)
   mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
 
 
   assDetsWidgets.append(assDetsWidget)
   assDetsItems.append(item)
+  item.setSizeHint(assDetsWidget.sizeHint() + QtCore.QSize(2,2))
 
 
 
