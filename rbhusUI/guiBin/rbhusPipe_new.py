@@ -106,7 +106,7 @@ class api_serv(QtCore.QThread):
     # Define the socket using the "Context"
     self.sock = self.context.socket(zmq.REP)
     self.sock.bind("tcp://127.0.0.1:8989")
-    rbhus.debug.info("API-SERV")
+    rbhus.debug.debug("API-SERV")
   def run(self):
     while True:
       (id, msg) = self.sock.recv_multipart()
@@ -283,7 +283,7 @@ class updateAssQthread(QtCore.QThread):
 
   def run(self):
     if(self.projSelected):
-      rbhus.debug.info("started thread")
+      rbhus.debug.debug("started thread")
       projWhere = []
       projWhereString = " where "
       assesUnsorted = []
@@ -345,9 +345,12 @@ class updateAssQthread(QtCore.QThread):
 
             self.assSignal.emit(richAss,x,current-1)
             self.progressSignal.emit(minLength,maxLength,current)
-            time.sleep(0.05)
+            if(os.path.exists("/etc/gentoo-release")):
+              time.sleep(0.05)
+            else:
+              time.sleep(0.1)
           else:
-            rbhus.debug.info("STOPPING THREAD")
+            rbhus.debug.debug("STOPPING THREAD")
             break
       else:
         minLength = 0
@@ -355,7 +358,7 @@ class updateAssQthread(QtCore.QThread):
         current = 1
         self.totalAssets.emit(0)
         self.progressSignal.emit(minLength, maxLength, current)
-    rbhus.debug.info("thread stopped")
+    rbhus.debug.debug("thread stopped")
     # self.finished.emit()
 
 
@@ -520,11 +523,11 @@ def updateAssetsForProjSelectTimed(mainUid):
       try:
         runingThread.disconnect()
       except:
-        rbhus.debug.info(runingThread)
+        rbhus.debug.debug(runingThread)
       try:
         runingThread.deleteLater()
       except:
-        rbhus.debug.info(sys.exc_info())
+        rbhus.debug.debug(sys.exc_info())
       updateAssThreads.remove(runingThread)
 
   updateAssThread = updateAssQthread(project = projects,whereDict=whereDict,parent=mainUid,isFav=mainUid.radioStarred.isChecked())
@@ -544,9 +547,8 @@ def updateProgressBar(minLength,maxLength,current,mainUid):
 
 
 def updateAssFinished(mainUid):
-  print"calling updateFinished"
+  rbhus.debug.debug("calling updateFinished")
   updateSorting(mainUid)
-  mainUid.listWidgetAssets.updateGeometry()
 
 
 def updateSorting(mainUid):
@@ -559,59 +561,50 @@ def updateSorting(mainUid):
 def updateSortingTimed(mainUid):
   global assDetsItems
   if (mainUid.comboBoxSort.currentText() == "review"):
-    rbhus.debug.info("sorting for asset review")
+    rbhus.debug.debug("sorting for asset review")
     for x in assDetsItems:
       x.sortby_review()
 
   elif (mainUid.comboBoxSort.currentText() == "modified"):
-    rbhus.debug.info("sorting for asset modified")
+    rbhus.debug.debug("sorting for asset modified")
     for x in assDetsItems:
       x.sortby_modified()
 
   elif (mainUid.comboBoxSort.currentText() == "published"):
-    rbhus.debug.info("sorting for asset published")
+    rbhus.debug.debug("sorting for asset published")
     for x in assDetsItems:
       x.sortby_published()
 
   elif (mainUid.comboBoxSort.currentText() == "version"):
-    rbhus.debug.info("sorting for asset version")
+    rbhus.debug.debug("sorting for asset version")
     for x in assDetsItems:
       x.sortby_version()
 
   elif (mainUid.comboBoxSort.currentText() == "assigned"):
-    rbhus.debug.info("sorting for asset assigned")
+    rbhus.debug.debug("sorting for asset assigned")
     for x in assDetsItems:
       x.sortby_assigned()
 
   elif (mainUid.comboBoxSort.currentText() == "reviewer"):
-    rbhus.debug.info("sorting for asset reviewer")
+    rbhus.debug.debug("sorting for asset reviewer")
     for x in assDetsItems:
       x.sortby_reviewer()
 
   elif (mainUid.comboBoxSort.currentText() == "creator"):
-    rbhus.debug.info("sorting for asset creator")
+    rbhus.debug.debug("sorting for asset creator")
     for x in assDetsItems:
       x.sortby_creator()
 
   else:
-    rbhus.debug.info("sorting for asset")
+    rbhus.debug.debug("sorting for asset")
     for x in assDetsItems:
       x.sortby_asset()
-  # mainUid.listWidgetAssets.setSortingEnabled(True)
+
+
   if(mainUid.radioAsc.isChecked()):
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.AscendingOrder)
   else:
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.DescendingOrder)
-
-
-  # global app
-  # if(app):
-  for x in assDetsItems:
-    print(x.sizeHint())
-  # mainUid.splitterAssetDetails.repaint()
-  # mainUid.listWidgetAssets.updateGeometry()
-  # app.updateGeometry()
-
 
 
 
@@ -629,19 +622,19 @@ def updateTotalAss(mainUid,totalRows):
   #   try:
   #     x.deleteLater()
   #   except:
-  #     rbhus.debug.info(sys.exc_info())
+  #     rbhus.debug.debug(sys.exc_info())
 
   for x in ImageWidgets:
     try:
       x.deleteLater()
     except:
-      rbhus.debug.info(sys.exc_info())
+      rbhus.debug.debug(sys.exc_info())
 
   for x in assDetsWidgets:
     try:
       x.deleteLater()
     except:
-      rbhus.debug.info(sys.exc_info())
+      rbhus.debug.debug(sys.exc_info())
 
   del assDetsItems[:]
   del ImageWidgets[:]
@@ -656,7 +649,7 @@ def updateAssSlot(mainUid, richAss, assetDets):
 
 
   assDetsWidget = uic.loadUi(ui_asset_details)
-  assDetsWidget.labelAsset.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, True)
+  # assDetsWidget.labelAsset.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, True)
 
   assDetsWidget.checkBoxStar.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarCheckBox)
   if (assetDets['fav']):
@@ -701,16 +694,14 @@ def updateAssSlot(mainUid, richAss, assetDets):
   if(previewWidget):
     assDetsWidget.horizontalLayoutPreview.addWidget(previewWidget)
 
-
-
   item = QListWidgetItemSortAsses(assetDets)
+  item.setSizeHint(assDetsWidget.sizeHint() + QtCore.QSize(2,4))
+
   mainUid.listWidgetAssets.addItem(item)
   mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
 
-
   assDetsWidgets.append(assDetsWidget)
   assDetsItems.append(item)
-  item.setSizeHint(assDetsWidget.sizeHint() + QtCore.QSize(2,2))
 
 
 
@@ -750,6 +741,7 @@ def detailsPanelThread(mainUid):
   else:
     stopMediaThreads(mainUid)
 
+
 def stopMediaThreads(mainUid):
   global updateDetailsThreads
   if (updateDetailsThreads):
@@ -759,11 +751,11 @@ def stopMediaThreads(mainUid):
       try:
         runningThread.disconnect()
       except:
-        rbhus.debug.info(runningThread)
+        rbhus.debug.debug(runningThread)
       try:
         runningThread.deleteLater()
       except:
-        rbhus.debug.info(sys.exc_info())
+        rbhus.debug.debug(sys.exc_info())
       updateDetailsThreads.remove(runningThread)
 
 def updateMediaTab(mainUid):
@@ -799,7 +791,7 @@ def clearListWidgetSubDir(mainUid):
   mainUid.progressBarMediaThumbz.setValue(0)
 
 def getTotalMedia(mainUid,totalObj):
-  # rbhus.debug.info(totalObj)
+  # rbhus.debug.debug(totalObj)
   mainUid.progressBarMediaThumbz.totalObj = totalObj
 
 
@@ -853,11 +845,11 @@ def detailsPanelMediaThread(mainUid):
       try:
         runningThread.disconnect()
       except:
-        rbhus.debug.info(runningThread)
+        rbhus.debug.debug(runningThread)
       try:
         runningThread.deleteLater()
       except:
-        rbhus.debug.info(sys.exc_info())
+        rbhus.debug.debug(sys.exc_info())
       updateDetailsPanelMediaThreads.remove(runningThread)
 
   mainUid.listWidgetMedia.clear()
@@ -1032,7 +1024,7 @@ def itemChangedSequence(modelIndex, mainUid):
 
 def updateAssetsSeq(mainUid):
   # textSelected = mainUid.comboSeq.lineEdit().text().split(",")
-  # rbhus.debug.info(textSelected)
+  # rbhus.debug.debug(textSelected)
   updateAssetsForProjSelect(mainUid)
 
 
@@ -1408,7 +1400,7 @@ def popupAss(mainUid,pos,isFav=False):
   for x in listAssesFull:
     if(x):
       listAsses.append(x)
-  # rbhus.debug.info("selected asses : "+ str(len(listAsses)))
+  # rbhus.debug.debug("selected asses : "+ str(len(listAsses)))
   if(len(listAsses) == 0):
     return(0)
 
@@ -1557,7 +1549,7 @@ def renderAss(mainUid, assetList=None):
     for x in filesTorender:
       if(x):
         renderFiles.append(str(x))
-        rbhus.debug.info(x)
+        rbhus.debug.debug(x)
   if(renderFiles):
     subprocess.Popen(rbhusPipeRenderSubmitCmd +" --file \""+ renderFiles[0] +"\" --path \""+ listedAss +"\"",shell=True)      #os.system(versionCmd +" --path \""+ selass[-1] +"\"")
     return(1)
@@ -1572,7 +1564,7 @@ def getFileAss(mainUid,assetList=None):
     p = rbhus.utilsPipe.getAbsPath(x)
     if(os.path.exists(p)):
       fila = QtWidgets.QFileDialog.getOpenFileNames(directory=p)
-      rbhus.debug.info(fila)
+      rbhus.debug.debug(fila)
       if(fila):
         return(fila[0])
       else:
@@ -1645,26 +1637,26 @@ def openFolderAss(mainUid,assetList=None):
     if(os.path.exists(p)):
       if(assdets['versioning'] == 0):
         fila = QtWidgets.QFileDialog.getOpenFileNames(directory=p)[0]
-        rbhus.debug.info(fila)
+        rbhus.debug.debug(fila)
         if(fila):
-          rbhus.debug.info(str(fila[0]))
+          rbhus.debug.debug(str(fila[0]))
           filename = str(fila[0])
-          rbhus.debug.info(filename.split("."))
+          rbhus.debug.debug(filename.split("."))
           assdets = rbhus.utilsPipe.getAssDetails(assPath=x['path'])
           runCmd = rbhus.utilsPipe.openAssetCmd(assdets,filename)
           if(runCmd):
             runCmd = runCmd.rstrip().lstrip()
             if(sys.platform.find("win") >= 0):
-              rbhus.debug.info(runCmd)
+              rbhus.debug.debug(runCmd)
               subprocess.Popen(runCmd,shell=True)
             elif(sys.platform.find("linux") >= 0):
-              rbhus.debug.info(runCmd)
+              rbhus.debug.debug(runCmd)
               subprocess.Popen(runCmd,shell=True)
           else:
             import webbrowser
             webbrowser.open(filename)
       else:
-        rbhus.debug.info("wtf : opening version cmd ")
+        rbhus.debug.debug("wtf : opening version cmd ")
         if(sys.platform.find("win") >= 0):
           subprocess.Popen([versionCmd,"--path",x['path']],shell = True)
         elif(sys.platform.find("linux") >= 0):
@@ -1672,7 +1664,7 @@ def openFolderAss(mainUid,assetList=None):
   # self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
   for x in os.environ.keys():
     if(x.find("rp_") >= 0):
-      rbhus.debug.info(x +" : "+os.environ[x])
+      rbhus.debug.debug(x +" : "+os.environ[x])
 
 def editAss(mainUid,assetList=None):
   if(assetList):
@@ -1682,7 +1674,7 @@ def editAss(mainUid,assetList=None):
     listAsses.append(x['path'])
   if(listAsses):
     rbhusAssetEditCmdMod = rbhusPipeAssetEditCmd +" -p "+ ",".join(listAsses)
-    rbhus.debug.info(rbhusAssetEditCmdMod)
+    rbhus.debug.debug(rbhusAssetEditCmdMod)
 
     p = QtCore.QProcess(parent=mainUid)
     p.setStandardOutputFile(tempDir + os.sep + "rbhusPipeAssetEdit_" + username + ".log")
@@ -1722,7 +1714,7 @@ def rbhusPipeAssetCreate(mainUid):
   p.setStandardOutputFile(tempDir + os.sep +"rbhusPipeAssetCreate_"+ username +".log")
   p.setStandardErrorFile(tempDir + os.sep +"rbhusPipeAssetCreate_"+ username +".err")
   mainUid.pushNewAsset.setEnabled(False)
-  rbhus.debug.info("wtf1 : "+ rbhusPipeAssetCreateCmd)
+  rbhus.debug.debug("wtf1 : "+ rbhusPipeAssetCreateCmd)
   p.start(sys.executable,rbhusPipeAssetCreateCmd.split())
   p.finished.connect(lambda exitstatus,test, mainUid=mainUid: rbhusPipeAssCreateEnable(exitstatus,mainUid))
 
@@ -1799,7 +1791,7 @@ def saveSearchItem(mainUid,filterFile=None):
     mainUid.listWidgetSearch.addItem(item)
 
   testDict = searchItemLoad(filterFile=filterFile)
-  rbhus.debug.info(testDict)
+  rbhus.debug.debug(testDict)
 
 def searchItemPresent(assFilter,filterFile=None):
   savedDict = searchItemLoad(filterFile=filterFile)
@@ -1863,8 +1855,8 @@ def searchItemSave(itemDict,filterFile=None):
 
 
 def searchItemChanged(mainUid,item):
-  rbhus.debug.info(item.text())
-  rbhus.debug.info(item.assFilter)
+  rbhus.debug.debug(item.text())
+  rbhus.debug.debug(item.assFilter)
   filterFile = os.path.join(home_dir, ".rbhusPipe.filters")
 
   savedDict = searchItemLoad()
@@ -1872,7 +1864,7 @@ def searchItemChanged(mainUid,item):
     if(x):
       if(x.has_key(item.assFilter)):
         x[item.assFilter] = str(item.text())
-  rbhus.debug.info(savedDict)
+  rbhus.debug.debug(savedDict)
   fd = open(filterFile,"w")
   yaml.dump(savedDict,fd)
   fd.flush()
@@ -1897,7 +1889,7 @@ def popUpSearchFav(mainUid,pos):
 def deleteSearch(mainUid):
   item = mainUid.listWidgetSearch.currentItem()
   savedFilter = searchItemLoad()
-  rbhus.debug.info(item.assFilter)
+  rbhus.debug.debug(item.assFilter)
   index  = 0
   indexToDelete = None
   for x in savedFilter:
@@ -1985,7 +1977,7 @@ def loadDefaultProject(mainUid):
     totalItems = mainUid.listWidgetProj.count()
     projectSelected = simplejson.load(pfd)
     pfd.close()
-    rbhus.debug.info(projectSelected)
+    rbhus.debug.debug(projectSelected)
     for x in range(0,totalItems):
       if(mainUid.listWidgetProj.item(x).text() in projectSelected):
         mainUid.listWidgetProj.setCurrentItem(mainUid.listWidgetProj.item(x))

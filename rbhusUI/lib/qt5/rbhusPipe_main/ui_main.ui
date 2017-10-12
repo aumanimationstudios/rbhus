@@ -938,19 +938,28 @@
             <enum>Qt::CustomContextMenu</enum>
            </property>
            <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarAlwaysOn</enum>
+            <enum>Qt::ScrollBarAsNeeded</enum>
            </property>
            <property name="horizontalScrollBarPolicy">
             <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="sizeAdjustPolicy">
-            <enum>QAbstractScrollArea::AdjustToContents</enum>
+            <enum>QAbstractScrollArea::AdjustIgnored</enum>
+           </property>
+           <property name="autoScroll">
+            <bool>false</bool>
+           </property>
+           <property name="autoScrollMargin">
+            <number>32</number>
            </property>
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="showDropIndicator" stdset="0">
             <bool>false</bool>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
            </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -966,6 +975,9 @@
            </property>
            <property name="movement">
             <enum>QListView::Static</enum>
+           </property>
+           <property name="layoutMode">
+            <enum>QListView::SinglePass</enum>
            </property>
            <property name="viewMode">
             <enum>QListView::ListMode</enum>
@@ -1047,7 +1059,7 @@
                </size>
               </property>
               <property name="currentIndex">
-               <number>2</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="tab">
                <attribute name="title">
@@ -1404,6 +1416,9 @@
                       <property name="defaultDropAction">
                        <enum>Qt::IgnoreAction</enum>
                       </property>
+                      <property name="alternatingRowColors">
+                       <bool>true</bool>
+                      </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>
                       </property>
@@ -1453,6 +1468,9 @@
                       </property>
                       <property name="defaultDropAction">
                        <enum>Qt::IgnoreAction</enum>
+                      </property>
+                      <property name="alternatingRowColors">
+                       <bool>true</bool>
                       </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>

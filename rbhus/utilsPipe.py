@@ -242,6 +242,10 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True,f
 
   else:
     newAsset = copy.copy(assDets)
+    try:
+      del(newAsset["publishVersion"])
+    except:
+      pass
     newAsset['projName'] = toProject
     newAsset['directory'] = projDets['directory']
     newAsset['assignedWorker'] = os.environ['rbhusPipe_acl_user']
