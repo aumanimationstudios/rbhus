@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/pyqtDelegate.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_prores.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -29,7 +26,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="365">
@@ -56,8 +53,18 @@
       <file leaf-file-name="convert_exr_mov_rle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
+            <state relative-caret-position="374">
               <caret line="30" column="86" lean-forward="true" selection-start-line="30" selection-start-column="86" selection-end-line="30" selection-end-column="86" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="convert_exr_mov_prores.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_prores.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="34" column="8" lean-forward="true" selection-start-line="34" selection-start-column="8" selection-end-line="34" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -123,16 +130,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="constantsPipe.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1224">
-              <caret line="75" column="12" lean-forward="false" selection-start-line="75" selection-start-column="12" selection-end-line="75" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -162,7 +159,6 @@
       <find>imagewidget</find>
       <find>thumbz</find>
       <find>imageWidgetClicked</find>
-      <find>importa</find>
       <find>itemSelectionChanged</find>
       <find>import</find>
       <find>commit</find>
@@ -174,6 +170,7 @@
       <find>updateSorting</find>
       <find>self.finished</find>
       <find>info</find>
+      <find>importa</find>
     </findStrings>
     <replaceStrings>
       <replace>mainUid.comboSeq</replace>
@@ -212,7 +209,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tests/qt5player.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusSubmit.py" />
         <option value="$PROJECT_DIR$/tests/fileBrowser.qml" />
         <option value="$PROJECT_DIR$/tools/rbhus/blender_refresh_sequencer.py" />
@@ -263,6 +259,7 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+        <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_prores.py" />
       </list>
     </option>
   </component>
@@ -429,8 +426,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install" />
       <recent name="$PROJECT_DIR$/tools/rbhus" />
+      <recent name="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install" />
       <recent name="/usr/local/bin" />
       <recent name="$PROJECT_DIR$/tools/system" />
       <recent name="$PROJECT_DIR$/rbhusUI" />
@@ -838,7 +835,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507693328750</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="lots of changes">
+      <created>1507789865610</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1507789865610</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TodoView">
@@ -911,13 +915,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/ntp_time.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="15" column="25" lean-forward="false" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2017.2/system/python_stubs/-1247972723/exceptions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-737">
@@ -1263,14 +1260,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="30" column="86" lean-forward="true" selection-start-line="30" selection-start-column="86" selection-end-line="30" selection-end-column="86" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="365">
@@ -1278,6 +1267,22 @@
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="30" column="86" lean-forward="true" selection-start-line="30" selection-start-column="86" selection-end-line="30" selection-end-column="86" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_prores.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" column="8" lean-forward="true" selection-start-line="34" selection-start-column="8" selection-end-line="34" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
