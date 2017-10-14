@@ -7,6 +7,7 @@ __email__ = "shrinidhi666@gmail.com"
 import os
 import time
 import logging
+import sys
 
 FORMAT = "%(asctime)s : %(pathname)s : %(funcName)s - %(levelname)s - %(lineno)d - %(message)s"
 logging.basicConfig(format=FORMAT)
@@ -42,6 +43,7 @@ class LockFile(object):
     self.timeout = timeout
     self._filePath = os.path.abspath(filePath)
     self._lockfile = self._filePath + ".lock"
+    self._lockfileFd = None
     self.lock_file = self._lockfile
     logDfl.debug(os.getpid())
 
@@ -58,8 +60,16 @@ class LockFile(object):
     logDfl.debug("entered lock state")
 
   def __exit__(self, type, value, traceback):
+    self._closeLockfileFd()
     os.unlink(self._lockfile)
     logDfl.debug("exited lock state")
+
+  def _closeLockfileFd(self):
+    if (self._lockfileFd):
+      try:
+        os.close(self._lockfileFd)
+      except:
+        logDfl.error(sys.exc_info())
 
 
   def _cleanExpired(self):
@@ -101,13 +111,13 @@ class LockFile(object):
   def _acquireLock(self):
     logDfl.debug("TRYING TO ACQUIRE LOCK")
     try:
-      os.open(self._lockfile,os.O_CREAT | os.O_EXCL)
+      self._lockfileFd = os.open(self._lockfile,os.O_CREAT | os.O_EXCL)
       logDfl.debug("ACQUIRED LOCK")
     except:
       if(self.timeout > 0):
         self._waitTimedout()
         try:
-          os.open(self._lockfile, os.O_CREAT | os.O_EXCL)
+          self._lockfileFd = os.open(self._lockfile, os.O_CREAT | os.O_EXCL)
           logDfl.debug("ACQUIRED LOCK")
         except:
           raise lockAcquireError

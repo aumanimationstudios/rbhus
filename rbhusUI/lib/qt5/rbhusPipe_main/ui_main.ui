@@ -760,7 +760,10 @@
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="editable">
-             <bool>false</bool>
+             <bool>true</bool>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
             </property>
             <item>
              <property name="text">
@@ -1060,6 +1063,9 @@
               </property>
               <property name="currentIndex">
                <number>1</number>
+              </property>
+              <property name="usesScrollButtons">
+               <bool>false</bool>
               </property>
               <widget class="QWidget" name="tab">
                <attribute name="title">
@@ -1404,6 +1410,9 @@
                       <property name="focusPolicy">
                        <enum>Qt::StrongFocus</enum>
                       </property>
+                      <property name="editTriggers">
+                       <set>QAbstractItemView::NoEditTriggers</set>
+                      </property>
                       <property name="showDropIndicator" stdset="0">
                        <bool>false</bool>
                       </property>
@@ -1417,7 +1426,7 @@
                        <enum>Qt::IgnoreAction</enum>
                       </property>
                       <property name="alternatingRowColors">
-                       <bool>true</bool>
+                       <bool>false</bool>
                       </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -1427,6 +1436,9 @@
                       </property>
                       <property name="movement">
                        <enum>QListView::Static</enum>
+                      </property>
+                      <property name="selectionRectVisible">
+                       <bool>true</bool>
                       </property>
                      </widget>
                     </item>
@@ -1470,7 +1482,7 @@
                        <enum>Qt::IgnoreAction</enum>
                       </property>
                       <property name="alternatingRowColors">
-                       <bool>true</bool>
+                       <bool>false</bool>
                       </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>

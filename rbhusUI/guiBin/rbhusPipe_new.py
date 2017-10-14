@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python2 -d
 #-*- coding: utf-8 -*-
 __author__ = "Shrinidhi Rao"
 __license__ = "GPL"
@@ -94,6 +94,7 @@ favLock = QtCore.QMutex()
 updateAssTimer = QtCore.QTimer()
 updateAssFavTimer = QtCore.QTimer()
 updateSortingTimer = QtCore.QTimer()
+updateMediaTabTimer = QtCore.QTimer()
 
 
 class api_serv(QtCore.QThread):
@@ -759,6 +760,13 @@ def stopMediaThreads(mainUid):
       updateDetailsThreads.remove(runningThread)
 
 def updateMediaTab(mainUid):
+  updateMediaTabTimer.stop
+  updateMediaTabTimer.setSingleShot(True)
+  updateMediaTabTimer.start(500)
+
+
+
+def updateMediaTabTimed(mainUid):
   items = mainUid.listWidgetAssets.selectedItems()
   stopMediaThreads(mainUid)
   if(len(items) == 1):
@@ -766,6 +774,10 @@ def updateMediaTab(mainUid):
     currentTab = mainUid.tabWidget.currentIndex()
     if(currentTab == 1):
       startMediaThread(assetDets,mainUid)
+
+
+
+
 
 def startMediaThread(assetDets,mainUid):
   global updateDetailsThreads
@@ -908,7 +920,7 @@ def updateThumbz(mainUid,mediaObj):
   imageThumb.clicked.connect(lambda x, imagePath = mediaObj.mainFile,mimeType=mediaObj.mimeType: imageWidgetClicked(imagePath,mimeType=mimeType))
   itemWidget.imageLayout.addWidget(imageThumb)
   item = QListWidgetItemSort()
-  icon = QtGui.QIcon(rbhus.constantsPipe.mimeLogo[mediaObj.mimeType])
+  icon = QtGui.QIcon(rbhus.constantsPipe.mimeLogos[mediaObj.mimeType])
   itemWidget.pushButtonLogo.setIcon(icon)
   # item.setSizeHint(QtCore.QSize(96,96))
   item.setData(QtCore.Qt.UserRole,os.path.basename(mediaObj.mainFile))
@@ -1974,13 +1986,14 @@ def loadDefaultProject(mainUid):
   projFile = os.path.join(home_dir, ".projSet.default")
   if(os.path.exists(projFile)):
     pfd = open(projFile, "r")
-    totalItems = mainUid.listWidgetProj.count()
     projectSelected = simplejson.load(pfd)
     pfd.close()
     rbhus.debug.debug(projectSelected)
-    for x in range(0,totalItems):
-      if(mainUid.listWidgetProj.item(x).text() in projectSelected):
-        mainUid.listWidgetProj.setCurrentItem(mainUid.listWidgetProj.item(x))
+    if(projectSelected):
+      totalItems = mainUid.listWidgetProj.count()
+      for x in range(0,totalItems):
+        if(mainUid.listWidgetProj.item(x).text() in projectSelected):
+          mainUid.listWidgetProj.setCurrentItem(mainUid.listWidgetProj.item(x))
 
 
 
@@ -2152,6 +2165,7 @@ def main_func(mainUid):
 
   updateAssTimer.timeout.connect(lambda mainUid=mainUid: updateAssetsForProjSelectTimed(mainUid))
   updateSortingTimer.timeout.connect(lambda mainUid=mainUid: updateSortingTimed(mainUid))
+  updateMediaTabTimer.timeout.connect(lambda mainUid=mainUid: updateMediaTabTimed(mainUid))
 
 
   mainUid.comboSeq.editTextChanged.connect(lambda textChanged, mainUid=mainUid: setScene(mainUid))

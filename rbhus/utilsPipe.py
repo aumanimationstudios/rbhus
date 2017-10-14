@@ -294,8 +294,8 @@ def getMediaFiles(assPath=None):
       for root,dir,filenames in os.walk(absPath):
         if(not (root.endswith(".hg") or root.endswith(".hglf") or root.endswith(".thumbz.db"))):
           for filename in filenames:
-            for mimeType in constantsPipe.mediaMime.keys():
-              for mimeExt in constantsPipe.mediaMime[mimeType]:
+            for mimeType in constantsPipe.mimeTypes.keys():
+              for mimeExt in constantsPipe.mimeTypes[mimeType]:
                 if(filename.endswith(mimeExt)):
                   try:
                     validMedia[root].append(filename)
@@ -344,8 +344,8 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
       for root, dir, filenames in os.walk(absPath):
         if (not (root.find(".hg") >= 0 or root.find(".hglf") >= 0 or root.find(".thumbz.db") >= 0)):
           for filename in filenames:
-            for mimeType in constantsPipe.mediaMime.keys():
-              for mimeExt in constantsPipe.mediaMime[mimeType]:
+            for mimeType in constantsPipe.mimeTypes.keys():
+              for mimeExt in constantsPipe.mimeTypes[mimeType]:
                 if(QT_callback_isStopped):
                   if(QT_callback_isStopped()):
                     return(0)
@@ -406,7 +406,7 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                 fThumbzDetails = jsonRead(fJson)
                 if(fThumbzDetails[fName] < fModifiedTime):
                   try:
-                    thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(fAbsPath ,fThumbz)
+                    thumbzCmd = constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
                   except:
                     thumbzCmd = None
                   if (thumbzCmd):
@@ -428,7 +428,7 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
             try:
               with fLockPath:
                 try:
-                  thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(fAbsPath, fThumbz)
+                  thumbzCmd = constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
                 except:
                   thumbzCmd = None
                 if (thumbzCmd):
@@ -449,7 +449,7 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
             with fLockPath:
               os.makedirs(fThumbzDbDir)
               try:
-                thumbzCmd = constantsPipe.mimeConvertCmd[mimeType].format(fAbsPath, fThumbz)
+                thumbzCmd = constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
               except:
                 thumbzCmd = None
               if(thumbzCmd):

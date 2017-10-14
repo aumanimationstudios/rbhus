@@ -66,21 +66,21 @@ typesDeactive = 2
 typesHidden = 3
 typesAll = 4
 
-mediaMime = {
+mimeTypes = {
              "image":[".png",".jpg",".jpeg",".exr",".svg"],
              "video":[".avi",".mp4",".mpg",".mov"],
              "audio":[".mp3",".wav",".flac"],
              "blender":[".blend",".blend1",".blend2"]
             }
 
-mimeLogo = {
+mimeLogos = {
   "image" : os.path.join(base_dir,"etc","icons","mime_type_image.png"),
   "video" : os.path.join(base_dir,"etc","icons","mime_type_video.png"),
   "blender" : os.path.join(base_dir,"etc","icons","mime_type_blender.png"),
   "audio" : os.path.join(base_dir,"etc","icons","mime_type_audio.png")
 }
 
-mimeConvertCmd = {
+mimeConvertCmds = {
   "image": "/usr/bin/convert '{0}' -sample 96x96 '{1}'",
   "video": "/usr/bin/convert '{0}'[23] -sample 96x96 '{1}'",
   "blender": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" '{0}' '{1}'"

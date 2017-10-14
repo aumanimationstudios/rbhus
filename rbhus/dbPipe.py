@@ -61,9 +61,9 @@ class dbPipe:
 
 
   
-  def _connDb(self,hostname,port,dbname):
+  def _connDb(self,hostname,port,dbname,user="root"):
     try:
-      conn = MySQLdb.connect(host = hostname,port=port,db = dbname)
+      conn = MySQLdb.connect(host = hostname,port=port,db = dbname,user=user)
       conn.autocommit(1)
     except:
       raise
@@ -72,7 +72,7 @@ class dbPipe:
   def _connRbhus(self):
     while(1):
       try:
-        con = self._connDb(hostname=dbHostname,port=int(dbPort),dbname=dbDatabase)
+        con = self._connDb(hostname=dbHostname,port=int(dbPort),dbname=dbDatabase,user=username)
         debug.debug("Db connected")
         return(con)
       except:
