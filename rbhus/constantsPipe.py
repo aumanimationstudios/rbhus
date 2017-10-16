@@ -82,9 +82,13 @@ mimeLogos = {
 
 mimeConvertCmds = {
   "image": "/usr/bin/convert '{0}' -sample 96x96 '{1}'",
-  "video": "/usr/bin/convert '{0}'[23] -sample 96x96 '{1}'",
+  "video": "/usr/bin/convert '{0}'[1] -sample 96x96 '{1}'",
   "blender": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" '{0}' '{1}'"
 }
 
+mimeTypesOpenCmds = {
+  "image": {"linux":["gwenview","djv_view"]},
+  "video": {"linux":["mpv","djv_view"]}
+}
 
 ignoreTemplateTypes = ["share","bin","output","template"]

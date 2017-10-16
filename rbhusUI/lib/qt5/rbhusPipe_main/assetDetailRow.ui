@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>715</width>
+    <width>748</width>
     <height>56</height>
    </rect>
   </property>
@@ -55,6 +55,12 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
        <height>50</height>
       </size>
      </property>
@@ -268,6 +274,9 @@ QCheckBox::indicator:unchecked
       </item>
       <item>
        <widget class="Line" name="line_2">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -298,8 +307,11 @@ QCheckBox::indicator:unchecked
          </sizepolicy>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayoutPreview">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetMaximumSize</enum>
+         <property name="topMargin">
+          <number>3</number>
+         </property>
+         <property name="bottomMargin">
+          <number>3</number>
          </property>
         </layout>
        </widget>

@@ -857,8 +857,9 @@ def getAbsPath(pipePath):
   if(assDets):
     projDirMapsDets = getDirMapsDetails(assDets['directory'])
   else:
-    projDets = getProjDetails(projName)
-    projDirMapsDets = getDirMapsDetails(projDets['directory'])
+    return(0)
+    # projDets = getProjDetails(projName)
+    # projDirMapsDets = getDirMapsDetails(projDets['directory'])
 
   #debug.info("getAbsPath 4: "+ str(projDirMapsDets))
   absPathRet = ""
@@ -1364,7 +1365,7 @@ def getAssPath(assDetDictTemp = {}):
   assPath = str(assDetDict['projName'])
   debug.debug(assDetDict['assetType'])
   if(re.search("^default$",str(assDetDict['assetType']))):
-    debug.info("passing : "+ assDetDict['assetType'])
+    debug.debug("passing : "+ assDetDict['assetType'])
     pass
   else:
     assTypeDets = getAssTypes(str(assDetDict['assetType']))
