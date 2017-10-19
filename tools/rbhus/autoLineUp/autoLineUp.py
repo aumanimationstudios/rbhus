@@ -8,11 +8,15 @@ import sys
 import os
 import re
 
-sys.path.append(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1]))
+print(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4]))
+
+sys.path.append(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4]))
 import rbhus.utilsPipe
 
-
-projName = "AndePirki_se01_ep013_fruitCause"
+try:
+  projName = sys.argv[1]
+except:
+  projName = "AndePirki_se01_ep013_fruitCause"
 seqScns = rbhus.utilsPipe.getSequenceScenes(projName)
 
 

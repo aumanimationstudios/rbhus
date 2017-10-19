@@ -1014,7 +1014,7 @@
             <enum>QListView::Static</enum>
            </property>
            <property name="resizeMode">
-            <enum>QListView::Adjust</enum>
+            <enum>QListView::Fixed</enum>
            </property>
            <property name="layoutMode">
             <enum>QListView::SinglePass</enum>
