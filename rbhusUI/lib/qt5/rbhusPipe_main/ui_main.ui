@@ -949,24 +949,18 @@
             <height>200</height>
            </size>
           </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="opaqueResize">
            <bool>true</bool>
           </property>
-          <property name="handleWidth">
-           <number>1</number>
-          </property>
           <property name="childrenCollapsible">
            <bool>true</bool>
           </property>
           <widget class="QListWidget" name="listWidgetAssets">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -995,8 +989,11 @@
            <property name="showDropIndicator" stdset="0">
             <bool>false</bool>
            </property>
+           <property name="defaultDropAction">
+            <enum>Qt::CopyAction</enum>
+           </property>
            <property name="alternatingRowColors">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -1014,10 +1011,19 @@
             <enum>QListView::Static</enum>
            </property>
            <property name="resizeMode">
-            <enum>QListView::Fixed</enum>
+            <enum>QListView::Adjust</enum>
            </property>
            <property name="layoutMode">
             <enum>QListView::SinglePass</enum>
+           </property>
+           <property name="spacing">
+            <number>1</number>
+           </property>
+           <property name="gridSize">
+            <size>
+             <width>0</width>
+             <height>56</height>
+            </size>
            </property>
            <property name="viewMode">
             <enum>QListView::ListMode</enum>
@@ -1026,7 +1032,7 @@
             <bool>true</bool>
            </property>
            <property name="batchSize">
-            <number>1</number>
+            <number>2000</number>
            </property>
            <property name="selectionRectVisible">
             <bool>true</bool>
@@ -1128,8 +1134,8 @@
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>698</width>
-                     <height>372</height>
+                     <width>700</width>
+                     <height>374</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -1475,7 +1481,7 @@
                        <enum>Qt::IgnoreAction</enum>
                       </property>
                       <property name="alternatingRowColors">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -1531,7 +1537,7 @@
                        <enum>Qt::IgnoreAction</enum>
                       </property>
                       <property name="alternatingRowColors">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -1810,6 +1816,29 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>listWidgetProj</tabstop>
+  <tabstop>pushRefreshProjects</tabstop>
+  <tabstop>comboAssType</tabstop>
+  <tabstop>comboSeq</tabstop>
+  <tabstop>comboScn</tabstop>
+  <tabstop>comboStage</tabstop>
+  <tabstop>comboNode</tabstop>
+  <tabstop>comboFile</tabstop>
+  <tabstop>pushNewAsset</tabstop>
+  <tabstop>lineEditSearch</tabstop>
+  <tabstop>listWidgetSearch</tabstop>
+  <tabstop>radioButton</tabstop>
+  <tabstop>radioButton_2</tabstop>
+  <tabstop>radioButton_3</tabstop>
+  <tabstop>radioButton_4</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>listWidgetAssets</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>listWidgetSubDir</tabstop>
+  <tabstop>listWidgetMedia</tabstop>
+  <tabstop>tableWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -2,16 +2,19 @@
 <ui version="4.0">
  <class>Form</class>
  <widget class="QWidget" name="Form">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>748</width>
+    <width>795</width>
     <height>56</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -22,27 +25,21 @@
     <height>56</height>
    </size>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>16777215</width>
-    <height>56</height>
-   </size>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="spacing">
-    <number>1</number>
+    <number>0</number>
    </property>
    <property name="leftMargin">
     <number>6</number>
    </property>
    <property name="topMargin">
-    <number>1</number>
+    <number>2</number>
    </property>
    <property name="rightMargin">
-    <number>6</number>
+    <number>4</number>
    </property>
    <property name="bottomMargin">
-    <number>1</number>
+    <number>2</number>
    </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
@@ -55,13 +52,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>50</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>50</height>
+       <height>52</height>
       </size>
      </property>
      <property name="contextMenuPolicy">
@@ -78,10 +69,10 @@
        <number>6</number>
       </property>
       <property name="topMargin">
-       <number>2</number>
+       <number>1</number>
       </property>
       <property name="bottomMargin">
-       <number>2</number>
+       <number>1</number>
       </property>
       <item>
        <widget class="QCheckBox" name="checkBoxStar">
@@ -277,17 +268,11 @@ QCheckBox::indicator:unchecked
         <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>30</height>
-         </size>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -296,26 +281,23 @@ QCheckBox::indicator:unchecked
       </item>
       <item>
        <widget class="QLabel" name="labelAsset">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>30</height>
-         </size>
-        </property>
         <property name="text">
-         <string>AndePirki_se01_ep001_ballThrow:library:Dumbbells:model:lookdev:blend</string>
+         <string/>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+        <property name="margin">
+         <number>1</number>
         </property>
         <property name="textInteractionFlags">
          <set>Qt::NoTextInteraction</set>
@@ -325,22 +307,10 @@ QCheckBox::indicator:unchecked
       <item>
        <widget class="QWidget" name="widgetPreview" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>46</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>46</height>
-         </size>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayoutPreview">
          <property name="topMargin">
@@ -353,6 +323,14 @@ QCheckBox::indicator:unchecked
        </widget>
       </item>
      </layout>
+     <zorder>labelAsset</zorder>
+     <zorder>checkBoxStar</zorder>
+     <zorder>checkBoxNotes</zorder>
+     <zorder>checkBoxReview</zorder>
+     <zorder>checkBoxPublish</zorder>
+     <zorder>checkBoxVersion</zorder>
+     <zorder>line_2</zorder>
+     <zorder>widgetPreview</zorder>
     </widget>
    </item>
   </layout>

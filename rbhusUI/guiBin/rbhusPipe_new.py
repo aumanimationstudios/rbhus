@@ -77,7 +77,7 @@ updateAssThreads = []
 updateAssThreadsFav = []
 assDetsItems = []
 ImageWidgets = []
-assDetsWidgets = []
+assDetsWidgetsDict = {}
 mediaWidgets = {}
 updateDetailsThreads = []
 updateDetailsPanelMediaThreads = []
@@ -607,13 +607,16 @@ def updateSortingTimed(mainUid):
   else:
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.DescendingOrder)
 
+  # for x in assDetsWidgets:
+  #   x.updateGeometry()
+  # mainUid.listWidgetAssets.update()
 
 
 
 def updateTotalAss(mainUid,totalRows):
   global assDetsItems
   global ImageWidgets
-  global assDetsWidgets
+  global assDetsWidgetsDict
   mainUid.labelTotal.setText(str(totalRows))
   mainUid.listWidgetAssets.clear()
   # mainUid.listWidgetAssets.setMinimumHeight(56)
@@ -631,21 +634,21 @@ def updateTotalAss(mainUid,totalRows):
     except:
       rbhus.debug.debug(sys.exc_info())
 
-  for x in assDetsWidgets:
+  for x in assDetsWidgetsDict:
     try:
-      x.deleteLater()
+      assDetsWidgetsDict[x].deleteLater()
     except:
       rbhus.debug.debug(sys.exc_info())
 
   del assDetsItems[:]
   del ImageWidgets[:]
-  del assDetsWidgets[:]
+  assDetsWidgetsDict.clear()
 
 
 
 def updateAssSlot(mainUid, richAss, assetDets):
   global ImageWidgets
-  global assDetsWidgets
+  global assDetsWidgetsDict
   global assDetsItems
 
 
@@ -695,14 +698,17 @@ def updateAssSlot(mainUid, richAss, assetDets):
   if(previewWidget):
     assDetsWidget.horizontalLayoutPreview.addWidget(previewWidget)
 
+
   item = QListWidgetItemSortAsses(assetDets)
-  item.setSizeHint(assDetsWidget.sizeHint() + QtCore.QSize(2,4))
+  item.setSizeHint(assDetsWidget.sizeHint())
 
   mainUid.listWidgetAssets.addItem(item)
   mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
 
-  assDetsWidgets.append(assDetsWidget)
+  # assDetsWidgets.append(assDetsWidget)
+  assDetsWidgetsDict[assetDets['path']] = assDetsWidget
   assDetsItems.append(item)
+  # mainUid.listWidgetAssets.update()
 
 
 
@@ -1398,10 +1404,14 @@ def messageBoxTemplateHard():
 
 def popupMedia(mainUid,pos):
   menu = QtWidgets.QMenu()
-  openAction = menu.addAction("open")
-  compareAction = menu.addAction("compare")
+  openAction = menu.addAction("open with")
+  # compareAction = menu.addAction("compare")
 
 
+def popupSubDir(mainUid,pos):
+  menu = QtWidgets.QMenu()
+  openAction = menu.addAction("copy path ")
+  # compareAction = menu.addAction("compare")
 
 
 
@@ -1507,9 +1517,20 @@ def reviewAss(mainUid,assetList=None):
     assPath = listedAss['path']
 
   if(sys.platform.find("win") >= 0):
-    subprocess.Popen([rbhusPipeReviewCmd,"--assetpath",assPath],shell = True)
+    a = subprocess.Popen([rbhusPipeReviewCmd,"--assetpath",assPath],shell = True)
   elif(sys.platform.find("linux") >= 0):
-    subprocess.Popen(rbhusPipeReviewCmd +" --assetpath "+ assPath,shell = True)
+    a = subprocess.Popen(rbhusPipeReviewCmd +" --assetpath "+ assPath,shell = True)
+  a.wait()
+  if(assDetsWidgetsDict.has_key(assPath)):
+    assetDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
+    if (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusNotDone):
+      assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.Unchecked)
+    elif (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusInProgress):
+      assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.PartiallyChecked)
+    else:
+      assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.Checked)
+
+
 
 def notesAss(mainUid,assetList=None):
   if(assetList):
