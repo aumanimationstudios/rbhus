@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/assetDetailRow.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/assetDetailRow.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -846,7 +843,14 @@
       <option name="project" value="LOCAL" />
       <updated>1508409416925</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="lots of changes">
+      <created>1509020658185</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1509020658185</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TodoView">
@@ -860,6 +864,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1920" height="1040" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24038461" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1756906" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
