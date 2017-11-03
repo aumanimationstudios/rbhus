@@ -989,8 +989,11 @@
            <property name="showDropIndicator" stdset="0">
             <bool>false</bool>
            </property>
+           <property name="dragDropMode">
+            <enum>QAbstractItemView::NoDragDrop</enum>
+           </property>
            <property name="defaultDropAction">
-            <enum>Qt::CopyAction</enum>
+            <enum>Qt::IgnoreAction</enum>
            </property>
            <property name="alternatingRowColors">
             <bool>true</bool>
@@ -1001,6 +1004,9 @@
            <property name="selectionBehavior">
             <enum>QAbstractItemView::SelectItems</enum>
            </property>
+           <property name="textElideMode">
+            <enum>Qt::ElideNone</enum>
+           </property>
            <property name="verticalScrollMode">
             <enum>QAbstractItemView::ScrollPerPixel</enum>
            </property>
@@ -1008,22 +1014,10 @@
             <enum>QAbstractItemView::ScrollPerPixel</enum>
            </property>
            <property name="movement">
-            <enum>QListView::Static</enum>
-           </property>
-           <property name="resizeMode">
-            <enum>QListView::Adjust</enum>
+            <enum>QListView::Free</enum>
            </property>
            <property name="layoutMode">
             <enum>QListView::SinglePass</enum>
-           </property>
-           <property name="spacing">
-            <number>1</number>
-           </property>
-           <property name="gridSize">
-            <size>
-             <width>0</width>
-             <height>56</height>
-            </size>
            </property>
            <property name="viewMode">
             <enum>QListView::ListMode</enum>
@@ -1056,13 +1050,6 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="font">
-               <font>
-                <weight>50</weight>
-                <bold>false</bold>
-                <underline>false</underline>
-               </font>
               </property>
               <property name="frameShape">
                <enum>QFrame::Panel</enum>
@@ -1531,7 +1518,7 @@
                        <bool>false</bool>
                       </property>
                       <property name="dragDropMode">
-                       <enum>QAbstractItemView::NoDragDrop</enum>
+                       <enum>QAbstractItemView::DragOnly</enum>
                       </property>
                       <property name="defaultDropAction">
                        <enum>Qt::IgnoreAction</enum>
@@ -1555,7 +1542,7 @@
                        <enum>QAbstractItemView::ScrollPerPixel</enum>
                       </property>
                       <property name="movement">
-                       <enum>QListView::Static</enum>
+                       <enum>QListView::Free</enum>
                       </property>
                       <property name="flow">
                        <enum>QListView::LeftToRight</enum>

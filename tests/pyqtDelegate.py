@@ -58,40 +58,43 @@ class MyWindow(QtWidgets.QWidget):
 
 ####################################################################
 class MyDelegate(QtWidgets.QItemDelegate):
-  def __init__(self, parent=None, *args):
-    super(MyDelegate,self).__init__(parent, *args)
-    self.ass_ui = uic.loadUi(ui_asset_details)
-    self.ass_ui.setParent(parent)
+  def createEditor(self, parent, option, index):
+    comboBox = QComboBox(parent)
+    # if index.column() == 1:
+    comboBox.addItem("Normal")
+    comboBox.addItem("Active")
+    comboBox.addItem("Disabled")
+    comboBox.addItem("Selected")
+    # elif index.column() == 2:
+    #   comboBox.addItem("Off")
+    #   comboBox.addItem("On")
 
-  # def paintEvent(self,e):
-  #   qp = QPainter()
-  #   qp.begin(self)
-  #   self.drawWidget(self.ass_ui)
-  #   qp.end()
+    comboBox.activated.connect(self.emitCommitData)
 
-  def paint(self, painter, option, index):
-    painter.save()
+    return comboBox
 
-    # set background color
-    painter.setPen(QtGui.QPen(QtCore.Qt.NoPen))
-    if option.state & QtWidgets.QStyle.State_Selected:
-      painter.setBrush(QtGui.QBrush(QtCore.Qt.red))
-    else:
-      painter.setBrush(QtGui.QBrush(QtCore.Qt.white))
-    painter.drawRect(option.rect)
+  def setEditorData(self, editor, index):
+    comboBox = editor
+    if not comboBox:
+      return
 
-    # set text color
-    painter.setPen(QtGui.QPen(QtCore.Qt.black))
-    value = index.data(QtCore.Qt.DisplayRole)
-    if value:
-      text = str(value)
-      # painter.drawText(option.rect, QtCore.Qt.AlignLeft, text)
-    # painter.drawWidget(self.ass_ui)
-    painter.restore()
+    pos = comboBox.findText(index.model().data(index), Qt.MatchExactly)
+    comboBox.setCurrentIndex(pos)
+
+  def setModelData(self, editor, model, index):
+    comboBox = editor
+    if not comboBox:
+      print("wtf1")
+      return
+
+    model.setData(index, comboBox.currentText())
+
+  def emitCommitData(self):
+    self.commitData.emit(self.sender())
 
 
 ####################################################################
-class MyListModel(QtCore.QAbstractListModel):
+class MyListModel(QtCore.QAbstractItemModel):
   def __init__(self, datain, parent=None, *args):
     """ datain: a list where each item is a row
     """

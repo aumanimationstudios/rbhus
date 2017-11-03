@@ -20,7 +20,7 @@ except:
 seqScns = rbhus.utilsPipe.getSequenceScenes(projName)
 
 
-autoLineUpAssPath = projName +":anim:autoLineUp"
+autoLineUpAssPath = projName +":share:autoLineUp"
 
 autoLineUpAbsPath = rbhus.utilsPipe.getAbsPath(autoLineUpAssPath)
 if(autoLineUpAbsPath):

@@ -58,6 +58,8 @@ rN = "rbhusPipeNotes.py"
 assImporter = "rbhusAssetImport.py"
 
 
+autoLineUpCmd = os.path.join(base_dir,"tools","rbhus","autoLineUp","autoLineUp_anim.py")
+
 selectCheckBoxCmd = os.path.join(file_dir, scb)
 rbhusPipeProjCreateCmd = os.path.join(file_dir, rpA)
 rbhusPipeAssetCreateCmd = os.path.join(file_dir, rpAss)
@@ -114,6 +116,12 @@ class api_serv(QtCore.QThread):
       self.msg_recved.emit(msg)
       self.sock.send_multipart([bytes(id), "ack"])
 
+
+
+class assetDetailRowClass(QtWidgets.QWidget):
+  def __init__(self,parent=None):
+    super(assetDetailRowClass, self).__init__(parent)
+    uic.loadUi(ui_asset_details,baseinstance=self)
 
 
 class QTableWidgetItemSort(QtWidgets.QTableWidgetItem):
@@ -607,9 +615,9 @@ def updateSortingTimed(mainUid):
   else:
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.DescendingOrder)
 
-  # for x in assDetsWidgets:
-  #   x.updateGeometry()
-  # mainUid.listWidgetAssets.update()
+  for x in assDetsWidgetsDict:
+    assDetsWidgetsDict[x].updateGeometry()
+  mainUid.listWidgetAssets.updateGeometry()
 
 
 
@@ -652,8 +660,11 @@ def updateAssSlot(mainUid, richAss, assetDets):
   global assDetsItems
 
 
-  assDetsWidget = uic.loadUi(ui_asset_details)
+  # assDetsWidget = uic.loadUi(ui_asset_details)
+  assDetsWidget = assetDetailRowClass(parent=mainUid.listWidgetAssets)
   # assDetsWidget.labelAsset.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, True)
+  # assDetsWidget.checkBoxStar.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, False)
+  # assDetsWidget.widgetPreview.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, False)
 
   assDetsWidget.checkBoxStar.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleStarCheckBox)
   if (assetDets['fav']):
@@ -699,16 +710,23 @@ def updateAssSlot(mainUid, richAss, assetDets):
     assDetsWidget.horizontalLayoutPreview.addWidget(previewWidget)
 
 
+  assDetsWidget.groupBox.mousePressEvent = eatEvents
+
   item = QListWidgetItemSortAsses(assetDets)
   item.setSizeHint(assDetsWidget.sizeHint())
 
   mainUid.listWidgetAssets.addItem(item)
   mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
-
-  # assDetsWidgets.append(assDetsWidget)
   assDetsWidgetsDict[assetDets['path']] = assDetsWidget
   assDetsItems.append(item)
-  # mainUid.listWidgetAssets.update()
+
+
+
+def eatEvents(e):
+  # print(dir(e))
+  e.ignore()
+  rbhus.debug.info("dropping : "+ str(e) +" : "+ str(e.source()))
+
 
 
 
@@ -1406,6 +1424,27 @@ def popupMedia(mainUid,pos):
   menu = QtWidgets.QMenu()
   openAction = menu.addAction("open with")
   # compareAction = menu.addAction("compare")
+
+def popupProjects(mainUid,pos):
+  menu = QtWidgets.QMenu()
+  menuAutoLineUp = QtWidgets.QMenu()
+  menuAutoLineUp.setTitle("autoLineUp")
+  createAutoLineUpAnim = menuAutoLineUp.addAction("update autoLineUp :  ANIM")
+  createAutoLineUpLight = menuAutoLineUp.addAction("update autoLineUp :  LIGHT/FX")
+  createAutoLineUpLight.setEnabled(False)
+  # compareAction = menu.addAction("compare")
+  menu.addMenu(menuAutoLineUp)
+  action = menu.exec_(mainUid.listWidgetProj.mapToGlobal(pos))
+  if(action == createAutoLineUpAnim):
+    autoLineUpFunc(mainUid)
+
+
+def autoLineUpFunc(mainUid):
+  item = mainUid.listWidgetProj.selectedItems()
+  for x in item:
+    print(x.text())
+
+
 
 
 def popupSubDir(mainUid,pos):
@@ -2198,6 +2237,7 @@ def main_func(mainUid):
   mainUid.comboAssType.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
   mainUid.listWidgetAssets.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupAss(mainUid, pos))
+  mainUid.listWidgetProj.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupProjects(mainUid, pos))
 
 
   mainUid.pushAssImport.clicked.connect(lambda clicked, mainUid=mainUid: rbhusAssImport(mainUid))
@@ -2220,6 +2260,15 @@ def main_func(mainUid):
   # mainUid.splitterAssetDetails.setStretchFactor(2,0.25)
   mainUid.splitterAssetDetails.setSizes((1000,50))
   mainUid.splitterMedia.setSizes((1,200))
+
+  #hide unwanted events
+  mainUid.listWidgetAssets.dropEvent = eatEvents
+  mainUid.listWidgetAssets.dragEnterEvent = eatEvents
+  mainUid.listWidgetAssets.dragMoveEvent = eatEvents
+
+  mainUid.listWidgetMedia.dropEvent = eatEvents
+  mainUid.listWidgetMedia.dragEnterEvent = eatEvents
+  mainUid.listWidgetMedia.dragMoveEvent = eatEvents
 
   mainUid.groupBoxShowOnly.hide()
 
