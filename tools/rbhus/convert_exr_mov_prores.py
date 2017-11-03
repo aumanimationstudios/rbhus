@@ -26,15 +26,22 @@ exrs.sort()
 mov = "_".join(exrs[-1].split(".")[0].split("_")[:-1]) + ".mov"
 exr = "_".join(exrs[-1].split(".")[0].split("_")[:-1]) + "_%04d.exr"
 startFrame = exrs[0].split("_")[-1].rstrip(".exr")
-print(startFrame)
+# print(startFrame)
 
 endFrame = exrs[-1].split("_")[-1].rstrip(".exr")
-print(endFrame)
+# print(endFrame)
 inputFileFmt = "_".join(exrs[-1].split(".")[0].split("_")[:-1]) + "_"+ startFrame +"-"+ endFrame +".exr"
+
+ffmpeg = None
+if(os.path.exists("/opt/lib/ffmpeg/bin/ffmpeg")):
+  ffmpeg = "/opt/lib/ffmpeg/bin/ffmpeg"
+else:
+  print("Not found : /opt/lib/ffmpeg/bin/ffmpeg")
+  ffmpeg = "ffmpeg"
 # cmd = "ffmpeg -probesize 5000000 -gamma 2.2 -r 24 -i "+ exr +" -c:v prores_ks -profile:v 3 -vendor ap10 -pix_fmt yuv422p10le -qscale:v 5 -y "+ mov
-cmd = "ffmpeg -probesize 5000000 -apply_trc iec61966_2_1 -r 24 -start_number "+ str(startFrame) +" -i "+ exr +" -c:v prores_ks -profile:v 3 -vendor ap10 -pix_fmt yuv422p10le -qscale:v 5 -y "+ mov
-print (cmd)
-os.system(cmd)
-# p = subprocess.Popen(cmd,shell=True)
-# p.wait()
+cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 24 -start_number "+ str(startFrame) +" -i "+ exr +" -c:v prores_ks -profile:v 3 -vendor ap10 -pix_fmt yuv422p10le -qscale:v 5 -y "+ mov
+# print (cmd)
+# os.system(cmd)
+p = subprocess.Popen(cmd,shell=True)
+p.wait()
 # os.remove(unatron)

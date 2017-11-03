@@ -28,7 +28,8 @@ autoLineUpAbsPath = rbhus.utilsPipe.getAbsPath(autoLineUpAssPath)
 def getLatestDir(dirPath):
   all_subdirs = [os.path.join(dirPath,x) for x in os.listdir(dirPath) if(os.path.isdir(os.path.join(dirPath,x)) and x.isdigit())]
   if(all_subdirs):
-    latest_subdir = max(all_subdirs, key=os.path.getmtime)
+    latest_subdir = sorted(all_subdirs, key=os.path.getmtime)
+    # print(latest_subdir)
     return(latest_subdir)
   else:
     return(False)
@@ -60,11 +61,20 @@ if(autoLineUpAbsPath):
           outputDir2 = os.path.join(outputDir1, "3840x2160")
           if(os.path.exists(outputDir2)):
             latestDir = getLatestDir(outputDir2)
-            # print(latestDir)
-            Mov = os.path.join(latestDir, assFIleName + ".mov")
-            if(os.path.exists(Mov)):
+            latestDir.reverse()
+            Mov = None
+            for x in latestDir:
+              if(x):
+                Mov = os.path.join(x, assFIleName + ".mov")
+                if(os.path.exists(Mov)):
+                  break
+                else:
+                  Mov = None
+                  continue
+
+            if(Mov):
               # finalMov = os.path.join(latestDir, assFIleName + ".mp4")
-              finalMov = os.path.join(latestDir, assFIleName + ".mov")
+              finalMov = Mov
               # MovMp4Cmd = "ffmpeg -y -r 24 -i "+ Mov +" -vcodec h264 -vf scale=1280:720 "+ finalMov
               # os.system(MovMp4Cmd)
               if (os.path.exists(finalMov)):
