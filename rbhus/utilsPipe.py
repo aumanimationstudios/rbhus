@@ -12,7 +12,7 @@ import shutil
 import copy
 import debug
 import simplejson
-import lockfile
+# import lockfile
 import collections
 import time
 
