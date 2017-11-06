@@ -125,8 +125,10 @@ if(autoLineUpAbsPath):
 
 
   ffmpegCmd = "ffmpeg -y -f concat -safe 0 -auto_convert 1 -i "+ ffmpegFile +" -an -vcodec h264 -vf scale=1280:720 "+ autoLineUpFile
-  print (ffmpegCmd)
-  # os.system(ffmpegCmd)
+  out = os.system(ffmpegCmd)
+  print(out)
+  exit(out)
 else:
   print(autoLineUpAssPath +" NOT FOUND")
+  exit(666)
 #

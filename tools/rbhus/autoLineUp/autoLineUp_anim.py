@@ -24,6 +24,7 @@ autoLineUpAssPath = projName +":share:autoLineUp"
 
 autoLineUpAbsPath = rbhus.utilsPipe.getAbsPath(autoLineUpAssPath)
 if(autoLineUpAbsPath):
+  autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,"anim_autoLineUp_inprogress.mp4")
   autoLineUpFile = os.path.join(autoLineUpAbsPath,"anim_autoLineUp.mp4")
   ffmpegFile = os.path.join(autoLineUpAbsPath,"anim_autoLineUp.ffmpeg")
   ffmpegFileFd = open(ffmpegFile,"w")
@@ -67,8 +68,10 @@ if(autoLineUpAbsPath):
   print(autoLineUpFile)
 
 
-  ffmpegCmd = "ffmpeg -y -r 24 -auto_convert 1 -f concat -safe 0 -i "+ ffmpegFile +" "+ autoLineUpFile
-  os.system(ffmpegCmd)
+  ffmpegCmd = "ffmpeg -y -r 24 -auto_convert 1 -f concat -safe 0 -i "+ ffmpegFile +" "+ autoLineUpFile_inProgress
+  out = os.system(ffmpegCmd)
+  print(out)
+  exit(out)
 else:
   print(autoLineUpAssPath +" NOT FOUND")
-
+  exit(666)

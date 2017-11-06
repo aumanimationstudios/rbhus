@@ -1442,7 +1442,8 @@ def popupProjects(mainUid,pos):
 def autoLineUpFunc(mainUid):
   item = mainUid.listWidgetProj.selectedItems()
   for x in item:
-    print(x.text())
+    aluc = autoLineUpCmd +" "+ x.text()
+    print(aluc)
 
 
 
