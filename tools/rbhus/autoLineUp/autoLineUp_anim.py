@@ -70,6 +70,7 @@ if(autoLineUpAbsPath):
 
   ffmpegCmd = "ffmpeg -y -r 24 -auto_convert 1 -f concat -safe 0 -i "+ ffmpegFile +" "+ autoLineUpFile_inProgress
   out = os.system(ffmpegCmd)
+  os.system("mv " + autoLineUpFile_inProgress + " " + autoLineUpFile)
   print(out)
   exit(out)
 else:

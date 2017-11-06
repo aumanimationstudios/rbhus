@@ -35,6 +35,7 @@ def getLatestDir(dirPath):
     return(False)
 
 if(autoLineUpAbsPath):
+  autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,"light_autoLineUp_inprogress.mp4")
   autoLineUpFile = os.path.join(autoLineUpAbsPath,"light_autoLineUp.mp4")
   ffmpegFile = os.path.join(autoLineUpAbsPath,"light_autoLineUp.ffmpeg")
   ffmpegFileFd = open(ffmpegFile,"w")
@@ -124,8 +125,9 @@ if(autoLineUpAbsPath):
   print(ffmpegFile)
 
 
-  ffmpegCmd = "ffmpeg -y -f concat -safe 0 -auto_convert 1 -i "+ ffmpegFile +" -an -vcodec h264 -vf scale=1280:720 "+ autoLineUpFile
+  ffmpegCmd = "ffmpeg -y -f concat -safe 0 -auto_convert 1 -i "+ ffmpegFile +" -an -vcodec h264 -vf scale=1280:720 "+ autoLineUpFile_inProgress
   out = os.system(ffmpegCmd)
+  os.system("mv "+ autoLineUpFile_inProgress +" "+ autoLineUpFile)
   print(out)
   exit(out)
 else:
