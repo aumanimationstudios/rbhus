@@ -35,7 +35,7 @@ def getLatestDir(dirPath):
     return(False)
 
 if(autoLineUpAbsPath):
-  autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,"light_autoLineUp_inprogress.mp4")
+  autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,".light_autoLineUp_inprogress.mp4")
   autoLineUpFile = os.path.join(autoLineUpAbsPath,"light_autoLineUp.mp4")
   ffmpegFile = os.path.join(autoLineUpAbsPath,"light_autoLineUp.ffmpeg")
   ffmpegFileFd = open(ffmpegFile,"w")
