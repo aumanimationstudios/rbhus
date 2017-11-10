@@ -1326,7 +1326,13 @@ def setTemplateAss(assDetDict):
       debug.error(sys.exc_info())
 
 
-
+def getAssStatus(assPath):
+  dbcon = dbPipe.dbPipe()
+  rows = dbcon.execute("select status from assets where path='"+ assPath +"'",dictionary=True)
+  if (isinstance(rows, int)):
+    return (0)
+  else:
+    return(rows[0]['status'])
 
 def getAssFileName(assDetDict):
   fileName = ""

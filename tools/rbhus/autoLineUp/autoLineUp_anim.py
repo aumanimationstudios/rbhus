@@ -12,6 +12,7 @@ print(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4]))
 
 sys.path.append(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4]))
 import rbhus.utilsPipe
+import rbhus.constantsPipe
 
 try:
   projName = sys.argv[1]
@@ -43,16 +44,9 @@ if(autoLineUpAbsPath):
           "fileType"    : "blend"
         }
         assPath = rbhus.utilsPipe.getAssPath(asset)
-        assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
-        assFIleName = rbhus.utilsPipe.getAssFileName(asset)
-        finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
-        if (os.path.exists(finalMov)):
-          print(finalMov)
-          ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
-        else:
-          # print(finalMov,"not found")
-          asset["nodeType"] = "previz"
-          assPath = rbhus.utilsPipe.getAssPath(asset)
+        status = rbhus.utilsPipe.getAssStatus(assPath)
+        if(status == rbhus.constantsPipe.assetStatusActive):
+
           assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
           assFIleName = rbhus.utilsPipe.getAssFileName(asset)
           finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
@@ -60,7 +54,17 @@ if(autoLineUpAbsPath):
             print(finalMov)
             ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
           else:
-            print(finalMov, "not found")
+            # print(finalMov,"not found")
+            asset["nodeType"] = "previz"
+            assPath = rbhus.utilsPipe.getAssPath(asset)
+            assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
+            assFIleName = rbhus.utilsPipe.getAssFileName(asset)
+            finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
+            if (os.path.exists(finalMov)):
+              print(finalMov)
+              ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+            else:
+              print(finalMov, "not found")
 
   ffmpegFileFd.flush()
   ffmpegFileFd.close()

@@ -54,33 +54,37 @@ if(autoLineUpAbsPath):
           "fileType"    : "blend"
         }
         assPath = rbhus.utilsPipe.getAssPath(asset)
-        assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
-        isLightMain = True
-        if(assAbsPath):
-          assFIleName = rbhus.utilsPipe.getAssFileName(asset)
-          outputDir1 = os.path.join(assAbsPath, assFIleName)
-          outputDir2 = os.path.join(outputDir1, "3840x2160")
-          if(os.path.exists(outputDir2)):
-            latestDir = getLatestDir(outputDir2)
-            latestDir.reverse()
-            Mov = None
-            for x in latestDir:
-              if(x):
-                Mov = os.path.join(x, assFIleName + ".mov")
-                if(os.path.exists(Mov)):
-                  break
-                else:
-                  Mov = None
-                  continue
+        status = rbhus.utilsPipe.getAssStatus(assPath)
+        if (status == rbhus.constantsPipe.assetStatusActive):
+          assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
+          isLightMain = True
+          if(assAbsPath):
+            assFIleName = rbhus.utilsPipe.getAssFileName(asset)
+            outputDir1 = os.path.join(assAbsPath, assFIleName)
+            outputDir2 = os.path.join(outputDir1, "3840x2160")
+            if(os.path.exists(outputDir2)):
+              latestDir = getLatestDir(outputDir2)
+              latestDir.reverse()
+              Mov = None
+              for x in latestDir:
+                if(x):
+                  Mov = os.path.join(x, assFIleName + ".mov")
+                  if(os.path.exists(Mov)):
+                    break
+                  else:
+                    Mov = None
+                    continue
 
-            if(Mov):
-              # finalMov = os.path.join(latestDir, assFIleName + ".mp4")
-              finalMov = Mov
-              # MovMp4Cmd = "ffmpeg -y -r 24 -i "+ Mov +" -vcodec h264 -vf scale=1280:720 "+ finalMov
-              # os.system(MovMp4Cmd)
-              if (os.path.exists(finalMov)):
-                print(finalMov)
-                ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+              if(Mov):
+                # finalMov = os.path.join(latestDir, assFIleName + ".mp4")
+                finalMov = Mov
+                # MovMp4Cmd = "ffmpeg -y -r 24 -i "+ Mov +" -vcodec h264 -vf scale=1280:720 "+ finalMov
+                # os.system(MovMp4Cmd)
+                if (os.path.exists(finalMov)):
+                  print(finalMov)
+                  ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+                else:
+                  isLightMain = False
               else:
                 isLightMain = False
             else:
@@ -101,16 +105,8 @@ if(autoLineUpAbsPath):
             "fileType"    : "blend"
           }
           assPath = rbhus.utilsPipe.getAssPath(asset)
-          assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
-          assFIleName = rbhus.utilsPipe.getAssFileName(asset)
-          finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
-          if (os.path.exists(finalMov)):
-            print(finalMov)
-            ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
-          else:
-            print(finalMov,"not found")
-            asset["nodeType"] = "previz"
-            assPath = rbhus.utilsPipe.getAssPath(asset)
+          status = rbhus.utilsPipe.getAssStatus(assPath)
+          if (status == rbhus.constantsPipe.assetStatusActive):
             assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
             assFIleName = rbhus.utilsPipe.getAssFileName(asset)
             finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
@@ -118,7 +114,17 @@ if(autoLineUpAbsPath):
               print(finalMov)
               ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
             else:
-              print(finalMov, "not found")
+              print(finalMov,"not found")
+              asset["nodeType"] = "previz"
+              assPath = rbhus.utilsPipe.getAssPath(asset)
+              assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
+              assFIleName = rbhus.utilsPipe.getAssFileName(asset)
+              finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
+              if (os.path.exists(finalMov)):
+                print(finalMov)
+                ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+              else:
+                print(finalMov, "not found")
 
   ffmpegFileFd.flush()
   ffmpegFileFd.close()

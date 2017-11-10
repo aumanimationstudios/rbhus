@@ -174,9 +174,13 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     for rt in resTemplates:
       self.comboRes.addItem(_fromUtf8(rt['name']))
     ind = 0
+    foundDefRes = False
     try:
       for rt in resTemplates:
-        if(rt['name'] == "default"):
+
+        print (self.projDets['projName'],rt['res'],self.projDets['renderResolution'])
+        if(rt['res'] == self.projDets['renderResolution']):
+          foundDefRes = True
           break
         ind = ind + 1
     except:
@@ -187,6 +191,8 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     self.batchingCheck()
     self.setOutName()
     self.setOutDir()
+    if(foundDefRes):
+      self.resetRes()
     
     
   def updateEdits(self):
