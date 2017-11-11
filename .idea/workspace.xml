@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_png.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/assetDetailRow.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/assetDetailRow.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeVersionsMod.py" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeVersionsMod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeVersionsMod.ui" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeVersionsMod.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py" afterPath="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" afterPath="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -55,11 +48,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="convert_exr_mov_rle.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="convert_exr_mov_rle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="629">
-              <caret line="38" column="140" lean-forward="false" selection-start-line="38" selection-start-column="140" selection-end-line="38" selection-end-column="140" />
+              <caret line="38" column="125" lean-forward="false" selection-start-line="38" selection-start-column="125" selection-end-line="38" selection-end-column="125" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="convert_exr_mov_png.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_png.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="629">
+              <caret line="38" column="123" lean-forward="false" selection-start-line="38" selection-start-column="123" selection-end-line="38" selection-end-column="123" />
               <folding />
             </state>
           </provider>
@@ -120,16 +123,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="convert_4kmov_2kmov.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_4kmov_2kmov.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="27" column="0" lean-forward="true" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -215,7 +208,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/rbhusUI/rbhusPipe_newProject.py" />
         <option value="$PROJECT_DIR$/etc/blend_lin/default.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
         <option value="$PROJECT_DIR$/tools/cloning/clone/makeClone.py" />
@@ -266,6 +258,7 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" />
+        <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_png.py" />
       </list>
     </option>
   </component>
@@ -410,15 +403,15 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="TEXT&#10;Python" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tools/rbhus/autoLineUp" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tools/rbhus" />
       <recent name="$PROJECT_DIR$/tests/FIX_PROBLEMS" />
       <recent name="$PROJECT_DIR$/tools/rbhus/autoLineUp" />
-      <recent name="$PROJECT_DIR$/tools/rbhus" />
       <recent name="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install" />
       <recent name="/usr/local/bin" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tools/rbhus/autoLineUp" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -949,7 +942,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510294655976</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="lots of changes">
+      <created>1510400066431</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1510400066431</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TodoView">
@@ -963,9 +963,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1920" height="1040" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26709402" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26709402" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1756906" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23425414" sideWeight="0.50427353" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2" sideWeight="0.4957265" order="1" side_tool="false" content_ui="tabs" />
@@ -1022,13 +1021,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun6">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun5">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -1397,7 +1389,15 @@
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
-          <caret line="38" column="140" lean-forward="false" selection-start-line="38" selection-start-column="140" selection-end-line="38" selection-end-column="140" />
+          <caret line="38" column="125" lean-forward="false" selection-start-line="38" selection-start-column="125" selection-end-line="38" selection-end-column="125" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_png.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="38" column="123" lean-forward="false" selection-start-line="38" selection-start-column="123" selection-end-line="38" selection-end-column="123" />
           <folding />
         </state>
       </provider>
