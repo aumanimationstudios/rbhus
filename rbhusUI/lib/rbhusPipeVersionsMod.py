@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'rbhusPipeVersionsMod.ui'
 #
-# Created by: PyQt4 UI code generator 4.12
+# Created by: PyQt4 UI code generator 4.12.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -39,6 +39,7 @@ class Ui_MainWindow(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.groupVersions.sizePolicy().hasHeightForWidth())
     self.groupVersions.setSizePolicy(sizePolicy)
+    self.groupVersions.setMinimumSize(QtCore.QSize(1, 1))
     self.groupVersions.setObjectName(_fromUtf8("groupVersions"))
     self.verticalLayout_2 = QtGui.QVBoxLayout(self.groupVersions)
     self.verticalLayout_2.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
@@ -49,6 +50,7 @@ class Ui_MainWindow(object):
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(self.tableVersions.sizePolicy().hasHeightForWidth())
     self.tableVersions.setSizePolicy(sizePolicy)
+    self.tableVersions.setMinimumSize(QtCore.QSize(1, 1))
     self.tableVersions.setMouseTracking(True)
     self.tableVersions.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
     self.tableVersions.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
@@ -65,22 +67,30 @@ class Ui_MainWindow(object):
     self.tableVersions.verticalHeader().setVisible(False)
     self.verticalLayout_2.addWidget(self.tableVersions)
     self.groupBox = QtGui.QGroupBox(self.splitter)
+    self.groupBox.setMinimumSize(QtCore.QSize(1, 1))
     self.groupBox.setObjectName(_fromUtf8("groupBox"))
     self.verticalLayout_3 = QtGui.QVBoxLayout(self.groupBox)
     self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
     self.listWidget = QtGui.QListWidget(self.groupBox)
+    self.listWidget.setMinimumSize(QtCore.QSize(1, 1))
+    self.listWidget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+    self.listWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+    self.listWidget.setUniformItemSizes(True)
     self.listWidget.setObjectName(_fromUtf8("listWidget"))
     self.verticalLayout_3.addWidget(self.listWidget)
     self.verticalLayout.addWidget(self.splitter)
     self.horizontalLayout = QtGui.QHBoxLayout()
     self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
     self.pushWork = QtGui.QPushButton(self.centralwidget)
+    self.pushWork.setMinimumSize(QtCore.QSize(1, 1))
     self.pushWork.setObjectName(_fromUtf8("pushWork"))
     self.horizontalLayout.addWidget(self.pushWork)
     self.pushReInit = QtGui.QPushButton(self.centralwidget)
+    self.pushReInit.setMinimumSize(QtCore.QSize(1, 1))
     self.pushReInit.setObjectName(_fromUtf8("pushReInit"))
     self.horizontalLayout.addWidget(self.pushReInit)
     self.pushCommit = QtGui.QPushButton(self.centralwidget)
+    self.pushCommit.setMinimumSize(QtCore.QSize(1, 1))
     self.pushCommit.setObjectName(_fromUtf8("pushCommit"))
     self.horizontalLayout.addWidget(self.pushCommit)
     self.toolButton = QtGui.QToolButton(self.centralwidget)

@@ -151,7 +151,6 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       self.pushReviewers.setEnabled(True)
 
 
-  
   def cAss(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     assdict = {}

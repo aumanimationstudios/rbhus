@@ -77,7 +77,8 @@ selectRadioBoxCmd = os.path.join(file_dir, srb)
 
 updateAssThreads = []
 updateAssThreadsFav = []
-assDetsItems = []
+# assDetsItems = []
+assDetsItemsDict = {}
 ImageWidgets = []
 assDetsWidgetsDict = {}
 mediaWidgets = {}
@@ -296,6 +297,7 @@ class updateAssQthread(QtCore.QThread):
       projWhere = []
       projWhereString = " where "
       assesUnsorted = []
+      isGentoo = os.path.exists("/etc/gentoo-release")
 
       if(self.isFav):
         for x in self.projSelected:
@@ -354,7 +356,7 @@ class updateAssQthread(QtCore.QThread):
 
             self.assSignal.emit(richAss,x,current-1)
             self.progressSignal.emit(minLength,maxLength,current)
-            if(os.path.exists("/etc/gentoo-release")):
+            if(isGentoo):
               time.sleep(0.05)
             else:
               time.sleep(0.1)
@@ -568,46 +570,46 @@ def updateSorting(mainUid):
 
 
 def updateSortingTimed(mainUid):
-  global assDetsItems
+  global assDetsItemsDict
   if (mainUid.comboBoxSort.currentText() == "review"):
     rbhus.debug.debug("sorting for asset review")
-    for x in assDetsItems:
-      x.sortby_review()
+    for x in assDetsItemsDict:
+      assDetsItemsDict[x].sortby_review()
 
   elif (mainUid.comboBoxSort.currentText() == "modified"):
     rbhus.debug.debug("sorting for asset modified")
-    for x in assDetsItems:
-      x.sortby_modified()
+    for x in assDetsItemsDict:
+      assDetsItemsDict[x].sortby_modified()
 
   elif (mainUid.comboBoxSort.currentText() == "published"):
     rbhus.debug.debug("sorting for asset published")
-    for x in assDetsItems:
-      x.sortby_published()
+    for x in assDetsItemsDict:
+      assDetsItemsDict[x].sortby_published()
 
   elif (mainUid.comboBoxSort.currentText() == "version"):
     rbhus.debug.debug("sorting for asset version")
-    for x in assDetsItems:
-      x.sortby_version()
+    for x in assDetsItemsDict:
+      assDetsItemsDict[x].sortby_version()
 
   elif (mainUid.comboBoxSort.currentText() == "assigned"):
     rbhus.debug.debug("sorting for asset assigned")
-    for x in assDetsItems:
-      x.sortby_assigned()
+    for x in assDetsItemsDict:
+      assDetsItemsDict[x].sortby_assigned()
 
   elif (mainUid.comboBoxSort.currentText() == "reviewer"):
     rbhus.debug.debug("sorting for asset reviewer")
-    for x in assDetsItems:
-      x.sortby_reviewer()
+    for x in assDetsItemsDict:
+      assDetsItemsDict[x].sortby_reviewer()
 
   elif (mainUid.comboBoxSort.currentText() == "creator"):
     rbhus.debug.debug("sorting for asset creator")
-    for x in assDetsItems:
-      x.sortby_creator()
+    for x in assDetsItemsDict:
+      assDetsItemsDict[x].sortby_creator()
 
   else:
     rbhus.debug.debug("sorting for asset")
-    for x in assDetsItems:
-      x.sortby_asset()
+    for x in assDetsItemsDict:
+      assDetsItemsDict[x].sortby_asset()
 
 
   if(mainUid.radioAsc.isChecked()):
@@ -615,14 +617,14 @@ def updateSortingTimed(mainUid):
   else:
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.DescendingOrder)
 
-  for x in assDetsWidgetsDict:
-    assDetsWidgetsDict[x].updateGeometry()
-  mainUid.listWidgetAssets.updateGeometry()
+  # for x in assDetsWidgetsDict:
+  #   assDetsWidgetsDict[x].updateGeometry()
+  # mainUid.listWidgetAssets.updateGeometry()
 
 
 
 def updateTotalAss(mainUid,totalRows):
-  global assDetsItems
+  global assDetsItemsDict
   global ImageWidgets
   global assDetsWidgetsDict
   mainUid.labelTotal.setText(str(totalRows))
@@ -648,16 +650,16 @@ def updateTotalAss(mainUid,totalRows):
     except:
       rbhus.debug.debug(sys.exc_info())
 
-  del assDetsItems[:]
   del ImageWidgets[:]
   assDetsWidgetsDict.clear()
+  assDetsItemsDict.clear()
 
 
 
 def updateAssSlot(mainUid, richAss, assetDets):
   global ImageWidgets
   global assDetsWidgetsDict
-  global assDetsItems
+  global assDetsItemsDict
 
 
   # assDetsWidget = uic.loadUi(ui_asset_details)
@@ -699,6 +701,12 @@ def updateAssSlot(mainUid, richAss, assetDets):
   assDetsWidget.labelAsset.setTextFormat(QtCore.Qt.RichText)
   assDetsWidget.labelAsset.setText(richAss)
 
+  assDetsWidget.labelMine.setText(assetDets['assignedWorker'])
+  if(assetDets['assignedWorker'] == username):
+    assDetsWidget.labelMine.setStyleSheet("QLabel { color : red; }")
+  else:
+    assDetsWidget.labelMine.setStyleSheet("")
+
   if(assetDets['preview_low']):
     previewWidget = ImageWidget(assetDets['preview_low'],40,parent=mainUid)
     previewWidget.clicked.connect(lambda x, imagePath = assetDets['preview']: imageWidgetClicked(imagePath))
@@ -718,7 +726,7 @@ def updateAssSlot(mainUid, richAss, assetDets):
   mainUid.listWidgetAssets.addItem(item)
   mainUid.listWidgetAssets.setItemWidget(item, assDetsWidget)
   assDetsWidgetsDict[assetDets['path']] = assDetsWidget
-  assDetsItems.append(item)
+  assDetsItemsDict[assetDets['path']] = item
 
 
 
@@ -742,25 +750,27 @@ def imageWidgetClicked(imagePath,mimeType=None):
 
 
 
+def updateDetailTab(mainUid,assetDets):
+  mainUid.labelRichAss.setText(assetDets['richAss'])
+  mainUid.labelAssigned.setText(assetDets['assignedWorker'])
+  mainUid.labelReviewer.setText(assetDets['reviewUser'])
+  mainUid.labelCreator.setText(assetDets['createdUser'])
+  mainUid.labelImportedFrom.setText(assetDets['importedFrom'])
+  mainUid.labelDescription.setText(assetDets['description'])
+  mainUid.labelTags.setText(assetDets['tags'])
+  mainUid.labelGroup.setText(assetDets['assetGroups'])
+
+  if(assetDets['modified']):
+    mainUid.labelModified.setText(time.strftime("%Y %B %d %A # %I:%M %p", time.localtime(assetDets['modified'])))
+  else:
+    mainUid.labelModified.setText("NOT FOUND")
 
 
 def detailsPanelThread(mainUid):
   items = mainUid.listWidgetAssets.selectedItems()
   if(len(items) == 1):
     assetDets = items[0].assetDets
-    mainUid.labelRichAss.setText(assetDets['richAss'])
-    mainUid.labelAssigned.setText(assetDets['assignedWorker'])
-    mainUid.labelReviewer.setText(assetDets['reviewUser'])
-    mainUid.labelCreator.setText(assetDets['createdUser'])
-    mainUid.labelImportedFrom.setText(assetDets['importedFrom'])
-    mainUid.labelDescription.setText(assetDets['description'])
-    mainUid.labelTags.setText(assetDets['tags'])
-    mainUid.labelGroup.setText(assetDets['assetGroups'])
-
-    if(assetDets['modified']):
-      mainUid.labelModified.setText(time.strftime("%Y %B %d %A # %I:%M %p", time.localtime(assetDets['modified'])))
-    else:
-      mainUid.labelModified.setText("NOT FOUND")
+    updateDetailTab(mainUid,assetDets)
 
     updateMediaTab(mainUid)
   else:
@@ -1563,12 +1573,38 @@ def reviewAss(mainUid,assetList=None):
   a.wait()
   if(assDetsWidgetsDict.has_key(assPath)):
     assetDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
-    if (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusNotDone):
-      assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.Unchecked)
-    elif (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusInProgress):
-      assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.PartiallyChecked)
-    else:
-      assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.Checked)
+    updateAssDetWidgets(assPath,assetDets)
+    updateDetailTab(mainUid,assetDets)
+
+
+
+
+def updateAssDetWidgets(assPath,assetDets):
+  if (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusNotDone):
+    assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.Unchecked)
+  elif (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusInProgress):
+    assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.PartiallyChecked)
+  else:
+    assDetsWidgetsDict[assPath].checkBoxReview.setCheckState(QtCore.Qt.Checked)
+
+  if (assetDets['publishVersion']):
+    assDetsWidgetsDict[assPath].checkBoxPublish.setChecked(True)
+  else:
+    assDetsWidgetsDict[assPath].checkBoxPublish.setChecked(False)
+
+  if (assetDets['versioning']):
+    assDetsWidgetsDict[assPath].checkBoxVersion.setChecked(True)
+  else:
+    assDetsWidgetsDict[assPath].checkBoxVersion.setChecked(False)
+
+  assDetsWidgetsDict[assPath].labelMine.setText(assetDets['assignedWorker'])
+  if (assetDets['assignedWorker'] == username):
+    assDetsWidgetsDict[assPath].labelMine.setStyleSheet("QLabel { color : red; }")
+  else:
+    assDetsWidgetsDict[assPath].labelMine.setStyleSheet("")
+
+
+
 
 
 
@@ -1644,6 +1680,7 @@ def getFileAss(mainUid,assetList=None):
         return(0)
     else:
       return(0)
+
 
 def delAss(mainUid,hard=False,assetList=None):
   if(assetList):
@@ -1753,7 +1790,21 @@ def editAss(mainUid,assetList=None):
     p.setStandardOutputFile(tempDir + os.sep + "rbhusPipeAssetEdit_" + username + ".log")
     p.setStandardErrorFile(tempDir + os.sep + "rbhusPipeAssetEdit_" + username + ".err")
     p.start(sys.executable, rbhusAssetEditCmdMod.split())
-    # p.finished.connect(lambda a ,b, mainUid=mainUid : updateAssetsForProjSelect(mainUid))
+    p.finished.connect(lambda a ,b, mainUid=mainUid,assetList = listAsses : updateAssetDetails(mainUid,assetList))
+
+def updateAssetDetails(mainUid,assetList):
+  global assDetsItemsDict
+  for x in assetList:
+    newAssDets = rbhus.utilsPipe.getAssDetails(assPath=x)
+    try:
+      assDetsItemsDict[x].assetDets.update(newAssDets)
+      updateAssDetWidgets(x, newAssDets)
+      updateDetailTab(mainUid,assDetsItemsDict[x].assetDets)
+    except:
+      rbhus.debug.info(sys.exc_info())
+
+
+
 
 
 

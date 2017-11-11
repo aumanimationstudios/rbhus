@@ -25,7 +25,7 @@ autoLineUpAssPath = projName +":share:autoLineUp"
 
 autoLineUpAbsPath = rbhus.utilsPipe.getAbsPath(autoLineUpAssPath)
 
-def getLatestDir(dirPath):
+def getTimeSortedDirs(dirPath):
   all_subdirs = [os.path.join(dirPath,x) for x in os.listdir(dirPath) if(os.path.isdir(os.path.join(dirPath,x)) and x.isdigit())]
   if(all_subdirs):
     latest_subdir = sorted(all_subdirs, key=os.path.getmtime)
@@ -33,6 +33,15 @@ def getLatestDir(dirPath):
     return(latest_subdir)
   else:
     return(False)
+
+def getLatestDir(dirPath):
+  all_subdirs = [os.path.join(dirPath,x) for x in os.listdir(dirPath) if(os.path.isdir(os.path.join(dirPath,x)))]
+  if(all_subdirs):
+    latest_subdir = max(all_subdirs, key=os.path.getmtime)
+    return(latest_subdir)
+  else:
+    return(False)
+
 
 if(autoLineUpAbsPath):
   autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,".light_autoLineUp_inprogress.mp4")
@@ -61,14 +70,14 @@ if(autoLineUpAbsPath):
           if(assAbsPath):
             assFIleName = rbhus.utilsPipe.getAssFileName(asset)
             outputDir1 = os.path.join(assAbsPath, assFIleName)
-            outputDir2 = os.path.join(outputDir1, "3840x2160")
+            outputDir2 = getLatestDir(outputDir1)
             if(os.path.exists(outputDir2)):
-              latestDir = getLatestDir(outputDir2)
+              latestDir = getTimeSortedDirs(outputDir2)
               latestDir.reverse()
               Mov = None
               for x in latestDir:
                 if(x):
-                  Mov = os.path.join(x, assFIleName + ".mov")
+                  Mov = os.path.join(x, assFIleName + ".mp4")
                   if(os.path.exists(Mov)):
                     break
                   else:

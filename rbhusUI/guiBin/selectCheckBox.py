@@ -29,6 +29,8 @@ try:
 except AttributeError:
   _fromUtf8 = lambda s: s
   
+def lowerString(a):
+  return(a.lower())
 
 class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
   def setupUi(self, Form):
@@ -41,11 +43,14 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
     self.updateLine = []
     if(args.inputlist):
       self.inList = args.inputlist.split(",")
+      self.inList = sorted(self.inList,key=lowerString)
     if(args.defaultlist):
       self.defList = args.defaultlist.split(",")
       
     self.checkBoxes = {}
-    self.updateCheckBoxes()
+
+    self.populateCheckBoxes()
+    # self.updateCheckBoxes()
     self.updateSelected()
     self.pushApply.clicked.connect(self.pApply)
     self.pushDeselect.clicked.connect(self.deselectall)
@@ -65,7 +70,18 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
     print(",".join(self.updateLine))
     QtCore.QCoreApplication.instance().quit()
     
-    
+
+  def populateCheckBoxes(self):
+    for x in self.inList:
+
+      self.checkBoxes[x] = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+      self.checkBoxes[x].setObjectName(_fromUtf8(x))
+      self.verticalLayout.addWidget(self.checkBoxes[x])
+      self.checkBoxes[x].setText(_fromUtf8(x))
+      self.checkBoxes[x].stateChanged.connect(self.updateSelected)
+      if(x in self.defList):
+        self.checkBoxes[x].setChecked(2)
+
     
     
   def updateCheckBoxes(self):
@@ -77,25 +93,33 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
     
     for x in self.inList:
       try:
-        self.checkBoxes[x].setParent(None)
-        self.checkBoxes[x].deleteLater()
-        self.checkBoxes[x] = None
-        
-        del(self.checkBoxes[x])
+        # self.checkBoxes[x].setParent(None)
+        # self.checkBoxes[x].deleteLater()
+        # self.checkBoxes[x] = None
+        #
+        # del(self.checkBoxes[x])
+        if(findList):
+          if(x in findList):
+            self.checkBoxes[x].show()
+          else:
+            self.checkBoxes[x].hide()
+
+        else:
+          self.checkBoxes[x].show()
+
       except:
-        pass
+        print(sys.exc_info())
       
-    if(findList):
-      for x in findList:
-        self.checkBoxes[x] = QtGui.QCheckBox(self.scrollAreaWidgetContents)
-        self.checkBoxes[x].setObjectName(_fromUtf8(x))
-        self.verticalLayout.addWidget(self.checkBoxes[x])
-        self.checkBoxes[x].setText(_fromUtf8(x))
-        self.checkBoxes[x].stateChanged.connect(self.updateSelected)
-        if(x in self.defList):
-          self.checkBoxes[x].setChecked(2)
-    #self.defList = []
-    
+    # if(findList):
+    #   for x in findList:
+    #     self.checkBoxes[x] = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+    #     self.checkBoxes[x].setObjectName(_fromUtf8(x))
+    #     self.verticalLayout.addWidget(self.checkBoxes[x])
+    #     self.checkBoxes[x].setText(_fromUtf8(x))
+    #     self.checkBoxes[x].stateChanged.connect(self.updateSelected)
+    #     if(x in self.defList):
+    #       self.checkBoxes[x].setChecked(2)
+
     
         
   def deselectall(self):
