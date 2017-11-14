@@ -1558,6 +1558,7 @@ def popupAss(mainUid,pos,isFav=False):
 
 
 def reviewAss(mainUid,assetList=None):
+
   if(assetList):
     listAsses = assetList
   if(isinstance(assetList,str)):
@@ -1573,9 +1574,16 @@ def reviewAss(mainUid,assetList=None):
   a.wait()
   if(assDetsWidgetsDict.has_key(assPath)):
     assetDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
-    updateAssDetWidgets(assPath,assetDets)
-    updateDetailTab(mainUid,assetDets)
+    updateAssetData(mainUid,assetDets)
 
+
+
+def updateAssetData(mainUid,assetDets):
+  global assDetsItemsDict
+  assPath = assetDets['path']
+  assDetsItemsDict[assPath].assetDets.update(assetDets)
+  updateAssDetWidgets(assPath, assDetsItemsDict[assPath].assetDets)
+  updateDetailTab(mainUid, assDetsItemsDict[assPath].assetDets)
 
 
 
@@ -1796,12 +1804,7 @@ def updateAssetDetails(mainUid,assetList):
   global assDetsItemsDict
   for x in assetList:
     newAssDets = rbhus.utilsPipe.getAssDetails(assPath=x)
-    try:
-      assDetsItemsDict[x].assetDets.update(newAssDets)
-      updateAssDetWidgets(x, newAssDets)
-      updateDetailTab(mainUid,assDetsItemsDict[x].assetDets)
-    except:
-      rbhus.debug.info(sys.exc_info())
+    updateAssetData(mainUid,newAssDets)
 
 
 
@@ -1871,7 +1874,7 @@ def setUsers(mainUid):
 
 
 
-def saveSearchItem(mainUid,filterFile=None):
+def saveSearchItem(mainUid,filterFile=None,noUi = False):
   assetTypeSave = str(mainUid.comboAssType.currentText())
   seqSave = str(mainUid.comboSeq.currentText())
   scnSave = str(mainUid.comboScn.currentText())
@@ -1904,15 +1907,15 @@ def saveSearchItem(mainUid,filterFile=None):
 
   isSaveStringPresent = searchItemPresent(saveString,filterFile=filterFile)
 
-
-  if(not isSaveStringPresent):
-    saveDict = {saveString:'name this'}
-    searchItemSave(saveDict,filterFile=filterFile)
-    item = QtWidgets.QListWidgetItem()
-    item.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled)
-    item.setText(saveDict[saveString])
-    item.assFilter = saveString
-    mainUid.listWidgetSearch.addItem(item)
+  if(not noUi):
+    if(not isSaveStringPresent):
+      saveDict = {saveString:'name this'}
+      searchItemSave(saveDict,filterFile=filterFile)
+      item = QtWidgets.QListWidgetItem()
+      item.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled)
+      item.setText(saveDict[saveString])
+      item.assFilter = saveString
+      mainUid.listWidgetSearch.addItem(item)
 
   testDict = searchItemLoad(filterFile=filterFile)
   rbhus.debug.debug(testDict)
@@ -2139,8 +2142,14 @@ def updateProjectsLists(mainUid):
   return(maxlen)
 
 
+def closeEvent(event):
+    rbhus.debug.debug("QUITTING")
+    event.accept()
+
+
 def main_func(mainUid):
   mainUid.listWidgetProj.clear()
+
 
   icon = QtGui.QIcon()
   icon.addPixmap(QtGui.QPixmap(os.path.join(base_dir, "etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -2331,12 +2340,10 @@ def main_func(mainUid):
   api.start()
 
 
-app = None
-
 
 if __name__ == '__main__':
-  global app
   app = QtWidgets.QApplication(sys.argv)
   mainUid = uic.loadUi(ui_main)
+  print(dir(mainUid))
   main_func(mainUid)
   os._exit((app.exec_()))
