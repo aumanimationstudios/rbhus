@@ -52,7 +52,7 @@ if(autoLineUpAbsPath):
           finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
           if (os.path.exists(finalMov)):
             print(finalMov)
-            ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+            ffmpegFileFd.write(finalMov + "\n")
           else:
             # print(finalMov,"not found")
             asset["nodeType"] = "previz"
@@ -62,7 +62,7 @@ if(autoLineUpAbsPath):
             finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
             if (os.path.exists(finalMov)):
               print(finalMov)
-              ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+              ffmpegFileFd.write(finalMov + "\n")
             else:
               print(finalMov, "not found")
 
@@ -72,7 +72,7 @@ if(autoLineUpAbsPath):
   print(autoLineUpFile)
 
 
-  ffmpegCmd = "ffmpeg -y -r 24 -auto_convert 1 -f concat -safe 0 -i "+ ffmpegFile +" "+ autoLineUpFile_inProgress
+  ffmpegCmd = "melt melt_file:"+ ffmpegFile +" -consumer avformat:"+ autoLineUpFile_inProgress +" vcodec=libx264 r=24"
   out = os.system(ffmpegCmd)
   os.system("mv " + autoLineUpFile_inProgress + " " + autoLineUpFile)
   print(out)

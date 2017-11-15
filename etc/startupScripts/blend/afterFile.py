@@ -84,12 +84,14 @@ def setOutPut():
   bpy.context.scene.render.ffmpeg.buffersize = 224 * 8
   bpy.context.scene.render.ffmpeg.packetsize = 2048
   bpy.context.scene.render.ffmpeg.muxrate = 10080000
+  bpy.context.scene.render.ffmpeg.audio_codec = 'AAC'
 
 
 if(not rbhus_isRendering):
   try:
     assPath = os.environ['rp_assets_path']
     stageType = os.environ['rp_assets_stageType']
+    nodeType = os.environ['rp_assets_nodeType']
     if(stageType == "anim"):
       setOutPut()
       bpy.context.scene.render.use_stamp = True
@@ -102,6 +104,16 @@ if(not rbhus_isRendering):
       bpy.context.scene.render.use_stamp_filename = False
       bpy.context.scene.render.use_stamp_note = True
       bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mp4"
+    elif(stageType == "postproduction" and nodeType == "lineUp"):
+      setOutPut()
+      bpy.context.scene.render.use_stamp = False
+      bpy.context.scene.render.resolution_x = 3840
+      bpy.context.scene.render.resolution_y = 2160
+      bpy.context.scene.render.resolution_percentage = 50
+
+      bpy.context.scene.render.ffmpeg.format = "QUICKTIME"
+      bpy.context.scene.render.ffmpeg.ffmpeg_preset = 'ULTRAFAST'
+      bpy.context.scene.render.filepath = "//" + getAssFileName() + ".mov"
 
     try:
       if (os.environ['rp_assets_fRange'] != "1"):

@@ -83,21 +83,21 @@ if(autoLineUpAbsPath):
                     mp4 = os.path.join(ld, assFIleName +".mp4")
                     Mov = os.path.join(ld, assFIleName +".mov")
                     if(os.path.exists(Mov)):
-                      # if(os.path.exists(mp4)):
-                      #   break
-                      cnvcmd = convertToMP4 +" "+ ld
-                      mp4out = os.system(cnvcmd)
+                      # # if(os.path.exists(mp4)):
+                      # #   break
+                      # cnvcmd = convertToMP4 +" "+ ld
+                      # mp4out = os.system(cnvcmd)
                       break
 
 
               if(Mov):
                 # finalMov = os.path.join(latestDir, assFIleName + ".mp4")
-                finalMov = mp4
+                finalMov = Mov
                 # MovMp4Cmd = "ffmpeg -y -r 24 -i "+ Mov +" -vcodec h264 -vf scale=1280:720 "+ finalMov
                 # os.system(MovMp4Cmd)
                 if (os.path.exists(finalMov)):
                   print(finalMov)
-                  ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+                  ffmpegFileFd.write(finalMov + "\n")
                 else:
                   isLightMain = False
               else:
@@ -127,7 +127,7 @@ if(autoLineUpAbsPath):
             finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
             if (os.path.exists(finalMov)):
               print(finalMov)
-              ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+              ffmpegFileFd.write(finalMov + "\n")
             else:
               print(finalMov,"not found")
               asset["nodeType"] = "previz"
@@ -137,7 +137,7 @@ if(autoLineUpAbsPath):
               finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
               if (os.path.exists(finalMov)):
                 print(finalMov)
-                ffmpegFileFd.write("file\t\'" + finalMov + "\'\n")
+                ffmpegFileFd.write(finalMov + "\n")
               else:
                 print(finalMov, "not found")
 
@@ -146,7 +146,7 @@ if(autoLineUpAbsPath):
   print(ffmpegFile)
 
 
-  ffmpegCmd = "ffmpeg -y -f concat -safe 0 -auto_convert 1 -i "+ ffmpegFile +" -an -vcodec h264 -pix_fmt yuv420p -vf scale=960:540 "+ autoLineUpFile_inProgress
+  ffmpegCmd = "melt melt_file:"+ ffmpegFile +" -consumer avformat:"+ autoLineUpFile_inProgress +" vcodec=libx264 r=24"
   out = os.system(ffmpegCmd)
   os.system("mv "+ autoLineUpFile_inProgress +" "+ autoLineUpFile)
   print(out)
