@@ -470,7 +470,10 @@ def updateProjSelect(mainUid):
   for x in items:
     projects.append(str(x.text()))
   saveSelectedProjects(projects)
-  rbhus.utilsPipe.exportProj(projects[-1])
+  try:
+    rbhus.utilsPipe.exportProj(projects[-1])
+  except:
+    rbhus.debug.warning("no project to export .. new user")
 
 def clearProjSelect(mainUid):
   global projects

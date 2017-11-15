@@ -8,9 +8,9 @@ import sys
 import os
 import re
 
-print(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4]))
+progPath = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4])
 
-sys.path.append(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4]))
+sys.path.append(progPath)
 import rbhus.utilsPipe
 
 try:
@@ -22,6 +22,7 @@ seqScns = rbhus.utilsPipe.getSequenceScenes(projName)
 
 autoLineUpAssPath = projName +":share:autoLineUp"
 
+convertToMP4 = os.path.join(progPath,"tools","rbhus","convert_exr_mp4.py")
 
 autoLineUpAbsPath = rbhus.utilsPipe.getAbsPath(autoLineUpAssPath)
 
@@ -50,9 +51,9 @@ if(autoLineUpAbsPath):
   ffmpegFileFd = open(ffmpegFile,"w")
 
   for x in seqScns:
-    # print(x['sequenceName'],x['sceneName'])
     if (not re.search("^default$", x['sequenceName'])):
       if (not re.search("^default$", x['sceneName'])):
+        # print(x['sequenceName'], x['sceneName'])
         asset = {
           "projName"    : projName,
           "assetType"   : "output",
@@ -73,20 +74,25 @@ if(autoLineUpAbsPath):
             outputDir2 = getLatestDir(outputDir1)
             if(os.path.exists(outputDir2)):
               latestDir = getTimeSortedDirs(outputDir2)
-              latestDir.reverse()
               Mov = None
-              for x in latestDir:
-                if(x):
-                  Mov = os.path.join(x, assFIleName + ".mp4")
-                  if(os.path.exists(Mov)):
-                    break
-                  else:
-                    Mov = None
-                    continue
+              mp4 = None
+              if(latestDir):
+                latestDir.reverse()
+                for ld in latestDir:
+                  if(ld):
+                    mp4 = os.path.join(ld, assFIleName +".mp4")
+                    Mov = os.path.join(ld, assFIleName +".mov")
+                    if(os.path.exists(Mov)):
+                      # if(os.path.exists(mp4)):
+                      #   break
+                      cnvcmd = convertToMP4 +" "+ ld
+                      mp4out = os.system(cnvcmd)
+                      break
+
 
               if(Mov):
                 # finalMov = os.path.join(latestDir, assFIleName + ".mp4")
-                finalMov = Mov
+                finalMov = mp4
                 # MovMp4Cmd = "ffmpeg -y -r 24 -i "+ Mov +" -vcodec h264 -vf scale=1280:720 "+ finalMov
                 # os.system(MovMp4Cmd)
                 if (os.path.exists(finalMov)):
@@ -140,7 +146,7 @@ if(autoLineUpAbsPath):
   print(ffmpegFile)
 
 
-  ffmpegCmd = "ffmpeg -y -f concat -safe 0 -auto_convert 1 -i "+ ffmpegFile +" -an -vcodec h264 -vf scale=1280:720 "+ autoLineUpFile_inProgress
+  ffmpegCmd = "ffmpeg -y -f concat -safe 0 -auto_convert 1 -i "+ ffmpegFile +" -an -vcodec h264 -pix_fmt yuv420p -vf scale=960:540 "+ autoLineUpFile_inProgress
   out = os.system(ffmpegCmd)
   os.system("mv "+ autoLineUpFile_inProgress +" "+ autoLineUpFile)
   print(out)
