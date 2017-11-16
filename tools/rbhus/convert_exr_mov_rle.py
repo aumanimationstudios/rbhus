@@ -37,7 +37,8 @@ else:
   ffmpeg = "ffmpeg"
 
 cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 24 -start_number "+ str(startFrame) +" -i "+ exr +" -c:v qtrle -pix_fmt rgb24 -qscale:v 1 -y "+ mov
-# cmd = "djv_convert "+ inputFileFmt +" "+ mov +" -default_speed 24 -render_filter_high"
+#iec61966_2_1
+# cmd = "djv_convert "+ inputFileFmt +" "+ mov +" -pixel \"RGB F16\" -default_speed 24 -render_filter_high"
 p = subprocess.Popen(cmd,shell=True)
 p.wait()
 # os.remove(unatron)

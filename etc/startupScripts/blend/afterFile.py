@@ -85,6 +85,9 @@ def setOutPut():
   bpy.context.scene.render.ffmpeg.packetsize = 2048
   bpy.context.scene.render.ffmpeg.muxrate = 10080000
   bpy.context.scene.render.ffmpeg.audio_codec = 'AAC'
+  bpy.context.scene.render.resolution_x = 1280
+  bpy.context.scene.render.resolution_y = 720
+  bpy.context.scene.render.resolution_percentage = 100
 
 
 if(not rbhus_isRendering):
