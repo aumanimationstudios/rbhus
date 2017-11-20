@@ -574,6 +574,7 @@ class dbRbhus:
                       AND hostInfo.hostName=hostResource.hostName \
                       AND hostResource.hostName=hostAlive.hostName \
                       AND hostAlive.hostName=hostEffectiveResource.hostName \
+                      AND hostInfo.statusPermanent="+ str(constants.hostAliveAlive) +" \
                       ORDER BY hostInfo.weight DESC", dictionary=True)
       if(rows):
         if(not 'eCpus' in rows[0].keys()):

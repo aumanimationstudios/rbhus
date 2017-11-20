@@ -562,6 +562,7 @@ def updateProgressBar(minLength,maxLength,current,mainUid):
 
 def updateAssFinished(mainUid):
   rbhus.debug.debug("calling updateFinished")
+  mainUid.listWidgetAssets.update()
   updateSorting(mainUid)
 
 
@@ -620,9 +621,7 @@ def updateSortingTimed(mainUid):
   else:
     mainUid.listWidgetAssets.sortItems(QtCore.Qt.DescendingOrder)
 
-  # for x in assDetsWidgetsDict:
-  #   assDetsWidgetsDict[x].updateGeometry()
-  # mainUid.listWidgetAssets.updateGeometry()
+
 
 
 
@@ -1584,9 +1583,12 @@ def reviewAss(mainUid,assetList=None):
 def updateAssetData(mainUid,assetDets):
   global assDetsItemsDict
   assPath = assetDets['path']
-  assDetsItemsDict[assPath].assetDets.update(assetDets)
-  updateAssDetWidgets(assPath, assDetsItemsDict[assPath].assetDets)
-  updateDetailTab(mainUid, assDetsItemsDict[assPath].assetDets)
+  try:
+    assDetsItemsDict[assPath].assetDets.update(assetDets)
+    updateAssDetWidgets(assPath, assDetsItemsDict[assPath].assetDets)
+    updateDetailTab(mainUid, assDetsItemsDict[assPath].assetDets)
+  except:
+    rbhus.debug.warning(sys.exc_info())
 
 
 
@@ -2347,6 +2349,6 @@ def main_func(mainUid):
 if __name__ == '__main__':
   app = QtWidgets.QApplication(sys.argv)
   mainUid = uic.loadUi(ui_main)
-  print(dir(mainUid))
+  # print(dir(mainUid))
   main_func(mainUid)
   os._exit((app.exec_()))

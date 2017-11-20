@@ -21,7 +21,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>56</width>
+    <width>200</width>
     <height>56</height>
    </size>
   </property>
@@ -79,14 +79,8 @@
       </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetFixedSize</enum>
-        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetFixedSize</enum>
-          </property>
           <property name="leftMargin">
            <number>2</number>
           </property>
@@ -399,7 +393,6 @@ QCheckBox::indicator:unchecked
      <zorder>labelAsset</zorder>
      <zorder>line_2</zorder>
      <zorder>widgetPreview</zorder>
-     <zorder>verticalLayoutWidget</zorder>
     </widget>
    </item>
   </layout>

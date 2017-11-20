@@ -98,6 +98,7 @@ if(not rbhus_isRendering):
     if(stageType == "anim"):
       setOutPut()
       bpy.context.scene.render.use_stamp = True
+      bpy.context.scene.render.stamp_font_size = 15
       bpy.context.scene.render.use_stamp_time = False
       bpy.context.scene.render.use_stamp_date = False
       bpy.context.scene.render.use_stamp_render_time = False
