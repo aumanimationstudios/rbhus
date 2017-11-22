@@ -720,7 +720,7 @@ def updateAssSlot(mainUid, richAss, assetDets):
     assDetsWidget.horizontalLayoutPreview.addWidget(previewWidget)
 
 
-  assDetsWidget.groupBox.mousePressEvent = eatEvents
+  # assDetsWidget.groupBox.mousePressEvent = eatEvents
 
   item = QListWidgetItemSortAsses(assetDets)
   item.setSizeHint(assDetsWidget.sizeHint())
@@ -736,8 +736,6 @@ def eatEvents(e):
   # print(dir(e))
   e.ignore()
   rbhus.debug.info("dropping : "+ str(e) +" : "+ str(e.source()))
-
-
 
 
 def imageWidgetClicked(imagePath,mimeType=None):
@@ -2336,6 +2334,9 @@ def main_func(mainUid):
   mainUid.listWidgetMedia.dragEnterEvent = eatEvents
   mainUid.listWidgetMedia.dragMoveEvent = eatEvents
 
+
+  mainUid.closeEvent = closeEvent
+
   mainUid.groupBoxShowOnly.hide()
 
   # mainUid.groupBoxUpdates.hide()
@@ -2349,6 +2350,6 @@ def main_func(mainUid):
 if __name__ == '__main__':
   app = QtWidgets.QApplication(sys.argv)
   mainUid = uic.loadUi(ui_main)
-  # print(dir(mainUid))
+  print(dir(mainUid))
   main_func(mainUid)
   os._exit((app.exec_()))
