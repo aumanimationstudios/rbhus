@@ -146,7 +146,7 @@ if(autoLineUpAbsPath):
   print(ffmpegFile)
 
 
-  ffmpegCmd = "melt melt_file:"+ ffmpegFile +" -strict -2 -consumer avformat:"+ autoLineUpFile_inProgress +" vcodec=libx264 r=24"
+  ffmpegCmd = "melt melt_file:"+ ffmpegFile +" -consumer avformat:"+ autoLineUpFile_inProgress +" vcodec=libx264 r=24"
   out = os.system(ffmpegCmd)
   os.system("mv "+ autoLineUpFile_inProgress +" "+ autoLineUpFile)
   print(out)

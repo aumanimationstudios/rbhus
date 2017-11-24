@@ -70,7 +70,7 @@ def setOutPut():
 
   is_ntsc = (bpy.context.scene.render.fps != 25)
 
-  bpy.context.scene.render.ffmpeg.format = "MPEG4"
+  bpy.context.scene.render.ffmpeg.format = "QUICKTIME"
   bpy.context.scene.render.ffmpeg.codec = "H264"
 
   if is_ntsc:
@@ -98,7 +98,7 @@ if(not rbhus_isRendering):
     if(stageType == "anim"):
       setOutPut()
       bpy.context.scene.render.use_stamp = True
-      bpy.context.scene.render.stamp_font_size = 15
+      bpy.context.scene.render.stamp_font_size = 20
       bpy.context.scene.render.use_stamp_time = False
       bpy.context.scene.render.use_stamp_date = False
       bpy.context.scene.render.use_stamp_render_time = False
@@ -107,7 +107,8 @@ if(not rbhus_isRendering):
       bpy.context.scene.render.use_stamp_camera = False
       bpy.context.scene.render.use_stamp_filename = False
       bpy.context.scene.render.use_stamp_note = True
-      bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mp4"
+      bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mov"
+      bpy.context.scene.use_audio_scrub = True
     elif(stageType == "postproduction" and nodeType == "lineUp"):
       setOutPut()
       bpy.context.scene.render.use_stamp = False

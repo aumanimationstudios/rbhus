@@ -230,7 +230,7 @@ def getAssTypes(atype=None, status=constantsPipe.typesActive):
     return(0)
 
 
-def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True,force=False):
+def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, rename=True, force=False):
   assDets = getAssDetails(assPath=assetPath)
   projDets = getProjDetails(toProject)
   origAssPath = getAbsPath(assetPath)
@@ -279,9 +279,9 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True,f
     debug.info(origAssPath)
     if(sys.platform.lower().find("linux") >= 0):
       if(getVersions):
-        os.system("rsync -a "+ origAssPath +"/ "+ newAssPath +"/ --exclude=.autocommitGrouped")
+        os.system("rsync -a "+ origAssPath +"/ "+ newAssPath +"/ --exclude=.autocommitGrouped --exclude=publish --exclude=export_*")
       else:
-        os.system("rsync -a " + origAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.hg --exclude=.hglf")
+        os.system("rsync -a " + origAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.hg --exclude=.hglf --exclude=publish --exclude=export_*")
     return(1)
   else:
     return(0)

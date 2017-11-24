@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" afterPath="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_anim.py" afterPath="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_anim.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py" afterPath="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py" />
     </list>
@@ -60,11 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="autoLineUp_light.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="autoLineUp_light.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="144" column="22" lean-forward="true" selection-start-line="144" selection-start-column="22" selection-end-line="144" selection-end-column="22" />
+            <state relative-caret-position="491">
+              <caret line="148" column="46" lean-forward="false" selection-start-line="148" selection-start-column="46" selection-end-line="148" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -82,11 +83,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="constantsPipe.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
+      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="83" column="46" lean-forward="false" selection-start-line="83" selection-start-column="45" selection-end-line="83" selection-end-column="46" />
+            <state relative-caret-position="212">
+              <caret line="232" column="91" lean-forward="false" selection-start-line="232" selection-start-column="91" selection-end-line="232" selection-end-column="91" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-7387">
+              <caret line="169" column="42" lean-forward="true" selection-start-line="169" selection-start-column="42" selection-end-line="169" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -95,18 +106,8 @@
       <file leaf-file-name="afterFile.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="474">
-              <caret line="118" column="65" lean-forward="true" selection-start-line="118" selection-start-column="65" selection-end-line="118" selection-end-column="65" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rbhusQueen_scheduler.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusQueen_scheduler.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="46" column="32" lean-forward="false" selection-start-line="46" selection-start-column="32" selection-end-line="46" selection-end-column="32" />
+            <state relative-caret-position="391">
+              <caret line="110" column="46" lean-forward="true" selection-start-line="110" selection-start-column="46" selection-end-line="110" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -116,7 +117,7 @@
         <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_anim.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="559">
-              <caret line="74" column="58" lean-forward="false" selection-start-line="74" selection-start-column="58" selection-end-line="74" selection-end-column="58" />
+              <caret line="74" column="47" lean-forward="false" selection-start-line="74" selection-start-column="47" selection-end-line="74" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -166,13 +167,13 @@
       <find>updateDetailTab</find>
       <find>&quot;file\t\'&quot; + finalMov + &quot;\'\n&quot;</find>
       <find>export</find>
-      <find>import</find>
       <find>autodir</find>
       <find>host</find>
       <find>dir(</find>
       <find>eate</find>
       <find>eateve</find>
       <find>closeEvent</find>
+      <find>import</find>
     </findStrings>
     <replaceStrings>
       <replace>mainUid.comboSeq</replace>
@@ -250,7 +251,6 @@
         <option value="$PROJECT_DIR$/tests/FIX_PROBLEMS/autoLineUp_light.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_server.py" />
         <option value="$PROJECT_DIR$/tests/knotify.py" />
-        <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" />
@@ -259,11 +259,12 @@
         <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" />
         <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
-        <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
         <option value="$PROJECT_DIR$/rbhus/dbRbhus.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
+        <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_anim.py" />
+        <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
       </list>
     </option>
   </component>
@@ -631,13 +632,6 @@
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
     </task>
-    <task id="LOCAL-00008" summary="fixing">
-      <created>1494394729859</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1494394729859</updated>
-    </task>
     <task id="LOCAL-00009" summary="fixing">
       <created>1494398019810</created>
       <option name="number" value="00009" />
@@ -974,7 +968,14 @@
       <option name="project" value="LOCAL" />
       <updated>1511165894510</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="lots of changes">
+      <created>1511325746373</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1511325746373</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1293,16 +1294,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3672">
-          <caret line="232" column="10" lean-forward="false" selection-start-line="232" selection-start-column="4" selection-end-line="232" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="731">
@@ -1335,36 +1326,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="157" column="2" lean-forward="false" selection-start-line="157" selection-start-column="2" selection-end-line="157" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
           <caret line="83" column="46" lean-forward="false" selection-start-line="83" selection-start-column="45" selection-end-line="83" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="118" column="65" lean-forward="true" selection-start-line="118" selection-start-column="65" selection-end-line="118" selection-end-column="65" />
           <folding />
         </state>
       </provider>
@@ -1403,6 +1368,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="110" column="46" lean-forward="true" selection-start-line="110" selection-start-column="46" selection-end-line="110" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_server.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="413">
@@ -1411,18 +1394,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_anim.py">
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="559">
-          <caret line="74" column="58" lean-forward="false" selection-start-line="74" selection-start-column="58" selection-end-line="74" selection-end-column="58" />
+        <state relative-caret-position="491">
+          <caret line="148" column="46" lean-forward="false" selection-start-line="148" selection-start-column="46" selection-end-line="148" selection-end-column="46" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py">
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_anim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="144" column="22" lean-forward="true" selection-start-line="144" selection-start-column="22" selection-end-line="144" selection-end-column="22" />
+        <state relative-caret-position="559">
+          <caret line="74" column="47" lean-forward="false" selection-start-line="74" selection-start-column="47" selection-end-line="74" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="232" column="91" lean-forward="false" selection-start-line="232" selection-start-column="91" selection-end-line="232" selection-end-column="91" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7387">
+          <caret line="169" column="42" lean-forward="true" selection-start-line="169" selection-start-column="42" selection-end-line="169" selection-end-column="42" />
           <folding />
         </state>
       </provider>
