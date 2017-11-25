@@ -320,6 +320,7 @@ class hg(object):
       return(0,versionCommited)
     else:
       debug.info(str(out))
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "commited : "+ str(versionCommited))
       return(1,versionCommited)
 
 
@@ -410,7 +411,7 @@ class hg(object):
   def _archive(self,rev):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(0)
+      return(111)
 
     pubpath = os.path.join(self.absPipePath,"publish")
     if(not rev):
@@ -439,7 +440,9 @@ class hg(object):
       assdict = {}
       assdict["publishVersion"] = str(rev)
       utilsPipe.assEdit(asspath=self.pipepath, assdict=assdict)
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "publish : "+ rev)
     os.chdir(self.localPath)
+
 
 
 
@@ -467,6 +470,7 @@ class hg(object):
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
+      return(1)
     else:
       debug.info(str(out))
       utilsPipe.reviewVersion(self.assDets['path'], rev)

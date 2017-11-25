@@ -19,6 +19,7 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep 
 base_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3])
 ui_dir = os.path.join(base_dir,"rbhusUI","lib")
 relatedAsset_ui = os.path.join(ui_dir,"rbhusPipeVersionsMod_relatedAsset.ui")
+pop_ui = os.path.join(ui_dir,"rbhusPipeVersionsMod_popAsset.ui")
 
 scb = "selectCheckBox.py"
 srb = "selectRadioBox.py"
@@ -187,7 +188,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
     self.centralwidget.resizeEvent  = self.resizeEvent
     # self.tableVersions.resizeEvent = self.resizeEvent
-    self.splitter.setStretchFactor(0, 110)
+    self.splitter.setStretchFactor(1, 100)
+    self.splitter.setStretchFactor(0, 100)
 
     self.initThread = None
 
@@ -207,6 +209,9 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
     self.versionsHg = None
     self.relatedAssetWidgets = {}
+    self.popAssetWidgets = {}
+
+    self.splitter.setSizes((1000, 1000))
 
     #self.versionsHg = hgmod.hg(args.assPath)
     self.toolButton.setMenu(self.popupToolButton())
@@ -316,8 +321,10 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     selvers = self.selectedVersions()
     if(selvers):
       sv = selvers[-1]
-      self.versionsHg._archive(sv)
-      utilsPipe.updateAssModifies(self.versionsHg.assDets['assetId'], "published version :" + str(sv))
+      retValue = self.versionsHg._archive(sv)
+      if(retValue != 111):
+        self.popRelated()
+
     self.hglog()
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
@@ -428,6 +435,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.loader.hide()
     self.hglog()
     self.updateRelatedAssets()
+    self.updatePopAssets()
 
 
   def updateRelatedAssets(self):
@@ -435,7 +443,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     selectedForAutoCommit = utilsPipe.getGroupedForAutoCommit(self.assetDetails['path'])
     debug.info(selectedForAutoCommit)
     self.relatedAssetWidgets.clear()
-    self.listWidget.clear()
+    self.listWidgetAutoCommit.clear()
     if(assGroups):
       for x in assGroups:
         debug.info(x)
@@ -458,9 +466,37 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         relatedAssetWidget.label.setText(richAss)
         item = QtGui.QListWidgetItem()
         item.assPath = x
-        self.listWidget.addItem(item)
-        self.listWidget.setItemWidget(item, relatedAssetWidget)
+        self.listWidgetAutoCommit.addItem(item)
+        self.listWidgetAutoCommit.setItemWidget(item, relatedAssetWidget)
         item.setSizeHint(relatedAssetWidget.sizeHint())
+
+  def updatePopAssets(self):
+    assGroups = utilsPipe.getGroupedAssets(self.assetDetails['path'])
+    selectedForPop = utilsPipe.getGroupedForPoP(self.assetDetails['path'])
+    debug.info(selectedForPop)
+    self.relatedAssetWidgets.clear()
+    self.listWidgetPoP.clear()
+    if(assGroups):
+      for x in assGroups:
+        debug.info(x)
+        assDets = utilsPipe.getAssDetails(assPath=x)
+        popAssetWidget = uic.loadUi(pop_ui)
+        self.popAssetWidgets[x] = popAssetWidget
+        assColored = utilsPipe.assPathColorCoded(assDets)
+        if(selectedForPop):
+          if(x in selectedForPop):
+            popAssetWidget.checkBox.setCheckState(QtCore.Qt.Checked)
+        popAssetWidget.checkBox.clicked.connect(lambda clicked,assDets=assDets,checkBox=popAssetWidget.checkBox : self.updatePopFile(assDets,checkBox))
+        textAssArr = []
+        for fc in assColored.split(":")[1:]:
+          textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
+        richAss = " " + "<b><i> : </i></b>".join(textAssArr)
+        popAssetWidget.label.setText(richAss)
+        item = QtGui.QListWidgetItem()
+        item.assPath = x
+        self.listWidgetPoP.addItem(item)
+        self.listWidgetPoP.setItemWidget(item, popAssetWidget)
+        item.setSizeHint(popAssetWidget.sizeHint())
 
 
   def updateAutoCommitFile(self,assDets,checkBox):
@@ -468,6 +504,14 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     if(checkBox.checkState() == QtCore.Qt.Checked):
       add = True
     utilsPipe.setGroupedForAutoCommit(self.assetDetails['path'],assDets['path'],add=add)
+
+
+  def updatePopFile(self,assDets,checkBox):
+    add = False
+    if(checkBox.checkState() == QtCore.Qt.Checked):
+      add = True
+    utilsPipe.setGroupedForPoP(self.assetDetails['path'],assDets['path'],add=add)
+
 
   def noData(self):
     sys.exit(0)
@@ -513,7 +557,6 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     os.chdir(self.versionsHg.localPath)
     self.commitRelated()
     self.hglog()
-    utilsPipe.updateAssModifies(self.versionsHg.assDets['assetId'],"commited")
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
   def commitRelated(self):
@@ -531,6 +574,18 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           if(versionNumber):
             self.relatedAssetWidgets[x].labelVersion.setText(str(versionNumber).zfill(4))
           self.relatedAssetWidgets[x].labelDate.setText(str(time.ctime(float(assLog[0][2].split("-")[0]))))
+
+
+  def popRelated(self):
+    selectedForPop = utilsPipe.getGroupedForPoP(self.assetDetails['path'])
+    if (selectedForPop):
+      for x in selectedForPop:
+        debug.info("PoPing : " + x)
+        retValue = utilsPipe.importAssets(args.assPath.split(":")[0],args.assPath,x,force=True,pop=True)
+        if (retValue == 111):
+          self.messageBoxWarn(assPath=x)
+        else:
+          self.popAssetWidgets[x].labelStatus.setText("done")
 
 
   def convertPreview(self):

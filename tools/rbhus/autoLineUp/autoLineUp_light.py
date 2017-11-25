@@ -45,8 +45,8 @@ def getLatestDir(dirPath):
 
 
 if(autoLineUpAbsPath):
-  autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,".light_autoLineUp_inprogress.mp4")
-  autoLineUpFile = os.path.join(autoLineUpAbsPath,"light_autoLineUp.mp4")
+  autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,".light_autoLineUp_inprogress.mov")
+  autoLineUpFile = os.path.join(autoLineUpAbsPath,"light_autoLineUp.mov")
   ffmpegFile = os.path.join(autoLineUpAbsPath,"light_autoLineUp.ffmpeg")
   ffmpegFileFd = open(ffmpegFile,"w")
 
@@ -80,7 +80,7 @@ if(autoLineUpAbsPath):
                 latestDir.reverse()
                 for ld in latestDir:
                   if(ld):
-                    mp4 = os.path.join(ld, assFIleName +".mp4")
+                    # mp4 = os.path.join(ld, assFIleName +".mp4")
                     Mov = os.path.join(ld, assFIleName +".mov")
                     if(os.path.exists(Mov)):
                       # # if(os.path.exists(mp4)):
@@ -124,7 +124,7 @@ if(autoLineUpAbsPath):
           if (status == rbhus.constantsPipe.assetStatusActive):
             assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
             assFIleName = rbhus.utilsPipe.getAssFileName(asset)
-            finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
+            finalMov = os.path.join(assAbsPath, assFIleName + ".mov")
             if (os.path.exists(finalMov)):
               print(finalMov)
               ffmpegFileFd.write(finalMov + "\n")
@@ -134,7 +134,7 @@ if(autoLineUpAbsPath):
               assPath = rbhus.utilsPipe.getAssPath(asset)
               assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
               assFIleName = rbhus.utilsPipe.getAssFileName(asset)
-              finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
+              finalMov = os.path.join(assAbsPath, assFIleName + ".mov")
               if (os.path.exists(finalMov)):
                 print(finalMov)
                 ffmpegFileFd.write(finalMov + "\n")

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>669</width>
-    <height>678</height>
+    <width>701</width>
+    <height>752</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -102,29 +102,99 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Check to auto commit everytime u commit this asset. Will work only if the respected asset is ASSIGNED to you</string>
+        <string>Grouped Assets  - AutoCommit and PushOnPublish</string>
        </property>
        <property name="title">
         <string>Related Assets </string>
        </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
         <item>
-         <widget class="QListWidget" name="listWidget">
-          <property name="minimumSize">
-           <size>
-            <width>1</width>
-            <height>1</height>
-           </size>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="styleSheet">
+           <string notr="true">QGroupBox::title {subcontrol-origin: margin; subcontrol-position: top left;padding: 5 5px;}</string>
           </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::NoSelection</enum>
+          <property name="title">
+           <string>autoCommit</string>
           </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
+          <property name="flat">
+           <bool>false</bool>
           </property>
-          <property name="uniformItemSizes">
-           <bool>true</bool>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>1</number>
+           </property>
+           <item>
+            <widget class="QListWidget" name="listWidgetAutoCommit">
+             <property name="minimumSize">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::NoSelection</enum>
+             </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectRows</enum>
+             </property>
+             <property name="uniformItemSizes">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="styleSheet">
+           <string notr="true">QGroupBox::title {subcontrol-origin: margin; subcontrol-position: top left;padding: 5 5px;}</string>
           </property>
+          <property name="title">
+           <string>pushOnPublish</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>1</number>
+           </property>
+           <item>
+            <widget class="QListWidget" name="listWidgetPoP">
+             <property name="minimumSize">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::NoSelection</enum>
+             </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectRows</enum>
+             </property>
+             <property name="uniformItemSizes">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>

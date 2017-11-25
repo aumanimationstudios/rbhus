@@ -25,8 +25,8 @@ autoLineUpAssPath = projName +":share:autoLineUp"
 
 autoLineUpAbsPath = rbhus.utilsPipe.getAbsPath(autoLineUpAssPath)
 if(autoLineUpAbsPath):
-  autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,".anim_autoLineUp_inprogress.mp4")
-  autoLineUpFile = os.path.join(autoLineUpAbsPath,"anim_autoLineUp.mp4")
+  autoLineUpFile_inProgress = os.path.join(autoLineUpAbsPath,".anim_autoLineUp_inprogress.mov")
+  autoLineUpFile = os.path.join(autoLineUpAbsPath,"anim_autoLineUp.mov")
   ffmpegFile = os.path.join(autoLineUpAbsPath,"anim_autoLineUp.ffmpeg")
   ffmpegFileFd = open(ffmpegFile,"w")
 
@@ -49,7 +49,7 @@ if(autoLineUpAbsPath):
 
           assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
           assFIleName = rbhus.utilsPipe.getAssFileName(asset)
-          finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
+          finalMov = os.path.join(assAbsPath, assFIleName + ".mov")
           if (os.path.exists(finalMov)):
             print(finalMov)
             ffmpegFileFd.write(finalMov + "\n")
@@ -59,7 +59,7 @@ if(autoLineUpAbsPath):
             assPath = rbhus.utilsPipe.getAssPath(asset)
             assAbsPath = rbhus.utilsPipe.getAbsPath(assPath)
             assFIleName = rbhus.utilsPipe.getAssFileName(asset)
-            finalMov = os.path.join(assAbsPath, assFIleName + ".mp4")
+            finalMov = os.path.join(assAbsPath, assFIleName + ".mov")
             if (os.path.exists(finalMov)):
               print(finalMov)
               ffmpegFileFd.write(finalMov + "\n")

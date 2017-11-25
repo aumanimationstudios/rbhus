@@ -11,3 +11,4 @@ review_*
 *.lock
 .groupedAssets
 .autocommitGrouped
+.popGrouped

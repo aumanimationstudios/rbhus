@@ -230,15 +230,18 @@ def getAssTypes(atype=None, status=constantsPipe.typesActive):
     return(0)
 
 
-def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, rename=True, force=False):
+def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, rename=True, force=False,pop=False):
   assDets = getAssDetails(assPath=assetPath)
   projDets = getProjDetails(toProject)
   origAssPath = getAbsPath(assetPath)
   toAsset = None
   if(toAssetPath != 'default'):
     toAsset = getAssDetails(assPath=toAssetPath)
-    if(getVersions):
-      toAsset['versioning'] = assDets['versioning']
+    if(toAsset):
+      if(not (isAssAssigned(toAsset) or isProjAdmin(toAsset))):
+        return(111)
+      if(getVersions):
+        toAsset['versioning'] = assDets['versioning']
 
   else:
     newAsset = copy.copy(assDets)
@@ -279,9 +282,15 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
     debug.info(origAssPath)
     if(sys.platform.lower().find("linux") >= 0):
       if(getVersions):
-        os.system("rsync -a "+ origAssPath +"/ "+ newAssPath +"/ --exclude=.autocommitGrouped --exclude=publish --exclude=export_*")
+        if(pop):
+          os.system("rsync -a "+ origAssPath +"/publish/ "+ newAssPath +"/ --exclude=.autocommitGrouped --exclude=.popGrouped --exclude=publish --exclude=export_*")
+        else:
+          os.system("rsync -a "+ origAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.popGrouped --exclude=publish --exclude=export_*")
       else:
-        os.system("rsync -a " + origAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.hg --exclude=.hglf --exclude=publish --exclude=export_*")
+        if(pop):
+          os.system("rsync -a "+ origAssPath + "/publish/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.popGrouped --exclude=.hg --exclude=.hglf --exclude=publish --exclude=export_*")
+        else:
+          os.system("rsync -a "+ origAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.popGrouped --exclude=.hg --exclude=.hglf --exclude=publish --exclude=export_*")
     return(1)
   else:
     return(0)
@@ -1143,6 +1152,41 @@ def getGroupedAssets(assPath):
   debug.debug(assetsToReturn)
   return(assetsToReturn.keys())
 
+
+
+def getGroupedForPoP(assPath):
+  absPath = getAbsPath(assPath)
+  popFile = os.path.join(absPath,".popGrouped")
+  assForPop = []
+  if(os.path.exists(popFile)):
+    lockGroupFile = dfl.LockFile(popFile)
+    with lockGroupFile:
+      fd = open(popFile,"r")
+      assForPop.extend(simplejson.load(fd))
+      fd.close()
+  return(assForPop)
+
+def setGroupedForPoP(mainAssetPath, assetToAddPath, add=False):
+  absPath = getAbsPath(mainAssetPath)
+  popFile = os.path.join(absPath,".popGrouped")
+  assForPop = []
+  lockGroupFile = dfl.LockFile(popFile)
+  with lockGroupFile:
+    if (os.path.exists(popFile)):
+      fd = open(popFile,"r")
+      assForPop.extend(simplejson.load(fd))
+      fd.close()
+    fd = open(popFile, "w")
+    if(add):
+      if(not assetToAddPath in assForPop):
+        assForPop.append(assetToAddPath)
+    else:
+      assForPop.remove(assetToAddPath)
+    simplejson.dump(assForPop,fd)
+    fd.flush()
+    fd.close()
+
+  return(assForPop)
 
 def getGroupedForAutoCommit(assPath):
   absPath = getAbsPath(assPath)
