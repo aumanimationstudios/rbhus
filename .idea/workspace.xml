@@ -4,7 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
+    <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="lots of changes">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
     </list>
@@ -81,8 +81,8 @@
       <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="292" column="121" lean-forward="false" selection-start-line="292" selection-start-column="121" selection-end-line="292" selection-end-column="121" />
+            <state relative-caret-position="-10818">
+              <caret line="524" column="4" lean-forward="false" selection-start-line="524" selection-start-column="4" selection-end-line="524" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -91,8 +91,8 @@
       <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="507" column="121" lean-forward="true" selection-start-line="507" selection-start-column="121" selection-end-line="507" selection-end-column="121" />
+            <state relative-caret-position="436">
+              <caret line="515" column="51" lean-forward="true" selection-start-line="515" selection-start-column="51" selection-end-line="515" selection-end-column="51" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -168,9 +168,9 @@
       <find>closeEvent</find>
       <find>updateRelatedAssets</find>
       <find>publish</find>
-      <find>importa</find>
       <find>mediaTh</find>
       <find>convertToMP4</find>
+      <find>importa</find>
     </findStrings>
     <replaceStrings>
       <replace>mainUid.comboSeq</replace>
@@ -638,13 +638,6 @@
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
     </task>
-    <task id="LOCAL-00010" summary="fixing">
-      <created>1494993049575</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1494993049575</updated>
-    </task>
     <task id="LOCAL-00011" summary="fixing">
       <created>1495259784814</created>
       <option name="number" value="00011" />
@@ -981,7 +974,14 @@
       <option name="project" value="LOCAL" />
       <updated>1511633024555</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="lots of changes">
+      <created>1511684438606</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1511684438606</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1385,14 +1385,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="292" column="121" lean-forward="false" selection-start-line="292" selection-start-column="121" selection-end-line="292" selection-end-column="121" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="591">
@@ -1427,10 +1419,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-10818">
+          <caret line="524" column="4" lean-forward="false" selection-start-line="524" selection-start-column="4" selection-end-line="524" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="507" column="121" lean-forward="true" selection-start-line="507" selection-start-column="121" selection-end-line="507" selection-end-column="121" />
+        <state relative-caret-position="436">
+          <caret line="515" column="51" lean-forward="true" selection-start-line="515" selection-start-column="51" selection-end-line="515" selection-end-column="51" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

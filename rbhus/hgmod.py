@@ -505,7 +505,7 @@ class hg(object):
           debug.info(ru)
           utilsTray.addNotifications(ru, "rbhusReview", reviewmsg, "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'], reviewID)
 
-    utilsPipe.updateAssModifies(self.assDets['assetId'], "review : " + str(rev) +" to "+ str(self.assDets['reviewUser']))
+    utilsPipe.updateAssModifies(self.assDets['assetId'], "review : " + str(rev) +" : from "+ str(self.assDets['assignedWorker']) +" to "+ str(self.assDets['reviewUser']))
     os.chdir(self.localPath)
 
 
