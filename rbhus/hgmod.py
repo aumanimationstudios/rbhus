@@ -440,7 +440,7 @@ class hg(object):
       assdict = {}
       assdict["publishVersion"] = str(rev)
       utilsPipe.assEdit(asspath=self.pipepath, assdict=assdict)
-      utilsPipe.updateAssModifies(self.assDets['assetId'], "publish : "+ rev)
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "publish : "+ str(rev))
     os.chdir(self.localPath)
 
 
@@ -505,7 +505,7 @@ class hg(object):
           debug.info(ru)
           utilsTray.addNotifications(ru, "rbhusReview", reviewmsg, "rbhusPipe_review.py", "-p " + self.assDets['projName'] + " -a " + self.assDets['path'], reviewID)
 
-
+    utilsPipe.updateAssModifies(self.assDets['assetId'], "review : " + str(rev) +" to "+ str(self.assDets['reviewUser']))
     os.chdir(self.localPath)
 
 
