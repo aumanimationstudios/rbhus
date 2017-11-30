@@ -474,7 +474,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     assGroups = utilsPipe.getGroupedAssets(self.assetDetails['path'])
     selectedForPop = utilsPipe.getGroupedForPoP(self.assetDetails['path'])
     debug.info(selectedForPop)
-    self.relatedAssetWidgets.clear()
+    self.popAssetWidgets.clear()
     self.listWidgetPoP.clear()
     if(assGroups):
       for x in assGroups:
