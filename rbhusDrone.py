@@ -1484,7 +1484,7 @@ def setHostInfo(dbconn,totalRam=0,totalCpus=0,totalSwap=0):
         grps.append(hostname)
         grps.append(str(totalCpus) +"-core")
         grps = list(set(grps))
-        dbconn.execute("delete from hostInfo where ip='"+ str(ipAddr) +"'")
+        # dbconn.execute("delete from hostInfo where ip='"+ str(ipAddr) +"'")
         dbconn.execute("INSERT INTO hostInfo \
                       (hostName,status,groups,totalRam,totalCpus,totalSwap,ip,weight,os) \
                       VALUES ('" \
