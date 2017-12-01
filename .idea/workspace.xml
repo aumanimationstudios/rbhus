@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusDrone.py" afterPath="$PROJECT_DIR$/rbhusDrone.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh" afterPath="$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,48 +26,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="rbhusPipe_new.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="953" column="49" lean-forward="true" selection-start-line="953" selection-start-column="49" selection-end-line="953" selection-end-column="49" />
-              <folding>
-                <element signature="e#136#146#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="autoLineUp_light.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_light.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="44" column="0" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="524" column="4" lean-forward="false" selection-start-line="524" selection-start-column="4" selection-end-line="524" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="rbhusQueen_scheduler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusQueen_scheduler.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -88,18 +46,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="470">
-              <caret line="517" column="49" lean-forward="true" selection-start-line="517" selection-start-column="49" selection-end-line="517" selection-end-column="49" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -110,7 +56,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="113">
@@ -120,11 +66,61 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="autoLineUp_anim.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/rbhus/autoLineUp/autoLineUp_anim.py">
+      <file leaf-file-name="makeClone_gentoo.sh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-395">
-              <caret line="28" column="70" lean-forward="false" selection-start-line="28" selection-start-column="70" selection-end-line="28" selection-end-column="70" />
+            <state relative-caret-position="204">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun3" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun3">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun4" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun4">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun6" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun6">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun7" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun7">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun8" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun8">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -169,8 +165,8 @@
       <find>convertToMP4</find>
       <find>importa</find>
       <find>commit</find>
-      <find>hostup</find>
       <find>relatedAssetWidgets</find>
+      <find>hostup</find>
     </findStrings>
     <replaceStrings>
       <replace>mainUid.comboSeq</replace>
@@ -228,7 +224,6 @@
         <option value="$PROJECT_DIR$/tests/mpv_ctl.sh" />
         <option value="$PROJECT_DIR$/tests/assGroup.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/blenderMoviePerSequenceStrip.py" />
-        <option value="$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun9" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun10" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun11" />
@@ -267,6 +262,7 @@
         <option value="$PROJECT_DIR$/rbhus/hgmod.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
         <option value="$PROJECT_DIR$/rbhusDrone.py" />
+        <option value="$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh" />
       </list>
     </option>
   </component>
@@ -401,6 +397,21 @@
               <item name="tools" type="462c0819:PsiDirectoryNode" />
               <item name="cloning" type="462c0819:PsiDirectoryNode" />
               <item name="clone" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="tools" type="462c0819:PsiDirectoryNode" />
+              <item name="cloning" type="462c0819:PsiDirectoryNode" />
+              <item name="cloneMaster" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="tools" type="462c0819:PsiDirectoryNode" />
+              <item name="cloning" type="462c0819:PsiDirectoryNode" />
+              <item name="cloneMaster" type="462c0819:PsiDirectoryNode" />
+              <item name="system-rescue-cd-install" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
@@ -640,13 +651,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
-    </task>
-    <task id="LOCAL-00013" summary="fixing">
-      <created>1495615060068</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1495615060086</updated>
     </task>
     <task id="LOCAL-00014" summary="fixing">
       <created>1497440439234</created>
@@ -984,7 +988,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512024660305</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="lots of changes">
+      <created>1512026355994</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1512026355994</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TodoView">
@@ -998,12 +1009,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1920" height="1040" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21100427" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1756906" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23425414" sideWeight="0.50427353" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24751382" sideWeight="0.4957265" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24751382" sideWeight="0.50641024" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24751382" sideWeight="0.49358973" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23425414" sideWeight="0.4957265" order="2" side_tool="false" content_ui="tabs" x="1807" y="742" width="1198" height="577" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33812153" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1057,41 +1067,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_vse.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1190">
-          <caret line="74" column="89" lean-forward="false" selection-start-line="74" selection-start-column="80" selection-end-line="74" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/blenderMoviePerSequenceStrip.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="20" column="68" lean-forward="true" selection-start-line="20" selection-start-column="68" selection-end-line="20" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/blenderDumpSequencePerStrip.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="10" lean-forward="false" selection-start-line="0" selection-start-column="10" selection-end-line="0" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/qt5/model_view_test01.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/qt5/topAlignment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="17" column="60" lean-forward="false" selection-start-line="17" selection-start-column="60" selection-end-line="17" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/pyqtDelegate.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1615">
@@ -1208,13 +1183,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
           <caret line="38" column="150" lean-forward="false" selection-start-line="38" selection-start-column="150" selection-end-line="38" selection-end-column="150" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1437,6 +1405,54 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="113">
           <caret line="1487" column="46" lean-forward="true" selection-start-line="1487" selection-start-column="46" selection-end-line="1487" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun3">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun6">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun7">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
