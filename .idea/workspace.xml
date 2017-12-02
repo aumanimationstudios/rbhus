@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/mercurial/local/hgrc" afterPath="$PROJECT_DIR$/etc/mercurial/local/hgrc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/mercurial/local/hgrc.linux" afterPath="$PROJECT_DIR$/etc/mercurial/local/hgrc.linux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/mercurial/local/hgrc.windows" afterPath="$PROJECT_DIR$/etc/mercurial/local/hgrc.windows" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,26 +27,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="autorun3" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun3">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="autorun4" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun4">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="autorun5" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun5">
           <provider selected="true" editor-type-id="text-editor">
@@ -86,11 +67,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hgrc" pinned="false" current-in-tab="true">
+      <file leaf-file-name="hgrc" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/etc/mercurial/local/hgrc">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
+              <caret line="3" column="5" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hgrc.linux" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/etc/mercurial/local/hgrc.linux">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
               <caret line="3" column="7" lean-forward="false" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hgrc.windows" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/etc/mercurial/local/hgrc.windows">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" column="8" lean-forward="false" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -212,8 +213,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun8" />
-        <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun0" />
         <option value="$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py" />
         <option value="$PROJECT_DIR$/tests/ntp_time.py" />
         <option value="$PROJECT_DIR$/tests/dfl.py" />
@@ -263,6 +262,8 @@
         <option value="$PROJECT_DIR$/rbhusDrone.py" />
         <option value="$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh" />
         <option value="$PROJECT_DIR$/etc/mercurial/local/hgrc" />
+        <option value="$PROJECT_DIR$/etc/mercurial/local/hgrc.linux" />
+        <option value="$PROJECT_DIR$/etc/mercurial/local/hgrc.windows" />
       </list>
     </option>
   </component>
@@ -652,13 +653,6 @@
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
     </task>
-    <task id="LOCAL-00016" summary="lots of changes">
-      <created>1499948476617</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1499948476617</updated>
-    </task>
     <task id="LOCAL-00017" summary="lots of changes">
       <created>1499948498820</created>
       <option name="number" value="00017" />
@@ -995,7 +989,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512235846832</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="lots of changes">
+      <created>1512243351838</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1512243351838</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1068,20 +1069,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/FIX_PROBLEMS/autoLineUp_light.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1258">
-          <caret line="76" column="22" lean-forward="false" selection-start-line="76" selection-start-column="22" selection-end-line="76" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/knotify.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="18" lean-forward="true" selection-start-line="0" selection-start-column="18" selection-end-line="0" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2703">
@@ -1439,7 +1426,23 @@
     <entry file="file://$PROJECT_DIR$/etc/mercurial/local/hgrc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
+          <caret line="3" column="5" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/mercurial/local/hgrc.linux">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
           <caret line="3" column="7" lean-forward="false" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/mercurial/local/hgrc.windows">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="8" lean-forward="false" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
           <folding />
         </state>
       </provider>
