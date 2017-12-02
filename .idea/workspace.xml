@@ -26,56 +26,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="rbhusQueen_scheduler.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusQueen_scheduler.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="52">
-              <caret line="46" column="31" lean-forward="true" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dbRbhus.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="553" column="6" lean-forward="false" selection-start-line="553" selection-start-column="6" selection-end-line="553" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
-              <caret line="476" column="24" lean-forward="false" selection-start-line="476" selection-start-column="24" selection-end-line="476" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rbhusDrone.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="1487" column="46" lean-forward="true" selection-start-line="1487" selection-start-column="46" selection-end-line="1487" selection-end-column="46" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="makeClone_gentoo.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="autorun3" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun3">
           <provider selected="true" editor-type-id="text-editor">
@@ -96,8 +46,8 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="autorun6" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun6">
+      <file leaf-file-name="autorun5" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun5">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -116,8 +66,58 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="autorun8" pinned="false" current-in-tab="true">
+      <file leaf-file-name="makeClone_gentoo.sh" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="129" lean-forward="false" selection-start-line="6" selection-start-column="129" selection-end-line="6" selection-end-column="129" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun8" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun8">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun9" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun9">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun11" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun11">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun1" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun1">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="autorun2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun2">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -430,8 +430,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -651,13 +651,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
-    </task>
-    <task id="LOCAL-00014" summary="fixing">
-      <created>1497440439234</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1497440439234</updated>
     </task>
     <task id="LOCAL-00015" summary="lots of changes">
       <created>1499765319476</created>
@@ -995,7 +988,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512026355994</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="lots of changes">
+      <created>1512101859356</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1512101859356</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1009,11 +1009,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1920" height="1040" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21100427" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21367522" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1756906" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24751382" sideWeight="0.50641024" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24751382" sideWeight="0.49358973" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24751382" sideWeight="0.50641024" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23425414" sideWeight="0.4957265" order="2" side_tool="false" content_ui="tabs" x="1807" y="742" width="1198" height="577" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33812153" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1027,6 +1027,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24751382" sideWeight="0.49358973" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="true" anchor="bottom" auto_hide="true" internal_type="SLIDING" type="FLOATING" visible="true" show_stripe_button="true" weight="0.32967034" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" x="1920" y="0" width="1920" height="1040" />
@@ -1067,48 +1068,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/pyqtDelegate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1615">
-          <caret line="96" column="38" lean-forward="false" selection-start-line="96" selection-start-column="38" selection-end-line="96" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="21" column="65" lean-forward="false" selection-start-line="21" selection-start-column="65" selection-end-line="21" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1938">
-          <caret line="120" column="100" lean-forward="false" selection-start-line="120" selection-start-column="100" selection-end-line="120" selection-end-column="100" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="40" column="90" lean-forward="false" selection-start-line="40" selection-start-column="90" selection-end-line="40" selection-end-column="90" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_png_flv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -1239,7 +1198,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="31" column="26" lean-forward="false" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1247,7 +1205,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="731">
           <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1255,7 +1212,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="663">
           <caret line="40" column="148" lean-forward="false" selection-start-line="40" selection-start-column="148" selection-end-line="40" selection-end-column="148" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1263,7 +1219,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3757">
           <caret line="227" column="35" lean-forward="false" selection-start-line="227" selection-start-column="35" selection-end-line="227" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1271,7 +1226,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8483">
           <caret line="506" column="8" lean-forward="false" selection-start-line="506" selection-start-column="8" selection-end-line="506" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1279,9 +1233,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1289,7 +1240,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="110" column="46" lean-forward="true" selection-start-line="110" selection-start-column="46" selection-end-line="110" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1297,7 +1247,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="413">
           <caret line="34" column="21" lean-forward="false" selection-start-line="34" selection-start-column="21" selection-end-line="34" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1313,7 +1262,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="11" lean-forward="true" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1321,7 +1269,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="591">
           <caret line="83" column="46" lean-forward="false" selection-start-line="83" selection-start-column="45" selection-end-line="83" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1329,9 +1276,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="249">
           <caret line="953" column="49" lean-forward="true" selection-start-line="953" selection-start-column="49" selection-end-line="953" selection-end-column="49" />
-          <folding>
-            <element signature="e#136#146#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1339,7 +1283,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-395">
           <caret line="28" column="70" lean-forward="false" selection-start-line="28" selection-start-column="70" selection-end-line="28" selection-end-column="70" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1347,7 +1290,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="385">
           <caret line="44" column="0" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1355,9 +1297,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="470">
           <caret line="517" column="49" lean-forward="true" selection-start-line="517" selection-start-column="49" selection-end-line="517" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1365,7 +1304,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="524" column="4" lean-forward="false" selection-start-line="524" selection-start-column="4" selection-end-line="524" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1373,13 +1311,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
+        <state relative-caret-position="7956">
           <caret line="476" column="24" lean-forward="false" selection-start-line="476" selection-start-column="24" selection-end-line="476" selection-end-column="24" />
           <folding />
         </state>
@@ -1387,15 +1324,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusQueen_scheduler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="46" column="31" lean-forward="true" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
+        <state relative-caret-position="612">
+          <caret line="46" column="31" lean-forward="false" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/dbRbhus.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
+        <state relative-caret-position="9231">
           <caret line="553" column="6" lean-forward="false" selection-start-line="553" selection-start-column="6" selection-end-line="553" selection-end-column="6" />
           <folding />
         </state>
@@ -1403,16 +1340,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="1487" column="46" lean-forward="true" selection-start-line="1487" selection-start-column="46" selection-end-line="1487" selection-end-column="46" />
+        <state relative-caret-position="25092">
+          <caret line="1487" column="46" lean-forward="false" selection-start-line="1487" selection-start-column="46" selection-end-line="1487" selection-end-column="46" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun6">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun0">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1433,7 +1394,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun6">
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun5">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1451,8 +1412,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun8">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun11">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun9">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="129" lean-forward="false" selection-start-line="6" selection-start-column="129" selection-end-line="6" selection-end-column="129" />
           <folding />
         </state>
       </provider>
