@@ -1,6 +1,7 @@
 [extensions]
 largefiles =
 purge =
+strip =
 
 [largefiles]
 minsize = 1
