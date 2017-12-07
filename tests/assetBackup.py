@@ -99,7 +99,8 @@ try:
   allProj = rbhus.utilsPipe.getAllProjects(status=rbhus.constantsPipe.projActive)
   for proj in allProj:
     if(proj['backup']):
-      allAssets = rbhus.utilsPipe.getProjAsses("standard")
+
+      allAssets = rbhus.utilsPipe.getProjAsses(proj['projName'])
 
       for x in allAssets:
         if(isValidBackupDir(x['backupDir'])):
