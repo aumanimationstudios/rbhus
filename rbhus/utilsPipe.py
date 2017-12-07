@@ -71,10 +71,10 @@ class thumbz_fileTypes(object):
 
 
 
-def getDirMaps():
+def getDirMaps(dirType="prod"):
   dbconn = dbPipe.dbPipe()
   try:
-    rows = dbconn.execute("SELECT * FROM dirMaps", dictionary=True)
+    rows = dbconn.execute("SELECT * FROM dirMaps where status=1 and dirMapType='"+ dirType +"'", dictionary=True)
     return(rows)
   except:
     debug.debug(str(sys.exc_info()))
