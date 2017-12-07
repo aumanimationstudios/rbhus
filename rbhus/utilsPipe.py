@@ -724,6 +724,24 @@ def exportProj(projName):
     exportProjTypes(dets['projType'])
     exportDirMaps(dets['directory'])
 
+def getAllProjects(status=None):
+  if (status):
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("select * from proj where status=" + str(status) + " order by projName", dictionary=True)
+    except:
+      debug.debug(str(sys.exc_info()))
+      return (0)
+    return (rows)
+  else:
+    dbconn = dbPipe.dbPipe()
+    try:
+      rows = dbconn.execute("select * from proj order by projName", dictionary=True)
+    except:
+      debug.debug(str(sys.exc_info()))
+      return (0)
+    return (rows)
+
 
 #when you give the projName it returns a single dict else it returns an array of dict
 def getProjDetails(projName=None,status=None):

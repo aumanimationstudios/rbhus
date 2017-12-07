@@ -16,6 +16,7 @@ sys.path.append(baseDir)
 
 import rbhus.utilsPipe
 import rbhus.debug
+import rbhus.constantsPipe
 
 def isValidBackupDir(directory):
   allDirMaps = rbhus.utilsPipe.getDirMaps(dirType="backup")
@@ -95,33 +96,36 @@ def isVersioning(absPath):
     return (False)
 
 try:
-  allAssets = rbhus.utilsPipe.getProjAsses("standard")
+  allProj = rbhus.utilsPipe.getAllProjects(status=rbhus.constantsPipe.projActive)
+  for proj in allProj:
+    if(proj['backup']):
+    allAssets = rbhus.utilsPipe.getProjAsses("standard")
 
-  for x in allAssets:
-    if(isValidBackupDir(x['backupDir'])):
-      dirMapDets = rbhus.utilsPipe.getDirMapsDetails(x['backupDir'])
-      pathSrcBackup = rbhus.utilsPipe.getAbsPath(x['path']).rstrip(os.sep) + os.sep
-      pathDestBackup = os.path.join(dirMapDets['linuxMapping'],x['projName'],x['assetId'],str(time.time())).rstrip(os.sep) + os.sep
-      # cmdStr = "rsync -a "+ pathSrcBackup +" {0} "+ pathDestBackup
-      cmpdAsses = getCompoundPaths(x['path'],allAssets)
-      if(cmpdAsses):
-        cmpdAssesStr ="--exclude=.hg --exclude=.hglf --exclude=.thumbz.db --exclude="+" --exclude=".join(cmpdAsses)
-        cmdFinal = "rsync -a "+ pathSrcBackup +" "+ cmpdAssesStr +" "+ pathDestBackup
-      else:
-        cmdFinal = "rsync -a "+ pathSrcBackup +" --exclude=.hg --exclude=.hglf --exclude=.thumbz.db "+ pathDestBackup
-        os.makedirs(pathDestBackup)
+    for x in allAssets:
+      if(isValidBackupDir(x['backupDir'])):
+        dirMapDets = rbhus.utilsPipe.getDirMapsDetails(x['backupDir'])
+        pathSrcBackup = rbhus.utilsPipe.getAbsPath(x['path']).rstrip(os.sep) + os.sep
+        pathDestBackup = os.path.join(dirMapDets['linuxMapping'],x['projName'],x['assetId'],str(time.time())).rstrip(os.sep) + os.sep
+        # cmdStr = "rsync -a "+ pathSrcBackup +" {0} "+ pathDestBackup
+        cmpdAsses = getCompoundPaths(x['path'],allAssets)
+        if(cmpdAsses):
+          cmpdAssesStr ="--exclude=.hg --exclude=.hglf --exclude=.thumbz.db --exclude="+" --exclude=".join(cmpdAsses)
+          cmdFinal = "rsync -a "+ pathSrcBackup +" "+ cmpdAssesStr +" "+ pathDestBackup
+        else:
+          cmdFinal = "rsync -a "+ pathSrcBackup +" --exclude=.hg --exclude=.hglf --exclude=.thumbz.db "+ pathDestBackup
+          os.makedirs(pathDestBackup)
+          try:
+            exitValue = os.system(cmdFinal)
+            # exitValue = 666
+          except:
+            exitValue = 666
+        # print(cmdFinal)
+        # print(x)
         try:
-          exitValue = os.system(cmdFinal)
-          # exitValue = 666
+          cleanBackUp(x)
         except:
-          exitValue = 666
-      # print(cmdFinal)
-      # print(x)
-      try:
-        cleanBackUp(x)
-      except:
-        print(sys.exc_info())
+          print(sys.exc_info())
 
-      rbhus.debug.info(cmdFinal +" "+ str(exitValue))
+        rbhus.debug.info(cmdFinal +" "+ str(exitValue))
 except:
   rbhus.debug.error(str(sys.exc_info()))
