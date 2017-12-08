@@ -76,14 +76,14 @@ def cleanBackUp(assDets):
       toDelete = []
     else:
       toDelete = sortedPaths[-toDelLen:]
-    print("DELETING : ")
+    print("DELETING : "+ str(len(toDelete)))
     for x in toDelete:
-      print(x)
+      # print(x)
       os.system("rm -fr "+ x)
 
-    print("PRESERVING : ")
+    print("PRESERVING : "+ str(len(toPreserve)))
     for x in toPreserve:
-      print(x)
+      # print(x)
 
 
 
