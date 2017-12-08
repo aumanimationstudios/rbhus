@@ -82,7 +82,7 @@ def cleanBackUp(assDets):
       os.system("rm -fr "+ x)
 
     print("PRESERVING : "+ str(len(toPreserve)))
-    for x in toPreserve:
+    # for x in toPreserve:
       # print(x)
 
 
