@@ -231,9 +231,9 @@ def getAssTypes(atype=None, status=constantsPipe.typesActive):
 
 
 def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, rename=True, force=False,pop=False):
-  assDets = getAssDetails(assPath=assetPath)
+  fromAssDets = getAssDetails(assPath=assetPath)
   projDets = getProjDetails(toProject)
-  origAssPath = getAbsPath(assetPath)
+  fromAssPath = getAbsPath(assetPath)
   toAsset = None
   if(toAssetPath != 'default'):
     toAsset = getAssDetails(assPath=toAssetPath)
@@ -241,10 +241,10 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
       if(not (isAssAssigned(toAsset) or isProjAdmin(toAsset))):
         return(111)
       if(getVersions):
-        toAsset['versioning'] = assDets['versioning']
+        toAsset['versioning'] = fromAssDets['versioning']
 
   else:
-    newAsset = copy.copy(assDets)
+    newAsset = copy.copy(fromAssDets)
     try:
       del(newAsset["publishVersion"])
     except:
@@ -253,7 +253,7 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
     newAsset['directory'] = projDets['directory']
     newAsset['assignedWorker'] = os.environ['rbhusPipe_acl_user']
     newAsset['reviewUser'] = os.environ['rbhusPipe_acl_user']
-    newAsset['importedFrom'] = assDets['path']
+    newAsset['importedFrom'] = fromAssDets['path']
 
     newAssId = assRegister(newAsset,copyFromTemplate=False)
     if(newAssId):
@@ -279,19 +279,68 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
       setupSequenceScene(seqScnDict)
 
     debug.info(newAssPath)
-    debug.info(origAssPath)
+    debug.info(fromAssPath)
     if(sys.platform.lower().find("linux") >= 0):
       if(getVersions):
         if(pop):
-          os.system("rsync -a "+ origAssPath +"/publish/ "+ newAssPath +"/ --exclude=.autocommitGrouped --exclude=.popGrouped --exclude=publish --exclude=export_*")
+          try:
+            os.makedirs(newAssPath +"/pop/"+ ":".join(fromAssDets['path'].split(":")[1:]))
+          except:
+            debug.warning(sys.exc_info())
+          os.system("rsync -a "+ fromAssPath +"/publish/ "+ newAssPath +"/pop/"+ fromAssDets['path'] +"/ --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=publish --exclude=export_* --delete")
+          applyPoPRules(toAsset['path'], fromAssDets['path'])
         else:
-          os.system("rsync -a "+ origAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.popGrouped --exclude=publish --exclude=export_*")
+          os.system("rsync -a "+ fromAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=publish --exclude=export_*")
       else:
         if(pop):
-          os.system("rsync -a "+ origAssPath + "/publish/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.popGrouped --exclude=.hg --exclude=.hglf --exclude=publish --exclude=export_*")
+          try:
+            os.makedirs(newAssPath + "/pop/" + ":".join(fromAssDets['path'].split(":")[1:]))
+          except:
+            debug.warning(sys.exc_info())
+          os.system("rsync -a "+ fromAssPath + "/publish/ " + newAssPath + "/pop/"+ fromAssDets['path'] +"/ --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=.hg* --exclude=publish --exclude=export_* --delete")
+          applyPoPRules(toAsset['path'], fromAssDets['path'])
         else:
-          os.system("rsync -a "+ origAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=.popGrouped --exclude=.hg --exclude=.hglf --exclude=publish --exclude=export_*")
+          os.system("rsync -a "+ fromAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=.hg* --exclude=publish --exclude=export_*")
     return(1)
+  else:
+    return(0)
+
+
+def applyPoPRules(toAssPath, fromAssPath):
+  """
+  apply popRules if any
+  :param toAssPath:
+  :param fromAssPath:
+  :return:
+  """
+  assDets = getAssDetails(assPath=toAssPath)
+  popedAssDets = getAssDetails(assPath=fromAssPath)
+
+  popRule  = getPopRules(popedAssDets['stageType'],popedAssDets['nodeType'],assDets['stageType'], assDets['nodeType'])
+  if(popRule):
+    if(popRule['autoPublish']):
+      popedAssFileName = getAssFileName(popedAssDets)
+      assFileName = getAssFileName(assDets)
+      assAbsPath = getAbsPath(toAssPath)
+      assPublishPath = assAbsPath +"/publish/"
+      if(assDets['publishVersion'] == None or popRule['autoPublishForce'] == 1):
+        fromAssPath = assAbsPath + "/pop/" + fromAssPath + "/"
+        syncStatus = os.system("rsync -av " + fromAssPath + " " + assPublishPath +" --delete")
+        if(popRule['autoRename']):
+          renameStatus = os.system("rename -v "+ popedAssFileName +" "+ assFileName +" "+ assPublishPath +"/*")
+
+
+def getPopRules(fromStage, fromNode, toStage, toNode):
+  dbcon = dbPipe.dbPipe()
+  try:
+    rows = dbcon.execute("select * from popRules where fromStage='"+ fromStage +"' and fromNode='"+ fromNode +"' and toStage='"+ toStage +"' and toNode='"+ toNode +"'",dictionary=True)
+  except:
+    debug.warning(sys.exc_info())
+  if(not isinstance(rows,int)):
+    if(rows):
+      return(rows[0])
+    else:
+      return(0)
   else:
     return(0)
 
@@ -693,12 +742,16 @@ def exportProjTypes(projType):
   return(0)
 
 
+
+
 def exportAsset(assDets):
   for x in assDets:
     os.environ['rp_assets_'+ str(x).rstrip().lstrip()] = str(assDets[x])
   exportProj(projName=assDets['projName'])
   exportSeqScn(assDets['projName'], assDets['sequenceName'], assDets['sceneName'])
   return(1)
+
+
 
 
 def exportSeqScn(projName,scq,scn):
@@ -723,6 +776,8 @@ def exportProj(projName):
       os.environ['rp_proj_'+ str(x)] = str(dets[x])
     exportProjTypes(dets['projType'])
     exportDirMaps(dets['directory'])
+
+
 
 def getAllProjects(status=None):
   if (status):

@@ -70,14 +70,16 @@ mimeTypes = {
              "image":[".png",".jpg",".jpeg",".exr",".svg"],
              "video":[".avi",".mp4",".mpg",".mov"],
              "audio":[".mp3",".wav",".flac"],
-             "blender":[".blend",".blend1",".blend2"]
+             "blender":[".blend",".blend1",".blend2"],
+             "office":[".ods",".doc",".xls"]
             }
 
 mimeLogos = {
   "image" : os.path.join(base_dir,"etc","icons","mime_type_image.png"),
   "video" : os.path.join(base_dir,"etc","icons","mime_type_video.png"),
   "blender" : os.path.join(base_dir,"etc","icons","mime_type_blender.png"),
-  "audio" : os.path.join(base_dir,"etc","icons","mime_type_audio.png")
+  "audio" : os.path.join(base_dir,"etc","icons","mime_type_audio.png"),
+  "office":os.path.join(base_dir,"etc","icons","mime_type_office.png")
 }
 
 mimeConvertCmds = {

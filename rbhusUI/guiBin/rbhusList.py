@@ -30,6 +30,7 @@ submitCmd = submitCmd.replace("\\","/")
 exr2pngCmd = toolsdir + os.sep + "convert_exr_png.py"
 png2flvCmd = toolsdir + os.sep + "convert_png_flv.py"
 png2mp4Cmd = toolsdir + os.sep + "convert_png_mp4.py"
+exr2rle = toolsdir + os.sep + "convert_exr_mov_rle.py"
 
 print editTaskCmd
 import rbhusListMod
@@ -39,6 +40,7 @@ import db
 import constants
 import auth
 import dbRbhus
+import utilsPipe
 import utils as rUtils
 
 try:
@@ -329,6 +331,20 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(action == test12Action):
       self.png2mp4()
 
+
+  def exrRleCreateScript(self):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    db_conn = dbRbhus.dbRbhus()
+    if (selTasksDict):
+      for x in selTasksDict:
+        tD = db_conn.getTaskDetails(x['id'])
+        oDir = tD['outDir']
+        self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+
+        openP = subprocess.Popen(exr2pngCmd + " " + str(oDir), shell=True)
+        openP.wait()
+        self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
 
   def exr2png(self):

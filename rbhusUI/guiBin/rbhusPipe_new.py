@@ -688,7 +688,7 @@ def updateAssSlot(mainUid, richAss, assetDets):
     assDetsWidget.checkBoxReview.setCheckState(QtCore.Qt.Checked)
 
   assDetsWidget.checkBoxPublish.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.stylePublishCheckBox)
-  if (assetDets['publishVersion']):
+  if (assetDets['publishVersion'] != None):
     assDetsWidget.checkBoxPublish.setChecked(True)
   else:
     assDetsWidget.checkBoxPublish.setChecked(False)
@@ -951,9 +951,12 @@ def updateThumbz(mainUid,mediaObj):
   itemWidget = uic.loadUi(ui_asset_media_Thumbz)
   itemWidget.labelImageName.setText(os.path.basename(mediaObj.mainFile))
   imageThumb = ImageWidget(mediaObj.thumbFile,64,parent=itemWidget.widgetImage)
-  modifiedT = os.path.getmtime(mediaObj.mainFile)
-  print(time.ctime(modifiedT))
-  itemWidget.groupBoxThumbz.setToolTip("modified : "+ str(time.ctime(modifiedT)))
+  try:
+    modifiedT = os.path.getmtime(mediaObj.mainFile)
+  except:
+    modifiedT = 0
+  # print(time.ctime(modifiedT))
+  itemWidget.groupBoxThumbz.setToolTip("subdir: "+ mediaObj.subPath  +"\nmodified : "+ str(time.ctime(modifiedT)))
   imageThumb.clicked.connect(lambda x, imagePath = mediaObj.mainFile,mimeType=mediaObj.mimeType: imageWidgetClicked(imagePath,mimeType=mimeType))
   itemWidget.imageLayout.addWidget(imageThumb)
   item = QListWidgetItemSort()
@@ -1570,15 +1573,16 @@ def reviewAss(mainUid,assetList=None):
     listedAss = listAsses[0]
     assPath = listedAss['path']
 
-  if(sys.platform.find("win") >= 0):
-    a = subprocess.Popen([rbhusPipeReviewCmd,"--assetpath",assPath],shell = True)
-  elif(sys.platform.find("linux") >= 0):
-    a = subprocess.Popen(rbhusPipeReviewCmd +" --assetpath "+ assPath,shell = True)
-  a.wait()
-  if(assDetsWidgetsDict.has_key(assPath)):
-    assetDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
-    updateAssetData(mainUid,assetDets)
+  p = QtCore.QProcess(parent=mainUid)
+  p.setStandardOutputFile(tempDir + os.sep + "rbhusPipeReview_" + username + ".log")
+  p.setStandardErrorFile(tempDir + os.sep + "rbhusPipeReview_" + username + ".err")
+  p.start(sys.executable, [rbhusPipeReviewCmd,"--assetpath",assPath])
+  p.finished.connect(lambda a, b, mainUid=mainUid, assPath=assPath: updateAfterReview(mainUid, assPath))
 
+
+def updateAfterReview(mainUid, assPath):
+  assetDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
+  updateAssetData(mainUid, assetDets)
 
 
 def updateAssetData(mainUid,assetDets):
@@ -2353,6 +2357,5 @@ def main_func(mainUid):
 if __name__ == '__main__':
   app = QtWidgets.QApplication(sys.argv)
   mainUid = uic.loadUi(ui_main)
-  print(dir(mainUid))
   main_func(mainUid)
   os._exit((app.exec_()))

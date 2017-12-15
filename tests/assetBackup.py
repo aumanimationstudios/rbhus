@@ -111,10 +111,10 @@ try:
             # cmdStr = "rsync -a "+ pathSrcBackup +" {0} "+ pathDestBackup
             cmpdAsses = getCompoundPaths(x['path'],allAssets)
             if(cmpdAsses):
-              cmpdAssesStr ="--exclude=.hg --exclude=.hglf --exclude=.thumbz.db --exclude="+" --exclude=".join(cmpdAsses)
+              cmpdAssesStr ="--exclude=.hg* --exclude=.thumbz.db --exclude="+" --exclude=".join(cmpdAsses)
               cmdFinal = "rsync -a "+ pathSrcBackup +" "+ cmpdAssesStr +" "+ pathDestBackup
             else:
-              cmdFinal = "rsync -a "+ pathSrcBackup +" --exclude=.hg --exclude=.hglf --exclude=.thumbz.db "+ pathDestBackup
+              cmdFinal = "rsync -a "+ pathSrcBackup +" --exclude=.hg* --exclude=.thumbz.db "+ pathDestBackup
               os.makedirs(pathDestBackup)
               try:
                 exitValue = os.system(cmdFinal)
