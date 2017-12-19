@@ -229,19 +229,38 @@ def getAssTypes(atype=None, status=constantsPipe.typesActive):
     debug.debug(str(sys.exc_info()))
     return(0)
 
+def getCompoundPaths(assPath):
+  assProj = assPath.split(":")[0]
+  allAssets = getProjAsses(assProj)
+  assPathAbs = rbhus.utilsPipe.getAbsPath(assPath)
+  retpaths = []
+  for x in allAssets:
+    pathToX = rbhus.utilsPipe.getAbsPath(x['path'])
+    if(assPathAbs != pathToX):
+      if(os.path.exists(pathToX)):
+        if(re.search(assPathAbs,pathToX)):
+          retpaths.append(pathToX)
+  return(retpaths)
+
+
 
 def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, rename=True, force=False,pop=False):
+  #todo: please please use getCompoundPaths to ignore any assets inside the asset to import . PLEASE DO THIS ASAP
+
   fromAssDets = getAssDetails(assPath=assetPath)
   projDets = getProjDetails(toProject)
   fromAssPath = getAbsPath(assetPath)
   toAsset = None
+  debug.info("importing from : "+ str(fromAssPath))
   if(toAssetPath != 'default'):
     toAsset = getAssDetails(assPath=toAssetPath)
+    # debug.info(toAsset)
     if(toAsset):
-      if(not (isAssAssigned(toAsset) or isProjAdmin(toAsset))):
-        return(111)
-      if(getVersions):
-        toAsset['versioning'] = fromAssDets['versioning']
+      if(not pop):
+        if(not (isAssAssigned(toAsset) or isProjAdmin(toAsset))):
+          return(111)
+        if(getVersions):
+          toAsset['versioning'] = fromAssDets['versioning']
 
   else:
     newAsset = copy.copy(fromAssDets)
@@ -267,8 +286,9 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
 
 
   if(toAsset):
-    if (not isAssAssigned(toAsset)):
-      return (3)
+    if(not pop):
+      if (not isAssAssigned(toAsset)):
+        return (3)
     newAssPath = getAbsPath(toAsset['path'])
     if((toAsset['sequenceName'] != "default" or toAsset['sceneName'] != "default") and toAssetPath == 'default'):
       seqScnDict = {}
@@ -278,29 +298,31 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
       seqScnDict['createdUser'] = os.environ['rbhusPipe_acl_user']
       setupSequenceScene(seqScnDict)
 
-    debug.info(newAssPath)
-    debug.info(fromAssPath)
+    # debug.info(newAssPath)
+    # debug.info(fromAssPath)
     if(sys.platform.lower().find("linux") >= 0):
       if(getVersions):
         if(pop):
+          pathForPop = ":".join(fromAssDets['path'].split(":")[1:])
           try:
-            os.makedirs(newAssPath +"/pop/"+ ":".join(fromAssDets['path'].split(":")[1:]))
+            os.makedirs(newAssPath + "/pop/" + pathForPop)
           except:
             debug.warning(sys.exc_info())
-          os.system("rsync -a "+ fromAssPath +"/publish/ "+ newAssPath +"/pop/"+ fromAssDets['path'] +"/ --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=publish --exclude=export_* --delete")
+          os.system("rsync -a "+ fromAssPath +"/publish/ "+ newAssPath +"/pop/"+ pathForPop +"/ --exclude=.thumbz.db --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=publish --exclude=export_* --delete")
           applyPoPRules(toAsset['path'], fromAssDets['path'])
         else:
-          os.system("rsync -a "+ fromAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=publish --exclude=export_*")
+          os.system("rsync -a "+ fromAssPath + "/ " + newAssPath + "/ --exclude=.thumbz.db --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=publish --exclude=export_*")
       else:
         if(pop):
+          pathForPop = ":".join(fromAssDets['path'].split(":")[1:])
           try:
-            os.makedirs(newAssPath + "/pop/" + ":".join(fromAssDets['path'].split(":")[1:]))
+            os.makedirs(newAssPath + "/pop/" + pathForPop)
           except:
             debug.warning(sys.exc_info())
-          os.system("rsync -a "+ fromAssPath + "/publish/ " + newAssPath + "/pop/"+ fromAssDets['path'] +"/ --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=.hg* --exclude=publish --exclude=export_* --delete")
+          os.system("rsync -a "+ fromAssPath + "/publish/ " + newAssPath + "/pop/"+ pathForPop +"/ --exclude=.thumbz.db --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=.hg* --exclude=publish --exclude=export_* --delete")
           applyPoPRules(toAsset['path'], fromAssDets['path'])
         else:
-          os.system("rsync -a "+ fromAssPath + "/ " + newAssPath + "/ --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=.hg* --exclude=publish --exclude=export_*")
+          os.system("rsync -a "+ fromAssPath + "/ " + newAssPath + "/ --exclude=.thumbz.db --exclude=.autocommitGrouped --exclude=pop --exclude=.popGrouped --exclude=.hg* --exclude=publish --exclude=export_*")
     return(1)
   else:
     return(0)
@@ -314,20 +336,41 @@ def applyPoPRules(toAssPath, fromAssPath):
   :return:
   """
   assDets = getAssDetails(assPath=toAssPath)
-  popedAssDets = getAssDetails(assPath=fromAssPath)
+  fromAssDets = getAssDetails(assPath=fromAssPath)
+  pathForPop = ":".join(fromAssDets['path'].split(":")[1:])
+  popRule  = getPopRules(fromAssDets['stageType'],fromAssDets['nodeType'],assDets['stageType'], assDets['nodeType'])
 
-  popRule  = getPopRules(popedAssDets['stageType'],popedAssDets['nodeType'],assDets['stageType'], assDets['nodeType'])
+
   if(popRule):
+    popedAssFileName = getAssFileName(fromAssDets)
+    assFileName = getAssFileName(assDets)
+    assAbsPath = getAbsPath(toAssPath)
+    assPublishPath = assAbsPath + "/publish/"
+    fromAssPoPPath = assAbsPath + "/pop/" + pathForPop + "/"
+
     if(popRule['autoPublish']):
-      popedAssFileName = getAssFileName(popedAssDets)
-      assFileName = getAssFileName(assDets)
-      assAbsPath = getAbsPath(toAssPath)
-      assPublishPath = assAbsPath +"/publish/"
       if(assDets['publishVersion'] == None or popRule['autoPublishForce'] == 1):
-        fromAssPath = assAbsPath + "/pop/" + fromAssPath + "/"
-        syncStatus = os.system("rsync -av " + fromAssPath + " " + assPublishPath +" --delete")
-        if(popRule['autoRename']):
-          renameStatus = os.system("rename -v "+ popedAssFileName +" "+ assFileName +" "+ assPublishPath +"/*")
+        syncStatus = os.system("rsync -av "+ fromAssPoPPath +" "+ assPublishPath +" --exclude=.thumbz.db --delete")
+      if(popRule['autoRename']):
+        renameStatus = os.system("rename -v "+ popedAssFileName +" "+ assFileName +" "+ assPublishPath +"/*")
+        if(renameStatus != 0):
+          debug.warning("renaming failed . trying to use without strict-sub")
+          renameStatus = os.system("rename -v 's/" + popedAssFileName + "/" + assFileName + "/' " + assPublishPath + "/*")
+    if (popRule['autoReplace']):
+      import hgmod
+      hgAss = hgmod.hg(toAssPath)
+      hgLog = hgAss._log()
+      if(not hgLog):
+        syncToAbsPathStatus = os.system("rsync -av "+ fromAssPoPPath +" "+ assAbsPath +"/")
+        if (popRule['autoRename']):
+          deleteOld = os.system("rm -fv "+ assAbsPath +"/"+ assFileName +"*")
+          renameStatus = os.system("rename -v " + popedAssFileName + " " + assFileName + " " + assAbsPath + "/*")
+          if (renameStatus != 0):
+            debug.warning("renaming failed . trying to use without strict-sub")
+            renameStatus = os.system("rename -v 's/" + popedAssFileName + "/" + assFileName + "/' " + assAbsPath + "/*")
+
+
+
 
 
 def getPopRules(fromStage, fromNode, toStage, toNode):

@@ -10,7 +10,7 @@ import re
 import time
 
 fileDir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1])
-baseDir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2])
+baseDir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4])
 
 sys.path.append(baseDir)
 

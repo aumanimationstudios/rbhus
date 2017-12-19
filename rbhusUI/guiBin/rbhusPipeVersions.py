@@ -565,7 +565,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       for x in selectedForAutoCommit:
         debug.info("commiting : " + x)
         xver = hgmod.hg(x)
-        retValue, versionNumber = xver.commitAbsPath()
+        retValue, versionNumber = xver.commitAbsPath(commitmsg="from autoCommit")
         debug.info(versionNumber)
         if (retValue == 111):
           self.messageBoxWarn(assPath=x)
@@ -582,6 +582,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       for x in selectedForPop:
         debug.info("PoPing : " + x)
         retValue = utilsPipe.importAssets(args.assPath.split(":")[0],args.assPath,x,force=True,pop=True)
+        debug.info(retValue)
         if (retValue == 111):
           self.messageBoxWarn(assPath=x)
         else:

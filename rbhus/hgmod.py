@@ -118,7 +118,7 @@ class hg(object):
       debug.info("already initialized")
       self._copyIgnore()
       self._add()
-      self._commit()
+      self._commit(commitmsg="from safeInit")
       self._update()
     else:
       self._copyIgnore()
@@ -128,7 +128,7 @@ class hg(object):
     debug.info("initialization done")
     return(True)
 
-  def commitAbsPath(self):
+  def commitAbsPath(self,commitmsg="from absPath"):
     curdir = os.getcwd()
     updatedVersion = None
     os.chdir(self.absPipePath)
@@ -141,7 +141,7 @@ class hg(object):
         if(isAdded == 111):
           os.chdir(curdir)
           return(111,None)
-      (retStatus,versionCommited) = self._commit()
+      (retStatus,versionCommited) = self._commit(commitmsg=commitmsg)
       debug.info(versionCommited)
       self._update()
     except:
@@ -292,14 +292,14 @@ class hg(object):
       debug.info(str(out))
 
 
-  def _commit(self):
+  def _commit(self,commitmsg = "from UI"):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(111,None)
     if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg --verbose commit -A --message \'ignore now\' --user {0}".format(os.environ['rbhusPipe_acl_user']),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen("hg --verbose commit -A --message \'{1}\' --user {0}".format(os.environ['rbhusPipe_acl_user'],commitmsg),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-      p = subprocess.Popen(["hg","--verbose","commit","-A","--message","\'ignore now\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      p = subprocess.Popen(["hg","--verbose","commit","-A","--message","\'"+ commitmsg +"\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     com = p.communicate()
     out = com[0]
     debug.info(com)

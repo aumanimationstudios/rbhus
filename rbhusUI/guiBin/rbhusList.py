@@ -30,7 +30,7 @@ submitCmd = submitCmd.replace("\\","/")
 exr2pngCmd = toolsdir + os.sep + "convert_exr_png.py"
 png2flvCmd = toolsdir + os.sep + "convert_png_flv.py"
 png2mp4Cmd = toolsdir + os.sep + "convert_png_mp4.py"
-exr2rle = toolsdir + os.sep + "convert_exr_mov_rle.py"
+exr2rleCmd = toolsdir + os.sep + "convert_exr_mov_rle.py"
 
 print editTaskCmd
 import rbhusListMod
@@ -42,6 +42,8 @@ import auth
 import dbRbhus
 import utilsPipe
 import utils as rUtils
+import simplejson
+
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
@@ -288,22 +290,29 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
   def popupTask(self, pos):
     mainMenu = QtGui.QMenu()
-    menu = QtGui.QMenu()
-    menu.setTitle("tools")
-    test1Action = menu.addAction("activate")
-    test2Action = menu.addAction("hold")
-    test3Action = menu.addAction("rerun")
-    test4Action = menu.addAction("edit")
-    test5Action = mainMenu.addAction("open dir")
-    test10Action = menu.addAction("exr2png(linux)")
-    test11Action = menu.addAction("png2flv(linux)")
-    test12Action = menu.addAction("png2mp4(linux)")
-    test6Action = menu.addAction("copy/submit")
-    test7Action = menu.addAction("fastAssign enable")
-    test8Action = menu.addAction("fastAssign disable")
-    test9Action = menu.addAction("delete")
+    toolsMenu = QtGui.QMenu()
+    toolsMenu.setTitle("tools")
 
-    mainMenu.addMenu(menu)
+    scriptMenu = QtGui.QMenu()
+    scriptMenu.setTitle("create Scripts")
+
+    test1Action = toolsMenu.addAction("activate")
+    test2Action = toolsMenu.addAction("hold")
+    test3Action = toolsMenu.addAction("rerun")
+    test4Action = toolsMenu.addAction("edit")
+    test5Action = mainMenu.addAction("open dir")
+    test10Action = toolsMenu.addAction("exr2png(linux)")
+    test11Action = toolsMenu.addAction("png2flv(linux)")
+    test12Action = toolsMenu.addAction("png2mp4(linux)")
+    test6Action = toolsMenu.addAction("copy/submit")
+    test7Action = toolsMenu.addAction("fastAssign enable")
+    test8Action = toolsMenu.addAction("fastAssign disable")
+    test9Action = toolsMenu.addAction("delete")
+
+    exrMovRleAction = scriptMenu.addAction("exr -> mov(rle)")
+
+    mainMenu.addMenu(toolsMenu)
+    toolsMenu.addMenu(scriptMenu)
 
     action = mainMenu.exec_(self.tableList.mapToGlobal(pos))
     if(action == test1Action):
@@ -331,20 +340,64 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(action == test12Action):
       self.png2mp4()
 
+    if (action == exrMovRleAction):
+      self.exrMovRle()
 
-  def exrRleCreateScript(self):
+  def exrMovRle(self):
     selTasksDict = self.selectedTasks()
     selTasks = []
     db_conn = dbRbhus.dbRbhus()
+    try:
+      os.makedirs(os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts"))
+    except:
+      print("trying to create rbhusPipe directory : "+ str(sys.exc_info()))
+
+    filenamepy = os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts",("_".join(time.asctime().split()) +".py").replace(":","-"))
+    fd = open(filenamepy,"w")
+    fd.write("#!/bin/sh\n")
+    print(filenamepy)
     if (selTasksDict):
       for x in selTasksDict:
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
-        self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+        convertCmd = exr2rleCmd +" "+ oDir +"\n"
+        fd.write(convertCmd)
+        if (tD['renExtEnv'] != "default"):
+          renExtEnv = simplejson.loads(tD['renExtEnv'])
+          if("assPath" in renExtEnv):
+            assPath = renExtEnv['assPath']
+            assProj = assPath.split(":")[0]
+            copyAss = assProj +":output:Movs"
+            copyAssAbsPath = utilsPipe.getAbsPath(copyAss)
+            cpCmd = "cp -v "+ oDir +"/*.mov "+ copyAssAbsPath +"/\n"
+            fd.write(cpCmd)
+        fd.write("\n\n")
+    fd.flush()
+    fd.close()
+    os.chmod(filenamepy,0777)
+    msgbox = QtGui.QMessageBox()
+    msgbox.setText(filenamepy)
+    msgbox.exec_()
 
-        openP = subprocess.Popen(exr2pngCmd + " " + str(oDir), shell=True)
-        openP.wait()
-        self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+
+  # def exrRleCreateScript(self):
+  #   selTasksDict = self.selectedTasks()
+  #   selTasks = []
+  #   db_conn = dbRbhus.dbRbhus()
+  #   if (selTasksDict):
+  #     for x in selTasksDict:
+  #       tD = db_conn.getTaskDetails(x['id'])
+  #       oDir = tD['outDir']
+  #       renExtEnv = {}
+  #       if(tD['renExtEnv'] != "default"):
+  #
+  #
+  #
+  #       self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
+  #
+  #       openP = subprocess.Popen(exr2pngCmd + " " + str(oDir), shell=True)
+  #       openP.wait()
+  #       self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
 
   def exr2png(self):
@@ -716,17 +769,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           else:
             rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks",dictionary=True)
       else:
-        statusCheck = " or status=".join(statusToCheck)
-        if(cTMine):
-          if(timeS):
-            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"' and "+ timeS,dictionary=True)
+        if(statusToCheck):
+          statusCheck = " or status=".join(statusToCheck)
+          if(cTMine):
+            if(timeS):
+              rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"' and "+ timeS,dictionary=True)
+            else:
+              rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'",dictionary=True)
           else:
-            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and user='"+ str(self.username) +"'",dictionary=True)
-        else:
-          if(timeS):
-            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and "+ timeS,dictionary=True)
-          else:
-            rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")",dictionary=True)
+            if(timeS):
+              rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +") and "+ timeS,dictionary=True)
+            else:
+              rows = db_conn.execute("select "+ ",".join(self.colNamesTask) +" from tasks where (status="+ statusCheck +")",dictionary=True)
     except:
       print("Error connecting to db "+ str(sys.exc_info()))
 
