@@ -8,6 +8,7 @@ import sys
 import os
 import re
 import time
+import argparse
 
 fileDir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1])
 baseDir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-4])
@@ -17,6 +18,11 @@ sys.path.append(baseDir)
 import rbhus.utilsPipe
 import rbhus.debug
 import rbhus.constantsPipe
+
+
+
+parser.add_argument("-a","--all",dest='start',help='start frame')
+args = parser.parse_args()
 
 
 def isValidBackupDir(directory):

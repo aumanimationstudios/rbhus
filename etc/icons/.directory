@@ -1,5 +1,6 @@
 [Dolphin]
-PreviewsShown=true
-Timestamp=2017,7,13,9,12,19
+SortOrder=1
+SortRole=modificationtime
+Timestamp=2017,12,20,10,10,44
 Version=4
 ViewMode=1

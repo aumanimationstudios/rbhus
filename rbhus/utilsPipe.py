@@ -229,13 +229,16 @@ def getAssTypes(atype=None, status=constantsPipe.typesActive):
     debug.debug(str(sys.exc_info()))
     return(0)
 
-def getCompoundPaths(assPath):
+def getCompoundPaths(assPath,QT_callback_isStopped=None):
   assProj = assPath.split(":")[0]
   allAssets = getProjAsses(assProj)
-  assPathAbs = rbhus.utilsPipe.getAbsPath(assPath)
+  assPathAbs = getAbsPath(assPath)
   retpaths = []
   for x in allAssets:
-    pathToX = rbhus.utilsPipe.getAbsPath(x['path'])
+    if (QT_callback_isStopped):
+      if (QT_callback_isStopped()):
+        return (retpaths)
+    pathToX = getAbsPath(x['path'])
     if(assPathAbs != pathToX):
       if(os.path.exists(pathToX)):
         if(re.search(assPathAbs,pathToX)):
@@ -244,7 +247,7 @@ def getCompoundPaths(assPath):
 
 
 
-def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, rename=True, force=False,pop=False):
+def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, force=False,pop=False):
   #todo: please please use getCompoundPaths to ignore any assets inside the asset to import . PLEASE DO THIS ASAP
 
   fromAssDets = getAssDetails(assPath=assetPath)
@@ -328,6 +331,8 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
     return(0)
 
 
+
+
 def applyPoPRules(toAssPath, fromAssPath):
   """
   apply popRules if any
@@ -360,7 +365,16 @@ def applyPoPRules(toAssPath, fromAssPath):
       import hgmod
       hgAss = hgmod.hg(toAssPath)
       hgLog = hgAss._log()
+
+      isReplace = False
+      if(hgLog):
+        if(len(hgLog) == 1):
+          isReplace = True
       if(not hgLog):
+        isReplace = True
+
+      # debug.info("LENGTH OF VERSION LOG : "+ str(len(hgLog)))
+      if(isReplace):
         syncToAbsPathStatus = os.system("rsync -av "+ fromAssPoPPath +" "+ assAbsPath +"/")
         if (popRule['autoRename']):
           deleteOld = os.system("rm -fv "+ assAbsPath +"/"+ assFileName +"*")
@@ -386,6 +400,9 @@ def getPopRules(fromStage, fromNode, toStage, toNode):
       return(0)
   else:
     return(0)
+
+
+
 
 def getMediaFiles(assPath=None):
   validMedia = {}
@@ -441,11 +458,31 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
 
   if (assPath):
     absPath = getAbsPath(assPath)
+    compPaths = getCompoundPaths(assPath,QT_callback_isStopped=QT_callback_isStopped)
     if (os.path.exists(absPath)):
       for root, dir, filenames in os.walk(absPath):
+        if (QT_callback_isStopped):
+          if (QT_callback_isStopped()):
+            return (0)
+        cont = False
+        for compPath in compPaths:
+          if (QT_callback_isStopped):
+            if (QT_callback_isStopped()):
+              return (0)
+          if (re.search(compPath,root)):
+            # debug.info("FOUND COMPOUND PATH FROM ANOTHER ASSET : " + str(root))
+            cont = True
+        if(cont):
+          continue
         if (not (root.find(".hg") >= 0 or root.find(".hglf") >= 0 or root.find(".thumbz.db") >= 0)):
           for filename in filenames:
+            if (QT_callback_isStopped):
+              if (QT_callback_isStopped()):
+                return (0)
             for mimeType in constantsPipe.mimeTypes.keys():
+              if (QT_callback_isStopped):
+                if (QT_callback_isStopped()):
+                  return (0)
               for mimeExt in constantsPipe.mimeTypes[mimeType]:
                 if(QT_callback_isStopped):
                   if(QT_callback_isStopped()):
@@ -513,10 +550,10 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                   if (thumbzCmd):
                     debug.debug(thumbzCmd)
                     p = subprocess.Popen(thumbzCmd, shell=True)
-                    retcode = p.poll()
-                    while(retcode == None):
-                      retcode = p.poll()
-                      time.sleep(0.1)
+                    retcode = p.wait()
+                    # while(retcode == None):
+                    #   retcode = p.poll()
+                    #   time.sleep(0.01)
 
                     if(retcode == 0):
                       fThumbzDetails = {fName: fModifiedTime}
@@ -535,10 +572,10 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                 if (thumbzCmd):
                   debug.debug(thumbzCmd)
                   p = subprocess.Popen(thumbzCmd, shell=True)
-                  retcode = p.poll()
-                  while (retcode == None):
-                    retcode = p.poll()
-                    time.sleep(0.1)
+                  retcode = p.wait()
+                  # while (retcode == None):
+                  #   retcode = p.poll()
+                  #   time.sleep(0.01)
                   if (retcode == 0):
                     fThumbzDetails = {fName: fModifiedTime}
                     jsonWrite(fJson, fThumbzDetails)
@@ -557,10 +594,10 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                 debug.debug(thumbzCmd)
                 p = subprocess.Popen(thumbzCmd, shell=True)
 
-                retcode = p.poll()
-                while (retcode == None):
-                  retcode = p.poll()
-                  time.sleep(0.1)
+                retcode = p.wait()
+                # while (retcode == None):
+                #   retcode = p.poll()
+                #   time.sleep(0.01)
                 if (retcode == 0):
                   fThumbzDetails = {fName: fModifiedTime}
                   jsonWrite(fJson, fThumbzDetails)
@@ -579,21 +616,6 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
         else:
           validMedia.append(thumbDetails)
   return(validMedia)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
