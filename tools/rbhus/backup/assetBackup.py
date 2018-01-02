@@ -20,10 +20,9 @@ import rbhus.debug
 import rbhus.constantsPipe
 
 
-
-parser.add_argument("-a","--all",dest='start',help='start frame')
+parser = argparse.ArgumentParser()
+parser.add_argument("-a","--all",dest='all',action="store_true")
 args = parser.parse_args()
-
 
 def isValidBackupDir(directory):
   allDirMaps = rbhus.utilsPipe.getDirMaps(dirType="backup")
@@ -111,7 +110,13 @@ try:
       allAssets = rbhus.utilsPipe.getProjAsses(proj['projName'])
 
       for x in allAssets:
-        if(x['assetType'] != "output"):
+        toBackup = False
+        if(x['assetType'] == "output"):
+          if(args.all):
+            toBackup = True
+        else:
+          toBackup = True
+        if(toBackup):
           if(isValidBackupDir(x['backupDir'])):
             dirMapDets = rbhus.utilsPipe.getDirMapsDetails(x['backupDir'])
             pathSrcBackup = rbhus.utilsPipe.getAbsPath(x['path']).rstrip(os.sep) + os.sep

@@ -5,23 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/icons/libreOffice_logo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screenShots/rbhusPipeAssImporter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screenShots/rbhusPipeNewAsset.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screenShots/rbhusPipeNewScqScn.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screenShots/rbhusPipeReview.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screenShots/rbhusPipeVersions.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screenShots/.directory" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screenShots/rbhusEdit.png" afterPath="$PROJECT_DIR$/screenShots/rbhusEdit.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screenShots/rbhusHost.png" afterPath="$PROJECT_DIR$/screenShots/rbhusHost.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screenShots/rbhusList.png" afterPath="$PROJECT_DIR$/screenShots/rbhusList.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screenShots/rbhusRenderMain.png" afterPath="$PROJECT_DIR$/screenShots/rbhusRenderMain.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screenShots/rbhusSubmit.png" afterPath="$PROJECT_DIR$/screenShots/rbhusSubmit.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.directory" afterPath="$PROJECT_DIR$/.directory" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/icons/.directory" afterPath="$PROJECT_DIR$/etc/icons/.directory" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py" afterPath="$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,11 +26,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="assetBackup.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="assetBackup.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-782">
-              <caret line="23" column="46" lean-forward="false" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
+            <state relative-caret-position="103">
+              <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
               <folding>
                 <element signature="e#133#143#0" expanded="true" />
               </folding>
@@ -84,10 +68,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
+            <state relative-caret-position="72">
               <caret line="376" column="18" lean-forward="false" selection-start-line="376" selection-start-column="18" selection-end-line="376" selection-end-column="18" />
               <folding />
             </state>
@@ -128,7 +112,7 @@
         <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_vse.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
-              <caret line="21" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <caret line="21" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding>
                 <element signature="e#133#142#0" expanded="true" />
               </folding>
@@ -227,7 +211,7 @@
       <GitPushTagMode />
     </option>
     <push-targets>
-      <push-target-info target-remote="origin" target-branch="2.0" repo="$PROJECT_DIR$" source="2.0" />
+      <push-target-info target-remote="bitbutcket" target-branch="2.0" repo="$PROJECT_DIR$" source="2.0" />
     </push-targets>
     <favorite-branches>
       <branch-storage>
@@ -297,8 +281,8 @@
         <option value="$PROJECT_DIR$/tests/assetBackup.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
         <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
-        <option value="$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py" />
         <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+        <option value="$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py" />
       </list>
     </option>
   </component>
@@ -661,13 +645,6 @@
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
     </task>
-    <task id="LOCAL-00031" summary="lots of changes">
-      <created>1507790789903</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1507790789903</updated>
-    </task>
     <task id="LOCAL-00032" summary="lots of changes">
       <created>1507962397415</created>
       <option name="number" value="00032" />
@@ -1004,7 +981,14 @@
       <option name="project" value="LOCAL" />
       <updated>1514647641997</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="lots of changes">
+      <created>1514648746234</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1514648746234</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1430,7 +1414,7 @@
     <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_vse.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <caret line="21" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding>
             <element signature="e#133#142#0" expanded="true" />
           </folding>
@@ -1445,21 +1429,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
+    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-782">
-          <caret line="23" column="46" lean-forward="false" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
-          <folding>
-            <element signature="e#133#143#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="72">
+          <caret line="376" column="18" lean-forward="false" selection-start-line="376" selection-start-column="18" selection-end-line="376" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="376" column="18" lean-forward="false" selection-start-line="376" selection-start-column="18" selection-end-line="376" selection-end-column="18" />
-          <folding />
+        <state relative-caret-position="103">
+          <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+          <folding>
+            <element signature="e#133#143#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
