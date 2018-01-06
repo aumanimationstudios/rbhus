@@ -29,8 +29,8 @@
       <file leaf-file-name="assetBackup.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="103">
-              <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+            <state relative-caret-position="237">
+              <caret line="129" column="4" lean-forward="false" selection-start-line="129" selection-start-column="4" selection-end-line="129" selection-end-column="4" />
               <folding>
                 <element signature="e#133#143#0" expanded="true" />
               </folding>
@@ -51,7 +51,7 @@
       <file leaf-file-name="convert_exr_mov_prores.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_prores.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="606">
+            <state relative-caret-position="663">
               <caret line="40" column="148" lean-forward="false" selection-start-line="40" selection-start-column="148" selection-end-line="40" selection-end-column="148" />
               <folding />
             </state>
@@ -61,7 +61,7 @@
       <file leaf-file-name="convert_exr_mp4.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="606">
+            <state relative-caret-position="629">
               <caret line="38" column="131" lean-forward="false" selection-start-line="38" selection-start-column="131" selection-end-line="38" selection-end-column="131" />
               <folding />
             </state>
@@ -71,7 +71,7 @@
       <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
+            <state relative-caret-position="6120">
               <caret line="376" column="18" lean-forward="false" selection-start-line="376" selection-start-column="18" selection-end-line="376" selection-end-column="18" />
               <folding />
             </state>
@@ -111,7 +111,7 @@
       <file leaf-file-name="blender_render_vse.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_vse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
+            <state relative-caret-position="289">
               <caret line="21" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding>
                 <element signature="e#133#142#0" expanded="true" />
@@ -423,8 +423,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -644,13 +644,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
-    </task>
-    <task id="LOCAL-00032" summary="lots of changes">
-      <created>1507962397415</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1507962397415</updated>
     </task>
     <task id="LOCAL-00033" summary="lots of changes">
       <created>1508176588775</created>
@@ -988,7 +981,14 @@
       <option name="project" value="LOCAL" />
       <updated>1514648746234</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="lots of changes">
+      <created>1514892596767</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1514892596767</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1004,12 +1004,12 @@
     <frame x="1920" y="0" width="1920" height="1040" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22970085" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23504274" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1756906" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24751382" sideWeight="0.50641024" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23425414" sideWeight="0.49252138" order="2" side_tool="false" content_ui="tabs" x="1807" y="742" width="1198" height="577" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26077348" sideWeight="0.49786323" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2629834" sideWeight="0.49786323" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21104972" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39889503" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1276,7 +1276,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5474">
           <caret line="332" column="0" lean-forward="false" selection-start-line="332" selection-start-column="0" selection-end-line="332" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1284,7 +1283,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1292,7 +1290,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9775">
           <caret line="583" column="41" lean-forward="false" selection-start-line="583" selection-start-column="29" selection-end-line="583" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1300,7 +1297,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2142">
           <caret line="132" column="25" lean-forward="false" selection-start-line="132" selection-start-column="25" selection-end-line="132" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1308,7 +1304,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
           <caret line="31" column="19" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="35" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1323,7 +1318,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1445">
           <caret line="88" column="92" lean-forward="false" selection-start-line="88" selection-start-column="92" selection-end-line="88" selection-end-column="92" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1331,9 +1325,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6188">
           <caret line="371" column="68" lean-forward="false" selection-start-line="371" selection-start-column="68" selection-end-line="371" selection-end-column="68" />
-          <folding>
-            <element signature="e#18#49#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1341,7 +1332,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1349,9 +1339,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1359,13 +1346,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_prores.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
+        <state relative-caret-position="663">
           <caret line="40" column="148" lean-forward="false" selection-start-line="40" selection-start-column="148" selection-end-line="40" selection-end-column="148" />
           <folding />
         </state>
@@ -1373,7 +1359,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mp4.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
+        <state relative-caret-position="629">
           <caret line="38" column="131" lean-forward="false" selection-start-line="38" selection-start-column="131" selection-end-line="38" selection-end-column="131" />
           <folding />
         </state>
@@ -1413,7 +1399,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_vse.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
+        <state relative-caret-position="289">
           <caret line="21" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding>
             <element signature="e#133#142#0" expanded="true" />
@@ -1431,7 +1417,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
+        <state relative-caret-position="6120">
           <caret line="376" column="18" lean-forward="false" selection-start-line="376" selection-start-column="18" selection-end-line="376" selection-end-column="18" />
           <folding />
         </state>
@@ -1439,8 +1425,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="103">
-          <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+        <state relative-caret-position="237">
+          <caret line="129" column="4" lean-forward="false" selection-start-line="129" selection-start-column="4" selection-end-line="129" selection-end-column="4" />
           <folding>
             <element signature="e#133#143#0" expanded="true" />
           </folding>

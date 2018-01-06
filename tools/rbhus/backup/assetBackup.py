@@ -22,6 +22,7 @@ import rbhus.constantsPipe
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a","--all",dest='all',action="store_true")
+parser.add_argument("-p","--projects",dest='projects',help="comma seperated list of projects to backup")
 args = parser.parse_args()
 
 def isValidBackupDir(directory):
@@ -103,10 +104,31 @@ def isVersioning(absPath):
     return (False)
 
 try:
-  allProj = rbhus.utilsPipe.getAllProjects(status=rbhus.constantsPipe.projActive)
-  for proj in allProj:
-    if(proj['backup']):
+  allProj = []
+  checkIfBackup = False
+  if(args.projects):
+    # print(args.projects)
+    projects = args.projects.split(",")
+    for p in projects:
+      projDet = rbhus.utilsPipe.getProjDetails(p.strip())
+      if(projDet):
+        allProj.append(projDet)
+      else:
+        rbhus.debug.warning("bad project name : "+ str(p))
+  else:
+    allProj = rbhus.utilsPipe.getAllProjects(status=rbhus.constantsPipe.projActive)
+    checkIfBackup = True
 
+  for proj in allProj:
+    doBackup = False
+    if(checkIfBackup):
+      if(proj['backup']):
+        doBackup = True
+    else:
+      doBackup = True
+    print(proj['projName'] +" : "+ str(doBackup))
+
+    if(doBackup):
       allAssets = rbhus.utilsPipe.getProjAsses(proj['projName'])
 
       for x in allAssets:
