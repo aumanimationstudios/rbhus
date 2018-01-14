@@ -17,7 +17,7 @@ class Browser(QWidget):
     mimeFileter.append("video/quicktime")
     self.resize(700, 600)
     self.setWindowTitle("File Browser")
-    self.treeView = QListView()
+    self.treeView = QTreeView()
     self.fileSystemModel = QFileSystemModel(self.treeView)
     self.fileSystemModel.setReadOnly(True)
     root = self.fileSystemModel.setRootPath(sys.argv[1])

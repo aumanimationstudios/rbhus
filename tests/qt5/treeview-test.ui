@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTreeWidget" name="treeWidget">
+     <column>
+      <property name="text">
+       <string>Dir</string>
+      </property>
+     </column>
+     <item>
+      <property name="text">
+       <string>test</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>test-sub1</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>test-sub1-sub2</string>
+        </property>
+       </item>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>test1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>test2</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>test2-sub1</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>test2-sub1-sub2</string>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>test2-sub2</string>
+       </property>
+      </item>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

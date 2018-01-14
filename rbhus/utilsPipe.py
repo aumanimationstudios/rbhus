@@ -1803,36 +1803,38 @@ def getBinPath(assdetsTemp = {}):
   assdets['assetType'] = "bin"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  debug.info(assdetails)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['nodeType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['stageType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  #debug.info(assdetails)
   debug.info(assPathTemp)
 
   if(not assdetails):
     assdets['sceneName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  debug.info(assdetails)
+  #debug.info(assdetails)
   debug.info(assPathTemp)
 
   if(not assdetails):
     assdets['sequenceName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
-  debug.info(assdetails)
+  #debug.info(assdetails)
   debug.info(assPathTemp)
 
-  if(not assdetails):
-    assdets['nodeType'] = "default"
-  assPathTemp = getAssPath(assdets)
-  assdetails = getAssDetails(assPath = assPathTemp)
-  debug.info(assdetails)
-  debug.info(assPathTemp)
 
-  if(not assdetails):
-    assdets['stageType'] = "default"
-  assPathTemp = getAssPath(assdets)
-  assdetails = getAssDetails(assPath = assPathTemp)
-  debug.info(assdetails)
-  debug.info(assPathTemp)
 
 
   # If there is no asset , then try the above logic with assName as 'default'
@@ -1842,36 +1844,38 @@ def getBinPath(assdetsTemp = {}):
     assdets['assName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath=assPathTemp)
-  debug.info(assdetails)
-  debug.info(assPathTemp)
-
-  if (not assdetails):
-    assdets['sceneName'] = "default"
-  assPathTemp = getAssPath(assdets)
-  assdetails = getAssDetails(assPath=assPathTemp)
-  debug.info(assdetails)
-  debug.info(assPathTemp)
-
-  if (not assdetails):
-    assdets['sequenceName'] = "default"
-  assPathTemp = getAssPath(assdets)
-  assdetails = getAssDetails(assPath=assPathTemp)
-  debug.info(assdetails)
+  #debug.info(assdetails)
   debug.info(assPathTemp)
 
   if (not assdetails):
     assdets['nodeType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath=assPathTemp)
-  debug.info(assdetails)
+  #debug.info(assdetails)
   debug.info(assPathTemp)
 
   if (not assdetails):
     assdets['stageType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath=assPathTemp)
-  debug.info(assdetails)
+  #debug.info(assdetails)
   debug.info(assPathTemp)
+
+
+  if (not assdetails):
+    assdets['sceneName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['sequenceName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
 
 
 
