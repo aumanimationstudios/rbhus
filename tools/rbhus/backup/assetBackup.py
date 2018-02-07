@@ -50,6 +50,25 @@ def getCompoundPaths(assPath,allAssets,isVersion=False):
   return(retpaths)
 
 
+def setAssetDone(assPath):
+  project = assPath.split(":")[0]
+  asspathfd = open("/tmp/"+ project,"a+")
+  asspathfd.write(assPath +"\n")
+  asspathfd.flush()
+  asspathfd.close()
+
+
+def isAssetDone(assPath):
+  project = assPath.split(":")[0]
+  if(os.path.exists("/tmp/" + project)):
+    asspathfd = open("/tmp/" + project, "r")
+    for x in asspathfd.readlines():
+      # print(x.strip())
+      if(x.strip() == assPath):
+        return(True)
+    asspathfd.close()
+  return(False)
+
 def sortKey(value):
   try:
     # print(value.split(os.sep)[-1])
@@ -133,6 +152,8 @@ try:
       if(allAssets):
 
         for x in allAssets:
+          if(isAssetDone(x['path'])):
+            continue
           toBackup = False
           if(x['assetType'] == "output"):
             if(args.all):
@@ -166,7 +187,7 @@ try:
                 cleanBackUp(x)
               except:
                 print(sys.exc_info())
-
+              setAssetDone(x['path'])
               rbhus.debug.info(x['path'] +" "+ str(exitValue))
 except:
   rbhus.debug.error(str(sys.exc_info()))

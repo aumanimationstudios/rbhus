@@ -28,7 +28,11 @@ pathDict = {}
 for path in paths:
   pathDict[path[0]] = [os.path.join(path[0],subPath) for subPath in path[1]]
 
-print(pathDict)
+for x in pathDict:
+  print(x,pathDict[x])
+
+
+treewidgetItems = []
 
 class Ui_Form(object):
   def setupUi(self, Form):
@@ -48,8 +52,12 @@ class Ui_Form(object):
     #
 
 
-    # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
-    # item_1 = QtWidgets.QTreeWidgetItem(item_0)
+    item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+    item_0.setText(0,"wtf1")
+    item_1 = QtWidgets.QTreeWidgetItem()
+    item_1.parent = item_0
+    item_1.setText(0,"wtf1_1")
+
     # item_2 = QtWidgets.QTreeWidgetItem(item_1)
     # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
     # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)

@@ -304,6 +304,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test10Action = toolsMenu.addAction("exr2png(linux)")
     test11Action = toolsMenu.addAction("png2flv(linux)")
     test12Action = toolsMenu.addAction("png2mp4(linux)")
+    test13Action = toolsMenu.addAction("exr2movRle(linux)")
     test6Action = toolsMenu.addAction("copy/submit")
     test7Action = toolsMenu.addAction("fastAssign enable")
     test8Action = toolsMenu.addAction("fastAssign disable")
@@ -342,8 +343,10 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
     if (action == exrMovRleAction):
       self.exrMovRle()
+    if (action == test13Action):
+      self.exrMovRle(isScript=False)
 
-  def exrMovRle(self):
+  def exrMovRle(self,isScript = True):
     selTasksDict = self.selectedTasks()
     selTasks = []
     db_conn = dbRbhus.dbRbhus()
@@ -351,17 +354,21 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       os.makedirs(os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts"))
     except:
       print("trying to create rbhusPipe directory : "+ str(sys.exc_info()))
-
-    filenamepy = os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts",("_".join(time.asctime().split()) +".py").replace(":","-"))
-    fd = open(filenamepy,"w")
-    fd.write("#!/bin/sh\n")
-    print(filenamepy)
+    if(isScript):
+      filenamepy = os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts",("_".join(time.asctime().split()) +".py").replace(":","-"))
+      fd = open(filenamepy,"w")
+      fd.write("#!/bin/sh\n")
+      print(filenamepy)
     if (selTasksDict):
       for x in selTasksDict:
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
         convertCmd = exr2rleCmd +" "+ oDir +"\n"
-        fd.write(convertCmd)
+        print(convertCmd)
+        if(isScript):
+          fd.write(convertCmd)
+        else:
+          os.system(convertCmd.rstrip())
         if (tD['renExtEnv'] != "default"):
           renExtEnv = simplejson.loads(tD['renExtEnv'])
           if("assPath" in renExtEnv):
@@ -370,14 +377,20 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             copyAss = assProj +":output:Movs"
             copyAssAbsPath = utilsPipe.getAbsPath(copyAss)
             cpCmd = "cp -v "+ oDir +"/*.mov "+ copyAssAbsPath +"/\n"
-            fd.write(cpCmd)
-        fd.write("\n\n")
-    fd.flush()
-    fd.close()
-    os.chmod(filenamepy,0777)
-    msgbox = QtGui.QMessageBox()
-    msgbox.setText(filenamepy)
-    msgbox.exec_()
+            if(isScript):
+              fd.write(cpCmd)
+            else:
+              os.system(cpCmd.rstrip())
+        if(isScript):
+          fd.write("\n\n")
+    if(isScript):
+      fd.flush()
+      fd.close()
+      os.chmod(filenamepy,0777)
+      msgbox = QtGui.QMessageBox()
+      msgbox.setText(filenamepy)
+      msgbox.exec_()
+
 
 
   # def exrRleCreateScript(self):

@@ -322,8 +322,10 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     self.lineEditWorkers.setText(self.singleAssDet['assignedWorker'])
     self.lineEditReviewers.setText(self.singleAssDet['reviewUser'])
     self.lineEditReviewNotifiers.setText(self.singleAssDet['reviewNotifyUsers'])
-    self.lineEditDesc.setText(self.singleAssDet['description'])
-    self.lineEditTags.setText(self.singleAssDet['tags'])
+    if(self.singleAssDet['description']):
+      self.lineEditDesc.setText(self.singleAssDet['description'])
+    if(self.singleAssDet['tags']):
+      self.lineEditTags.setText(self.singleAssDet['tags'])
     if(int(self.singleAssDet['versioning'])):
       self.checkVersionEnable.setChecked(True)
 

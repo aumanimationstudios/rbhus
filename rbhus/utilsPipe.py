@@ -275,6 +275,10 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
     newAsset['directory'] = projDets['directory']
     newAsset['assignedWorker'] = os.environ['rbhusPipe_acl_user']
     newAsset['reviewUser'] = os.environ['rbhusPipe_acl_user']
+    newAsset['createdUser'] = os.environ['rbhusPipe_acl_user']
+    newAsset['reviewStatus'] = constantsPipe.reviewStatusNotDone
+    newAsset['publishVersion'] = ""
+    newAsset['reviewVersion'] = ""
     newAsset['importedFrom'] = fromAssDets['path']
 
     newAssId = assRegister(newAsset,copyFromTemplate=False)
@@ -1407,7 +1411,10 @@ def assRegister(assDetDict,copyFromTemplate=True,assetGroup = []):
   valuesA = []
   for x in assDetDict.keys():
     fieldsA.append(str(x))
-    valuesA.append("'"+ str(assDetDict[x]).rstrip().lstrip() +"'")
+    if(assDetDict[x]):
+      valuesA.append("'"+ str(assDetDict[x]).rstrip().lstrip() +"'")
+    else:
+      valuesA.append("NULL")
   fs = "("+ ",".join(fieldsA) +")"
   vs = "("+ ",".join(valuesA) +")"
   debug.debug(assDetDict)

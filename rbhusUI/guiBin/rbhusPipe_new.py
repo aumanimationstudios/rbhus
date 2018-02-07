@@ -2328,6 +2328,7 @@ def main_func(mainUid):
 
   mainUid.splitter.setStretchFactor(0,10)
   # mainUid.splitterAssetDetails.setStretchFactor(0,0.75)
+  mainUid.splitterProj.setSizes((10,500))
   # mainUid.splitterAssetDetails.setStretchFactor(2,0.25)
   mainUid.splitterAssetDetails.setSizes((1000,50))
   mainUid.splitterMedia.setSizes((1,200))
