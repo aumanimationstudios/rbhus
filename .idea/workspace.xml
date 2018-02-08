@@ -6,14 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/debug.py" afterPath="$PROJECT_DIR$/rbhus/debug.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetEdit.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetEdit.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/qt5/treeview-test.py" afterPath="$PROJECT_DIR$/tests/qt5/treeview-test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/convert-to-gif.sh" afterPath="$PROJECT_DIR$/tools/convert-to-gif.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py" afterPath="$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -670,13 +662,6 @@
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
     </task>
-    <task id="LOCAL-00036" summary="lots of changes">
-      <created>1509078553880</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1509078553880</updated>
-    </task>
     <task id="LOCAL-00037" summary="lots of changes">
       <created>1509683664882</created>
       <option name="number" value="00037" />
@@ -1013,7 +998,14 @@
       <option name="project" value="LOCAL" />
       <updated>1515936646035</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="lots of changes">
+      <created>1518006754805</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1518006754805</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TodoView">
