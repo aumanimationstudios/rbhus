@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -667,13 +664,6 @@
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
     </task>
-    <task id="LOCAL-00038" summary="lots of changes">
-      <created>1509699684681</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1509699684681</updated>
-    </task>
     <task id="LOCAL-00039" summary="lots of changes">
       <created>1509989783649</created>
       <option name="number" value="00039" />
@@ -1010,7 +1000,14 @@
       <option name="project" value="LOCAL" />
       <updated>1518060694710</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="lots of changes">
+      <created>1519981386654</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1519981386654</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="TodoView">
