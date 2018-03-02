@@ -1411,7 +1411,7 @@ def assRegister(assDetDict,copyFromTemplate=True,assetGroup = []):
   valuesA = []
   for x in assDetDict.keys():
     fieldsA.append(str(x))
-    if(assDetDict[x]):
+    if(assDetDict[x] != None):
       valuesA.append("'"+ str(assDetDict[x]).rstrip().lstrip() +"'")
     else:
       valuesA.append("NULL")

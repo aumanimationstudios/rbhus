@@ -553,7 +553,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg._push()
     os.chdir(self.versionsHg.absPipePath)
     self.versionsHg._purge()
-    self.versionsHg._update()
+    self.versionsHg._update(rev=versionCommited)
     os.chdir(self.versionsHg.localPath)
     self.commitRelated()
     self.hglog()

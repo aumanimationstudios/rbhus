@@ -361,15 +361,19 @@ class hg(object):
     debug.info("_clone"+ str(out))
 
 
-  def _update(self,local=False):
+  def _update(self, local=False, rev = None):
     if(not local):
       if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
         debug.warn("user not allowed")
         return(111)
-    if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg --verbose update --check",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if (rev != None):
+      cmd = "hg --verbose update --check -rev " + str(rev)
     else:
-      p = subprocess.Popen(["hg","--verbose","update","--check"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      cmd = "hg --verbose update --check"
+    if(sys.platform.lower().find("linux") >= 0):
+      p = subprocess.Popen(cmd,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    else:
+      p = subprocess.Popen(cmd.split(),stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
