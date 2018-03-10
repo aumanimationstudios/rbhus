@@ -147,6 +147,7 @@ class hg(object):
     except:
       debug.error(sys.exc_info())
     os.chdir(curdir)
+    utilsPipe.updateProjModifies(self.assDets['projName'],"commit_abspath",isModified=True)
     return(1,versionCommited)
 
 
@@ -293,9 +294,11 @@ class hg(object):
 
 
   def _commit(self,commitmsg = "from UI"):
+
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(111,None)
+    utilsPipe.updateAssModifies(self.assDets['assetId'],"commit:start")
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose commit -A --message \'{1}\' --user {0}".format(os.environ['rbhusPipe_acl_user'],commitmsg),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
@@ -315,12 +318,14 @@ class hg(object):
     except:
       debug.warning(sys.exc_info())
     debug.info(versionCommited)
+
     if (p.returncode != 0):
       debug.error(str(out))
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "commit:end:fail:"+ str(p.returncode))
       return(0,versionCommited)
     else:
       debug.info(str(out))
-      utilsPipe.updateAssModifies(self.assDets['assetId'], "commited : "+ str(versionCommited))
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "commit:end:success:"+ str(versionCommited))
       return(1,versionCommited)
 
 
@@ -328,6 +333,7 @@ class hg(object):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
       return(111)
+    utilsPipe.updateAssModifies(self.assDets['assetId'], "push:start")
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose push -f {0}".format(self.absPipePath),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
@@ -335,8 +341,10 @@ class hg(object):
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "push:end:fail:"+ str(p.returncode))
     else:
       debug.info(str(out))
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "push:end:success:" + str(p.returncode))
 
 
   def _pull(self):
@@ -366,8 +374,11 @@ class hg(object):
       if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
         debug.warn("user not allowed")
         return(111)
+    utilsPipe.updateAssModifies(self.assDets['assetId'], "update:start")
+
     if (rev != None):
       cmd = "hg --verbose update --check -rev " + str(rev)
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "update:command:"+ str(rev))
     else:
       cmd = "hg --verbose update --check"
     if(sys.platform.lower().find("linux") >= 0):
@@ -377,8 +388,14 @@ class hg(object):
     out = p.communicate()[0]
     if (p.returncode != 0):
       debug.error(str(out))
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "update:end:fail:" + str(p.returncode))
     else:
       debug.info(str(out))
+      if(rev != None):
+        msg = str(rev)
+      else:
+        msg = str(p.returncode)
+      utilsPipe.updateAssModifies(self.assDets['assetId'], "update:end:success:" + msg)
 
   def _purge(self):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
@@ -418,33 +435,39 @@ class hg(object):
       return(111)
 
     pubpath = os.path.join(self.absPipePath,"publish")
+    utilsPipe.updateAssModifies(self.assDets['assetId'], "archive:start")
     if(not rev):
       rev = 0
     os.chdir(self.absPipePath)
-    if(os.path.exists(pubpath)):
+    try:
+      if(os.path.exists(pubpath)):
+        try:
+          shutil.rmtree(pubpath)
+        except:
+          debug.warn(sys.exc_info())
       try:
-        shutil.rmtree(pubpath)
+        os.makedirs(pubpath)
       except:
         debug.warn(sys.exc_info())
-    try:
-      os.makedirs(pubpath)
-    except:
-      debug.warn(sys.exc_info())
-    if(sys.platform.lower().find("linux") >= 0):
-      p = subprocess.Popen("hg --verbose archive --rev {0} ./publish/".format(rev),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    else:
-      p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./publish/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      if(sys.platform.lower().find("linux") >= 0):
+        p = subprocess.Popen("hg --verbose archive --rev {0} ./publish/".format(rev),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      else:
+        p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./publish/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    out = p.communicate()[0]
-    p.wait()
-    if (p.returncode != 0):
-      debug.error(str(out))
-    else:
-      debug.info(str(out))
-      assdict = {}
-      assdict["publishVersion"] = str(rev)
-      utilsPipe.assEdit(asspath=self.pipepath, assdict=assdict)
-      utilsPipe.updateAssModifies(self.assDets['assetId'], "publish : "+ str(rev))
+      out = p.communicate()[0]
+      p.wait()
+      if (p.returncode != 0):
+        debug.error(str(out))
+        utilsPipe.updateAssModifies(self.assDets['assetId'], "archive:end:fail:" + str(p.returncode))
+
+      else:
+        debug.info(str(out))
+        assdict = {}
+        assdict["publishVersion"] = str(rev)
+        utilsPipe.assEdit(asspath=self.pipepath, assdict=assdict)
+        utilsPipe.updateAssModifies(self.assDets['assetId'], "archive:end:success:" + str(rev))
+    except:
+      debug.error(sys.exc_info())
     os.chdir(self.localPath)
 
 

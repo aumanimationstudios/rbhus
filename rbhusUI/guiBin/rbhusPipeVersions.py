@@ -622,9 +622,11 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         assdets = utilsPipe.getAssDetails(assPath=self.versionsHg.pipepath)
         runCmd = utilsPipe.openAssetCmd(assdets,filename)
         if(runCmd):
+          utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_from_rbhusPipeVersion_ui",isAccessed=True)
           runCmd = runCmd.rstrip().lstrip()
           subprocess.Popen(runCmd,shell=True)
         else:
+          utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_from_rbhusPipeVersion_ui",isAccessed=True)
           import webbrowser
           webbrowser.open(filename)
     
