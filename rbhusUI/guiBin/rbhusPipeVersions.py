@@ -576,6 +576,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           self.relatedAssetWidgets[x].labelDate.setText(str(time.ctime(float(assLog[0][2].split("-")[0]))))
 
 
+
   def popRelated(self):
     selectedForPop = utilsPipe.getGroupedForPoP(self.assetDetails['path'])
     if (selectedForPop):
