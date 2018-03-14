@@ -147,7 +147,7 @@ class hg(object):
     except:
       debug.error(sys.exc_info())
     os.chdir(curdir)
-    utilsPipe.updateProjModifies(self.assDets['projName'],"commit_abspath",isModified=True)
+    utilsPipe.updateProjModifies(self.assDets['projName'],"commit_abspath:",isModified=True)
     return(1,versionCommited)
 
 
@@ -326,6 +326,8 @@ class hg(object):
     else:
       debug.info(str(out))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "commit:end:success:"+ str(versionCommited))
+      utilsPipe.updateProjModifies(self.assDets['projName'], "commit:"+ str(self.assDets['path']), isModified=True)
+
       return(1,versionCommited)
 
 

@@ -565,15 +565,18 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       for x in selectedForAutoCommit:
         debug.info("commiting : " + x)
         xver = hgmod.hg(x)
+        utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:start")
         retValue, versionNumber = xver.commitAbsPath(commitmsg="from autoCommit")
         debug.info(versionNumber)
         if (retValue == 111):
           self.messageBoxWarn(assPath=x)
+          utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:end:fail:permission_denied")
         else:
           assLog = xver._log()
           if(versionNumber):
             self.relatedAssetWidgets[x].labelVersion.setText(str(versionNumber).zfill(4))
           self.relatedAssetWidgets[x].labelDate.setText(str(time.ctime(float(assLog[0][2].split("-")[0]))))
+          utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:end:success")
 
 
 

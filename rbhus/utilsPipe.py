@@ -654,11 +654,11 @@ def updateProjModifies(projName,notes, isAccessed=False, isModified=False):
   dbconn = dbPipe.dbPipe()
   try:
     if(isModified):
-      dbconn.execute("insert into projModifies (projName,username,notes,modified) values ('"+ assId +"','"+ username +"','"+ notes +"', now()) \"
-                     "on duplicate key update notes="+ notes +", modified=now()")
+      dbconn.execute("insert into projModifies (projName,username,notes,modified) values ('"+ projName +"','"+ username +"','"+ notes +"', now()) \
+                     on duplicate key update notes='"+ notes +"', modified=now()")
     if(isAccessed):
-      dbconn.execute("insert into projModifies (projName,username,notes,accessed) values ('" + assId + "','" + username + "','" + notes + "', now()) \"
-                     "on duplicate key update notes=" + notes + ", accessed=now()")
+      dbconn.execute("insert into projModifies (projName,username,notes,accessed) values ('" + projName + "','" + username + "','" + notes + "', now()) \
+                     on duplicate key update notes='" + notes + "', accessed=now()")
   except:
     debug.error(sys.exc_info())
 

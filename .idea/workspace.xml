@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/hgmod.py" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,7 +32,7 @@
       <file leaf-file-name="assetBackup.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="855">
               <caret line="71" column="19" lean-forward="false" selection-start-line="71" selection-start-column="19" selection-end-line="71" selection-end-column="19" />
               <folding>
                 <element signature="e#133#143#0" expanded="true" />
@@ -37,31 +41,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="treeview-test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/qt5/treeview-test.py">
+      <file leaf-file-name="assetBackup_new.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="16" column="1" lean-forward="false" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
+            <state relative-caret-position="1110">
+              <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusAssetImport.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusAssetImport.py">
+      <file leaf-file-name="beforeFile.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="55" column="39" lean-forward="false" selection-start-line="55" selection-start-column="39" selection-end-line="55" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="762">
-              <caret line="660" column="75" lean-forward="false" selection-start-line="660" selection-start-column="75" selection-end-line="660" selection-end-column="75" />
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -70,8 +64,8 @@
       <file leaf-file-name="rbhusPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-9">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="550">
+              <caret line="264" column="27" lean-forward="false" selection-start-line="264" selection-start-column="17" selection-end-line="264" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -80,8 +74,8 @@
       <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3141">
-              <caret line="149" column="91" lean-forward="true" selection-start-line="149" selection-start-column="4" selection-end-line="149" selection-end-column="91" />
+            <state relative-caret-position="315">
+              <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -90,18 +84,28 @@
       <file leaf-file-name="afterFile.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="34" column="26" lean-forward="false" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+            <state relative-caret-position="45">
+              <caret line="6" column="34" lean-forward="true" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1080">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rbhusPipeVersions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2018">
-              <caret line="628" column="118" lean-forward="true" selection-start-line="628" selection-start-column="118" selection-end-line="628" selection-end-column="118" />
+            <state relative-caret-position="1450">
+              <caret line="628" column="33" lean-forward="false" selection-start-line="628" selection-start-column="33" selection-end-line="628" selection-end-column="33" />
               <folding>
                 <element signature="e#18#54#0" expanded="true" />
               </folding>
@@ -109,21 +113,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusHostEdit.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusHostEdit.py">
+      <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="407">
+              <caret line="651" column="4" lean-forward="false" selection-start-line="651" selection-start-column="4" selection-end-line="651" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusPipeAssetEdit.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetEdit.py">
+      <file leaf-file-name="dbPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="327" column="58" lean-forward="false" selection-start-line="327" selection-start-column="58" selection-end-line="327" selection-end-column="58" />
+            <state relative-caret-position="946">
+              <caret line="82" column="6" lean-forward="false" selection-start-line="82" selection-start-column="6" selection-end-line="82" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -140,12 +144,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getproje</find>
-      <find>pop</find>
-      <find>dir(</find>
-      <find>published</find>
-      <find>publish</find>
-      <find>review</find>
       <find>assReviewAction</find>
       <find>reviewAss</find>
       <find>qpro</find>
@@ -167,9 +165,15 @@
       <find>assregister</find>
       <find>splitter</find>
       <find>assre</find>
-      <find>commit</find>
-      <find>assetmodi</find>
       <find>projn</find>
+      <find>assetmodi</find>
+      <find>commit</find>
+      <find>assdets</find>
+      <find>assmodifie</find>
+      <find>from</find>
+      <find>projModi</find>
+      <find>modifies</find>
+      <find>updateProjModifies</find>
     </findStrings>
     <replaceStrings>
       <replace>mainUid.comboSeq</replace>
@@ -211,7 +215,7 @@
       <GitPushTagMode />
     </option>
     <push-targets>
-      <push-target-info target-remote="origin" target-branch="2.0" repo="$PROJECT_DIR$" source="2.0" />
+      <push-target-info target-remote="bitbutcket" target-branch="2.0" repo="$PROJECT_DIR$" source="2.0" />
     </push-targets>
     <favorite-branches>
       <branch-storage>
@@ -232,7 +236,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun9" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun10" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun11" />
         <option value="$PROJECT_DIR$/tests/fixAssetGroups.py" />
@@ -280,9 +283,10 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetEdit.py" />
         <option value="$PROJECT_DIR$/tests/qt5/treeview-test.py" />
-        <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
-        <option value="$PROJECT_DIR$/rbhus/hgmod.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
+        <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+        <option value="$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py" />
+        <option value="$PROJECT_DIR$/rbhus/hgmod.py" />
       </list>
     </option>
   </component>
@@ -453,15 +457,15 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="TEXT&#10;Python" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tools/rbhus/autoLineUp" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/tools/rbhus/backup" />
       <recent name="$PROJECT_DIR$/tools/rbhus" />
       <recent name="$PROJECT_DIR$/tests/FIX_PROBLEMS" />
       <recent name="$PROJECT_DIR$/tools/rbhus/autoLineUp" />
       <recent name="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tools/rbhus/autoLineUp" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -476,7 +480,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.assetBackup">
+  <component name="RunManager" selected="Python.assetBackup_new">
     <configuration default="true" type="tests" factoryName="Doctests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -560,6 +564,24 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
+    <configuration name="assetBackup_new" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools/rbhus/backup" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="rbhus" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
     <configuration name="autoLineUp_light" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -614,38 +636,20 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="pyqtDelegate" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="rbhus" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/pyqtDelegate.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.pyqtDelegate" />
-      <item index="1" class="java.lang.String" itemvalue="Python.autoLineUp_light" />
-      <item index="2" class="java.lang.String" itemvalue="Python.autoLineUp_server" />
-      <item index="3" class="java.lang.String" itemvalue="Python.knotify" />
-      <item index="4" class="java.lang.String" itemvalue="Python.assetBackup" />
+      <item index="0" class="java.lang.String" itemvalue="Python.autoLineUp_light" />
+      <item index="1" class="java.lang.String" itemvalue="Python.autoLineUp_server" />
+      <item index="2" class="java.lang.String" itemvalue="Python.knotify" />
+      <item index="3" class="java.lang.String" itemvalue="Python.assetBackup" />
+      <item index="4" class="java.lang.String" itemvalue="Python.assetBackup_new" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.assetBackup" />
-        <item index="1" class="java.lang.String" itemvalue="Python.knotify" />
-        <item index="2" class="java.lang.String" itemvalue="Python.autoLineUp_server" />
-        <item index="3" class="java.lang.String" itemvalue="Python.autoLineUp_light" />
-        <item index="4" class="java.lang.String" itemvalue="Python.pyqtDelegate" />
+        <item index="0" class="java.lang.String" itemvalue="Python.assetBackup_new" />
+        <item index="1" class="java.lang.String" itemvalue="Python.assetBackup" />
+        <item index="2" class="java.lang.String" itemvalue="Python.knotify" />
+        <item index="3" class="java.lang.String" itemvalue="Python.autoLineUp_server" />
+        <item index="4" class="java.lang.String" itemvalue="Python.autoLineUp_light" />
       </list>
     </recent_temporary>
   </component>
@@ -662,20 +666,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1490596174821</updated>
-    </task>
-    <task id="LOCAL-00043" summary="lots of changes">
-      <created>1510209724395</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1510209724395</updated>
-    </task>
-    <task id="LOCAL-00044" summary="lots of changes">
-      <created>1510210070951</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1510210070951</updated>
     </task>
     <task id="LOCAL-00045" summary="lots of changes">
       <created>1510210089850</created>
@@ -1006,7 +996,21 @@
       <option name="project" value="LOCAL" />
       <updated>1520704071495</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="lots of changes">
+      <created>1520704154211</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1520704154211</updated>
+    </task>
+    <task id="LOCAL-00093" summary="lots of changes">
+      <created>1520704221481</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1520704221481</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1020,13 +1024,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1080" height="1872" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29263565" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28972867" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1756906" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.124928035" sideWeight="0.508547" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23425414" sideWeight="0.49252138" order="2" side_tool="false" content_ui="tabs" x="1807" y="742" width="1198" height="577" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287277" sideWeight="0.6356589" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24697755" sideWeight="0.491453" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23373632" sideWeight="0.49252138" order="2" side_tool="false" content_ui="tabs" x="1807" y="742" width="1198" height="577" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287277" sideWeight="0.36434108" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2640884" sideWeight="0.49786323" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21104972" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1038,7 +1042,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24751382" sideWeight="0.491453" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="true" anchor="bottom" auto_hide="true" internal_type="SLIDING" type="FLOATING" visible="true" show_stripe_button="true" weight="0.32967034" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" x="1920" y="0" width="1920" height="1040" />
@@ -1084,27 +1087,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun7">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun8">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun11">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun9">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1304,13 +1286,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/convert-to-gif.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1374,16 +1349,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="71" column="19" lean-forward="false" selection-start-line="71" selection-start-column="19" selection-end-line="71" selection-end-column="19" />
-          <folding>
-            <element signature="e#133#143#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/qt5/treeview-test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1396,14 +1361,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="55" column="39" lean-forward="false" selection-start-line="55" selection-start-column="39" selection-end-line="55" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="34" column="26" lean-forward="false" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
           <folding />
         </state>
       </provider>
@@ -1424,37 +1381,87 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1450">
+          <caret line="628" column="33" lean-forward="false" selection-start-line="628" selection-start-column="33" selection-end-line="628" selection-end-column="33" />
+          <folding>
+            <element signature="e#18#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/dbPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="946">
+          <caret line="82" column="6" lean-forward="false" selection-start-line="82" selection-start-column="6" selection-end-line="82" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="71" column="19" lean-forward="false" selection-start-line="71" selection-start-column="19" selection-end-line="71" selection-end-column="19" />
+          <folding>
+            <element signature="e#133#143#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="6" column="34" lean-forward="true" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1080">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="550">
+          <caret line="264" column="27" lean-forward="false" selection-start-line="264" selection-start-column="17" selection-end-line="264" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="762">
-          <caret line="660" column="75" lean-forward="false" selection-start-line="660" selection-start-column="75" selection-end-line="660" selection-end-column="75" />
+        <state relative-caret-position="407">
+          <caret line="651" column="4" lean-forward="false" selection-start-line="651" selection-start-column="4" selection-end-line="651" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3141">
-          <caret line="149" column="91" lean-forward="true" selection-start-line="149" selection-start-column="4" selection-end-line="149" selection-end-column="91" />
+        <state relative-caret-position="315">
+          <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2018">
-          <caret line="628" column="118" lean-forward="true" selection-start-line="628" selection-start-column="118" selection-end-line="628" selection-end-column="118" />
-          <folding>
-            <element signature="e#18#54#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="1110">
+          <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
