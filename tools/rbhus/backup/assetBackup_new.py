@@ -27,14 +27,20 @@ parser.add_argument("-a","--all",dest='all',action="store_true")
 parser.add_argument("-p","--projects",dest='projects',help="comma seperated list of projects to backup")
 args = parser.parse_args()
 
-dbproj = rbhus.dbPipe.dbPipe()
-projs = dbproj.execute("select * from projModifies where date(modified) > DATE_SUB(CURDATE(), INTERVAL 7 DAY)",dictionary=True)
 
-if(projs):
-  for x in projs:
-    print(x)
-# getProjForBackup = rbhus.
-sys.exit(0)
+def getProjForBackup(days=7):
+  dbproj = rbhus.dbPipe.dbPipe()
+  projs = dbproj.execute("select * from projModifies where date(modified) > DATE_SUB(CURDATE(), INTERVAL 7 DAY)",dictionary=True)
+  projToRet = []
+  if(projs):
+    for x in projs:
+      projDetail = rbhus.utilsPipe.getProjDetails(x['projName'].strip())
+      projToRet.append(projDetail)
+  return(projToRet)
+
+# for x in getProjForBackup():
+#   print(x['projName'])
+# sys.exit(0)
 
 def isValidBackupDir(directory):
   allDirMaps = rbhus.utilsPipe.getDirMaps(dirType="backup")
@@ -146,7 +152,7 @@ try:
       else:
         rbhus.debug.warning("bad project name : "+ str(p))
   else:
-    allProj = rbhus.utilsPipe.getAllProjects(status=rbhus.constantsPipe.projActive)
+    allProj = getProjForBackup()
     checkIfBackup = True
 
   for proj in allProj:
@@ -157,7 +163,6 @@ try:
     else:
       doBackup = True
     print(proj['projName'] +" : "+ str(doBackup))
-
     if(doBackup):
       allAssets = rbhus.utilsPipe.getProjAsses(proj['projName'])
       if(allAssets):
