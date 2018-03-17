@@ -557,6 +557,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     os.chdir(self.versionsHg.localPath)
     self.commitRelated()
     self.hglog()
+    utilsPipe.updateProjModifies(self.assetDetails['projName'], "commit:"+ str(self.assetDetails['path']), isModified=True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
   def commitRelated(self):
@@ -626,11 +627,11 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         assdets = utilsPipe.getAssDetails(assPath=self.versionsHg.pipepath)
         runCmd = utilsPipe.openAssetCmd(assdets,filename)
         if(runCmd):
-          utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_from_rbhusPipeVersion_ui",isAccessed=True)
+          utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_version_ui:"+ self.assetDetails['path'],isAccessed=True)
           runCmd = runCmd.rstrip().lstrip()
           subprocess.Popen(runCmd,shell=True)
         else:
-          utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_from_rbhusPipeVersion_ui",isAccessed=True)
+          utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_version_ui:"+ self.assetDetails['path'],isAccessed=True)
           import webbrowser
           webbrowser.open(filename)
     

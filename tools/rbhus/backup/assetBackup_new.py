@@ -31,11 +31,15 @@ args = parser.parse_args()
 def getProjForBackup(days=7):
   dbproj = rbhus.dbPipe.dbPipe()
   projs = dbproj.execute("select * from projModifies where date(modified) > DATE_SUB(CURDATE(), INTERVAL 7 DAY)",dictionary=True)
+  uniqproj = {}
   projToRet = []
   if(projs):
     for x in projs:
-      projDetail = rbhus.utilsPipe.getProjDetails(x['projName'].strip())
-      projToRet.append(projDetail)
+      if(not uniqproj.has_key(x['projName'])):
+        projDetail = rbhus.utilsPipe.getProjDetails(x['projName'].strip())
+        uniqproj[x['projName']] = 1
+        projToRet.append(projDetail)
+
   return(projToRet)
 
 # for x in getProjForBackup():

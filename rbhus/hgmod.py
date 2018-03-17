@@ -326,7 +326,7 @@ class hg(object):
     else:
       debug.info(str(out))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "commit:end:success:"+ str(versionCommited))
-      utilsPipe.updateProjModifies(self.assDets['projName'], "commit:"+ str(self.assDets['path']), isModified=True)
+      # utilsPipe.updateProjModifies(self.assDets['projName'], "commit:"+ str(self.assDets['path']), isModified=True)
 
       return(1,versionCommited)
 
@@ -379,10 +379,10 @@ class hg(object):
     utilsPipe.updateAssModifies(self.assDets['assetId'], "update:start")
 
     if (rev != None):
-      cmd = "hg --verbose update --check -rev " + str(rev)
+      cmd = "hg --verbose update -rev " + str(rev)
       utilsPipe.updateAssModifies(self.assDets['assetId'], "update:command:"+ str(rev))
     else:
-      cmd = "hg --verbose update --check"
+      cmd = "hg --verbose update"
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen(cmd,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
