@@ -379,10 +379,10 @@ class hg(object):
     utilsPipe.updateAssModifies(self.assDets['assetId'], "update:start")
 
     if (rev != None):
-      cmd = "hg --verbose update -rev " + str(rev)
+      cmd = "hg --verbose update --check --rev " + str(rev)
       utilsPipe.updateAssModifies(self.assDets['assetId'], "update:command:"+ str(rev))
     else:
-      cmd = "hg --verbose update"
+      cmd = "hg --verbose update --check"
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen(cmd,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
