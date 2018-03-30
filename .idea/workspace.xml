@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/convert-to-gif.sh" afterPath="$PROJECT_DIR$/tools/convert-to-gif.sh" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -41,17 +41,7 @@
         <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1022">
-              <caret line="176" column="26" lean-forward="true" selection-start-line="176" selection-start-column="26" selection-end-line="176" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="beforeFile.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <caret line="176" column="26" lean-forward="false" selection-start-line="176" selection-start-column="26" selection-end-line="176" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -67,11 +57,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="hgmod.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1029">
-              <caret line="384" column="40" lean-forward="false" selection-start-line="384" selection-start-column="40" selection-end-line="384" selection-end-column="40" />
+            <state relative-caret-position="1104">
+              <caret line="356" column="28" lean-forward="true" selection-start-line="356" selection-start-column="28" selection-end-line="356" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="convert-to-gif.sh" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tools/convert-to-gif.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="28" lean-forward="false" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -232,7 +232,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun10" />
         <option value="$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun11" />
         <option value="$PROJECT_DIR$/tests/fixAssetGroups.py" />
         <option value="/proj/standard/share/blender-2.79-gentoo/2.79/scripts/addons/Copy_Render_Layer.py" />
@@ -271,7 +270,6 @@
         <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
         <option value="$PROJECT_DIR$/tests/qt4-filebrowser.py" />
         <option value="$PROJECT_DIR$/tests/qt5-treeview.py" />
-        <option value="$PROJECT_DIR$/tools/convert-to-gif.sh" />
         <option value="$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py" />
         <option value="/blueprod/STOR1/proj/standard/share/blender-2.78.5-gentoo-py35/2.78/scripts/addons/cycles/__init__.py" />
         <option value="$PROJECT_DIR$/rbhus/debug.py" />
@@ -283,6 +281,8 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py" />
         <option value="$PROJECT_DIR$/rbhus/hgmod.py" />
+        <option value="/blueprod/STOR1/proj/standard/share/blender-2.78.5-gentoo-py35/2.78/scripts/startup/bl_operators/screen_play_rendered_anim.py" />
+        <option value="$PROJECT_DIR$/tools/convert-to-gif.sh" />
       </list>
     </option>
   </component>
@@ -315,8 +315,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -390,48 +388,14 @@
             <path>
               <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
               <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-              <item name="guiBin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
               <item name="tools" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="tools" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="tools" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="autoLineUp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="tools" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="backup" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1073,13 +1037,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tools/cloning/cloneMaster/system-rescue-cd-install/autorun9">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -1272,13 +1229,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/convert-to-gif.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/dfl.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="697">
@@ -1413,14 +1363,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1022">
-          <caret line="176" column="26" lean-forward="true" selection-start-line="176" selection-start-column="26" selection-end-line="176" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="960">
@@ -1439,10 +1381,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///blueprod/STOR1/proj/standard/share/blender-2.78.5-gentoo-py35/2.78/scripts/startup/bl_operators/screen_play_rendered_anim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="104" column="58" lean-forward="true" selection-start-line="104" selection-start-column="58" selection-end-line="104" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1029">
-          <caret line="384" column="40" lean-forward="false" selection-start-line="384" selection-start-column="40" selection-end-line="384" selection-end-column="40" />
+        <state relative-caret-position="1104">
+          <caret line="356" column="28" lean-forward="true" selection-start-line="356" selection-start-column="28" selection-end-line="356" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1022">
+          <caret line="176" column="26" lean-forward="false" selection-start-line="176" selection-start-column="26" selection-end-line="176" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/convert-to-gif.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="28" lean-forward="false" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
           <folding />
         </state>
       </provider>
