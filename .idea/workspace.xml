@@ -40,7 +40,7 @@
       <file leaf-file-name="assetBackup_new.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1022">
+            <state relative-caret-position="1036">
               <caret line="176" column="26" lean-forward="false" selection-start-line="176" selection-start-column="26" selection-end-line="176" selection-end-column="26" />
               <folding />
             </state>
@@ -70,8 +70,8 @@
       <file leaf-file-name="convert-to-gif.sh" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tools/convert-to-gif.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="28" lean-forward="false" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+            <state relative-caret-position="105">
+              <caret line="7" column="72" lean-forward="false" selection-start-line="7" selection-start-column="72" selection-end-line="7" selection-end-column="72" />
               <folding />
             </state>
           </provider>
@@ -140,7 +140,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>publishVersion</find>
       <find>auto</find>
       <find>exr2rleCmd</find>
       <find>getassde</find>
@@ -170,6 +169,7 @@
       <find>_update</find>
       <find>commit</find>
       <find>projmo</find>
+      <find>di</find>
     </findStrings>
     <replaceStrings>
       <replace>mainUid.comboSeq</replace>
@@ -1399,7 +1399,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/backup/assetBackup_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1022">
+        <state relative-caret-position="1036">
           <caret line="176" column="26" lean-forward="false" selection-start-line="176" selection-start-column="26" selection-end-line="176" selection-end-column="26" />
           <folding />
         </state>
@@ -1407,8 +1407,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/convert-to-gif.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="28" lean-forward="false" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+        <state relative-caret-position="105">
+          <caret line="7" column="72" lean-forward="false" selection-start-line="7" selection-start-column="72" selection-end-line="7" selection-end-column="72" />
           <folding />
         </state>
       </provider>
