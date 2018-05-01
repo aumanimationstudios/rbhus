@@ -240,7 +240,7 @@ class updateDetailsPanelMediaQthread(QtCore.QThread):
           self.mediaSignal.emit(x)
           i = i+1
           self.mediaCountCurrent.emit(i)
-          time.sleep(0.01)
+          # time.sleep(0.01)
         else:
           break
     # self.finished.emit()

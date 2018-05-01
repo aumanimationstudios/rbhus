@@ -294,7 +294,8 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
 
   if(toAsset):
     if(not pop):
-      if (not isAssAssigned(toAsset)):
+      if (not isAssAssigned(toAsset) and not isProjAdmin(toAsset)):
+        debug.error("NO permission")
         return (3)
     newAssPath = getAbsPath(toAsset['path'])
     if((toAsset['sequenceName'] != "default" or toAsset['sceneName'] != "default") and toAssetPath == 'default'):
@@ -616,7 +617,7 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
         thumbDetails.subPath = fSubPath
         if(QT_callback_signalThumbz):
           QT_callback_signalThumbz(thumbDetails)
-          time.sleep(0.01)
+          # time.sleep(0.01)
         else:
           validMedia.append(thumbDetails)
   return(validMedia)
@@ -1435,7 +1436,7 @@ def assRegister(assDetDict,copyFromTemplate=True,assetGroup = []):
   try:
     rows = dbconn.execute("insert into assets "+ fs +" values "+ vs)
   except:
-    debug.debug(str(sys.exc_info()))
+    debug.error(str(sys.exc_info()))
     return(0)
   try:
 
@@ -1447,7 +1448,7 @@ def assRegister(assDetDict,copyFromTemplate=True,assetGroup = []):
     try:
       os.makedirs(corePath,0775)
     except:
-      debug.debug(str(sys.exc_info()))
+      debug.error(str(sys.exc_info()))
     if(copyFromTemplate):
       if(not assDetDict['assetType'] in constantsPipe.ignoreTemplateTypes):
         setAssTemplate(assDetDict)

@@ -268,7 +268,7 @@ class hosts(object):
       return(0)
       
   def hStop(self):
-    if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == self.MyIp)):
       try:
         rFrames = self.db_conn.execute("select * from frames where status = "+ str(constants.framesRunning) +" and hostName = \'"+ str(self.hostDetails['hostName']) +"\'", dictionary=True)
       except:
@@ -284,7 +284,7 @@ class hosts(object):
       return(0)
       
   def hEnable(self):
-    if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == self.MyIp)):
       try:
         self.db_conn.execute("update hostInfo set status = "+ str(constants.hostInfoEnable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
         self.db_conn.execute("update hostStates set status = "+ str(constants.hostInfoEnable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
@@ -299,7 +299,7 @@ class hosts(object):
     
       
   def hDisable(self):
-    if(self.userAdmin or (str(self.hostDetails['ip']) == MyIp)):
+    if(self.userAdmin or (str(self.hostDetails['ip']) == self.MyIp)):
       try:
         self.db_conn.execute("update hostInfo set status = "+ str(constants.hostInfoDisable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")
         self.db_conn.execute("update hostStates set status = "+ str(constants.hostInfoDisable) +" where ip=\'"+ str(self.hostDetails['ip']) +"\'")

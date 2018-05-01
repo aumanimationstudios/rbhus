@@ -24,6 +24,7 @@ import rbhus.dbPipe
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a","--all",dest='all',action="store_true")
+parser.add_argument("-d","--dryrun",dest='dryrun',action="store_true",help="do a test run without actually backing up anything")
 parser.add_argument("-p","--projects",dest='projects',help="comma seperated list of projects to backup")
 args = parser.parse_args()
 
@@ -185,6 +186,9 @@ try:
             toBackup = True
           if(toBackup):
             if(isValidBackupDir(x['backupDir'])):
+              if(args.dryrun == True):
+                print(x['path'])
+                continue
               dirMapDets = rbhus.utilsPipe.getDirMapsDetails(x['backupDir'])
               pathSrcBackup = rbhus.utilsPipe.getAbsPath(x['path']).rstrip(os.sep) + os.sep
               pathDestBackup = os.path.join(dirMapDets['linuxMapping'],x['projName'],x['assetId'],str(time.time())).rstrip(os.sep) + os.sep
