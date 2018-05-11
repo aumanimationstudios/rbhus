@@ -31,6 +31,7 @@ exr2pngCmd = toolsdir + os.sep + "convert_exr_png.py"
 png2flvCmd = toolsdir + os.sep + "convert_png_flv.py"
 png2mp4Cmd = toolsdir + os.sep + "convert_png_mp4.py"
 exr2rleCmd = toolsdir + os.sep + "convert_exr_mov_rle.py"
+png2rleCmd = toolsdir + os.sep + "convert_png_mov_rle.py"
 
 print editTaskCmd
 import rbhusListMod
@@ -301,16 +302,18 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     test3Action = toolsMenu.addAction("rerun")
     test4Action = toolsMenu.addAction("edit")
     test5Action = mainMenu.addAction("open dir")
-    test10Action = toolsMenu.addAction("exr2png(linux)")
-    test11Action = toolsMenu.addAction("png2flv(linux)")
-    test12Action = toolsMenu.addAction("png2mp4(linux)")
+    # test10Action = toolsMenu.addAction("exr2png(linux)")
+    # test11Action = toolsMenu.addAction("png2flv(linux)")
+    # test12Action = toolsMenu.addAction("png2mp4(linux)")
     test13Action = toolsMenu.addAction("exr2movRle(linux)")
+    test14Action = toolsMenu.addAction("png2movRle(linux)")
     test6Action = toolsMenu.addAction("copy/submit")
     test7Action = toolsMenu.addAction("fastAssign enable")
     test8Action = toolsMenu.addAction("fastAssign disable")
     test9Action = toolsMenu.addAction("delete")
 
     exrMovRleAction = scriptMenu.addAction("exr -> mov(rle)")
+    pngMovRleAction = scriptMenu.addAction("png -> mov(rle)")
 
     mainMenu.addMenu(toolsMenu)
     toolsMenu.addMenu(scriptMenu)
@@ -334,17 +337,22 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.fastAssignFunc(e=0)
     if(action == test9Action):
       self.delTask()
-    if(action == test10Action):
-      self.exr2png()
-    if(action == test11Action):
-      self.png2flv()
-    if(action == test12Action):
-      self.png2mp4()
+    # if(action == test10Action):
+    #   self.exr2png()
+    # if(action == test11Action):
+    #   self.png2flv()
+    # if(action == test12Action):
+    #   self.png2mp4()
 
     if (action == exrMovRleAction):
       self.exrMovRle()
     if (action == test13Action):
       self.exrMovRle(isScript=False)
+    if (action == pngMovRleAction):
+      self.pngMovRle()
+    if (action == test14Action):
+      self.pngMovRle(isScript=False)
+
 
   def exrMovRle(self,isScript = True):
     selTasksDict = self.selectedTasks()
@@ -364,6 +372,51 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
         convertCmd = exr2rleCmd +" "+ oDir +"\n"
+        print(convertCmd)
+        if(isScript):
+          fd.write(convertCmd)
+        else:
+          os.system(convertCmd.rstrip())
+        if (tD['renExtEnv'] != "default"):
+          renExtEnv = simplejson.loads(tD['renExtEnv'])
+          if("assPath" in renExtEnv):
+            assPath = renExtEnv['assPath']
+            assProj = assPath.split(":")[0]
+            copyAss = assProj +":output:Movs"
+            copyAssAbsPath = utilsPipe.getAbsPath(copyAss)
+            cpCmd = "cp -v "+ oDir +"/*.mov "+ copyAssAbsPath +"/\n"
+            if(isScript):
+              fd.write(cpCmd)
+            else:
+              os.system(cpCmd.rstrip())
+        if(isScript):
+          fd.write("\n\n")
+    if(isScript):
+      fd.flush()
+      fd.close()
+      os.chmod(filenamepy,0777)
+      msgbox = QtGui.QMessageBox()
+      msgbox.setText(filenamepy)
+      msgbox.exec_()
+
+  def pngMovRle(self,isScript = True):
+    selTasksDict = self.selectedTasks()
+    selTasks = []
+    db_conn = dbRbhus.dbRbhus()
+    try:
+      os.makedirs(os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts"))
+    except:
+      print("trying to create rbhusPipe directory : "+ str(sys.exc_info()))
+    if(isScript):
+      filenamepy = os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts",("_".join(time.asctime().split()) +".py").replace(":","-"))
+      fd = open(filenamepy,"w")
+      fd.write("#!/bin/sh\n")
+      print(filenamepy)
+    if (selTasksDict):
+      for x in selTasksDict:
+        tD = db_conn.getTaskDetails(x['id'])
+        oDir = tD['outDir']
+        convertCmd = png2rleCmd +" "+ oDir +"\n"
         print(convertCmd)
         if(isScript):
           fd.write(convertCmd)

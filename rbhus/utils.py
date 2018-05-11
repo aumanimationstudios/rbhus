@@ -584,9 +584,10 @@ class tasks(object):
     self.insertStatement = "insert into tasks ("+ ", ".join(self.validFields_keys) +") values ("+ ", ".join(self.validFields_values) +")"
     print(self.insertStatement)
     try:
-      self.db_conn.execute(self.insertStatement)
-      rows = self.db_conn.execute("select last_insert_id()", dictionary = True)
-      self.taskId =  rows[0]['last_insert_id()']
+      self.taskId = self.db_conn.execute(self.insertStatement,lastInsertId = True)
+      # rows = self.db_conn.execute("select last_insert_id()", dictionary = True)
+      # print("last insert id : "+ str(rows))
+      # self.taskId =  rows[0]['last_insert_id()']
       self.taskDetails = self._getTaskDetails(self.taskId)
       self.db_conn.execute("insert into tasksLog (id) values ("+ str(self.taskId) +")")
       return(self.taskId)

@@ -303,7 +303,7 @@ class dbRbhus:
 
 
 
-  def execute(self, query, dictionary=False):
+  def execute(self, query, dictionary=False, lastInsertId = False):
     while (1):
       try:
         self.__conn = self._connRbhus()
@@ -313,6 +313,8 @@ class dbRbhus:
           cur = self.__conn.cursor()
         cur.execute(query)
         debug.debug(query)
+        if(lastInsertId):
+          return(self.__conn.insert_id())
         if (dictionary):
           try:
             rows = cur.fetchall()

@@ -38,7 +38,7 @@ camera = os.environ['rbhus_camera']
 res = os.environ['rbhus_resolution']
 
 
-script = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/tools/rbhus/convert_exr_mov_prores.py"
+script = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/tools/rbhus/convert_exr_mov_rle.py"
 cmd = script +" "+ outDir
 print (cmd)
 rbhus.renderPlugin.sendCmd(cmd)

@@ -539,6 +539,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                       flvdict['fileType'] = "convert_exr_mov"
                       flvdict['fRange'] = "1"
                       flv = a.submit(flvdict)
+                      print("submited exr mov 1")
                       print("Submiting EXR to MOV task : " + str(b) + " : " + str(submitDict))
 
                     if (self.checkPngMov.isChecked()):
@@ -547,6 +548,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                       flvdict['fileType'] = "convert_png_mov"
                       flvdict['fRange'] = "1"
                       flv = a.submit(flvdict)
+                      print("submited png mov 1")
                       print("Submiting EXR to MOV task : " + str(b) + " : " + str(submitDict))
 
                     print("Submiting task : "+ str(b) +" : "+ str(submitDict))
@@ -572,6 +574,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     flvdict['fileType'] = "convert_exr_mov"
                     flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
+                    print("submited exr mov 2")
                     print("Submiting EXR to MOV task : " + str(b) + " : " + str(submitDict))
 
                   if (self.checkPngMov.isChecked()):
@@ -580,6 +583,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                     flvdict['fileType'] = "convert_png_mov"
                     flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
+                    print("submited png mov 2")
                     print("Submiting EXR to MOV task : " + str(b) + " : " + str(submitDict))
 
                   print("Submiting task : "+ str(b) +" : "+ str(submitDict))
@@ -593,28 +597,22 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
                 b = a.submit(submitDict)
                 print("Submiting task : " + str(b) + " : " + str(submitDict))
                 if(b):
-                  if (self.checkPngFlv.isChecked()):
-                    flvdict = copy.copy(submitDict)
-                    flvdict['afterTasks'] = str(b)
-                    flvdict['fileType'] = "convert_png_flv"
-                    flvdict['fRange'] = "1"
-                    flv = a.submit(flvdict)
-                    print("Submiting PNG to FLV task : " + str(b) + " : " + str(submitDict))
-
-                  if (self.checkPngMP4.isChecked()):
-                    flvdict = copy.copy(submitDict)
-                    flvdict['afterTasks'] = str(b)
-                    flvdict['fileType'] = "convert_png_mp4"
-                    flvdict['fRange'] = "1"
-                    flv = a.submit(flvdict)
-                    print("Submiting PNG to MP4 task : " + str(b) + " : " + str(submitDict))
-
                   if (self.checkExrMov.isChecked()):
                     flvdict = copy.copy(submitDict)
                     flvdict['afterTasks'] = str(b)
                     flvdict['fileType'] = "convert_exr_mov"
                     flvdict['fRange'] = "1"
                     flv = a.submit(flvdict)
+                    print("submited exr mov 3")
+                    print("Submiting EXR to MOV task : " + str(b) + " : " + str(submitDict))
+
+                  if (self.checkPngMov.isChecked()):
+                    flvdict = copy.copy(submitDict)
+                    flvdict['afterTasks'] = str(b)
+                    flvdict['fileType'] = "convert_png_mov"
+                    flvdict['fRange'] = "1"
+                    flv = a.submit(flvdict)
+                    print("submited png mov 2")
                     print("Submiting EXR to MOV task : " + str(b) + " : " + str(submitDict))
 
 
