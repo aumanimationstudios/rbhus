@@ -211,6 +211,11 @@ try:
                 # print("\_"+ outputDir1)
                 if(os.path.exists(outputDir1)):
                   print(outputDir1)
+                  rmcmd = "rm -frv " + str(outputDir1)
+                  if (args.dryrun == False):
+                    q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                    outq = q.communicate()[0].split()[0]
+                    print(outq)
                   # outputDir2 = getTimeSortedDirs(outputDir1)
             #       if(outputDir2):
             #         for od2 in outputDir2:
