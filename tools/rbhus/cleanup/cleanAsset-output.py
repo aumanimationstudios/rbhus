@@ -193,7 +193,7 @@ try:
     if(allAssets):
 
       for x in allAssets:
-        if(x['assetType'] == "output" and (x['assName'] != "Movs" or x['assName'] != "MovsFx" or x['assName'] != "Rendered_SF" or x['assName'] != "RenderedSF") ):
+        if(x['assetType'] == "output" and (x['assName'] != "Movs" and x['assName'] != "MovsFx" and x['assName'] != "Rendered_SF" and x['assName'] != "RenderedSF") ):
           # print(x['path'])
           dirMapDets = rbhus.utilsPipe.getDirMapsDetails(x['backupDir'])
           assAbsPath = rbhus.utilsPipe.getAbsPath(x['path'])
