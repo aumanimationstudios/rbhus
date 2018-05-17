@@ -31,7 +31,19 @@ args = parser.parse_args()
 
 
 
-excludeProjects = ['AndePirki_se01_ep024_getTheDarts','AndePirki_se01_ep023_flyMeNot']
+excludeProjects = ['AndePirki_se01_ep024_getTheDarts',
+                   'AndePirki_se01_ep023_flyMeNot',
+                   'AndePirki_se01_ep016_hatAttack',
+                   'AndePirki_se01_ep017_hideAndSeek',
+                   'AndePirki_se01_ep018_sleepWalk',
+                   'AndePirki_se01_ep019_letMeSleep',
+                   'AndePirki_se01_ep020_goofBall',
+                   'AndePirki_se01_ep021_hypnocity',
+                   'AndePirki_se01_ep022_fishyBUsiness',
+                   'andePirki_AnimationExplore',
+                   'examWorriors_m001',
+                   'examWorriors_m002_laughInlaughOut',
+                   'AndyPirki_SocialMedia']
 
 def getProjForBackup(days=7):
   dbproj = rbhus.dbPipe.dbPipe()
