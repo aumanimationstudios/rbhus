@@ -187,18 +187,19 @@ try:
           assAbsPath = rbhus.utilsPipe.getAbsPath(x['path'])
 
           if(os.path.exists(assAbsPath)):
-            p = subprocess.Popen("du -sx " + assAbsPath, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            outp = p.communicate()[0].split()[0]
+            # p = subprocess.Popen("du -sx " + assAbsPath, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            # outp = p.communicate()[0].split()[0]
+            #
+            # totalDelete = totalDelete + float(outp)
 
-            totalDelete = totalDelete + float(outp)
-
-            # outputDir1_2  = getTimeSortedDirs(assAbsPath)
-            # # print(outputDir1_2)
-            # if(outputDir1_2):
-            #   for outputDir1 in outputDir1_2:
-            #     # print("\_"+ outputDir1)
-            #     if(os.path.exists(outputDir1)):
-            #       outputDir2 = getTimeSortedDirs(outputDir1)
+            outputDir1_2  = getTimeSortedDirs(assAbsPath)
+            # print(outputDir1_2)
+            if(outputDir1_2):
+              for outputDir1 in outputDir1_2:
+                # print("\_"+ outputDir1)
+                if(os.path.exists(outputDir1)):
+                  print(outputDir1)
+                  # outputDir2 = getTimeSortedDirs(outputDir1)
             #       if(outputDir2):
             #         for od2 in outputDir2:
             #           # print("  \_"+ od2)

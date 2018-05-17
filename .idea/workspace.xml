@@ -5,10 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/rbhus/cleanup/cleanAsset-output.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/rbhus/cleanup/cleanAsset-output.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,8 +40,8 @@
       <file leaf-file-name="cleanAsset-output.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/cleanup/cleanAsset-output.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="192" column="51" lean-forward="true" selection-start-line="192" selection-start-column="51" selection-end-line="192" selection-end-column="51" />
+            <state relative-caret-position="228">
+              <caret line="192" column="53" lean-forward="true" selection-start-line="189" selection-start-column="14" selection-end-line="192" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -249,8 +245,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1920" />
-    <option name="height" value="1038" />
+    <option name="x" value="4" />
+    <option name="width" value="1272" />
+    <option name="height" value="688" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -932,14 +929,14 @@
     <frame x="0" y="0" width="1920" height="1038" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2672641" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2672641" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.1756906" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.53263956" side_tool="true" weight="0.21103527" />
       <window_info anchor="bottom" id="Version Control" order="10" sideWeight="0.36434108" weight="0.3287277" />
-      <window_info anchor="bottom" id="Python Console" order="8" sideWeight="0.49786323" visible="true" weight="0.18653421" />
+      <window_info anchor="bottom" id="Python Console" order="8" sideWeight="0.49786323" weight="0.18653421" />
       <window_info anchor="bottom" x="1807" y="742" width="1198" height="577" id="Run" order="2" sideWeight="0.43313953" weight="0.23321956" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.46736047" weight="0.21103527" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.46736047" visible="true" weight="0.21081677" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39889503" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1256,8 +1253,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/cleanup/cleanAsset-output.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="192" column="51" lean-forward="true" selection-start-line="192" selection-start-column="51" selection-end-line="192" selection-end-column="51" />
+        <state relative-caret-position="228">
+          <caret line="192" column="53" lean-forward="true" selection-start-line="189" selection-start-column="14" selection-end-line="192" selection-end-column="53" />
         </state>
       </provider>
     </entry>
