@@ -193,7 +193,7 @@ try:
     if(allAssets):
 
       for x in allAssets:
-        if(x['assetType'] == "output" and (x['assName'] != "Movs" and x['assName'] != "MovsFx" and x['assName'] != "Rendered_SF" and x['assName'] != "RenderedSF") ):
+        if(x['assetType'] == "output" and (x['assName'] != "Movs" and x['assName'] != "MovsFx" and x['assName'] != "Rendered_SF" and x['assName'] != "RenderedSF") and (x['sequenceName'] != 'default' and x['sceneName'] != 'default')):
           # print(x['path'])
           dirMapDets = rbhus.utilsPipe.getDirMapsDetails(x['backupDir'])
           assAbsPath = rbhus.utilsPipe.getAbsPath(x['path'])
