@@ -187,39 +187,44 @@ try:
           assAbsPath = rbhus.utilsPipe.getAbsPath(x['path'])
 
           if(os.path.exists(assAbsPath)):
-            outputDir1_2  = getTimeSortedDirs(assAbsPath)
-            # print(outputDir1_2)
-            if(outputDir1_2):
-              for outputDir1 in outputDir1_2:
-                # print("\_"+ outputDir1)
-                if(os.path.exists(outputDir1)):
-                  outputDir2 = getTimeSortedDirs(outputDir1)
-                  if(outputDir2):
-                    for od2 in outputDir2:
-                      # print("  \_"+ od2)
-                      latestDir = getTimeSortedDirs(od2)
+            p = subprocess.Popen("du -sx " + assAbsPath, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            outp = p.communicate()[0].split()[0]
 
-                      if(latestDir):
-                        latestDir.reverse()
-                        # print("    \_")
-                        latestDirImproved = []
-                        for ldi in latestDir:
+            totalDelete = totalDelete + float(outp)
 
-                          if(ldi.split(os.sep)[-1].isdigit()):
-                            latestDirImproved.append(ldi)
-                        toDeleteDir = latestDirImproved[:-1]
-                        if(toDeleteDir):
-                          for ld in toDeleteDir:
-                            print("- "+ ld)
-                            p = subprocess.Popen("du -sx "+ ld,shell=True,stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-                            outp = p.communicate()[0].split()[0]
-
-                            totalDelete = totalDelete + float(outp)
-                            rmcmd = "rm -frv "+ str(ld)
-                            if (args.dryrun == False):
-                              q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-                              outq = q.communicate()[0].split()[0]
-                              print(outq)
+            # outputDir1_2  = getTimeSortedDirs(assAbsPath)
+            # # print(outputDir1_2)
+            # if(outputDir1_2):
+            #   for outputDir1 in outputDir1_2:
+            #     # print("\_"+ outputDir1)
+            #     if(os.path.exists(outputDir1)):
+            #       outputDir2 = getTimeSortedDirs(outputDir1)
+            #       if(outputDir2):
+            #         for od2 in outputDir2:
+            #           # print("  \_"+ od2)
+            #           latestDir = getTimeSortedDirs(od2)
+            #
+            #           if(latestDir):
+            #             latestDir.reverse()
+            #             # print("    \_")
+            #             latestDirImproved = []
+            #             for ldi in latestDir:
+            #
+            #               if(ldi.split(os.sep)[-1].isdigit()):
+            #                 latestDirImproved.append(ldi)
+            #             toDeleteDir = latestDirImproved[:-1]
+            #             if(toDeleteDir):
+            #               for ld in toDeleteDir:
+            #                 print("- "+ ld)
+            #                 p = subprocess.Popen("du -sx "+ ld,shell=True,stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            #                 outp = p.communicate()[0].split()[0]
+            #
+            #                 totalDelete = totalDelete + float(outp)
+            #                 rmcmd = "rm -frv "+ str(ld)
+            #                 if (args.dryrun == False):
+            #                   q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            #                   outq = q.communicate()[0].split()[0]
+            #                   print(outq)
 
                             # print(out)
                         # for lds in latestDir[-2:]:
