@@ -5,75 +5,57 @@ __license__ = "GPL"
 __email__ = "shrinidhi666@gmail.com"
 
 import sys
-import os
 
-sys.path.append(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1]))
-
-import sys
-from collections import deque
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QVBoxLayout
+from PyQt5.QtGui import QIcon
+from PyQt5 import QtCore
 
 
-class Window(QtWidgets.QWidget):
+
+class fsm(QFileSystemModel):
   def __init__(self):
-    super(Window, self).__init__()
-    self.tree = QtWidgets.QTreeView(self)
-    layout = QtWidgets.QVBoxLayout(self)
-    layout.addWidget(self.tree)
-    self.fileSystemModel = QtWidgets.QFileSystemModel(parent =self.tree)
-    # self.fileSystemModel = QtWidgets.QDirModel(self.tree)
-    self.fileSystemModel.setFilter(QtCore.QDir.NoDot | QtCore.QDir.NoDotDot |QtCore.QDir.Dirs)
-    self.fileSystemModel.setNameFilters(("pulse*",))
-    self.fileSystemModel.setNameFilterDisables(False)
-    self.fileSystemModel.setReadOnly(True)
-    # self.tree.header().setDefaultSectionSize(180)
+    super(fsm, self).__init__()
 
-    root = self.fileSystemModel.setRootPath(sys.argv[1])
-    self.tree.setModel(self.fileSystemModel)
-    self.tree.setRootIndex(root)
-    self.tree.hideColumn(1)
-    self.tree.hideColumn(2)
-    self.tree.hideColumn(3)
-    # self.importData(data)
-    # self.tree.expandAll()
 
-  # def importData(self, data, root=None):
-  #   self.model.setRowCount(0)
-  #   if root is None:
-  #     root = self.model.invisibleRootItem()
-  #   seen = {}
-  #   values = deque(data)
-  #   while values:
-  #     value = values.popleft()
-  #     if value['level'] == 0:
-  #       parent = root
-  #     else:
-  #       pid = value['parent_ID']
-  #       if pid not in seen:
-  #         values.append(value)
-  #         continue
-  #       parent = seen[pid]
-  #     dbid = value['dbID']
-  #     parent.appendRow([
-  #       QtGui.QStandardItem(value['short_name']),
-  #       QtGui.QStandardItem(str(dbid)),
-  #     ])
-  #     seen[dbid] = parent.child(parent.rowCount() - 1)
+
+
+class App(QWidget):
+
+  def __init__(self):
+    super(App,self).__init__()
+    self.title = 'PyQt5 file system view - pythonspot.com'
+    self.left = 10
+    self.top = 10
+    self.width = 640
+    self.height = 480
+    self.initUI()
+
+  def initUI(self):
+    self.setWindowTitle(self.title)
+    self.setGeometry(self.left, self.top, self.width, self.height)
+
+    self.model = fsm()
+    self.model.setFilter(QtCore.QDir.NoDot | QtCore.QDir.NoDotDot |QtCore.QDir.Dirs)
+
+    self.model.setRootPath(sys.argv[1])
+    self.tree = QTreeView()
+    self.tree.setModel(self.model)
+
+    self.tree.setAnimated(True)
+    self.tree.setIndentation(20)
+    self.tree.setSortingEnabled(True)
+
+    self.tree.setWindowTitle("Dir View")
+    # self.tree.resize(640, 480)
+
+    windowLayout = QVBoxLayout()
+    windowLayout.addWidget(self.tree)
+    self.setLayout(windowLayout)
+
+    self.show()
 
 
 if __name__ == '__main__':
-  # data = [
-  #   {'level': 0, 'dbID': 77, 'parent_ID': 6, 'short_name': '0:0:0:<new> to 6', 'long_name': '', 'order': 1, 'pos': 0},
-  #   {'level': 1, 'dbID': 88, 'parent_ID': 77, 'short_name': '1:1:1:Store13', 'long_name': '', 'order': 2, 'pos': 1},
-  #   {'level': 0, 'dbID': 442, 'parent_ID': 6, 'short_name': '2:<new>', 'long_name': '', 'order': 1, 'pos': 2},
-  #   {'level': 1, 'dbID': 522, 'parent_ID': 442, 'short_name': '3:<new>', 'long_name': '', 'order': 2, 'pos': 3},
-  #   {'level': 2, 'dbID': 171, 'parent_ID': 522, 'short_name': '3:<new>', 'long_name': '', 'order': 1, 'pos': 3},
-  #   {'level': 0, 'dbID': 456, 'parent_ID': 6, 'short_name': '4:<new>', 'long_name': '', 'order': 1, 'pos': 4},
-  #   {'level': 1, 'dbID': 523, 'parent_ID': 456, 'short_name': '5:<new>', 'long_name': '', 'order': 3, 'pos': 5}
-  # ]
-  #
-  app = QtWidgets.QApplication(sys.argv)
-  window = Window()
-  window.setGeometry(600, 50, 400, 250)
-  window.show()
+  app = QApplication(sys.argv)
+  ex = App()
   sys.exit(app.exec_())

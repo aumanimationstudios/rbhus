@@ -23,16 +23,16 @@ import collections
 
 
 basepath = os.path.abspath(sys.argv[1])
-paths = os.walk(basepath)
+paths = os.listdir(basepath)
 pathDict = {}
 for path in paths:
-  pathDict[path[0]] = [os.path.join(path[0],subPath) for subPath in path[1]]
+  print (path)
 
-for x in pathDict:
-  print(x,pathDict[x])
-
-
-treewidgetItems = []
+# for x in pathDict:
+#   print(x,pathDict[x])
+#
+#
+# treewidgetItems = []
 
 class Ui_Form(object):
   def setupUi(self, Form):
