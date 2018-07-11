@@ -61,6 +61,7 @@ class thumbz_db(object):
   absPath = None
   subPath = None
   mimeType = None
+  mimeExt = None
   mainFile = None
   thumbFile = None
 
