@@ -26,7 +26,7 @@ import rbhus.constantsPipe
 import rbhus.utilsPipe
 import rbhus.dfl
 
-main_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderManager", "main.ui")
+main_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderManager", "main_listView.ui")
 mediaThumbz_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderManager", "mediaThumbz.ui")
 rbhus.debug.info(main_ui_file)
 
@@ -48,7 +48,6 @@ print(COMPOUND_PATHS)
 fileDetsDict = {}
 fileIconThreadRunning = None
 fileThumbzWidget = {}
-fileThumbzItems = {}
 
 context = zmq.Context()
 
@@ -369,7 +368,6 @@ class FSM(QFileSystemModel):
 
 def dirSelected(idx, modelDirs, main_ui):
   global fileThumbzWidget
-  global  fileThumbzItems
   global fileIconThreadRunning
 
 
@@ -385,9 +383,8 @@ def dirSelected(idx, modelDirs, main_ui):
       pass
 
 
-  fileThumbzWidget.clear()
-  fileThumbzItems.clear()
-  main_ui.listFiles.clear()
+  fileThumbz.clear()
+  # main_ui.listFiles.clear()
 
 
 
@@ -408,6 +405,7 @@ def dirSelected(idx, modelDirs, main_ui):
     fileIconThreadRunning = fileDirLoadedThread(fileGlob,pathSelected)
     fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
     fileIconThreadRunning.start()
+
 
 
 
@@ -433,13 +431,12 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   itemWidget.pushButtonLogo.setIcon(icon)
   # item.setSizeHint(QtCore.QSize(96,96))
   item.setData(QtCore.Qt.UserRole, os.path.basename(fileIconDets.mainFile))
-  item.setToolTip(os.path.basename(fileIconDets.mainFile))
+  item.setToolTip(fileIconDets.subPath + os.sep + os.path.basename(fileIconDets.mainFile))
   item.media = fileIconDets
   item.setSizeHint(itemWidget.sizeHint() + QtCore.QSize(10, 10))
   main_ui.listFiles.addItem(item)
   main_ui.listFiles.setItemWidget(item, itemWidget)
-  fileThumbzWidget[fileIconDets.mainFile] = itemWidget
-  fileThumbzItems[fileIconDets.mainFile] = item
+  fileThumbz[fileIconDets.mainFile] = itemWidget
   # print("thumbz added :: "+ fileIconDets.mainFile)
 
 
@@ -455,14 +452,11 @@ def imageWidgetClicked(imagePath,mimeType=None):
 
 def imageWidgetUpdated(fileDets):
   global fileThumbzWidget
-  global fileThumbzItems
   # print("updated icon : "+ fileDets.mainFile)
   try:
 
-    fileThumbzWidget[fileDets.mainFile].pushButtonImage.setIcon(QtGui.QIcon(fileDets.thumbFile))
-    fileThumbzWidget[fileDets.mainFile].pushButtonImage.setIconSize(QtCore.QSize(94, 94))
-    fileThumbzWidget[fileDets.mainFile].adjustSize()
-    fileThumbzItems[fileDets.mainFile].setSizeHint(fileThumbzWidget[fileDets.mainFile].sizeHint()  + QtCore.QSize(10, 10))
+    fileThumbz[fileDets.mainFile].pushButtonImage.setIcon(QtGui.QIcon(fileDets.thumbFile))
+    fileThumbz[fileDets.mainFile].pushButtonImage.setIconSize(QtCore.QSize(92,92))
     return
   except:
     print("wtf :: "+ str(sys.exc_info()))
@@ -491,6 +485,12 @@ def mainGui(main_ui):
   filterList = COMPOUND_PATHS
   # modelDirs.setNameFilters(filterList)
   # modelDirs.setNameFilterDisables(False)
+
+
+  modelFiles = FSM()
+  modelFiles.setFilter( QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
+  modelFiles.setRootPath(ROOTDIR)
+
 
 
   main_ui.treeDirs.setModel(modelDirs)

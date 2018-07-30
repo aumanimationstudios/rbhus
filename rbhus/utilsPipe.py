@@ -232,7 +232,7 @@ def getAssTypes(atype=None, status=constantsPipe.typesActive):
 
 def getCompoundPaths(assPath,QT_callback_isStopped=None):
   assProj = assPath.split(":")[0]
-  allAssets = getProjAsses(assProj)
+  allAssets = getAssesLike(assPath)
   assPathAbs = getAbsPath(assPath)
   retpaths = []
   for x in allAssets:
@@ -241,9 +241,8 @@ def getCompoundPaths(assPath,QT_callback_isStopped=None):
         return (retpaths)
     pathToX = getAbsPath(x['path'])
     if(assPathAbs != pathToX):
-      if(os.path.exists(pathToX)):
-        if(re.search(assPathAbs,pathToX)):
-          retpaths.append(pathToX)
+      if(re.search(assPathAbs,pathToX)):
+        retpaths.append(pathToX)
   return(retpaths)
 
 
@@ -1243,6 +1242,19 @@ def getProjAsses(projName,limit=None,whereDict={}):
   except:
     debug.debug(str(sys.exc_info()))
     return(0)
+
+
+def getAssesLike(assPath):
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("select * from assets where path like '%" + str(assPath) +"%' order by sequenceName,sceneName,assName,assetType", dictionary=True)
+    if(rows):
+      return(rows)
+    else:
+      return(0)
+  except:
+    debug.debug(str(sys.exc_info()))
+    return (0)
 
 
 def getUsers():

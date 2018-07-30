@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>732</width>
+    <width>749</width>
     <height>528</height>
    </rect>
   </property>
@@ -84,7 +84,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="listFiles">
+        <widget class="QListView" name="listFiles">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
            <horstretch>1</horstretch>
@@ -118,9 +118,6 @@
          <property name="horizontalScrollMode">
           <enum>QAbstractItemView::ScrollPerItem</enum>
          </property>
-         <property name="movement">
-          <enum>QListView::Free</enum>
-         </property>
          <property name="isWrapping" stdset="0">
           <bool>true</bool>
          </property>
@@ -128,7 +125,7 @@
           <enum>QListView::Adjust</enum>
          </property>
          <property name="spacing">
-          <number>100</number>
+          <number>20</number>
          </property>
          <property name="viewMode">
           <enum>QListView::IconMode</enum>
@@ -140,9 +137,6 @@
           <bool>false</bool>
          </property>
          <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="sortingEnabled">
           <bool>true</bool>
          </property>
         </widget>

@@ -11,6 +11,8 @@ bpy.context.scene.keying_sets_all.active = bpy.context.scene.keying_sets_all['Lo
 bpy.context.scene.render.engine = 'CYCLES'
 bpy.context.scene.cycles.progressive = 'BRANCHED_PATH'
 bpy.context.scene.cycles.preview_aa_samples = 1
+bpy.context.scene.display_settings.display_device = 'sRGB / BT.709'
+bpy.context.scene.view_settings.view_transform = 'sRGB EOTF'
 
 
 # bpy.context.scene.render.use_single_layer = False
