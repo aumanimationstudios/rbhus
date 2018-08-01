@@ -5,11 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/mercurial/local/.hgignore" beforeDir="false" afterPath="$PROJECT_DIR$/etc/mercurial/local/.hgignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/main.ui" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/main.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/mediaThumbz.ui" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/mediaThumbz.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/qt5-treeview.py" afterDir="false" />
@@ -32,11 +27,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="qt5-treeview.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="qt5-treeview.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/qt5-treeview.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="559">
-              <caret line="388" column="24" selection-start-line="388" selection-start-column="24" selection-end-line="388" selection-end-column="24" />
+            <state relative-caret-position="525">
+              <caret line="462" selection-start-line="462" selection-end-line="462" />
+              <folding>
+                <element signature="e#136#146#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rbhusPipe_new.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="2010" column="4" selection-start-line="2010" selection-start-column="4" selection-end-line="2010" selection-end-column="4" />
               <folding>
                 <element signature="e#136#146#0" expanded="true" />
               </folding>
@@ -47,7 +54,7 @@
       <file leaf-file-name="qt5-treeview_delegate_test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1057">
+            <state relative-caret-position="901">
               <caret line="495" column="38" selection-start-line="495" selection-start-column="38" selection-end-line="495" selection-end-column="38" />
             </state>
           </provider>
@@ -982,10 +989,10 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.1756906" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.53263956" side_tool="true" weight="0.21103527" />
       <window_info anchor="bottom" x="1807" y="742" width="1198" height="577" id="Run" order="2" sideWeight="0.43313953" weight="0.23321956" />
-      <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.36434108" weight="0.3287277" />
+      <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.36434108" weight="0.32821387" />
       <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.49786323" weight="0.18600683" />
       <window_info id="Structure" order="1" sideWeight="0.50108147" side_tool="true" weight="0.2667928" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.46736047" weight="0.21103527" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.46736047" visible="true" weight="0.21103527" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39889503" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1255,13 +1262,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="969">
-          <caret line="216" lean-forward="true" selection-start-line="201" selection-end-line="216" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="16094">
@@ -1320,15 +1320,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1057">
+        <state relative-caret-position="901">
           <caret line="495" column="38" selection-start-line="495" selection-start-column="38" selection-end-line="495" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/qt5-treeview.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="559">
-          <caret line="388" column="24" selection-start-line="388" selection-start-column="24" selection-end-line="388" selection-end-column="24" />
+        <state relative-caret-position="525">
+          <caret line="462" selection-start-line="462" selection-end-line="462" />
+          <folding>
+            <element signature="e#136#146#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="2010" column="4" selection-start-line="2010" selection-start-column="4" selection-end-line="2010" selection-end-column="4" />
           <folding>
             <element signature="e#136#146#0" expanded="true" />
           </folding>

@@ -427,6 +427,7 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   # itemWidget.pushButtonImage.clicked.connect(lambda x, imagePath=fileIconDets.mainFile, mimeType=fileIconDets.mimeType: imageWidgetClicked(imagePath, mimeType=mimeType))
 
   item = QListWidgetItemSort()
+  item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
   icon = QtGui.QIcon(rbhus.constantsPipe.mimeLogos[fileIconDets.mimeType])
   # icon = fileIconProvider()
   # icon = QtGui.QIcon(rbhus.constantsPipe.mimeLogos[fileIconDets.mimeType])
