@@ -40,6 +40,7 @@ from PyQt5 import QtCore, uic, QtGui, QtWidgets
 
 
 assPath = sys.argv[1]
+assDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
 ROOTDIR = rbhus.utilsPipe.getAbsPath(sys.argv[1])
 CUR_ROOTDIR_POINTER = os.path.join(ROOTDIR,"-")
 COMPOUND_PATHS = rbhus.utilsPipe.getCompoundPaths(assPath)
@@ -245,7 +246,7 @@ class server(QtCore.QThread):
       self._context.term()
     except:
       print(sys.exc_info())
-    self.finished.emit()
+    # self.finished.emit() # dont enable this . this will simply emit finished twice .. !!!
 
 
 class fileDirLoadedThread(QtCore.QThread):
@@ -302,14 +303,15 @@ class fileDirLoadedThread(QtCore.QThread):
               fThumbz = os.path.join(fThumbzDbDir, fName + ".png")
               fileDets.thumbFile = fThumbz
 
+
               try:
                 self.fileIcon.emit(fileDets)
                 self.startIconGen(fileDets)
               except:
                 print(sys.exc_info())
-              time.sleep(0.01)
+              time.sleep(0.015)
     self.socket.close()
-    self.finished.emit()
+    # self.finished.emit() # dont enable this . this will simply emit finished twice .. !!!
 
   def startIconGen(self,fileDets):
 
@@ -365,7 +367,10 @@ class FSM(QFileSystemModel):
     else:
       return super(FSM, self).filePath(idx)
 
-
+def listFilesFinished(main_ui):
+  main_ui.listFiles.adjustSize()
+  # main_ui.splitter.adjustSize()
+  print("trying to fix vanishing items -- WTF!!!!")
 
 def dirSelected(idx, modelDirs, main_ui):
   global fileThumbzWidget
@@ -407,6 +412,7 @@ def dirSelected(idx, modelDirs, main_ui):
     fileGlob.sort()
     fileIconThreadRunning = fileDirLoadedThread(fileGlob,pathSelected)
     fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
+    fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
     fileIconThreadRunning.start()
 
 
@@ -417,21 +423,24 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   global fileThumbzWidget
   itemWidget = uic.loadUi(mediaThumbz_ui_file)
   itemWidget.labelImageName.setText(os.path.basename(fileIconDets.mainFile))
+  itemWidget.labelLogo.setParent(itemWidget.labelImage)
 
   try:
     modifiedT = os.path.getmtime(fileIconDets.mainFile)
   except:
     modifiedT = 0
   # print(time.ctime(modifiedT))
-  itemWidget.groupBoxThumbz.setToolTip("subdir: " + fileIconDets.subPath + "\nmodified : " + str(time.ctime(modifiedT)))
+  itemWidget.setToolTip("subdir: " + fileIconDets.subPath + "\nmodified : " + str(time.ctime(modifiedT)))
   # itemWidget.pushButtonImage.clicked.connect(lambda x, imagePath=fileIconDets.mainFile, mimeType=fileIconDets.mimeType: imageWidgetClicked(imagePath, mimeType=mimeType))
 
   item = QListWidgetItemSort()
   item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
-  icon = QtGui.QIcon(rbhus.constantsPipe.mimeLogos[fileIconDets.mimeType])
-  # icon = fileIconProvider()
-  # icon = QtGui.QIcon(rbhus.constantsPipe.mimeLogos[fileIconDets.mimeType])
-  itemWidget.pushButtonLogo.setIcon(icon)
+
+
+  logoIcon = QtGui.QPixmap(rbhus.constantsPipe.mimeLogos[fileIconDets.mimeType])
+  logoIconScaled = logoIcon.scaled(20,20,QtCore.Qt.KeepAspectRatio)
+  itemWidget.labelLogo.setPixmap(logoIconScaled)
+
   # item.setSizeHint(QtCore.QSize(96,96))
   item.setData(QtCore.Qt.UserRole, os.path.basename(fileIconDets.mainFile))
   item.setToolTip(os.path.basename(fileIconDets.mainFile))
@@ -445,23 +454,16 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
 
 
 
-def imageWidgetClicked(imagePath,mimeType=None):
-  if(mimeType):
-    if(mimeType != "blender"):
-      import webbrowser
-      webbrowser.open(imagePath)
-  else:
-    import webbrowser
-    webbrowser.open(imagePath)
-
 def imageWidgetUpdated(fileDets):
   global fileThumbzWidget
   global fileThumbzItems
   # print("updated icon : "+ fileDets.mainFile)
   try:
-
-    fileThumbzWidget[fileDets.mainFile].pushButtonImage.setIcon(QtGui.QIcon(fileDets.thumbFile))
-    fileThumbzWidget[fileDets.mainFile].pushButtonImage.setIconSize(QtCore.QSize(94, 94))
+    fileIcon = QtGui.QPixmap(fileDets.thumbFile)
+    scaledIcon = fileIcon.scaled(80,80,QtCore.Qt.KeepAspectRatio )
+    fileThumbzWidget[fileDets.mainFile].labelImage.setPixmap(scaledIcon)
+    fileThumbzWidget[fileDets.mainFile].labelImage.setMinimumSize(QtCore.QSize(100, 100))
+    # fileThumbzWidget[fileDets.mainFile].pushButtonImage.setIconSize(QtCore.QSize(94, 94))
     fileThumbzWidget[fileDets.mainFile].adjustSize()
     fileThumbzItems[fileDets.mainFile].setSizeHint(fileThumbzWidget[fileDets.mainFile].sizeHint()  + QtCore.QSize(10, 10))
     return
@@ -469,12 +471,101 @@ def imageWidgetUpdated(fileDets):
     print("wtf :: "+ str(sys.exc_info()))
 
 
-def filesSelected(modelFiles, main_ui):
-  selectedIdx = main_ui.listFiles.selectedIndexes()
-  rbhus.debug.info(selectedIdx)
-  for idx in selectedIdx:
-    print("--------")
-    print(modelFiles.filePath(idx))
+# def filesSelected(modelFiles, main_ui):
+#   selectedIdx = main_ui.listFiles.selectedIndexes()
+#   rbhus.debug.info(selectedIdx)
+#   for idx in selectedIdx:
+#     print("--------")
+#     print(modelFiles.filePath(idx))
+
+
+
+def popUpFiles(main_uid,pos):
+  selected = main_ui.listFiles.currentItem()
+
+
+  menu = QtWidgets.QMenu()
+  openMenu = QtWidgets.QMenu()
+  openMenu.setTitle("open with")
+  fileNameMenu  = QtWidgets.QMenu()
+  fileNameMenu.setTitle("fileName")
+  ioMenu = QtWidgets.QMenu()
+  ioMenu.setTitle("IO")
+
+  fileNameMenu_sub1 = QtWidgets.QMenu()
+  fileNameRenameAction = fileNameMenu_sub1.addAction("rename")
+
+
+  openWithCmdActions = {}
+  cmdSubMenu = QtWidgets.QMenu()
+  if(rbhus.constantsPipe.mimeTypesOpenCmds.has_key(selected.media.mimeType)):
+    cmds = rbhus.constantsPipe.mimeTypesOpenCmds[selected.media.mimeType]["linux"]
+    for cmd in cmds:
+      if(rbhus.constantsPipe.mimeCmdsLinux.has_key(cmd)):
+        openWithCmdActions[cmdSubMenu.addAction(cmd)] = rbhus.constantsPipe.mimeCmdsLinux[cmd]
+
+
+
+  ioMenu_sub1 = QtWidgets.QMenu()
+  ioDeleteAction = ioMenu_sub1.addAction("delete")
+
+
+  fileNameMenu.addMenu(fileNameMenu_sub1)
+  ioMenu.addMenu(ioMenu_sub1)
+  openMenu.addMenu(cmdSubMenu)
+
+  menu.addMenu(openMenu)
+  menu.addMenu(fileNameMenu)
+  menu.addMenu(ioMenu)
+
+  action = menu.exec_(main_ui.listFiles.mapToGlobal(pos))
+
+  if(action == fileNameRenameAction):
+    fileRenameDialog(main_ui)
+
+  if(action in openWithCmdActions.keys()):
+    runCmd = openWithCmdActions[action]
+    openFile(main_ui,runCmd)
+  # if(action == deleteSearchAction):
+  #   deleteSearch(mainUid)
+
+
+
+def openFile(main_ui,cmd):
+  selected = main_ui.listFiles.currentItem()
+  cmdFull = cmd.format(selected.media.mainFile)
+  subprocess.Popen(cmdFull,shell=True)
+
+def fileRenameDialog(main_ui):
+  global fileThumbzWidget
+
+  selected = main_ui.listFiles.currentItem()
+  dialog = QtWidgets.QInputDialog(main_ui.listFiles)
+  dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+  dialog.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,QtWidgets.QSizePolicy.MinimumExpanding)
+  dialog.setWindowTitle("Rename Dialog")
+  dialog.setLabelText("file:")
+  (pathRoot , ext) = os.path.splitext(os.path.basename(selected.media.mainFile))
+  # if(ext):
+  dialog.setTextValue(pathRoot)
+  # else:
+  #   dialog.setTextValue(os.path.basename(selected.media.mainFile))
+  dialog.adjustSize()
+  dialog.resize(500,80)
+  # dialog.adjustSize()
+
+  dialog.exec_()
+  fileRenamed  =  dialog.textValue() + ext
+  newFile = os.path.join(selected.media.subPath,fileRenamed)
+  copyStatus = QtCore.QFile().rename(selected.media.mainFile,newFile)
+  print(newFile +" : "+ str(copyStatus))
+  if(copyStatus):
+    fileThumbzWidget[selected.media.mainFile].labelImageName.setText(os.path.basename(newFile))
+    mainFileWidget = fileThumbzWidget[selected.media.mainFile]
+    del(fileThumbzWidget[selected.media.mainFile])
+    selected.media.mainFile = newFile
+    fileThumbzWidget[selected.media.mainFile] = mainFileWidget
+
 
 
 def mainGui(main_ui):
@@ -524,6 +615,7 @@ def mainGui(main_ui):
   main_ui.treeDirs.clicked.connect(lambda idnx, modelDirs=modelDirs, main_ui = main_ui : dirSelected(idnx, modelDirs, main_ui))
   # main_ui.listFiles.clicked.connect(lambda idnx, main_ui = main_ui :filesSelected(modelFiles,main_ui))
 
+  main_ui.listFiles.customContextMenuRequested.connect(lambda pos, main_ui = main_ui: popUpFiles(main_ui, pos))
 
   main_ui.show()
   main_ui.update()

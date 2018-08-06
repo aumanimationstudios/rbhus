@@ -5,6 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f348a-432a-4d0c-9b4e-88d583ad779c" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/icons/.directory" beforeDir="false" afterPath="$PROJECT_DIR$/etc/icons/.directory" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/main.ui" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/main.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/mediaThumbz.ui" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/mediaThumbz.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/qt5-treeview.py" afterDir="false" />
@@ -27,11 +31,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="qt5-treeview.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="qt5-treeview.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/qt5-treeview.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="462" selection-start-line="462" selection-end-line="462" />
+            <state relative-caret-position="817">
+              <caret line="402" lean-forward="true" selection-start-line="402" selection-end-line="402" />
               <folding>
                 <element signature="e#136#146#0" expanded="true" />
               </folding>
@@ -39,23 +43,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rbhusPipe_new.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rbhusPipe_new.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="2010" column="4" selection-start-line="2010" selection-start-column="4" selection-end-line="2010" selection-end-column="4" />
+            <state relative-caret-position="104">
+              <caret line="1487" column="30" lean-forward="true" selection-start-line="1487" selection-start-column="30" selection-end-line="1487" selection-end-column="30" />
               <folding>
                 <element signature="e#136#146#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="qt5-treeview_delegate_test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="901">
-              <caret line="495" column="38" selection-start-line="495" selection-start-column="38" selection-end-line="495" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -72,8 +67,17 @@
       <file leaf-file-name="utilsPipe.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16094">
-              <caret line="1254" column="9" selection-start-line="1254" selection-start-column="9" selection-end-line="1254" selection-end-column="9" />
+            <state relative-caret-position="650">
+              <caret line="66" column="16" lean-forward="true" selection-start-line="66" selection-start-column="16" selection-end-line="66" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="constantsPipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="960">
+              <caret line="92" column="33" selection-start-line="92" selection-start-column="33" selection-end-line="92" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -116,18 +120,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>jsonRead</find>
-      <find>mimet</find>
-      <find>media</find>
-      <find>trying to recv icon</find>
-      <find>client</find>
-      <find>thumbz.</find>
-      <find>fileDets.thumbFile</find>
-      <find>thumbFile</find>
-      <find>fileIconDets</find>
-      <find>fileDetsDict</find>
-      <find>fSubPath</find>
-      <find>mediaObj</find>
       <find>thumbz_db</find>
       <find>absPath</find>
       <find>listWidgetMedia</find>
@@ -139,17 +131,27 @@
       <find>filed</find>
       <find>splitter</find>
       <find>iconsize</find>
-      <find>pushButtonImage</find>
       <find>compon</find>
       <find>compo</find>
       <find>argv</find>
       <find>modelDirsFilter</find>
-      <find>labelImageName</find>
       <find>fileThumbzItems</find>
+      <find>pushButtonImage</find>
+      <find>thumb</find>
+      <find>groupBoxThumbz</find>
+      <find>setParent</find>
+      <find>conte</find>
+      <find>server-</find>
+      <find>settex</find>
+      <find>document().setText</find>
+      <find>document().setPlainText</find>
+      <find>labelImageName</find>
+      <find>pop</find>
+      <find>getbin</find>
+      <find>open</find>
+      <find>adjus</find>
     </findStrings>
     <replaceStrings>
-      <replace>rbhusPipe_new.py</replace>
-      <replace>selectedAsses(mainUid)</replace>
       <replace>mainUid.radioAllAss</replace>
       <replace>assFilter</replace>
       <replace>mainUid</replace>
@@ -178,6 +180,8 @@
       <replace>rbhus.debug.info</replace>
       <replace>labelImage</replace>
       <replace>modelDirs</replace>
+      <replace>document().setPlainText</replace>
+      <replace>setText</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -237,7 +241,6 @@
         <option value="/blueprod/STOR1/proj/standard/share/blender-2.78.5-gentoo-py35/2.78/scripts/startup/bl_operators/screen_play_rendered_anim.py" />
         <option value="$PROJECT_DIR$/tools/convert-to-gif.sh" />
         <option value="$PROJECT_DIR$/tools/rbhus/sync-standard-bin-blend.py" />
-        <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/convert_png_mov_prores.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
         <option value="$PROJECT_DIR$/rbhus/dbRbhus.py" />
@@ -252,11 +255,12 @@
         <option value="$PROJECT_DIR$/tools/rbhus/cleanup/cleanAsset-production-files.py" />
         <option value="$PROJECT_DIR$/tests/qt5/treeview-test.py" />
         <option value="$PROJECT_DIR$/rbhus/debug.py" />
-        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
-        <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
         <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
         <option value="$PROJECT_DIR$/etc/mercurial/local/.hgignore" />
         <option value="$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py" />
+        <option value="$PROJECT_DIR$/rbhus/utilsPipe.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
+        <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
         <option value="$PROJECT_DIR$/tests/qt5-treeview.py" />
       </list>
     </option>
@@ -985,14 +989,15 @@
     <frame x="1920" y="0" width="1080" height="1890" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49891853" visible="true" weight="0.29801324" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49891853" visible="true" weight="0.23084201" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.1756906" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.53263956" side_tool="true" weight="0.21103527" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.491453" visible="true" weight="0.24687144" />
       <window_info anchor="bottom" x="1807" y="742" width="1198" height="577" id="Run" order="2" sideWeight="0.43313953" weight="0.23321956" />
       <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.36434108" weight="0.32821387" />
       <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.49786323" weight="0.18600683" />
       <window_info id="Structure" order="1" sideWeight="0.50108147" side_tool="true" weight="0.2667928" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.46736047" visible="true" weight="0.21103527" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.46736047" weight="0.21103527" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39889503" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1004,7 +1009,6 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.491453" visible="true" weight="0.24687144" />
       <window_info active="true" anchor="bottom" auto_hide="true" x="1920" y="0" width="1920" height="1040" id="Concurrent Activities Diagram" internal_type="SLIDING" order="12" type="FLOATING" visible="true" weight="0.32967034" />
     </layout>
   </component>
@@ -1248,24 +1252,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="31" column="25" lean-forward="true" selection-start-line="31" selection-start-column="25" selection-end-line="31" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="455">
           <caret line="40" column="87" selection-start-line="40" selection-start-column="87" selection-end-line="40" selection-end-column="87" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16094">
-          <caret line="1254" column="9" selection-start-line="1254" selection-start-column="9" selection-end-line="1254" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -1320,25 +1310,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="901">
+        <state relative-caret-position="6331">
           <caret line="495" column="38" selection-start-line="495" selection-start-column="38" selection-end-line="495" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/qt5-treeview.py">
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="462" selection-start-line="462" selection-end-line="462" />
+        <state relative-caret-position="104">
+          <caret line="1487" column="30" lean-forward="true" selection-start-line="1487" selection-start-column="30" selection-end-line="1487" selection-end-column="30" />
           <folding>
             <element signature="e#136#146#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
+    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="2010" column="4" selection-start-line="2010" selection-start-column="4" selection-end-line="2010" selection-end-column="4" />
+        <state relative-caret-position="650">
+          <caret line="66" column="16" lean-forward="true" selection-start-line="66" selection-start-column="16" selection-end-line="66" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="960">
+          <caret line="92" column="33" selection-start-line="92" selection-start-column="33" selection-end-line="92" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/qt5-treeview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="817">
+          <caret line="402" lean-forward="true" selection-start-line="402" selection-end-line="402" />
           <folding>
             <element signature="e#136#146#0" expanded="true" />
           </folding>

@@ -64,6 +64,7 @@ class thumbz_db(object):
   mimeExt = None
   mainFile = None
   thumbFile = None
+  assDets = None
 
 class thumbz_fileTypes(object):
   absPath = None

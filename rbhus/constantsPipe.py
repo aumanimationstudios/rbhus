@@ -67,11 +67,12 @@ typesHidden = 3
 typesAll = 4
 
 mimeTypes = {
-             "image":[".png",".jpg",".jpeg",".exr",".svg"],
+             "image":[".png",".jpg",".jpeg",".exr",".svg",".tiff",".tga"],
              "video":[".avi",".mp4",".mpg",".mov"],
              "audio":[".mp3",".wav",".flac"],
              "blender":[".blend",".blend1",".blend2"],
-             "office":[".ods",".doc",".xls"]
+             "office":[".ods",".doc",".xls"],
+             "krita":[".kra"]
             }
 
 mimeLogos = {
@@ -79,7 +80,8 @@ mimeLogos = {
   "video" : os.path.join(base_dir,"etc","icons","mime_type_video.png"),
   "blender" : os.path.join(base_dir,"etc","icons","mime_type_blender.png"),
   "audio" : os.path.join(base_dir,"etc","icons","mime_type_audio.png"),
-  "office":os.path.join(base_dir,"etc","icons","mime_type_office.png")
+  "office":os.path.join(base_dir,"etc","icons","mime_type_office.png"),
+  "krita" : os.path.join(base_dir,"etc","icons","mime_type_krita.png")
 }
 
 mimeConvertCmds = {
@@ -87,12 +89,23 @@ mimeConvertCmds = {
   # "video": "/usr/bin/convert \"{0}[1]\" -sample 96x96 \"{1}\"",
   "video": "/usr/bin/ffmpeg -loglevel panic -i \"{0}\" -vframes 1 -an -vf scale=96:-1 -ss 0.1 -y \"{1}\"",
   "office" : "cp "+ os.path.join(base_dir,"etc","icons","libreOffice_logo.png") +" \"{1}\"",
-  "blender": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" \"{0}\" \"{1}\""
+  "blender": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" \"{0}\" \"{1}\"",
+  "krita": "/usr/local/bin/krita  \"{0}\" --export --export-filename \"{1}\""
 }
 
 mimeTypesOpenCmds = {
-  "image": {"linux":["gwenview","djv_view"]},
-  "video": {"linux":["mpv","djv_view"]}
+  "image": {"linux":["gwenview","djv_view - image","djv_view - sequence"]},
+  "video": {"linux":["mpv","mpv - loop", "djv_view - video"]}
+}
+
+mimeCmdsLinux = {
+  "gwenview"                     : "gwenview \"{0}\"",
+  "djv_view - image"             : "djv_view -auto_seq False -file_cache False \"{0}\"",
+  "djv_view - sequence"          : "djv_view -auto_seq True \"{0}\"",
+  "mpv"                          : "mpv --really-quiet \"{0}\"",
+  "mpv - loop"                   : "mpv --really-quiet --loop \"{0}\"",
+  "djv_view - video"             : "djv_view -file_cache False \"{0}\"",
+  "blender"                      : "get_dynamically"
 }
 
 ignoreTemplateTypes = ["share","bin","output","template"]
