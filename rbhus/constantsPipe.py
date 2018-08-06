@@ -95,7 +95,10 @@ mimeConvertCmds = {
 
 mimeTypesOpenCmds = {
   "image": {"linux":["gwenview","djv_view - image","djv_view - sequence"]},
-  "video": {"linux":["mpv","mpv - loop", "djv_view - video"]}
+  "video": {"linux":["mpv","mpv - loop", "djv_view - video"]},
+  "blender": {"linux":["project_blender"]},
+  "krita": {"linux":["krita"]},
+  "office": {"linux":["libreoffice"]},
 }
 
 mimeCmdsLinux = {
@@ -105,7 +108,8 @@ mimeCmdsLinux = {
   "mpv"                          : "mpv --really-quiet \"{0}\"",
   "mpv - loop"                   : "mpv --really-quiet --loop \"{0}\"",
   "djv_view - video"             : "djv_view -file_cache False \"{0}\"",
-  "blender"                      : "get_dynamically"
+  "krita"                        : "krita \"{0}\"",
+  "libreoffice"                  : "libreoffice --nologo --safe-mode \"{0}\""
 }
 
 ignoreTemplateTypes = ["share","bin","output","template"]

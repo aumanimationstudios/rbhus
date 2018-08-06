@@ -304,6 +304,7 @@ class fileDirLoadedThread(QtCore.QThread):
               fileDets.thumbFile = fThumbz
 
 
+
               try:
                 self.fileIcon.emit(fileDets)
                 self.startIconGen(fileDets)
@@ -525,15 +526,27 @@ def popUpFiles(main_uid,pos):
 
   if(action in openWithCmdActions.keys()):
     runCmd = openWithCmdActions[action]
-    openFile(main_ui,runCmd)
+    try:
+      openFile(main_ui,runCmd)
+    except:
+      rbhus.debug.error(sys.exc_info)
   # if(action == deleteSearchAction):
   #   deleteSearch(mainUid)
 
 
 
 def openFile(main_ui,cmd):
+  global assDets
   selected = main_ui.listFiles.currentItem()
-  cmdFull = cmd.format(selected.media.mainFile)
+
+  if(cmd.startwith("project_")):
+    cmdToRun = rbhus.utilsPipe.openAssetCmd(assDets, selected.media.mainFile)
+    if(cmdToRun):
+      cmdFull = cmdToRun
+    else:
+      cmdFull = cmd.format(selected.media.mainFile)
+  else:
+    cmdFull = cmd.format(selected.media.mainFile)
   subprocess.Popen(cmdFull,shell=True)
 
 def fileRenameDialog(main_ui):
