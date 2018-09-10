@@ -72,7 +72,8 @@ mimeTypes = {
              "audio":[".mp3",".wav",".flac"],
              "blender":[".blend",".blend1",".blend2"],
              "office":[".ods",".doc",".xls"],
-             "krita":[".kra"]
+             "krita":[".kra"],
+             "psd":[".psd"]
             }
 
 mimeLogos = {
@@ -81,7 +82,8 @@ mimeLogos = {
   "blender" : os.path.join(base_dir,"etc","icons","mime_type_blender.png"),
   "audio" : os.path.join(base_dir,"etc","icons","mime_type_audio.png"),
   "office":os.path.join(base_dir,"etc","icons","mime_type_office.png"),
-  "krita" : os.path.join(base_dir,"etc","icons","mime_type_krita.png")
+  "krita" : os.path.join(base_dir,"etc","icons","mime_type_krita.png"),
+  "psd": os.path.join(base_dir,"etc","icons","mime_type_psd.png"),
 }
 
 mimeConvertCmds = {
@@ -94,22 +96,29 @@ mimeConvertCmds = {
 }
 
 mimeTypesOpenCmds = {
-  "image": {"linux":["gwenview","djv_view - image","djv_view - sequence"]},
+  "image": {"linux":["gwenview","djv_view - image","djv_view - sequence","krita","inkscape"]},
   "video": {"linux":["mpv","mpv - loop", "djv_view - video"]},
-  "blender": {"linux":["project_blender"]},
+  "blender": {"linux":["project_assigned_application"]}, # Just enter "project_assigned_application" to open certain kinds of files with project assigned apps.
   "krita": {"linux":["krita"]},
   "office": {"linux":["libreoffice"]},
+  "audio": {"linux":["mpv-audio","mpv-audio - loop"]},
+  "psd": {"linux":["krita"]}
 }
+
+
 
 mimeCmdsLinux = {
   "gwenview"                     : "gwenview \"{0}\"",
   "djv_view - image"             : "djv_view -auto_seq False -file_cache False \"{0}\"",
   "djv_view - sequence"          : "djv_view -auto_seq True \"{0}\"",
   "mpv"                          : "mpv --really-quiet \"{0}\"",
+  "mpv-audio"                    : "mpv --player-operation-mode=pseudo-gui --really-quiet \"{0}\"",
   "mpv - loop"                   : "mpv --really-quiet --loop \"{0}\"",
+  "mpv-audio - loop"             : "mpv --player-operation-mode=pseudo-gui --really-quiet --loop \"{0}\"",
   "djv_view - video"             : "djv_view -file_cache False \"{0}\"",
   "krita"                        : "krita \"{0}\"",
-  "libreoffice"                  : "libreoffice --nologo --safe-mode \"{0}\""
+  "libreoffice"                  : "libreoffice --nologo \"{0}\"",
+  "inkscape"                     : "inkscape \"{0}\""
 }
 
 ignoreTemplateTypes = ["share","bin","output","template"]

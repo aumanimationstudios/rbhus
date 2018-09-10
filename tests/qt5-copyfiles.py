@@ -19,11 +19,12 @@ clip = QtWidgets.QApplication.clipboard()
 conts = clip.text()
 print(conts)
 
-urlToCopy = QtCore.QUrl("file:////home/shrinidhi/Downloads/WTF")
+urlToCopy = QtCore.QUrl().fromLocalFile("/home/shrinidhi/Downloads/WTF")
+print(urlToCopy)
 # urlToCopy.fromLocalFile("/home/shrinidhi/Downloads/WTF")
-mimeData = QtCore.QMimeData()
-mimeData.setUrls([urlToCopy])
-QtWidgets.QApplication.clipboard().setMimeData(mimeData)
+# mimeData = QtCore.QMimeData()
+# mimeData.setUrls([urlToCopy])
+# QtWidgets.QApplication.clipboard().setMimeData(mimeData)
 
 
 sys.exit(app.exec_())

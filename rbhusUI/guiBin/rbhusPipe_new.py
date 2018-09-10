@@ -1,4 +1,4 @@
-#!/usr/bin/env python2 -d
+#!/usr/bin/env python2
 #-*- coding: utf-8 -*-
 __author__ = "Shrinidhi Rao"
 __license__ = "GPL"
@@ -55,6 +55,7 @@ rS = "rbhusPipeRenderSubmit.py"
 rR = "rbhusPipeReview.py"
 rN = "rbhusPipeNotes.py"
 
+assFolds = "qt5-treeview.py"
 assImporter = "rbhusAssetImport.py"
 
 
@@ -73,8 +74,8 @@ rbhusPipeReviewCmd = os.path.join(file_dir, rR)
 rbhusPipeNotesCmd = os.path.join(file_dir, rN)
 rbhusPipeAssetImportCmd = os.path.join(file_dir, assImporter)
 selectRadioBoxCmd = os.path.join(file_dir, srb)
-
-
+assFoldsCmd = os.path.join(file_dir,assFolds)
+print(assFoldsCmd)
 updateAssThreads = []
 updateAssThreadsFav = []
 # assDetsItems = []
@@ -359,7 +360,7 @@ class updateAssQthread(QtCore.QThread):
             if(isGentoo):
               time.sleep(0.05)
             else:
-              time.sleep(0.1)
+              time.sleep(0.05)
           else:
             rbhus.debug.debug("STOPPING THREAD")
             break
@@ -1503,6 +1504,7 @@ def popupAss(mainUid,pos,isFav=False):
 
 
   openFolderAction = menu.addAction("open")
+  # openAssFoldsAction = menu.addAction("asset folder")
   # addToFavAction = menuTools.addAction("add to shortcuts")
   assEditAction = menuTools.addAction("edit")
 
@@ -1561,6 +1563,8 @@ def popupAss(mainUid,pos,isFav=False):
   #   self.setDone()
   if(action == assGetTemplateUpdate):
     resetAssToTemplateFiles(mainUid, assetList=listAsses)
+  # if(action == openAssFoldsAction):
+  #   assFoldOpen(mainUid, assetList=listAsses)
 
 
 def reviewAss(mainUid,assetList=None):
@@ -1578,6 +1582,23 @@ def reviewAss(mainUid,assetList=None):
   p.setStandardErrorFile(tempDir + os.sep + "rbhusPipeReview_" + username + ".err")
   p.start(sys.executable, [rbhusPipeReviewCmd,"--assetpath",assPath])
   p.finished.connect(lambda a, b, mainUid=mainUid, assPath=assPath: updateAfterReview(mainUid, assPath))
+
+
+
+def assFoldOpen(mainUid,assetList=None):
+  if(assetList):
+    listAsses = assetList
+  if(isinstance(assetList,str)):
+    assPath = assetList
+  else:
+    listedAss = listAsses[0]
+    assPath = listedAss['path']
+
+  p = QtCore.QProcess(parent=mainUid)
+  p.setStandardOutputFile(tempDir + os.sep + "rbhusAssFolds_" + username + ".log")
+  p.setStandardErrorFile(tempDir + os.sep + "rbhusAssFolds_" + username + ".err")
+  p.start(sys.executable, [assFoldsCmd,"--asset",assPath])
+  # p.finished.connect(lambda a, b, mainUid=mainUid, assPath=assPath: updateAfterReview(mainUid, assPath))
 
 
 def updateAfterReview(mainUid, assPath):
@@ -1761,28 +1782,29 @@ def openFolderAss(mainUid,assetList=None):
   if(x):
     # debug.info(x)
     p = rbhus.utilsPipe.getAbsPath(x['path'])
-    assdets = x
+    assDets = x
     if(os.path.exists(p)):
-      if(assdets['versioning'] == 0):
-        fila = QtWidgets.QFileDialog.getOpenFileNames(directory=p)[0]
-        rbhus.debug.debug(fila)
-        if(fila):
-          rbhus.debug.debug(str(fila[0]))
-          filename = str(fila[0])
-          rbhus.debug.debug(filename.split("."))
-          assdets = rbhus.utilsPipe.getAssDetails(assPath=x['path'])
-          runCmd = rbhus.utilsPipe.openAssetCmd(assdets,filename)
-          if(runCmd):
-            runCmd = runCmd.rstrip().lstrip()
-            if(sys.platform.find("win") >= 0):
-              rbhus.debug.debug(runCmd)
-              subprocess.Popen(runCmd,shell=True)
-            elif(sys.platform.find("linux") >= 0):
-              rbhus.debug.debug(runCmd)
-              subprocess.Popen(runCmd,shell=True)
-          else:
-            import webbrowser
-            webbrowser.open(filename)
+      if(assDets['versioning'] == 0):
+        assFoldOpen(mainUid,x['path'])
+        # fila = QtWidgets.QFileDialog.getOpenFileNames(directory=p)[0]
+        # rbhus.debug.debug(fila)
+        # if(fila):
+        #   rbhus.debug.debug(str(fila[0]))
+        #   filename = str(fila[0])
+        #   rbhus.debug.debug(filename.split("."))
+        #   assDets = rbhus.utilsPipe.getAssDetails(assPath=x['path'])
+        #   runCmd = rbhus.utilsPipe.openAssetCmd(assDets,filename)
+        #   if(runCmd):
+        #     runCmd = runCmd.rstrip().lstrip()
+        #     if(sys.platform.find("win") >= 0):
+        #       rbhus.debug.debug(runCmd)
+        #       subprocess.Popen(runCmd,shell=True)
+        #     elif(sys.platform.find("linux") >= 0):
+        #       rbhus.debug.debug(runCmd)
+        #       subprocess.Popen(runCmd,shell=True)
+        #   else:
+        #     import webbrowser
+        #     webbrowser.open(filename)
       else:
         rbhus.debug.debug("wtf : opening version cmd ")
         if(sys.platform.find("win") >= 0):

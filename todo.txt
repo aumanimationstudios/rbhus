@@ -1,3 +1,4 @@
 # todo : model - lookdev stage : while sending for review should copy all the files linked in blender to the model lookdev review folder
 # todo : do something to highlight assname in review windows and notifications
 # todo : make a video compare program with syncronized frames
+# todo : authentication check in version and asset opening is not working properly due to "default" admins . check it ASAP

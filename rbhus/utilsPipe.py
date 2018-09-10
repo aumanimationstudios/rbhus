@@ -1410,14 +1410,21 @@ def assRegisterGroups(assDetDict,assetGroup= [],dryrun=False):
       assetGroups.append(assDetDict['sequenceName'])
   if (assetGroups):
     assDetDict['assetGroups'] = ",".join(assetGroups)
-    if(not dryrun):
-      for g in assetGroups:
-        dbconn = dbPipe.dbPipe()
-        try:
-          dbconn.execute("insert into assetGroupsReverseLookUp (assetId, projName, groupName, assetPath) values(\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(assDetDict['assetId'], assDetDict['projName'], g, assDetDict['path']))
-        except:
-          debug.info(sys.exc_info())
+  else:
+    assetGroups.append(assDetDict['stageType']+ "_"+ assDetDict['nodeType'])
+    assDetDict['assetGroups'] = ",".join(assetGroups)
+
+
+
+  if(not dryrun):
+    for g in assetGroups:
+      dbconn = dbPipe.dbPipe()
+      try:
+        dbconn.execute("insert into assetGroupsReverseLookUp (assetId, projName, groupName, assetPath) values(\'{0}\', \'{1}\', \'{2}\', \'{3}\')".format(assDetDict['assetId'], assDetDict['projName'], g, assDetDict['path']))
+      except:
+        debug.info(sys.exc_info())
   return(assetGroups)
+
 
 
 
@@ -1943,6 +1950,7 @@ def openAssetCmd(assdets ={},filename = None):
       debug.info(runProc)
       return(runProc)
   else:
+
     return(0)
 
 

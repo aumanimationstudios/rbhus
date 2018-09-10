@@ -18,6 +18,8 @@ parser.add_argument("-i","--assetid",dest='assetid',help='asset id')
 args = parser.parse_args()
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
+
+assFoldsCmd = os.path.join(dirSelf,"qt5-treeview.py")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib")
 ui_file_path = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib"
 ui_left_msg = os.path.join(ui_file_path,"rbhusPipeReviewMod_textBox_left.ui")
@@ -178,7 +180,12 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
       except:
         pass
       pyperclip.copy(refFolder)
-      webbrowser.open(refFolder)
+      assPath = self.assdets['path']
+      p = QtCore.QProcess(parent=self.centralwidget)
+      p.setStandardOutputFile(tempDir + os.sep + "rbhusAssFolds_" + username + ".log")
+      p.setStandardErrorFile(tempDir + os.sep + "rbhusAssFolds_" + username + ".err")
+      p.start(sys.executable, [assFoldsCmd, "--asset", assPath,"--path",refFolder])
+      # webbrowser.open(refFolder)
       self.isReferenceAdded = True
 
 
@@ -186,7 +193,12 @@ class Ui_Form(rbhusPipeReviewMod.Ui_MainWindow):
     abspath  = utilsPipe.getAbsPath(self.assdets['path'])
     verFolder = abspath +"/review_"+ str(args[1]) +"/"
     if(os.path.exists(verFolder)):
-      webbrowser.open(verFolder)
+      assPath = self.assdets['path']
+      p = QtCore.QProcess(parent=self.centralwidget)
+      p.setStandardOutputFile(tempDir + os.sep + "rbhusAssFolds_" + username + ".log")
+      p.setStandardErrorFile(tempDir + os.sep + "rbhusAssFolds_" + username + ".err")
+      p.start(sys.executable, [assFoldsCmd, "--asset", assPath, "--path", verFolder])
+      # webbrowser.open(verFolder)
     
 
   def sendReview(self):

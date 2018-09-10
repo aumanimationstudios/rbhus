@@ -8,9 +8,12 @@ import subprocess
 import argparse
 import tempfile
 import psutil
+import tempfile
 if(sys.platform.find("linux") >=0 ):
   import fcntl
 
+
+tempDir = tempfile.gettempdir()
 
 dirSelf = os.path.dirname(os.path.realpath(__file__))
 print(dirSelf)
@@ -25,8 +28,12 @@ scb = "selectCheckBox.py"
 srb = "selectRadioBox.py"
 selectCheckBoxCmd = dirSelf.rstrip(os.sep) + os.sep + scb
 selectRadioBoxCmd = dirSelf.rstrip(os.sep) + os.sep + srb
+assFoldsCmd = os.path.join(dirSelf,"qt5-treeview.py")
 
-
+try:
+  username = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
+except:
+  pass
 
 
 
@@ -294,14 +301,13 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     if(selvers):
       sv = selvers[-1]
       verpath = self.versionsHg.getVersionPath(sv)
-    assdets = utilsPipe.getAssDetails(assPath=self.versionsHg.pipepath)
-    runCmd = utilsPipe.openAssetCmd(assdets,verpath)
-    if(runCmd):
-      runCmd = runCmd.rstrip().lstrip()
-      subprocess.Popen(runCmd,shell=True)
-    else:
-      import webbrowser
-      webbrowser.open(verpath)
+    # assdets = utilsPipe.getAssDetails(assPath=self.versionsHg.pipepath)
+    # runCmd = utilsPipe.openAssetCmd(assdets,verpath)
+    # if(runCmd):
+    #   runCmd = runCmd.rstrip().lstrip()
+    #   subprocess.Popen(runCmd,shell=True)
+    # else:
+    self.openfolder(verpath)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 
 
@@ -617,24 +623,34 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
 
 
-  def openfolder(self):
-    if(os.path.exists(self.versionsHg.localPath)):
-      fila = QtGui.QFileDialog.getOpenFileNames(directory=self.versionsHg.localPath)
-      print(fila)
-      if(fila):
-        print(str(fila[0]))
-        filename = str(fila[0])
-        assdets = utilsPipe.getAssDetails(assPath=self.versionsHg.pipepath)
-        runCmd = utilsPipe.openAssetCmd(assdets,filename)
-        if(runCmd):
-          utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_version_ui:"+ self.assetDetails['path'],isAccessed=True)
-          runCmd = runCmd.rstrip().lstrip()
-          subprocess.Popen(runCmd,shell=True)
-        else:
-          utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_version_ui:"+ self.assetDetails['path'],isAccessed=True)
-          import webbrowser
-          webbrowser.open(filename)
-    
+  def openfolder(self,path=None):
+    if(not path):
+      path = self.versionsHg.localPath
+    if(os.path.exists(path)):
+      p = QtCore.QProcess(parent=self.centralwidget)
+      p.setStandardOutputFile(tempDir + os.sep + "rbhusAssFoldsVersion_" + username + ".log")
+      p.setStandardErrorFile(tempDir + os.sep + "rbhusAssFoldsVersion_" + username + ".err")
+      p.start(sys.executable, [assFoldsCmd, "--asset", self.assetDetails['path'], "--path", self.versionsHg.localPath])
+
+
+
+    # if(os.path.exists(self.versionsHg.localPath)):
+    #   fila = QtGui.QFileDialog.getOpenFileNames(directory=self.versionsHg.localPath)
+    #   print(fila)
+    #   if(fila):
+    #     print(str(fila[0]))
+    #     filename = str(fila[0])
+    #     assdets = utilsPipe.getAssDetails(assPath=self.versionsHg.pipepath)
+    #     runCmd = utilsPipe.openAssetCmd(assdets,filename)
+    #     if(runCmd):
+    #       utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_version_ui:"+ self.assetDetails['path'],isAccessed=True)
+    #       runCmd = runCmd.rstrip().lstrip()
+    #       subprocess.Popen(runCmd,shell=True)
+    #     else:
+    #       utilsPipe.updateProjModifies(self.assetDetails['projName'], "open_version_ui:"+ self.assetDetails['path'],isAccessed=True)
+    #       import webbrowser
+    #       webbrowser.open(filename)
+    #
     
 
 
