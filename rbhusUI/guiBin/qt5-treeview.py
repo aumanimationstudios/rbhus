@@ -43,6 +43,7 @@ from PyQt5 import QtCore, uic, QtGui, QtWidgets
 parser = argparse.ArgumentParser(description="Use the comand to open a sandboxed UI for folders in an Asset")
 parser.add_argument("-a","--asset",dest="asset",help="colon separated Asset path")
 parser.add_argument("-p","--path",dest="path",help="Absolute path of the asset on disk")
+parser.add_argument("-c","--close",dest="close",action="store_true",help="Close the app after opening a file")
 # parser.add_argument("-e","--end",dest="end",help="end number")
 # parser.add_argument("-p","--pad",dest="pad",help="padding for number")
 args = parser.parse_args()
@@ -535,7 +536,7 @@ def popUpFiles(main_uid,pos):
 
     ioCopyAction = ioMenu.addAction("copy")
     ioDeleteAction = ioMenu.addAction("delete")
-    ioDeleteAction.setEnabled(False)
+    # ioDeleteAction.setEnabled(False)
 
     fileNameRenameAction = fileNameMenu.addAction("rename")
 
@@ -577,6 +578,9 @@ def popUpFiles(main_uid,pos):
         fileRenameDialog(main_ui)
       except:
         print("rename failed : " + str(sys.exc_info()))
+    if(action == ioDeleteAction):
+      deleteFiles(main_ui)
+
 
 
 
@@ -592,9 +596,25 @@ def openFile(main_ui,cmd):
       cmdFull = cmdToRun
     else:
       cmdFull = cmd.format(selected.media.mainFile)
+  elif(cmd.startswith("system_")):
+    import webbrowser
+    webbrowser.open(selected.media.mainFile)
   else:
     cmdFull = cmd.format(selected.media.mainFile)
   subprocess.Popen(cmdFull,shell=True)
+  if(args.close):
+    QApplication.quit()
+
+def deleteFiles(main_ui):
+  global fileThumbzWidget
+  global CUR_DIR_SELECTED
+  global fileIconThreadRunning
+  selected = main_ui.listFiles.selectedItems()
+  for item in selected:
+    fileToDelete = item.media.mainFile
+
+
+
 
 
 
@@ -602,10 +622,12 @@ def pasteFilesFromClipboard(main_ui,urls):
   global fileThumbzWidget
   global CUR_DIR_SELECTED
   global fileIconThreadRunning
-  rewriteOption = False
+  applyOption = QtCore.Qt.Unchecked
+  rewriteReply = QtWidgets.QMessageBox.No
+
 
   for url in urls:
-    rewriteOptionLocal = False
+    # applyOptionLocal = False
     sourceFile = url.toLocalFile()
     isDir = os.path.isdir(sourceFile)
     sourceFileBaseName = os.path.basename(sourceFile)
@@ -613,37 +635,49 @@ def pasteFilesFromClipboard(main_ui,urls):
     destFile = os.path.join(CUR_DIR_SELECTED,sourceFileBaseName)
     reply = QtWidgets.QMessageBox.No
     if(os.path.exists(destFile)):
-      msgBox = QtWidgets.QMessageBox()
-      applyToAll = QtWidgets.QCheckBox("apply to all")
-      msgBox.setText("Overwrite : " + sourceFileBaseName)
-      msgBox.addButton(QtWidgets.QMessageBox.Yes)
-      msgBox.addButton(QtWidgets.QMessageBox.No)
-      msgBox.setDefaultButton(QtWidgets.QMessageBox.No)
-      msgBox.setCheckBox(applyToAll)
+      if(applyOption == QtCore.Qt.Unchecked):
+        msgBox = QtWidgets.QMessageBox()
+        applyToAll = QtWidgets.QCheckBox("apply to all")
+        msgBox.setText("Overwrite : " + sourceFileBaseName)
+        msgBox.addButton(QtWidgets.QMessageBox.Yes)
+        msgBox.addButton(QtWidgets.QMessageBox.No)
+        msgBox.setDefaultButton(QtWidgets.QMessageBox.No)
+        msgBox.setCheckBox(applyToAll)
+        # applyToAll.stateChanged.connect(lambda stateChanged, applyOption = applyOption :rewriteFunc(stateChanged,applyOption))
+        reply = msgBox.exec_()
+        applyOption = applyToAll.checkState()
+        if(applyOption == QtCore.Qt.Checked):
+          rewriteReply = reply
+      else:
+        reply = rewriteReply
 
-      reply = msgBox.exec_()
 
 
+      rbhus.debug.info(applyOption)
       # reply = QtWidgets.QMessageBox.question(main_ui.listFiles, "WARNING", "Overwrite : " + sourceFileBaseName, QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
       if (reply == QtWidgets.QMessageBox.No):
-        print("NO")
-        for x in range(1, 100):
-          (bName, bExt) = os.path.splitext(sourceFileBaseName)
-          bName = bName + "_" + str(x).zfill(3)
+        print("skipping : "+ sourceFile)
+        continue
 
-          newFileName = None
-          if (bExt):
-            newFileName = bName + bExt
-          else:
-            newFileName = bName
 
-          destFile = os.path.join(CUR_DIR_SELECTED, newFileName)
-          if (not os.path.exists(destFile)):
-            break
+        # for x in range(1, 100):
+        #   (bName, bExt) = os.path.splitext(sourceFileBaseName)
+        #   bName = bName + "_" + str(x).zfill(3)
+        #
+        #   newFileName = None
+        #   if (bExt):
+        #     newFileName = bName + bExt
+        #   else:
+        #     newFileName = bName
+        #
+        #   destFile = os.path.join(CUR_DIR_SELECTED, newFileName)
+        #   if (not os.path.exists(destFile)):
+        #     break
     if(isDir):
-      os.system("rsync -a "+ sourceFile + "/ " + destFile)
+      os.system("rsync -a \""+ sourceFile + "/\" \""+ destFile + "\"")
     else:
-      os.system("rsync -a "+ sourceFile + " " + destFile)
+      os.system("rsync -a \""+ sourceFile + "\" \"" + destFile + "\"")
+
     rbhus.utilsPipe.updateAssModifies(assDets['assetId'],"copied : "+ sourceFile +" -> "+ destFile)
     if(not isDir):
       fileGlob = [destFile]

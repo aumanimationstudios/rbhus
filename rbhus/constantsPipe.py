@@ -73,7 +73,8 @@ mimeTypes = {
              "blender":[".blend",".blend1",".blend2"],
              "office":[".ods",".doc",".xls"],
              "krita":[".kra"],
-             "psd":[".psd"]
+             "psd":[".psd"],
+             "pdf":["pdf"]
             }
 
 mimeLogos = {
@@ -84,10 +85,12 @@ mimeLogos = {
   "office":os.path.join(base_dir,"etc","icons","mime_type_office.png"),
   "krita" : os.path.join(base_dir,"etc","icons","mime_type_krita.png"),
   "psd": os.path.join(base_dir,"etc","icons","mime_type_psd.png"),
+  "pdf": os.path.join(base_dir,"etc","icons","mime_type_pdf.png"),
 }
 
 mimeConvertCmds = {
   "image": "/usr/bin/convert \"{0}\" -sample 96x96 \"{1}\"",
+  "pdf": "/usr/bin/convert \"{0}\"[0] -sample 96x96 -alpha remove \"{1}\"",
   # "video": "/usr/bin/convert \"{0}[1]\" -sample 96x96 \"{1}\"",
   "video": "/usr/bin/ffmpeg -loglevel panic -i \"{0}\" -vframes 1 -an -vf scale=96:-1 -ss 0.1 -y \"{1}\"",
   "office" : "cp "+ os.path.join(base_dir,"etc","icons","libreOffice_logo.png") +" \"{1}\"",
@@ -99,8 +102,9 @@ mimeTypesOpenCmds = {
   "image": {"linux":["gwenview","djv_view - image","djv_view - sequence","krita","inkscape"]},
   "video": {"linux":["mpv","mpv - loop", "djv_view - video"]},
   "blender": {"linux":["project_assigned_application"]}, # Just enter "project_assigned_application" to open certain kinds of files with project assigned apps.
+  "pdf": {"linux":["system_assigned_application"]}, # Just enter "system_assigned_application" to open certain kinds of files with project assigned apps.
   "krita": {"linux":["krita"]},
-  "office": {"linux":["libreoffice"]},
+  "office": {"linux":["libreoffice","gnumeric"]},
   "audio": {"linux":["mpv-audio","mpv-audio - loop"]},
   "psd": {"linux":["krita"]}
 }
@@ -118,6 +122,7 @@ mimeCmdsLinux = {
   "djv_view - video"             : "djv_view -file_cache False \"{0}\"",
   "krita"                        : "krita \"{0}\"",
   "libreoffice"                  : "libreoffice --nologo \"{0}\"",
+  "gnumeric"                     : "gnumeric \"{0}\"",
   "inkscape"                     : "inkscape \"{0}\""
 }
 

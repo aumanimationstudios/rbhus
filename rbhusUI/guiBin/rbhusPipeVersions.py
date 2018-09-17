@@ -630,7 +630,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       p = QtCore.QProcess(parent=self.centralwidget)
       p.setStandardOutputFile(tempDir + os.sep + "rbhusAssFoldsVersion_" + username + ".log")
       p.setStandardErrorFile(tempDir + os.sep + "rbhusAssFoldsVersion_" + username + ".err")
-      p.start(sys.executable, [assFoldsCmd, "--asset", self.assetDetails['path'], "--path", self.versionsHg.localPath])
+      p.start(sys.executable, [assFoldsCmd, "-c", "--asset", self.assetDetails['path'], "--path", path])
 
 
 
