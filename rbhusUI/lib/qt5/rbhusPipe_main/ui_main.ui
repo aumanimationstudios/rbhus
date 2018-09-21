@@ -97,9 +97,6 @@
           <property name="defaultDropAction">
            <enum>Qt::ActionMask</enum>
           </property>
-          <property name="alternatingRowColors">
-           <bool>true</bool>
-          </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::SingleSelection</enum>
           </property>
@@ -991,9 +988,6 @@
            </property>
            <property name="defaultDropAction">
             <enum>Qt::IgnoreAction</enum>
-           </property>
-           <property name="alternatingRowColors">
-            <bool>true</bool>
            </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::ExtendedSelection</enum>

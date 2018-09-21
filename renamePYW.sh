@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 rsync -av ./ /projdump/pythonTestWindoze.DONOTDELETE/rbhus/ --delete --exclude=*.pyc --exclude=.git
 cd /projdump/pythonTestWindoze.DONOTDELETE/rbhus/ ; ./clean.sh ; cd -
 cd /projdump/pythonTestWindoze.DONOTDELETE/rbhus/rbhusUI/ ; rename .py .pyw * ; cd -

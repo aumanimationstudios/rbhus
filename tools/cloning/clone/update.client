@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 source ./update.client.dirs
 for I in $Idirs
 do

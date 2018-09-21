@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 pkill -9 rQ
 pkill -9 pD
 rsync -av ./ /opt/rbhus/ --delete --exclude=*.pyc --exclude=.git

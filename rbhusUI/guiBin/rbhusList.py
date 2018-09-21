@@ -365,7 +365,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(isScript):
       filenamepy = os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts",("_".join(time.asctime().split()) +".py").replace(":","-"))
       fd = open(filenamepy,"w")
-      fd.write("#!/bin/sh\n")
+      fd.write("#!/bin/bash\n")
       print(filenamepy)
     if (selTasksDict):
       for x in selTasksDict:
@@ -410,7 +410,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(isScript):
       filenamepy = os.path.join(os.path.expanduser("~"),"rbhusRenderGeneratedScripts",("_".join(time.asctime().split()) +".py").replace(":","-"))
       fd = open(filenamepy,"w")
-      fd.write("#!/bin/sh\n")
+      fd.write("#!/bin/bash\n")
       print(filenamepy)
     if (selTasksDict):
       for x in selTasksDict:

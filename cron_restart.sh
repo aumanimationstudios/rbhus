@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 sleep 60
 
 /etc/local.d/01-rbhus.stop

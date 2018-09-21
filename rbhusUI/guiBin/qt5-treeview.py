@@ -7,18 +7,18 @@ __email__ = "shrinidhi666@gmail.com"
 
 
 
-import sys
-import os
-import zmq
-import uuid
-import setproctitle
-import multiprocessing
-import subprocess
-import time
-import glob
-import simplejson
-import uuid
 import argparse
+import glob
+import multiprocessing
+import os
+import subprocess
+import sys
+import time
+import uuid
+
+import setproctitle
+import simplejson
+import zmq
 
 # sys.path.append(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1]))
 progPath = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2])
@@ -34,8 +34,7 @@ mediaThumbz_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderMa
 rbhus.debug.info(main_ui_file)
 
 
-from PyQt5.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QVBoxLayout, QFileIconProvider, QListWidgetItem
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QFileSystemModel, QListWidgetItem
 from PyQt5 import QtCore, uic, QtGui, QtWidgets
 
 
@@ -612,7 +611,10 @@ def deleteFiles(main_ui):
   selected = main_ui.listFiles.selectedItems()
   for item in selected:
     fileToDelete = item.media.mainFile
-
+    # if(os.path.exists(item.media.mainFile)):
+    #
+    # rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "deleted : " + item.media.mainFile)
+    #
 
 
 
@@ -695,10 +697,21 @@ def copyToClipboard(main_ui):
   mimeData = QtCore.QMimeData()
 
   for x in selected:
+    # if(os.path.exists("/usr/bin/thunar-no-more")):
+    #   urlList.append(x.media.mainFile)
+    # elif(os.path.exists("/usr/bin/dolphin-no-more")):
     urlList.append(QtCore.QUrl().fromLocalFile(x.media.mainFile))
     rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "clipboard : " + x.media.mainFile)
 
+  # if(os.path.exists("/usr/bin/thunar-no-more")):
+  #   byteArray = QtCore.QByteArray("copy\n")
+  #   for url in urlList:
+  #     byteArray.append(url.toEncoded())
+  #     byteArray.append("\n")
+  #   mimeData.setData("x-special/gnome-copied-files",byteArray)
+  # elif (os.path.exists("/usr/bin/dolphin-no-more")):
   mimeData.setUrls(urlList)
+
   QtWidgets.QApplication.clipboard().setMimeData(mimeData)
 
 

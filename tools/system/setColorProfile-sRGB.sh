@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 xiccd &
 sleep 5
 colorprofile=`colormgr find-profile-by-filename /usr/share/color/icc/colord/sRGB.icc | grep -i object | gawk -F ":" '{gsub(/ /,"",$2); print $2}'`
