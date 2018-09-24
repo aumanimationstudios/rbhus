@@ -11,7 +11,7 @@ import zmq
 
 from PyQt5 import QtCore, uic, QtGui, QtWidgets
 
-
+rbhusPath = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3])
 
 parser = argparse.ArgumentParser(description="Use the comand to copy whatever u copied from rbhus to any folder")
 parser.add_argument("-d","--directory",dest="directory",help="paste into given directory")
@@ -23,7 +23,8 @@ def main():
   ctx = zmq.Context()
   sock = ctx.socket(zmq.PUSH)
   sock.connect("ipc:///tmp/rbhusTray_api_serv_"+ username)
-  cmd = "/home/shrinidhi/bin/gitHub/rbhus/tools/rbhus/copyFromRbhus.py -d "+ args.directory
+  cmd_path = os.path.join(rbhusPath,"tools","rbhus","copyFromRbhus.py")
+  cmd = cmd_path +" -d "+ args.directory
   sock.send_pyobj(cmd)
   sock.close()
 

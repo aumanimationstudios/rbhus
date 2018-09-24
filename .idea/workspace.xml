@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tools/rbhus/copyFromRbhus.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/rbhus/copyToFM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cron_restart.sh" beforeDir="false" afterPath="$PROJECT_DIR$/cron_restart.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/icons/mimeTypes.svg" beforeDir="false" afterPath="$PROJECT_DIR$/etc/icons/mimeTypes.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusDNSDHCP.sh" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusDNSDHCP.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renamePYW.sh" beforeDir="false" afterPath="$PROJECT_DIR$/renamePYW.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sync.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sync.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/syncBeta.sh" beforeDir="false" afterPath="$PROJECT_DIR$/syncBeta.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/syncServer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/syncServer.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/cloning/clone/update.client" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cloning/clone/update.client" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/system/browser_perm.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/browser_perm.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/system/removeMountPermissions_ubuntu.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/removeMountPermissions_ubuntu.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/system/setColorProfile-sRGB.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/setColorProfile-sRGB.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/system/sync_ubuntu.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/sync_ubuntu.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/system/ubuntu/update_wacom.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/ubuntu/update_wacom.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/firefox" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/firefox" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome-stable" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/ubuntu/usr/local/bin/google-chrome-stable" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/rbhus/copyToFM.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/rbhus/copyToFM.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +59,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="6" />
-          <entry key="py" value="3050" />
+          <entry key="py" value="3096" />
           <entry key="sh" value="21" />
           <entry key="txt" value="1" />
         </counts>
@@ -89,7 +68,7 @@
         <counts>
           <entry key="Bash" value="21" />
           <entry key="PLAIN_TEXT" value="6" />
-          <entry key="Python" value="3050" />
+          <entry key="Python" value="3096" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -125,11 +104,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/copyFromRbhus.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="55" column="38" lean-forward="true" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="38" />
+            <state relative-caret-position="195">
+              <caret line="13" selection-start-line="13" selection-end-line="13" selection-end-column="69" />
               <folding>
                 <element signature="e#133#143#0" expanded="true" />
                 <marker date="1537549830499" expanded="true" signature="725:1463" ph="..." />
@@ -159,14 +138,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tools/rbhus/copyToFM.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="14" selection-start-line="24" selection-start-column="14" selection-end-line="24" selection-end-column="14" />
+            <state relative-caret-position="390">
+              <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
               <folding>
                 <element signature="e#133#143#0" expanded="true" />
-                <marker date="1537466221231" expanded="true" signature="508:758" ph="..." />
+                <marker date="1537550821195" expanded="true" signature="577:848" ph="..." />
               </folding>
             </state>
           </provider>
@@ -294,8 +273,8 @@
         <option value="$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh" />
         <option value="$PROJECT_DIR$/tools/system/setColorProfile-sRGB.sh" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" />
-        <option value="$PROJECT_DIR$/tools/rbhus/copyToFM.py" />
         <option value="$PROJECT_DIR$/tools/rbhus/copyFromRbhus.py" />
+        <option value="$PROJECT_DIR$/tools/rbhus/copyToFM.py" />
       </list>
     </option>
   </component>
@@ -602,13 +581,13 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32975113" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.1590909" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.1590909" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3297143" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" weight="0.0692395" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" visible="true" weight="0.21761364" />
       <window_info anchor="bottom" id="Python Console" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5004721" side_tool="true" weight="0.32975113" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -892,27 +871,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/copyToFM.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="14" selection-start-line="24" selection-start-column="14" selection-end-line="24" selection-end-column="14" />
-          <folding>
-            <element signature="e#133#143#0" expanded="true" />
-            <marker date="1537466221231" expanded="true" signature="508:758" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/copyFromRbhus.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="55" column="38" lean-forward="true" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="38" />
+        <state relative-caret-position="195">
+          <caret line="13" selection-start-line="13" selection-end-line="13" selection-end-column="69" />
           <folding>
             <element signature="e#133#143#0" expanded="true" />
             <marker date="1537549830499" expanded="true" signature="725:1463" ph="..." />
             <marker date="1537549830499" expanded="true" signature="1505:1640" ph="..." />
             <marker date="1537549830499" expanded="true" signature="1598:1640" ph="..." />
             <marker date="1537549830499" expanded="true" signature="1654:1963" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/copyToFM.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+          <folding>
+            <element signature="e#133#143#0" expanded="true" />
+            <marker date="1537550821195" expanded="true" signature="577:848" ph="..." />
           </folding>
         </state>
       </provider>
