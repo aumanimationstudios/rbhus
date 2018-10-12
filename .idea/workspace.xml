@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/exportAssetsData.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/convert_exr/default.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/convert_exr/default.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rbhusDrone.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusDrone.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/main.ui" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/folderManager/main.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/qt5/rbhusPipe_main/ui_main.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -71,7 +61,7 @@
         <counts>
           <entry key="Python Console" value="218" />
           <entry key="dummy" value="6" />
-          <entry key="py" value="5563" />
+          <entry key="py" value="5565" />
           <entry key="sh" value="87" />
           <entry key="txt" value="1" />
         </counts>
@@ -80,7 +70,7 @@
         <counts>
           <entry key="Bash" value="87" />
           <entry key="PLAIN_TEXT" value="6" />
-          <entry key="Python" value="5781" />
+          <entry key="Python" value="5783" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -187,8 +177,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1167">
-              <caret line="579" column="48" selection-start-line="579" selection-start-column="48" selection-end-line="579" selection-end-column="48" />
+            <state relative-caret-position="972">
+              <caret line="584" column="21" selection-start-line="584" selection-start-column="21" selection-end-line="584" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -213,7 +203,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>assfoldscmd</find>
       <find>openass</find>
       <find>pri</find>
       <find>register</find>
@@ -243,6 +232,7 @@
       <find>pop</find>
       <find>mime</find>
       <find>start</find>
+      <find>exec</find>
     </findStrings>
     <replaceStrings>
       <replace>setText</replace>
@@ -598,7 +588,7 @@
     <frame x="1917" y="0" width="1086" height="1892" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2573321" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2573321" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -609,7 +599,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3297143" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" visible="true" weight="0.21761364" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" visible="true" weight="0.21761364" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.32954547" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5004721" side_tool="true" weight="0.32975113" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -915,6 +905,9 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusDroneCtrl.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -925,13 +918,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusDroneCtrl.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1167">
-          <caret line="579" column="48" selection-start-line="579" selection-start-column="48" selection-end-line="579" selection-end-column="48" />
+        <state relative-caret-position="972">
+          <caret line="584" column="21" selection-start-line="584" selection-start-column="21" selection-end-line="584" selection-end-column="21" />
         </state>
       </provider>
     </entry>

@@ -582,7 +582,7 @@ def execFrames(frameInfo,frameScrutiny):
         logClient.debug(sys.exc_info())
     except:
       os.environ['rbhus_exit']   = "1"
-      logClient.debug(str(sys.exc_info()))
+      logClient.info(str(sys.exc_info()))
       while(1):
         if(setFramesStatus(frameInfo['id'],batchedFrames,constants.framesFailed,db_conn) == 1):
           logClient.debug("run cmd failed !! ")
