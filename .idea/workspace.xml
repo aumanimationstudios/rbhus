@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/etc/convert_exr/default.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/convert_exr/default.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusDrone.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusDrone.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +61,7 @@
         <counts>
           <entry key="Python Console" value="218" />
           <entry key="dummy" value="6" />
-          <entry key="py" value="5807" />
+          <entry key="py" value="5817" />
           <entry key="sh" value="87" />
           <entry key="txt" value="1" />
         </counts>
@@ -71,7 +70,7 @@
         <counts>
           <entry key="Bash" value="87" />
           <entry key="PLAIN_TEXT" value="6" />
-          <entry key="Python" value="6025" />
+          <entry key="Python" value="6035" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -129,11 +128,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="870">
-              <caret line="58" column="22" lean-forward="true" selection-start-line="58" selection-start-column="22" selection-end-line="58" selection-end-column="22" />
+            <state relative-caret-position="120">
+              <caret line="8" column="17" lean-forward="true" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
               <folding>
                 <element signature="e#19#28#0" expanded="true" />
               </folding>
@@ -166,10 +165,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="945">
+            <state relative-caret-position="2565">
               <caret line="558" column="110" selection-start-line="558" selection-start-column="110" selection-end-line="558" selection-end-column="110" />
             </state>
           </provider>
@@ -273,8 +272,8 @@
         <option value="$PROJECT_DIR$/tests/exportAssetsData.py" />
         <option value="$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" />
-        <option value="$PROJECT_DIR$/etc/convert_exr/default.py" />
         <option value="$PROJECT_DIR$/rbhusDrone.py" />
+        <option value="$PROJECT_DIR$/etc/convert_exr/default.py" />
       </list>
     </option>
   </component>
@@ -918,16 +917,6 @@
         <state relative-caret-position="-6744" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="870">
-          <caret line="58" column="22" lean-forward="true" selection-start-line="58" selection-start-column="22" selection-end-line="58" selection-end-column="22" />
-          <folding>
-            <element signature="e#19#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusDroneCtrl.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="441">
@@ -937,8 +926,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
+        <state relative-caret-position="2565">
           <caret line="558" column="110" selection-start-line="558" selection-start-column="110" selection-end-line="558" selection-end-column="110" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="17" lean-forward="true" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+          <folding>
+            <element signature="e#19#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

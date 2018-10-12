@@ -6,6 +6,7 @@ import pwd
 import time
 import socket
 import subprocess
+import simplejson
 rbhus_main_path = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-3])
 sys.path.append(rbhus_main_path)
 import rbhus.renderPlugin
