@@ -517,6 +517,7 @@ def execFrames(frameInfo,frameScrutiny):
     except:
       logClient.debug("update logFile  : "+ str(sys.exc_info()))
 
+    logD = open(logFile,"a+",0)
     os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
     if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]
@@ -553,9 +554,9 @@ def execFrames(frameInfo,frameScrutiny):
     runCmd = None
     try:
       if(sys.platform.find("win") >= 0):
-        runScriptProc = subprocess.Popen(['python.exe',runScript],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+        runScriptProc = subprocess.Popen(['python.exe',runScript],stderr=logD,stdout=logD)
       elif(sys.platform.find("linux") >= 0):
-        runScriptProc = subprocess.Popen("python \"{0}\"".format(runScript),shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+        runScriptProc = subprocess.Popen("python \"{0}\"".format(runScript),shell=True,stderr=logD,stdout=logD)
       runCmd = socket.recv_unicode()
       logClient.debug("run cmd :  "+ str(runCmd))
       # while True:
@@ -611,7 +612,6 @@ def execFrames(frameInfo,frameScrutiny):
 
     logClient.debug("logFile : "+ str(logFile))
     try:
-      logD = open(logFile,"a+",0)
       logD.write("RUN CMD :"+ str(runCmd))
       logD.write("START : "+ str(frameInfo['batchId']) + " : "+ str(hostname) +" : "+ str(time.asctime()) +"\n")
       logD.write("FRAMES : "+ " ".join(batchedFrames) +"\n")

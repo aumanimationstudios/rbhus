@@ -10,6 +10,7 @@ rbhus_main_path = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-3])
 sys.path.append(rbhus_main_path)
 import rbhus.renderPlugin
 import rbhus.utilsPipe
+import rbhus.debug
 
 taskId = os.environ['rbhus_taskId']
 frameId = os.environ['rbhus_frameId']
@@ -55,7 +56,7 @@ if(copyAssAbsPath):
   cmd = script +" "+ outDir +" "+ copyAssAbsPath
 else:
   cmd = script + " " + outDir
-print(cmd)
+rbhus.debug.debug(cmd)
 rbhus.renderPlugin.sendCmd(cmd)
 
 
