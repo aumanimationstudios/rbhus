@@ -61,7 +61,7 @@
         <counts>
           <entry key="Python Console" value="218" />
           <entry key="dummy" value="6" />
-          <entry key="py" value="5595" />
+          <entry key="py" value="5597" />
           <entry key="sh" value="87" />
           <entry key="txt" value="1" />
         </counts>
@@ -70,7 +70,7 @@
         <counts>
           <entry key="Bash" value="87" />
           <entry key="PLAIN_TEXT" value="6" />
-          <entry key="Python" value="5813" />
+          <entry key="Python" value="5815" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -170,8 +170,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="577" column="51" selection-start-line="576" selection-start-column="8" selection-end-line="577" selection-end-column="51" />
+            <state relative-caret-position="597">
+              <caret line="585" column="42" lean-forward="true" selection-start-line="585" selection-start-column="42" selection-end-line="585" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -934,8 +934,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="577" column="51" selection-start-line="576" selection-start-column="8" selection-end-line="577" selection-end-column="51" />
+        <state relative-caret-position="597">
+          <caret line="585" column="42" lean-forward="true" selection-start-line="585" selection-start-column="42" selection-end-line="585" selection-end-column="42" />
         </state>
       </provider>
     </entry>
