@@ -87,6 +87,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="alternatingRowColors">
           <bool>false</bool>
          </property>
@@ -210,7 +213,7 @@
           <enum>QListView::Adjust</enum>
          </property>
          <property name="spacing">
-          <number>2</number>
+          <number>5</number>
          </property>
          <property name="gridSize">
           <size>
@@ -220,6 +223,9 @@
          </property>
          <property name="viewMode">
           <enum>QListView::IconMode</enum>
+         </property>
+         <property name="uniformItemSizes">
+          <bool>true</bool>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

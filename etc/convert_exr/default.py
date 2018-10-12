@@ -9,6 +9,7 @@ import subprocess
 rbhus_main_path = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-3])
 sys.path.append(rbhus_main_path)
 import rbhus.renderPlugin
+import rbhus.utilsPipe
 
 taskId = os.environ['rbhus_taskId']
 frameId = os.environ['rbhus_frameId']
@@ -38,9 +39,22 @@ camera = os.environ['rbhus_camera']
 res = os.environ['rbhus_resolution']
 
 
+copyAssAbsPath = None
+if ("rbhus_renExtEnv" in rbhus.renderPlugin.env):
+  extEnv = rbhus.renderPlugin.env['rbhus_renExtEnv']
+  if (extEnv != "default"):
+    renExtEnv = simplejson.loads(extEnv)
+    if ("assPath" in renExtEnv):
+      assPath = renExtEnv['assPath']
+      assProj = assPath.split(":")[0]
+      copyAss = assProj + ":output:Movs"
+      copyAssAbsPath = rbhus.utilsPipe.getAbsPath(copyAss)
+
 script = "/projdump/pythonTestWindoze.DONOTDELETE/rbhus/tools/rbhus/convert_exr_mov_rle.py"
-cmd = script +" "+ outDir
-print (cmd)
+if(copyAssAbsPath):
+  cmd = script +" "+ outDir +" "+ copyAssAbsPath
+else:
+  cmd = script + " " + outDir
 rbhus.renderPlugin.sendCmd(cmd)
 
 

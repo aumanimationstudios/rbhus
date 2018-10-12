@@ -576,8 +576,8 @@ def execFrames(frameInfo,frameScrutiny):
       try:
         socket.close()
         context.term()
-        runScriptProc.wait()
-        logClient.debug("socket closed")
+        msg = runScriptProc.communicate()
+        logClient.info("socket closed "+ str(msg))
       except:
         logClient.debug(sys.exc_info())
     except:

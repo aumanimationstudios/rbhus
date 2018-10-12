@@ -111,6 +111,17 @@ if(not rbhus_isRendering):
       bpy.context.scene.render.use_stamp_note = True
       bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mov"
       bpy.context.scene.use_audio_scrub = True
+    if (stageType == "fx"):
+      setOutPut()
+      bpy.context.scene.render.use_stamp = False
+      bpy.context.scene.render.resolution_x = 3840
+      bpy.context.scene.render.resolution_y = 2160
+      bpy.context.scene.render.resolution_percentage = 50
+      bpy.context.scene.render.ffmpeg.format = "QUICKTIME"
+      bpy.context.scene.render.ffmpeg.codec = 'PNG'
+      bpy.context.scene.render.image_settings.color_mode = 'RGBA'
+      bpy.context.scene.render.ffmpeg.ffmpeg_preset = 'ULTRAFAST'
+      bpy.context.scene.render.filepath = "//" + getAssFileName() + ".mov"
     elif(stageType == "postproduction" and nodeType == "lineUp"):
       setOutPut()
       bpy.context.scene.render.use_stamp = False
@@ -119,7 +130,9 @@ if(not rbhus_isRendering):
       bpy.context.scene.render.resolution_percentage = 50
 
       bpy.context.scene.render.ffmpeg.format = "QUICKTIME"
-      bpy.context.scene.render.ffmpeg.ffmpeg_preset = 'ULTRAFAST'
+      # bpy.context.scene.render.image_settings.color_mode = 'RGB'
+      # bpy.context.scene.render.ffmpeg.codec = 'PNG'
+      # bpy.context.scene.render.ffmpeg.ffmpeg_preset = 'ULTRAFAST'
       bpy.context.scene.render.filepath = "//" + getAssFileName() + ".mov"
 
     try:

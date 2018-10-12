@@ -56,6 +56,8 @@ hostname = socket.gethostname()
 tempDir = os.path.abspath(tempfile.gettempdir())
 
 
+rbhusTrash = os.path.join("/home",username,".rbhusTrash")
+
 
 class thumbz_db(object):
   absPath = None
@@ -193,7 +195,7 @@ def getFileTypes(ftype=None):
   dbconn = dbPipe.dbPipe()
   try:
     if(ftype):
-      rows = dbconn.execute("SELECT * FROM fileTypes where type='"+ str(ftype) +"' order by type", dictionary=True)
+      rows = dbconn.execute("SELECT * FROM fileTypes where type='"+ str(ftype) +"'", dictionary=True)
       if(rows):
         return(rows[0])
       else:
@@ -1937,6 +1939,7 @@ def openAssetCmd(assdets ={},filename = None):
   binPathExe = getBinPath(assdets)
   debug.info(filename)
   exportAsset(assdets)
+  # fileExt = os.path.splitext(filename)[-1]
   if(assdets['fileType'] != "default"):
     filetypedets = getFileTypes(assdets['fileType'])
     validExtenstions = filetypedets['extension'].split(",")

@@ -19,7 +19,11 @@ import shutil
 
 
 path = os.path.abspath(sys.argv[1])
-
+move_path = None
+try:
+  mov_path = os.path.abspath(sys.argv[2])
+except:
+  print("Nothing to move after convert")
 cpus = multiprocessing.cpu_count()
 exrs = glob.glob(path.rstrip(os.sep) + os.sep + "*.exr")
 exrs.sort()
@@ -42,3 +46,7 @@ cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 24 -start_number 
 p = subprocess.Popen(cmd,shell=True)
 p.wait()
 # os.remove(unatron)
+
+if(mov_path):
+    cpCmd = "cp -v "+ mov +" "+ mov_path +"/"
+    os.system(cpCmd.rstrip())

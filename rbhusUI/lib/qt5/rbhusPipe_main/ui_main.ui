@@ -1089,7 +1089,7 @@
                </size>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>2</number>
               </property>
               <property name="usesScrollButtons">
                <bool>false</bool>
@@ -1680,7 +1680,7 @@
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_11">
                 <item>
-                 <widget class="QTableWidget" name="tableWidget">
+                 <widget class="QTableWidget" name="tableUpdates">
                   <property name="minimumSize">
                    <size>
                     <width>1</width>
@@ -1821,7 +1821,7 @@
   <tabstop>scrollArea</tabstop>
   <tabstop>listWidgetSubDir</tabstop>
   <tabstop>listWidgetMedia</tabstop>
-  <tabstop>tableWidget</tabstop>
+  <tabstop>tableUpdates</tabstop>
  </tabstops>
  <resources/>
  <connections/>

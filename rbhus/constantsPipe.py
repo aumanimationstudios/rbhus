@@ -71,7 +71,7 @@ mimeTypes = {
              "video":[".avi",".mp4",".mpg",".mov"],
              "audio":[".mp3",".wav",".flac"],
              "blender":[".blend",".blend1",".blend2"],
-             "office":[".ods",".doc",".xls"],
+             "office":[".ods",".doc",".xls",".txt",".docx"],
              "krita":[".kra"],
              "psd":[".psd"],
              "pdf":["pdf"]
