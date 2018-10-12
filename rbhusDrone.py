@@ -557,6 +557,7 @@ def execFrames(frameInfo,frameScrutiny):
       elif(sys.platform.find("linux") >= 0):
         runScriptProc = subprocess.Popen("python \"{0}\"".format(runScript),shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
       runCmd = socket.recv_unicode()
+      logClient.debug("run cmd :  "+ str(runCmd))
       # while True:
       #   sockets = dict(poller.poll(10000))
       #   if (sockets):
@@ -578,7 +579,6 @@ def execFrames(frameInfo,frameScrutiny):
         logClient.debug("socket closed "+ str(msg))
         socket.close()
         context.term()
-        logClient.debug("run cmd :  "+ str(runCmd))
       except:
         logClient.debug(sys.exc_info())
     except:
