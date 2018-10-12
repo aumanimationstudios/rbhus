@@ -55,6 +55,7 @@ if(copyAssAbsPath):
   cmd = script +" "+ outDir +" "+ copyAssAbsPath
 else:
   cmd = script + " " + outDir
+print(cmd)
 rbhus.renderPlugin.sendCmd(cmd)
 
 
