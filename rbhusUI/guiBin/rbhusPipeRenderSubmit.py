@@ -143,6 +143,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     self.comboRes.currentIndexChanged.connect(self.resetRes)
     self.checkAfterTime.clicked.connect(self.afterTimeEnable)
     self.checkBatching.clicked.connect(self.batchingCheck)
+    self.checkExrMov.setChecked(True)
     
     ostypes = rUtils.getOsTypes()
     ftypes = rUtils.getFileTypes()

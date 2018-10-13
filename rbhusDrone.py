@@ -534,7 +534,6 @@ def execFrames(frameInfo,frameScrutiny):
       except:
         logClient.debug("MKDIR : "+ str(sys.exc_info()[1]))
 
-
     try:
       os.makedirs(str(frameInfo['logBase']),0777)
     except:
@@ -612,8 +611,11 @@ def execFrames(frameInfo,frameScrutiny):
 
     logClient.debug("logFile : "+ str(logFile))
     try:
+      logD.write("\n")
       logD.write("RUN CMD :"+ str(runCmd))
+      logD.write("\n")
       logD.write("START : "+ str(frameInfo['batchId']) + " : "+ str(hostname) +" : "+ str(time.asctime()) +"\n")
+      logD.write("\n")
       logD.write("FRAMES : "+ " ".join(batchedFrames) +"\n")
     except:
       pass
@@ -772,6 +774,7 @@ def execFrames(frameInfo,frameScrutiny):
       killFrame(db_conn,frameInfo['id'],frameInfo['frameId'],pidfileLock,-1)
     try:
       logD.write("FRAMES : "+ " ".join(batchedFrames) +"\n")
+      logD.write("\n")
       logD.write("END : "+ str(frameInfo['batchId']) + " : "+ str(hostname) +" : "+ str(time.asctime()) +"\n")
       logD.close()
     except:
