@@ -516,8 +516,10 @@ def execFrames(frameInfo,frameScrutiny):
       db_conn.execute("update frames set logFile=\'"+ str(logFile) +"\' where batchId=\'"+ str(frameInfo['batchId']) +"\'")
     except:
       logClient.debug("update logFile  : "+ str(sys.exc_info()))
-
-    logD = open(logFile,"a+",0)
+    try:
+      logD = open(logFile,"a+",0)
+    except:
+      logClient.debug(sys.exc_info())
     os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
     if(sys.platform.find("linux") >=0):
       ruid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[2]

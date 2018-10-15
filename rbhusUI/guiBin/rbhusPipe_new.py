@@ -360,7 +360,7 @@ class updateAssQthread(QtCore.QThread):
             if(isGentoo):
               time.sleep(0.05)
             else:
-              time.sleep(0.05)
+              time.sleep(0.1)
           else:
             rbhus.debug.debug("STOPPING THREAD")
             break

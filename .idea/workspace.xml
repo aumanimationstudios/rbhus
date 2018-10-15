@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rbhusDrone.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusDrone.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +64,7 @@
         <counts>
           <entry key="Python Console" value="218" />
           <entry key="dummy" value="6" />
-          <entry key="py" value="5861" />
+          <entry key="py" value="6184" />
           <entry key="sh" value="87" />
           <entry key="txt" value="1" />
         </counts>
@@ -71,13 +73,13 @@
         <counts>
           <entry key="Bash" value="87" />
           <entry key="PLAIN_TEXT" value="6" />
-          <entry key="Python" value="6079" />
+          <entry key="Python" value="6402" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="45" />
+          <entry key="py" value="49" />
           <entry key="sh" value="7" />
           <entry key="txt" value="1" />
         </counts>
@@ -86,7 +88,7 @@
         <counts>
           <entry key="Bash" value="6" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="45" />
+          <entry key="Python" value="49" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -97,8 +99,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
-              <caret line="711" column="18" selection-start-line="711" selection-start-column="18" selection-end-line="711" selection-end-column="18" />
+            <state relative-caret-position="1041">
+              <caret line="965" column="127" lean-forward="true" selection-start-line="965" selection-start-column="2" selection-end-line="965" selection-end-column="127" />
               <folding>
                 <element signature="e#136#151#0" expanded="true" />
                 <marker date="1539259060522" expanded="true" signature="17446:17985" ph="..." />
@@ -109,21 +111,23 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
+        <entry file="file://$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="120" column="51" selection-start-line="120" selection-start-column="51" selection-end-line="120" selection-end-column="51" />
+            <state relative-caret-position="2149">
+              <caret line="514" column="46" selection-start-line="514" selection-start-column="46" selection-end-line="514" selection-end-column="46" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/exportAssetsData.py">
+        <entry file="file://$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="212" selection-start-line="27" selection-start-column="212" selection-end-line="27" selection-end-column="212" />
+            <state relative-caret-position="934">
+              <caret line="93" selection-start-line="93" selection-end-line="93" />
               <folding>
-                <element signature="e#133#143#0" expanded="true" />
+                <element signature="e#136#151#0" expanded="true" />
+                <marker date="1539621614992" expanded="true" signature="2126:2506" ph="..." />
+                <marker date="1539621614992" expanded="true" signature="3170:3196" ph="..." />
               </folding>
             </state>
           </provider>
@@ -133,7 +137,7 @@
         <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="930">
-              <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+              <caret line="62" selection-start-line="62" selection-end-line="62" />
               <folding>
                 <element signature="e#19#28#0" expanded="true" />
               </folding>
@@ -145,7 +149,7 @@
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="831">
-              <caret line="212" column="41" lean-forward="true" selection-start-line="212" selection-start-column="41" selection-end-line="212" selection-end-column="41" />
+              <caret line="212" column="41" selection-start-line="212" selection-start-column="41" selection-end-line="212" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -171,17 +175,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="778" selection-start-line="778" selection-end-line="778" />
+            <state relative-caret-position="661">
+              <caret line="521" column="37" lean-forward="true" selection-start-line="521" selection-start-column="37" selection-end-line="521" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/debug.py">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="14" column="37" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
+            <state relative-caret-position="1425">
+              <caret line="362" column="28" selection-start-line="362" selection-start-column="28" selection-end-line="362" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -204,8 +208,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pri</find>
-      <find>register</find>
       <find>related</find>
       <find>rewriteOption</find>
       <find>mainFile</find>
@@ -234,6 +236,8 @@
       <find>start</find>
       <find>exec</find>
       <find>runCmd</find>
+      <find>status changed</find>
+      <find>getDefaultScript</find>
     </findStrings>
     <replaceStrings>
       <replace>setText</replace>
@@ -260,7 +264,6 @@
         <option value="$PROJECT_DIR$/todo.txt" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" />
-        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.txt" />
         <option value="$PROJECT_DIR$/tools/rbhus/blender_render_opengl_sequencer.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" />
@@ -277,6 +280,8 @@
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" />
         <option value="$PROJECT_DIR$/etc/convert_exr/default.py" />
         <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" />
+        <option value="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" />
+        <option value="$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py" />
         <option value="$PROJECT_DIR$/rbhusDrone.py" />
       </list>
     </option>
@@ -387,6 +392,19 @@
             <path>
               <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
               <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
+              <item name="qt5" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
+              <item name="qt5" type="462c0819:PsiDirectoryNode" />
+              <item name="treeViewTest" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
               <item name="tools" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -441,28 +459,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.copyFromRbhus">
-    <configuration name="constantsPipe" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="rbhus" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/constantsPipe.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.treeView">
     <configuration name="copyFromRbhus" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="rbhus" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -547,20 +544,41 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="treeView" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="rbhus" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/qt5/treeViewTest" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="Python.constantsPipe" />
       <item itemvalue="Python.qt5-copyfiles" />
       <item itemvalue="Python.rbhusPipe_new" />
       <item itemvalue="Python.rbhusPipe_new (1)" />
       <item itemvalue="Python.copyFromRbhus" />
+      <item itemvalue="Python.treeView" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.treeView" />
         <item itemvalue="Python.copyFromRbhus" />
         <item itemvalue="Python.rbhusPipe_new (1)" />
         <item itemvalue="Python.rbhusPipe_new" />
         <item itemvalue="Python.qt5-copyfiles" />
-        <item itemvalue="Python.constantsPipe" />
       </list>
     </recent_temporary>
   </component>
@@ -595,13 +613,13 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32954547" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.1590909" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.1590909" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3297143" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" visible="true" weight="0.21761364" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" weight="0.21761364" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.32954547" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5004721" side_tool="true" weight="0.32975113" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -624,14 +642,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../tests/qt5-treeview.py" />
-    <entry file="file://$PROJECT_DIR$/tests/qt5-copyfiles.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="26" column="58" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/qt5-treeview.py" />
     <entry file="file://$PROJECT_DIR$/todo.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -720,13 +730,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="21" lean-forward="true" selection-start-column="21" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1545">
-          <caret line="109" lean-forward="true" selection-start-line="103" selection-end-line="119" />
         </state>
       </provider>
     </entry>
@@ -885,18 +888,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="711" column="18" selection-start-line="711" selection-start-column="18" selection-end-line="711" selection-end-column="18" />
-          <folding>
-            <element signature="e#136#151#0" expanded="true" />
-            <marker date="1539259060522" expanded="true" signature="17446:17985" ph="..." />
-            <marker date="1539259060522" expanded="true" signature="26670:26971" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/debug.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -926,7 +917,7 @@
     <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="930">
-          <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
           <folding>
             <element signature="e#19#28#0" expanded="true" />
           </folding>
@@ -936,14 +927,52 @@
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="831">
-          <caret line="212" column="41" lean-forward="true" selection-start-line="212" selection-start-column="41" selection-end-line="212" selection-end-column="41" />
+          <caret line="212" column="41" selection-start-line="212" selection-start-column="41" selection-end-line="212" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="362" column="28" selection-start-line="362" selection-start-column="28" selection-end-line="362" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1041">
+          <caret line="965" column="127" lean-forward="true" selection-start-line="965" selection-start-column="2" selection-end-line="965" selection-end-column="127" />
+          <folding>
+            <element signature="e#136#151#0" expanded="true" />
+            <marker date="1539259060522" expanded="true" signature="17446:17985" ph="..." />
+            <marker date="1539259060522" expanded="true" signature="26670:26971" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2149">
+          <caret line="514" column="46" selection-start-line="514" selection-start-column="46" selection-end-line="514" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="934">
+          <caret line="93" selection-start-line="93" selection-end-line="93" />
+          <folding>
+            <element signature="e#136#151#0" expanded="true" />
+            <marker date="1539621614992" expanded="true" signature="2126:2506" ph="..." />
+            <marker date="1539621614992" expanded="true" signature="3170:3196" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="778" selection-start-line="778" selection-end-line="778" />
+        <state relative-caret-position="661">
+          <caret line="521" column="37" lean-forward="true" selection-start-line="521" selection-start-column="37" selection-end-line="521" selection-end-column="37" />
         </state>
       </provider>
     </entry>
