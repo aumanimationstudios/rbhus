@@ -95,7 +95,7 @@ mimeConvertCmds = {
   "video": "/usr/bin/ffmpeg -loglevel panic -i \"{0}\" -vframes 1 -an -vf scale=96:-1 -ss 0.1 -y \"{1}\"",
   "office" : "cp "+ os.path.join(base_dir,"etc","icons","libreOffice_logo.png") +" \"{1}\"",
   "blender": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" \"{0}\" \"{1}\"",
-  "krita": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" \"{0}\"  \"{1}\""
+  "krita": os.path.join(base_dir,"tools","rbhus","krita-thumbnailer.py") +" \"{0}\"  \"{1}\""
 }
 
 mimeTypesOpenCmds = {

@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +62,7 @@
         <counts>
           <entry key="Python Console" value="266" />
           <entry key="dummy" value="7" />
-          <entry key="py" value="9929" />
+          <entry key="py" value="9934" />
           <entry key="sh" value="87" />
           <entry key="txt" value="1" />
         </counts>
@@ -73,7 +71,7 @@
         <counts>
           <entry key="Bash" value="87" />
           <entry key="PLAIN_TEXT" value="7" />
-          <entry key="Python" value="10195" />
+          <entry key="Python" value="10200" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -145,8 +143,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="756">
-              <caret line="97" column="2" selection-start-line="97" selection-start-column="2" selection-end-line="97" selection-end-column="2" />
+            <state relative-caret-position="770">
+              <caret line="97" column="55" selection-start-line="97" selection-start-column="55" selection-end-line="97" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -594,7 +592,7 @@
     <frame x="1917" y="0" width="1086" height="1892" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.40208137" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.40208137" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -605,7 +603,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3297143" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32954547" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" visible="true" weight="0.21761364" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" visible="true" weight="0.21761364" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.32954547" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5004721" side_tool="true" weight="0.32975113" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -906,6 +904,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="70" column="17" selection-start-line="70" selection-start-column="17" selection-end-line="70" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1539799068780" expanded="true" signature="1114:1170" ph="..." />
+            <marker date="1539799068780" expanded="true" signature="63534:63548" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -922,25 +935,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="70" column="17" selection-start-line="70" selection-start-column="17" selection-end-line="70" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1539799068780" expanded="true" signature="1114:1170" ph="..." />
-            <marker date="1539799068780" expanded="true" signature="63534:63548" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="97" column="2" selection-start-line="97" selection-start-column="2" selection-end-line="97" selection-end-column="2" />
+        <state relative-caret-position="770">
+          <caret line="97" column="55" selection-start-line="97" selection-start-column="55" selection-end-line="97" selection-end-column="55" />
         </state>
       </provider>
     </entry>
