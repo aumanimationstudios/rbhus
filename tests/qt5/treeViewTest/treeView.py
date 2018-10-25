@@ -42,8 +42,23 @@ import rbhus.debug
 
 main_ui_file = os.path.join(rbhusPath, "tests", "qt5", "treeViewTest", "main.ui")
 
-ROOTDIR = sys.argv[1]
+parser = argparse.ArgumentParser(description="Use the comand to open a sandboxed UI for folders in an Asset")
+parser.add_argument("-a","--asset",dest="asset",help="colon separated Asset path")
+parser.add_argument("-p","--path",dest="path",help="Absolute path of the asset on disk")
+parser.add_argument("-c","--close",dest="close",action="store_true",help="Close the app after opening a file")
+# parser.add_argument("-e","--end",dest="end",help="end number")
+# parser.add_argument("-p","--pad",dest="pad",help="padding for number")
+args = parser.parse_args()
+
+
+assPath = args.asset
+assDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
+if(args.path):
+  ROOTDIR = args.path
+else:
+  ROOTDIR = rbhus.utilsPipe.getAbsPath(assPath)
 CUR_ROOTDIR_POINTER = os.path.join(ROOTDIR,"-")
+COMPOUND_PATHS = rbhus.utilsPipe.getCompoundPaths(assPath)
 
 CUR_DIR_SELECTED = None
 thumbsDbDir = "/crap/LOCAL.crap/.thumbz.db"
@@ -80,6 +95,25 @@ def jsonRead(jFile):
   except:
     return (0)
 
+
+class syncThread(QtCore.QThread):
+  syncing = QtCore.pyqtSignal(str,str)
+  syncingDone = QtCore.pyqtSignal(str,str)
+
+  def __init__(self,parent,fileParticles):
+    super(syncThread, self).__init__(parent)
+    self.fileParticles  = fileParticles
+
+  def run(self):
+    for fileParticle in self.fileParticles.keys():
+      self.syncing.emit(fileParticle,self.fileParticles[fileParticle])
+      if(os.path.isdir(fileParticle)):
+        status = os.system("rsync -av \""+ fileParticle + "/\" \""+ self.fileParticles[fileParticle] + "\"")
+        rbhus.debug.info(status)
+      else:
+        status = os.system("rsync -av \""+ fileParticle + "\" \"" + self.fileParticles[fileParticle] + "\"")
+        rbhus.debug.info(status)
+      self.syncingDone.emit(fileParticle, self.fileParticles[fileParticle])
 
 
 class IconProvider(QtWidgets.QFileIconProvider):
@@ -409,6 +443,32 @@ class iconGenerateThread(QtCore.QThread):
 
 
 
+def getFileDets(filePath):
+  if (os.path.isfile(filePath)):
+    pathSelected = os.path.relpath(os.path.abspath(os.path.dirname(filePath)), self.rootdir)
+    # rbhus.debug.info(pathSelected)
+    for mimeType in rbhus.constantsPipe.mimeTypes.keys():
+      mimeExts = rbhus.constantsPipe.mimeTypes[mimeType]
+      for mimeExt in mimeExts:
+        if (filePath.endswith(mimeExt)):
+          fSubPath = pathSelected
+          if (not fSubPath):
+            fSubPath = "-"
+
+          fileDets = rbhus.utilsPipe.thumbz_db()
+          fileDets.mainFile = filePath
+          fileDets.absPath = filePath
+          fileDets.subPath = pathSelected
+          fileDets.mimeType = mimeType
+          fileDets.mimeExt = mimeExt
+          fAbsPath = fileDets.absPath
+          fName = os.path.basename(fAbsPath)
+          fThumbz = os.path.join(thumbsDbDir, pathSelected, fName + ".png")
+          fJson = os.path.join(thumbsDbDir, pathSelected, fName + ".json")
+          fileDets.thumbFile = fThumbz
+          fileDets.fileName = fName
+          fileDets.jsonFile = fJson
+
 
 
 
@@ -579,6 +639,344 @@ def deleteFolder(main_ui):
 
     msgBox.exec_()
 
+def popUpFiles(main_ui,pos):
+  clip = QtWidgets.QApplication.clipboard()
+  pasteUrls = clip.mimeData().urls()
+
+  selected = getSelectedFiles(main_ui)
+  print(selectedRows)
+
+  # print(pasteUrls)
+
+  menu = QtWidgets.QMenu()
+  openMenu = QtWidgets.QMenu()
+  openMenu.setTitle("open with")
+  fileMenu  = QtWidgets.QMenu()
+  fileMenu.setTitle("file")
+  ioMenu = QtWidgets.QMenu()
+  ioMenu.setTitle("IO")
+
+
+
+
+  openWithCmdActions = {}
+  try:
+    selected = main_ui.listFiles.selectedItems()[0]
+  except:
+    selected = None
+  if(selected):
+    if(rbhus.constantsPipe.mimeTypesOpenCmds.has_key(selected.media.mimeType)):
+      cmds = rbhus.constantsPipe.mimeTypesOpenCmds[selected.media.mimeType]["linux"]
+      for cmd in cmds:
+        if(rbhus.constantsPipe.mimeCmdsLinux.has_key(cmd)):
+          openWithCmdActions[openMenu.addAction(cmd)] = rbhus.constantsPipe.mimeCmdsLinux[cmd]
+        else:
+          openWithCmdActions[openMenu.addAction(cmd)] = cmd
+
+
+
+    ioCopyAction = ioMenu.addAction("copy")
+    ioDeleteAction = ioMenu.addAction("delete")
+    # ioDeleteAction.setEnabled(False)
+
+    fileNameRenameAction = fileMenu.addAction("rename")
+    fileImageCopyAction = fileMenu.addAction("copy to clipboard")
+    # fileCopyPathAction
+
+  ioPasteAction = ioMenu.addAction("paste")
+
+  if(pasteUrls):
+    ioPasteAction.setEnabled(True)
+  else:
+    ioPasteAction.setEnabled(False)
+
+
+
+
+  menu.addMenu(openMenu)
+  menu.addMenu(fileMenu)
+  menu.addMenu(ioMenu)
+
+  action = menu.exec_(main_ui.listFiles.mapToGlobal(pos))
+
+
+
+
+  if(action in openWithCmdActions.keys()):
+    runCmd = openWithCmdActions[action]
+    try:
+      openFile(main_ui,runCmd)
+    except:
+      rbhus.debug.error(sys.exc_info)
+
+  if(action == ioPasteAction):
+    pasteFilesFromClipboard(main_ui,pasteUrls)
+
+  if(selected):
+    if(action == ioCopyAction):
+      copyToClipboard(main_ui)
+
+    if(action == fileNameRenameAction):
+      try:
+        fileRenameDialog(main_ui)
+      except:
+        print("rename failed : " + str(sys.exc_info()))
+    if(action == ioDeleteAction):
+      deleteFiles(main_ui)
+    if(action == fileImageCopyAction):
+      copyImageToClipboard(main_ui)
+
+
+
+
+def openFile(main_ui,cmd):
+  global assDets
+  global isCopying
+  global isQuiting
+  selected = main_ui.listFiles.currentItem()
+  print(selected.media.mainFile)
+  print("cmd : "+ str(cmd))
+  if(cmd.startswith("project_")):
+    cmdToRun = rbhus.utilsPipe.openAssetCmd(assDets, selected.media.mainFile)
+    print("command to run :"+ str(cmdToRun))
+    if(cmdToRun):
+      cmdFull = cmdToRun
+    else:
+      cmdFull = cmd.format(selected.media.mainFile)
+  elif(cmd.startswith("system_")):
+    import webbrowser
+    webbrowser.open(selected.media.mainFile)
+  else:
+    cmdFull = cmd.format(selected.media.mainFile)
+  subprocess.Popen(cmdFull,shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+  # rbhus.debug.info(p.communicate())
+
+
+  if(args.close):
+    if(isCopying):
+      isQuiting = True
+    else:
+      QApplication.quit()
+
+def deleteFiles(main_ui):
+  global fileThumbzWidget
+  global CUR_DIR_SELECTED
+  global fileIconThreadRunning
+  selected = main_ui.listFiles.selectedItems()
+
+  for item in selected:
+    fileToDelete = item.media.mainFile
+    if(os.path.exists(item.media.mainFile)):
+      thrashPath  = os.path.join(rbhus.utilsPipe.rbhusTrash,assDets['assetId'])
+      try:
+        os.makedirs(thrashPath)
+      except:
+        rbhus.debug.warning(sys.exc_info())
+      mvCmd = "mv "+ item.media.mainFile +" "+ thrashPath
+      reply = QtWidgets.QMessageBox.question(main_ui.listFiles, "WARNING", "Do you want to delete the selected files?!!", QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+      if(reply == QtWidgets.QMessageBox.Yes):
+        os.system(mvCmd)
+
+        fileThumbzWidget[item.media.mainFile].deleteLater()
+        del fileThumbzWidget[item.media.mainFile]
+        delIndex = main_ui.listFiles.indexFromItem(fileThumbzItems[item.media.mainFile])
+        main_ui.listFiles.takeItem(delIndex.row())
+        rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "deleted : " + item.media.mainFile)
+
+
+def tray_icon_change(icon_anim,tray_icon):
+  tray_icon.setIcon(QtGui.QIcon(icon_anim.currentPixmap()))
+
+
+def setToolTip(tray_icon,src,dest,main_ui):
+
+  tray_icon.showMessage("COPYING",src +"->"+ dest)
+
+
+def syncingDoneEvent(src,dest,main_ui):
+  global CUR_DIR_SELECTED
+  global fileIconThreadRunning
+  if(not os.path.isdir(src)):
+    fileGlob = [dest]
+    fileIconThreadRunning = fileDirLoadedThread(fileGlob,CUR_DIR_SELECTED)
+    fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = CUR_DIR_SELECTED, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
+     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
+    fileIconThreadRunning.start()
+    fileIconThreadRunning.wait()
+    rbhus.debug.info("created ICON FOR : "+ dest)
+
+def copyingFinished(tray_icon,tray_icon_anim):
+  global isCopying
+  tray_icon_anim.disconnect()
+  tray_icon_anim.deleteLater()
+  tray_icon.deleteLater()
+  try:
+    isCopying.pop()
+  except:
+    rbhus.debug.error(sys.exc_info())
+  if(not isCopying):
+    if(isQuiting):
+      QApplication.quit()
+
+
+
+def pasteFilesFromClipboard(main_ui,urls):
+  global fileThumbzWidget
+  global CUR_DIR_SELECTED
+  global fileIconThreadRunning
+  global isCopying
+
+  tray_icon_anim = QtGui.QMovie(busyIconGif)
+  tray_icon_anim.start()
+
+  tray_icon = QtWidgets.QSystemTrayIcon(QtGui.QIcon(busyIconGif), app)
+  tray_icon_anim.frameChanged.connect(lambda frameNumber, icon_anim=tray_icon_anim, tray_icon=tray_icon: tray_icon_change(icon_anim, tray_icon))
+  tray_icon.show()
+
+
+  applyOption = QtCore.Qt.Unchecked
+  rewriteReply = QtWidgets.QMessageBox.No
+  fileParticles = {}
+
+  for url in urls:
+    # applyOptionLocal = False
+    sourceFile = url.toLocalFile()
+    isDir = os.path.isdir(sourceFile)
+    sourceFileBaseName = os.path.basename(sourceFile)
+    sourceDir = os.path.dirname(sourceFile)
+    destFile = os.path.join(CUR_DIR_SELECTED,sourceFileBaseName)
+    reply = QtWidgets.QMessageBox.No
+    if(os.path.exists(destFile)):
+      if(applyOption == QtCore.Qt.Unchecked):
+        msgBox = QtWidgets.QMessageBox()
+        applyToAll = QtWidgets.QCheckBox("apply to all")
+        msgBox.setText("Overwrite : " + sourceFileBaseName)
+        msgBox.addButton(QtWidgets.QMessageBox.Yes)
+        msgBox.addButton(QtWidgets.QMessageBox.No)
+        msgBox.setDefaultButton(QtWidgets.QMessageBox.No)
+        msgBox.setCheckBox(applyToAll)
+        # applyToAll.stateChanged.connect(lambda stateChanged, applyOption = applyOption :rewriteFunc(stateChanged,applyOption))
+        reply = msgBox.exec_()
+        applyOption = applyToAll.checkState()
+        if(applyOption == QtCore.Qt.Checked):
+          rewriteReply = reply
+      else:
+        reply = rewriteReply
+
+
+
+      rbhus.debug.info(applyOption)
+      # reply = QtWidgets.QMessageBox.question(main_ui.listFiles, "WARNING", "Overwrite : " + sourceFileBaseName, QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+      if (reply == QtWidgets.QMessageBox.No):
+        print("skipping : "+ sourceFile)
+        continue
+      else:
+        fileParticles[sourceFile] = destFile
+    else:
+      fileParticles[sourceFile] = destFile
+
+  if (fileParticles):
+    isCopying.append(1)
+    sT = syncThread(app, fileParticles)
+    sT.syncing.connect(lambda src, dest, tray_icon=tray_icon,main_ui=main_ui: setToolTip(tray_icon, src,dest,main_ui))
+    sT.syncingDone.connect(lambda src, dest, main_ui=main_ui: syncingDoneEvent(src,dest,main_ui))
+    sT.finished.connect(lambda tray_icon = tray_icon, tray_icon_anim= tray_icon_anim : copyingFinished(tray_icon,tray_icon_anim))
+    sT.start()
+  else:
+    tray_icon_anim.disconnect()
+    tray_icon_anim.deleteLater()
+    tray_icon.deleteLater()
+
+
+
+
+def copyToClipboard(main_ui):
+  selected = main_ui.listFiles.selectedItems()
+  urlList = []
+  mimeData = QtCore.QMimeData()
+
+  for x in selected:
+    # if(os.path.exists("/usr/bin/thunar-no-more")):
+    #   urlList.append(x.media.mainFile)
+    # elif(os.path.exists("/usr/bin/dolphin-no-more")):
+    urlList.append(QtCore.QUrl().fromLocalFile(x.media.mainFile))
+    rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "clipboard : " + x.media.mainFile)
+
+  # if(os.path.exists("/usr/bin/thunar-no-more")):
+  #   byteArray = QtCore.QByteArray("copy\n")
+  #   for url in urlList:
+  #     byteArray.append(url.toEncoded())
+  #     byteArray.append("\n")
+  #   mimeData.setData("x-special/gnome-copied-files",byteArray)
+  # elif (os.path.exists("/usr/bin/dolphin-no-more")):
+  mimeData.setUrls(urlList)
+
+  QtWidgets.QApplication.clipboard().setMimeData(mimeData)
+
+
+def copyImageToClipboard(main_ui):
+  selected = main_ui.listFiles.currentItem()
+  if(selected):
+    fileSelected = selected.media.mainFile
+    mimeType = selected.media.mimeType
+    if(mimeType == "image"):
+      pixMapToCopy = QtGui.QPixmap(selected.media.mainFile)
+      QtWidgets.QApplication.clipboard().setPixmap(pixMapToCopy)
+
+
+
+def fileRenameDialog(main_ui):
+  global fileThumbzWidget
+
+  selected = main_ui.listFiles.currentItem()
+  dialog = QtWidgets.QInputDialog(main_ui.listFiles)
+  dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+  dialog.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,QtWidgets.QSizePolicy.MinimumExpanding)
+  dialog.setWindowTitle("Rename Dialog")
+  dialog.setLabelText("file:")
+  (pathRoot , ext) = os.path.splitext(os.path.basename(selected.media.mainFile))
+  # if(ext):
+  dialog.setTextValue(pathRoot)
+  # else:
+  #   dialog.setTextValue(os.path.basename(selected.media.mainFile))
+  dialog.adjustSize()
+  dialog.resize(500,80)
+  # dialog.adjustSize()
+
+  dialog.exec_()
+  fileRenamed  =  dialog.textValue() + ext
+  newFile = os.path.join(selected.media.subPath,fileRenamed)
+  copyStatus = QtCore.QFile().rename(selected.media.mainFile,newFile)
+  print(newFile +" : "+ str(copyStatus))
+  if(copyStatus):
+    fileThumbzWidget[selected.media.mainFile].labelImageName.setText(os.path.basename(newFile))
+    mainFileWidget = fileThumbzWidget[selected.media.mainFile]
+    del(fileThumbzWidget[selected.media.mainFile])
+    selected.media.mainFile = newFile
+    fileThumbzWidget[selected.media.mainFile] = mainFileWidget
+    rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "renamed : " + selected.media.mainFile + " -> " + newFile)
+    try:
+      modifiedT = os.path.getmtime(selected.media.mainFile)
+    except:
+      modifiedT = 0
+    # print(time.ctime(modifiedT))
+    fileThumbzWidget[selected.media.mainFile].setToolTip("fileName: " + os.path.basename(selected.media.mainFile) + "\nmodified : " + str(time.ctime(modifiedT)))
+
+
+
+def getSelectedFiles(main_ui):
+  files =[]
+  if(main_ui.radioDetail.isChecked()):
+    selectedIdxs = main_ui.tableFiles.selectionModel().selectedRows()
+    modelFiles = main_ui.tableFiles.model()
+  else:
+    selectedIdxs = main_ui.listFiles.selectionModel().selectedRows()
+    modelFiles = main_ui.listFiles.model()
+
+  for selectedIdx in selectedIdxs:
+    files.append(modelFiles.filePath(selectedIdx))
+
+  return(files)
 
 
 def togleFileView(modelDirs, main_ui):
@@ -634,6 +1032,9 @@ def mainGui(main_ui):
   main_ui.radioIcon.clicked.connect(lambda click, modelDirs=modelDirs,  main_ui=main_ui: togleFileView(modelDirs, main_ui))
 
   main_ui.treeDirs.customContextMenuRequested.connect(lambda pos, main_ui=main_ui: popUpFolders(main_ui, pos))
+  main_ui.listFiles.customContextMenuRequested.connect(lambda pos, main_ui=main_ui: popUpFiles(main_ui, pos))
+  main_ui.tableFiles.customContextMenuRequested.connect(lambda pos, main_ui=main_ui: popUpFiles(main_ui, pos))
+
 
   dirSelected(curRootIdx, modelDirs, main_ui)
   iconEventEater = getIconDoneEvent(iconQDoneSignal,parent=main_ui)
