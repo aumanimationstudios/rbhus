@@ -93,6 +93,9 @@
          <property name="alternatingRowColors">
           <bool>false</bool>
          </property>
+         <property name="textElideMode">
+          <enum>Qt::ElideMiddle</enum>
+         </property>
          <property name="uniformRowHeights">
           <bool>true</bool>
          </property>
@@ -199,6 +202,9 @@
          </property>
          <property name="selectionMode">
           <enum>QAbstractItemView::ExtendedSelection</enum>
+         </property>
+         <property name="textElideMode">
+          <enum>Qt::ElideMiddle</enum>
          </property>
          <property name="verticalScrollMode">
           <enum>QAbstractItemView::ScrollPerItem</enum>

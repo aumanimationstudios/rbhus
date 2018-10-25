@@ -67,6 +67,8 @@ class thumbz_db(object):
   mainFile = None
   thumbFile = None
   assDets = None
+  fileName = None
+  jsonFile = None
 
 class thumbz_fileTypes(object):
   absPath = None
