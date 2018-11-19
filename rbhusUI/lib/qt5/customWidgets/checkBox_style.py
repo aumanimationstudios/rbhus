@@ -49,6 +49,24 @@ QCheckBox::indicator:unchecked
 }
 """
 
+
+styleNotesPushButton = """
+QPushButton::indicator {
+ width: 24px;
+ height: 24px;
+}
+
+QPushButton::indicator:checked
+{
+  image: url(""" + checkNotesTrue +""");
+}
+QPushButton::indicator:unchecked
+{
+  image: url(""" + checkNotesFalse +""");
+}
+"""
+
+
 styleStarCheckBox = """
 QCheckBox::indicator {
  width: 24px;

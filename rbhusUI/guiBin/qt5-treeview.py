@@ -15,10 +15,14 @@ import subprocess
 import sys
 import time
 import uuid
-
+try:
+  import arrow
+except:
+  pass
 import setproctitle
 import simplejson
 import zmq
+import re
 
 # sys.path.append(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1]))
 progPath = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2])
@@ -53,10 +57,11 @@ args = parser.parse_args()
 
 assPath = args.asset
 assDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
+ROOTDIR_ASSET = rbhus.utilsPipe.getAbsPath(assPath)
 if(args.path):
   ROOTDIR = args.path
 else:
-  ROOTDIR = rbhus.utilsPipe.getAbsPath(assPath)
+  ROOTDIR = ROOTDIR_ASSET
 CUR_ROOTDIR_POINTER = os.path.join(ROOTDIR,"-")
 COMPOUND_PATHS = rbhus.utilsPipe.getCompoundPaths(assPath)
 CUR_DIR_SELECTED = None
@@ -75,6 +80,8 @@ workerIPC = str(uuid.uuid4())
 
 isCopying = []
 isQuiting = False
+
+thumbsDbDir = os.path.join("/crap/LOCAL.crap/",rbhus.utilsPipe.username, ".thumbz.db",assDets['assetId'])
 
 
 def jsonWrite(jFile, jData):
@@ -98,6 +105,26 @@ def jsonRead(jFile):
     return (0)
 
 
+
+class DateItemDelegate(QtWidgets.QStyledItemDelegate):
+  def __init__(self,parent=None):
+    super(DateItemDelegate, self).__init__(parent=parent)
+
+  def displayText(self,value,locale):
+    try:
+      arrowDate = arrow.get(str(value),'M/D/YY h:m A')
+      return arrowDate.format('MMM DD, ddd, YYYY  hh:mm A')
+    except:
+      pass
+      # rbhus.debug.error(sys.exc_info())
+
+    # if(QtCore.QVariant(value) == QtCore.QVariant.DateTime):
+    #   rbhus.debug.info("wtf")
+    # return "wtf"
+    #   # return value.toDateTime().toString(QtCore.Qt.ISODate)
+    # else:
+    #   rbhus.debug.info("NO wtf")
+    return super(DateItemDelegate, self).displayText(value,locale)
 
 class syncThread(QtCore.QThread):
   syncing = QtCore.pyqtSignal(str,str)
@@ -167,20 +194,23 @@ class server(QtCore.QThread):
       mimeType = fileDets.mimeType
       fLockPath = rbhus.dfl.LockFile(fAbsPath,timeout=0,expiry=30)
       fDir = os.path.dirname(fAbsPath)
-      fName = os.path.basename(fAbsPath)
-      fThumbzDbDir = os.path.join(fDir, ".thumbz.db")
+      fName = fileDets.fileName
+      # fThumbzDbDir = os.path.join(fDir, ".thumbz.db")
+      fJson = fileDets.jsonFile
+      fThumbz = fileDets.thumbFile
+      fThumbzDir = os.path.dirname(fThumbz)
+
+      rbhus.debug.info(fThumbzDir)
       try:
-        os.mkdir(fThumbzDbDir)
+        os.makedirs(fThumbzDir)
       except:
-        pass
-      fJson = os.path.join(fThumbzDbDir,fName + ".json")
-      fThumbz = os.path.join(fThumbzDbDir,fName + ".png")
+        rbhus.debug.info(sys.exc_info())
       fModifiedTime = os.path.getmtime(fAbsPath)
       # if (os.path.exists(fLockPath.lock_file)):
       #   if ((time.time() - os.path.getmtime(fLockPath.lock_file)) > 60):
       #     rbhus.debug.info("locked file for more than 1 minute : " + str(fAbsPath))
 
-      if (os.path.exists(fThumbzDbDir)):
+      if (os.path.exists(fThumbzDir)):
 
         if (os.path.exists(fJson)):
           try:
@@ -214,9 +244,9 @@ class server(QtCore.QThread):
             p = subprocess.Popen(thumbzCmd, shell=True)
             retcode = p.wait()
 
-      fileDets.thumbFile = fThumbz
-      fileDets.mainFile = fAbsPath
-      fileDets.subPath = fDir
+      # fileDets.thumbFile = fThumbz
+      # fileDets.mainFile = fAbsPath
+      # fileDets.subPath = fDir
       iconQDoneSignal.put(fileDets)
 
 
@@ -311,6 +341,8 @@ class fileDirLoadedThread(QtCore.QThread):
       if(self._pleaseStop):
         break
       if(os.path.isfile(filePath)):
+        pathSelected = os.path.relpath(os.path.abspath(os.path.dirname(filePath)), ROOTDIR)
+        rbhus.debug.info(pathSelected)
         for mimeType in rbhus.constantsPipe.mimeTypes.keys():
           if (self._pleaseStop):
             break
@@ -321,25 +353,34 @@ class fileDirLoadedThread(QtCore.QThread):
 
 
             if (filePath.endswith(mimeExt)):
-
-              fSubPath = self.pathSelected
-
-              if (not fSubPath):
-                fSubPath = "-"
-
-
               fileDets = rbhus.utilsPipe.thumbz_db()
               fileDets.mainFile = filePath
               fileDets.absPath = filePath
-              fileDets.subPath = fSubPath
+              fileDets.subPath = pathSelected
               fileDets.mimeType = mimeType
               fileDets.mimeExt = mimeExt
-              fAbsPath = fileDets.absPath
-              fDir = os.path.dirname(fAbsPath)
-              fName = os.path.basename(fAbsPath)
-              fThumbzDbDir = os.path.join(fDir, ".thumbz.db")
-              fThumbz = os.path.join(fThumbzDbDir, fName + ".png")
+
+              fName = os.path.basename(filePath)
+              fileDets.fileName = fName
+
+              fThumbz = os.path.join(thumbsDbDir, pathSelected, fName + ".png")
+              fJson = os.path.join(thumbsDbDir, pathSelected, fName + ".json")
               fileDets.thumbFile = fThumbz
+              fileDets.jsonFile = fJson
+
+
+              # fileDets = rbhus.utilsPipe.thumbz_db()
+              # fileDets.mainFile = filePath
+              # fileDets.absPath = filePath
+              # fileDets.subPath = fSubPath
+              # fileDets.mimeType = mimeType
+              # fileDets.mimeExt = mimeExt
+              # fAbsPath = fileDets.absPath
+              # fDir = os.path.dirname(fAbsPath)
+              # fName = os.path.basename(fAbsPath)
+              # fThumbzDbDir = os.path.join(fDir, ".thumbz.db")
+              # fThumbz = os.path.join(fThumbzDbDir, fName + ".png")
+              # fileDets.thumbFile = fThumbz
 
 
 
@@ -418,6 +459,8 @@ def dirSelected(idx, modelDirs, main_ui):
 
 
 
+
+
   pathSelected = modelDirs.filePath(idx)
   main_ui.labelFile.setText(str(pathSelected).replace(ROOTDIR,"-"))
   CUR_DIR_SELECTED = pathSelected
@@ -436,6 +479,15 @@ def dirSelected(idx, modelDirs, main_ui):
   main_ui.listFiles.clear()
 
 
+  modelFiles = QFileSystemModel()
+  modelFiles.setRootPath(CUR_DIR_SELECTED)
+  modelFiles.setFilter(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
+  rootIdx = modelFiles.index(CUR_DIR_SELECTED)
+  main_ui.tableFiles.setModel(modelFiles)
+  main_ui.tableFiles.setRootIndex(rootIdx)
+  main_ui.tableFiles.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+
+
 
 
 
@@ -451,7 +503,7 @@ def dirSelected(idx, modelDirs, main_ui):
     pass
   if(fileGlob):
     fileGlob.sort()
-    fileIconThreadRunning = fileDirLoadedThread(fileGlob,pathSelected)
+    fileIconThreadRunning = fileDirLoadedThread(fileGlob,CUR_DIR_SELECTED)
     fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
     fileIconThreadRunning.start()
@@ -522,6 +574,10 @@ def imageWidgetUpdated(fileDets):
 #   for idx in selectedIdx:
 #     print("--------")
 #     print(modelFiles.filePath(idx))
+
+
+
+
 
 def popUpFolders(main_ui,pos):
 
@@ -597,9 +653,24 @@ def deleteFolder(main_ui):
 
 
 
+def getSelectedFiles(main_ui):
+  files =[]
+  if(main_ui.checkDetails.isChecked()):
+    selectedIdxs = main_ui.tableFiles.selectionModel().selectedRows()
+    modelFiles = main_ui.tableFiles.model()
+    for selectedIdx in selectedIdxs:
+      files.append(modelFiles.filePath(selectedIdx))
+  else:
+    selectedItems = main_ui.listFiles.selectedItems()
+    for selectedItem in selectedItems:
+      files.append(selectedItem.media.absPath)
 
 
-def popUpFiles(main_ui,pos):
+  return(files)
+
+
+def popUpFiles(main_ui,context,pos):
+  global fileThumbzItems
   clip = QtWidgets.QApplication.clipboard()
   pasteUrls = clip.mimeData().urls()
   # print(pasteUrls)
@@ -613,21 +684,30 @@ def popUpFiles(main_ui,pos):
   ioMenu.setTitle("IO")
 
 
-
+  selectedFiles = getSelectedFiles(main_ui)
+  rbhus.debug.info(selectedFiles)
 
   openWithCmdActions = {}
-  try:
-    selected = main_ui.listFiles.selectedItems()[0]
-  except:
-    selected = None
-  if(selected):
-    if(rbhus.constantsPipe.mimeTypesOpenCmds.has_key(selected.media.mimeType)):
-      cmds = rbhus.constantsPipe.mimeTypesOpenCmds[selected.media.mimeType]["linux"]
-      for cmd in cmds:
-        if(rbhus.constantsPipe.mimeCmdsLinux.has_key(cmd)):
-          openWithCmdActions[openMenu.addAction(cmd)] = rbhus.constantsPipe.mimeCmdsLinux[cmd]
-        else:
-          openWithCmdActions[openMenu.addAction(cmd)] = cmd
+  if(selectedFiles):
+    try:
+      sel = re.sub("~$", "", selectedFiles[0])
+      rbhus.debug.info(sel)
+      selected = fileThumbzItems[sel]
+      rbhus.debug.info(selected)
+    except:
+      rbhus.debug.info(sys.exc_info())
+      selected = None
+    if(selected):
+      if(rbhus.constantsPipe.mimeTypesOpenCmds.has_key(selected.media.mimeType)):
+        cmds = rbhus.constantsPipe.mimeTypesOpenCmds[selected.media.mimeType]["linux"]
+        for cmd in cmds:
+          if(rbhus.constantsPipe.mimeCmdsLinux.has_key(cmd)):
+            openWithCmdActions[openMenu.addAction(cmd)] = rbhus.constantsPipe.mimeCmdsLinux[cmd]
+          else:
+            openWithCmdActions[openMenu.addAction(cmd)] = cmd
+    else:
+      openWithCmdActions[openMenu.addAction("system_assigned_application")] = "system_assigned_application"
+
 
 
 
@@ -653,7 +733,7 @@ def popUpFiles(main_ui,pos):
   menu.addMenu(fileMenu)
   menu.addMenu(ioMenu)
 
-  action = menu.exec_(main_ui.listFiles.mapToGlobal(pos))
+  action = menu.exec_(context.mapToGlobal(pos))
 
 
 
@@ -668,7 +748,7 @@ def popUpFiles(main_ui,pos):
   if(action == ioPasteAction):
     pasteFilesFromClipboard(main_ui,pasteUrls)
 
-  if(selected):
+  if(selectedFiles):
     if(action == ioCopyAction):
       copyToClipboard(main_ui)
 
@@ -689,22 +769,24 @@ def openFile(main_ui,cmd):
   global assDets
   global isCopying
   global isQuiting
-  selected = main_ui.listFiles.currentItem()
-  print(selected.media.mainFile)
+  selectedFiles = getSelectedFiles(main_ui)
+
+  selected = selectedFiles[0]
+  print(selected)
   print("cmd : "+ str(cmd))
   if(cmd.startswith("project_")):
-    cmdToRun = rbhus.utilsPipe.openAssetCmd(assDets, selected.media.mainFile)
+    cmdToRun = rbhus.utilsPipe.openAssetCmd(assDets, selected)
     print("command to run :"+ str(cmdToRun))
     if(cmdToRun):
       cmdFull = cmdToRun
     else:
-      cmdFull = cmd.format(selected.media.mainFile)
+      cmdFull = cmd.format(selected)
   elif(cmd.startswith("system_")):
-    import webbrowser
-    webbrowser.open(selected.media.mainFile)
+    # import webbrowser
+    cmdFull = "xdg-open \""+ selected +"\""
   else:
-    cmdFull = cmd.format(selected.media.mainFile)
-  subprocess.Popen(cmdFull,shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+    cmdFull = cmd.format(selected)
+  subprocess.Popen(cmdFull,shell=True)
   # rbhus.debug.info(p.communicate())
 
 
@@ -718,26 +800,28 @@ def deleteFiles(main_ui):
   global fileThumbzWidget
   global CUR_DIR_SELECTED
   global fileIconThreadRunning
-  selected = main_ui.listFiles.selectedItems()
+  selected = getSelectedFiles(main_ui)
+  # selected = main_ui.listFiles.selectedItems()
 
   for item in selected:
-    fileToDelete = item.media.mainFile
-    if(os.path.exists(item.media.mainFile)):
+    if(os.path.exists(item)):
       thrashPath  = os.path.join(rbhus.utilsPipe.rbhusTrash,assDets['assetId'])
       try:
         os.makedirs(thrashPath)
       except:
         rbhus.debug.warning(sys.exc_info())
-      mvCmd = "mv "+ item.media.mainFile +" "+ thrashPath
+      mvCmd = "mv \""+ item +"\" \""+ thrashPath +"\""
       reply = QtWidgets.QMessageBox.question(main_ui.listFiles, "WARNING", "Do you want to delete the selected files?!!", QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
       if(reply == QtWidgets.QMessageBox.Yes):
         os.system(mvCmd)
-
-        fileThumbzWidget[item.media.mainFile].deleteLater()
-        del fileThumbzWidget[item.media.mainFile]
-        delIndex = main_ui.listFiles.indexFromItem(fileThumbzItems[item.media.mainFile])
-        main_ui.listFiles.takeItem(delIndex.row())
-        rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "deleted : " + item.media.mainFile)
+        try:
+          fileThumbzWidget[item].deleteLater()
+          del fileThumbzWidget[item]
+          delIndex = main_ui.listFiles.indexFromItem(fileThumbzItems[item])
+          main_ui.listFiles.takeItem(delIndex.row())
+        except:
+          pass
+        rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "deleted : " + item)
 
 
 def tray_icon_change(icon_anim,tray_icon):
@@ -847,16 +931,14 @@ def pasteFilesFromClipboard(main_ui,urls):
 
 
 def copyToClipboard(main_ui):
-  selected = main_ui.listFiles.selectedItems()
-  urlList = []
-  mimeData = QtCore.QMimeData()
+  selectedFiles = getSelectedFiles(main_ui)
 
-  for x in selected:
+  for x in selectedFiles:
     # if(os.path.exists("/usr/bin/thunar-no-more")):
     #   urlList.append(x.media.mainFile)
     # elif(os.path.exists("/usr/bin/dolphin-no-more")):
-    urlList.append(QtCore.QUrl().fromLocalFile(x.media.mainFile))
-    rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "clipboard : " + x.media.mainFile)
+    urlList.append(QtCore.QUrl().fromLocalFile(x))
+    rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "clipboard : " + x)
 
   # if(os.path.exists("/usr/bin/thunar-no-more")):
   #   byteArray = QtCore.QByteArray("copy\n")
@@ -871,54 +953,74 @@ def copyToClipboard(main_ui):
 
 
 def copyImageToClipboard(main_ui):
-  selected = main_ui.listFiles.currentItem()
-  if(selected):
-    fileSelected = selected.media.mainFile
-    mimeType = selected.media.mimeType
-    if(mimeType == "image"):
-      pixMapToCopy = QtGui.QPixmap(selected.media.mainFile)
-      QtWidgets.QApplication.clipboard().setPixmap(pixMapToCopy)
+  global fileThumbzItems
+  selectedFiles = getSelectedFiles(main_ui)
+  if(selectedFiles):
+    try:
+      fileSelected = fileThumbzItems[selectedFiles[0]]
+      mimeType = fileSelected.media.mimeType
+      if(mimeType == "image"):
+        pixMapToCopy = QtGui.QPixmap(fileSelected.media.mainFile)
+        QtWidgets.QApplication.clipboard().setPixmap(pixMapToCopy)
+    except:
+      rbhus.debug.error(sys.exc_info())
 
 
 
 def fileRenameDialog(main_ui):
   global fileThumbzWidget
+  global fileThumbzItems
 
-  selected = main_ui.listFiles.currentItem()
+  selectedFiles = getSelectedFiles(main_ui)
+
+  if(selectedFiles):
+    selectedFile = selectedFiles[0]
   dialog = QtWidgets.QInputDialog(main_ui.listFiles)
   dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
   dialog.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,QtWidgets.QSizePolicy.MinimumExpanding)
   dialog.setWindowTitle("Rename Dialog")
   dialog.setLabelText("file:")
-  (pathRoot , ext) = os.path.splitext(os.path.basename(selected.media.mainFile))
+  (pathRoot , ext) = os.path.splitext(os.path.basename(selectedFile))
   # if(ext):
   dialog.setTextValue(pathRoot)
   # else:
-  #   dialog.setTextValue(os.path.basename(selected.media.mainFile))
+  #   dialog.setTextValue(os.path.basename(selectedFile))
   dialog.adjustSize()
   dialog.resize(500,80)
   # dialog.adjustSize()
 
   dialog.exec_()
   fileRenamed  =  dialog.textValue() + ext
-  newFile = os.path.join(selected.media.subPath,fileRenamed)
-  copyStatus = QtCore.QFile().rename(selected.media.mainFile,newFile)
-  print(newFile +" : "+ str(copyStatus))
+  newFile = os.path.join(ROOTDIR,os.path.relpath(os.path.abspath(os.path.dirname(selectedFile)), ROOTDIR),fileRenamed)
+  rbhus.debug.info(newFile)
+  copyStatus = QtCore.QFile().rename(selectedFile,newFile)
+  rbhus.debug.info(newFile +" : "+ str(copyStatus))
   if(copyStatus):
-    fileThumbzWidget[selected.media.mainFile].labelImageName.setText(os.path.basename(newFile))
-    mainFileWidget = fileThumbzWidget[selected.media.mainFile]
-    del(fileThumbzWidget[selected.media.mainFile])
-    selected.media.mainFile = newFile
-    fileThumbzWidget[selected.media.mainFile] = mainFileWidget
-    rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "renamed : " + selected.media.mainFile + " -> " + newFile)
+
     try:
-      modifiedT = os.path.getmtime(selected.media.mainFile)
+      fileThumbzWidget[selectedFile].labelImageName.setText(os.path.basename(newFile))
+      mainFileWidget = fileThumbzWidget[selectedFile]
+      del(fileThumbzWidget[selectedFile])
+      # fileThumbzItems[selectedFile].media.mainFile = newFile
+      fileThumbzWidget[newFile] = mainFileWidget
+    except:
+      rbhus.debug.info(sys.exc_info())
+    rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "renamed : " + selectedFile + " -> " + newFile)
+    try:
+      modifiedT = os.path.getmtime(newFile)
     except:
       modifiedT = 0
     # print(time.ctime(modifiedT))
-    fileThumbzWidget[selected.media.mainFile].setToolTip("fileName: " + os.path.basename(selected.media.mainFile) + "\nmodified : " + str(time.ctime(modifiedT)))
+    fileThumbzWidget[newFile].setToolTip("fileName: " + os.path.basename(newFile) + "\nmodified : " + str(time.ctime(modifiedT)))
 
 
+def toggleView(main_ui):
+  if(main_ui.checkDetails.isChecked()):
+    main_ui.listFiles.hide()
+    main_ui.tableFiles.show()
+  else:
+    main_ui.tableFiles.hide()
+    main_ui.listFiles.show()
 
 def mainGui(main_ui):
   iconQDoneSignal = multiprocessing.Queue(1)
@@ -952,7 +1054,7 @@ def mainGui(main_ui):
     xIdx = modelDirs.index(x)
     main_ui.treeDirs.setRowHidden(xIdx.row(),xIdx.parent(),True)
 
-
+  main_ui.tableFiles.setItemDelegate(DateItemDelegate())
 
 
   curRootIdx = modelDirs.index(CUR_ROOTDIR_POINTER)
@@ -966,8 +1068,13 @@ def mainGui(main_ui):
   main_ui.treeDirs.clicked.connect(lambda idnx, modelDirs=modelDirs, main_ui = main_ui : dirSelected(idnx, modelDirs, main_ui))
   # main_ui.listFiles.clicked.connect(lambda idnx, main_ui = main_ui :filesSelected(modelFiles,main_ui))
 
-  main_ui.listFiles.customContextMenuRequested.connect(lambda pos, main_ui = main_ui: popUpFiles(main_ui, pos))
+  main_ui.listFiles.customContextMenuRequested.connect(lambda pos, context = main_ui.listFiles, main_ui = main_ui: popUpFiles(main_ui, context, pos))
+  main_ui.tableFiles.customContextMenuRequested.connect(lambda pos, context = main_ui.tableFiles, main_ui = main_ui: popUpFiles(main_ui, context, pos))
   main_ui.treeDirs.customContextMenuRequested.connect(lambda pos, main_ui = main_ui: popUpFolders(main_ui, pos))
+
+  main_ui.checkDetails.clicked.connect(lambda click, main_ui=main_ui: toggleView(main_ui))
+
+  toggleView(main_ui)
 
   main_ui.show()
   main_ui.update()

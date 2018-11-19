@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>894</width>
-    <height>609</height>
+    <width>1295</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="palette">
@@ -107,9 +107,16 @@
       </layout>
      </widget>
      <widget class="QWidget" name="verticalLayoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QCheckBox" name="checkDetails">
+           <property name="text">
+            <string>details</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QLineEdit" name="labelFile">
            <property name="sizePolicy">
@@ -195,7 +202,7 @@
           <bool>false</bool>
          </property>
          <property name="dragDropMode">
-          <enum>QAbstractItemView::DragDrop</enum>
+          <enum>QAbstractItemView::DropOnly</enum>
          </property>
          <property name="defaultDropAction">
           <enum>Qt::CopyAction</enum>
@@ -211,6 +218,9 @@
          </property>
          <property name="horizontalScrollMode">
           <enum>QAbstractItemView::ScrollPerItem</enum>
+         </property>
+         <property name="movement">
+          <enum>QListView::Static</enum>
          </property>
          <property name="isWrapping" stdset="0">
           <bool>true</bool>
@@ -242,6 +252,28 @@
          <property name="sortingEnabled">
           <bool>true</bool>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableView" name="tableFiles">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
         </widget>
        </item>
        <item>

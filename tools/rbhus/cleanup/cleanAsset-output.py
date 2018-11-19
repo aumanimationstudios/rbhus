@@ -25,25 +25,14 @@ import rbhus.dbPipe
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a","--all",dest='all',action="store_true")
+parser.add_argument("-n","--no-preserve",dest='nopreserve',action="store_true")
 parser.add_argument("-d","--dryrun",dest='dryrun',action="store_true",help="do a test run without actually backing up anything")
 parser.add_argument("-p","--projects",dest='projects',help="comma seperated list of projects to backup")
 args = parser.parse_args()
 
 
 
-excludeProjects = ['AndePirki_se01_ep024_getTheDarts',
-                   'AndePirki_se01_ep023_flyMeNot',
-                   'AndePirki_se01_ep016_hatAttack',
-                   'AndePirki_se01_ep017_hideAndSeek',
-                   'AndePirki_se01_ep018_sleepWalk',
-                   'AndePirki_se01_ep019_letMeSleep',
-                   'AndePirki_se01_ep020_goofBall',
-                   'AndePirki_se01_ep021_hypnocity',
-                   'AndePirki_se01_ep022_fishyBUsiness',
-                   'andePirki_AnimationExplore',
-                   'examWorriors_m001',
-                   'examWorriors_m002_laughInlaughOut',
-                   'AndyPirki_SocialMedia']
+excludeProjects = ['AndyPirki_SocialMedia','AndePirki_se01_ep032_chickenHunt','AndePirki_se01_ep033_melonMillionaire']
 
 def getProjForBackup(days=7):
   dbproj = rbhus.dbPipe.dbPipe()
@@ -191,7 +180,6 @@ try:
 
     allAssets = rbhus.utilsPipe.getProjAsses(proj['projName'])
     if(allAssets):
-
       for x in allAssets:
         if(x['assetType'] == "output" and (x['assName'] != "Movs" and x['assName'] != "MovsFx" and x['assName'] != "Rendered_SF" and x['assName'] != "RenderedSF") and (x['sequenceName'] != 'default' and x['sceneName'] != 'default')):
           # print(x['path'])
@@ -205,44 +193,49 @@ try:
             # totalDelete = totalDelete + float(outp)
 
             outputDir1_2  = getTimeSortedDirs(assAbsPath)
-            # print(outputDir1_2)
+            # rbhus.debug.info(outputDir1_2)
             if(outputDir1_2):
               for outputDir1 in outputDir1_2:
                 # print("\_"+ outputDir1)
                 if(os.path.exists(outputDir1)):
-                  print(outputDir1)
-                  rmcmd = "rm -frv " + str(outputDir1)
-                  if (args.dryrun == False):
-                    q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-                    outq = q.communicate()[0].split()[0]
-                    print(outq)
-                  # outputDir2 = getTimeSortedDirs(outputDir1)
-            #       if(outputDir2):
-            #         for od2 in outputDir2:
-            #           # print("  \_"+ od2)
-            #           latestDir = getTimeSortedDirs(od2)
-            #
-            #           if(latestDir):
-            #             latestDir.reverse()
-            #             # print("    \_")
-            #             latestDirImproved = []
-            #             for ldi in latestDir:
-            #
-            #               if(ldi.split(os.sep)[-1].isdigit()):
-            #                 latestDirImproved.append(ldi)
-            #             toDeleteDir = latestDirImproved[:-1]
-            #             if(toDeleteDir):
-            #               for ld in toDeleteDir:
-            #                 print("- "+ ld)
-            #                 p = subprocess.Popen("du -sx "+ ld,shell=True,stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            #                 outp = p.communicate()[0].split()[0]
-            #
-            #                 totalDelete = totalDelete + float(outp)
-            #                 rmcmd = "rm -frv "+ str(ld)
-            #                 if (args.dryrun == False):
-            #                   q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            #                   outq = q.communicate()[0].split()[0]
-            #                   print(outq)
+                  # print(outputDir1)
+                  # rmcmd = "rm -frv " + str(outputDir1)
+                  # print(rmcmd)
+                  # if (args.dryrun == False):
+                  #   q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                  #   outq = q.communicate()[0].split()[0]
+                  #   print(outq)
+                  outputDir2 = getTimeSortedDirs(outputDir1)
+                  if(outputDir2):
+                    for od2 in outputDir2:
+                      # print("  \_"+ od2)
+                      latestDir = getTimeSortedDirs(od2)
+
+                      if(latestDir):
+                        latestDir.reverse()
+                        # print("    \_")
+                        latestDirImproved = []
+                        for ldi in latestDir:
+
+                          if(ldi.split(os.sep)[-1].isdigit()):
+                            latestDirImproved.append(ldi)
+                        toDeleteDir = latestDirImproved[:-1]
+
+                        if(toDeleteDir):
+                          for ld in toDeleteDir:
+                            print("todel : " + str(ld))
+
+                            p = subprocess.Popen("du -sx "+ ld,shell=True,stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                            outp = p.communicate()[0].split()[0]
+
+                            totalDelete = totalDelete + float(outp)
+                            rmcmd = "rm -frv "+ str(ld)
+                            print(rmcmd)
+                            if (args.dryrun == False):
+                              q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                              outq = q.communicate()[0].split()[0]
+
+                              print(outq)
 
                             # print(out)
                         # for lds in latestDir[-2:]:

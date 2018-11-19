@@ -122,12 +122,6 @@
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
-          <property name="iconSize">
-           <size>
-            <width>92</width>
-            <height>92</height>
-           </size>
-          </property>
           <property name="gridStyle">
            <enum>Qt::DashLine</enum>
           </property>
@@ -141,10 +135,10 @@
            <bool>false</bool>
           </attribute>
           <attribute name="verticalHeaderDefaultSectionSize">
-           <number>95</number>
+           <number>48</number>
           </attribute>
           <attribute name="verticalHeaderMinimumSectionSize">
-           <number>95</number>
+           <number>42</number>
           </attribute>
          </widget>
         </item>
@@ -158,6 +152,9 @@
           </property>
           <property name="sizeAdjustPolicy">
            <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::ExtendedSelection</enum>
           </property>
           <property name="iconSize">
            <size>
@@ -180,14 +177,14 @@
           <property name="resizeMode">
            <enum>QListView::Adjust</enum>
           </property>
-          <property name="gridSize">
-           <size>
-            <width>150</width>
-            <height>100</height>
-           </size>
+          <property name="layoutMode">
+           <enum>QListView::SinglePass</enum>
           </property>
           <property name="viewMode">
            <enum>QListView::IconMode</enum>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

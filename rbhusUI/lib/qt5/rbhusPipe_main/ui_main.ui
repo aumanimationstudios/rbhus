@@ -956,7 +956,7 @@
            <number>5</number>
           </property>
           <property name="childrenCollapsible">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <widget class="QListWidget" name="listWidgetAssets">
            <property name="sizePolicy">

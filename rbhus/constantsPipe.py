@@ -67,11 +67,11 @@ typesHidden = 3
 typesAll = 4
 
 mimeTypes = {
-             "image":[".png",".jpg",".jpeg",".exr",".svg",".tiff",".tga"],
+             "image":[".png",".jpg",".jpeg",".exr",".svg",".tiff",".tga",".hdr"],
              "video":[".avi",".mp4",".mpg",".mov"],
              "audio":[".mp3",".wav",".flac"],
              "blender":[".blend",".blend1",".blend2"],
-             "office":[".ods",".doc",".xls",".txt",".docx"],
+             "office":[".ods",".doc",".xls",".xlsx",".txt",".docx"],
              "krita":[".kra"],
              "psd":[".psd"],
              "pdf":["pdf"]
@@ -104,9 +104,10 @@ mimeTypesOpenCmds = {
   "blender": {"linux":["project_assigned_application"]}, # Just enter "project_assigned_application" to open certain kinds of files with project assigned apps.
   "pdf": {"linux":["system_assigned_application"]}, # Just enter "system_assigned_application" to open certain kinds of files with project assigned apps.
   "krita": {"linux":["krita"]},
-  "office": {"linux":["libreoffice","gnumeric"]},
+  "office": {"linux":["libreoffice","gnumeric","abiword"]},
   "audio": {"linux":["mpv-audio","mpv-audio - loop"]},
-  "psd": {"linux":["krita"]}
+  "psd": {"linux":["krita"]},
+  # "crap":
 }
 
 
@@ -123,6 +124,7 @@ mimeCmdsLinux = {
   "krita"                        : "krita \"{0}\"",
   "libreoffice"                  : "libreoffice --nologo \"{0}\"",
   "gnumeric"                     : "gnumeric \"{0}\"",
+  "abiword"                      : "abiword \"{0}\"",
   "inkscape"                     : "inkscape \"{0}\""
 }
 

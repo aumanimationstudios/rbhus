@@ -38,7 +38,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore, uic
 projects = []
 
 ui_main = os.path.join(ui_dir,"ui_main.ui")
-ui_asset_details = os.path.join(ui_dir,"assetDetailRow.ui")
+ui_asset_details = os.path.join(ui_dir,"assetDetailRow_new.ui")
 ui_asset_media_list = os.path.join(ui_dir,"assetMediaList.ui")
 ui_asset_media_Thumbz = os.path.join(ui_dir,"mediaThumbz.ui")
 
@@ -676,9 +676,16 @@ def updateAssSlot(mainUid, richAss, assetDets):
     assDetsWidget.checkBoxStar.setChecked(True)
   assDetsWidget.checkBoxStar.clicked.connect(lambda clicked, assPath=assetDets['path'], starObj=assDetsWidget.checkBoxStar, mainUid=mainUid: updateFavorite(mainUid, assPath, starObj))
 
-  assDetsWidget.checkBoxNotes.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleNotesCheckBox)
+  # assDetsWidget.checkBoxNotes.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleNotesPushButton)
+  # if (assetDets['isNotes']):
+  #   assDetsWidget.checkBoxNotes.setChecked(True)
+  # notesIconUpdate(mainUid,assDetsWidget.checkBoxNotes,assetDets)
   if (assetDets['isNotes']):
-    assDetsWidget.checkBoxNotes.setChecked(True)
+    assDetsWidget.checkBoxNotes.setIcon(QtGui.QIcon(rbhusUI.lib.qt5.customWidgets.checkBox_style.checkNotesTrue))
+  else:
+    assDetsWidget.checkBoxNotes.setIcon(QtGui.QIcon(rbhusUI.lib.qt5.customWidgets.checkBox_style.checkNotesFalse))
+
+  assDetsWidget.checkBoxNotes.clicked.connect(lambda clicked, mainUid=mainUid,assPath = assetDets['path']: notesAss(mainUid,assPath))
 
   assDetsWidget.checkBoxReview.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleReviewCheckBox)
   if (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusNotDone):
@@ -740,13 +747,14 @@ def eatEvents(e):
 
 
 def imageWidgetClicked(imagePath,mimeType=None):
+  cmdFull = None
   if(mimeType):
     if(mimeType != "blender"):
-      import webbrowser
-      webbrowser.open(imagePath)
+      cmdFull = "xdg-open \"" + imagePath + "\""
   else:
-    import webbrowser
-    webbrowser.open(imagePath)
+    cmdFull = "xdg-open \"" + imagePath + "\""
+  if(cmdFull):
+    subprocess.Popen(cmdFull, shell=True)
 
 
 
@@ -1593,6 +1601,8 @@ def assFoldOpen(mainUid,assetList=None):
   else:
     listedAss = listAsses[0]
     assPath = listedAss['path']
+    assId = listedAss['assetId']
+
 
   p = QtCore.QProcess(parent=mainUid)
   p.setStandardOutputFile(tempDir + os.sep + "rbhusAssFolds_" + username + ".log")
@@ -1642,24 +1652,37 @@ def updateAssDetWidgets(assPath,assetDets):
   else:
     assDetsWidgetsDict[assPath].labelMine.setStyleSheet("")
 
+  notes = rbhus.utilsPipe.notesDetails(assetDets['assetId'])
+  if (notes):
+    assDetsWidgetsDict[assPath].checkBoxNotes.setIcon(QtGui.QIcon(rbhusUI.lib.qt5.customWidgets.checkBox_style.checkNotesTrue))
+  else:
+    assDetsWidgetsDict[assPath].checkBoxNotes.setIcon(QtGui.QIcon(rbhusUI.lib.qt5.customWidgets.checkBox_style.checkNotesFalse))
 
 
 
 
 
 def notesAss(mainUid,assetList=None):
-  if(assetList):
-    listAsses = assetList
+  # rbhus.debug.info(assetList)
+  # if(assetList):
+  #   listAsses = assetList
   if(isinstance(assetList,str)):
     assPath = assetList
+    listAsses = [assetList]
   else:
-    listedAss = listAsses[0]
-    assPath = listedAss['path']
+    listAsses = [assetList[0]['path']]
+    assPath = assetList[0]['path']
+  rbhusPipeNotesCmdFinal = rbhusPipeNotesCmd + " --assetpath "+ assPath
+  p = QtCore.QProcess(parent=mainUid)
+  p.setStandardOutputFile(tempDir + os.sep + "rbhusPipeNotes_" + username + ".log")
+  p.setStandardErrorFile(tempDir + os.sep + "rbhusPipeNotes_" + username + ".err")
+  p.start(sys.executable, rbhusPipeNotesCmdFinal.split())
+  p.finished.connect(lambda a, b, mainUid=mainUid, assList=listAsses: updateAssetDetails(mainUid, assList))
 
-  if(sys.platform.find("win") >= 0):
-    subprocess.Popen([rbhusPipeNotesCmd,"--assetpath",assPath],shell = True)
-  elif(sys.platform.find("linux") >= 0):
-    subprocess.Popen(rbhusPipeNotesCmd +" --assetpath "+ assPath,shell = True)
+  # if(sys.platform.find("win") >= 0):
+  #   subprocess.Popen([rbhusPipeNotesCmd,"--assetpath",assPath],shell = True)
+  # elif(sys.platform.find("linux") >= 0):
+  #   subprocess.Popen(rbhusPipeNotesCmd +" --assetpath "+ assPath,shell = True)
 
 
 
@@ -1786,6 +1809,7 @@ def openFolderAss(mainUid,assetList=None):
     if(os.path.exists(p)):
       if(assDets['versioning'] == 0):
         assFoldOpen(mainUid,x['path'])
+        rbhus.utilsPipe.updateAssModifies(x['assetId'], "opened:noversion_ui")
         # fila = QtWidgets.QFileDialog.getOpenFileNames(directory=p)[0]
         # rbhus.debug.debug(fila)
         # if(fila):
@@ -1807,6 +1831,7 @@ def openFolderAss(mainUid,assetList=None):
         #     webbrowser.open(filename)
       else:
         rbhus.debug.debug("wtf : opening version cmd ")
+        rbhus.utilsPipe.updateAssModifies(x['assetId'], "opened:version_ui")
         if(sys.platform.find("win") >= 0):
           subprocess.Popen([versionCmd,"--path",x['path']],shell = True)
         elif(sys.platform.find("linux") >= 0):
@@ -1834,6 +1859,7 @@ def editAss(mainUid,assetList=None):
 
 def updateAssetDetails(mainUid,assetList):
   global assDetsItemsDict
+  # rbhus.debug.info(assetList)
   for x in assetList:
     newAssDets = rbhus.utilsPipe.getAssDetails(assPath=x)
     updateAssetData(mainUid,newAssDets)

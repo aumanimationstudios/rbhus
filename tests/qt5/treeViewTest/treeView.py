@@ -42,6 +42,9 @@ import rbhus.debug
 
 main_ui_file = os.path.join(rbhusPath, "tests", "qt5", "treeViewTest", "main.ui")
 
+busyIconGif = os.path.join(rbhusPath,"etc","icons","rbhusIconTray-BUSY.gif")
+
+
 parser = argparse.ArgumentParser(description="Use the comand to open a sandboxed UI for folders in an Asset")
 parser.add_argument("-a","--asset",dest="asset",help="colon separated Asset path")
 parser.add_argument("-p","--path",dest="path",help="Absolute path of the asset on disk")
@@ -74,6 +77,10 @@ serverIPC = str(uuid.uuid4())
 workerIPC = str(uuid.uuid4())
 
 
+isCopying = []
+isQuiting = False
+
+
 
 def jsonWrite(jFile, jData):
   try:
@@ -95,6 +102,34 @@ def jsonRead(jFile):
   except:
     return (0)
 
+class MyDelegate(QtWidgets.QItemDelegate):
+  def __init__(self,parent=None):
+    super(MyDelegate, self).__init__(parent)
+
+  def paint(self, painter, option, index):
+    painter.save()
+
+    # set background color
+    painter.setPen(QtGui.QPen(QtCore.Qt.NoPen))
+    if option.state & QtWidgets.QStyle.State_Selected:
+      painter.setBrush(QtGui.QBrush(QtCore.Qt.red))
+    else:
+      painter.setBrush(QtGui.QBrush(QtCore.Qt.white))
+    painter.drawRect(option.rect)
+
+    # set text color
+    painter.setPen(QtGui.QPen(QtCore.Qt.black))
+    value = index.data(QtCore.Qt.DisplayRole)
+    print(value)
+    # if value.isValid():
+    # text = value.toString()
+    painter.drawText(option.rect, QtCore.Qt.AlignLeft, value)
+
+    painter.restore()
+
+
+
+
 
 class syncThread(QtCore.QThread):
   syncing = QtCore.pyqtSignal(str,str)
@@ -113,7 +148,7 @@ class syncThread(QtCore.QThread):
       else:
         status = os.system("rsync -av \""+ fileParticle + "\" \"" + self.fileParticles[fileParticle] + "\"")
         rbhus.debug.info(status)
-      self.syncingDone.emit(fileParticle, self.fileParticles[fileParticle])
+      # self.syncingDone.emit(fileParticle, self.fileParticles[fileParticle])
 
 
 class IconProvider(QtWidgets.QFileIconProvider):
@@ -152,11 +187,12 @@ class IconProvider(QtWidgets.QFileIconProvider):
 
 
 
+            pixmap = QtGui.QPixmap(fileDets.thumbFile)
 
             # rbhus.debug.info(fileDets.thumbFile)
             # self.iconGenerate(fileDets)
             if(os.path.exists(fThumbz)):
-              return QtGui.QIcon(fileDets.thumbFile)
+              return QtGui.QIcon(pixmap.scaled(92,92,QtCore.Qt.KeepAspectRatio))
             else:
               return QtWidgets.QFileIconProvider.icon(self, fileInfo)
       else:
@@ -232,7 +268,7 @@ class server(QtCore.QThread):
                 except:
                   thumbzCmd = None
                 if (thumbzCmd):
-                  rbhus.debug.debug(thumbzCmd)
+                  rbhus.debug.info(thumbzCmd)
                   p = subprocess.Popen(thumbzCmd, shell=True)
                   retcode = p.wait()
                   # print("generated thumb : "+ str(fThumbz))
@@ -429,7 +465,7 @@ class iconGenerateThread(QtCore.QThread):
               fileDets.fileName = fName
               fileDets.jsonFile = fJson
               self.generate(fileDets)
-              time.sleep(0.01)
+              time.sleep(0.1)
 
     self.socket.close()
 
@@ -446,15 +482,11 @@ class iconGenerateThread(QtCore.QThread):
 def getFileDets(filePath):
   if (os.path.isfile(filePath)):
     pathSelected = os.path.relpath(os.path.abspath(os.path.dirname(filePath)), self.rootdir)
-    # rbhus.debug.info(pathSelected)
     for mimeType in rbhus.constantsPipe.mimeTypes.keys():
       mimeExts = rbhus.constantsPipe.mimeTypes[mimeType]
       for mimeExt in mimeExts:
         if (filePath.endswith(mimeExt)):
           fSubPath = pathSelected
-          if (not fSubPath):
-            fSubPath = "-"
-
           fileDets = rbhus.utilsPipe.thumbz_db()
           fileDets.mainFile = filePath
           fileDets.absPath = filePath
@@ -468,6 +500,8 @@ def getFileDets(filePath):
           fileDets.thumbFile = fThumbz
           fileDets.fileName = fName
           fileDets.jsonFile = fJson
+          return(fileDets)
+    return(None)
 
 
 
@@ -497,18 +531,17 @@ def iconGenerate(main_ui):
 def finishedIconGenerate(main_ui):
   global CUR_DIR_SELECTED
   fileIconProvider = IconProvider()
-  # currentIconProvider = fileIconProvider
+  currentIconProvider = fileIconProvider
   main_ui.tableFiles.model().setIconProvider(fileIconProvider)
-
 
 
 
 def imageWidgetUpdated(fileDets,modelDirs,main_ui):
   global CUR_DIR_SELECTED
 
-  fileSelectedIdx = main_ui.tableFiles.model().index(fileDets.mainFile)
-  icon = QtGui.QIcon(fileDets.thumbFile)
-  main_ui.tableFiles.model().setData(fileSelectedIdx,icon,QFileSystemModel.FileIconRole)
+  # fileSelectedIdx = main_ui.tableFiles.model().index(fileDets.mainFile)
+  # icon = QtGui.QIcon(fileDets.thumbFile)
+  # main_ui.tableFiles.model().setData(fileSelectedIdx,icon,QFileSystemModel.FileIconRole)
   # main_ui.tableFiles.model().endResetModel()
   # main_ui.tableFiles.model().setRootPath(CUR_DIR_SELECTED)
   #
@@ -523,7 +556,7 @@ def imageWidgetUpdated(fileDets,modelDirs,main_ui):
   # else:
   #   rootIdx = main_ui.listFiles.model().index(CUR_DIR_SELECTED)
   #   main_ui.listFiles.setRootIndex(rootIdx)
-  main_ui.tableFiles.update()
+  # main_ui.tableFiles.update()
   # print("updated : "+ str(fileDets.thumbFile))
 
 
@@ -539,10 +572,11 @@ def dirSelected(idx, modelDirs, main_ui, passive=False):
   modelFiles = modelFileClass()
   modelFiles.setFilter(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
   fileIconProvider = IconProvider()
-  fileIconProvider.setOptions(QtWidgets.QFileIconProvider.DontUseCustomDirectoryIcons)
+  # fileIconProvider.setOptions(QtWidgets.QFileIconProvider.DontUseCustomDirectoryIcons)
   modelFiles.setIconProvider(fileIconProvider)
   main_ui.tableFiles.setModel(modelFiles)
   main_ui.listFiles.setModel(modelFiles)
+  # main_ui.listFiles.setItemDelegate(MyDelegate())
 
 
   modelFiles.setRootPath(CUR_DIR_SELECTED)
@@ -643,7 +677,7 @@ def popUpFiles(main_ui,pos):
   clip = QtWidgets.QApplication.clipboard()
   pasteUrls = clip.mimeData().urls()
 
-  selected = getSelectedFiles(main_ui)
+  selectedRows = getSelectedFiles(main_ui)
   print(selectedRows)
 
   # print(pasteUrls)
@@ -879,7 +913,7 @@ def pasteFilesFromClipboard(main_ui,urls):
     isCopying.append(1)
     sT = syncThread(app, fileParticles)
     sT.syncing.connect(lambda src, dest, tray_icon=tray_icon,main_ui=main_ui: setToolTip(tray_icon, src,dest,main_ui))
-    sT.syncingDone.connect(lambda src, dest, main_ui=main_ui: syncingDoneEvent(src,dest,main_ui))
+    # sT.syncingDone.connect(lambda src, dest, main_ui=main_ui: syncingDoneEvent(src,dest,main_ui))
     sT.finished.connect(lambda tray_icon = tray_icon, tray_icon_anim= tray_icon_anim : copyingFinished(tray_icon,tray_icon_anim))
     sT.start()
   else:
@@ -1020,6 +1054,7 @@ def mainGui(main_ui):
   main_ui.treeDirs.hideColumn(1)
   main_ui.treeDirs.hideColumn(2)
   main_ui.treeDirs.hideColumn(3)
+
 
 
 
