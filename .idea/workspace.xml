@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" afterDir="false" />
-    </list>
+    <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -435,7 +433,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1926" height="1052" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.22989593" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
