@@ -933,6 +933,7 @@ def pasteFilesFromClipboard(main_ui,urls):
 def copyToClipboard(main_ui):
   selectedFiles = getSelectedFiles(main_ui)
   urlList = []
+  mimeData = QtCore.QMimeData()
   for x in selectedFiles:
     # if(os.path.exists("/usr/bin/thunar-no-more")):
     #   urlList.append(x.media.mainFile)
