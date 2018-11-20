@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" afterDir="false" />
-    </list>
+    <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,10 +53,10 @@
           <entry key="project.open.time.4" value="3" />
           <entry key="project.open.time.5" value="9" />
           <entry key="project.open.time.6" value="4" />
-          <entry key="project.open.time.7" value="6" />
+          <entry key="project.open.time.7" value="7" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="36" />
+          <entry key="project.opened" value="37" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -120,12 +118,12 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="108">
-              <caret line="935" column="31" selection-start-line="935" selection-start-column="31" selection-end-line="935" selection-end-column="31" />
+              <caret line="939" column="31" selection-start-line="939" selection-start-column="31" selection-end-line="939" selection-end-column="31" />
               <folding>
                 <element signature="e#136#151#0" expanded="true" />
               </folding>
@@ -229,40 +227,17 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-3" />
-    <option name="width" value="1926" />
-    <option name="height" value="1052" />
+    <option name="x" value="-1" />
+    <option name="y" value="609" />
+    <option name="width" value="1922" />
+    <option name="height" value="1054" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-              <item name="guiBin" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
@@ -434,8 +409,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3" y="0" width="1926" height="1052" extended-state="6" />
-    <editor active="true" />
+    <frame x="-1" y="609" width="1922" height="1054" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.22989593" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -447,7 +421,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32954547" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.3286638" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" weight="0.21761364" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.33599088" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5004721" side_tool="true" weight="0.32975113" />
@@ -687,7 +661,7 @@
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
-          <caret line="935" column="31" selection-start-line="935" selection-start-column="31" selection-end-line="935" selection-end-column="31" />
+          <caret line="939" column="31" selection-start-line="939" selection-start-column="31" selection-end-line="939" selection-end-column="31" />
           <folding>
             <element signature="e#136#151#0" expanded="true" />
           </folding>
