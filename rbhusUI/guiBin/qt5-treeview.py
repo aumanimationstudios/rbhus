@@ -23,6 +23,7 @@ import setproctitle
 import simplejson
 import zmq
 import re
+import shutil
 
 # sys.path.append(os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1]))
 progPath = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2])
@@ -35,6 +36,7 @@ import rbhus.debug
 import rbhus.constantsPipe
 import rbhus.utilsPipe
 import rbhus.dfl
+import rbhus.pyperclip
 
 main_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderManager", "main.ui")
 mediaThumbz_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderManager", "mediaThumbz.ui")
@@ -492,6 +494,7 @@ def dirSelected(idx, modelDirs, main_ui):
 
 
 
+
   if(pathSelected == CUR_ROOTDIR_POINTER):
 
     fileGlob = glob.glob(ROOTDIR + os.sep + "*")
@@ -501,6 +504,9 @@ def dirSelected(idx, modelDirs, main_ui):
     fileGlob.remove("-")
   except:
     pass
+
+  totalFiles = len([x for x in fileGlob if(os.path.isfile(x))])
+  main_ui.labelTotal.setText(str(totalFiles))
   if(fileGlob):
     fileGlob.sort()
     fileIconThreadRunning = fileDirLoadedThread(fileGlob,CUR_DIR_SELECTED)
@@ -588,12 +594,15 @@ def popUpFolders(main_ui,pos):
   deleteFolderAction = ioMenu.addAction("delete")
 
   menu.addMenu(ioMenu)
+  copyFolderPathAction = menu.addAction("copy path to clipboard")
   action = menu.exec_(main_ui.treeDirs.mapToGlobal(pos))
 
   if (action == createFolderAction):
     createFolder(main_ui)
   if(action == deleteFolderAction):
     deleteFolder(main_ui)
+  if(action == copyFolderPathAction):
+    copyPathToClipboard(main_ui)
 
 
 def createFolder(main_ui):
@@ -642,7 +651,8 @@ def deleteFolder(main_ui):
     return(0)
 
   try:
-    os.removedirs(CUR_DIR_SELECTED)
+
+    shutil.rmtree(CUR_DIR_SELECTED)
   except:
     msgBox = QtWidgets.QMessageBox(parent=main_ui.treeDirs)
     msgBox.adjustSize()
@@ -770,22 +780,25 @@ def openFile(main_ui,cmd):
   global isCopying
   global isQuiting
   selectedFiles = getSelectedFiles(main_ui)
+  selected = []
+  for x in selectedFiles:
+    selected.append("\""+ x +"\"")
 
-  selected = selectedFiles[0]
-  print(selected)
-  print("cmd : "+ str(cmd))
+  rbhus.debug.info("cmd : "+ str(cmd))
+  rbhus.debug.info(selected)
   if(cmd.startswith("project_")):
-    cmdToRun = rbhus.utilsPipe.openAssetCmd(assDets, selected)
-    print("command to run :"+ str(cmdToRun))
+    cmdToRun = rbhus.utilsPipe.openAssetCmd(assDets, selected[0])
+    rbhus.debug.info("command to run :"+ str(cmdToRun))
     if(cmdToRun):
       cmdFull = cmdToRun
     else:
       cmdFull = cmd.format(selected)
   elif(cmd.startswith("system_")):
     # import webbrowser
-    cmdFull = "xdg-open \""+ selected +"\""
+    cmdFull = "xdg-open "+ " ".join(selected)
   else:
-    cmdFull = cmd.format(selected)
+    cmdFull = cmd.format(" ".join(selected))
+  rbhus.debug.info(cmdFull)
   subprocess.Popen(cmdFull,shell=True)
   # rbhus.debug.info(p.communicate())
 
@@ -927,6 +940,13 @@ def pasteFilesFromClipboard(main_ui,urls):
     tray_icon_anim.deleteLater()
     tray_icon.deleteLater()
 
+
+
+def copyPathToClipboard(main_ui):
+  global CUR_DIR_SELECTED
+  rbhus.debug.info(CUR_DIR_SELECTED)
+  rbhus.pyperclip.copy(CUR_DIR_SELECTED)
+  rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "clipboard : " + CUR_DIR_SELECTED)
 
 
 
