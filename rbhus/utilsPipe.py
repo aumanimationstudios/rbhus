@@ -1939,19 +1939,20 @@ def getBinPath(assdetsTemp = {}):
 
 def openAssetCmd(assdets ={},filename = None):
   binPathExe = getBinPath(assdets)
-  debug.info(filename)
+  # debug.info(binPathExe)
+  # debug.info(filename)
   exportAsset(assdets)
   # fileExt = os.path.splitext(filename)[-1]
   if(assdets['fileType'] != "default"):
     filetypedets = getFileTypes(assdets['fileType'])
     validExtenstions = filetypedets['extension'].split(",")
-    fileExt = filename.split(".")[-1]
+    fileExt = filename.split(".")[-1].strip("\"")
     if(fileExt not in validExtenstions):
+      debug.error("invalid extention : "+ fileExt)
       return(0)
     runCmd = binPathExe
     if(os.path.exists(runCmd)):
       runProc = runCmd +" "+ filename
-      debug.info(runProc)
       debug.info(runProc)
       return(runProc)
   else:

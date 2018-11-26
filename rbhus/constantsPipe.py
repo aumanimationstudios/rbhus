@@ -113,19 +113,19 @@ mimeTypesOpenCmds = {
 
 
 mimeCmdsLinux = {
-  "gwenview"                     : "gwenview \"{0}\"",
-  "djv_view - image"             : "djv_view -auto_seq False -file_cache False \"{0}\"",
-  "djv_view - sequence"          : "djv_view -auto_seq True \"{0}\"",
-  "mpv"                          : "mpv --really-quiet \"{0}\"",
-  "mpv-audio"                    : "mpv --player-operation-mode=pseudo-gui --really-quiet \"{0}\"",
-  "mpv - loop"                   : "mpv --really-quiet --loop \"{0}\"",
-  "mpv-audio - loop"             : "mpv --player-operation-mode=pseudo-gui --really-quiet --loop \"{0}\"",
-  "djv_view - video"             : "djv_view -file_cache False \"{0}\"",
-  "krita"                        : "krita \"{0}\"",
-  "libreoffice"                  : "libreoffice --nologo \"{0}\"",
-  "gnumeric"                     : "gnumeric \"{0}\"",
-  "abiword"                      : "abiword \"{0}\"",
-  "inkscape"                     : "inkscape \"{0}\""
+  "gwenview"                     : "gwenview {0}",
+  "djv_view - image"             : "djv_view -auto_seq False -file_cache False {0}",
+  "djv_view - sequence"          : "djv_view -auto_seq True {0}",
+  "mpv"                          : "mpv --window-scale 0.5 --really-quiet {0}",
+  "mpv-audio"                    : "mpv --player-operation-mode=pseudo-gui --really-quiet {0}",
+  "mpv - loop"                   : "mpv --window-scale 0.5 --really-quiet --loop {0}",
+  "mpv-audio - loop"             : "mpv --player-operation-mode=pseudo-gui --really-quiet --loop {0}",
+  "djv_view - video"             : "djv_view -file_cache False {0}",
+  "krita"                        : "krita {0}",
+  "libreoffice"                  : "libreoffice --nologo {0}",
+  "gnumeric"                     : "gnumeric {0}",
+  "abiword"                      : "abiword {0}",
+  "inkscape"                     : "inkscape {0}"
 }
 
 ignoreTemplateTypes = ["share","bin","output","template"]
