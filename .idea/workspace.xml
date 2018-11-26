@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" afterDir="false" />
-    </list>
+    <list default="true" id="e7d582ee-68db-4058-b262-0829568c39f4" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,12 +97,14 @@
     <session id="1301193296">
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="1" />
+          <entry key="py" value="4" />
+          <entry key="qrc" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="1" />
+          <entry key="Python" value="4" />
+          <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -121,14 +121,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="935" column="31" selection-start-line="935" selection-start-column="31" selection-end-line="935" selection-end-column="31" />
+            <state relative-caret-position="1920">
+              <caret line="128" column="33" lean-forward="true" selection-start-line="128" selection-start-column="33" selection-end-line="128" selection-end-column="33" />
               <folding>
                 <element signature="e#136#151#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="268">
+              <caret line="1835" column="72" lean-forward="true" selection-start-line="1835" selection-start-column="72" selection-end-line="1835" selection-end-column="72" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="988">
+              <caret line="104" column="47" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/styleSheets/checkBox_favorites.qrc">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="52" column="13" lean-forward="true" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -249,6 +281,11 @@
             <path>
               <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
               <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
               <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -256,6 +293,35 @@
               <item name="rbhus" type="462c0819:PsiDirectoryNode" />
               <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
               <item name="guiBin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="qt5" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="qt5" type="462c0819:PsiDirectoryNode" />
+              <item name="customWidgets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
+              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="qt5" type="462c0819:PsiDirectoryNode" />
+              <item name="styleSheets" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -435,20 +501,19 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1926" height="1052" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.22989593" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22959453" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.32915717" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.3286638" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.1590909" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32954547" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.3286638" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" weight="0.21761364" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3286638" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" weight="0.21659483" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.33599088" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5004721" side_tool="true" weight="0.32975113" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -481,9 +546,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusRender.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_vse.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -653,13 +715,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/rbhus/cleanup/cleanAsset-output.py" />
-    <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1515">
-          <caret line="104" column="47" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -670,27 +725,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27840">
-          <caret line="1862" column="21" selection-start-line="1862" selection-start-column="21" selection-end-line="1862" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="52" selection-start-line="52" selection-end-line="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="935" column="31" selection-start-line="935" selection-start-column="31" selection-end-line="935" selection-end-column="31" />
+        <state relative-caret-position="1920">
+          <caret line="128" column="33" lean-forward="true" selection-start-line="128" selection-start-column="33" selection-end-line="128" selection-end-column="33" />
           <folding>
             <element signature="e#136#151#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="1835" column="72" lean-forward="true" selection-start-line="1835" selection-start-column="72" selection-end-line="1835" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="988">
+          <caret line="104" column="47" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/styleSheets/checkBox_favorites.qrc">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="52" column="13" lean-forward="true" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
         </state>
       </provider>
     </entry>
