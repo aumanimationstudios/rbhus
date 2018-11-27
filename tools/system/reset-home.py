@@ -18,7 +18,7 @@ backupLocalKrita = os.path.join(backupdir,".local","share","krita*")
 localKrita = os.path.join(homedir,".local","share/")
 backupConfigBlend = os.path.join(backupdir,".config","blender")
 configBlend = os.path.join(homedir,".config/")
-
+os.system("mkdir -p "+ backupdir)
 os.system("mv "+ os.path.join(homedir,".*") +" "+ backupdir)
 os.system("mkdir -p "+ os.path.join(homedir,".local/share/"))
 os.system("rsync -av /etc/skel/ "+ homedir)
