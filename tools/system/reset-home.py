@@ -18,6 +18,8 @@ backupLocalKrita = os.path.join(backupdir,".local","share","krita*")
 localKrita = os.path.join(homedir,".local","share/")
 backupConfigBlend = os.path.join(backupdir,".config","blender")
 configBlend = os.path.join(homedir,".config/")
+backupConfigPurple = os.path.join(backupdir,".purple")
+
 os.system("mkdir -p "+ backupdir)
 os.system("mv "+ os.path.join(homedir,".*") +" "+ backupdir)
 os.system("mkdir -p "+ os.path.join(homedir,".local/share/"))
@@ -26,5 +28,6 @@ os.system("rsync -av "+ backupConfigKrita +" "+ configKrita)
 os.system("rsync -av "+ backupConfigTray +" "+ configTray)
 os.system("rsync -av "+ backupLocalKrita +" "+ localKrita)
 os.system("rsync -av "+ backupConfigBlend +" "+ configBlend)
+os.system("rsync -av "+ backupConfigPurple +" "+ homedir)
 
 
