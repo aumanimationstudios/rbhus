@@ -126,7 +126,7 @@ mimeCmdsLinux = {
   "gnumeric"                     : "gnumeric {0}",
   "abiword"                      : "abiword {0}",
   "inkscape"                     : "inkscape {0}",
-  "mirage"                       : "/usr/local/bin/mirage {0}"
+  "mirage"                       : "mirage {0}"
 }
 
 ignoreTemplateTypes = ["share","bin","output","template"]
