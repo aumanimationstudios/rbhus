@@ -99,7 +99,7 @@ mimeConvertCmds = {
 }
 
 mimeTypesOpenCmds = {
-  "image": {"linux":["gwenview","djv_view - image","djv_view - sequence","krita","inkscape"]},
+  "image": {"linux":["gwenview","mirage","djv_view - image","djv_view - sequence","krita","inkscape"]},
   "video": {"linux":["mpv","mpv - loop", "djv_view - video"]},
   "blender": {"linux":["project_assigned_application"]}, # Just enter "project_assigned_application" to open certain kinds of files with project assigned apps.
   "pdf": {"linux":["system_assigned_application"]}, # Just enter "system_assigned_application" to open certain kinds of files with project assigned apps.
@@ -125,7 +125,8 @@ mimeCmdsLinux = {
   "libreoffice"                  : "libreoffice --nologo {0}",
   "gnumeric"                     : "gnumeric {0}",
   "abiword"                      : "abiword {0}",
-  "inkscape"                     : "inkscape {0}"
+  "inkscape"                     : "inkscape {0}",
+  "mirage"                       : "/usr/local/bin/mirage {0}"
 }
 
 ignoreTemplateTypes = ["share","bin","output","template"]
