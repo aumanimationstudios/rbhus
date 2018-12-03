@@ -3,7 +3,7 @@ if [ "$(whoami)" == "bluepixels" ]; then
         echo "Script cannot be run as bluepixels"
         exit -1
 fi
-xiccd &
+nohup xiccd &
 sleep 5
 colorprofile=`colormgr find-profile-by-filename /usr/share/color/icc/colord/sRGB.icc | grep -i object | gawk -F ":" '{gsub(/ /,"",$2); print $2}'`
 echo "Using sRGB profile "$colorprofile
