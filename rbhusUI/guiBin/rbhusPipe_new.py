@@ -54,6 +54,7 @@ vc = "rbhusPipeVersions.py"
 rS = "rbhusPipeRenderSubmit.py"
 rR = "rbhusPipeReview.py"
 rN = "rbhusPipeNotes.py"
+rNr = "rbhusPipeNotes_readonly.py"
 
 assFolds = "qt5-treeview.py"
 assImporter = "rbhusAssetImport.py"
@@ -72,6 +73,7 @@ versionCmd = os.path.join(file_dir, vc)
 rbhusPipeRenderSubmitCmd = os.path.join(file_dir, rS)
 rbhusPipeReviewCmd = os.path.join(file_dir, rR)
 rbhusPipeNotesCmd = os.path.join(file_dir, rN)
+rbhusPipeNotesReadonlyCmd = os.path.join(file_dir, rNr)
 rbhusPipeAssetImportCmd = os.path.join(file_dir, assImporter)
 selectRadioBoxCmd = os.path.join(file_dir, srb)
 assFoldsCmd = os.path.join(file_dir,assFolds)
@@ -685,7 +687,7 @@ def updateAssSlot(mainUid, richAss, assetDets):
   else:
     assDetsWidget.checkBoxNotes.setIcon(QtGui.QIcon(rbhusUI.lib.qt5.customWidgets.checkBox_style.checkNotesFalse))
 
-  assDetsWidget.checkBoxNotes.clicked.connect(lambda clicked, mainUid=mainUid,assPath = assetDets['path']: notesAss(mainUid,assPath))
+  assDetsWidget.checkBoxNotes.clicked.connect(lambda clicked, mainUid=mainUid,assPath = assetDets['path']: notesAssRO(mainUid,assPath))
 
   assDetsWidget.checkBoxReview.setStyleSheet(rbhusUI.lib.qt5.customWidgets.checkBox_style.styleReviewCheckBox)
   if (assetDets['reviewStatus'] == rbhus.constantsPipe.reviewStatusNotDone):
@@ -775,11 +777,43 @@ def updateDetailTab(mainUid,assetDets):
     mainUid.labelModified.setText("NOT FOUND")
 
 
+
+def updateLogsTab(mainUid,assetDets):
+  assModifies = rbhus.utilsPipe.getAssModifies(assetDets['assetId'])
+  mainUid.tableLogs.clearContents()
+  mainUid.tableLogs.setRowCount(0)
+  if(assModifies):
+    rows = len(assModifies)
+    mainUid.tableLogs.setRowCount(rows)
+
+    rowcount = 0
+    for assModify in assModifies:
+      itemDate = QtWidgets.QTableWidgetItem()
+      itemDate.setText(str(assModify['datetime']))
+
+      itemUser = QtWidgets.QTableWidgetItem()
+      itemUser.setText(assModify['username'])
+
+      itemNotes = QtWidgets.QTableWidgetItem()
+      itemNotes.setText(assModify['notes'])
+
+      mainUid.tableLogs.setItem(rowcount,0,itemDate)
+      mainUid.tableLogs.setItem(rowcount,1,itemUser)
+      mainUid.tableLogs.setItem(rowcount,2,itemNotes)
+      rowcount += 1
+
+    mainUid.tableLogs.resizeColumnsToContents()
+
+
+
+
+
 def detailsPanelThread(mainUid):
   items = mainUid.listWidgetAssets.selectedItems()
   if(len(items) == 1):
     assetDets = items[0].assetDets
     updateDetailTab(mainUid,assetDets)
+    updateLogsTab(mainUid,assetDets)
 
     updateMediaTab(mainUid)
   else:
@@ -1686,6 +1720,23 @@ def notesAss(mainUid,assetList=None):
 
 
 
+def notesAssRO(mainUid,assetList=None):
+  # rbhus.debug.info(assetList)
+  # if(assetList):
+  #   listAsses = assetList
+  if(isinstance(assetList,str)):
+    assPath = assetList
+    listAsses = [assetList]
+  else:
+    listAsses = [assetList[0]['path']]
+    assPath = assetList[0]['path']
+  rbhusPipeNotesCmdFinal = rbhusPipeNotesReadonlyCmd + " --assetpath "+ assPath
+  p = QtCore.QProcess(parent=mainUid)
+  p.setStandardOutputFile(tempDir + os.sep + "rbhusPipeNotesRO_" + username + ".log")
+  p.setStandardErrorFile(tempDir + os.sep + "rbhusPipeNotesRO_" + username + ".err")
+  p.start(sys.executable, rbhusPipeNotesCmdFinal.split())
+  p.waitForFinished()
+
 def resetTemplateFiles(mainUid,hard=False,assetList=None):
   yn = False
   if(hard):
@@ -1805,6 +1856,8 @@ def openFolderAss(mainUid,assetList=None):
   if(x):
     # debug.info(x)
     p = rbhus.utilsPipe.getAbsPath(x['path'])
+    if(x["isNotes"]):
+      notesAssRO(mainUid,assetList)
     assDets = x
     if(os.path.exists(p)):
       if(assDets['versioning'] == 0):
@@ -1862,6 +1915,11 @@ def updateAssetDetails(mainUid,assetList):
   # rbhus.debug.info(assetList)
   for x in assetList:
     newAssDets = rbhus.utilsPipe.getAssDetails(assPath=x)
+    notes = rbhus.utilsPipe.notesDetails(newAssDets['assetId'])
+    if (notes):
+      newAssDets['isNotes'] = True
+    else:
+      newAssDets['isNotes'] = False
     updateAssetData(mainUid,newAssDets)
 
 
@@ -2208,6 +2266,7 @@ def closeEvent(event):
 def main_func(mainUid):
   mainUid.listWidgetProj.clear()
 
+  mainUid.tableLogs.horizontalHeader().setDefaultAlignment(QtCore.Qt.AlignLeft)
 
   icon = QtGui.QIcon()
   icon.addPixmap(QtGui.QPixmap(os.path.join(base_dir, "etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)

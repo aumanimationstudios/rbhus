@@ -97,6 +97,8 @@ if(not rbhus_isRendering):
     assPath = os.environ['rp_assets_path']
     stageType = os.environ['rp_assets_stageType']
     nodeType = os.environ['rp_assets_nodeType']
+    for x in bpy.data.cameras:
+      x.show_safe_areas = True
     if(stageType == "anim"):
       setOutPut()
       bpy.context.scene.render.use_stamp = True
@@ -111,6 +113,9 @@ if(not rbhus_isRendering):
       bpy.context.scene.render.use_stamp_note = True
       bpy.context.scene.render.filepath = "//"+ getAssFileName() +".mov"
       bpy.context.scene.use_audio_scrub = True
+      for x in bpy.data.cameras:
+        x.show_safe_areas = True
+
     if (stageType == "fx"):
       setOutPut()
       bpy.context.scene.render.use_stamp = False
@@ -154,14 +159,12 @@ if(not rbhus_isRendering):
     else:
       bpy.context.scene.render.stamp_note_text = assPath
 
-    for x in bpy.data.cameras:
-      x.show_safe_areas = True
 
     for x in bpy.data.scenes:
       x.safe_areas.title[0] = 0.1
       x.safe_areas.title[1] = 0.1
-      x.safe_areas.action[0] = 0.1
-      x.safe_areas.action[1] = 0.1
+      x.safe_areas.action[0] = 0
+      x.safe_areas.action[1] = 0
 
 
 

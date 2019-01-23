@@ -41,7 +41,7 @@ import dfl
 
 if(sys.platform.find("win") >= 0):
   try:
-    username = os.environ['USERNAME']
+    usernausername = os.environ['USERNAME']
   except:
     username = "nobody"
 if(sys.platform.find("linux") >= 0):
@@ -463,11 +463,14 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
     except:
       return(0)
 
+
   validMedia = []
   filesForThumb = collections.OrderedDict()
 
   if (assPath):
     absPath = getAbsPath(assPath)
+    assDets = getAssDetails(assPath=assPath)
+    thumbsDbDir = os.path.join("/crap/LOCAL.crap/",username, ".thumbz.db",assDets['assetId'])
     compPaths = getCompoundPaths(assPath,QT_callback_isStopped=QT_callback_isStopped)
     if (os.path.exists(absPath)):
       for root, dir, filenames in os.walk(absPath):
@@ -499,8 +502,9 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                     return(0)
                 if(not filename.startswith(".")):
                   if (filename.endswith(mimeExt)):
-                    fSubPath = root.replace(absPath,"")
+                    # fSubPath = root.replace(absPath,"")
                     fAbsPath = os.path.join(root,filename)
+                    fSubPath = os.path.relpath(os.path.abspath(os.path.dirname(fAbsPath)), absPath)
 
                     if(not fSubPath):
                       fSubPath = "-"
@@ -535,46 +539,29 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
             return (0)
         fAbsPath = fileDet.absPath
         mimeType = fileDet.mimeType
-        fLockPath = dfl.LockFile(fAbsPath,timeout=0,expiry=30)
         fDir = os.path.dirname(fAbsPath)
         fName = os.path.basename(fAbsPath)
-        fThumbzDbDir = os.path.join(fDir,".thumbz.db")
-        fJson = os.path.join(fThumbzDbDir,fName + ".json")
-        fThumbz = os.path.join(fThumbzDbDir,fName + ".png")
+        # fThumbzDbDir = os.path.join(fDir,".thumbz.db")
+        fJson = os.path.join(thumbsDbDir,fSubPath,fName + ".json")
+        fThumbz = os.path.join(thumbsDbDir,fSubPath,fName + ".png")
+        fThumbzDir = os.path.dirname(fThumbz)
         fModifiedTime = os.path.getmtime(fAbsPath)
+        fLockPath = dfl.LockFile(fThumbz,timeout=0,expiry=30)
 
         if (os.path.exists(fLockPath.lock_file)):
           if ((time.time() - os.path.getmtime(fLockPath.lock_file)) > 60):
             debug.info("locked file for more than 1 minute : " + str(fAbsPath))
 
-        if(os.path.exists(fThumbzDbDir)):
-          if(os.path.exists(fJson)):
-            try:
-              with fLockPath:
-                fThumbzDetails = jsonRead(fJson)
-                if(fThumbzDetails[fName] < fModifiedTime):
-                  try:
-                    thumbzCmd = constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
-                  except:
-                    thumbzCmd = None
-                  if (thumbzCmd):
-                    debug.debug(thumbzCmd)
-                    p = subprocess.Popen(thumbzCmd, shell=True)
-                    retcode = p.wait()
-                    # while(retcode == None):
-                    #   retcode = p.poll()
-                    #   time.sleep(0.01)
+        try:
+          os.makedirs(fThumbzDir)
+        except:
+          pass
 
-                    if(retcode == 0):
-                      fThumbzDetails = {fName: fModifiedTime}
-                      jsonWrite(fJson, fThumbzDetails)
-            except:
-              debug.info("file is updated by someone : "+ str(fAbsPath))
-
-
-          else:
-            try:
-              with fLockPath:
+        if(os.path.exists(fJson)):
+          try:
+            with fLockPath:
+              fThumbzDetails = jsonRead(fJson)
+              if(fThumbzDetails[fName] < fModifiedTime):
                 try:
                   thumbzCmd = constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
                 except:
@@ -583,27 +570,27 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                   debug.debug(thumbzCmd)
                   p = subprocess.Popen(thumbzCmd, shell=True)
                   retcode = p.wait()
-                  # while (retcode == None):
+                  # while(retcode == None):
                   #   retcode = p.poll()
                   #   time.sleep(0.01)
-                  if (retcode == 0):
+
+                  if(retcode == 0):
                     fThumbzDetails = {fName: fModifiedTime}
                     jsonWrite(fJson, fThumbzDetails)
-            except:
-              debug.info("file is updated by someone : "+ str(fAbsPath))
+          except:
+            debug.info("file is updated by someone : "+ str(fThumbz))
+
 
         else:
           try:
             with fLockPath:
-              os.makedirs(fThumbzDbDir)
               try:
                 thumbzCmd = constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
               except:
                 thumbzCmd = None
-              if(thumbzCmd):
+              if (thumbzCmd):
                 debug.debug(thumbzCmd)
                 p = subprocess.Popen(thumbzCmd, shell=True)
-
                 retcode = p.wait()
                 # while (retcode == None):
                 #   retcode = p.poll()
@@ -612,7 +599,29 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
                   fThumbzDetails = {fName: fModifiedTime}
                   jsonWrite(fJson, fThumbzDetails)
           except:
-            debug.info("file is updated by someone : "+ str(fAbsPath))
+            debug.info("file is updated by someone : "+ str(fThumbz))
+
+        # else:
+        #   try:
+        #     with fLockPath:
+        #       os.makedirs(fThumbzDbDir)
+        #       try:
+        #         thumbzCmd = constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
+        #       except:
+        #         thumbzCmd = None
+        #       if(thumbzCmd):
+        #         debug.debug(thumbzCmd)
+        #         p = subprocess.Popen(thumbzCmd, shell=True)
+        #
+        #         retcode = p.wait()
+        #         # while (retcode == None):
+        #         #   retcode = p.poll()
+        #         #   time.sleep(0.01)
+        #         if (retcode == 0):
+        #           fThumbzDetails = {fName: fModifiedTime}
+        #           jsonWrite(fJson, fThumbzDetails)
+        #   except:
+        #     debug.info("file is updated by someone : "+ str(fAbsPath))
 
         thumbDetails = thumbz_db()
         thumbDetails.mimeType = mimeType
@@ -653,6 +662,20 @@ def updateAssModifies(assId,notes):
     dbconn.execute("insert into assetModifies (assetId,username,notes,datetime) values ('"+ assId +"','"+ username +"','"+ notes +"', now())")
   except:
     debug.error(sys.exc_info())
+
+
+
+
+def getAssModifies(assId):
+  username = os.environ['rbhusPipe_acl_user']
+  dbconn = dbPipe.dbPipe()
+  try:
+    rows = dbconn.execute("select * from assetModifies where assetId = '"+ assId +"' order by datetime DESC", dictionary=True)
+  except:
+    debug.error(sys.exc_info())
+    return(0)
+  return(rows)
+
 
 
 def updateProjModifies(projName,notes, isAccessed=False, isModified=False):
@@ -1798,7 +1821,23 @@ def getTemplatePath(assdetsTemp = {}):
   debug.info(assdetails)
   debug.info(assPathTemp)
 
+  if (not assdetails):
+    assdets['nodeType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['stageType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  debug.info(assdetails)
+  debug.info(assPathTemp)
+
   if(not assdetails):
+    assdets['nodeType'] = assdetsTemp['nodeType']
+    assdets['stageType'] = assdetsTemp['stageType']
     assdets['sequenceName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
@@ -1852,6 +1891,13 @@ def getBinPath(assdetsTemp = {}):
   #debug.info(assdetails)
   debug.info(assPathTemp)
 
+  if(not assdetails):
+    assdets['sceneName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath = assPathTemp)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
   if (not assdetails):
     assdets['nodeType'] = "default"
   assPathTemp = getAssPath(assdets)
@@ -1866,19 +1912,31 @@ def getBinPath(assdetsTemp = {}):
   #debug.info(assdetails)
   debug.info(assPathTemp)
 
-  if(not assdetails):
-    assdets['sceneName'] = "default"
-  assPathTemp = getAssPath(assdets)
-  assdetails = getAssDetails(assPath = assPathTemp)
-  #debug.info(assdetails)
-  debug.info(assPathTemp)
 
   if(not assdetails):
+    assdets['nodeType'] = assdetsTemp['nodeType']
+    assdets['stageType'] = assdetsTemp['stageType']
     assdets['sequenceName'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath = assPathTemp)
   #debug.info(assdetails)
   debug.info(assPathTemp)
+
+
+  if (not assdetails):
+    assdets['nodeType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
+  if (not assdetails):
+    assdets['stageType'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
 
 
 
@@ -1893,6 +1951,14 @@ def getBinPath(assdetsTemp = {}):
   #debug.info(assdetails)
   debug.info(assPathTemp)
 
+
+  if (not assdetails):
+    assdets['sceneName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
   if (not assdetails):
     assdets['nodeType'] = "default"
   assPathTemp = getAssPath(assdets)
@@ -1909,18 +1975,30 @@ def getBinPath(assdetsTemp = {}):
 
 
   if (not assdetails):
-    assdets['sceneName'] = "default"
+    assdets['nodeType'] = assdetsTemp['nodeType']
+    assdets['stageType'] = assdetsTemp['stageType']
+    assdets['sequenceName'] = "default"
+  assPathTemp = getAssPath(assdets)
+  assdetails = getAssDetails(assPath=assPathTemp)
+  #debug.info(assdetails)
+  debug.info(assPathTemp)
+
+
+  if (not assdetails):
+    assdets['nodeType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath=assPathTemp)
   #debug.info(assdetails)
   debug.info(assPathTemp)
 
   if (not assdetails):
-    assdets['sequenceName'] = "default"
+    assdets['stageType'] = "default"
   assPathTemp = getAssPath(assdets)
   assdetails = getAssDetails(assPath=assPathTemp)
   #debug.info(assdetails)
   debug.info(assPathTemp)
+
+
 
 
 

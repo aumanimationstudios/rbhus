@@ -74,7 +74,9 @@ mimeTypes = {
              "office":[".ods",".doc",".xls",".xlsx",".txt",".docx"],
              "krita":[".kra"],
              "psd":[".psd"],
-             "pdf":["pdf"]
+             "pdf":[".pdf"],
+             "reel":[".reel"],
+             # "edl":[".reel"]
             }
 
 mimeLogos = {
@@ -86,6 +88,7 @@ mimeLogos = {
   "krita" : os.path.join(base_dir,"etc","icons","mime_type_krita.png"),
   "psd": os.path.join(base_dir,"etc","icons","mime_type_psd.png"),
   "pdf": os.path.join(base_dir,"etc","icons","mime_type_pdf.png"),
+  "reel": os.path.join(base_dir,"etc","icons","mime_type_reel.png"),
 }
 
 mimeConvertCmds = {
@@ -99,15 +102,16 @@ mimeConvertCmds = {
 }
 
 mimeTypesOpenCmds = {
-  "image": {"linux":["gwenview","djv_view - image","djv_view - sequence","krita","inkscape"]},
-  "video": {"linux":["mpv","mpv - loop", "djv_view - video"]},
+  "image": {"linux":["gwenview","djv_view - image","djv_view - sequence","krita","inkscape","mrViewer"]},
+  "video": {"linux":["mpv","mpv - loop", "djv_view - video","mrViewer"]},
   "blender": {"linux":["project_assigned_application"]}, # Just enter "project_assigned_application" to open certain kinds of files with project assigned apps.
   "pdf": {"linux":["system_assigned_application"]}, # Just enter "system_assigned_application" to open certain kinds of files with project assigned apps.
   "krita": {"linux":["krita"]},
   "office": {"linux":["libreoffice","gnumeric","abiword"]},
   "audio": {"linux":["mpv-audio","mpv-audio - loop"]},
   "psd": {"linux":["krita"]},
-  # "crap":
+  "reel": {"linux":["mrViewer"]},
+  # "edl": {"linux":["mrViewer"]},
 }
 
 
@@ -116,6 +120,7 @@ mimeCmdsLinux = {
   "gwenview"                     : "gwenview {0}",
   "djv_view - image"             : "djv_view -auto_seq False -file_cache False {0}",
   "djv_view - sequence"          : "djv_view -auto_seq True {0}",
+  "mrViewer"                     : "mrViewer.sh --playback --run -e {0}",
   "mpv"                          : "mpv --window-scale 0.5 --really-quiet {0}",
   "mpv-audio"                    : "mpv --player-operation-mode=pseudo-gui --really-quiet {0}",
   "mpv - loop"                   : "mpv --window-scale 0.5 --really-quiet --loop {0}",
@@ -125,8 +130,7 @@ mimeCmdsLinux = {
   "libreoffice"                  : "libreoffice --nologo {0}",
   "gnumeric"                     : "gnumeric {0}",
   "abiword"                      : "abiword {0}",
-  "inkscape"                     : "inkscape {0}",
-  "mirage"                       : "mirage {0}"
+  "inkscape"                     : "inkscape {0}"
 }
 
 ignoreTemplateTypes = ["share","bin","output","template"]

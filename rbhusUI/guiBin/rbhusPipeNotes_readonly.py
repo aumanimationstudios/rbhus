@@ -22,7 +22,7 @@ sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep 
 ui_file_path = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep) + os.sep + "lib"
 ui_left_msg = os.path.join(ui_file_path,"rbhusPipeNotesMod_textBox_left.ui")
 ui_right_msg = os.path.join(ui_file_path,"rbhusPipeNotesMod_textBox_right.ui")
-import rbhusPipeNotesMod
+import rbhusPipeNotesMod_readonly
 
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 
@@ -114,10 +114,10 @@ def app_lock():
     f.close()
 
   
-class Ui_Form(rbhusPipeNotesMod.Ui_MainWindow):
+class Ui_Form(rbhusPipeNotesMod_readonly.Ui_MainWindow):
   def setupUi(self, Form):
     app_lock()
-    rbhusPipeNotesMod.Ui_MainWindow.setupUi(self,Form)
+    rbhusPipeNotesMod_readonly.Ui_MainWindow.setupUi(self,Form)
 
     self.spacerForMsgBox = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
     self.splitter.setStretchFactor(0, 10)
@@ -132,7 +132,7 @@ class Ui_Form(rbhusPipeNotesMod.Ui_MainWindow):
     else:
       sys.exit(0)
 
-    self.pushSend.clicked.connect(self.sendReview)
+    self.pushOk.clicked.connect(self.sendReview)
     self.scrollArea.verticalScrollBar().rangeChanged.connect(self.updateScroll)
     self.update()
 
@@ -161,22 +161,7 @@ class Ui_Form(rbhusPipeNotesMod.Ui_MainWindow):
 
 
   def sendReview(self):
-    if(utilsPipe.isReviewUser(self.assdets) or utilsPipe.isStageAdmin(self.assdets) or utilsPipe.isAssAssigned(self.assdets) or utilsPipe.isProjAdmin(self.assdets)):
-      if(str(self.textEdit.toPlainText()) == ""):
-        self.textEdit.setText(str(self.comboProgress.currentText()))
-        # debug.info("not updating since there is no message")
-        # return(0)
-
-      revdets = {}
-      revdets['assetId'] = str(self.assdets['assetId'])
-      revdets['notes'] = str(self.textEdit.toPlainText())
-      revdets['username'] = str(username)
-      utilsPipe.notesAdd(revdets)
-      assedit = {}
-
-      self.clearLayout()
-      self.update()
-      self.textEdit.clear()
+    QtGui.QApplication.quit()
 
 
 

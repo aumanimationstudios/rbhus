@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>850</width>
+    <height>993</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,17 +29,30 @@
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
            <string>GroupBox</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QWebEngineView" name="webEngineView">
-             <property name="url">
-              <url>
-               <string>file:///blueprod/STOR2/stor2/AndePirki_se01_ep029_candyThief/preproduction/reference/12-Healthy-Delicious-Gummy-Recipes.jpg</string>
-              </url>
+            <widget class="QGraphicsView" name="graphicsView">
+             <property name="backgroundBrush">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+              </brush>
+             </property>
+             <property name="foregroundBrush">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+              </brush>
              </property>
             </widget>
            </item>
@@ -47,16 +60,16 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QGroupBox" name="groupBox_2">
+         <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
            <string>GroupBox</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QWebEngineView" name="webEngineView_2">
+            <widget class="QWebEngineView" name="webEngineView_3">
              <property name="url">
               <url>
-               <string>file:///blueprod/STOR2/stor2/AndePirki_se01_ep029_candyThief/preproduction/reference/12-Healthy-Delicious-Gummy-Recipes.jpg</string>
+               <string>file:///home/shrinidhi/AUM.png</string>
               </url>
              </property>
             </widget>
@@ -76,7 +89,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>850</width>
      <height>23</height>
     </rect>
    </property>

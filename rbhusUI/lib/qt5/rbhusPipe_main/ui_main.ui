@@ -1074,7 +1074,7 @@
             <item>
              <widget class="QTabWidget" name="tabWidget">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -1671,19 +1671,64 @@
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="tabUpdates">
+              <widget class="QWidget" name="tabLogs">
                <attribute name="title">
-                <string>Updates</string>
+                <string>Logs</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_11">
                 <item>
-                 <widget class="QTableWidget" name="tableUpdates">
+                 <widget class="QTableWidget" name="tableLogs">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>1</width>
                     <height>0</height>
                    </size>
                   </property>
+                  <property name="sizeAdjustPolicy">
+                   <enum>QAbstractScrollArea::AdjustIgnored</enum>
+                  </property>
+                  <property name="editTriggers">
+                   <set>QAbstractItemView::NoEditTriggers</set>
+                  </property>
+                  <property name="horizontalScrollMode">
+                   <enum>QAbstractItemView::ScrollPerPixel</enum>
+                  </property>
+                  <property name="sortingEnabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="cornerButtonEnabled">
+                   <bool>true</bool>
+                  </property>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+                   <bool>false</bool>
+                  </attribute>
+                  <column>
+                   <property name="text">
+                    <string>date</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>user</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>action</string>
+                   </property>
+                  </column>
                  </widget>
                 </item>
                </layout>
@@ -1818,7 +1863,7 @@
   <tabstop>scrollArea</tabstop>
   <tabstop>listWidgetSubDir</tabstop>
   <tabstop>listWidgetMedia</tabstop>
-  <tabstop>tableUpdates</tabstop>
+  <tabstop>tableLogs</tabstop>
  </tabstops>
  <resources/>
  <connections/>
