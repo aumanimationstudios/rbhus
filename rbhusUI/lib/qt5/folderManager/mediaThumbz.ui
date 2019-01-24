@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>208</width>
-    <height>192</height>
+    <height>184</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -30,16 +30,16 @@
     <number>1</number>
    </property>
    <property name="leftMargin">
-    <number>10</number>
+    <number>2</number>
    </property>
    <property name="topMargin">
-    <number>10</number>
+    <number>2</number>
    </property>
    <property name="rightMargin">
-    <number>10</number>
+    <number>2</number>
    </property>
    <property name="bottomMargin">
-    <number>10</number>
+    <number>2</number>
    </property>
    <item>
     <widget class="QLabel" name="labelLogo">
@@ -170,14 +170,14 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>40</height>
-      </size>
-     </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
      </property>
      <property name="alignment">
       <set>Qt::AlignHCenter|Qt::AlignTop</set>

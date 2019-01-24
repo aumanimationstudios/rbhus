@@ -133,14 +133,6 @@ class DateItemDelegate(QtWidgets.QStyledItemDelegate):
       return arrowDate.format('MMM DD, ddd, YYYY  hh:mm A')
     except:
       pass
-      # rbhus.debug.error(sys.exc_info())
-
-    # if(QtCore.QVariant(value) == QtCore.QVariant.DateTime):
-    #   rbhus.debug.info("wtf")
-    # return "wtf"
-    #   # return value.toDateTime().toString(QtCore.Qt.ISODate)
-    # else:
-    #   rbhus.debug.info("NO wtf")
     return super(DateItemDelegate, self).displayText(value,locale)
 
 class syncThread(QtCore.QThread):
@@ -189,7 +181,7 @@ class getIconDoneEvent(QtCore.QThread):
       try:
         self.iconGenerated.emit(iconObj)
       except:
-        pass
+        rbhus.debug.info(sys.exc_info())
 
 
 
@@ -404,11 +396,11 @@ class fileDirLoadedThread(QtCore.QThread):
 
 
               try:
-                self.startIconGen(fileDets)
                 self.fileIcon.emit(fileDets)
+                self.startIconGen(fileDets)
               except:
                 rbhus.debug.error(sys.exc_info())
-              time.sleep(0.05)
+              time.sleep(0.02)
     self.socket.close()
     # self.finished.emit() # dont enable this . this will simply emit finished twice .. !!!
 
@@ -476,6 +468,9 @@ def dirSelected(idx, modelDirs, main_ui):
   global fileIconThreadRunning
   global CUR_DIR_SELECTED
 
+  fileThumbzWidget.clear()
+  fileThumbzItems.clear()
+  main_ui.listFiles.clear()
 
 
 
@@ -490,12 +485,11 @@ def dirSelected(idx, modelDirs, main_ui):
       fileIconThreadRunning.wait()
       fileIconThreadRunning = None
     except:
-      pass
+      rbhus.debug.info(sys.exc_info())
 
 
-  fileThumbzWidget.clear()
-  fileThumbzItems.clear()
-  main_ui.listFiles.clear()
+  # fileThumbzWidget = {}
+  # fileThumbzItems = {}
 
 
   modelFiles = QFileSystemModel()
@@ -542,6 +536,7 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
     imageWidgetUpdated(fileIconDets)
     return
   itemWidget = uic.loadUi(mediaThumbz_ui_file)
+  fileThumbzWidget[fileIconDets.mainFile] = itemWidget
   itemWidget.labelImageName.setText(os.path.basename(fileIconDets.mainFile))
   itemWidget.labelLogo.setParent(itemWidget.labelImage)
 
@@ -554,6 +549,7 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   # itemWidget.pushButtonImage.clicked.connect(lambda x, imagePath=fileIconDets.mainFile, mimeType=fileIconDets.mimeType: imageWidgetClicked(imagePath, mimeType=mimeType))
 
   item = QListWidgetItemSort()
+  fileThumbzItems[fileIconDets.mainFile] = item
   item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
 
 
@@ -568,8 +564,6 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   item.setSizeHint(itemWidget.sizeHint() + QtCore.QSize(10, 10))
   main_ui.listFiles.addItem(item)
   main_ui.listFiles.setItemWidget(item, itemWidget)
-  fileThumbzWidget[fileIconDets.mainFile] = itemWidget
-  fileThumbzItems[fileIconDets.mainFile] = item
   # print("thumbz added :: "+ fileIconDets.mainFile)
 
 
@@ -586,9 +580,9 @@ def imageWidgetUpdated(fileDets):
     # fileThumbzWidget[fileDets.mainFile].pushButtonImage.setIconSize(QtCore.QSize(94, 94))
     fileThumbzWidget[fileDets.mainFile].adjustSize()
     fileThumbzItems[fileDets.mainFile].setSizeHint(fileThumbzWidget[fileDets.mainFile].sizeHint()  + QtCore.QSize(10, 10))
-    return
+
   except:
-    print("wtf :: "+ str(sys.exc_info()))
+    rbhus.debug.info(str(sys.exc_info()))
 
 
 # def filesSelected(modelFiles, main_ui):
@@ -607,11 +601,17 @@ def popUpFolders(main_ui,pos):
   menu = QtWidgets.QMenu()
 
   ioMenu = QtWidgets.QMenu("IO")
+  folderMenu = QtWidgets.QMenu("folder")
+  clipboardMenu = QtWidgets.QMenu("clipboard")
   createFolderAction = ioMenu.addAction("new")
   deleteFolderAction = ioMenu.addAction("delete")
 
+  copyFolderPathAction = clipboardMenu.addAction("copy path to clipboard")
+  renameFolderAction = folderMenu.addAction("rename")
+
+  menu.addMenu(folderMenu)
+  menu.addMenu(clipboardMenu)
   menu.addMenu(ioMenu)
-  copyFolderPathAction = menu.addAction("copy path to clipboard")
   action = menu.exec_(main_ui.treeDirs.mapToGlobal(pos))
 
   if (action == createFolderAction):
@@ -620,6 +620,8 @@ def popUpFolders(main_ui,pos):
     deleteFolder(main_ui)
   if(action == copyFolderPathAction):
     copyPathToClipboard(main_ui)
+  if (action == renameFolderAction):
+    folderRenameDialog(main_ui)
 
 
 def createFolder(main_ui):
@@ -670,6 +672,7 @@ def deleteFolder(main_ui):
   try:
 
     shutil.rmtree(CUR_DIR_SELECTED)
+    rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "deleted : " + CUR_DIR_SELECTED)
   except:
     msgBox = QtWidgets.QMessageBox(parent=main_ui.treeDirs)
     msgBox.adjustSize()
@@ -1012,6 +1015,36 @@ def copyImageToClipboard(main_ui):
       rbhus.debug.error(sys.exc_info())
 
 
+def folderRenameDialog(main_ui):
+  global CUR_DIR_SELECTED
+  global ROOTDIR
+  if(CUR_DIR_SELECTED == ROOTDIR):
+    return
+  dirSelected = CUR_DIR_SELECTED
+  dialog = QtWidgets.QInputDialog(main_ui.listFiles)
+  dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+  dialog.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,QtWidgets.QSizePolicy.MinimumExpanding)
+  dialog.setWindowTitle("Rename Dialog")
+  dialog.setLabelText("file:")
+  (pathRoot , ext) = os.path.splitext(os.path.basename(dirSelected))
+  # if(ext):
+  dialog.setTextValue(pathRoot)
+  # else:
+  #   dialog.setTextValue(os.path.basename(selectedFile))
+  dialog.adjustSize()
+  dialog.resize(500,80)
+  # dialog.adjustSize()
+
+  dialog.exec_()
+  fileRenamed  =  dialog.textValue() + ext
+  newFile = os.path.join(ROOTDIR,os.path.relpath(os.path.abspath(os.path.dirname(dirSelected)), ROOTDIR),fileRenamed)
+  rbhus.debug.info(newFile)
+  copyStatus = QtCore.QFile().rename(dirSelected, newFile)
+  rbhus.debug.info(newFile + " : " + str(copyStatus))
+  rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "renamed : " + dirSelected + " -> " + newFile)
+
+
+
 
 def fileRenameDialog(main_ui):
   global fileThumbzWidget
@@ -1069,7 +1102,7 @@ def toggleView(main_ui):
     main_ui.listFiles.show()
 
 def mainGui(main_ui):
-  iconQDoneSignal = multiprocessing.Queue(1)
+  iconQDoneSignal = multiprocessing.Queue(4)
   iconServer = server(iconQDoneSignal=iconQDoneSignal,parent=main_ui)
   iconServer.start()
   main_ui.setWindowTitle(assPath)
