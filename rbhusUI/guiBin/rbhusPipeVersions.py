@@ -331,6 +331,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       if(retValue != 111):
         self.popRelated()
 
+
     self.hglog()
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
 

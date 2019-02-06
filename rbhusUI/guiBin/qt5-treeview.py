@@ -59,7 +59,7 @@ args = parser.parse_args()
 
 
 
-
+app = None
 assPath = args.asset
 assDets = rbhus.utilsPipe.getAssDetails(assPath=assPath)
 ROOTDIR_ASSET = rbhus.utilsPipe.getAbsPath(assPath)
@@ -121,6 +121,25 @@ def jsonRead(jFile):
   except:
     return (0)
 
+
+class IconProvider(QtWidgets.QFileIconProvider):
+  # def __init__(self,*arg):
+  #   super(IconProvider, self).__init__(*arg)
+  #   rbhus.debug.info("Inside icon provider")
+    # self.setOptions(QtWidgets.QFileIconProvider.DontUseCustomDirectoryIcons)
+
+  def icon(self, fileInfo):
+    filePath = fileInfo.absoluteFilePath()
+    pathSelected = os.path.relpath(fileInfo.absolutePath(),ROOTDIR)
+    fName = os.path.basename(filePath)
+    fThumbz = os.path.join(thumbsDbDir, pathSelected, fName + ".png")
+
+
+    if(os.path.exists(fThumbz)):
+      pixmap = QtGui.QPixmap(fThumbz)
+      return QtGui.QIcon(pixmap.scaled(64, 64, QtCore.Qt.KeepAspectRatio))
+    else:
+      return QtWidgets.QFileIconProvider.icon(self, fileInfo)
 
 
 class DateItemDelegate(QtWidgets.QStyledItemDelegate):
@@ -414,6 +433,27 @@ class fileDirLoadedThread(QtCore.QThread):
 
 
 
+class FSM4Files(QFileSystemModel):
+
+  def __init__(self,**kwargs):
+    super(FSM4Files, self).__init__(**kwargs)
+
+  def data(self, index, role):
+    if (index.isValid()):
+      if(index.column() == 0):
+        if( role == QtCore.Qt.DecorationRole):
+          filePath = os.path.abspath(str(self.filePath(index)))
+          pathSelected = os.path.relpath(os.path.dirname(filePath), ROOTDIR)
+          fName = os.path.basename(filePath)
+          fThumbz = os.path.join(thumbsDbDir, pathSelected, fName + ".png")
+          if (os.path.exists(fThumbz)):
+            # rbhus.debug.info(fThumbz)
+            pixmap = QtGui.QPixmap(fThumbz)
+            return pixmap.scaled(64, 64, QtCore.Qt.KeepAspectRatio)
+
+    return super(FSM4Files, self).data(index, role)
+
+
 class FSM(QFileSystemModel):
 
   def __init__(self,**kwargs):
@@ -492,7 +532,10 @@ def dirSelected(idx, modelDirs, main_ui):
   # fileThumbzItems = {}
 
 
-  modelFiles = QFileSystemModel()
+  modelFiles = FSM4Files(parent=main_ui)
+  # modelFiles = QFileSystemModel()
+  # fileIconProvider = IconProvider()
+  # modelFiles.setIconProvider(fileIconProvider)
   modelFiles.setRootPath(CUR_DIR_SELECTED)
   modelFiles.setFilter(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
   rootIdx = modelFiles.index(CUR_DIR_SELECTED)
@@ -532,6 +575,17 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   # print("recvd preview : "+ str(fileIconDets.subPath))
   global fileThumbzWidget
   global fileThumbzItems
+
+  fileSelectedIdx = main_ui.tableFiles.model().index(fileIconDets.mainFile)
+  try:
+    main_ui.tableFiles.update()
+    app.processEvents()
+  except:
+    rbhus.debug.info(sys.exc_info())
+  # icon = QtGui.QIcon(fileIconDets.thumbFile)
+  # main_ui.tableFiles.model().setData(fileSelectedIdx, icon, QtCore.Qt.DecorationRole)
+  # main_ui.tableFiles.resizeColumnsToContents()
+
   if(fileThumbzWidget.has_key(fileIconDets.mainFile)):
     imageWidgetUpdated(fileIconDets)
     return
@@ -565,6 +619,9 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   main_ui.listFiles.addItem(item)
   main_ui.listFiles.setItemWidget(item, itemWidget)
   # print("thumbz added :: "+ fileIconDets.mainFile)
+
+
+
 
 
 
@@ -1162,6 +1219,7 @@ def mainGui(main_ui):
 
 
 def mainfunc():
+  global app
   app = QApplication(sys.argv)
   main_ui = uic.loadUi(main_ui_file)
   mainGui(main_ui)
