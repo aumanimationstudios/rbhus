@@ -266,7 +266,7 @@ def importAssets(toProject, assetPath, toAssetPath='default', getVersions=True, 
     if(toAsset):
       if(not pop):
         if(not (isAssAssigned(toAsset) or isProjAdmin(toAsset))):
-          return(111)
+          return(False)
         if(getVersions):
           toAsset['versioning'] = fromAssDets['versioning']
 
@@ -1247,7 +1247,7 @@ def getProjAsses(projName,limit=None,whereDict={}):
             if(z):
               whereDicts.append(x +"='"+ z +"'")
         whereString.append("("+ " or ".join(whereDicts) +")")
-      debug.debug(whereString)
+      debug.info(whereString)
       rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
       for x in whereDictTemp:
@@ -1261,7 +1261,7 @@ def getProjAsses(projName,limit=None,whereDict={}):
             if(z):
               whereDicts.append(x +"='"+ z +"'")
         whereString.append("("+ " or ".join(whereDicts) +")")
-      debug.debug(whereString)
+      debug.info(whereString)
       rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
     if(rows):
       return(rows)
@@ -1285,6 +1285,7 @@ def getAssesLike(assPath):
     return (0)
 
 
+
 def getUsers():
   dbconn = dbPipe.dbPipe()
   try:
@@ -1294,6 +1295,8 @@ def getUsers():
   except:
     debug.debug(str(sys.exc_info()))
     return(0)
+
+
 
 def getStageAdmins(stageType):
   dbconn = dbPipe.dbPipe()

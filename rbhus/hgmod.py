@@ -138,9 +138,9 @@ class hg(object):
       self._copyIgnore()
       isAdded = self._addremove()
       if(isAdded):
-        if(isAdded == 111):
+        if(isAdded == False):
           os.chdir(curdir)
-          return(111,None)
+          return(False,None)
       (retStatus,versionCommited) = self._commit(commitmsg=commitmsg)
       debug.info(versionCommited)
       self._update()
@@ -250,7 +250,7 @@ class hg(object):
   def _merge(self):
     if(not (utilsPipe.isAssCreated(self.assDets) or utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111)
+      return(False)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose merge --tool=\":local\"",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
@@ -265,7 +265,7 @@ class hg(object):
   def _add(self):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111)
+      return(False)
     #debug.info(self.absPipePath)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose add --large",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -281,7 +281,7 @@ class hg(object):
   def _addremove(self):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111)
+      return(False)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose addremove",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
@@ -297,7 +297,7 @@ class hg(object):
 
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111,None)
+      return(False,None)
     utilsPipe.updateAssModifies(self.assDets['assetId'],"commit:start")
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose commit -A --message \'{1}\' --user {0}".format(os.environ['rbhusPipe_acl_user'],commitmsg),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -334,7 +334,7 @@ class hg(object):
   def _push(self):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111)
+      return(False)
     utilsPipe.updateAssModifies(self.assDets['assetId'], "push:start")
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose push -f {0}".format(self.absPipePath),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -375,7 +375,7 @@ class hg(object):
     if(not local):
       if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
         debug.warn("user not allowed")
-        return(111)
+        return(False)
     utilsPipe.updateAssModifies(self.assDets['assetId'], "update:start")
 
     if (rev != None):
@@ -402,7 +402,7 @@ class hg(object):
   def _purge(self):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111)
+      return(False)
     if(sys.platform.lower().find("linux") >= 0):
       p = subprocess.Popen("hg --verbose purge",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
@@ -434,7 +434,7 @@ class hg(object):
   def _archive(self,rev):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111)
+      return(False)
 
     pubpath = os.path.join(self.absPipePath,"publish")
     utilsPipe.updateAssModifies(self.assDets['assetId'], "archive:start")
@@ -478,7 +478,7 @@ class hg(object):
   def _review(self,rev):
     if(not (utilsPipe.isAssAssigned(self.assDets) or utilsPipe.isStageAdmin(self.assDets) or utilsPipe.isProjAdmin(self.assDets) or utilsPipe.isNodeAdmin(self.assDets))):
       debug.warn("user not allowed")
-      return(111)
+      return(False)
     if(not rev):
       rev = 0
 

@@ -328,7 +328,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     if(selvers):
       sv = selvers[-1]
       retValue = self.versionsHg._archive(sv)
-      if(retValue != 111):
+      if(retValue != False):
         self.popRelated()
 
 
@@ -543,8 +543,9 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.convertPreview()
     perm = self.versionsHg._add()
     debug.info("returned : "+ str(perm))
-    if(perm == 111):
+    if(perm == False):
       self.messageBoxWarn()
+      self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
       return(0)
 
     self.versionsHg._addremove()
@@ -576,7 +577,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:start")
         retValue, versionNumber = xver.commitAbsPath(commitmsg="from autoCommit")
         debug.info(versionNumber)
-        if (retValue == 111):
+        if (retValue == False):
           self.messageBoxWarn(assPath=x)
           utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:end:fail:permission_denied")
         else:
@@ -595,7 +596,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         debug.info("PoPing : " + x)
         retValue = utilsPipe.importAssets(args.assPath.split(":")[0],args.assPath,x,force=True,pop=True)
         debug.info(retValue)
-        if (retValue == 111):
+        if (retValue == False):
           self.messageBoxWarn(assPath=x)
         else:
           self.popAssetWidgets[x].labelStatus.setText("done")

@@ -267,7 +267,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
         if(utilsPipe.isAssAssigned(assdets) or utilsPipe.isProjAdmin(assdets)):
           print("user not allowed to edit . not an admin or an asset founder!!")
           self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
-          return(111)
+          return(False)
 
         if(assdict):
           utilsPipe.assEdit(assid = xid , assdict=assdict)

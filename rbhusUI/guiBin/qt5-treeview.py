@@ -270,7 +270,7 @@ class server(QtCore.QThread):
           except:
             thumbzCmd = None
           if (thumbzCmd):
-            rbhus.debug.info(thumbzCmd)
+            # rbhus.debug.info(thumbzCmd)
             p = subprocess.Popen(thumbzCmd, shell=True)
             retcode = p.wait()
 
@@ -398,22 +398,6 @@ class fileDirLoadedThread(QtCore.QThread):
               fileDets.thumbFile = fThumbz
               fileDets.jsonFile = fJson
 
-
-              # fileDets = rbhus.utilsPipe.thumbz_db()
-              # fileDets.mainFile = filePath
-              # fileDets.absPath = filePath
-              # fileDets.subPath = fSubPath
-              # fileDets.mimeType = mimeType
-              # fileDets.mimeExt = mimeExt
-              # fAbsPath = fileDets.absPath
-              # fDir = os.path.dirname(fAbsPath)
-              # fName = os.path.basename(fAbsPath)
-              # fThumbzDbDir = os.path.join(fDir, ".thumbz.db")
-              # fThumbz = os.path.join(fThumbzDbDir, fName + ".png")
-              # fileDets.thumbFile = fThumbz
-
-
-
               try:
                 self.fileIcon.emit(fileDets)
                 self.startIconGen(fileDets)
@@ -421,7 +405,6 @@ class fileDirLoadedThread(QtCore.QThread):
                 rbhus.debug.error(sys.exc_info())
               time.sleep(0.02)
     self.socket.close()
-    # self.finished.emit() # dont enable this . this will simply emit finished twice .. !!!
 
   def startIconGen(self,fileDets):
 
@@ -576,12 +559,12 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   global fileThumbzWidget
   global fileThumbzItems
 
-  fileSelectedIdx = main_ui.tableFiles.model().index(fileIconDets.mainFile)
-  try:
-    main_ui.tableFiles.update()
-    app.processEvents()
-  except:
-    rbhus.debug.info(sys.exc_info())
+  # fileSelectedIdx = main_ui.tableFiles.model().index(fileIconDets.mainFile)
+  # try:
+  #   main_ui.tableFiles.update()
+  #   app.processEvents()
+  # except:
+  #   rbhus.debug.info(sys.exc_info())
   # icon = QtGui.QIcon(fileIconDets.thumbFile)
   # main_ui.tableFiles.model().setData(fileSelectedIdx, icon, QtCore.Qt.DecorationRole)
   # main_ui.tableFiles.resizeColumnsToContents()
@@ -662,6 +645,7 @@ def popUpFolders(main_ui,pos):
   clipboardMenu = QtWidgets.QMenu("clipboard")
   createFolderAction = ioMenu.addAction("new")
   deleteFolderAction = ioMenu.addAction("delete")
+  deleteFolderAction.setEnabled(False)
 
   copyFolderPathAction = clipboardMenu.addAction("copy path to clipboard")
   renameFolderAction = folderMenu.addAction("rename")
@@ -727,8 +711,12 @@ def deleteFolder(main_ui):
     return(0)
 
   try:
-
-    shutil.rmtree(CUR_DIR_SELECTED)
+    thrashPath = os.path.join(rbhus.utilsPipe.rbhusTrash, assDets['assetId'])
+    try:
+      os.makedirs(thrashPath)
+    except:
+      rbhus.debug.warning(sys.exc_info())
+    os.system("mv -v --force "+ CUR_DIR_SELECTED +" "+ thrashPath + os.sep)
     rbhus.utilsPipe.updateAssModifies(assDets['assetId'], "deleted : " + CUR_DIR_SELECTED)
   except:
     msgBox = QtWidgets.QMessageBox(parent=main_ui.treeDirs)
@@ -815,7 +803,7 @@ def popUpFiles(main_ui,context,pos):
 
     ioCopyAction = ioMenu.addAction("copy")
     ioDeleteAction = ioMenu.addAction("delete")
-    # ioDeleteAction.setEnabled(False)
+    ioDeleteAction.setEnabled(False)
 
     fileNameRenameAction = fileMenu.addAction("rename")
 
