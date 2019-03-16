@@ -25,7 +25,6 @@ if(len(progPath) > 1):
 else:
   cwd = os.path.abspath(os.getcwd())
 
-
 etcpathtmp = cwd.split(os.sep)[0:-2]
 etcpathtmp.append("rbhus")
 etcpathtmp.append("etc")
@@ -50,6 +49,14 @@ if(sys.platform.find("linux") >= 0):
   except:
     username = "nobody"
 
+
+
+
+app_lock_dir = os.path.join(tempfile.gettempdir(),username)
+try:
+  os.makedirs(app_lock_dir)
+except:
+  debug.warning(str(sys.exc_info()))
 
 
 hostname = socket.gethostname()
@@ -1247,7 +1254,7 @@ def getProjAsses(projName,limit=None,whereDict={}):
             if(z):
               whereDicts.append(x +"='"+ z +"'")
         whereString.append("("+ " or ".join(whereDicts) +")")
-      debug.info(whereString)
+      # debug.info(whereString)
       rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType", dictionary=True)
     else:
       for x in whereDictTemp:
@@ -1261,7 +1268,7 @@ def getProjAsses(projName,limit=None,whereDict={}):
             if(z):
               whereDicts.append(x +"='"+ z +"'")
         whereString.append("("+ " or ".join(whereDicts) +")")
-      debug.info(whereString)
+      # debug.info(whereString)
       rows = dbconn.execute("select * from assets where projName='"+ str(projName) +"' and ("+ " and ".join(whereString) +") order by sequenceName,sceneName,assName,assetType limit "+ str(limit), dictionary=True)
     if(rows):
       return(rows)
@@ -2100,15 +2107,15 @@ def assDelete(assId=None,assPath=None,hard=False):
 
 def setWorkInProgress(asspath):
   assdets = getAssDetails(assPath=str(asspath))
-  if (isProjAdmin(assdets) or isStageAdmin(assdets) or isAssAssigned(assdets)):
-    try:
-      dbconn = dbPipe.dbPipe()
-      dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressInProgress) +",doneDate = '0000-00-00 00:00:00' where path='"+ str(asspath) +"'")
-    except:
-      debug.debug(str(sys.exc_info()))
-      return(0)
-  else:
-    debug.warn("user not permitted to set work in progress")
+  # if (isProjAdmin(assdets) or isStageAdmin(assdets) or isAssAssigned(assdets)):
+  try:
+    dbconn = dbPipe.dbPipe()
+    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressInProgress) +",doneDate = '0000-00-00 00:00:00' where path='"+ str(asspath) +"'")
+  except:
+    debug.debug(str(sys.exc_info()))
+    return(0)
+  # else:
+  #   debug.warn("user not permitted to set work in progress")
   return(1)
 
 
@@ -2116,15 +2123,15 @@ def setWorkInProgress(asspath):
 def setWorkDone(asspath):
   assdets = getAssDetails(assPath=str(asspath))
 
-  if(isProjAdmin(assdets) or isStageAdmin(assdets) or isAssAssigned(assdets)):
-    try:
-      dbconn = dbPipe.dbPipe()
-      dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressDone) +",doneDate='"+ str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"' where path='"+ str(asspath) +"'")
-    except:
-      debug.debug(str(sys.exc_info()))
-      return(0)
-  else:
-    debug.warn("user not permitted to set work as done")
+  # if(isProjAdmin(assdets) or isStageAdmin(assdets) or isAssAssigned(assdets)):
+  try:
+    dbconn = dbPipe.dbPipe()
+    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressDone) +",doneDate='"+ str(MySQLdb.Timestamp.now()).rstrip().lstrip() +"' where path='"+ str(asspath) +"'")
+  except:
+    debug.debug(str(sys.exc_info()))
+    return(0)
+  # else:
+  #   debug.warn("user not permitted to set work as done")
   return(1)
 
 
@@ -2148,6 +2155,11 @@ def isAssAssigned(assdets = {}):
     return(False)
 
 
+def isAssTrakAssigned(assdets = {}):
+  if(os.environ['rbhusPipe_acl_user'] in assdets['trakAssigned'].split(",")):
+    return(True)
+  else:
+    return(False)
 
 def isStageAdmin(assdets = {}):
   if(assdets['stageType'] != "default"):
@@ -2179,8 +2191,9 @@ def isNodeAdmin(assdets = {}):
     return(True)
 
 
-def isDbAdmin(assdets = {}):
-  if(os.environ['rbhusPipe_acl_admin'] == "1"):
+def isDbAdmin():
+  adminUsers = getAdmins()
+  if(os.environ['rbhusPipe_acl_user'] in adminUsers):
     return(True)
   else:
     return(False)

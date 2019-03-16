@@ -11,6 +11,7 @@ import tempfile
 import simplejson
 import copy
 import yaml
+import argparse
 
 tempDir = tempfile.gettempdir()
 file_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1])
@@ -18,6 +19,7 @@ base_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3])
 ui_dir = os.path.join(base_dir,"rbhusUI","lib","qt5","rbhusPipe_trak")
 rbhus_lib_dir = os.path.join(base_dir,"rbhus")
 custom_widget_dir = os.path.join(base_dir,"rbhusUI","lib","qt5","customWidgets")
+tools_widget_dir = os.path.join(base_dir,"rbhusUI","lib","qt5","rbhusPipe_tools")
 home_dir = os.path.expanduser("~")
 print(custom_widget_dir)
 
@@ -30,16 +32,29 @@ import rbhus.debug
 import rbhusUI.lib.qt5.customWidgets.checkBox_style
 import rbhus.pyperclip
 import rbhus.hgmod
+import rbhus.dfl
 import time
-import zmq
+import arrow
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 
-projects = ["pipeTest1"]
+parser = argparse.ArgumentParser(description="rbhusTrak")
+parser.add_argument("-p","--project",dest="project",help="project name")
+args = parser.parse_args()
+
+
+
+project = args.project
+print(project)
+projects = [project]
+filterFileAsset = project +":share:trakFilters"
+filterFilePath = rbhus.utilsPipe.getAbsPath(filterFileAsset)
+filterFileProj = os.path.join(filterFilePath,".rbhusFilters")
 
 ui_main = os.path.join(ui_dir,"ui_main.ui")
 ui_asset_details = os.path.join(ui_dir,"assetDetailRow_new.ui")
 ui_asset_media_list = os.path.join(ui_dir,"assetMediaList.ui")
 ui_asset_media_Thumbz = os.path.join(ui_dir,"mediaThumbz.ui")
+ui_asset_edit = os.path.join(ui_dir,"rbhusPipeAssetEdit.ui")
 
 rpA = "rbhusPipeProjCreate.py"
 rpAss = "rbhusPipeAssetCreate.py"
@@ -87,6 +102,13 @@ mediaWidgets = {}
 updateDetailsThreads = []
 updateDetailsPanelMediaThreads = []
 tableRowCount = 0
+totalNS = 0
+totalWIP = 0
+totalDONE = 0
+totalFrames = 0
+
+editAssDueDate = False
+editAssTrakAssigned = False
 
 
 assColumnList = ['','','asset','assigned','reviewer','modified','v','review','publish','']
@@ -103,7 +125,7 @@ updateSortingTimer = QtCore.QTimer()
 # updateMediaTabTimer = QtCore.QTimer()
 
 
-
+allUsers = rbhus.utilsPipe.getUsers()
 
 class assetDetailRowClass(QtWidgets.QWidget):
   def __init__(self,parent=None):
@@ -111,13 +133,37 @@ class assetDetailRowClass(QtWidgets.QWidget):
     uic.loadUi(ui_asset_details,baseinstance=self)
 
 
+class assetEditClass(QtWidgets.QMainWindow):
+  def __init__(self,parent=None):
+    super(assetEditClass, self).__init__(parent)
+    uic.loadUi(ui_asset_edit,baseinstance=self)
+
+
 class QTableWidgetItemSort(QtWidgets.QTableWidgetItem):
 
 
   def __lt__(self, other):
+    if(not self.data(QtCore.Qt.UserRole)):
+      if(other.data(QtCore.Qt.UserRole)):
+        return False
+      return True
+    if(not other.data(QtCore.Qt.UserRole)):
+      if(self.data(QtCore.Qt.UserRole)):
+        return True
+      return False
+
     return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
 
   def __ge__(self, other):
+    if(not self.data(QtCore.Qt.UserRole)):
+      if(other.data(QtCore.Qt.UserRole)):
+        return True
+      return False
+    if(not other.data(QtCore.Qt.UserRole)):
+      if(self.data(QtCore.Qt.UserRole)):
+        return False
+      return True
+
     return self.data(QtCore.Qt.UserRole) > other.data(QtCore.Qt.UserRole)
 
 
@@ -129,6 +175,20 @@ class QListWidgetItemSort(QtWidgets.QListWidgetItem):
 
   def __ge__(self, other):
     return self.data(QtCore.Qt.UserRole) > other.data(QtCore.Qt.UserRole)
+
+
+
+class DateItemDelegate(QtWidgets.QStyledItemDelegate):
+  def __init__(self,parent=None):
+    super(DateItemDelegate, self).__init__(parent=parent)
+
+  def displayText(self,value,locale):
+    try:
+      arrowDate = arrow.get(str(value),'YYYY-MM-DD h:m:s')
+      return arrowDate.format('MMM DD, ddd, YYYY  hh:mm A')
+    except:
+      pass
+    return super(DateItemDelegate, self).displayText(value,locale)
 
 
 
@@ -221,7 +281,8 @@ class updateAssQthread(QtCore.QThread):
             else:
               x['isNotes'] = False
 
-            x['fav']  = isFavorite(x['path'])
+            x['fav']  = False
+            # x['fav']  = isFavorite(x['path'])
             x['absPath'] = absPathAss
             try:
               x['modified'] = os.path.getmtime(absPathAss)
@@ -254,64 +315,6 @@ class updateAssQthread(QtCore.QThread):
     # self.finished.emit()
 
 
-def updateFavorite(mainUid,assPath,starObj):
-  proj = assPath.split(":")[0]
-
-  fav_file = os.path.join(home_dir,".rbhusPipe__"+ str(proj) +".fav")
-  fav_asses = []
-  favLock.lock()
-  if(os.path.exists(fav_file)):
-    fd = open(fav_file,"r")
-    try:
-      fav_asses = simplejson.load(fd)
-    except:
-      rbhus.debug.error(sys.exc_info())
-    fd.close()
-  if(not starObj.isChecked()):
-    if(assPath in fav_asses):
-      try:
-        fav_asses.remove(assPath)
-      except:
-        rbhus.debug.error(sys.exc_info())
-    else:
-      favLock.unlock()
-      return
-  else:
-    if(assPath not in fav_asses):
-      fav_asses.append(assPath)
-    else:
-      favLock.unlock()
-      return
-  fd = open(fav_file,"w")
-  try:
-    simplejson.dump(fav_asses,fd)
-  except:
-    rbhus.debug.error(sys.exc_info())
-  fd.flush()
-  fd.close()
-  favLock.unlock()
-  # updateAssetsForProjSelectFav(mainUid)
-
-
-def isFavorite(assPath):
-  proj = assPath.split(":")[0]
-  fav_file = os.path.join(home_dir, ".rbhusPipe__" + str(proj) + ".fav")
-  fav_asses = []
-  if (os.path.exists(fav_file)):
-    favLock.lock()
-    fd = open(fav_file, "r")
-    try:
-      fav_asses = simplejson.load(fd)
-    except:
-      rbhus.debug.warning(sys.exc_info())
-    fd.close()
-    favLock.unlock()
-    if(assPath in fav_asses):
-      return True
-    else:
-      return False
-  else:
-    return False
 
 
 def getAllFavorite(proj):
@@ -410,6 +413,7 @@ def updateAssetsForProjSelectTimed(mainUid):
   else:
     if(mainUid.radioMineAss.isChecked()):
       whereDict['assignedWorker'] = username
+      # whereDict['trakAssigned'] = username
 
   rbhus.debug.debug(whereDict)
 
@@ -447,14 +451,26 @@ def updateAssFinished(mainUid):
   rbhus.debug.debug("calling updateFinished")
   mainUid.tableWidgetAssets.update()
   mainUid.tableWidgetAssets.resizeColumnsToContents()
-  updateSorting(mainUid)
+  global totalDONE
+  global totalWIP
+  global totalNS
+  global totalFrames
 
+  itemNs = QTableWidgetItemSort()
+  itemNs.setText(str(totalNS))
 
-def updateSorting(mainUid):
-  updateSortingTimer.stop()
-  updateSortingTimer.setSingleShot(True)
-  updateSortingTimer.start(100)
+  itemWip = QTableWidgetItemSort()
+  itemWip.setText(str(totalWIP))
 
+  itemDone = QTableWidgetItemSort()
+  itemDone.setText(str(totalDONE))
+
+  itemFrames = QTableWidgetItemSort()
+  itemFrames.setText(str(totalFrames))
+  mainUid.tableWidgetProjDets.setItem(0,0,itemNs)
+  mainUid.tableWidgetProjDets.setItem(1,0,itemWip)
+  mainUid.tableWidgetProjDets.setItem(2,0,itemDone)
+  mainUid.tableWidgetProjDets.setItem(3,0,itemFrames)
 
 
 
@@ -465,9 +481,18 @@ def updateTotalAss(mainUid,totalRows):
   global ImageWidgets
   global assDetsWidgetsDict
   global tableRowCount
+  global totalDONE
+  global totalWIP
+  global totalNS
+  global totalFrames
   tableRowCount = 0
+  totalWIP = 0
+  totalNS = 0
+  totalDONE = 0
+  totalFrames = 0
   mainUid.labelTotal.setText(str(totalRows))
   mainUid.tableWidgetAssets.clearContents()
+  mainUid.tableWidgetProjDets.clearContents()
 
 
 
@@ -477,24 +502,92 @@ def updateAssSlot(mainUid, richAss, assetDets):
   global assDetsWidgetsDict
   global assDetsItemsDict
   global tableRowCount
+  global totalDONE
+  global totalWIP
+  global totalNS
+  global totalFrames
 
-
+  mainUid.tableWidgetAssets.setItemDelegate(DateItemDelegate())
   mainUid.tableWidgetAssets.setRowCount(tableRowCount+1)
   assetLabel = QtWidgets.QLabel()
   assetPathItem = QTableWidgetItemSort()
+  assetPathItem.assetDets = assetDets
   assetPathItem.setData(QtCore.Qt.UserRole,assetDets['path'])
   assetLabel.setTextFormat(QtCore.Qt.RichText)
   assetLabel.setText(richAss)
   mainUid.tableWidgetAssets.setCellWidget(tableRowCount,0,assetLabel)
   mainUid.tableWidgetAssets.setItem(tableRowCount,0,assetPathItem)
 
+
   if(assetDets['seqScnDets']):
     descItem = QTableWidgetItemSort()
     descItem.setText(assetDets['seqScnDets']['description'])
     descItem.setData(QtCore.Qt.UserRole,assetDets['seqScnDets']['description'])
     mainUid.tableWidgetAssets.setItem(tableRowCount, 1, descItem)
+    framesItem = QTableWidgetItemSort()
+    if(assetDets['seqScnDets']['sFrame']):
+      if(assetDets['seqScnDets']['eFrame']):
+        totalFrames = totalFrames + int(assetDets['seqScnDets']['eFrame'])
+        framesItem.setText(str(assetDets['seqScnDets']['sFrame']) +" - "+ str(assetDets['seqScnDets']['eFrame']))
+        framesItem.setData(QtCore.Qt.UserRole,assetDets['seqScnDets']['eFrame'])
+        mainUid.tableWidgetAssets.setItem(tableRowCount, 4, framesItem)
 
 
+  assetCurrentUser = QTableWidgetItemSort()
+  assetCurrentUser.setText(assetDets['assignedWorker'])
+  assetCurrentUser.setData(QtCore.Qt.UserRole,assetDets['assignedWorker'])
+  mainUid.tableWidgetAssets.setItem(tableRowCount, 3, assetCurrentUser)
+
+
+  assetAssignedUser = QTableWidgetItemSort()
+  assetAssignedUser.setData(QtCore.Qt.UserRole,assetDets['trakAssigned'])
+  assetAssignedUser.setText(assetDets['trakAssigned'])
+  mainUid.tableWidgetAssets.setItem(tableRowCount, 2, assetAssignedUser)
+
+
+  if(assetDets['progressStatus'] == rbhus.constantsPipe.assetProgressNotStarted):
+    progress_color = QtGui.QColor()
+    progress_color.setGreen(1)
+    progress_color.setBlue(1)
+    progress_color.setRed(225)
+    progress_sort = 1
+    totalNS = totalNS + 1
+  elif(assetDets['progressStatus'] == rbhus.constantsPipe.assetProgressInProgress):
+    progress_color = QtGui.QColor()
+    progress_color.setGreen(150)
+    progress_color.setBlue(255)
+    progress_color.setRed(0)
+    progress_sort = 2
+    totalWIP  = totalWIP + 1
+  else:
+    progress_color = QtGui.QColor()
+    progress_color.setGreen(225)
+    progress_color.setBlue(10)
+    progress_color.setRed(10)
+    progress_sort = 3
+    totalDONE = totalDONE + 1
+
+  assetProgressItem = QTableWidgetItemSort()
+  assetProgressItem.setData(QtCore.Qt.BackgroundRole,progress_color)
+  assetProgressItem.setData(QtCore.Qt.UserRole,progress_sort)
+  if(progress_sort == 3):
+    if(assetDets['doneDate']):
+      assetProgressItem.setData(QtCore.Qt.UserRole,assetDets['doneDate'])
+      assetProgressItem.setText(str(assetDets['doneDate']))
+  mainUid.tableWidgetAssets.setItem(tableRowCount, 5, assetProgressItem)
+
+
+  assetStartDateItem = QTableWidgetItemSort()
+  if(assetDets['startDate']):
+    assetStartDateItem.setData(QtCore.Qt.UserRole,assetDets['startDate'])
+    assetStartDateItem.setText(str(assetDets['startDate']))
+  mainUid.tableWidgetAssets.setItem(tableRowCount, 6, assetStartDateItem)
+
+  assetDueDateItem = QTableWidgetItemSort()
+  if(assetDets['dueDate']):
+    assetDueDateItem.setData(QtCore.Qt.UserRole, assetDets['dueDate'])
+    assetDueDateItem.setText(str(assetDets['dueDate']))
+  mainUid.tableWidgetAssets.setItem(tableRowCount, 7, assetDueDateItem)
 
   tableRowCount = tableRowCount + 1
   mainUid.tableWidgetAssets.resizeColumnsToContents()
@@ -503,6 +596,18 @@ def updateAssSlot(mainUid, richAss, assetDets):
 
 
 
+
+
+
+
+def selectedAsses(mainUid,isFav=False):
+  items = mainUid.tableWidgetAssets.selectionModel().selectedRows()
+  selected = []
+  for x in items:
+    item = mainUid.tableWidgetAssets.item(x.row(),0)
+    selected.append(item.assetDets)
+    # rowstask.append(x.assetDets)
+  return(selected)
 
 def eatEvents(e):
   # print(dir(e))
@@ -523,13 +628,6 @@ def imageWidgetClicked(imagePath,mimeType=None):
 
 
 
-
-def selectedAsses(mainUid,isFav=False):
-  items = mainUid.tableWidgetAssets.selectedItems()
-  rowstask = []
-  for x in items:
-    rowstask.append(x.assetDets)
-  return(rowstask)
 
 
 def setSequence(mainUid):
@@ -1071,12 +1169,15 @@ def notesAssRO(mainUid,assetList=None):
 
 
 
-def setUsers(mainUid):
+def setUsers(mainUid,lineEdit=None):
   users = rbhus.utilsPipe.getUsers()
   outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(mainUid.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
   # if(outUsers == ""):
   #   outUsers = str(self.lineEditSearch.text()).rstrip().lstrip()
-  mainUid.lineEditSearch.setText(outUsers)
+  if(lineEdit):
+    lineEdit.setText(outUsers)
+  else:
+    mainUid.lineEditSearch.setText(outUsers)
 
 
 
@@ -1152,7 +1253,7 @@ def searchItemLoad(filterFile=None):
 
 def loadSearch(mainUid):
   mainUid.listWidgetSearch.clear()
-  saveSearchArray = searchItemLoad()
+  saveSearchArray = searchItemLoad(filterFile=filterFileProj)
   if(saveSearchArray):
     for x in saveSearchArray:
       item = QtWidgets.QListWidgetItem()
@@ -1187,12 +1288,15 @@ def searchItemSave(itemDict,filterFile=None):
 
 
 
-def searchItemChanged(mainUid,item):
+def searchItemChanged(mainUid,item,filterFile=None):
   rbhus.debug.debug(item.text())
   rbhus.debug.debug(item.assFilter)
-  filterFile = os.path.join(home_dir, ".rbhusPipe.filters")
+  if (filterFile):
+    filterFile = os.path.abspath(filterFile)
+  else:
+    filterFile = os.path.join(home_dir, ".rbhusPipe.filters")
 
-  savedDict = searchItemLoad()
+  savedDict = searchItemLoad(filterFile=filterFile)
   for x in savedDict:
     if(x):
       if(x.has_key(item.assFilter)):
@@ -1210,18 +1314,24 @@ def popUpSearchFav(mainUid,pos):
   waste1 = menu.addAction("")
   waste2 = menu.addAction("")
   deleteSearchAction = menu.addAction("delete")
+  if(not rbhus.utilsPipe.isDbAdmin()):
+    deleteSearchAction.setEnabled(False)
   action = menu.exec_(mainUid.listWidgetSearch.mapToGlobal(pos))
 
   if(action == filterSearchAction):
-    searchItemActivate(mainUid)
+    searchItemActivate(mainUid,filterFileProj)
 
   if(action == deleteSearchAction):
-    deleteSearch(mainUid)
+    deleteSearch(mainUid,filterFileProj)
 
 
-def deleteSearch(mainUid):
+def deleteSearch(mainUid,filterFile=None):
   item = mainUid.listWidgetSearch.currentItem()
-  savedFilter = searchItemLoad()
+  if (filterFile):
+    filterFile = os.path.abspath(filterFile)
+  else:
+    filterFile = os.path.join(home_dir, ".rbhusPipe.filters")
+  savedFilter = searchItemLoad(filterFile)
   rbhus.debug.debug(item.assFilter)
   index  = 0
   indexToDelete = None
@@ -1231,7 +1341,6 @@ def deleteSearch(mainUid):
         indexToDelete = index
     index = index + 1
   del savedFilter[indexToDelete]
-  filterFile = os.path.join(home_dir, ".rbhusPipe.filters")
   fd = open(filterFile, "w")
   yaml.dump(savedFilter, fd)
   fd.flush()
@@ -1241,9 +1350,13 @@ def deleteSearch(mainUid):
 
 
 
-def searchItemActivate(mainUid):
+def searchItemActivate(mainUid,filterFile=None):
   indexChanged = mainUid.listWidgetSearch.currentRow()
-  savedFilter = searchItemLoad()
+  if (filterFile):
+    filterFile = os.path.abspath(filterFile)
+  else:
+    filterFile = os.path.join(home_dir, ".rbhusPipe.filters")
+  savedFilter = searchItemLoad(filterFile)
   s = savedFilter[indexChanged].keys()[-1].split("###")
   mainUid.comboAssType.setEditText(s[0])
   mainUid.comboSeq.setEditText(s[1])
@@ -1296,10 +1409,110 @@ def searchItemActivate(mainUid):
 
 
 
+def popupAss(mainUid,pos,isFav=False):
+  selectedAssDets = selectedAsses(mainUid)
+
+  if(selectedAssDets):
+    menu = QtWidgets.QMenu()
+    menuTools = QtWidgets.QMenu("tools")
+    menuProgress = QtWidgets.QMenu("progress")
+    # progressAction = menu.addAction("progress")
+    progressWipAction = menuProgress.addAction("set WIP")
+    progressDoneAction = menuProgress.addAction("set DONE")
+
+    editAction = menuTools.addAction("edit")
+
+    if(not (rbhus.utilsPipe.isDbAdmin() or rbhus.utilsPipe.isProjAdmin(selectedAssDets[0]) or rbhus.utilsPipe.isAssTrakAssigned(selectedAssDets[0]))):
+      progressDoneAction.setEnabled(False)
+      progressWipAction.setEnabled(False)
+
+    if(not (rbhus.utilsPipe.isDbAdmin() or rbhus.utilsPipe.isProjAdmin(selectedAssDets[0]))):
+      editAction.setEnabled(False)
+
+
+
+
+
+    menu.addMenu(menuTools)
+    menu.addMenu(menuProgress)
+
+  action = menu.exec_(mainUid.tableWidgetAssets.mapToGlobal(pos))
+
+  if(action == progressWipAction):
+    setInprogress(mainUid)
+  if(action == progressDoneAction):
+    setDone(mainUid)
+
+  if(action == editAction):
+    editActionFunc(mainUid)
+
+def setInprogress(mainUid):
+  selectedAssDets = selectedAsses(mainUid)
+  for asset in selectedAssDets:
+    rbhus.utilsPipe.setWorkInProgress(asset['path'])
+
+
+
+def setDone(mainUid):
+  selectedAssDets = selectedAsses(mainUid)
+  for asset in selectedAssDets:
+    rbhus.utilsPipe.setWorkDone(asset['path'])
+
+
+
+
+def editActionFunc(mainUid):
+  global editAssDueDate
+  global editAssTrakAssigned
+  editAssDueDate = False
+  editAssTrakAssigned = False
+  assets = selectedAsses(mainUid)
+  mainUid.edit.disconnect()
+  if(assets):
+    if(len(assets) == 1):
+      if(assets[0]['dueDate']):
+        mainUid.edit.dateTimeEditDue.setDateTime(assets[0]['dueDate'])
+      if(assets[0]['trakAssigned']):
+        mainUid.edit.lineEditWorkers.setText(assets[0]['trakAssigned'])
+
+    mainUid.edit.dateTimeEditDue.dateTimeChanged.connect(lambda dt: editAssDueDateToggle())
+    mainUid.edit.lineEditWorkers.textChanged.connect(lambda tx: editAssTrakAssignedToggle())
+    mainUid.edit.show()
+
+
+def editAssDueDateToggle():
+  global editAssDueDate
+  editAssDueDate = True
+
+def editAssTrakAssignedToggle():
+  global editAssTrakAssigned
+  editAssTrakAssigned = True
+
+def editAssets(mainUid):
+  global editAssDueDate
+  global editAssTrakAssigned
+  assets = selectedAsses(mainUid)
+  if(assets):
+    for assDet in assets:
+      assEdit = {}
+      if(editAssTrakAssigned):
+        assEdit['trakAssigned'] = str(mainUid.edit.lineEditWorkers.text())
+        rbhus.debug.info("editing trakAssigned ")
+      if(editAssDueDate):
+        assEdit['dueDate'] = str(mainUid.edit.dateTimeEditDue.dateTime().toPyDateTime())
+        rbhus.debug.info("editing dueDate ")
+      if(assEdit):
+        rbhus.utilsPipe.assEdit(asspath=assDet['path'],assdict=assEdit)
+  mainUid.edit.hide()
+
 
 def closeEvent(event):
-    rbhus.debug.debug("QUITTING")
-    event.accept()
+  rbhus.debug.debug("QUITTING")
+  event.accept()
+
+
+
+
 
 
 def main_func(mainUid):
@@ -1312,6 +1525,7 @@ def main_func(mainUid):
   mainUid.setWindowIcon(icon)
 
 
+  mainUid.setWindowTitle(project)
   iconRefresh = QtGui.QIcon()
   iconRefresh.addPixmap(QtGui.QPixmap(os.path.join(base_dir,"etc/icons/ic_loop_black_48dp_2x.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
@@ -1327,6 +1541,9 @@ def main_func(mainUid):
   iconImportAsset.addPixmap(QtGui.QPixmap(os.path.join(base_dir, "etc/icons/ic_move_to_inbox_black_48dp_2x.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
 
+  mainUid.edit = assetEditClass(mainUid.tableWidgetAssets)
+
+  mainUid.edit.pushEdit.clicked.connect(lambda clicked , mainUid = mainUid : editAssets(mainUid))
 
 
   # mainUid.pushNewAsset.setIcon(iconNewAsset)
@@ -1414,6 +1631,7 @@ def main_func(mainUid):
   mainUid.checkAssPath.clicked.connect(lambda clicked, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
   mainUid.checkUsers.clicked.connect(lambda clicked, mainUid=mainUid: setUsers(mainUid))
+  mainUid.edit.pushUsers.clicked.connect(lambda clicked, mainUid=mainUid, lineEdit=mainUid.edit.lineEditWorkers: setUsers(mainUid,lineEdit=lineEdit))
 
   mainUid.lineEditSearch.textChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
@@ -1431,10 +1649,10 @@ def main_func(mainUid):
 
 
 
+  if(rbhus.utilsPipe.isDbAdmin()):
+    mainUid.pushSaveFilters.clicked.connect(lambda clicked,mainUid=mainUid: saveSearchItem(mainUid,filterFile=filterFileProj))
 
-  mainUid.pushSaveFilters.clicked.connect(lambda clicked,mainUid=mainUid: saveSearchItem(mainUid))
-
-  mainUid.listWidgetSearch.itemChanged.connect(lambda item,mainUid=mainUid: searchItemChanged(mainUid,item))
+    mainUid.listWidgetSearch.itemChanged.connect(lambda item,mainUid=mainUid: searchItemChanged(mainUid,item,filterFile=filterFileProj))
   loadSearch(mainUid)
 
   mainUid.listWidgetSearch.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popUpSearchFav(mainUid, pos))
@@ -1453,7 +1671,7 @@ def main_func(mainUid):
   mainUid.comboScn.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
   mainUid.comboAssType.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
-  # mainUid.listWidgetAssets.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupAss(mainUid, pos))
+  mainUid.tableWidgetAssets.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupAss(mainUid, pos))
   # mainUid.listWidgetProj.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupProjects(mainUid, pos))
 
 
@@ -1478,7 +1696,12 @@ def main_func(mainUid):
   # mainUid.splitterAssetDetails.setStretchFactor(2,0.25)
   # mainUid.splitterAssetDetails.setSizes((1000,50))
   # mainUid.splitterMedia.setSizes((1,200))
+  mainUid.splitterTrak.setSizes([150,1000,500])
+  mainUid.splitterTrak.setStretchFactor(0,0)
+  mainUid.splitterTrak.setStretchFactor(1,100)
+  mainUid.splitterTrak.setStretchFactor(2,0)
 
+  # mainUid.groupBoxDetails.hide()
   #hide unwanted events
   # mainUid.listWidgetAssets.dropEvent = eatEvents
   # mainUid.listWidgetAssets.dragEnterEvent = eatEvents
@@ -1501,7 +1724,10 @@ def main_func(mainUid):
 
 
 if __name__ == '__main__':
-  app = QtWidgets.QApplication(sys.argv)
-  mainUid = uic.loadUi(ui_main)
-  main_func(mainUid)
-  os._exit((app.exec_()))
+  app_lock_file = os.path.join(rbhus.utilsPipe.app_lock_dir,project + ".lock")
+  app_lock = rbhus.dfl.LockFile(app_lock_file,expiry=2,debug=True)
+  with app_lock:
+    app = QtWidgets.QApplication(sys.argv)
+    mainUid = uic.loadUi(ui_main)
+    main_func(mainUid)
+    os._exit((app.exec_()))

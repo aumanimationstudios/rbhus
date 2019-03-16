@@ -62,7 +62,7 @@ parser.add_argument("-i","--id",dest='assId',help='asset id')
 parser.add_argument("-p","--path",dest='assPath',help='asset path')
 args = parser.parse_args()
 
-app_lock_file = os.path.join(tempfile.gettempdir(),str(args.assPath).replace(":","_"))
+app_lock_file = os.path.join(utilsPipe.app_lock_dir,str(args.assPath).replace(":","_"))
 preview_files = ["preview.png"]
 
 class ImagePlayer(QtGui.QWidget):
@@ -524,12 +524,10 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     sys.exit(0)
 
 
-  def messageBoxWarn(self, hard=False, assPath=None):
+  def messageBoxWarn(self, assPath):
     msgbox = QtGui.QMessageBox()
-    if(assPath):
-      msgbox.setText(unicode(assPath +"\nNOT COMMITING !Asset not assigned to you!!!"))
-    else:
-      msgbox.setText(unicode("NOT COMMITING !\nAsset not assigned to you!!!"))
+    msgbox.setWindowTitle(assPath)
+    msgbox.setText(unicode(assPath +"\nNOT COMMITING !Asset not assigned to you!!!"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
@@ -537,6 +535,17 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     msgbox.setDefaultButton(noBut)
     msgbox.exec_()
 
+
+  def messageBoxCommitFailed(self, assPath):
+    msgbox = QtGui.QMessageBox()
+    msgbox.setWindowTitle(assPath)
+    msgbox.setText(unicode(assPath +"\nCOMMIT FAILED !- Please check"))
+    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
+    #noBut = QtGui.QPushButton("cancel")
+    #yesBut = QtGui.QPushButton("yes")
+    noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
+    msgbox.setDefaultButton(noBut)
+    msgbox.exec_()
 
   def commit(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
@@ -553,7 +562,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg._merge()
     commit_status, versionCommited = self.versionsHg._commit()
     if(not commit_status):
-      debug.info("NOTHING TO COMMIT")
+      self.messageBoxCommitFailed(assPath=self.assetDetails['path'])
       self.hglog()
       self.commitRelated()
       self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
@@ -567,6 +576,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.hglog()
     utilsPipe.updateProjModifies(self.assetDetails['projName'], "commit:"+ str(self.assetDetails['path']), isModified=True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+
+
 
   def commitRelated(self):
     selectedForAutoCommit = utilsPipe.getGroupedForAutoCommit(self.assetDetails['path'])
@@ -602,6 +613,10 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           self.popAssetWidgets[x].labelStatus.setText("done")
 
 
+
+  #todo: Change the preview logic to be more automatic .
+  #todo: Users can change the file to be put on preview using a json based file .preview.json
+  #todo: whenever the respected file updates any access to the asset should update the preview file.
   def convertPreview(self):
     files = glob.glob(os.path.join(self.versionsHg.localPath,"*"))
     for x in files:

@@ -49,9 +49,9 @@ createStatus = {
 assetStatusDelete = 0
 assetStatusActive = 1
 assetStatusHidden = 2
-assetProgressInProgress = 0
-assetProgressDone = 1
-assetProgressNotStarted = 2
+assetProgressInProgress = 1
+assetProgressDone = 2
+assetProgressNotStarted = 0
 
 
 reviewStatusNotDone = 0

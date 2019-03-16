@@ -803,7 +803,7 @@ def popUpFiles(main_ui,context,pos):
 
     ioCopyAction = ioMenu.addAction("copy")
     ioDeleteAction = ioMenu.addAction("delete")
-    ioDeleteAction.setEnabled(False)
+    # ioDeleteAction.setEnabled(False)
 
     fileNameRenameAction = fileMenu.addAction("rename")
 

@@ -32,6 +32,7 @@ import rbhus.pyperclip
 import rbhus.hgmod
 import time
 import zmq
+import arrow
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 
 
@@ -55,13 +56,14 @@ rS = "rbhusPipeRenderSubmit.py"
 rR = "rbhusPipeReview.py"
 rN = "rbhusPipeNotes.py"
 rNr = "rbhusPipeNotes_readonly.py"
+rpT = "rbhusPipeTrak.py"
 
 assFolds = "qt5-treeview.py"
 assImporter = "rbhusAssetImport.py"
 
 
 autoLineUpCmd = os.path.join(base_dir,"tools","rbhus","autoLineUp","autoLineUp_anim.py")
-
+rbhusPipeTrakCmd = os.path.join(file_dir, rpT)
 selectCheckBoxCmd = os.path.join(file_dir, scb)
 rbhusPipeProjCreateCmd = os.path.join(file_dir, rpA)
 rbhusPipeAssetCreateCmd = os.path.join(file_dir, rpAss)
@@ -119,6 +121,20 @@ class api_serv(QtCore.QThread):
       (id, msg) = self.sock.recv_multipart()
       self.msg_recved.emit(msg)
       self.sock.send_multipart([bytes(id), "ack"])
+
+
+
+class DateItemDelegate(QtWidgets.QStyledItemDelegate):
+  def __init__(self,parent=None):
+    super(DateItemDelegate, self).__init__(parent=parent)
+
+  def displayText(self,value,locale):
+    try:
+      arrowDate = arrow.get(str(value),'YYYY-MM-DD h:m:s')
+      return arrowDate.format('MMM DD, ddd, YYYY  hh:mm A')
+    except:
+      pass
+    return super(DateItemDelegate, self).displayText(value,locale)
 
 
 
@@ -783,6 +799,7 @@ def updateLogsTab(mainUid,assetDets):
   assModifies = rbhus.utilsPipe.getAssModifies(assetDets['assetId'])
   mainUid.tableLogs.clearContents()
   mainUid.tableLogs.setRowCount(0)
+  mainUid.tableLogs.setItemDelegate(DateItemDelegate())
   if(assModifies):
     rows = len(assModifies)
     mainUid.tableLogs.setRowCount(rows)
@@ -1534,23 +1551,16 @@ def messageBoxTemplateHard():
     return (0)
 
 
-def popupMedia(mainUid,pos):
-  menu = QtWidgets.QMenu()
-  openAction = menu.addAction("open with")
-  # compareAction = menu.addAction("compare")
+
 
 def popupProjects(mainUid,pos):
   menu = QtWidgets.QMenu()
-  menuAutoLineUp = QtWidgets.QMenu()
-  menuAutoLineUp.setTitle("autoLineUp")
-  createAutoLineUpAnim = menuAutoLineUp.addAction("update autoLineUp :  ANIM")
-  createAutoLineUpLight = menuAutoLineUp.addAction("update autoLineUp :  LIGHT/FX")
-  createAutoLineUpLight.setEnabled(False)
-  # compareAction = menu.addAction("compare")
-  menu.addMenu(menuAutoLineUp)
+  traKAction  = menu.addAction("TRAK")
+
   action = menu.exec_(mainUid.listWidgetProj.mapToGlobal(pos))
-  if(action == createAutoLineUpAnim):
-    autoLineUpFunc(mainUid)
+  if(action == traKAction):
+    projTrak(mainUid)
+
 
 
 def autoLineUpFunc(mainUid):
@@ -1561,11 +1571,6 @@ def autoLineUpFunc(mainUid):
 
 
 
-
-def popupSubDir(mainUid,pos):
-  menu = QtWidgets.QMenu()
-  openAction = menu.addAction("copy path ")
-  # compareAction = menu.addAction("compare")
 
 
 
@@ -1680,6 +1685,17 @@ def reviewAss(mainUid,assetList=None):
   p.start(sys.executable, [rbhusPipeReviewCmd,"--assetpath",assPath])
   p.finished.connect(lambda a, b, mainUid=mainUid, assPath=assPath: updateAfterReview(mainUid, assPath))
 
+
+
+def projTrak(mainUid):
+  item = mainUid.listWidgetProj.selectedItems()
+  if(item):
+    project = item[0].text()
+
+    p = QtCore.QProcess(parent=mainUid)
+    p.setStandardOutputFile(tempDir + os.sep + "rbhusTrak_" + username + ".log")
+    p.setStandardErrorFile(tempDir + os.sep + "rbhusTrak_" + username + ".err")
+    p.start(sys.executable, [rbhusPipeTrakCmd,"-p",project])
 
 
 def assFoldOpen(mainUid,assetList=None):
@@ -2470,7 +2486,7 @@ def main_func(mainUid):
   mainUid.comboAssType.editTextChanged.connect(lambda textChanged, mainUid=mainUid: updateAssetsForProjSelect(mainUid))
 
   mainUid.listWidgetAssets.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupAss(mainUid, pos))
-  # mainUid.listWidgetProj.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupProjects(mainUid, pos))
+  mainUid.listWidgetProj.customContextMenuRequested.connect(lambda pos, mainUid=mainUid: popupProjects(mainUid, pos))
 
 
   mainUid.pushAssImport.clicked.connect(lambda clicked, mainUid=mainUid: rbhusAssImport(mainUid))

@@ -5,6 +5,7 @@ import multiprocessing
 import shutil
 import subprocess
 import debug
+import datetime
 
 
 
@@ -320,13 +321,15 @@ class hg(object):
     debug.info(versionCommited)
 
     if (p.returncode != 0):
-      debug.error(str(out))
+      debug.error(str(out) + ": error code: "+ str(p.returncode))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "commit:end:fail:"+ str(p.returncode))
-      return(0,versionCommited)
+      return(0,out)
     else:
       debug.info(str(out))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "commit:end:success:"+ str(versionCommited))
       # utilsPipe.updateProjModifies(self.assDets['projName'], "commit:"+ str(self.assDets['path']), isModified=True)
+      if(int(versionCommited) == 1):
+        utilsPipe.assEdit(asspath=self.assDets['path'],assdict={'startDate':str(datetime.datetime.now()),'progressStatus':constantsPipe.assetProgressInProgress})
 
       return(1,versionCommited)
 

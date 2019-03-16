@@ -31,10 +31,34 @@ class lockBadValuesError(dflError):
   pass
 
 
+class _updateMtimeThread(Thread):
+  def __init__(self,path):
+    super(_updateMtimeThread, self).__init__()
+    self._pleaseStop = False
+    self._path = path
+
+  def pleaseStop(self):
+    self._pleaseStop = True
+
+  def run(self):
+    while(True):
+      if(self._pleaseStop):
+        break
+      try:
+        os.utime(self._path,None)
+      except:
+        pass
+      time.sleep(1)
+      # logDfl.debug("updated utime")
+
+
+
 class LockFile(object):
   timeout = 0
   expiry = 0
   lock_file = None
+
+
 
   def __init__(self,filePath,debug=False,timeout=0,expiry=0):
     if(debug):
@@ -44,6 +68,7 @@ class LockFile(object):
     self._filePath = os.path.abspath(filePath)
     self._lockfile = self._filePath + ".lock"
     self._lockfileFd = None
+    self._lockThread = None
     self.lock_file = self._lockfile
     logDfl.debug(os.getpid())
 
@@ -58,9 +83,12 @@ class LockFile(object):
 
     self._acquireLock()
     logDfl.debug("entered lock state")
+    self._lockThread = _updateMtimeThread(self._lockfile)
+    self._lockThread.start()
 
   def __exit__(self, type, value, traceback):
     self._closeLockfileFd()
+    self._lockThread.pleaseStop()
     os.unlink(self._lockfile)
     logDfl.debug("exited lock state")
 
@@ -128,19 +156,22 @@ class LockFile(object):
 
 
 
+
+
 #TESTING
 if(__name__ == '__main__'):
   import setproctitle
   setproctitle.setproctitle("dfl")
-  lckf = LockFile("/nfs/mounted/file", debug=True)
-  lckf.expiry = 20
+  lckf = LockFile("/crap/crap.server/shrinidhi/", debug=True)
+  lckf.expiry = 10
+  lckf.timeout = 5
   # lckf.timeout = 19
   with lckf:
     # a rubbish logic to waste time
     logDfl.debug("testing locking body")
     timestarted = time.time()
     while(True):
-      if((time.time() - timestarted) > 5):
+      if((time.time() - timestarted) > 20):
         break
       else:
         logDfl.debug("INSIDE testing locking body")

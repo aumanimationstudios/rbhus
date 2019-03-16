@@ -271,6 +271,8 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
 
         if(assdict):
           utilsPipe.assEdit(assid = xid , assdict=assdict)
+          for assEdit in assdict.keys():
+            utilsPipe.updateAssModifies(assdets['assetId'],"assEdit : "+ str(assEdit) +" = "+ str(assdict[assEdit]))
     if(self.pathList):
       for xpath in self.pathList:
         assdets = utilsPipe.getAssDetails(assPath=xpath)
@@ -302,6 +304,8 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
         
         if(assdict):
           utilsPipe.assEdit(asspath = xpath , assdict=assdict)
+          for assEdit in assdict.keys():
+            utilsPipe.updateAssModifies(assdets['assetId'],"assEdit : "+ str(assEdit) +" = "+ str(assdict[assEdit]))
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
     return(1)
     
