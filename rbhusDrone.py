@@ -171,6 +171,7 @@ def updateIdle():
   try:
     db_conn.execute("update hostInfo set idleLast = \"" + str(MySQLdb.Timestamp.now()) + "\" where ip=\'" + str(ipAddr) + "\'")
   except:
+    logClient.debug(sys.exc_info())
     return (0)
 
 

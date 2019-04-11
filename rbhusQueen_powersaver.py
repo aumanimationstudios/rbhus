@@ -18,6 +18,6 @@ import rbhus.utils
 while(True):
   allActiveHosts = rbhus.dbRbhus.dbRbhus().getPotentHosts()
   for activehost in allActiveHosts:
-    print(activehost['idleLast'])
+    print(activehost['hostName'] +" : "+ str(activehost['idleLast']))
   time.sleep(2)
 
