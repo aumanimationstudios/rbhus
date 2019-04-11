@@ -569,6 +569,7 @@ class dbRbhus:
                             hostEffectiveResource.eCpus, \
                             hostInfo.weight, \
                             hostInfo.groups, \
+                            hostInfo.idleLast, \
                             hostInfo.os \
                       FROM hostResource, hostInfo, hostAlive, hostEffectiveResource \
                       WHERE hostInfo.status=hostAlive.status \

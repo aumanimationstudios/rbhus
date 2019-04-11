@@ -296,6 +296,18 @@ class hosts(object):
     else:
       print("Only local hosts can be enabled without admin rights!")
       return(0)
+
+
+  def idleSet(self):
+    try:
+      self.db_conn.execute("update hostInfo set idleLast = \"" + str(MySQLdb.Timestamp.now()) + "\" where ip=\'" + str(self.hostDetails['ip']) + "\'")
+    except:
+      print(str(sys.exc_info()))
+      return (0)
+    self.hostDetails = self._getHostDetails()
+    return(1)
+
+
     
       
   def hDisable(self):

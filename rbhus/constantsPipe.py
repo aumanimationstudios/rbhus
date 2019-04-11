@@ -68,7 +68,7 @@ typesAll = 4
 
 mimeTypes = {
              "image":[".png",".jpg",".jpeg",".exr",".svg",".tiff",".tga",".hdr"],
-             "video":[".avi",".mp4",".mpg",".mov"],
+             "video":[".avi",".mp4",".mpg",".mov",".gif",".webp"],
              "audio":[".mp3",".wav",".flac"],
              "blender":[".blend",".blend1",".blend2"],
              "office":[".ods",".doc",".xls",".xlsx",".txt",".docx"],
@@ -103,7 +103,7 @@ mimeConvertCmds = {
 
 mimeTypesOpenCmds = {
   "image": {"linux":["gwenview","djv_view - image","djv_view - sequence","krita","inkscape","mrViewer"]},
-  "video": {"linux":["mpv","mpv - loop", "djv_view - video","mrViewer"]},
+  "video": {"linux":["mpv - loop","mpv", "djv_view - video","mrViewer"]},
   "blender": {"linux":["project_assigned_application"]}, # Just enter "project_assigned_application" to open certain kinds of files with project assigned apps.
   "pdf": {"linux":["system_assigned_application"]}, # Just enter "system_assigned_application" to open certain kinds of files with project assigned apps.
   "krita": {"linux":["krita"]},

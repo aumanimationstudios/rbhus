@@ -156,13 +156,23 @@ def clientQuit(ppid):
 # Get the host info and update the database.
 def init():
   checkHostNameDb()
-  hostname,ipAddr = getHostNameIP()
+  # hostname,ipAddr = getHostNameIP()
   totalCpus = multiprocessing.cpu_count()
   totalMem = totalMemInfo()
   ret = setHostInfo(db_conn,totalMem['MemTotal'],totalCpus,totalMem['SwapTotal'])
+  updateIdle()
   if(ret == 1):
     return(1)
   return(0)
+
+def updateIdle():
+  hostname, ipAddr = getHostNameIP()
+  db_conn = dbRbhus.dbRbhus()
+  try:
+    db_conn.execute("update hostInfo set idleLast = \"" + str(MySQLdb.Timestamp.now()) + "\" where ip=\'" + str(ipAddr) + "\'")
+  except:
+    return (0)
+
 
 def getMacAddress():
   mac = ""

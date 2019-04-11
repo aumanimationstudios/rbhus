@@ -2120,6 +2120,20 @@ def setWorkInProgress(asspath):
 
 
 
+def setWorkNotStarted(asspath):
+  assdets = getAssDetails(assPath=str(asspath))
+  # if (isProjAdmin(assdets) or isStageAdmin(assdets) or isAssAssigned(assdets)):
+  try:
+    dbconn = dbPipe.dbPipe()
+    dbconn.execute("update assets set progressStatus="+ str(constantsPipe.assetProgressNotStarted) +",doneDate = '0000-00-00 00:00:00' where path='"+ str(asspath) +"'")
+  except:
+    debug.debug(str(sys.exc_info()))
+    return(0)
+  # else:
+  #   debug.warn("user not permitted to set work in progress")
+  return(1)
+
+
 def setWorkDone(asspath):
   assdets = getAssDetails(assPath=str(asspath))
 

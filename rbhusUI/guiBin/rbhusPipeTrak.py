@@ -12,6 +12,9 @@ import simplejson
 import copy
 import yaml
 import argparse
+import time
+import arrow
+import datetime
 
 tempDir = tempfile.gettempdir()
 file_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1])
@@ -33,8 +36,6 @@ import rbhusUI.lib.qt5.customWidgets.checkBox_style
 import rbhus.pyperclip
 import rbhus.hgmod
 import rbhus.dfl
-import time
-import arrow
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 
 parser = argparse.ArgumentParser(description="rbhusTrak")
@@ -1171,7 +1172,7 @@ def notesAssRO(mainUid,assetList=None):
 
 def setUsers(mainUid,lineEdit=None):
   users = rbhus.utilsPipe.getUsers()
-  outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(mainUid.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+  outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(mainUid.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
   # if(outUsers == ""):
   #   outUsers = str(self.lineEditSearch.text()).rstrip().lstrip()
   if(lineEdit):
@@ -1419,14 +1420,16 @@ def popupAss(mainUid,pos,isFav=False):
     # progressAction = menu.addAction("progress")
     progressWipAction = menuProgress.addAction("set WIP")
     progressDoneAction = menuProgress.addAction("set DONE")
+    progressNsAction = menuProgress.addAction("set NOT STARTED")
 
     editAction = menuTools.addAction("edit")
 
-    if(not (rbhus.utilsPipe.isDbAdmin() or rbhus.utilsPipe.isProjAdmin(selectedAssDets[0]) or rbhus.utilsPipe.isAssTrakAssigned(selectedAssDets[0]))):
+    if(not rbhus.utilsPipe.isDbAdmin()):
       progressDoneAction.setEnabled(False)
       progressWipAction.setEnabled(False)
+      progressNsAction.setEnabled(False)
 
-    if(not (rbhus.utilsPipe.isDbAdmin() or rbhus.utilsPipe.isProjAdmin(selectedAssDets[0]))):
+    if(not rbhus.utilsPipe.isDbAdmin()):
       editAction.setEnabled(False)
 
 
@@ -1442,6 +1445,8 @@ def popupAss(mainUid,pos,isFav=False):
     setInprogress(mainUid)
   if(action == progressDoneAction):
     setDone(mainUid)
+  if(action == progressNsAction):
+    setNotStarted(mainUid)
 
   if(action == editAction):
     editActionFunc(mainUid)
@@ -1451,6 +1456,12 @@ def setInprogress(mainUid):
   for asset in selectedAssDets:
     rbhus.utilsPipe.setWorkInProgress(asset['path'])
 
+
+
+def setNotStarted(mainUid):
+  selectedAssDets = selectedAsses(mainUid)
+  for asset in selectedAssDets:
+    rbhus.utilsPipe.setWorkNotStarted(asset['path'])
 
 
 def setDone(mainUid):
@@ -1467,13 +1478,25 @@ def editActionFunc(mainUid):
   editAssDueDate = False
   editAssTrakAssigned = False
   assets = selectedAsses(mainUid)
-  mainUid.edit.disconnect()
+  try:
+    mainUid.edit.dateTimeEditDue.disconnect()
+    mainUid.edit.lineEditWorkers.disconnect()
+
+  except:
+    rbhus.debug.info(sys.exc_info())
+
   if(assets):
-    if(len(assets) == 1):
-      if(assets[0]['dueDate']):
-        mainUid.edit.dateTimeEditDue.setDateTime(assets[0]['dueDate'])
-      if(assets[0]['trakAssigned']):
-        mainUid.edit.lineEditWorkers.setText(assets[0]['trakAssigned'])
+    try:
+      if(len(assets) == 1):
+        if(assets[0]['dueDate']):
+          mainUid.edit.dateTimeEditDue.setDateTime(assets[0]['dueDate'])
+        else:
+          mainUid.edit.dateTimeEditDue.setDateTime(datetime.datetime.now())
+
+        if(assets[0]['trakAssigned']):
+          mainUid.edit.lineEditWorkers.setText(assets[0]['trakAssigned'])
+    except:
+      rbhus.debug.info(sys.exc_info())
 
     mainUid.edit.dateTimeEditDue.dateTimeChanged.connect(lambda dt: editAssDueDateToggle())
     mainUid.edit.lineEditWorkers.textChanged.connect(lambda tx: editAssTrakAssignedToggle())
@@ -1491,19 +1514,22 @@ def editAssTrakAssignedToggle():
 def editAssets(mainUid):
   global editAssDueDate
   global editAssTrakAssigned
-  assets = selectedAsses(mainUid)
-  if(assets):
-    for assDet in assets:
-      assEdit = {}
-      if(editAssTrakAssigned):
-        assEdit['trakAssigned'] = str(mainUid.edit.lineEditWorkers.text())
-        rbhus.debug.info("editing trakAssigned ")
-      if(editAssDueDate):
-        assEdit['dueDate'] = str(mainUid.edit.dateTimeEditDue.dateTime().toPyDateTime())
-        rbhus.debug.info("editing dueDate ")
-      if(assEdit):
-        rbhus.utilsPipe.assEdit(asspath=assDet['path'],assdict=assEdit)
-  mainUid.edit.hide()
+  try:
+    assets = selectedAsses(mainUid)
+    if(assets):
+      for assDet in assets:
+        assEdit = {}
+        if(editAssTrakAssigned):
+          assEdit['trakAssigned'] = str(mainUid.edit.lineEditWorkers.text())
+          rbhus.debug.info("editing trakAssigned ")
+        if(editAssDueDate):
+          assEdit['dueDate'] = str(mainUid.edit.dateTimeEditDue.dateTime().toPyDateTime())
+          rbhus.debug.info("editing dueDate ")
+        if(assEdit):
+          rbhus.utilsPipe.assEdit(asspath=assDet['path'],assdict=assEdit)
+    mainUid.edit.hide()
+  except:
+    rbhus.debug.info(sys.exc_info())
 
 
 def closeEvent(event):
