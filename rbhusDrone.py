@@ -41,6 +41,7 @@ if(sys.platform.find("linux") >= 0):
 import tempfile
 import inspect
 import zmq
+import MySQLdb
 
 
 hostname = socket.gethostname()
