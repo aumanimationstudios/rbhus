@@ -185,8 +185,9 @@ def getMacAddress():
         break
   else:
     for line in os.popen("ifconfig"):
-      if line.find('Ether') > -1:
-        mac = line.split()[4]
+      b = re.search("(([0-9]|[a-z]|[A-Z]){2}|:){11}", line)
+      if (b):
+        mac = str(b.group())
         break
   return(mac)
 
