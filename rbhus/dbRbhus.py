@@ -587,6 +587,41 @@ class dbRbhus:
       modLogger.error(str(sys.exc_info()))    
       return(0)
     return(rows)
+
+  def getDeadHosts(self):
+    try:
+      rows = self.execute("SELECT hostInfo.hostName, \
+                            hostInfo.ip, \
+                            hostInfo.totalCpus, \
+                            hostResource.freeCpus, \
+                            hostInfo.totalRam, \
+                            hostResource.freeRam, \
+                            hostInfo.totalSwap, \
+                            hostResource.freeSwap, \
+                            hostResource.load1, \
+                            hostResource.load5, \
+                            hostResource.load10, \
+                            hostEffectiveResource.eCpus, \
+                            hostInfo.weight, \
+                            hostInfo.groups, \
+                            hostInfo.idleLast, \
+                            hostInfo.os \
+                      FROM hostResource, hostInfo, hostAlive, hostEffectiveResource \
+                      WHERE hostInfo.status=hostAlive.status \
+                      AND hostAlive.status="+ str(constants.hostAliveDead) +" \
+                      AND hostInfo.hostName=hostResource.hostName \
+                      AND hostResource.hostName=hostAlive.hostName \
+                      AND hostAlive.hostName=hostEffectiveResource.hostName \
+                      AND hostInfo.statusPermanent="+ str(constants.hostAliveAlive) +" \
+                      ORDER BY hostInfo.weight DESC", dictionary=True)
+      if(rows):
+        if(not 'eCpus' in rows[0].keys()):
+          modLogger.error("faaaaaaaaack ..getPotentHosts missed!!!!")
+          return(0)
+    except:
+      modLogger.error(str(sys.exc_info()))
+      return(0)
+    return(rows)
     
   def getUnassignedFrames(self,taskId):
     try:

@@ -18,10 +18,11 @@ import rbhus.utils
 
 timeformat = '%Y-%m-%d %H:%M:%S.%f'
 while(True):
-  allActiveHosts = rbhus.dbRbhus.dbRbhus().getPotentHosts()
+
   allActiveTasks = rbhus.dbRbhus.dbRbhus().getAllActiveTasks()
   # if(not allActiveTasks):
   if(not allActiveTasks):
+    allActiveHosts = rbhus.dbRbhus.dbRbhus().getPotentHosts()
     for activehost in allActiveHosts:
       # print(activehost['hostName'] + " : " + str(activehost['idleLast']))
       timeNow = datetime.datetime.now()
@@ -31,5 +32,9 @@ while(True):
         print(activehost['hostName'] +" : "+ str(activehost['idleLast']) + " : "+ str(timeDiffSecs))
         hostDet = rbhus.utils.hosts(activehost['ip'])
         hostDet.shutdownSys()
+  else:
+    deadHosts = rbhus.dbRbhus.dbRbhus().getDeadHosts()
+    for deadHost in deadHosts:
+      print(deadHost)
   time.sleep(2)
 

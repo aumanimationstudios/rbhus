@@ -211,7 +211,7 @@ def updateHostNameDb():
   maccy = getMacAddress().lower()
   hostname, ipaddr = getHostNameIP()
   try:
-    hdb.execute("delete from main where macc='"+ maccy +"'")
+    hdb.execute("delete from main where macc='"+ maccy +"' or ip='"+ ipaddr +"'")
   except:
     logClient.debug(sys.exc_info())
 
