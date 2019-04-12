@@ -156,12 +156,12 @@ def clientQuit(ppid):
 
 # Get the host info and update the database.
 def init():
-  checkHostNameDb()
-  # hostname,ipAddr = getHostNameIP()
+  # checkHostNameDb()
   totalCpus = multiprocessing.cpu_count()
   totalMem = totalMemInfo()
   ret = setHostInfo(db_conn,totalMem['MemTotal'],totalCpus,totalMem['SwapTotal'])
   updateIdle()
+  updateHostNameDb()
   if(ret == 1):
     return(1)
   return(0)
@@ -205,6 +205,19 @@ def checkHostNameDb():
     if(sys.platform.find("win") >= 0):
       os.system("wmic computersystem where name=\"%COMPUTERNAME%\" call rename name=\""+ str(realName) +"\"")
 
+def updateHostNameDb():
+  hdb = dbRbhus.dbRbhusHost()
+  maccy = getMacAddress().lower()
+  hostname, ipaddr = getHostNameIP()
+  try:
+    hdb.execute("delete from main where macc='"+ maccy +"'")
+  except:
+    logClient.debug(sys.exc_info())
+
+  try:
+    hdb.execute("insert into main (macc,ip,name) values ('{0}', '{1}', '{2}')".format(maccy,ipaddr,hostname))
+  except:
+    logClient.debug(sys.exc_info())
 
 def hostUpdater():
   if(sys.platform.find("linux") >=0):
