@@ -35,8 +35,8 @@ def create_magic_packet(macaddress):
         sep = macaddress[2]
         macaddress = macaddress.replace(sep, '')
     else:
-        raise ValueError('Incorrect MAC address format')
 
+        raise ValueError('Incorrect MAC address format')
     # Pad the synchronization stream
     data = b'FFFFFFFFFFFF' + (macaddress * 16).encode()
     send_data = b''
