@@ -16,7 +16,7 @@ import rbhus.dbRbhus
 import rbhus.debug
 import rbhus.utils
 import rbhus.WOL
-
+import rbhus.auth
 
 
 
@@ -24,7 +24,8 @@ import rbhus.WOL
 timeformat = '%Y-%m-%d %H:%M:%S.%f'
 
 
-
+acl = rbhus.auth.login()
+acl.useEnvUser()
 
 
 
@@ -47,15 +48,16 @@ while(True):
   # if(not allActiveTasks):
   if(not allActiveTasks):
     allActiveHosts = rbhus.dbRbhus.dbRbhus().getShutdownHosts()
-    for activehost in allActiveHosts:
-      # print(activehost['hostName'] + " : " + str(activehost['idleLast']))
-      timeNow = datetime.datetime.now()
-      timeDiff = timeNow - datetime.datetime.strptime(str(activehost['idleLast']),timeformat)
-      timeDiffSecs = timeDiff.total_seconds()
-      if(timeDiffSecs >= 7200):
-        print("shuting down "+ activehost['hostName'] +" : "+ str(activehost['idleLast']) + " : "+ str(timeDiffSecs))
-        hostDet = rbhus.utils.hosts(activehost['ip'])
-        hostDet.shutdownSys()
+    if(allActiveHosts):
+      for activehost in allActiveHosts:
+        # print(activehost['hostName'] + " : " + str(activehost['idleLast']))
+        timeNow = datetime.datetime.now()
+        timeDiff = timeNow - datetime.datetime.strptime(str(activehost['idleLast']),timeformat)
+        timeDiffSecs = timeDiff.total_seconds()
+        if(timeDiffSecs >= 7200):
+          print("shuting down "+ activehost['hostName'] +" : "+ str(activehost['idleLast']) + " : "+ str(timeDiffSecs))
+          hostDet = rbhus.utils.hosts(activehost['ip'])
+          hostDet.shutdownSys()
   else:
     deadHosts = rbhus.dbRbhus.dbRbhus().getDeadHosts()
     for deadHost in deadHosts:

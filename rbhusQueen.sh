@@ -5,4 +5,6 @@ sleep 5
 ./rbhusQueen_initTasks.py &
 ./rbhusQueen_pingClient.py &
 ./rbhusQueen_scheduler.py &
+./rbhusQueen_powersaver.py &
+
 
