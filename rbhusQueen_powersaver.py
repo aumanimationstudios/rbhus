@@ -35,7 +35,7 @@ def getMaccAddr(hostname):
   try:
     row = hdb.execute("select * from main where name='"+ hostname +"'",dictionary=True)
   except:
-    print (str(sys.exc_info()))
+    rbhus.debug.warn(str(sys.exc_info()))
     return(None)
   if(row):
     det = row[-1]
