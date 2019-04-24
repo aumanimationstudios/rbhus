@@ -55,7 +55,7 @@ while(True):
         timeDiff = timeNow - datetime.datetime.strptime(str(activehost['idleLast']),timeformat)
         timeDiffSecs = timeDiff.total_seconds()
         if(timeDiffSecs >= 7200):
-          print("shuting down "+ activehost['hostName'] +" : "+ str(activehost['idleLast']) + " : "+ str(timeDiffSecs))
+          rbhus.debug.info("shuting down "+ activehost['hostName'] +" : "+ str(activehost['idleLast']) + " : "+ str(timeDiffSecs))
           hostDet = rbhus.utils.hosts(activehost['ip'])
           hostDet.shutdownSys()
   else:
@@ -63,7 +63,7 @@ while(True):
     for deadHost in deadHosts:
       macc = getMaccAddr(deadHost['hostName'])
       if(macc):
-        print("trying to bring up "+ deadHost['hostName'] +"  :  "+ str(macc))
+        rbhus.debug.info("trying to bring up "+ deadHost['hostName'] +"  :  "+ str(macc))
         rbhus.WOL.send_magic_packet(macc,ip_address=rbhus.WOL.BROADCAST_IP, port=rbhus.WOL.DEFAULT_PORT)
   time.sleep(10)
 

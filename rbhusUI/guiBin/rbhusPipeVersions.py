@@ -553,7 +553,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     perm = self.versionsHg._add()
     debug.info("returned : "+ str(perm))
     if(perm == False):
-      self.messageBoxWarn()
+      self.messageBoxWarn(assPath=self.assetDetails['path'])
       self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
       return(0)
 

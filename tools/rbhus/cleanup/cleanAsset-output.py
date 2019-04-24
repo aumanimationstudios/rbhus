@@ -32,7 +32,7 @@ args = parser.parse_args()
 
 
 
-excludeProjects = ['AndePirki_se01_ep037_iceSkating','AndePirki_se01_ep036_hiccup']
+excludeProjects = ['AndePirki_se01_ep039_fishTale','AndePirki_se01_ep038_snowDogBear','AndePirki_se01_short018_woofers']
 
 def getProjForBackup(days=7):
   dbproj = rbhus.dbPipe.dbPipe()
