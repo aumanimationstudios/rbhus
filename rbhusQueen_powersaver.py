@@ -61,7 +61,9 @@ while(True):
             hostDet = rbhus.utils.hosts(activehost['ip'])
             hostDet.shutdownSys()
         except:
+          rbhus.debug.warn(activehost['hostName'])
           rbhus.debug.warn(sys.exc_info())
+          continue
 
   else:
     deadHosts = rbhus.dbRbhus.dbRbhus().getDeadHosts()
