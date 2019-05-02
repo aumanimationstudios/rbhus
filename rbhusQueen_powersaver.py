@@ -51,13 +51,18 @@ while(True):
     if(allActiveHosts):
       for activehost in allActiveHosts:
         # print(activehost['hostName'] + " : " + str(activehost['idleLast']))
-        timeNow = datetime.datetime.now()
-        timeDiff = timeNow - datetime.datetime.strptime(str(activehost['idleLast']),timeformat)
-        timeDiffSecs = timeDiff.total_seconds()
-        if(timeDiffSecs >= 7200):
-          rbhus.debug.info("shuting down "+ activehost['hostName'] +" : "+ str(activehost['idleLast']) + " : "+ str(timeDiffSecs))
-          hostDet = rbhus.utils.hosts(activehost['ip'])
-          hostDet.shutdownSys()
+
+        try:
+          timeNow = datetime.datetime.now()
+          timeDiff = timeNow - datetime.datetime.strptime(str(activehost['idleLast']),timeformat)
+          timeDiffSecs = timeDiff.total_seconds()
+          if(timeDiffSecs >= 7200):
+            rbhus.debug.info("shuting down "+ activehost['hostName'] +" : "+ str(activehost['idleLast']) + " : "+ str(timeDiffSecs))
+            hostDet = rbhus.utils.hosts(activehost['ip'])
+            hostDet.shutdownSys()
+        except:
+          rbhus.debug.warn(sys.exc_info())
+
   else:
     deadHosts = rbhus.dbRbhus.dbRbhus().getDeadHosts()
     for deadHost in deadHosts:

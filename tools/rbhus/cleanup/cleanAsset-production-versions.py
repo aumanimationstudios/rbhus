@@ -125,9 +125,8 @@ try:
                       rmcmd = "rm -frv "+ str(versionPath)
                       # print(rmcmd)
                       if (args.dryrun == False):
-                        # q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-                        # outq = q.communicate()[0].split()[0]
-
+                        q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                        outq = q.communicate()[0].split()[0]
                         print("deleting : "+ versionPath)
 
                               # print(out)
