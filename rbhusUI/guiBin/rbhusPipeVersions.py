@@ -547,6 +547,17 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     msgbox.setDefaultButton(noBut)
     msgbox.exec_()
 
+  def messageBoxPushFailed(self, assPath):
+    msgbox = QtGui.QMessageBox()
+    msgbox.setWindowTitle(assPath)
+    msgbox.setText(unicode(assPath +"\nPUSHING TO SERVER FAILED !- Please check"))
+    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
+    #noBut = QtGui.QPushButton("cancel")
+    #yesBut = QtGui.QPushButton("yes")
+    noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
+    msgbox.setDefaultButton(noBut)
+    msgbox.exec_()
+
   def commit(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     self.convertPreview()
@@ -561,13 +572,19 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.versionsHg._pull()
     self.versionsHg._merge()
     commit_status, versionCommited = self.versionsHg._commit()
-    if(not commit_status):
+    if(commit_status != 0):
       self.messageBoxCommitFailed(assPath=self.assetDetails['path'])
       self.hglog()
       self.commitRelated()
       self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
       return(0)
-    self.versionsHg._push()
+    pushReturnCode = self.versionsHg._push()
+    if (pushReturnCode != 0):
+      self.messageBoxPushFailed(assPath=self.assetDetails['path'])
+      self.hglog()
+      self.commitRelated()
+      self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
+      return (0)
     os.chdir(self.versionsHg.absPipePath)
     self.versionsHg._purge()
     self.versionsHg._update(rev=versionCommited)
@@ -588,9 +605,9 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:start")
         retValue, versionNumber = xver.commitAbsPath(commitmsg="from autoCommit")
         debug.info(versionNumber)
-        if (retValue == False):
+        if (retValue != 0):
           self.messageBoxWarn(assPath=x)
-          utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:end:fail:permission_denied")
+          utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:end:fail:"+ str(retValue))
         else:
           assLog = xver._log()
           if(versionNumber):

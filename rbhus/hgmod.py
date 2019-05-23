@@ -308,6 +308,7 @@ class hg(object):
     out = com[0]
     debug.info(com)
     versionCommited = None
+    returnCode =  p.returncode
     try:
       outArray = out.split("\n")
       for x in outArray:
@@ -320,10 +321,10 @@ class hg(object):
       debug.warning(sys.exc_info())
     debug.info(versionCommited)
 
-    if (p.returncode != 0):
+    if (returnCode != 0):
       debug.error(str(out) + ": error code: "+ str(p.returncode))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "commit:end:fail:"+ str(p.returncode))
-      return(0,out)
+      return(returnCode,out)
     else:
       debug.info(str(out))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "commit:end:success:"+ str(versionCommited))
@@ -331,7 +332,7 @@ class hg(object):
       if(int(versionCommited) == 1):
         utilsPipe.assEdit(asspath=self.assDets['path'],assdict={'startDate':str(datetime.datetime.now()),'progressStatus':constantsPipe.assetProgressInProgress})
 
-      return(1,versionCommited)
+      return(returnCode,versionCommited)
 
 
   def _push(self):
@@ -344,12 +345,14 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","--verbose","push","-f",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.communicate()[0]
-    if (p.returncode != 0):
+    returnCode = p.returncode
+    if (returnCode != 0):
       debug.error(str(out))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "push:end:fail:"+ str(p.returncode))
     else:
       debug.info(str(out))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "push:end:success:" + str(p.returncode))
+    return(returnCode)
 
 
   def _pull(self):
