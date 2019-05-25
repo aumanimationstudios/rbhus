@@ -85,7 +85,7 @@ while(True):
           hostDet = rbhus.utils.hosts(disabledHost['ip'])
           hostDet.hEnable()
       except:
-        rbhus.debug.warn(sys.exc_info())
+        rbhus.debug.warn(disabledHost['hostName'] +" : "+ str(sys.exc_info()))
 
   time.sleep(10)
 
