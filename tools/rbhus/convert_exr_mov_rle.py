@@ -23,7 +23,8 @@ move_path = None
 try:
   mov_path = os.path.abspath(sys.argv[2])
 except:
-  print("Nothing to move after convert")
+  mov_path = None
+
 cpus = multiprocessing.cpu_count()
 exrs = glob.glob(path.rstrip(os.sep) + os.sep + "*.exr")
 exrs.sort()
@@ -48,5 +49,7 @@ p.wait()
 # os.remove(unatron)
 
 if(mov_path):
-    cpCmd = "cp -v "+ mov +" "+ mov_path +"/"
-    os.system(cpCmd.rstrip())
+  cpCmd = "cp -v "+ mov +" "+ mov_path +"/"
+  os.system(cpCmd.rstrip())
+else:
+  print("Nothing to move after convert")

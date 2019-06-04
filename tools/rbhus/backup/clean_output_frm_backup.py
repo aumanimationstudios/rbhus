@@ -39,6 +39,7 @@ def sortKey(value):
     return(0.0)
 
 def getTimeSortedDirs(dirPath):
+
   all_subdirs = [os.path.join(dirPath,x) for x in os.listdir(dirPath) if(os.path.isdir(os.path.join(dirPath,x)))]
 
   if(all_subdirs):
@@ -54,34 +55,38 @@ def getTimeSortedDirs(dirPath):
 def cleanBackUp(assDets):
   dirMapDets = rbhus.utilsPipe.getDirMapsDetails(assDets['backupDir'])
   pathDestBackupBase = os.path.join(dirMapDets['linuxMapping'],assDets['projName'],assDets['assetId'])
-  sortedPaths = getTimeSortedDirs(pathDestBackupBase)
-  if(sortedPaths):
-    totalBacked = len(sortedPaths)
-    toPreserve = sortedPaths[:int(assDets['backupCountToRetain'])]
-    toDelLen = totalBacked - int(assDets['backupCountToRetain'])
-    if(toDelLen <= 0):
-      toDelete = []
-    else:
-      toDelete = sortedPaths[-toDelLen:]
-    print("DELETING : "+ str(len(toDelete)))
-    for x in toDelete:
-      print(x)
-      # os.system("rm -fr "+ x)
+  if(os.path.exists(pathDestBackupBase)):
+    print("ASSET : "+ str(assDets['path']))
+    sortedPaths = getTimeSortedDirs(pathDestBackupBase)
+    if(sortedPaths):
+      totalBacked = len(sortedPaths)
+      toPreserve = sortedPaths[:int(assDets['backupCountToRetain'])]
+      toDelLen = totalBacked - int(assDets['backupCountToRetain'])
+      if(toDelLen <= 0):
+        toDelete = []
+      else:
+        toDelete = sortedPaths[-toDelLen:]
+      if(toDelete):
+        print("DELETING : "+ str(len(toDelete)))
+        for x in toDelete:
+          print(x)
+          # os.system("rm -fr "+ x)
 
-    print("PRESERVING : "+ str(len(toPreserve)))
-    # for x in toPreserve:
-      # print(x)
+      # print("PRESERVING : "+ str(len(toPreserve)))
+      # for x in toPreserve:
+        # print(x)
 
 
 dbcon = rbhus.dbPipe.dbPipe()
 
-rows = dbcon.execute("select * from assets where assetType=\'output\'",dictionary=True)
+rows = dbcon.execute("select * from assets where status=1 order by projName",dictionary=True)
 for x in rows:
   if (isValidBackupDir(x['backupDir'])):
-    dirMapDets = rbhus.utilsPipe.getDirMapsDetails(x['backupDir'])
-    pathSrcBackup = rbhus.utilsPipe.getAbsPath(x['path']).rstrip(os.sep) + os.sep
-    pathDestBackup = os.path.join(dirMapDets['linuxMapping'], x['projName'], x['assetId']).rstrip(os.sep) + os.sep
-    if(os.path.exists(pathDestBackup)):
-      print(pathDestBackup)
+    cleanBackUp(x)
+    # dirMapDets = rbhus.utilsPipe.getDirMapsDetails(x['backupDir'])
+    # pathSrcBackup = rbhus.utilsPipe.getAbsPath(x['path']).rstrip(os.sep) + os.sep
+    # pathDestBackup = os.path.join(dirMapDets['linuxMapping'], x['projName'], x['assetId']).rstrip(os.sep) + os.sep
+    # if(os.path.exists(pathDestBackup)):
+    #   print(pathDestBackup)
 
 
