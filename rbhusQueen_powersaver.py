@@ -74,18 +74,20 @@ while(True):
         rbhus.WOL.send_magic_packet(macc,ip_address=rbhus.WOL.BROADCAST_IP, port=rbhus.WOL.DEFAULT_PORT)
 
     allDisabledHosts = rbhus.dbRbhus.dbRbhus().getHostInfo(status="DISABLED")
-    for disabledHost in allDisabledHosts:
-      try:
-        timeNow = datetime.datetime.now()
-        timeDiff = timeNow - datetime.datetime.strptime(str(disabledHost['idleLast']), timeformat)
-        timeDiffSecs = timeDiff.total_seconds()
-        if (timeDiffSecs >= 7200):
-          rbhus.debug.info("enabling " + disabledHost['hostName'] + " : " + str(disabledHost['idleLast']) + " : " + str(timeDiffSecs))
+    if(allDisabledHosts):
 
-          hostDet = rbhus.utils.hosts(disabledHost['ip'])
-          hostDet.hEnable()
-      except:
-        rbhus.debug.warn(disabledHost['hostName'] +" : "+ str(sys.exc_info()))
+      for disabledHost in allDisabledHosts:
+        try:
+          timeNow = datetime.datetime.now()
+          timeDiff = timeNow - datetime.datetime.strptime(str(disabledHost['idleLast']), timeformat)
+          timeDiffSecs = timeDiff.total_seconds()
+          if (timeDiffSecs >= 7200):
+            rbhus.debug.info("enabling " + disabledHost['hostName'] + " : " + str(disabledHost['idleLast']) + " : " + str(timeDiffSecs))
+
+            hostDet = rbhus.utils.hosts(disabledHost['ip'])
+            hostDet.hEnable()
+        except:
+          rbhus.debug.warn(disabledHost['hostName'] +" : "+ str(sys.exc_info()))
 
   time.sleep(10)
 
