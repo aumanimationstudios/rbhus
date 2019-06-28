@@ -47,6 +47,7 @@ import utilsPipe
 import hgmod
 import debug
 import pyperclip
+import dfl
 
 
 
@@ -445,6 +446,14 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.updatePopAssets()
 
 
+  def checkIfOpen(self):
+    fLockPath = dfl.LockFile(self.versionsHg.absPipePath, timeout=0, expiry=30)
+    try:
+      with fLockPath:
+        self.pushCommit.setEnabled(True)
+    except:
+      self.pushCommit.setEnabled(False)
+      self.pushCommit.setToolTip("Currently used by some other user")
 
   def updateRelatedAssets(self):
     assGroups = utilsPipe.getGroupedAssets(self.assetDetails['path'])
