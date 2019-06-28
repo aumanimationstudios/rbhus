@@ -4,3 +4,4 @@
 env.set
 *.autosave
 *.lock
+*.idea

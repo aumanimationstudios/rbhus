@@ -12,5 +12,6 @@ review_*
 .groupedAssets
 .autocommitGrouped
 .popGrouped
+.version.lock
 pop
 -

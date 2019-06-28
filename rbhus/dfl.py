@@ -162,7 +162,7 @@ class LockFile(object):
 if(__name__ == '__main__'):
   import setproctitle
   setproctitle.setproctitle("dfl")
-  lckf = LockFile("/crap/crap.server/shrinidhi/", debug=True)
+  lckf = LockFile("/tmp/", debug=True)
   lckf.expiry = 10
   lckf.timeout = 5
   # lckf.timeout = 19

@@ -445,6 +445,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.updatePopAssets()
 
 
+
   def updateRelatedAssets(self):
     assGroups = utilsPipe.getGroupedAssets(self.assetDetails['path'])
     selectedForAutoCommit = utilsPipe.getGroupedForAutoCommit(self.assetDetails['path'])
