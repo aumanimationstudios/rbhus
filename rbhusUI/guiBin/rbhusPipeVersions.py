@@ -444,6 +444,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.hglog()
     self.updateRelatedAssets()
     self.updatePopAssets()
+    self.checkIfOpen()
 
 
   def checkIfOpen(self):
