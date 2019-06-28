@@ -14,6 +14,10 @@ logging.basicConfig(format=FORMAT)
 logDfl = logging.getLogger("dfl")
 
 
+username = os.environ['USER']
+
+
+
 class dflError(Exception):
   pass
 
@@ -146,6 +150,8 @@ class LockFile(object):
         self._waitTimedout()
         try:
           self._lockfileFd = os.open(self._lockfile, os.O_CREAT | os.O_EXCL)
+          self._lockfileFd.write(username)
+          self._lockfileFd.flush()
           logDfl.debug("ACQUIRED LOCK")
         except:
           raise lockAcquireError
