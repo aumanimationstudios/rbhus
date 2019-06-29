@@ -702,11 +702,11 @@ if __name__ == "__main__":
   fLockPath = dfl.LockFile(assAbsPath, timeout=0, expiry=30)
   try:
     with fLockPath:
-      Form.pushCommit.setEnabled(True)
+      ui.pushCommit.setEnabled(True)
       sys.exit(app.exec_())
   except:
-    Form.pushCommit.setEnabled(False)
-    Form.pushCommit.setToolTip("Currently used by some other user")
+    ui.pushCommit.setEnabled(False)
+    ui.pushCommit.setToolTip("Currently used by some other user")
     sys.exit(app.exec_())
 
     # debug.info("Somebody is using the asset currently. Please ask him to close ")
