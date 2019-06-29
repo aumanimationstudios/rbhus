@@ -59,7 +59,7 @@ except AttributeError:
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-i","--id",dest='assId',help='asset id')
+# parser.add_argument("-i","--id",dest='assId',help='asset id')
 parser.add_argument("-p","--path",dest='assPath',help='asset path')
 args = parser.parse_args()
 
@@ -230,10 +230,10 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
 
   def updateAssDetails(self):
-    if(args.assId):
-      self.assetDetails = utilsPipe.getAssDetails(assId=args.assId)
-    if(args.assPath):
-      self.assetDetails = utilsPipe.getAssDetails(assPath=args.assPath)
+    # if(args.assId):
+    #   self.assetDetails = utilsPipe.getAssDetails(assId=args.assId)
+    # if(args.assPath):
+    self.assetDetails = utilsPipe.getAssDetails(assPath=args.assPath)
 
 
   def popupPublish(self, pos):
@@ -444,17 +444,9 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.hglog()
     self.updateRelatedAssets()
     self.updatePopAssets()
-    self.checkIfOpen()
 
 
-  def checkIfOpen(self):
-    fLockPath = dfl.LockFile(self.versionsHg.absPipePath, timeout=0, expiry=30)
-    try:
-      with fLockPath:
-        self.pushCommit.setEnabled(True)
-    except:
-      self.pushCommit.setEnabled(False)
-      self.pushCommit.setToolTip("Currently used by some other user")
+
 
   def updateRelatedAssets(self):
     assGroups = utilsPipe.getGroupedAssets(self.assetDetails['path'])
@@ -699,12 +691,23 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     
 
 
-
 if __name__ == "__main__":
   app = QtGui.QApplication(sys.argv)
   Form = QtGui.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()
-  sys.exit(app.exec_())
+
+  assAbsPath = utilsPipe.getAbsPath(args.assPath)
+  fLockPath = dfl.LockFile(assAbsPath, timeout=0, expiry=30)
+  try:
+    with fLockPath:
+      Form.pushCommit.setEnabled(True)
+      sys.exit(app.exec_())
+  except:
+    Form.pushCommit.setEnabled(False)
+    Form.pushCommit.setToolTip("Currently used by some other user")
+    sys.exit(app.exec_())
+
+    # debug.info("Somebody is using the asset currently. Please ask him to close ")
     
