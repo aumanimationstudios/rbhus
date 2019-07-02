@@ -184,7 +184,7 @@ def app_lock():
 
 class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   def setupUi(self, Form):
-    app_lock()
+    # app_lock()
 
     self.form = Form
     rbhusPipeVersionsMod.Ui_MainWindow.setupUi(self,Form)
@@ -699,15 +699,21 @@ if __name__ == "__main__":
   Form.show()
 
   assAbsPath = utilsPipe.getAbsPath(args.assPath)
-  fLockPath = dfl.LockFile(assAbsPath, timeout=0, expiry=30)
+  fLockPath = dfl.LockFile(assAbsPath, timeout=0, expiry=2)
+  appLock = dfl.LockFile(app_lock_file,timeout=0, expiry=2)
   try:
-    with fLockPath:
-      ui.pushCommit.setEnabled(True)
-      sys.exit(app.exec_())
+    with appLock:
+      try:
+        with fLockPath:
+          ui.pushCommit.setEnabled(True)
+          a = app.exec_()
+      except:
+        ui.pushCommit.setEnabled(False)
+        ui.pushCommit.setToolTip("Currently used by some other user")
+        a = app.exec_()
   except:
-    ui.pushCommit.setEnabled(False)
-    ui.pushCommit.setToolTip("Currently used by some other user")
-    sys.exit(app.exec_())
+    debug.info(sys.exc_info())
+    sys.exit(0)
 
     # debug.info("Somebody is using the asset currently. Please ask him to close ")
     

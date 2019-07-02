@@ -13,8 +13,10 @@ FORMAT = "%(asctime)s : %(pathname)s : %(funcName)s - %(levelname)s - %(lineno)d
 logging.basicConfig(format=FORMAT)
 logDfl = logging.getLogger("dfl")
 
-
-username = os.environ['USER']
+try:
+  username = os.environ['USER']
+except:
+  username = "nobody"
 
 
 

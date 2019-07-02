@@ -23,8 +23,10 @@ def main():
   ctx = zmq.Context()
   sock = ctx.socket(zmq.PUSH)
   sock.connect("ipc:///tmp/rbhusTray_api_serv_"+ username)
+  print("ipc:///tmp/rbhusTray_api_serv_"+ username)
   cmd_path = os.path.join(rbhusPath,"tools","rbhus","copyFromRbhus.py")
   cmd = cmd_path +" -d "+ args.directory
+  print cmd
   sock.send_pyobj(cmd)
   sock.close()
 
