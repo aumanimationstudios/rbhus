@@ -201,7 +201,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
     self.initThread = None
 
-    self.loadingGif = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/loading.gif"
+    # self.loadingGif = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/loading.gif"
+    self.loadingGif = dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ThugLife.gif"
 
     self.loader = ImagePlayer(self.loadingGif,parent=self.tableVersions)
     self.loader.hide()
@@ -716,4 +717,3 @@ if __name__ == "__main__":
     sys.exit(0)
 
     # debug.info("Somebody is using the asset currently. Please ask him to close ")
-    
