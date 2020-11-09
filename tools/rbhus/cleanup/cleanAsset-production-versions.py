@@ -123,7 +123,7 @@ try:
 
                       totalDelete = totalDelete + float(outp)
                       rmcmd = "rm -frv "+ str(versionPath)
-                      # print(rmcmd)
+                      print(rmcmd)
                       if (args.dryrun == False):
                         q = subprocess.Popen(rmcmd, shell=True, stderr=subprocess.PIPE, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
                         outq = q.communicate()[0].split()[0]
