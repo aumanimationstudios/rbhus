@@ -2,23 +2,23 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="210mm"
    height="297mm"
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.2 2405546, 2018-03-11"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    sodipodi:docname="mimeTypes.svg"
    inkscape:export-filename="/home/shrinidhi/bin/gitHub/rbhus/etc/icons/mimeTypes.png"
    inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -47,17 +47,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.55971221"
-     inkscape:cx="358.9963"
-     inkscape:cy="96.143593"
+     inkscape:zoom="0.90509668"
+     inkscape:cx="347.47669"
+     inkscape:cy="577.83882"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1080"
-     inkscape:window-height="1861"
-     inkscape:window-x="1920"
+     inkscape:window-width="1920"
+     inkscape:window-height="1052"
+     inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -66,7 +67,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -211,17 +211,23 @@
          style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.41264984"
          id="path3026" />
     </g>
+    <rect
+       style="fill:#ff7f2a;fill-opacity:1;stroke-width:0.890497"
+       id="rect37-5"
+       width="36"
+       height="36"
+       x="319.31873"
+       y="487.06934"
+       ry="4.0484343"
+       inkscape:export-xdpi="120.00008"
+       inkscape:export-ydpi="120.00008"
+       inkscape:export-filename="/home/sanath.shetty/rbhus/etc/icons/mime_type_pureref.png" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:37.5px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9375"
        x="71.186142"
        y="315.37631"
-       id="text3791"><tspan
-         sodipodi:role="line"
-         id="tspan3789"
-         x="71.186142"
-         y="349.1546"
-         style="stroke-width:0.9375" /></text>
+       id="text3791" />
     <rect
        style="fill:#ff7f2a;fill-opacity:1;stroke-width:0.89049655"
        id="rect3721"
@@ -401,7 +407,8 @@
            y="478.07648"
            style="font-family:sans-serif" /></flowRegion><flowPara
          id="flowPara2995"
-         style="font-size:40px;line-height:1.25;font-family:sans-serif"> </flowPara></flowRoot>    <circle
+         style="font-size:40px;line-height:1.25;font-family:sans-serif"> </flowPara></flowRoot>
+    <circle
        r="19.544355"
        cy="469.62283"
        cx="88.62384"
@@ -443,7 +450,7 @@
        ry="4.0484343" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:19.92846107px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#483737;fill-opacity:1;stroke:none;stroke-width:0.49821153"
+       style="font-style:normal;font-weight:normal;font-size:19.9285px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#483737;fill-opacity:1;stroke:none;stroke-width:0.498212"
        x="6.861156"
        y="460.50018"
        id="text3913"
@@ -452,23 +459,23 @@
          id="tspan3911"
          x="6.861156"
          y="460.50018"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:extra-condensed;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Ultra-Bold Extra-Condensed';fill:#483737;fill-opacity:1;stroke-width:0.49821153">REEL</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:extra-condensed;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Ultra-Bold Extra-Condensed';fill:#483737;fill-opacity:1;stroke-width:0.498212">REEL</tspan><tspan
          sodipodi:role="line"
          x="6.861156"
          y="485.41077"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Ultra-Bold';fill:#483737;fill-opacity:1;stroke-width:0.49821153"
          id="tspan3915" /></text>
     <flowRoot
        xml:space="preserve"
        id="flowRoot3917"
-       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"><flowRegion
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
          id="flowRegion3919"><rect
            id="rect3921"
            width="152.75708"
            height="114.34447"
            x="-75.931877"
            y="546.33075" /></flowRegion><flowPara
-         id="flowPara3923"></flowPara></flowRoot>    <g
+         id="flowPara3923" /></flowRoot>
+    <g
        id="g3963"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -485,18 +492,35 @@
          id="text3913-9"
          y="479.88101"
          x="83.880989"
-         style="font-style:normal;font-weight:normal;font-size:19.92846107px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#483737;fill-opacity:1;stroke:none;stroke-width:0.49821156"
+         style="font-style:normal;font-weight:normal;font-size:19.9285px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#483737;fill-opacity:1;stroke:none;stroke-width:0.498212"
          xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:extra-condensed;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Ultra-Bold Extra-Condensed';fill:#483737;fill-opacity:1;stroke-width:0.49821156"
+           style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:extra-condensed;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Ultra-Bold Extra-Condensed';fill:#483737;fill-opacity:1;stroke-width:0.498212"
            y="479.88101"
            x="83.880989"
            id="tspan3911-0"
            sodipodi:role="line">REEL</tspan><tspan
            id="tspan3915-1"
-           style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Ultra-Bold';fill:#483737;fill-opacity:1;stroke-width:0.49821156"
            y="504.7916"
            x="83.880989"
            sodipodi:role="line" /></text>
+    </g>
+    <g
+       id="g7127"
+       style="fill:#000000;fill-opacity:1;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(0.04461397,0,0,0.04461397,326.09044,492.56915)"
+       inkscape:export-filename="/home/sanath.shetty/rbhus/etc/icons/mime_type_pureref.png"
+       inkscape:export-xdpi="120.00008"
+       inkscape:export-ydpi="120.00008">
+      <path
+         fill="#FFFFFF"
+         d="m 235.844,108.436 c -69.239,0 -125.368,56.098 -125.368,125.295 0,69.196 56.129,125.296 125.368,125.296 69.239,0 125.368,-56.1 125.368,-125.296 -10e-4,-69.196 -56.129,-125.295 -125.368,-125.295 z m 0.145,213.071 c -48.586,0 -87.978,-39.365 -87.978,-87.922 0,-48.563 39.391,-87.928 87.978,-87.928 48.587,0 87.976,39.366 87.976,87.928 0,48.557 -39.388,87.922 -87.976,87.922 z"
+         id="path7123"
+         style="fill:#000000;fill-opacity:1;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none" />
+      <path
+         fill="#FFFFFF"
+         d="m 420.45,376.607 c 0,0 49.555,-52.313 49.555,-144.197 C 470.004,140.532 398.93,0 237.455,0 75.98,0 1.677,133.935 1.677,239.444 c 0,105.511 0.884,320.048 0.884,320.048 h 137.243 v -113.42 c 0,0 42.31,21.979 96.773,21.979 54.462,0 71.261,-12.311 71.261,-12.311 l 88.27,104.631 105.568,-89.977 z m -179.184,58.619 c -95.507,0 -134.013,-46.309 -134.013,-46.309 V 524.905 H 34.228 c 0,0 0.296,-177.311 0.296,-296.306 0,-118.989 103.026,-196.655 202.053,-196.655 99.027,0 201.464,79.568 201.464,200.174 10e-4,120.6 -101.261,203.108 -196.775,203.108 z"
+         id="path7125"
+         style="fill:#000000;fill-opacity:1;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none" />
     </g>
   </g>
   <style

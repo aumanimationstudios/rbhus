@@ -76,6 +76,7 @@ mimeTypes = {
              "psd":[".psd"],
              "pdf":[".pdf"],
              "reel":[".reel"],
+             "pureref":[".pur"],
              # "edl":[".reel"]
             }
 
@@ -89,6 +90,7 @@ mimeLogos = {
   "psd": os.path.join(base_dir,"etc","icons","mime_type_psd.png"),
   "pdf": os.path.join(base_dir,"etc","icons","mime_type_pdf.png"),
   "reel": os.path.join(base_dir,"etc","icons","mime_type_reel.png"),
+  "pureref": os.path.join(base_dir,"etc","icons","mime_type_pureref.png"),
 }
 
 mimeConvertCmds = {
@@ -98,7 +100,8 @@ mimeConvertCmds = {
   "video": "/usr/bin/ffmpeg -loglevel panic -i \"{0}\" -vframes 1 -an -vf scale=96:-1 -ss 0.1 -y \"{1}\"",
   "office" : "cp "+ os.path.join(base_dir,"etc","icons","libreOffice_logo.png") +" \"{1}\"",
   "blender": os.path.join(base_dir,"tools","rbhus","blender-thumbnailer.py") +" \"{0}\" \"{1}\"",
-  "krita": os.path.join(base_dir,"tools","rbhus","krita-thumbnailer.py") +" \"{0}\"  \"{1}\""
+  "krita": os.path.join(base_dir,"tools","rbhus","krita-thumbnailer.py") +" \"{0}\"  \"{1}\"",
+  "pureref": "cp "+ os.path.join(base_dir,"etc","icons","pureref.png") +" \"{1}\""
 }
 
 mimeTypesOpenCmds = {
@@ -111,6 +114,7 @@ mimeTypesOpenCmds = {
   "audio": {"linux":["mpv-audio","mpv-audio - loop"]},
   "psd": {"linux":["krita"]},
   "reel": {"linux":["mrViewer"]},
+  "pureref": {"linux":["pureref"]},
   # "edl": {"linux":["mrViewer"]},
 }
 
@@ -130,7 +134,8 @@ mimeCmdsLinux = {
   "libreoffice"                  : "libreoffice --nologo {0}",
   "gnumeric"                     : "gnumeric {0}",
   "abiword"                      : "abiword {0}",
-  "inkscape"                     : "inkscape {0}"
+  "inkscape"                     : "inkscape {0}",
+  "pureref"                      : "pureref {0}"
 }
 
 ignoreTemplateTypes = ["share","bin","output","template"]
