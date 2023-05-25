@@ -129,10 +129,10 @@ elif(imType == "PNG-RGBA"):
 
 if(renderer == "CYCLES"):
   defaultScripts = defaultScripts + "\nbpy.context.scene.cycles.device = 'CPU'"
-  RENDERCMD = "DISPLAY=:0.0 " + RENDERCMD
+  # RENDERCMD = "DISPLAY=:0.0 " + RENDERCMD
 
-if(renderer == "BLENDER_EEVEE"):
-  RENDERCMD = "DISPLAY=:0.0 " + RENDERCMD
+# if(renderer == "BLENDER_EEVEE"):
+#   RENDERCMD = "DISPLAY=:0.0 " + RENDERCMD
 
 dF = open(defaultF,"w")
 dF.writelines(defaultScripts)
