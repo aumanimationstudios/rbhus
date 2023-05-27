@@ -45,7 +45,8 @@ runScript = os.environ['rbhus_runScript']
 camera = os.environ['rbhus_camera']
 res = os.environ['rbhus_resolution']
 
-RENDERCMD = "/usr/local/bin/blender -noaudio -b \"" + str(fileName) +"\""
+# RENDERCMD = "/usr/local/bin/blender -noaudio -b \"" + str(fileName) +"\""
+RENDERCMD = "flatpak run org.blender.Blender -noaudio -b \"" + str(fileName) +"\""
 
 if("rbhus_renExtEnv" in rbhus.renderPlugin.env):
   extEnv = rbhus.renderPlugin.env['rbhus_renExtEnv']
