@@ -46,14 +46,14 @@ camera = os.environ['rbhus_camera']
 res = os.environ['rbhus_resolution']
 
 # RENDERCMD = "/usr/local/bin/blender -noaudio -b \"" + str(fileName) +"\""
-RENDERCMD = "flatpak run org.blender.Blender -noaudio -b \"" + str(fileName) +"\""
+RENDERCMD = "/usr/local/bin/blender_flatpak -noaudio -b \"" + str(fileName) +"\""
 
-if("rbhus_renExtEnv" in rbhus.renderPlugin.env):
-  extEnv = rbhus.renderPlugin.env['rbhus_renExtEnv']
-  if(extEnv != "default"):
-    extEnvDict = simplejson.loads(extEnv)
-    if("exe" in extEnvDict):
-      RENDERCMD = extEnvDict['exe'] +" -noaudio -b \"" + str(fileName) + "\""
+# if("rbhus_renExtEnv" in rbhus.renderPlugin.env):
+#   extEnv = rbhus.renderPlugin.env['rbhus_renExtEnv']
+#   if(extEnv != "default"):
+#     extEnvDict = simplejson.loads(extEnv)
+#     if("exe" in extEnvDict):
+#       RENDERCMD = extEnvDict['exe'] +" -noaudio -b \"" + str(fileName) + "\""
 
 
 
