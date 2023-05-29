@@ -36,7 +36,8 @@ else:
   print("Not found : /opt/lib/ffmpeg/bin/ffmpeg")
   ffmpeg = "ffmpeg"
 
-cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 24 -start_number "+ str(startFrame) +" -i "+ png +" -c:v qtrle -pix_fmt rgb24 -qscale:v 1 -y "+ mov
+# cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 24 -start_number "+ str(startFrame) +" -i "+ png +" -c:v qtrle -pix_fmt rgb24 -qscale:v 1 -y "+ mov
+cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 25 -start_number "+ str(startFrame) +" -i "+ png +" -c:v qtrle -pix_fmt rgb24 -qscale:v 1 -s 1920x1080 -y "+ mov
 #iec61966_2_1
 # cmd = "djv_convert "+ inputFileFmt +" "+ mov +" -pixel \"RGB F16\" -default_speed 24 -render_filter_high"
 p = subprocess.Popen(cmd,shell=True)
