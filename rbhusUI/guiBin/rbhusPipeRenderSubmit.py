@@ -288,7 +288,14 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
         exten = x['extention']
     if(exten):
       self.lineEditOutName.setText(".".join((outFile.replace("\\","/")).split("/")[-1].split(".")[0:-1]) +"."+ exten)
-    
+
+      if exten == "png":
+        self.checkExrMov.setChecked(False)
+        self.checkPngMov.setChecked(True)
+      if exten == "exr":
+        self.checkExrMov.setChecked(True)
+        self.checkPngMov.setChecked(False)
+
   def setOutDir(self):
     outFile = str(self.lineEditOutName.text())
     print(self.outDir)
