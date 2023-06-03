@@ -20,6 +20,14 @@ import shutil
 
 path = os.path.abspath(sys.argv[1])
 
+projPath = (os.sep).join(path.split(os.sep)[0:5])
+movsPath = path
+if os.path.exists(projPath):
+    a = os.path.join(projPath,"output","Movs")
+    if os.path.exists(a):
+        a = a.rstrip(os.sep) + os.sep 
+        movsPath = a
+
 cpus = multiprocessing.cpu_count()
 pngs = glob.glob(path.rstrip(os.sep) + os.sep + "*.png")
 pngs.sort()
@@ -37,9 +45,12 @@ else:
   ffmpeg = "ffmpeg"
 
 # cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 24 -start_number "+ str(startFrame) +" -i "+ png +" -c:v qtrle -pix_fmt rgb24 -qscale:v 1 -y "+ mov
-cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 25 -start_number "+ str(startFrame) +" -i "+ png +" -c:v qtrle -pix_fmt rgb24 -qscale:v 1 -y "+ mov
+cmd = ffmpeg +" -probesize 50000000 -apply_trc iec61966_2_1 -r 25 -start_number "+ str(startFrame) +" -i "+ png +" -c:v qtrle -pix_fmt argb -qscale:v 1 -y "+ mov
 #iec61966_2_1
 # cmd = "djv_convert "+ inputFileFmt +" "+ mov +" -pixel \"RGB F16\" -default_speed 24 -render_filter_high"
 p = subprocess.Popen(cmd,shell=True)
 p.wait()
 # os.remove(unatron)
+cpCmd = "cp -v " + mov + " " + movsPath
+p1 = subprocess.Popen(cpCmd,shell=True)
+p1.wait()
