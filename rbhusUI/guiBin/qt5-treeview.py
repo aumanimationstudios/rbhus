@@ -41,7 +41,7 @@ import rbhus.utilsPipe
 import rbhus.dfl
 import rbhus.pyperclip
 rbhus.debug.info("TREEVIEW PATH : "+ str(busyIconGif))
-main_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderManager", "main.ui")
+main_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderManager", "main01.ui")
 mediaThumbz_ui_file = os.path.join(rbhusPath, "rbhusUI", "lib", "qt5", "folderManager", "mediaThumbz.ui")
 rbhus.debug.info(main_ui_file)
 
@@ -100,6 +100,8 @@ isQuiting = False
 
 thumbsDbDir = os.path.join("/crap/LOCAL.crap/",rbhus.utilsPipe.username, ".thumbz.db",assDets['assetId'])
 
+filterList = []
+currView = "ICON"
 
 def jsonWrite(jFile, jData):
   try:
@@ -515,28 +517,34 @@ def dirSelected(idx, modelDirs, main_ui):
   # fileThumbzItems = {}
 
 
-  modelFiles = FSM4Files(parent=main_ui)
-  # modelFiles = QFileSystemModel()
-  # fileIconProvider = IconProvider()
-  # modelFiles.setIconProvider(fileIconProvider)
-  modelFiles.setRootPath(CUR_DIR_SELECTED)
-  modelFiles.setFilter(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
-  rootIdx = modelFiles.index(CUR_DIR_SELECTED)
-  main_ui.tableFiles.setModel(modelFiles)
-  main_ui.tableFiles.setRootIndex(rootIdx)
-  main_ui.tableFiles.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
+  fileGlob = []
+  directory_path = ""
+  mimeExts = []
 
-
-
-
-
-
-  if(pathSelected == CUR_ROOTDIR_POINTER):
-
-    fileGlob = glob.glob(ROOTDIR + os.sep + "*")
+  if (pathSelected == CUR_ROOTDIR_POINTER):
+    directory_path = ROOTDIR
   else:
-    fileGlob = glob.glob(pathSelected + os.sep + "*")
+    directory_path = pathSelected
+  
+  if filterList:
+    for filter in filterList:
+      mimeExts.extend(rbhus.constantsPipe.mimeTypes[filter])
+    for mime in mimeExts:
+      fileGlob.extend(glob.glob(directory_path + os.sep + "*{0}".format(mime)))
+  else:
+    fileGlob = glob.glob(directory_path + os.sep + "*")
+  
+  rbhus.debug.info(filterList)
+  rbhus.debug.info(mimeExts)
+  rbhus.debug.info(fileGlob)
+
+  # if(pathSelected == CUR_ROOTDIR_POINTER):
+
+  #   fileGlob = glob.glob(ROOTDIR + os.sep + "*")
+  # else:
+  #   fileGlob = glob.glob(pathSelected + os.sep + "*")
+
   try:
     fileGlob.remove("-")
   except:
@@ -550,6 +558,22 @@ def dirSelected(idx, modelDirs, main_ui):
     fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
     fileIconThreadRunning.start()
+
+
+
+  modelFiles = FSM4Files(parent=main_ui)
+  modelFiles.setRootPath(CUR_DIR_SELECTED)
+  modelFiles.setFilter(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
+  modelFiles.setNameFilters(["*" + ext for ext in mimeExts])
+  modelFiles.setNameFilterDisables(False)
+  rootIdx = modelFiles.index(CUR_DIR_SELECTED)
+  main_ui.tableFiles.setModel(modelFiles)
+  main_ui.tableFiles.setRootIndex(rootIdx)
+  # main_ui.tableFiles.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+  header = main_ui.tableFiles.horizontalHeader()
+  header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+  header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+  header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
 
 
 
@@ -730,12 +754,14 @@ def deleteFolder(main_ui):
 
 def getSelectedFiles(main_ui):
   files =[]
-  if(main_ui.checkDetails.isChecked()):
+  # if(main_ui.checkDetails.isChecked()):
+  if currView == "LIST":
     selectedIdxs = main_ui.tableFiles.selectionModel().selectedRows()
     modelFiles = main_ui.tableFiles.model()
     for selectedIdx in selectedIdxs:
       files.append(modelFiles.filePath(selectedIdx))
-  else:
+  # else:
+  if currView == "ICON":
     selectedItems = main_ui.listFiles.selectedItems()
     for selectedItem in selectedItems:
       files.append(selectedItem.media.absPath)
@@ -1139,12 +1165,37 @@ def fileRenameDialog(main_ui):
 
 
 def toggleView(main_ui):
-  if(main_ui.checkDetails.isChecked()):
-    main_ui.listFiles.hide()
-    main_ui.tableFiles.show()
-  else:
-    main_ui.tableFiles.hide()
+  global currView
+
+  if currView == "LIST":
+    main_ui.changeViewButt.setIcon(QtGui.QIcon(os.path.join(rbhusPath,"etc","icons","list.svg")))
+    currView = "ICON"
     main_ui.listFiles.show()
+    main_ui.tableFiles.hide()
+  elif currView == "ICON":
+    main_ui.changeViewButt.setIcon(QtGui.QIcon(os.path.join(rbhusPath,"etc","icons","grid.svg")))
+    currView = "LIST"
+    main_ui.tableFiles.show()
+    main_ui.listFiles.hide()
+
+  # if(main_ui.checkDetails.isChecked()):
+  #   main_ui.listFiles.hide()
+  #   main_ui.tableFiles.show()
+  # else:
+  #   main_ui.tableFiles.hide()
+  #   main_ui.listFiles.show()
+
+
+def updateFilterList(main_ui, ui, modelDirs):
+  if ui.isChecked():
+    filterList.append(str(ui.text()))
+  else:
+    try:
+      filterList.remove(str(ui.text()))
+    except:
+      pass
+  dirSelected(main_ui.treeDirs.currentIndex(), modelDirs, main_ui)
+
 
 def mainGui(main_ui):
   iconQDoneSignal = multiprocessing.Queue(4)
@@ -1196,9 +1247,21 @@ def mainGui(main_ui):
   main_ui.tableFiles.customContextMenuRequested.connect(lambda pos, context = main_ui.tableFiles, main_ui = main_ui: popUpFiles(main_ui, context, pos))
   main_ui.treeDirs.customContextMenuRequested.connect(lambda pos, main_ui = main_ui: popUpFolders(main_ui, pos))
 
-  main_ui.checkDetails.clicked.connect(lambda click, main_ui=main_ui: toggleView(main_ui))
+  # main_ui.checkDetails.clicked.connect(lambda click, main_ui=main_ui: toggleView(main_ui))
+  # main_ui.checkDetails.setChecked(True)
+  main_ui.changeViewButt.setIcon(QtGui.QIcon(os.path.join(rbhusPath,"etc","icons","list.svg")))
+  main_ui.changeViewButt.clicked.connect(lambda click, main_ui=main_ui: toggleView(main_ui))
 
   toggleView(main_ui)
+
+  layV = QtWidgets.QVBoxLayout()
+  main_ui.frame.setLayout(layV)
+  for mimeType in rbhus.constantsPipe.mimeTypes.keys():
+    chkbx = QtWidgets.QCheckBox(mimeType)
+    chkbx.clicked.connect(lambda click, main_ui=main_ui, ui=chkbx, modelDirs=modelDirs: updateFilterList(main_ui, ui, modelDirs))
+    layV.addWidget(chkbx)
+  vSpacer = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+  layV.addItem(vSpacer)
 
   main_ui.show()
   main_ui.update()
