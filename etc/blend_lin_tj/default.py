@@ -115,7 +115,7 @@ if(layer != "default"):
 if(renderer != "default"):
   RENDERCMD = RENDERCMD +" -E "+ renderer
 RENDERCMD = RENDERCMD +" -t "+ rThreads
-defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False\nbpy.context.scene.render.use_overwrite = True\nbpy.context.scene.render.use_simplify = False\nbpy.context.scene.render.fps = 24\nbpy.context.scene.render.fps_base = 1\nbpy.context.scene.render.use_single_layer = False\nbpy.context.scene.render.use_stamp = False\nbpy.context.scene.render.tile_x = 32\nbpy.context.scene.render.tile_y = 32"
+defaultScripts = "import bpy\nbpy.context.scene.render.use_overwrite = True\nbpy.context.scene.render.use_simplify = False\nbpy.context.scene.render.fps = 24\nbpy.context.scene.render.fps_base = 1\nbpy.context.scene.render.use_single_layer = False\nbpy.context.scene.render.use_stamp = False"
 if((imType.find("PNG") >=0) or (imType.find("EXR") >=0)):
   defaultScripts = defaultScripts +"\nbpy.context.scene.render.image_settings.color_depth = '16'"
   if(imType == "EXR"):
