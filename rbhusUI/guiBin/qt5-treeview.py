@@ -559,12 +559,18 @@ def dirSelected(idx, modelDirs, main_ui):
     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
     fileIconThreadRunning.start()
 
-
+  searchTerm = main_ui.lineEditSearch.text().strip()
 
   modelFiles = FSM4Files(parent=main_ui)
   modelFiles.setRootPath(CUR_DIR_SELECTED)
   modelFiles.setFilter(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
-  modelFiles.setNameFilters(["*" + ext for ext in mimeExts])
+  if searchTerm:
+    if mimeExts:
+      modelFiles.setNameFilters([searchTerm + "*" + ext for ext in mimeExts])
+    else:
+      modelFiles.setNameFilters([searchTerm + "*"])
+  else:
+    modelFiles.setNameFilters(["*" + ext for ext in mimeExts])
   modelFiles.setNameFilterDisables(False)
   rootIdx = modelFiles.index(CUR_DIR_SELECTED)
   main_ui.tableFiles.setModel(modelFiles)
@@ -1196,6 +1202,8 @@ def updateFilterList(main_ui, ui, modelDirs):
       pass
   dirSelected(main_ui.treeDirs.currentIndex(), modelDirs, main_ui)
 
+def search(modelDirs, main_ui):
+  dirSelected(main_ui.treeDirs.currentIndex(), modelDirs, main_ui)
 
 def mainGui(main_ui):
   iconQDoneSignal = multiprocessing.Queue(4)
@@ -1238,7 +1246,7 @@ def mainGui(main_ui):
   iconEventEater.iconGenerated.connect(imageWidgetUpdated)
   iconEventEater.start()
 
-
+  main_ui.lineEditSearch.textChanged.connect(lambda x, modelDirs=modelDirs, main_ui = main_ui : search(modelDirs, main_ui))
 
   main_ui.treeDirs.clicked.connect(lambda idnx, modelDirs=modelDirs, main_ui = main_ui : dirSelected(idnx, modelDirs, main_ui))
   # main_ui.listFiles.clicked.connect(lambda idnx, main_ui = main_ui :filesSelected(modelFiles,main_ui))
