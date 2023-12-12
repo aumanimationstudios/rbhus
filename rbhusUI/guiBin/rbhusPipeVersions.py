@@ -702,16 +702,26 @@ if __name__ == "__main__":
   assAbsPath = utilsPipe.getAbsPath(args.assPath)
   fLockPath = dfl.LockFile(assAbsPath, timeout=0, expiry=2)
   appLock = dfl.LockFile(app_lock_file,timeout=0, expiry=2)
+  assDets = utilsPipe.getAssDetails(assPath=args.assPath)
   try:
-    with appLock:
-      try:
-        with fLockPath:
-          ui.pushCommit.setEnabled(True)
-          a = app.exec_()
-      except:
-        ui.pushCommit.setEnabled(False)
-        ui.pushCommit.setToolTip("Currently used by some other user")
-        a = app.exec_()
+    # with appLock:
+    #   try:
+    #     with fLockPath:
+    #       ui.pushCommit.setEnabled(True)
+    #       a = app.exec_()
+    #   except:
+    #     ui.pushCommit.setEnabled(False)
+    #     ui.pushCommit.setToolTip("Currently used by some other user")
+    #     a = app.exec_()
+    debug.info(assDets)
+    if (utilsPipe.isAssAssigned(assDets)):
+      ui.pushCommit.setEnabled(True)
+      a = app.exec_()
+    else:
+      debug.warn("Asset not assigned to user")
+      ui.pushCommit.setEnabled(False)
+      ui.pushCommit.setToolTip("Asset not assigned to you")
+      a = app.exec_()
   except:
     debug.info(sys.exc_info())
     sys.exit(0)
