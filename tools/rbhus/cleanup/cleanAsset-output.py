@@ -37,7 +37,8 @@ args = parser.parse_args()
 # excludeProjects = ['AndePirki_se02_ep002_HungerTimes', 'AndePirki_se02_short001_diving','AndePirki_se02_short002_lightning','AndePirki_se02_short003_rocket','AndePirki_se02_short004_shock','AndePirki_se02_short006_newYear2020','study_ap_lightLayout']
 # excludeProjects = ['AndePirki_se02_ep003_eggHunt','AndePirki_se02_ep004_eggHuntCGI','AndePirki_se02_short009_HappyDance']
 # excludeProjects = ['AndePirki_se02_short010_Trap']
-excludeProjects = ['TOM_N_JERRY_s01_ep001_HDB','TOM_N_JERRY_s01_ep002_marinaBarrage','TOM_N_JERRY_s01_ep003_botanicalGarden','TOM_N_JERRY_s01_ep004_merlion','TOM_N_JERRY_s01_ep005_sentosa']
+# excludeProjects = ['TOM_N_JERRY_s01_ep001_HDB','TOM_N_JERRY_s01_ep002_marinaBarrage','TOM_N_JERRY_s01_ep003_botanicalGarden','TOM_N_JERRY_s01_ep004_merlion','TOM_N_JERRY_s01_ep005_sentosa']
+excludeProjects = []
 
 def getProjForBackup(days=7):
   dbproj = rbhus.dbPipe.dbPipe()
@@ -224,8 +225,8 @@ try:
 
                           if(ldi.split(os.sep)[-1].isdigit()):
                             latestDirImproved.append(ldi)
-                        toDeleteDir = latestDirImproved[:-1]
-                        # toDeleteDir = latestDirImproved
+                        # toDeleteDir = latestDirImproved[:-1]
+                        toDeleteDir = latestDirImproved
 
                         if(toDeleteDir):
                           for ld in toDeleteDir:
