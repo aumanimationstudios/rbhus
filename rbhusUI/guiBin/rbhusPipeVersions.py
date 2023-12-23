@@ -211,6 +211,11 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     self.pushCommit.clicked.connect(self.commit)
     self.pushReInit.clicked.connect(self.reInit)
 
+    self.pushCommit.hovered.connect(self.on_hover_change)
+
+    assDets = utilsPipe.getAssDetails(assPath=args.assPath)
+    assUser = assDets['assignedWorker']
+    self.user.setText("Assigned to : " + assUser)
 
     self.tableVersions.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
     self.tableVersions.customContextMenuRequested.connect(self.popupPublish)
@@ -690,6 +695,24 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     #       webbrowser.open(filename)
     #
     
+  def on_hover_change(self, is_hovered):
+    if is_hovered:
+      assDets = utilsPipe.getAssDetails(assPath=args.assPath)
+      assUser = assDets['assignedWorker']
+      self.user.setText("Assigned to : " + assUser)
+
+      if (utilsPipe.isAssAssigned(assDets)):
+        ui.pushCommit.setEnabled(True)
+        ui.pushCommit.setToolTip("")
+      else:
+        debug.warn("Asset not assigned to user")
+        ui.pushCommit.setEnabled(False)
+        ui.pushCommit.setToolTip("Asset not assigned to you")
+
+    # if is_hovered:
+    #   debug.info("Mouse is over the button.")
+    # else:
+    #   debug.info("Mouse left the button.")
 
 
 if __name__ == "__main__":
@@ -716,6 +739,7 @@ if __name__ == "__main__":
     debug.info(assDets)
     if (utilsPipe.isAssAssigned(assDets)):
       ui.pushCommit.setEnabled(True)
+      ui.pushCommit.setToolTip("")
       a = app.exec_()
     else:
       debug.warn("Asset not assigned to user")

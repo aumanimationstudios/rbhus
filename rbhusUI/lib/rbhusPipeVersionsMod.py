@@ -22,6 +22,22 @@ except AttributeError:
   def _translate(context, text, disambig):
     return QtGui.QApplication.translate(context, text, disambig)
 
+
+class HoverButton(QtGui.QPushButton):
+  # Define a custom signal for hover events
+  hovered = QtCore.pyqtSignal(bool)
+
+  def __init__(self, parent=None):
+    super(HoverButton, self).__init__(parent)
+    self.setMouseTracking(True)
+
+  def enterEvent(self, event):
+    self.hovered.emit(True)
+
+  def leaveEvent(self, event):
+    self.hovered.emit(False)
+
+
 class Ui_MainWindow(object):
   def setupUi(self, MainWindow):
     MainWindow.setObjectName(_fromUtf8("MainWindow"))
@@ -114,7 +130,8 @@ class Ui_MainWindow(object):
     self.pushReInit.setMinimumSize(QtCore.QSize(1, 1))
     self.pushReInit.setObjectName(_fromUtf8("pushReInit"))
     self.horizontalLayout.addWidget(self.pushReInit)
-    self.pushCommit = QtGui.QPushButton(self.centralwidget)
+    # self.pushCommit = QtGui.QPushButton(self.centralwidget)
+    self.pushCommit = HoverButton(self.centralwidget)
     self.pushCommit.setMinimumSize(QtCore.QSize(1, 1))
     self.pushCommit.setObjectName(_fromUtf8("pushCommit"))
     self.horizontalLayout.addWidget(self.pushCommit)
@@ -125,6 +142,11 @@ class Ui_MainWindow(object):
     self.toolButton.setObjectName(_fromUtf8("toolButton"))
     self.horizontalLayout.addWidget(self.toolButton)
     self.verticalLayout.addLayout(self.horizontalLayout)
+    self.user = QtGui.QLabel(self.centralwidget)
+    self.user.setObjectName(_fromUtf8("userLabel"))
+    self.user.setText(_fromUtf8("user"))
+    self.user.setAlignment(QtCore.Qt.AlignCenter)
+    self.verticalLayout.addWidget(self.user)
     MainWindow.setCentralWidget(self.centralwidget)
     self.statusbar = QtGui.QStatusBar(MainWindow)
     self.statusbar.setObjectName(_fromUtf8("statusbar"))
