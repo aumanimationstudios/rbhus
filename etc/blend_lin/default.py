@@ -112,7 +112,10 @@ if(layer != "default"):
 
 
 if(renderer != "default"):
-  RENDERCMD = RENDERCMD +" -E "+ renderer
+  if (renderer.find("CYCLES") >= 0):
+    RENDERCMD = RENDERCMD +" -E "+ "CYCLES"
+  else:
+    RENDERCMD = RENDERCMD +" -E "+ renderer
 RENDERCMD = RENDERCMD +" -t "+ rThreads
 # defaultScripts = "import bpy\nbpy.context.scene.render.use_save_buffers = False\nbpy.context.scene.render.use_overwrite = True\nbpy.context.scene.render.use_simplify = False\nbpy.context.scene.render.fps = 24\nbpy.context.scene.render.fps_base = 1\nbpy.context.scene.render.use_single_layer = False\nbpy.context.scene.render.use_stamp = False\nbpy.context.scene.render.tile_x = 32\nbpy.context.scene.render.tile_y = 32"
 defaultScripts = "import bpy\nbpy.context.scene.render.use_overwrite = True\nbpy.context.scene.render.use_simplify = False\nbpy.context.scene.render.fps = 24\nbpy.context.scene.render.fps_base = 1\nbpy.context.scene.render.use_single_layer = False\nbpy.context.scene.render.use_stamp = False"
@@ -149,6 +152,12 @@ if (imType.find("EXR") >=0):
 
 if(renderer == "CYCLES"):
   defaultScripts = defaultScripts + "\nbpy.context.scene.cycles.device = 'CPU'"
+
+if (renderer.find("CYCLES") >= 0):
+  if (renderer.find("CPU") >= 0):
+    defaultScripts = defaultScripts + "\nbpy.context.scene.cycles.device = 'CPU'"
+  if (renderer.find("GPU") >= 0):
+    defaultScripts = defaultScripts + "\nbpy.context.scene.cycles.device = 'GPU'"
 
 if(renderer == "BLENDER_EEVEE"):
   RENDERCMD = "DISPLAY=:0.0 " + RENDERCMD
