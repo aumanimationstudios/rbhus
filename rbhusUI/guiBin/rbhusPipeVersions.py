@@ -694,7 +694,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     #       import webbrowser
     #       webbrowser.open(filename)
     #
-    
+
   def on_hover_change(self, is_hovered):
     if is_hovered:
       assDets = utilsPipe.getAssDetails(assPath=args.assPath)
@@ -737,15 +737,29 @@ if __name__ == "__main__":
     #     ui.pushCommit.setToolTip("Currently used by some other user")
     #     a = app.exec_()
     debug.info(assDets)
-    if (utilsPipe.isAssAssigned(assDets)):
-      ui.pushCommit.setEnabled(True)
-      ui.pushCommit.setToolTip("")
-      a = app.exec_()
-    else:
-      debug.warn("Asset not assigned to user")
-      ui.pushCommit.setEnabled(False)
-      ui.pushCommit.setToolTip("Asset not assigned to you")
-      a = app.exec_()
+    with appLock:
+      try:
+        with fLockPath:
+          if (utilsPipe.isAssAssigned(assDets)):
+            ui.pushCommit.setEnabled(True)
+            ui.pushCommit.setToolTip("")
+            a = app.exec_()
+          else:
+            debug.warn("Asset not assigned to user")
+            ui.pushCommit.setEnabled(False)
+            ui.pushCommit.setToolTip("Asset not assigned to you")
+            a = app.exec_()
+      except:
+        if (utilsPipe.isAssAssigned(assDets)):
+          ui.pushCommit.setEnabled(True)
+          ui.pushCommit.setToolTip("")
+          a = app.exec_()
+        else:
+          debug.warn("Asset not assigned to user")
+          ui.pushCommit.setEnabled(False)
+          ui.pushCommit.setToolTip("Asset not assigned to you")
+          a = app.exec_()
+
   except:
     debug.info(sys.exc_info())
     sys.exit(0)
