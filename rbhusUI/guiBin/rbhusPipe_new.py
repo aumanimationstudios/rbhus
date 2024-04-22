@@ -89,7 +89,7 @@ assDetsWidgetsDict = {}
 mediaWidgets = {}
 updateDetailsThreads = []
 updateDetailsPanelMediaThreads = []
-
+tooltips = []
 
 assColumnList = ['','','asset','assigned','reviewer','modified','v','review','publish','']
 
@@ -473,6 +473,32 @@ def changeProject(mainUid):
   setSequence(mainUid)
   updateAssetsForProjSelect(mainUid)
   # updateAssetsForProjSelectFav(mainUid)
+
+  try:
+    if tooltips:
+      for t in tooltips:
+        t.hide()
+    item = mainUid.listWidgetProj.selectedItems()
+    if (item):
+      project = item[0].text()
+      tag_file_path = rbhus.utilsPipe.getAbsPath(project + ":" + "tag") + os.sep + "tag.txt"
+      with open(tag_file_path, 'r') as tag_file:
+        tag_name = tag_file.read().strip()
+        # item[0].setToolTip("<b>"+tag_name+"</b>")
+        if tag_name:
+          tooltip_label = QtWidgets.QLabel(tag_name, mainUid)
+          tooltip_label.setStyleSheet("background-color: white; color: black; padding: 2px; border: 1px solid black;")
+          cursor_pos = mainUid.mapFromGlobal(QtGui.QCursor.pos())
+          tooltip_pos = cursor_pos + QtCore.QPoint(12, 0)
+          tooltip_label.move(tooltip_pos)
+          tooltip_label.adjustSize()
+          tooltips.append(tooltip_label)
+          tooltip_label.show()
+          timer = QtCore.QTimer(mainUid.listWidgetProj)
+          timer.timeout.connect(tooltip_label.hide)
+          timer.start(2000)
+  except:
+    rbhus.debug.info(str(sys.exc_info()))
 
 
 def pushRefresh(mainUid):
@@ -1556,12 +1582,18 @@ def messageBoxTemplateHard():
 def popupProjects(mainUid,pos):
   menu = QtWidgets.QMenu()
   traKAction  = menu.addAction("TRAK")
+  if username in rbhus.utilsPipe.getAdmins():
+    tagAction = menu.addAction("EDIT TAG")
 
   action = menu.exec_(mainUid.listWidgetProj.mapToGlobal(pos))
   if(action == traKAction):
     projTrak(mainUid)
-
-
+  try:
+    if (action == tagAction):
+      rbhus.debug.info("Tagging...")
+      editTag(mainUid)
+  except:
+    rbhus.debug.info(str(sys.exc_info()))
 
 def autoLineUpFunc(mainUid):
   item = mainUid.listWidgetProj.selectedItems()
@@ -1696,6 +1728,19 @@ def projTrak(mainUid):
     p.setStandardOutputFile(tempDir + os.sep + "rbhusTrak_" + username + ".log")
     p.setStandardErrorFile(tempDir + os.sep + "rbhusTrak_" + username + ".err")
     p.start(sys.executable, [rbhusPipeTrakCmd,"-p",project])
+
+
+def editTag(mainUid):
+  item = mainUid.listWidgetProj.selectedItems()
+  if (item):
+    project = item[0].text()
+    try:
+      tag_file_path = rbhus.utilsPipe.getAbsPath(project + ":" + "tag") + os.sep + "tag.txt"
+      rbhus.debug.info(tag_file_path)
+      cmdFull = "xdg-open \"" + tag_file_path + "\""
+      subprocess.Popen(cmdFull, shell=True)
+    except:
+      rbhus.debug.info(str(sys.exc_info()))
 
 
 def assFoldOpen(mainUid,assetList=None):
