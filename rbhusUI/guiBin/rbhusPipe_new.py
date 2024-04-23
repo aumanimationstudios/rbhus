@@ -1583,15 +1583,19 @@ def popupProjects(mainUid,pos):
   menu = QtWidgets.QMenu()
   traKAction  = menu.addAction("TRAK")
   if username in rbhus.utilsPipe.getAdmins():
-    tagAction = menu.addAction("EDIT TAG")
+    editTagAction = menu.addAction("EDIT TAG")
+    importTagAction = menu.addAction("IMPORT TAG")
 
   action = menu.exec_(mainUid.listWidgetProj.mapToGlobal(pos))
   if(action == traKAction):
     projTrak(mainUid)
   try:
-    if (action == tagAction):
-      rbhus.debug.info("Tagging...")
+    if (action == editTagAction):
+      rbhus.debug.info("Editing Tag...")
       editTag(mainUid)
+    if (action == importTagAction):
+      rbhus.debug.info("Importing Tag...")
+      importTag(mainUid)
   except:
     rbhus.debug.info(str(sys.exc_info()))
 
@@ -1739,6 +1743,25 @@ def editTag(mainUid):
       rbhus.debug.info(tag_file_path)
       cmdFull = "xdg-open \"" + tag_file_path + "\""
       subprocess.Popen(cmdFull, shell=True)
+    except:
+      rbhus.debug.info(str(sys.exc_info()))
+
+
+def importTag(mainUid):
+  item = mainUid.listWidgetProj.selectedItems()
+  if (item):
+    project = item[0].text()
+    try:
+      returnStatus = rbhus.utilsPipe.importAssets(toProject=project, assetPath="standard:tag", toAssetPath="default", getVersions=False, force=False)
+      time.sleep(0.5)
+      if (returnStatus == 1):
+        rbhus.debug.info("done")
+      elif (returnStatus == 3):
+        rbhus.debug.info("no permission")
+      elif (returnStatus == 4):
+        rbhus.debug.info("asset exists. use force")
+      else:
+        rbhus.debug.info("fail")
     except:
       rbhus.debug.info(str(sys.exc_info()))
 
