@@ -1584,7 +1584,6 @@ def popupProjects(mainUid,pos):
   traKAction  = menu.addAction("TRAK")
   if username in rbhus.utilsPipe.getAdmins():
     editTagAction = menu.addAction("EDIT TAG")
-    importTagAction = menu.addAction("IMPORT TAG")
 
   action = menu.exec_(mainUid.listWidgetProj.mapToGlobal(pos))
   if(action == traKAction):
@@ -1593,9 +1592,6 @@ def popupProjects(mainUid,pos):
     if (action == editTagAction):
       rbhus.debug.info("Editing Tag...")
       editTag(mainUid)
-    if (action == importTagAction):
-      rbhus.debug.info("Importing Tag...")
-      importTag(mainUid)
   except:
     rbhus.debug.info(str(sys.exc_info()))
 
@@ -1739,29 +1735,28 @@ def editTag(mainUid):
   if (item):
     project = item[0].text()
     try:
-      tag_file_path = rbhus.utilsPipe.getAbsPath(project + ":" + "tag") + os.sep + "tag.txt"
-      rbhus.debug.info(tag_file_path)
-      cmdFull = "xdg-open \"" + tag_file_path + "\""
-      subprocess.Popen(cmdFull, shell=True)
-    except:
-      rbhus.debug.info(str(sys.exc_info()))
-
-
-def importTag(mainUid):
-  item = mainUid.listWidgetProj.selectedItems()
-  if (item):
-    project = item[0].text()
-    try:
-      returnStatus = rbhus.utilsPipe.importAssets(toProject=project, assetPath="standard:tag", toAssetPath="default", getVersions=False, force=False)
+      returnStatus = rbhus.utilsPipe.importAssets(toProject=project, assetPath="standard:tag", toAssetPath="default",
+                                                  getVersions=False, force=False)
       time.sleep(0.5)
+      can_edit = 0
       if (returnStatus == 1):
         rbhus.debug.info("done")
+        can_edit = 1
       elif (returnStatus == 3):
         rbhus.debug.info("no permission")
+        can_edit = 0
       elif (returnStatus == 4):
         rbhus.debug.info("asset exists. use force")
+        can_edit = 1
       else:
         rbhus.debug.info("fail")
+        can_edit = 0
+
+      if can_edit:
+        tag_file_path = rbhus.utilsPipe.getAbsPath(project + ":" + "tag") + os.sep + "tag.txt"
+        rbhus.debug.info(tag_file_path)
+        cmdFull = "xdg-open \"" + tag_file_path + "\""
+        subprocess.Popen(cmdFull, shell=True)
     except:
       rbhus.debug.info(str(sys.exc_info()))
 
