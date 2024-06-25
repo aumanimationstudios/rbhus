@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+rsync -aHXW --info=progress2 /mnt/gentooOnesis-arch/ /mnt/realroot/
+
+exit 0

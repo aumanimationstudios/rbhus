@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Wipe existing filesystem signatures
+wipefs --all /dev/sda
+
+# Create a new MS-DOS partition table
+parted -s /dev/sda mklabel msdos
+
+# Inform the OS of partition table changes
+partprobe
+
+# Remove all existing partitions
+fdisk /dev/sda -l -o device | grep -E 'sda[0-9].*' | sed 's/\/dev\/sda//g' | awk '{print "parted -s /dev/sda rm "$1}' | sh -v
+
+# Create new partitions using fdisk
+fdisk /dev/sda <<EOF
+n
+p
+1
+
++1G
+n
+p
+2
+
++50G
+n
+p
+3
+
+
+w
+EOF
+partprobe
+
+# Mark the first partition as active
+fdisk /dev/sda <<EOF
+a
+1
+w
+EOF
+partprobe
+
+# Set the boot flag on the first partition
+parted -s /dev/sda set 1 boot on
+partprobe
+
+
+# Format the partitions
+mkfs.ext4 -F /dev/sda1 -L bp_boot
+mkswap -f /dev/sda2 -L bp_swap
+mkfs.ext4 -F /dev/sda3 -L bp_root
+
+exit 0

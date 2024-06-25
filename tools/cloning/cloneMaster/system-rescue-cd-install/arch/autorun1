@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+mkdir -pv /mnt/realroot/
+mount /dev/sda3 /mnt/realroot/
+mkdir -pv /mnt/realroot/boot/
+mount /dev/sda1 /mnt/realroot/boot/
+
+mkdir -p /mnt/cloneMaster/
+mount cloneMaster:/cloneMaster/ /mnt/cloneMaster/
+mkdir -p /mnt/gentooOnesis-arch/
+mount cloneMaster:/crap/gentooOnesis-arch/ /mnt/gentooOnesis-arch/
+exit 0
