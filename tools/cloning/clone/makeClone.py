@@ -89,19 +89,30 @@ if(link_dict):
     os.system("ln -vs "+ x +" "+ link_dict[x])
 
     
-if(args.emptyTree):
+# if(args.emptyTree):
+#   for x in args.emptyTree.split(","):
+#     mptyDir = os.path.join(target,x.rstrip("/").lstrip("/"))
+#     print("to delete : "+ str(mptyDir))
+#     tree1 = subprocess.check_output(["tree","-aif","--noreport",mptyDir,"|","gawk","-F","'->'","'{print $1}'"]).split("\n")
+#     for y in tree1:
+#       if(os.path.isfile(y)):
+#         os.system("rm -f "+ y)
+
+if args.emptyTree:
   for x in args.emptyTree.split(","):
-    mptyDir = os.path.join(target,x.rstrip("/").lstrip("/"))
-    print("to delete : "+ str(mptyDir))
-    tree1 = subprocess.check_output(["tree","-aif","--noreport",mptyDir,"|","gawk","-F","'->'","'{print $1}'"]).split("\n")
-    for y in tree1:
-      if(os.path.isfile(y)):
-        os.system("rm -f "+ y)
- 
-    
-    
-    
-    
-    
-    
-    
+    emptyDir = os.path.join(target, x.rstrip("/").lstrip("/"))
+    print("to delete : " + str(emptyDir))
+    try:
+      tree_cmd = ["tree", "-aif", "--noreport", emptyDir]
+      tree_output = subprocess.check_output(tree_cmd).decode()
+
+      # Use gawk to process the tree output
+      awk_cmd = ["gawk", "-F", "->", "{print $1}"]
+      awk_process = subprocess.Popen(awk_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+      tree1, _ = awk_process.communicate(input=tree_output.encode())
+
+      for y in tree1.decode().split("\n"):
+        if os.path.isfile(y):
+          os.system("rm -f " + y)
+    except subprocess.CalledProcessError as e:
+      print(f"Error: {e}")
