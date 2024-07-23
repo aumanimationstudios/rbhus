@@ -1,598 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ac3e424-fa24-43bc-81fb-1c095c259689" name="Default Changelist" comment="">
-<<<<<<< HEAD
+    <list default="true" id="c5de4dea-8992-4546-9046-bea2fae47a96" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/WOL.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/WOL.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/authPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/authPipe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/tools/system/reset-home.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/system/reset-home.py" afterDir="false" />
->>>>>>> 1ac084576374e37686a626ac53d8a287a4eba5ea
+      <change beforePath="$PROJECT_DIR$/rbhus/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/dbPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/dbPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/dbRbhus.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/dbRbhus.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/dbTrayServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/dbTrayServer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/debug.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/debug.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/polymorph.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/polymorph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusAuth.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusAuth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusEdit.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusEdit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusEditMulti.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusEditMulti.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusHost.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusHost.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusHostEdit.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusHostEdit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusHostEditMulti.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusHostEditMulti.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetCreate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetEdit.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetEdit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeNotes.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeNotes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeNotes_readonly.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeNotes_readonly.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeProjCreate.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeProjCreate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeReview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeSeqSceCreate.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeSeqSceCreate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeSeqSceEdit.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeSeqSceEdit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusReadText.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusReadText.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusRender.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusRender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusSubmit.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusSubmit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectCheckBoxCombo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/selectRadioBox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/rbhusPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/rbhusPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/rbhusPipe.py.old" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/rbhusPipe.py.old" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/rbhusPipe_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/rbhusPipe_new.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/rbhusPipe_newProject.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/rbhusPipe_newProject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/rbhusRender.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/rbhusRender.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="1301193296">
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="py" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Python" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="dummy" value="1" />
-          <entry key="py" value="99" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="99" />
-        </counts>
-      </usages-collector>
-    </session>
-    <session id="1071979686">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.open.time.13" value="1" />
-          <entry key="project.open.time.8" value="1" />
-          <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="3" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="py" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Python" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="Python Console" value="31" />
-          <entry key="py" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Python" value="32" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1845">
-              <caret line="130" column="33" selection-start-line="130" selection-start-column="33" selection-end-line="130" selection-end-column="33" />
-              <folding>
-                <element signature="e#136#151#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1447" column="14" selection-start-line="1447" selection-start-column="9" selection-end-line="1447" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1470">
-              <caret line="101" column="32" selection-start-line="101" selection-start-column="32" selection-end-line="101" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <folding>
-                <element signature="e#135#149#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/styleSheets/checkBox_favorites.qrc">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="52" column="13" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusHost.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3180">
-              <caret line="218" column="15" selection-start-line="218" selection-start-column="15" selection-end-line="218" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rbhus/utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7080">
-              <caret line="480" column="6" selection-start-line="480" selection-start-column="6" selection-end-line="480" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tools/system/reset-home.py">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state relative-caret-position="465">
-              <caret line="33" selection-start-line="33" selection-end-line="33" />
-=======
-            <state relative-caret-position="450">
-              <caret line="32" column="61" lean-forward="true" selection-start-line="32" selection-start-column="61" selection-end-line="32" selection-end-column="61" />
->>>>>>> 1ac084576374e37686a626ac53d8a287a4eba5ea
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/rbhus/constantsPipe.py" />
-        <option value="$PROJECT_DIR$/tools/system/reset-home.py" />
-      </list>
-    </option>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2jOuZsFir1QvIQeNi1j4Ntd1C7n" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1919" />
-    <option name="width" value="1082" />
-    <option name="height" value="1892" />
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "archlinux-python2-pyqt4",
+    "last_opened_file_path": "/home/sanath/git_repos/rbhus"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-              <item name="guiBin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="qt5" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="qt5" type="462c0819:PsiDirectoryNode" />
-              <item name="customWidgets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhusUI" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="qt5" type="462c0819:PsiDirectoryNode" />
-              <item name="styleSheets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="tools" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="tools" type="462c0819:PsiDirectoryNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rbhus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rbhus" type="462c0819:PsiDirectoryNode" />
-              <item name="tools" type="462c0819:PsiDirectoryNode" />
-              <item name="system" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-975db3bf15a3-31b6be0877a2-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.18034.82" />
+      </set>
+    </attachedChunks>
   </component>
-  <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/mirage-0.9.5.2/mirage-0.9.5.2" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager">
-    <configuration name="reset-home" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="rbhus" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools/system" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/system/reset-home.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.reset-home" />
-      </list>
-    </recent_temporary>
-  </component>
-  <component name="SvnConfiguration">
-    <configuration />
-  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="4ac3e424-fa24-43bc-81fb-1c095c259689" name="Default Changelist" comment="" />
-      <created>1533528326981</created>
+      <changelist id="c5de4dea-8992-4546-9046-bea2fae47a96" name="Changes" comment="" />
+      <created>1721270504316</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1533528326981</updated>
+      <updated>1721270504316</updated>
     </task>
     <servers />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="1919" y="0" width="1082" height="1892" extended-state="6" />
-    <editor active="true" />
-    <layout>
-<<<<<<< HEAD
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22894986" />
-=======
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22959453" />
->>>>>>> 1ac084576374e37686a626ac53d8a287a4eba5ea
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.3286638" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.1590909" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32954547" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3286638" />
-<<<<<<< HEAD
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" weight="0.21635434" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="9" visible="true" weight="0.33560476" />
-=======
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49952784" visible="true" weight="0.21659483" />
-      <window_info anchor="bottom" id="Python Console" order="9" weight="0.33599088" />
->>>>>>> 1ac084576374e37686a626ac53d8a287a4eba5ea
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5004721" side_tool="true" weight="0.32975113" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Data View" order="3" />
-    </layout>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_render_opengl_sequencer.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/blender_refresh_sequencer.py" />
-    <entry file="file://$PROJECT_DIR$/tests/FIX_PROBLEMS/autoLineUp_light.py" />
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/duplicateImage.py" />
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/blender-thumbnailer.py" />
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_prores.py" />
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_4kmov_2kmov.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="21" lean-forward="true" selection-start-column="21" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1247972723/PyQt5/QtWidgets/QSystemTrayIcon.py" />
-    <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_ubuntu.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/cloning/clone/makeClone_gentoo.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="129" selection-start-line="6" selection-start-column="92" selection-end-line="6" selection-end-column="129" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/system/sync_ubuntu.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/system/setColorProfile-sRGB.sh" />
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/copyToFM.py" />
-    <entry file="file://$PROJECT_DIR$/rbhus/hgmod.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="996">
-          <caret line="121" column="14" selection-start-line="121" selection-start-column="14" selection-end-line="121" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_png_mov_rle.py" />
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/convert_exr_mov_rle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="49" column="13" lean-forward="true" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sync.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="153" selection-start-line="3" selection-start-column="153" selection-end-line="3" selection-end-column="153" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/blend_lin/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="52" column="41" selection-start-line="51" selection-start-column="2" selection-end-line="52" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeVersions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1770">
-          <caret line="127" column="23" selection-start-line="127" selection-start-column="23" selection-end-line="127" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/copyFromRbhus.py" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1247972723/__builtin__.py" />
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/beforeFile.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/assetBackup.py" />
-    <entry file="file://$PROJECT_DIR$/tests/exportAssetsData.py" />
-    <entry file="file://$PROJECT_DIR$/etc/startupScripts/blend/afterFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="120" column="51" selection-start-line="120" selection-start-column="51" selection-end-line="120" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/renderPlugin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusDroneCtrl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="87" column="4" selection-start-line="87" selection-start-column="4" selection-end-line="87" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/qt5-treeview_delegate_test.py" />
-    <entry file="file://$PROJECT_DIR$/etc/convert_exr/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="840">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusList.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeRenderSubmit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3150">
-          <caret line="217" column="20" selection-start-line="217" selection-start-column="20" selection-end-line="217" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/pipeUtils.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/cleanup/cleanAsset-production-files.py" />
-    <entry file="file://$PROJECT_DIR$/rbhusDrone.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="563" column="44" lean-forward="true" selection-start-line="563" selection-start-column="44" selection-end-line="563" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/dfl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="38" column="6" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/policy.xml" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1247972723/PyQt4/QtCore/__init__/QMetaType.py" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1247972723/PyQt5/QtCore/__init__/QMetaType.py" />
-    <entry file="file://$PROJECT_DIR$/rbhus/debug.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="14" column="37" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/qt5/treeViewTest/treeView.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2595">
-          <caret line="189" column="54" selection-start-line="189" selection-start-column="54" selection-end-line="189" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/cleanup/cleanAsset-output.py" />
-    <entry file="file://$PROJECT_DIR$/rbhus/utilsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="43" column="10" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1845">
-          <caret line="130" column="33" selection-start-line="130" selection-start-column="33" selection-end-line="130" selection-end-column="33" />
-          <folding>
-            <element signature="e#136#151#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1470">
-          <caret line="101" column="32" selection-start-line="101" selection-start-column="32" selection-end-line="101" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#135#149#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/styleSheets/checkBox_favorites.qrc">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/lib/qt5/customWidgets/checkBox_style.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="52" column="13" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusHost.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3180">
-          <caret line="218" column="15" selection-start-line="218" selection-start-column="15" selection-end-line="218" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7080">
-          <caret line="480" column="6" selection-start-line="480" selection-start-column="6" selection-end-line="480" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhus/constantsPipe.py">
-      <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="465">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1447" column="14" selection-start-line="1447" selection-start-column="9" selection-end-line="1447" selection-end-column="14" />
-=======
-        <state relative-caret-position="561">
-          <caret line="128" column="36" selection-start-line="128" selection-start-column="36" selection-end-line="128" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/system/reset-home.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="32" column="61" lean-forward="true" selection-start-line="32" selection-start-column="61" selection-end-line="32" selection-end-column="61" />
->>>>>>> 1ac084576374e37686a626ac53d8a287a4eba5ea
-        </state>
-      </provider>
-    </entry>
   </component>
 </project>

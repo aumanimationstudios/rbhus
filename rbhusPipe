@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source /opt/rbhus/rbhus-env/bin/activate
+cd /opt/rbhus/rbhusUI || return
+python2 /opt/rbhus/rbhusUI/rbhusPipe.py
+cd - || return

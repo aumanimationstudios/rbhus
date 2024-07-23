@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 import zmq
 from PyQt4 import QtCore, QtGui, QtSql
 import os

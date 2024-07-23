@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 from PyQt4 import QtCore, QtGui
 import os
 import sys
@@ -25,7 +25,7 @@ rbhusSubmitCmd = rbhusSubmitCmd.replace("\\","/")
 rbhusHostCmd = dirSelf.rstrip(os.sep) + os.sep + rH
 rbhusHostCmd = rbhusHostCmd.replace("\\","/")
 
-print rbhuslistCmd
+print (rbhuslistCmd)
 import rbhusRenderMain
 print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
