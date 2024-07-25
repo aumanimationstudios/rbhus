@@ -9,11 +9,14 @@ import sys
 import os
 import socket
 import MySQLdb
-
-
-import dbRbhus
-import constants
 import time
+
+filepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-1])
+basepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-2])
+sys.path.append(basepath)
+
+import rbhus.dbRbhus as dbRbhus
+import rbhus.constants as constants
 
 
 def getSystemAdmins():

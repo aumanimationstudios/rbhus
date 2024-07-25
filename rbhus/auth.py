@@ -6,11 +6,17 @@ __email__ = "shrinidhi666@gmail.com"
 
 import ldap
 import sys
-import dbRbhus
 import os
 import tempfile
 import time
-import constants
+
+filepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-1])
+basepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-2])
+sys.path.append(basepath)
+
+import rbhus.dbRbhus as dbRbhus
+import rbhus.constants as constants
+
 
 class login():
   def __init__(self):

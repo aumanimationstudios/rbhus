@@ -4,13 +4,18 @@ import MySQLdb
 import MySQLdb.cursors
 import time
 import sys
-import constants
+import os
 import logging
 import logging.handlers
 import socket
-import os
 import tempfile
-import debug
+
+filepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-1])
+basepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-2])
+sys.path.append(basepath)
+
+import rbhus.constants as constants
+import rbhus.debug as debug
 
 # os.environ["QT_GRAPHICSSYSTEM"] = "native"
 
