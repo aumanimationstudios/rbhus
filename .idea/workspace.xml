@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5de4dea-8992-4546-9046-bea2fae47a96" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhus/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/auth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhus/dbRbhus.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/dbRbhus.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhus/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utils.py" afterDir="false" />
-    </list>
+    <list default="true" id="c5de4dea-8992-4546-9046-bea2fae47a96" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

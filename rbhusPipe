@@ -1,6 +1,26 @@
 #!/usr/bin/env bash
 
-source /opt/rbhus/rbhus-env/bin/activate
-cd /opt/rbhus/rbhusUI || return
-python2 /opt/rbhus/rbhusUI/rbhusPipe.py
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  TARGET="$(readlink "$SOURCE")"
+  if [[ $TARGET == /* ]]; then
+    #echo "SOURCE '$SOURCE' is an absolute symlink to '$TARGET'"
+    SOURCE="$TARGET"
+  else
+    DIR="$( dirname "$SOURCE" )"
+    #echo "SOURCE '$SOURCE' is a relative symlink to '$TARGET' (relative to '$DIR')"
+    SOURCE="$DIR/$TARGET" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  fi
+done
+#echo "SOURCE is '$SOURCE'"
+RDIR="$( dirname "$SOURCE" )"
+DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+if [ "$DIR" != "$RDIR" ]; then
+  #echo "DIR '$RDIR' resolves to '$DIR'"
+  true
+fi
+#echo "DIR is '$DIR'"
+source "$DIR"/rbhus-env/bin/activate
+cd "$DIR"/rbhusUI || return
+python2 "$DIR"/rbhusUI/rbhusPipe.py
 cd - || return
