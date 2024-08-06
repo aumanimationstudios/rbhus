@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -157,7 +157,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     
     
   def printPrioSel(self):
-    print self.comboPrio.currentText()
+    print (self.comboPrio.currentText())
     
   
   
@@ -204,9 +204,9 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
   
   def selectFileName(self):
     if(sys.platform.find("win") >= 0):
-      fila = QtGui.QFileDialog.getOpenFileNames(directory="x:/")
+      fila = QtWidgets.QFileDialog.getOpenFileNames(directory="x:/")
     elif(sys.platform.find("linux") >= 0):
-      fila = QtGui.QFileDialog.getOpenFileNames(directory="/proj/")
+      fila = QtWidgets.QFileDialog.getOpenFileNames(directory="/proj/")
     if(fila):
       if(self.lineEditFileName.text()):
         self.lineEditFileName.setText(self.lineEditFileName.text() +","+ fila.join(","))
@@ -231,7 +231,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         self.lineEditOutDir.setText("/projdump/"+ "/".join(outFile.split("/")[2:-1]) +"/")
   
   def selectOutDir(self):
-    dirac = QtGui.QFileDialog.getExistingDirectory()
+    dirac = QtWidgets.QFileDialog.getExistingDirectory()
     if(dirac):
       self.lineEditOutDir.setText(dirac)
   
@@ -510,7 +510,7 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
         #except:
           #print("Error inserting task : "+ str(sys.exc_info()))
     
-    QtGui.qApp.closeAllWindows()
+    QtWidgets.qApp.closeAllWindows()
     
     
     
@@ -518,8 +518,8 @@ class Ui_Form(rbhusSubmitMod.Ui_rbhusSubmit):
     
     
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

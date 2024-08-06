@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import sys
 import os
@@ -12,11 +12,16 @@ import subprocess
 import re
 import shutil
 import copy
-import debug
 import simplejson
 # import lockfile
 import collections
 import time
+
+filepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-1])
+basepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-2])
+sys.path.append(basepath)
+
+import rbhus.debug as debug
 
 
 progPath =  sys.argv[0].split(os.sep)
@@ -35,9 +40,9 @@ debug.info("utilsPipe 1: "+ str(etcpath))
 
 
 sys.path.append(cwd.rstrip(os.sep) + os.sep)
-import dbPipe
-import constantsPipe
-import dfl
+import rbhus.dbPipe as dbPipe
+import rbhus.constantsPipe as constantsPipe
+import rbhus.dfl as dfl
 
 
 if(sys.platform.find("win") >= 0):
@@ -978,7 +983,7 @@ def setupSequenceScene(seqSceDict):
   seqValues.append("'"+ str(MySQLdb.Timestamp.now()) +"'")
 
 
-  if(not seqSceDict.has_key("createdUser")):
+  if "createdUser" not in seqSceDict:
     try:
       seqValues.append("'"+ os.environ['rbhusPipe_acl_user'] +"'")
       seqKeys.append("createdUser")
@@ -1439,7 +1444,7 @@ def setGroupedForAutoCommit(mainAssetPath, assetToAddPath, add=False):
 def assRegisterGroups(assDetDict,assetGroup= [],dryrun=False):
   assetGroups = []
   assetGroups.extend(assetGroup)
-  if (assDetDict.has_key("assName")):
+  if "assName" in assDetDict:
     if(not re.search("^default$", assDetDict['assName'])):
       assetGroups.append(assDetDict['assName'])
   if (not re.search("^default$", assDetDict['sequenceName'])):
@@ -1506,7 +1511,7 @@ def assRegister(assDetDict,copyFromTemplate=True,assetGroup = []):
       corePath = dirMapsDets['linuxMapping'] + assPath.replace(":","/")
     debug.debug(corePath)
     try:
-      os.makedirs(corePath,0775)
+      os.makedirs(corePath,0o775)
     except:
       debug.error(str(sys.exc_info()))
     if(copyFromTemplate):
@@ -1599,7 +1604,7 @@ def getAssStatus(assPath):
 
 def getAssFileName(assDetDict):
   fileName = ""
-  if(assDetDict.has_key('assName')):
+  if 'assName' in assDetDict:
     if(str(assDetDict['assName']) != "default"):
       fileName = str(assDetDict['assName'])
   if(not re.search("^default$",str(assDetDict['sequenceName']))):
@@ -1650,7 +1655,7 @@ def getAssPath(assDetDictTemp = {}):
         assPath = assPath +":"+ str(assDetDict['sequenceName']) +":" + str(assDetDict['sceneName'])
       else:
         assPath = assPath +":"+ str(assDetDict['sequenceName'])
-    if(assDetDict.has_key('assName')):
+    if 'assName' in assDetDict:
       if(not re.search("^default$",str(assDetDict['assName']))):
         assPath = assPath +":" + str(assDetDict['assName'])
 
@@ -1692,7 +1697,7 @@ def assEdit(asspath="",assid="",assdict={}):
 
 
 def reviewAdd(assdict={}):
-  if(not assdict.has_key("referenceFolder")):
+  if "referenceFolder" not in assdict:
     assdict["referenceFolder"] = ""
   dbconn = dbPipe.dbPipe()
   try:

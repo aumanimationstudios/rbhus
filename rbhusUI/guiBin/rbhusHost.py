@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -24,7 +24,7 @@ rEcM = "rbhusHostEditMulti.py"
 hostEditCmd = dirSelf.rstrip(os.sep) + os.sep + rEc
 hostEditMultiCmd = dirSelf.rstrip(os.sep) + os.sep + rEcM
 
-print hostEditCmd
+print (hostEditCmd)
 import rbhusHostMod
 print(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 
@@ -93,20 +93,20 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
   
   
   def popupHost(self, pos):
-    menu = QtGui.QMenu()
-    systemMenu = QtGui.QMenu()
-    rbhusMenu = QtGui.QMenu()
-    restartMenu = QtGui.QMenu()
+    menu = QtWidgets.QMenu()
+    systemMenu = QtWidgets.QMenu()
+    rbhusMenu = QtWidgets.QMenu()
+    restartMenu = QtWidgets.QMenu()
     
-    restartTypeMenuL = QtGui.QMenu()
+    restartTypeMenuL = QtWidgets.QMenu()
     rNowL = restartTypeMenuL.addAction("now")
     rNextL = restartTypeMenuL.addAction("next reboot")
     
-    restartTypeMenuW = QtGui.QMenu()
+    restartTypeMenuW = QtWidgets.QMenu()
     rNowW = restartTypeMenuW.addAction("now")
     rNextW = restartTypeMenuW.addAction("next reboot")
     
-    restartTypeMenuC = QtGui.QMenu()
+    restartTypeMenuC = QtWidgets.QMenu()
     rNowC = restartTypeMenuC.addAction("now")
     rNextC = restartTypeMenuC.addAction("next reboot")
     
@@ -421,7 +421,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     self.tableHost.clearContents()
     self.tableHost.setSortingEnabled(False)
     self.tableHost.resizeColumnsToContents()
-    self.tableHost.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+    self.tableHost.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
     colCount = 0
     
     
@@ -441,7 +441,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       hostsRunning = {}
     if(hostsRunning):
       hostsRunning = hostsRunning.intersection(hostsAll)
-    self.LabelRunning.setText(QtGui.QApplication.translate("Form", "RUNNING : "+ str(len(hostsRunning)), None, QtGui.QApplication.UnicodeUTF8))
+    self.LabelRunning.setText(QtWidgets.QApplication.translate("Form", "RUNNING : "+ str(len(hostsRunning)), None, QtWidgets.QApplication.UnicodeUTF8))
       
     if(not rows):
       return()
@@ -451,28 +451,28 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       
     self.tableHost.setColumnCount(colCount)
     self.tableHost.setRowCount(len(rows))
-    self.LabelTotal.setText(QtGui.QApplication.translate("Form", "TOTAL : "+ str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
+    self.LabelTotal.setText(QtWidgets.QApplication.translate("Form", "TOTAL : "+ str(len(rows)), None, QtWidgets.QApplication.UnicodeUTF8))
     
     for x in range(0,colCount):
-      item = QtGui.QTableWidgetItem()
+      item = QtWidgets.QTableWidgetItem()
       self.tableHost.setHorizontalHeaderItem(x, item)
     indx = 0
     for x in self.colNamesHost:
       y = x.split(" as ")
       x = y[-1].split(".")[-1]
-      self.tableHost.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      self.tableHost.horizontalHeaderItem(indx).setText(QtWidgets.QApplication.translate("Form", x, None, QtWidgets.QApplication.UnicodeUTF8))
       indx = indx + 1
 
 
     indx = 0
     for row in rows:
-      item = QtGui.QTableWidgetItem()
+      item = QtWidgets.QTableWidgetItem()
       #brush = QtGui.QBrush()
       self.tableHost.setVerticalHeaderItem(indx, item)
       colIndx = 0
       for colName in self.colNamesHost:
         colName = colName.split(" as ")[-1].split(".")[-1]
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         brush = QtGui.QBrush()
         if(colName == "status"):
           if(row[colName] == constants.hostInfoDisable):
@@ -483,7 +483,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
             brush.setStyle(QtCore.Qt.SolidPattern)
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.hostInfoStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", constants.hostInfoStatus[int(row[colName])], None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         
@@ -496,7 +496,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
             brush.setStyle(QtCore.Qt.SolidPattern)
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None, QtWidgets.QApplication.UnicodeUTF8))
           if(row[colName] in hostSelected):
             self.tableHost.selectRow(indx)
           colIndx = colIndx + 1
@@ -512,25 +512,25 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
             brush.setStyle(QtCore.Qt.SolidPattern)
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.hostAliveStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", constants.hostAliveStatus[int(row[colName])], None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         
         if(colName == "freeRam"):
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtGui.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         
         if(colName == "totalRam"):
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtGui.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         
         item.setBackground(brush)
         self.tableHost.setItem(indx, colIndx, item)
-        self.tableHost.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None, QtWidgets.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
         
       indx = indx + 1
@@ -538,7 +538,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
  
     self.tableHost.resizeColumnsToContents()
     self.tableHost.setSortingEnabled(True)
-    self.tableHost.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+    self.tableHost.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
     
     
     
@@ -547,8 +547,8 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     
 if __name__ == "__main__":
   import sys
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

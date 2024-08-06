@@ -1,6 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 import zmq
-from PyQt4 import QtCore, QtGui, QtSql
+from PyQt5 import QtWidgets, QtCore, QtGui, QtSql
 import os
 import sys
 import tempfile
@@ -99,16 +99,16 @@ class api_serv(QtCore.QThread):
 
 
 
-class ExtendedQLabel(QtGui.QLabel):
+class ExtendedQLabel(QtWidgets.QLabel):
   clicked = QtCore.pyqtSignal()
 
   def __init(self):
-    QtGui.QLabel.__init__(self)
+    QtWidgets.QLabel.__init__(self)
 
   def mouseDoubleClickEvent(self, ev):
     self.clicked.emit()
 
-class ImageWidget(QtGui.QPushButton):
+class ImageWidget(QtWidgets.QPushButton):
   def __init__(self, imagePath, imageSize, parent):
     super(ImageWidget, self).__init__(parent)
     self.imagePath = imagePath
@@ -122,7 +122,7 @@ class ImageWidget(QtGui.QPushButton):
 
 
 
-class ImagePlayer(QtGui.QWidget):
+class ImagePlayer(QtWidgets.QWidget):
   def __init__(self, filename, parent):
     super(ImagePlayer,self).__init__(parent)
     self.parent = parent
@@ -132,8 +132,8 @@ class ImagePlayer(QtGui.QWidget):
     self.newSize = QtCore.QSize(100,100)
     self.movie.setScaledSize(self.newSize)
 
-    self.movie_screen = QtGui.QLabel()
-    self.movie_screen.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+    self.movie_screen = QtWidgets.QLabel()
+    self.movie_screen.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
     self.movie_screen.setAlignment(QtCore.Qt.AlignCenter)
 
     # Add the QMovie object to the label
@@ -143,7 +143,7 @@ class ImagePlayer(QtGui.QWidget):
 
 
     # Create the layout
-    main_layout = QtGui.QVBoxLayout()
+    main_layout = QtWidgets.QVBoxLayout()
     main_layout.addWidget(self.movie_screen)
     self.setLayout(main_layout)
     self.movie.start()
@@ -317,7 +317,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.pushResetLinked.hide()
 
 
-    self.menuMine = QtGui.QMenu()
+    self.menuMine = QtWidgets.QMenu()
     self.mineCreatedAction = QtGui.QAction("created",self.menuMine,checkable=True)
     self.mineCreatedAction.setChecked(False)
     self.mineCreatedAction.changed.connect(self.mineCheck)
@@ -387,10 +387,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.pushLogout.clicked.connect(self.logout)
 
     self.wFlag = self.form.windowFlags()
-    self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg"))
+    self.trayIcon = QtWidgets.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg"))
     self.trayIcon.show()
 
-    self.trayMenu = QtGui.QMenu()
+    self.trayMenu = QtWidgets.QMenu()
 
 
 
@@ -640,11 +640,11 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(len(listAsses) == 0):
       return(0)
 
-    menu = QtGui.QMenu()
-    menuTools = QtGui.QMenu()
-    menuProgress = QtGui.QMenu()
-    menuCopy = QtGui.QMenu()
-    menuTemplate = QtGui.QMenu()
+    menu = QtWidgets.QMenu()
+    menuTools = QtWidgets.QMenu()
+    menuProgress = QtWidgets.QMenu()
+    menuCopy = QtWidgets.QMenu()
+    menuTemplate = QtWidgets.QMenu()
     menuCopy.setTitle("copy to clipboard")
     menuProgress.setTitle("progress status")
     menuTemplate.setTitle("template tools")
@@ -889,7 +889,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       debug.info(x)
       p = utilsPipe.getAbsPath(x)
       if(os.path.exists(p)):
-        fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
+        fila = QtWidgets.QFileDialog.getOpenFileNames(directory=p)
         if(fila):
           return(fila)
         else:
@@ -922,7 +922,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       debug.info("versioning : "+ str(assdets['versioning']))
       if(os.path.exists(p)):
         if(assdets['versioning'] == 0):
-          fila = QtGui.QFileDialog.getOpenFileNames(directory=p)
+          fila = QtWidgets.QFileDialog.getOpenFileNames(directory=p)
           debug.info(fila)
           if(fila):
             debug.info(str(fila[0]))
@@ -1612,7 +1612,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def messageBoxDelete(self,hard=False):
-    msgbox = QtGui.QMessageBox()
+    msgbox = QtWidgets.QMessageBox()
     if(hard == True):
       delmsg = "DELETE (database and disk)?!?!?!"
     else:
@@ -1621,8 +1621,8 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger_128.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
-    yesBut = msgbox.addButton("yes",QtGui.QMessageBox.YesRole)
-    noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
+    yesBut = msgbox.addButton("yes",QtWidgets.QMessageBox.YesRole)
+    noBut = msgbox.addButton("cancel",QtWidgets.QMessageBox.NoRole)
     msgbox.setDefaultButton(noBut)
     msgbox.exec_()
     if(msgbox.clickedButton() == yesBut):
@@ -1631,15 +1631,15 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       return(0)
 
   def messageBoxTemplateHard(self):
-    msgbox = QtGui.QMessageBox()
+    msgbox = QtWidgets.QMessageBox()
     delmsg = "Replace the current asset file from template??!!!"
     msgbox.setWindowTitle("WTF!!!")
     msgbox.setText(delmsg + "\nYour time and effort used on this asset WILL be WASTED!!!!")
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep + "etc/icons/danger_128.png")))
     # noBut = QtGui.QPushButton("cancel")
     # yesBut = QtGui.QPushButton("yes")
-    yesBut = msgbox.addButton("yes", QtGui.QMessageBox.YesRole)
-    noBut = msgbox.addButton("cancel", QtGui.QMessageBox.NoRole)
+    yesBut = msgbox.addButton("yes", QtWidgets.QMessageBox.YesRole)
+    noBut = msgbox.addButton("cancel", QtWidgets.QMessageBox.NoRole)
     msgbox.setDefaultButton(noBut)
     msgbox.exec_()
     if (msgbox.clickedButton() == yesBut):
@@ -1764,13 +1764,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     self.tableWidget.setSortingEnabled(False)
     #self.tableWidget.resizeColumnsToContents()
-    self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+    self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
     self.previewItems = {}
     if(assesList):
       self.tableWidget.setColumnCount(len(colNames))
       self.tableWidget.setRowCount(len(assesList))
       for cn in range(0,len(colNames)):
-        itemcn = QtGui.QTableWidgetItem()
+        itemcn = QtWidgets.QTableWidgetItem()
         itemcn.setText(str(colNames[cn]))
         self.tableWidget.setHorizontalHeaderItem(cn, itemcn)
       for x in range(0,len(assesList)):
@@ -1786,7 +1786,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           item.setTextFormat(QtCore.Qt.RichText)
           item.setText(textAss)
           # item.setToolTip("CHECK OUT THE VERSION OPTION    };)\nEnable it by editing the asset")
-          sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+          sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
 
           item.setSizePolicy(sizePolicy)
           item.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
@@ -1799,28 +1799,28 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
         try:
-          itemAss = QtGui.QTableWidgetItem()
+          itemAss = QtWidgets.QTableWidgetItem()
           itemAss.setText(str(assesNames[assesList[x]]['assignedWorker']))
           self.tableWidget.setItem(x,1,itemAss)
         except:
           debug.info(str(sys.exc_info()))
 
         try:
-          itemAss = QtGui.QTableWidgetItem()
+          itemAss = QtWidgets.QTableWidgetItem()
           itemAss.setText(str(assesNames[assesList[x]]['createdUser']))
           self.tableWidget.setItem(x,2,itemAss)
         except:
           debug.info(str(sys.exc_info()))
 
         try:
-          itemAss = QtGui.QTableWidgetItem()
+          itemAss = QtWidgets.QTableWidgetItem()
           itemAss.setText(str(assesNames[assesList[x]]['reviewUser']))
           self.tableWidget.setItem(x,3,itemAss)
         except:
           debug.info(str(sys.exc_info()))
 
         try:
-          itemTag = QtGui.QTableWidgetItem()
+          itemTag = QtWidgets.QTableWidgetItem()
           itemTag.setText(str(assesNames[assesList[x]]['tags']))
           self.tableWidget.setItem(x,4,itemTag)
         except:
@@ -1828,14 +1828,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
         try:
-          itemModified = QtGui.QTableWidgetItem()
+          itemModified = QtWidgets.QTableWidgetItem()
           itemModified.setText(str(assModifiedTime[assesList[x]]))
           self.tableWidget.setItem(x,5,itemModified)
         except:
           debug.info(str(sys.exc_info()))
 
         try:
-          itemModified = QtGui.QTableWidgetItem()
+          itemModified = QtWidgets.QTableWidgetItem()
           if(assesNames[assesList[x]]['versioning'] == 0):
             itemModified.setText("disabled")
           else:
@@ -1845,7 +1845,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
           debug.info(str(sys.exc_info()))
 
         try:
-          itemModified = QtGui.QTableWidgetItem()
+          itemModified = QtWidgets.QTableWidgetItem()
           if(assesNames[assesList[x]]['reviewStatus'] == constantsPipe.reviewStatusNotDone):
             brush1 = QtGui.QBrush()
             brush1.setColor(QtGui.QColor(250, 100, 100))
@@ -1870,7 +1870,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
         try:
-          itemModified = QtGui.QTableWidgetItem()
+          itemModified = QtWidgets.QTableWidgetItem()
           if(assesNames[assesList[x]]['progressStatus'] == constantsPipe.assetProgressInProgress):
             brush2 = QtGui.QBrush()
             brush2.setColor(QtGui.QColor(0, 150, 250))
@@ -1909,7 +1909,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.form.statusBar().showMessage("total : "+ str(len(assesList)))
     #self.timerAssetsRefresh.stop()
     self.tableWidget.setSortingEnabled(True)
-    self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+    self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
     self.previewCheck()
     self.loader.hide()
 
@@ -2124,14 +2124,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
                  isAssetPathSave
 
     debug.info(saveString)
-    if(not self.searchDict.has_key(saveString)):
+    if saveString not in self.searchDict:
       saveFileFd = open(self.saveFile,"w")
       self.searchDict[saveString] = 1
       searchSavedObj = saveSearch()
       searchSavedObj.searchPath = saveString
       searchSavedObj.searchName = "new fav"
       self.saveSearchArray.append(searchSavedObj)
-      item = QtGui.QListWidgetItem()
+      item = QtWidgets.QListWidgetItem()
       item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
       item.setText(searchSavedObj.searchName)
       self.listWidgetSearch.addItem(item)
@@ -2232,7 +2232,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         itemsForSaveSearch = pickle.load(saveFileFd)
         for x in range(0,len(itemsForSaveSearch)):
           debug.info("funcky : "+ str(itemsForSaveSearch[x]))
-          item = QtGui.QListWidgetItem()
+          item = QtWidgets.QListWidgetItem()
           item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
           item.setText(itemsForSaveSearch[x].searchName)
           self.listWidgetSearch.addItem(item)
@@ -2263,7 +2263,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def popUpSearchFav(self,pos):
-    menu = QtGui.QMenu()
+    menu = QtWidgets.QMenu()
     filterSearchAction = menu.addAction("filter")
     deleteSearchAction = menu.addAction("delete")
     action = menu.exec_(self.listWidgetSearch.mapToGlobal(pos))
@@ -2276,7 +2276,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def popUpAssetFav(self,pos):
-    menu = QtGui.QMenu()
+    menu = QtWidgets.QMenu()
     openSearchAction = menu.addAction("open")
     deleteSearchAction = menu.addAction("delete")
     action = menu.exec_(self.listWidgetAssets.mapToGlobal(pos))
@@ -2307,14 +2307,14 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     if(asses):
       for x in range(0,len(asses)):
         debug.info(asses[x])
-        if(not self.assFavDict.has_key(str(asses[x]))):
+        if str(asses[x]) not in self.assFavDict:
           self.assFavDict[str(asses[x])] = 1
           self.assSearchArray.append(str(asses[x]))
           assSaveFileFd = open(self.saveFileShortcut,"w")
           pickle.dump(self.assSearchArray,assSaveFileFd)
           assSaveFileFd.flush()
           assSaveFileFd.close()
-          item = QtGui.QListWidgetItem()
+          item = QtWidgets.QListWidgetItem()
           item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
           item.setText(str(asses[x]))
           self.listWidgetAssets.addItem(item)
@@ -2331,7 +2331,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
         assSaveFileFd.close()
         for x in range(0,len(self.assSearchArray)):
           self.assFavDict[self.assSearchArray[x]] = 1
-          item = QtGui.QListWidgetItem()
+          item = QtWidgets.QListWidgetItem()
           item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
           item.setText(str(self.assSearchArray[x]))
           self.listWidgetAssets.addItem(item)
@@ -2391,7 +2391,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def closeEvent(self,event):
     event.ignore()
-    QtGui.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray .\nPlease quit from the tray icon if you really want to quit!")
+    QtWidgets.QMessageBox.about(self.form,"QUITING?","Minimizing to Tray .\nPlease quit from the tray icon if you really want to quit!")
     self.form.setVisible(False)
 
   def hideEvent(self,event):
@@ -2418,13 +2418,13 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def center(self):
-    Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
+    Form.move(QtWidgets.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
 
 if __name__ == "__main__":
   import sys
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

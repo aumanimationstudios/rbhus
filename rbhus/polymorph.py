@@ -1,4 +1,5 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
+
 import glob
 import os
 import posix
@@ -62,8 +63,8 @@ class polymorph:
     
   def create(self,branch="default"):
     try:
-      os.makedirs(self._pmVerDir,mode=0777)
-      os.makedirs(self._pmTags,mode=0777)
+      os.makedirs(self._pmVerDir,mode=0o777)
+      os.makedirs(self._pmTags,mode=0o777)
       lockFD = open(self._pmLock,"w",0)
       lockFD.close()
     except:

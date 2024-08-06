@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui, uic
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui, uic
 import glob
 import os
 import sys
@@ -66,7 +66,7 @@ args = parser.parse_args()
 app_lock_file = os.path.join(utilsPipe.app_lock_dir,str(args.assPath).replace(":","_"))
 preview_files = ["preview.png"]
 
-class ImagePlayer(QtGui.QWidget):
+class ImagePlayer(QtWidgets.QWidget):
   def __init__(self, filename, parent):
     # Create the layout
     super(ImagePlayer,self).__init__(parent)
@@ -77,8 +77,8 @@ class ImagePlayer(QtGui.QWidget):
     self.newSize = QtCore.QSize(100,100)
     self.movie.setScaledSize(self.newSize)
 
-    self.movie_screen = QtGui.QLabel()
-    self.movie_screen.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+    self.movie_screen = QtWidgets.QLabel()
+    self.movie_screen.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
     self.movie_screen.setAlignment(QtCore.Qt.AlignCenter)
 
     # Add the QMovie object to the label
@@ -87,7 +87,7 @@ class ImagePlayer(QtGui.QWidget):
     self.movie_screen.setMovie(self.movie)
 
 
-    main_layout = QtGui.QVBoxLayout()
+    main_layout = QtWidgets.QVBoxLayout()
     main_layout.addWidget(self.movie_screen)
     self.setLayout(main_layout)
     self.movie.start()
@@ -243,7 +243,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
 
   def popupPublish(self, pos):
-    menu = QtGui.QMenu()
+    menu = QtWidgets.QMenu()
     #openFileAction = menu.addAction("open file")
     punkaction1 = menu.addAction("-")
     publishAction = menu.addAction("publish")
@@ -266,7 +266,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       self.reviewVersion()
 
   def popupToolButton(self):
-    menu = QtGui.QMenu()
+    menu = QtWidgets.QMenu()
     copyVersionPath = menu.addAction("version path")
     copyPublishPath = menu.addAction("publish path")
     copyAssetPath = menu.addAction("asset path")
@@ -382,21 +382,21 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
       for te in tem:
         indcol = 0
         for t in te:
-          item = QtGui.QTableWidgetItem()
+          item = QtWidgets.QTableWidgetItem()
           brush = QtGui.QBrush()
           self.tableVersions.setItem(indrow, indcol, item)
           if(indcol == 4):
             self.tableVersions.item(indrow, indcol).setText(str(time.ctime(float(t.split("-")[0]))))
           elif(indcol == 0):
             if(str(t) == str(self.assetDetails['publishVersion'])):
-              item1 = QtGui.QTableWidgetItem()
+              item1 = QtWidgets.QTableWidgetItem()
               brush1 = QtGui.QBrush()
               self.tableVersions.setItem(indrow, indcol+1, item1)
               brush1.setColor(QtGui.QColor(0, 200, 0))
               brush1.setStyle(QtCore.Qt.SolidPattern)
               self.tableVersions.item(indrow, indcol+1).setBackground(brush1)
             if(str(t) == str(self.assetDetails['reviewVersion'])):
-              item2 = QtGui.QTableWidgetItem()
+              item2 = QtWidgets.QTableWidgetItem()
               brush2 = QtGui.QBrush()
               self.tableVersions.setItem(indrow, indcol + 2, item2)
               brush2.setColor(QtGui.QColor(150, 150, 200))
@@ -480,7 +480,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
         richAss = " " + "<b><i> : </i></b>".join(textAssArr)
         relatedAssetWidget.label.setText(richAss)
-        item = QtGui.QListWidgetItem()
+        item = QtWidgets.QListWidgetItem()
         item.assPath = x
         self.listWidgetAutoCommit.addItem(item)
         self.listWidgetAutoCommit.setItemWidget(item, relatedAssetWidget)
@@ -508,7 +508,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           textAssArr.append('<font color="' + fc.split("#")[1] + '">' + fc.split("#")[0] + '</font>')
         richAss = " " + "<b><i> : </i></b>".join(textAssArr)
         popAssetWidget.label.setText(richAss)
-        item = QtGui.QListWidgetItem()
+        item = QtWidgets.QListWidgetItem()
         item.assPath = x
         self.listWidgetPoP.addItem(item)
         self.listWidgetPoP.setItemWidget(item, popAssetWidget)
@@ -534,36 +534,36 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
 
   def messageBoxWarn(self, assPath):
-    msgbox = QtGui.QMessageBox()
+    msgbox = QtWidgets.QMessageBox()
     msgbox.setWindowTitle(assPath)
     msgbox.setText(unicode(assPath +"\nNOT COMMITING !Asset not assigned to you!!!"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
-    noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
+    noBut = msgbox.addButton("cancel",QtWidgets.QMessageBox.NoRole)
     msgbox.setDefaultButton(noBut)
     msgbox.exec_()
 
 
   def messageBoxCommitFailed(self, assPath):
-    msgbox = QtGui.QMessageBox()
+    msgbox = QtWidgets.QMessageBox()
     msgbox.setWindowTitle(assPath)
     msgbox.setText(unicode(assPath +"\nCOMMIT FAILED !- Please check"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
-    noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
+    noBut = msgbox.addButton("cancel",QtWidgets.QMessageBox.NoRole)
     msgbox.setDefaultButton(noBut)
     msgbox.exec_()
 
   def messageBoxPushFailed(self, assPath):
-    msgbox = QtGui.QMessageBox()
+    msgbox = QtWidgets.QMessageBox()
     msgbox.setWindowTitle(assPath)
     msgbox.setText(unicode(assPath +"\nPUSHING TO SERVER FAILED !- Please check"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
-    noBut = msgbox.addButton("cancel",QtGui.QMessageBox.NoRole)
+    noBut = msgbox.addButton("cancel",QtWidgets.QMessageBox.NoRole)
     msgbox.setDefaultButton(noBut)
     msgbox.exec_()
 
@@ -716,8 +716,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
 
 
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

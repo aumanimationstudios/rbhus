@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import MySQLdb
 import MySQLdb.cursors
@@ -361,7 +361,7 @@ class dbRbhus:
   def getBatchedFrames(self,batchId):
     try:
       rows = self.execute("select frange from batch where id=\""+ str(batchId) +"\"",dictionary=True)
-      frange = rows[0][rows[0].keys()[-1]].split()
+      frange = rows[0][list(rows[0].keys())[-1]].split()
       try:
         frange.remove("default")
       except:
@@ -376,7 +376,7 @@ class dbRbhus:
   def getBatchId(self, taskId, frameId):
     try:
       rows = self.execute("select batchId from frames where id=\""+ str(taskId) +"\" and frameId=\""+ str(frameId) +"\"",dictionary=True)
-      batchId = str(rows[0][rows[0].keys()[-1]])
+      batchId = str(rows[0][list(rows[0].keys())[-1]])
       try:
         batchId.remove("default")
       except:
@@ -456,7 +456,7 @@ class dbRbhus:
           f_status[constants.framesStatus[x['status']]] = f_status[constants.framesStatus[x['status']]] + 1
         except:
           f_status[constants.framesStatus[x['status']]] = 1
-    if(f_status.has_key(constants.framesStatus[constants.framesRunning])):
+    if constants.framesStatus[constants.framesRunning] in f_status:
       debug.info("cannot delete task : "+ str(taskId) +" : running frames detected!")
       return(0)
     else:
@@ -733,7 +733,7 @@ class dbRbhus:
     except:
       modLogger.error(str(sys.exc_info()))
       return(0)
-    return(int(rows[0][rows[0].keys()[-1]]))
+    return int(rows[0][list(rows[0].keys())[-1]])
     
   
   def resetFailedFrames(self,taskId):

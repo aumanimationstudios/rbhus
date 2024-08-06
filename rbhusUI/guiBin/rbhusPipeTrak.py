@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 __author__ = "Shrinidhi Rao"
 __license__ = "GPL"
@@ -1233,7 +1233,7 @@ def searchItemPresent(assFilter,filterFile=None):
   if(savedDict):
     for x in savedDict:
       if(x):
-        if(x.has_key(assFilter)):
+        if assFilter in x:
           return(True)
   return(False)
 
@@ -1259,8 +1259,8 @@ def loadSearch(mainUid):
     for x in saveSearchArray:
       item = QtWidgets.QListWidgetItem()
       item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsEnabled)
-      item.setText(x[x.keys()[-1]])
-      item.assFilter = x.keys()[-1]
+      item.setText(x[list(x.keys())[-1]])
+      item.assFilter = list(x.keys())[-1]
       mainUid.listWidgetSearch.addItem(item)
 
 
@@ -1300,7 +1300,7 @@ def searchItemChanged(mainUid,item,filterFile=None):
   savedDict = searchItemLoad(filterFile=filterFile)
   for x in savedDict:
     if(x):
-      if(x.has_key(item.assFilter)):
+      if item.assFilter in x:
         x[item.assFilter] = str(item.text())
   rbhus.debug.debug(savedDict)
   fd = open(filterFile,"w")
@@ -1338,7 +1338,7 @@ def deleteSearch(mainUid,filterFile=None):
   indexToDelete = None
   for x in savedFilter:
     if(x):
-      if(x.has_key(item.assFilter)):
+      if item.assFilter in x:
         indexToDelete = index
     index = index + 1
   del savedFilter[indexToDelete]
@@ -1358,7 +1358,7 @@ def searchItemActivate(mainUid,filterFile=None):
   else:
     filterFile = os.path.join(home_dir, ".rbhusPipe.filters")
   savedFilter = searchItemLoad(filterFile)
-  s = savedFilter[indexChanged].keys()[-1].split("###")
+  s = list(savedFilter[indexChanged].keys())[-1].split("###")
   mainUid.comboAssType.setEditText(s[0])
   mainUid.comboSeq.setEditText(s[1])
   mainUid.comboScn.setEditText(s[2])

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 __author__ = "Shrinidhi Rao"
 __license__ = "GPL"
@@ -719,7 +719,7 @@ def importingStart(mainUid, text,textColor,version):
 
 
 def importingResult(mainUid,ass,toColor,progText):
-  if(ui_progress_list_dict.has_key(ass)):
+  if ass in ui_progress_list_dict:
     ui_progress_list_dict[ass].labelStatus.setText(progText)
     ui_progress_list_dict[ass].progressBar.setMinimum(0)
     ui_progress_list_dict[ass].progressBar.setMaximum(1)

@@ -1,20 +1,21 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 __author__ = "Shrinidhi Rao"
 __license__ = "GPL"
 __email__ = "shrinidhi666@gmail.com"
 
-import dbTrayServer
 import os
 import sys
 import uuid
-import debug
 import MySQLdb
 import hashlib
 
+filepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-1])
+basepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-2])
+sys.path.append(basepath)
 
-
-
+import rbhus.dbTrayServer as dbTrayServer
+import rbhus.debug as debug
 
 
 if(sys.platform.find("win") >= 0):

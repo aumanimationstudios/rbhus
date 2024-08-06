@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -74,7 +74,7 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
   def populateCheckBoxes(self):
     for x in self.inList:
 
-      self.checkBoxes[x] = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+      self.checkBoxes[x] = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
       self.checkBoxes[x].setObjectName(_fromUtf8(x))
       self.verticalLayout.addWidget(self.checkBoxes[x])
       self.checkBoxes[x].setText(_fromUtf8(x))
@@ -152,8 +152,8 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
     
     
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

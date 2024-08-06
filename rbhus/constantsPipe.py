@@ -16,11 +16,12 @@
 import os
 import tempfile
 import sys
-import debug
 
 tempDir = tempfile.gettempdir()
 file_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1])
 base_dir = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2])
+sys.path.append(base_dir)
+import rbhus.debug as debug
 debug.info(base_dir)
 
 #proj table
@@ -94,8 +95,8 @@ mimeLogos = {
 }
 
 mimeConvertCmds = {
-  "image": "/usr/bin/convert \"{0}\" -sample 96x96 \"{1}\"",
-  "pdf": "/usr/bin/convert \"{0}\"[0] -sample 96x96 -alpha remove \"{1}\"",
+  "image": "/usr/bin/magick \"{0}\" -sample 96x96 \"{1}\"",
+  "pdf": "/usr/bin/magick \"{0}\"[0] -sample 96x96 -alpha remove \"{1}\"",
   # "video": "/usr/bin/convert \"{0}[1]\" -sample 96x96 \"{1}\"",
   "video": "/usr/bin/ffmpeg -loglevel panic -i \"{0}\" -vframes 1 -an -vf scale=96:-1 -ss 0.1 -y \"{1}\"",
   "office" : "cp "+ os.path.join(base_dir,"etc","icons","libreOffice_logo.png") +" \"{1}\"",
@@ -122,8 +123,8 @@ mimeTypesOpenCmds = {
 
 mimeCmdsLinux = {
   "gwenview"                     : "gwenview {0}",
-  "djv_view - image"             : "djv_view -auto_seq False -file_cache False {0}",
-  "djv_view - sequence"          : "djv_view -auto_seq True {0}",
+  "djv_view - image"             : "djv_view -seq_auto False -file_cache False {0}",
+  "djv_view - sequence"          : "djv_view -seq_auto True {0}",
   "mrViewer"                     : "mrViewer.sh --playback --run -e {0}",
   "mpv"                          : "mpv --window-scale=0.5 --really-quiet {0}",
   "mpv-audio"                    : "mpv --player-operation-mode=pseudo-gui --really-quiet {0}",

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 __author__ = "Shrinidhi Rao"
 __license__ = "GPL"
@@ -590,7 +590,7 @@ class tasks(object):
     else:
       return(0)
     for x in fieldDict.keys():
-      if(self.taskFields.has_key(x)):
+      if x in self.taskFields:
         self.validFields[x] = fieldDict[x].rstrip().lstrip()
       else:
         self.invalidFields[x] = fieldDict[x]
@@ -701,7 +701,7 @@ class tasks(object):
     else:
       return(0)
     for x in fieldDict.keys():
-      if(self.taskFields.has_key(x)):
+      if x in self.taskFields:
         self.validFields[x] = fieldDict[x]
       else:
         self.invalidFields[x] = fieldDict[x]

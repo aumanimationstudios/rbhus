@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import os
 import sys
 import subprocess
@@ -65,7 +65,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     
   
   def center(self):
-    Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
+    Form.move(QtWidgets.QApplication.desktop().screen().rect().center()- Form.rect().center())
   
   def tryAuth(self):
     
@@ -80,8 +80,8 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     sys.exit(0)
     
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

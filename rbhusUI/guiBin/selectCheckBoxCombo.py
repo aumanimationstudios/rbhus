@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -164,8 +164,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
       #model = QtGui.QStandardItemModel(len(self.findList),1)
       for x in self.findList:
         indx = 0
-        groupBox = QtGui.QGroupBox(self.scrollAreaWidgetContents)
-        comboBox = QtGui.QComboBox(groupBox)
+        groupBox = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
+        comboBox = QtWidgets.QComboBox(groupBox)
         model = QtGui.QStandardItemModel(len(self.defCombo),1)
         model.setParent(comboBox)
         
@@ -190,10 +190,10 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         
         
         #groupBox.setObjectName(_fromUtf8("groupBox"))
-        gridLayout_2 = QtGui.QGridLayout(groupBox)
+        gridLayout_2 = QtWidgets.QGridLayout(groupBox)
         #gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        checkBox = QtGui.QCheckBox(groupBox)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
+        checkBox = QtWidgets.QCheckBox(groupBox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(checkBox.sizePolicy().hasHeightForWidth())
@@ -210,7 +210,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         else:
           comboBox.setEditText("default")
         
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(comboBox.sizePolicy().hasHeightForWidth())
@@ -343,8 +343,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
     
     
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

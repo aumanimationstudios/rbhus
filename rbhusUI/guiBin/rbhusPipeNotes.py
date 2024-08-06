@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 import argparse
 import os
 import socket
@@ -10,7 +10,7 @@ if(sys.platform.find("linux") >=0 ):
   import fcntl
 import psutil
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtWidgets, QtCore, QtGui, uic
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p","--assetpath",dest='assetpath',help='asset path (pipePath)')
@@ -58,12 +58,12 @@ except AttributeError:
   
 
 try:
-  _encoding = QtGui.QApplication.UnicodeUTF8
+  _encoding = QtWidgets.QApplication.UnicodeUTF8
   def _translate(context, text, disambig):
-    return QtGui.QApplication.translate(context, text, disambig, _encoding)
+    return QtWidgets.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
   def _translate(context, text, disambig):
-    return QtGui.QApplication.translate(context, text, disambig)
+    return QtWidgets.QApplication.translate(context, text, disambig)
   
   
 
@@ -119,7 +119,7 @@ class Ui_Form(rbhusPipeNotesMod.Ui_MainWindow):
     app_lock()
     rbhusPipeNotesMod.Ui_MainWindow.setupUi(self,Form)
 
-    self.spacerForMsgBox = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+    self.spacerForMsgBox = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
     self.splitter.setStretchFactor(0, 10)
     self.assdets = {}
     self.msgboxes = []
@@ -225,8 +225,8 @@ class Ui_Form(rbhusPipeNotesMod.Ui_MainWindow):
     
     
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

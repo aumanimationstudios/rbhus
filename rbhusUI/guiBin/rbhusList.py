@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -33,7 +33,7 @@ png2mp4Cmd = toolsdir + os.sep + "convert_png_mp4.py"
 exr2rleCmd = toolsdir + os.sep + "convert_exr_mov_rle.py"
 png2rleCmd = toolsdir + os.sep + "convert_png_mov_rle.py"
 
-print editTaskCmd
+print (editTaskCmd)
 import rbhusListMod
 print(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
 sys.path.append(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep +"rbhus")
@@ -52,7 +52,7 @@ except AttributeError:
   _fromUtf8 = lambda s: s
 
 
-class ImagePlayer(QtGui.QWidget):
+class ImagePlayer(QtWidgets.QWidget):
   def __init__(self, filename, parent):
     super(ImagePlayer,self).__init__(parent)
     self.parent = parent
@@ -62,8 +62,8 @@ class ImagePlayer(QtGui.QWidget):
     self.newSize = QtCore.QSize(100,100)
     self.movie.setScaledSize(self.newSize)
 
-    self.movie_screen = QtGui.QLabel()
-    self.movie_screen.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+    self.movie_screen = QtWidgets.QLabel()
+    self.movie_screen.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
     self.movie_screen.setAlignment(QtCore.Qt.AlignCenter)
 
     # Add the QMovie object to the label
@@ -73,7 +73,7 @@ class ImagePlayer(QtGui.QWidget):
 
 
     # Create the layout
-    main_layout = QtGui.QVBoxLayout()
+    main_layout = QtWidgets.QVBoxLayout()
     main_layout.addWidget(self.movie_screen)
     self.setLayout(main_layout)
     self.movie.start()
@@ -259,7 +259,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       for x in selTasksDict:
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
-        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,options=QtGui.QFileDialog.DontUseNativeDialog)
+        fila = QtWidgets.QFileDialog.getOpenFileNames(directory=oDir,options=QtWidgets.QFileDialog.DontUseNativeDialog)
         if(fila):
           for fi in fila:
             if(sys.platform.find("win") >= 0):
@@ -278,7 +278,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       tD = db_conn.getTaskDetails(x['id'])
       oDir = tD['outDir']
       print("*"+ str(x['frameId']).zfill(tD['pad']) +"*")
-      fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*",options=QtGui.QFileDialog.DontUseNativeDialog)
+      fila = QtWidgets.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*",options=QtWidgets.QFileDialog.DontUseNativeDialog)
       if(fila):
         print(fila)
         for fi in fila:
@@ -290,11 +290,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
 
   def popupTask(self, pos):
-    mainMenu = QtGui.QMenu()
-    toolsMenu = QtGui.QMenu()
+    mainMenu = QtWidgets.QMenu()
+    toolsMenu = QtWidgets.QMenu()
     toolsMenu.setTitle("tools")
 
-    scriptMenu = QtGui.QMenu()
+    scriptMenu = QtWidgets.QMenu()
     scriptMenu.setTitle("create Scripts")
 
     test1Action = toolsMenu.addAction("activate")
@@ -394,8 +394,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(isScript):
       fd.flush()
       fd.close()
-      os.chmod(filenamepy,0777)
-      msgbox = QtGui.QMessageBox()
+      os.chmod(filenamepy,0o777)
+      msgbox = QtWidgets.QMessageBox()
       msgbox.setText(filenamepy)
       msgbox.exec_()
 
@@ -439,8 +439,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     if(isScript):
       fd.flush()
       fd.close()
-      os.chmod(filenamepy,0777)
-      msgbox = QtGui.QMessageBox()
+      os.chmod(filenamepy,0o777)
+      msgbox = QtWidgets.QMessageBox()
       msgbox.setText(filenamepy)
       msgbox.exec_()
 
@@ -531,7 +531,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
   def popupFrames(self, pos):
     selFramesDict = self.selectedFrames()
-    menu = QtGui.QMenu()
+    menu = QtWidgets.QMenu()
     db_conn = dbRbhus.dbRbhus()
     test1Action = menu.addAction("check log")
     test3Action = menu.addAction("hold")
@@ -573,7 +573,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         tD = db_conn.getTaskDetails(x['id'])
         oDir = tD['outDir']
         print("*"+ str(x['frameId']).zfill(tD['pad']) +"*")
-        fila = QtGui.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*",options=QtGui.QFileDialog.DontUseNativeDialog)
+        fila = QtWidgets.QFileDialog.getOpenFileNames(directory=oDir,filter="*"+ str(x['frameId']).zfill(tD['pad']) +"*",options=QtWidgets.QFileDialog.DontUseNativeDialog)
         print(fila)
         if(fila):
           for f in fila:
@@ -589,7 +589,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     db_conn = dbRbhus.dbRbhus()
     for x in selFramesDict:
       if(x['status'] == "running"):
-        print self.getHostIp(x['hostName'])
+        print (self.getHostIp(x['hostName']))
         db_conn.stopFrames(str(self.getHostIp(x['hostName'])),x['id'],x['frameId'])
       else:
         print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
@@ -601,7 +601,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     db_conn = dbRbhus.dbRbhus()
     for x in selFramesDict:
       if(x['status'] == "running"):
-        print self.getHostIp(x['hostName'])
+        print (self.getHostIp(x['hostName']))
         db_conn.stopHoldFrames(str(self.getHostIp(x['hostName'])),x['id'],x['frameId'])
       else:
         print(str(x['id']) +"%"+ str(x['frameId']) +" not able to murder since it is running")
@@ -870,7 +870,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.tableList.clearContents()
     self.tableList.setSortingEnabled(False)
     self.tableList.resizeColumnsToContents()
-    self.tableList.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+    self.tableList.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
     colCount = 0
     rows = self.selTasks
 
@@ -878,7 +878,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.tableList.setColumnCount(0)
       self.tableList.setRowCount(0)
-      self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+      self.labelTaskTotal.setText(QtWidgets.QApplication.translate("Form", str(0), None, QtWidgets.QApplication.UnicodeUTF8))
       self.groupBoxTask.setEnabled(True)
       self.groupBoxTaskDate.setEnabled(True)
       return()
@@ -896,20 +896,20 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     rows = findRows
 
 
-    self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
+    self.labelTaskTotal.setText(QtWidgets.QApplication.translate("Form", str(len(rows)), None, QtWidgets.QApplication.UnicodeUTF8))
     self.tableList.setColumnCount(colCount)
     self.tableList.setRowCount(len(rows))
 
     for x in range(0,colCount):
-      item = QtGui.QTableWidgetItem()
+      item = QtWidgets.QTableWidgetItem()
       self.tableList.setHorizontalHeaderItem(x, item)
     indx = 0
     for x in self.colNamesTask:
-      self.tableList.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      self.tableList.horizontalHeaderItem(indx).setText(QtWidgets.QApplication.translate("Form", x, None, QtWidgets.QApplication.UnicodeUTF8))
       indx = indx + 1
 
     for x in self.colNamesTaskXtra:
-      self.tableList.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      self.tableList.horizontalHeaderItem(indx).setText(QtWidgets.QApplication.translate("Form", x, None, QtWidgets.QApplication.UnicodeUTF8))
       indx = indx + 1
 
 
@@ -921,20 +921,20 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           #sFlag = 1
 
       #if(sFlag):
-      item = QtGui.QTableWidgetItem()
+      item = QtWidgets.QTableWidgetItem()
       self.tableList.setVerticalHeaderItem(indx, item)
       colIndx = 0
       for colName in self.colNamesTask:
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         # item.setToolTip(str(row['fileName']))
         if(colName == "status"):
           self.tableList.setItem(indx, colIndx, item)
-          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+          self.tableList.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", constants.taskStatus[int(row[colName])], None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         if(colName == "id"):
           self.tableList.setItem(indx, colIndx, item)
-          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableList.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtWidgets.QApplication.UnicodeUTF8))
           if(str(row[colName]).zfill(4) in tSelect):
             self.tableList.selectRow(indx)
           colIndx = colIndx + 1
@@ -942,16 +942,16 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
         if (colName == "fileName"):
           self.tableList.setItem(indx, colIndx, item)
-          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).split(os.sep)[-1], None, QtGui.QApplication.UnicodeUTF8))
+          self.tableList.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]).split(os.sep)[-1], None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
 
         self.tableList.setItem(indx, colIndx, item)
-        self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        self.tableList.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None, QtWidgets.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
 
       for colName in self.colNamesTaskXtra:
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         # item.setToolTip(str(row['id']) +":"+ str(row['fileName']))
         if(colName == "pending"):
           self.tableList.setItem(indx, colIndx, item)
@@ -961,21 +961,21 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
             totalPend = self.pendFrames[row['id']][-1]['count(*)']
           except:
             pass
-          self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(totalPend), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableList.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(totalPend), None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         self.tableList.setItem(indx, colIndx, item)
-        self.tableList.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        self.tableList.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None, QtWidgets.QApplication.UnicodeUTF8))
         colIndx = colIndx + 1
 
       indx = indx + 1
 
-    self.labelTaskTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
+    self.labelTaskTotal.setText(QtWidgets.QApplication.translate("Form", str(len(rows)), None, QtWidgets.QApplication.UnicodeUTF8))
     self.tableList.resizeColumnsToContents()
     self.tableList.setSortingEnabled(True)
 
     self.tableList.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
-    self.tableList.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+    self.tableList.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
     self.groupBoxTask.setEnabled(True)
     self.groupBoxTaskDate.setEnabled(True)
     #self.popTableFrames()
@@ -1051,11 +1051,11 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
         rows = db_conn.execute("select "+ ",".join(self.colNamesFrames) +" from frames where (id = "+ ids +") and (status="+ statusCheck +")",dictionary=True)
       else:
         #print("please check status")
-        self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+        self.labelTotal.setText(QtWidgets.QApplication.translate("Form", str(0), None, QtWidgets.QApplication.UnicodeUTF8))
         self.timerFramesRefresh.stop()
     except:
       print(str(sys.exc_info()))
-      self.labelTotal.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+      self.labelTotal.setText(QtWidgets.QApplication.translate("Form", str(0), None, QtWidgets.QApplication.UnicodeUTF8))
       self.timerFramesRefresh.stop()
     self.sFrames = rows
 
@@ -1065,7 +1065,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.tableFrames.clearContents()
     self.tableFrames.setSortingEnabled(False)
     self.tableFrames.resizeColumnsToContents()
-    self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+    self.tableFrames.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
 
 
     rows = self.sFrames
@@ -1073,7 +1073,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       self.tableFrames.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
       self.tableFrames.setColumnCount(0)
       self.tableFrames.setRowCount(0)
-      self.labelTotal.setText(QtGui.QApplication.translate("Form", "0", None, QtGui.QApplication.UnicodeUTF8))
+      self.labelTotal.setText(QtWidgets.QApplication.translate("Form", "0", None, QtWidgets.QApplication.UnicodeUTF8))
       self.timerFramesRefresh.stop()
       return()
     selFramesDict = self.selectedFrames()
@@ -1128,50 +1128,50 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
     self.tableFrames.setRowCount(len(rows))
 
     for x in range(0,colCount):
-      item = QtGui.QTableWidgetItem()
+      item = QtWidgets.QTableWidgetItem()
       self.tableFrames.setHorizontalHeaderItem(x, item)
     indx = 0
     for x in self.colNamesFrames:
-      self.tableFrames.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      self.tableFrames.horizontalHeaderItem(indx).setText(QtWidgets.QApplication.translate("Form", x, None, QtWidgets.QApplication.UnicodeUTF8))
       indx = indx + 1
     for x in self.colNamesFramesXtra:
-      self.tableFrames.horizontalHeaderItem(indx).setText(QtGui.QApplication.translate("Form", x, None, QtGui.QApplication.UnicodeUTF8))
+      self.tableFrames.horizontalHeaderItem(indx).setText(QtWidgets.QApplication.translate("Form", x, None, QtWidgets.QApplication.UnicodeUTF8))
       indx = indx + 1
 
 
     indx = 0
     for row in rows:
-      item = QtGui.QTableWidgetItem()
+      item = QtWidgets.QTableWidgetItem()
       self.tableFrames.setVerticalHeaderItem(indx, item)
       colIndx = 0
       for colName in self.colNamesFrames:
         if(colName == "status"):
-          item = QtGui.QTableWidgetItem()
+          item = QtWidgets.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
-          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", constants.framesStatus[int(row[colName])], None, QtGui.QApplication.UnicodeUTF8))
+          self.tableFrames.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", constants.framesStatus[int(row[colName])], None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         if(colName == "id"):
-          item = QtGui.QTableWidgetItem()
+          item = QtWidgets.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
-          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableFrames.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]).zfill(4), None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         if(colName == "frameId"):
-          item = QtGui.QTableWidgetItem()
+          item = QtWidgets.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
-          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableFrames.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]).zfill(int(padDict[str(row['id'])])), None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
         if(colName == "ram"):
-          item = QtGui.QTableWidgetItem()
+          item = QtWidgets.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
-          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtGui.QApplication.UnicodeUTF8))
+          self.tableFrames.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.tableFrames.setItem(indx, colIndx, item)
-        self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        self.tableFrames.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None, QtWidgets.QApplication.UnicodeUTF8))
         #print self.tableFrames.item(indx, colIndx).type()
         colIndx = colIndx + 1
 
@@ -1181,7 +1181,7 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
           nowTemp = datetime.datetime.now()
           now = datetime.datetime(nowTemp.year,nowTemp.month,nowTemp.day,nowTemp.hour,nowTemp.minute,nowTemp.second,0)
 
-          item = QtGui.QTableWidgetItem()
+          item = QtWidgets.QTableWidgetItem()
           self.tableFrames.setItem(indx, colIndx, item)
           tT = 0
           if(not row['sTime']):
@@ -1209,13 +1209,13 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
                 tT = row['eTime'] - row['sTime']
             except:
               pass
-          self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(tT).zfill(int(padDict[str(row['id'])])), None, QtGui.QApplication.UnicodeUTF8))
+          self.tableFrames.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(tT).zfill(int(padDict[str(row['id'])])), None, QtWidgets.QApplication.UnicodeUTF8))
           colIndx = colIndx + 1
           continue
 
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.tableFrames.setItem(indx, colIndx, item)
-        self.tableFrames.item(indx, colIndx).setText(QtGui.QApplication.translate("Form", str(row[colName]), None, QtGui.QApplication.UnicodeUTF8))
+        self.tableFrames.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None, QtWidgets.QApplication.UnicodeUTF8))
         #print self.tableFrames.item(indx, colIndx).type()
         colIndx = colIndx + 1
 
@@ -1225,12 +1225,12 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
       indx = indx + 1
       #print(row['eTime'] - row['sTime'])
 
-    self.labelTotal.setText(QtGui.QApplication.translate("Form", str(len(rows)), None, QtGui.QApplication.UnicodeUTF8))
+    self.labelTotal.setText(QtWidgets.QApplication.translate("Form", str(len(rows)), None, QtWidgets.QApplication.UnicodeUTF8))
 
     self.tableFrames.resizeColumnsToContents()
     self.tableFrames.setSortingEnabled(True)
-    QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-    self.tableFrames.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+    QtWidgets.QApplication.setOverrideCursor(QtWidgets.QCursor(QtCore.Qt.ArrowCursor))
+    self.tableFrames.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
     self.timerFramesRefresh.stop()
 
 
@@ -1286,8 +1286,8 @@ class Ui_Form(rbhusListMod.Ui_mainRbhusList):
 
 if __name__ == "__main__":
   import sys
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

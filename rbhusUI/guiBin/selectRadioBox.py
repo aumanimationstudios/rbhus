@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -85,7 +85,7 @@ class Ui_Form(selectRadioBoxMod.Ui_selectRadioBox):
       
     if(findList):
       for x in findList:
-        self.radioButts[x] = QtGui.QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButts[x] = QtWidgets.QRadioButton(self.scrollAreaWidgetContents)
         self.radioButts[x].setObjectName(_fromUtf8(x))
         self.verticalLayout.addWidget(self.radioButts[x])
         self.radioButts[x].setText(_fromUtf8(x))
@@ -126,8 +126,8 @@ class Ui_Form(selectRadioBoxMod.Ui_selectRadioBox):
     
     
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

@@ -1,6 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -85,7 +85,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     self.lineEditResolution.textChanged.connect(self.reset_res)
     self.lineEditCamera.textChanged.connect(self.reset_cam)
     self.lineEditAfterTask.textChanged.connect(self.reset_afterTask)
-    print self.afterTimeEdit.dateTime().toString()
+    print (self.afterTimeEdit.dateTime().toString())
     
     
     self.db_filetype = 0
@@ -365,32 +365,32 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       self.db_afterTaskSloppy = 1
   
   def selectFileName(self):
-    fila = QtGui.QFileDialog.getOpenFileName()
+    fila = QtWidgets.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditFileName.setText(fila.replace("\\","/"))
       self.db_filename = fila
 
   def selectOutPutDir(self):
-    fila = QtGui.QFileDialog.getExistingDirectory()
+    fila = QtWidgets.QFileDialog.getExistingDirectory()
     if(fila):
       self.lineEditOutPutDir.setText(fila.replace("\\","/"))
       self.db_outputdir = fila
       
 
   def selectLogBase(self):
-    fila = QtGui.QFileDialog.getExistingDirectory()
+    fila = QtWidgets.QFileDialog.getExistingDirectory()
     if(fila):
       self.lineEditLogbase.setText(fila)
       self.db_logbase = fila
   
   def selectBfc(self):
-    fila = QtGui.QFileDialog.getOpenFileName()
+    fila = QtWidgets.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditBfc.setText(fila)
       self.db_bfc = fila
 
   def selectAfc(self):
-    fila = QtGui.QFileDialog.getOpenFileName()
+    fila = QtWidgets.QFileDialog.getOpenFileName()
     if(fila):
       self.lineEditAfc.setText(fila)
       self.db_afc = fila
@@ -519,8 +519,8 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   
     
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

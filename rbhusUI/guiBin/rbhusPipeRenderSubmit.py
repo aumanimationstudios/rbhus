@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -233,7 +233,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     
     
   def printPrioSel(self):
-    print self.comboPrio.currentText()
+    print (self.comboPrio.currentText())
     
   
   
@@ -627,7 +627,7 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
               except:
                 print("Error inserting task : "+ str(sys.exc_info()))
                 
-    QtGui.qApp.closeAllWindows()
+    QtWidgets.qApp.closeAllWindows()
     
     
     
@@ -635,8 +635,8 @@ class Ui_Form(rbhusPipeSubmitRenderMod.Ui_rbhusSubmit):
     
     
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

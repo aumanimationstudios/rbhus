@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'templateUI.ui'
@@ -7,7 +8,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import re
@@ -22,16 +23,16 @@ class Ui_Form(object):
     Form.setObjectName(_fromUtf8("Form"))
     Form.resize(519, 171)
     self.center()
-    sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+    sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
     sizePolicy.setHorizontalStretch(0)
     sizePolicy.setVerticalStretch(0)
     sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
     Form.setSizePolicy(sizePolicy)
-    self.gridlayout = QtGui.QGridLayout(Form)
+    self.gridlayout = QtWidgets.QGridLayout(Form)
     self.gridlayout.setMargin(9)
     self.gridlayout.setSpacing(6)
     self.gridlayout.setObjectName(_fromUtf8("gridlayout"))
-    self.listWidget = QtGui.QListWidget(Form)
+    self.listWidget = QtWidgets.QListWidget(Form)
     self.listWidget.setObjectName(_fromUtf8("listWidget"))
     self.gridlayout.addWidget(self.listWidget, 0, 0, 1, 1)
     self.getFiles()
@@ -42,7 +43,7 @@ class Ui_Form(object):
 
 
   def retranslateUi(self, Form):
-    Form.setWindowTitle(QtGui.QApplication.translate("Form", sys.argv[1], None, QtGui.QApplication.UnicodeUTF8))
+    Form.setWindowTitle(QtWidgets.QApplication.translate("Form", sys.argv[1], None, QtWidgets.QApplication.UnicodeUTF8))
     self.listWidget.setSortingEnabled(True)
     
     
@@ -59,12 +60,12 @@ class Ui_Form(object):
       for f in files:
         if(os.path.isfile(f)):
           if(not f.endswith("~")):
-            fS = QtGui.QListWidgetItem(_fromUtf8(f.split("/")[-1]))
+            fS = QtWidgets.QListWidgetItem(_fromUtf8(f.split("/")[-1]))
             self.listWidget.addItem(fS)
       
       
   def center(self):
-    screen = QtGui.QDesktopWidget().screenGeometry()
+    screen = QtWidgets.QDesktopWidget().screenGeometry()
     size =  Form.geometry()
     Form.move((screen.width()-size.width())/2, (screen.height()-size.height())/2)
       
@@ -73,8 +74,8 @@ class Ui_Form(object):
 
 if __name__ == "__main__":
   import sys
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QWidget()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QWidget()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

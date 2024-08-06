@@ -184,10 +184,11 @@ def getMacAddress():
         mac = line.split(':')[1].strip().replace('-',':')
         break
   else:
-    for line in os.popen("ifconfig"):
-      b = re.search("(([0-9]|[a-z]|[A-Z]){2}|:){11}", line)
+    for line in os.popen("ip addr"):
+      # b = re.search("(([0-9]|[a-z]|[A-Z]){2}|:){11}", line)
+      b = re.search(r'ether\s+([0-9a-fA-F:]+)', line)
       if (b):
-        mac = str(b.group())
+        mac = str(b.group(1))
         break
   return(mac)
 
@@ -552,22 +553,22 @@ def execFrames(frameInfo,frameScrutiny):
       rgid = pwd.getpwnam(str(frameInfo['user']).lstrip().rstrip())[3]
 
     try:
-      os.makedirs(str(frameInfo['outDir']),0777)
+      os.makedirs(str(frameInfo['outDir']),0o777)
     except:
       logClient.debug("MKDIR : "+ str(sys.exc_info()[1]))
     if(sys.platform.find("linux") >= 0):
       try:
-        os.chmod(str(frameInfo['outDir']),0777)
+        os.chmod(str(frameInfo['outDir']),0o777)
         os.chown(str(frameInfo['outDir']),ruid,rgid)
       except:
         logClient.debug("MKDIR : "+ str(sys.exc_info()[1]))
 
     try:
-      os.makedirs(str(frameInfo['logBase']),0777)
+      os.makedirs(str(frameInfo['logBase']),0o777)
     except:
       logClient.debug("MKDIR : "+ str(sys.exc_info()[1]))
     try:
-      os.chmod(str(frameInfo['logBase']),0777)
+      os.chmod(str(frameInfo['logBase']),0o777)
       os.chown(str(frameInfo['logBase']),ruid,rgid)
     except:
       logClient.debug("MKDIR : "+ str(sys.exc_info()[1]))

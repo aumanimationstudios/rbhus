@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import os
 import sys
 
@@ -36,7 +36,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   def center(self):
     
     qr = Form.frameGeometry()
-    cp = QtGui.QDesktopWidget().availableGeometry().center()
+    cp = QtWidgets.QDesktopWidget().availableGeometry().center()
     qr.moveCenter(cp)
     Form.move(qr.topLeft())
   
@@ -59,8 +59,8 @@ if __name__ == "__main__":
       #sys.exit(0)
     #else:
       #sys.exit(1)
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

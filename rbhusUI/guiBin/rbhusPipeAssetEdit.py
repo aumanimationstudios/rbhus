@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -145,7 +145,7 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     
     
   def center(self):
-    Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
+    Form.move(QtWidgets.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
   
   def enableReview(self):
@@ -341,8 +341,8 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
 
 
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -111,10 +111,10 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
   
   
   def inputDiag(self, title="New File Name"):
-    fS = QtGui.QWidget()
+    fS = QtWidgets.QWidget()
     fS.setGeometry(300, 300, 350, 80)
     fS.setWindowTitle('New File Name')
-    text, ok = QtGui.QInputDialog.getText(fS, 'New', 'Enter Name:')
+    text, ok = QtWidgets.QInputDialog.getText(fS, 'New', 'Enter Name:')
     if(ok):
       print(str(text))
       return(str(text))
@@ -123,7 +123,7 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
     
     
   def center(self):
-    Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
+    Form.move(QtWidgets.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
   
   def updateStatus(self):
@@ -172,8 +172,8 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
 
 
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

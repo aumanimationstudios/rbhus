@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import os
 import sys
 import tempfile
@@ -72,11 +72,11 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
     self.wFlag = self.form.windowFlags()
 
 
-    self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png"))
+    self.trayIcon = QtWidgets.QSystemTrayIcon(QtGui.QIcon(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png"))
     self.trayIcon.show()
 
-    self.trayMenu = QtGui.QMenu()
-    self.hostMenu = QtGui.QMenu()
+    self.trayMenu = QtWidgets.QMenu()
+    self.hostMenu = QtWidgets.QMenu()
     self.listAction = self.trayMenu.addAction("list")
     self.newAction = self.trayMenu.addAction("new")
     self.hostAction = self.trayMenu.addAction("hosts")
@@ -218,13 +218,13 @@ class Ui_Form(rbhusRenderMain.Ui_MainWindow):
 
 
   def center(self):
-    Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
+    Form.move(QtWidgets.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
 
 if __name__ == "__main__":
   import sys
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()

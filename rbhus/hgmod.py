@@ -4,7 +4,6 @@ from os.path import expanduser
 import multiprocessing
 import shutil
 import subprocess
-import debug
 import datetime
 
 
@@ -25,12 +24,15 @@ localCacheWindowsMain = "D:/versionCache/"
 localCacheLinux = localCacheLinuxMain + os.environ['rbhusPipe_acl_user'] +"/"
 localCacheWindows = localCacheWindowsMain + os.environ['rbhusPipe_acl_user'] +"/"
 
+filepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-1])
+basepath = os.sep.join(os.path.abspath(__file__).split(os.sep)[0:-2])
+sys.path.append(basepath)
 
-
-import dbPipe
-import constantsPipe
-import utilsPipe
-import utilsTray
+import rbhus.debug as debug
+import rbhus.dbPipe as dbPipe
+import rbhus.constantsPipe as constantsPipe
+import rbhus.utilsPipe as utilsPipe
+import rbhus.utilsTray as utilsTray
 import re
 
 
@@ -58,7 +60,7 @@ class hg(object):
       except:
         debug.info(sys.exc_info())
       try:
-        os.chmod(localCacheLinuxMain, 0777)
+        os.chmod(localCacheLinuxMain, 0o777)
       except:
         debug.info(sys.exc_info())
 

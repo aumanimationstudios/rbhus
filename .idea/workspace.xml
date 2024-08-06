@@ -4,13 +4,50 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5de4dea-8992-4546-9046-bea2fae47a96" name="Changes" comment="" />
+    <list default="true" id="c5de4dea-8992-4546-9046-bea2fae47a96" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bootstrap.sh" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/blend_lin/camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/blend_lin/camera.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/blend_lin/default.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/blend_lin/default.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/blend_lin/layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/blend_lin/layers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/blend_lin/outputNodes.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/blend_lin/outputNodes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/WOL.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/WOL.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/authPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/authPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/constantsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/constantsPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/dbPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/dbPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/dbRbhus.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/dbRbhus.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/dbTrayServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/dbTrayServer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/debug.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/debug.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/dfl.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/dfl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/hgmod.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/hgmod.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/polymorph.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/polymorph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/renderPlugin.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/renderPlugin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/utilsTray.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utilsTray.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusPipe" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusPipe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusRender" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusRender" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetEdit.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipeAssetEdit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/rbhusPipe_new.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusAuthMod.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusAuthMod.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetEditMod.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/lib/rbhusPipeAssetEditMod.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/rbhusPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/rbhusPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="archlinux-python2-pyqt4" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
@@ -25,8 +62,8 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;archlinux-python2-pyqt4&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/sanath/git_repos/rbhus&quot;
+    &quot;git-widget-placeholder&quot;: &quot;python3-pyqt5&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/sanath/git_repos/rbhus_pyqt5&quot;
   }
 }</component>
   <component name="RecentsManager">

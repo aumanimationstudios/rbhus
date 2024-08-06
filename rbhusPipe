@@ -22,5 +22,5 @@ fi
 #echo "DIR is '$DIR'"
 source "$DIR"/rbhus-env/bin/activate
 cd "$DIR"/rbhusUI || return
-python2 "$DIR"/rbhusUI/rbhusPipe.py
+python3 "$DIR"/rbhusUI/rbhusPipe.py
 cd - || return

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 __author__ = "Shrinidhi Rao"
 __license__ = "GPL"
@@ -69,7 +69,7 @@ else:
   ROOTDIR = ROOTDIR_ASSET
 
 
-testhash = hashlib.sha1(str(assPath)+str(ROOTDIR))
+testhash = hashlib.sha1(assPath.encode('utf-8') + ROOTDIR.encode('utf-8'))
 lockFile = os.path.join(tempfile.gettempdir(),rbhus.utilsPipe.username, str(testhash.hexdigest()))
 rbhus.debug.info("HASH: "+ lockFile)
 
@@ -85,7 +85,8 @@ CUR_DIR_SELECTED = None
 print(COMPOUND_PATHS)
 
 fileDetsDict = {}
-fileIconThreadRunning = None
+# fileIconThreadRunning = None
+fileIconThreads = []
 fileThumbzWidget = {}
 fileThumbzItems = {}
 
@@ -350,72 +351,100 @@ class server(QtCore.QThread):
     # self.finished.emit() # dont enable this . this will simply emit finished twice .. !!!
 
 
+# class fileDirLoadedThread(QtCore.QThread):
+#   fileIcon = QtCore.pyqtSignal(object)
+#   iconProcessStarted = QtCore.pyqtSignal()
+#   def __init__(self, filesLoaded,pathSelected):
+#     super(fileDirLoadedThread, self).__init__()
+#     self._ip = 'localhost'
+#     self.filesLoaded = filesLoaded
+#     self._pleaseStop = False
+#     self.pathSelected = pathSelected
+#     global context
+#     self.socket = context.socket(zmq.REQ)
+#     self.socket.connect("ipc:///tmp/"+ serverIPC)
+#     # rbhus.debug.info("Sending request {0} ".format(fileDets))
+#
+#
+#   def pleaseStop(self):
+#     rbhus.debug.info("Stopping thread")
+#     self._pleaseStop = True
+#
+#   def run(self):
+#     for filePath in self.filesLoaded:
+#       if(self._pleaseStop):
+#         break
+#       if(os.path.isfile(filePath)):
+#         pathSelected = os.path.relpath(os.path.abspath(os.path.dirname(filePath)), ROOTDIR)
+#         rbhus.debug.info(pathSelected)
+#         for mimeType in rbhus.constantsPipe.mimeTypes.keys():
+#           if (self._pleaseStop):
+#             break
+#           mimeExts = rbhus.constantsPipe.mimeTypes[mimeType]
+#           for mimeExt in mimeExts:
+#             if (self._pleaseStop):
+#               break
+#
+#             rbhus.debug.info("reached here")
+#
+#             if (filePath.endswith(mimeExt)):
+#               fileDets = rbhus.utilsPipe.thumbz_db()
+#               fileDets.mainFile = filePath
+#               fileDets.absPath = filePath
+#               fileDets.subPath = pathSelected
+#               fileDets.mimeType = mimeType
+#               fileDets.mimeExt = mimeExt
+#
+#               fName = os.path.basename(filePath)
+#               fileDets.fileName = fName
+#
+#               fThumbz = os.path.join(thumbsDbDir, pathSelected, fName + ".png")
+#               fJson = os.path.join(thumbsDbDir, pathSelected, fName + ".json")
+#               fileDets.thumbFile = fThumbz
+#               fileDets.jsonFile = fJson
+#
+#               try:
+#                 self.fileIcon.emit(fileDets)
+#                 self.startIconGen(fileDets)
+#               except:
+#                 rbhus.debug.error(sys.exc_info())
+#               time.sleep(0.02)
+#     self.socket.close()
+#
+#   def startIconGen(self,fileDets):
+#     if self._pleaseStop:
+#       return
+#
+#     self.socket.send_pyobj(fileDets)
+#     # rbhus.debug.info("sending filepath")
+#     recvd_obj = self.socket.recv_pyobj()
+
+
 class fileDirLoadedThread(QtCore.QThread):
-  fileIcon = QtCore.pyqtSignal(object)
-  iconProcessStarted = QtCore.pyqtSignal()
-  def __init__(self, filesLoaded,pathSelected):
-    super(fileDirLoadedThread, self).__init__()
-    self._ip = 'localhost'
-    self.filesLoaded = filesLoaded
-    self._pleaseStop = False
-    self.pathSelected = pathSelected
-    global context
-    self.socket = context.socket(zmq.REQ)
-    self.socket.connect("ipc:///tmp/"+ serverIPC)
-    # rbhus.debug.info("Sending request {0} ".format(fileDets))
+  thumbzSignal = QtCore.pyqtSignal(object)
+  thumbzStarted = QtCore.pyqtSignal()
+  thumbzTotal = QtCore.pyqtSignal(object)
 
+  def __init__(self,parent=None,assPath=None):
+    super(fileDirLoadedThread, self).__init__(parent)
+    self.assPath = assPath
+    self.pleaseStop = False
 
-  def pleaseStop(self):
-    self._pleaseStop = True
+  def exitshit(self):
+    self.pleaseStop = True
+
+  def callback_stop(self):
+    return self.pleaseStop
+
+  def callback_media(self,obj):
+    self.thumbzSignal.emit(obj)
+
+  def callback_total(self,obj):
+    self.thumbzTotal.emit(obj)
 
   def run(self):
-    for filePath in self.filesLoaded:
-      if(self._pleaseStop):
-        break
-      if(os.path.isfile(filePath)):
-        pathSelected = os.path.relpath(os.path.abspath(os.path.dirname(filePath)), ROOTDIR)
-        # rbhus.debug.info(pathSelected)
-        for mimeType in rbhus.constantsPipe.mimeTypes.keys():
-          if (self._pleaseStop):
-            break
-          mimeExts = rbhus.constantsPipe.mimeTypes[mimeType]
-          for mimeExt in mimeExts:
-            if (self._pleaseStop):
-              break
-
-
-            if (filePath.endswith(mimeExt)):
-              fileDets = rbhus.utilsPipe.thumbz_db()
-              fileDets.mainFile = filePath
-              fileDets.absPath = filePath
-              fileDets.subPath = pathSelected
-              fileDets.mimeType = mimeType
-              fileDets.mimeExt = mimeExt
-
-              fName = os.path.basename(filePath)
-              fileDets.fileName = fName
-
-              fThumbz = os.path.join(thumbsDbDir, pathSelected, fName + ".png")
-              fJson = os.path.join(thumbsDbDir, pathSelected, fName + ".json")
-              fileDets.thumbFile = fThumbz
-              fileDets.jsonFile = fJson
-
-              try:
-                self.fileIcon.emit(fileDets)
-                self.startIconGen(fileDets)
-              except:
-                rbhus.debug.error(sys.exc_info())
-              time.sleep(0.02)
-    self.socket.close()
-
-  def startIconGen(self,fileDets):
-
-
-
-    self.socket.send_pyobj(fileDets)
-    # rbhus.debug.info("sending filepath")
-    recvd_obj = self.socket.recv_pyobj()
-
+    self.thumbzStarted.emit()
+    rbhus.utilsPipe.getUpdatedMediaThumbz(self.assPath, QT_callback_signalThumbz=self.callback_media, QT_callback_isStopped=self.callback_stop, QT_callback_total=self.callback_total)
 
 
 class FSM4Files(QFileSystemModel):
@@ -488,44 +517,53 @@ def listFilesFinished(main_ui):
   print("trying to fix vanishing items -- WTF!!!!")
 
 def dirSelected(idx, modelDirs, main_ui):
+  global filterList
   global fileThumbzWidget
   global  fileThumbzItems
-  global fileIconThreadRunning
+  # global fileIconThreadRunning
+  global fileIconThreads
   global CUR_DIR_SELECTED
 
   fileThumbzWidget.clear()
   fileThumbzItems.clear()
   main_ui.listFiles.clear()
 
-
-
-
   pathSelected = modelDirs.filePath(idx)
   main_ui.labelFile.setText(str(pathSelected).replace(ROOTDIR,"-"))
   CUR_DIR_SELECTED = pathSelected
-  if(fileIconThreadRunning):
+
+  if fileIconThreads:
+    rbhus.debug.info(fileIconThreads)
     try:
-      fileIconThreadRunning.disconnect()
-      fileIconThreadRunning.pleaseStop()
-      fileIconThreadRunning.wait()
-      fileIconThreadRunning = None
+      for thread in fileIconThreads:
+        rbhus.debug.info("Stopping thread")
+        thread.exitshit()
+        thread.wait()
+        try:
+          thread.disconnect()
+        except:
+          rbhus.debug.debug(thread)
+        try:
+          thread.deleteLater()
+        except:
+          rbhus.debug.debug(sys.exc_info())
+        fileIconThreads.remove(thread)
     except:
       rbhus.debug.info(sys.exc_info())
-
 
   # fileThumbzWidget = {}
   # fileThumbzItems = {}
 
-
+  directory_path = ROOTDIR if pathSelected == CUR_ROOTDIR_POINTER else pathSelected
 
   fileGlob = []
-  directory_path = ""
+  # directory_path = ""
   mimeExts = []
 
-  if (pathSelected == CUR_ROOTDIR_POINTER):
-    directory_path = ROOTDIR
-  else:
-    directory_path = pathSelected
+  # if (pathSelected == CUR_ROOTDIR_POINTER):
+  #   directory_path = ROOTDIR
+  # else:
+  #   directory_path = pathSelected
   
   if filterList:
     for filter in filterList:
@@ -534,10 +572,10 @@ def dirSelected(idx, modelDirs, main_ui):
       fileGlob.extend(glob.glob(directory_path + os.sep + "*{0}".format(mime)))
   else:
     fileGlob = glob.glob(directory_path + os.sep + "*")
-  
+
   rbhus.debug.info(filterList)
   rbhus.debug.info(mimeExts)
-  rbhus.debug.info(fileGlob)
+  # rbhus.debug.info(fileGlob)
 
   # if(pathSelected == CUR_ROOTDIR_POINTER):
 
@@ -554,9 +592,15 @@ def dirSelected(idx, modelDirs, main_ui):
   main_ui.labelTotal.setText(str(totalFiles))
   if(fileGlob):
     fileGlob.sort()
-    fileIconThreadRunning = fileDirLoadedThread(fileGlob,CUR_DIR_SELECTED)
-    fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
+    # rbhus.debug.info(fileGlob)
+    # fileIconThreadRunning = fileDirLoadedThread(fileGlob,CUR_DIR_SELECTED)
+    # fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
+    fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, parent=main_ui)
+    # fileIconThreadRunning.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
+    fileIconThreadRunning.thumbzSignal.connect(lambda mediaObj, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(mediaObj,pathSelected,main_ui))
+    fileIconThreads.append(fileIconThreadRunning)
+    rbhus.debug.info("Starting thread")
     fileIconThreadRunning.start()
 
   searchTerm = main_ui.lineEditSearch.text().strip()
@@ -599,7 +643,7 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   # main_ui.tableFiles.model().setData(fileSelectedIdx, icon, QtCore.Qt.DecorationRole)
   # main_ui.tableFiles.resizeColumnsToContents()
 
-  if(fileThumbzWidget.has_key(fileIconDets.mainFile)):
+  if fileIconDets.mainFile in fileThumbzWidget:
     imageWidgetUpdated(fileIconDets)
     return
   itemWidget = uic.loadUi(mediaThumbz_ui_file)
@@ -815,10 +859,10 @@ def popUpFiles(main_ui,context,pos):
       rbhus.debug.info(sys.exc_info())
       selected = None
     if(selected):
-      if(rbhus.constantsPipe.mimeTypesOpenCmds.has_key(selected.media.mimeType)):
+      if selected.media.mimeType in rbhus.constantsPipe.mimeTypesOpenCmds:
         cmds = rbhus.constantsPipe.mimeTypesOpenCmds[selected.media.mimeType]["linux"]
         for cmd in cmds:
-          if(rbhus.constantsPipe.mimeCmdsLinux.has_key(cmd)):
+          if cmd in rbhus.constantsPipe.mimeCmdsLinux:
             openWithCmdActions[openMenu.addAction(cmd)] = rbhus.constantsPipe.mimeCmdsLinux[cmd]
           else:
             openWithCmdActions[openMenu.addAction(cmd)] = cmd
@@ -925,7 +969,7 @@ def openFile(main_ui,cmd):
 def deleteFiles(main_ui):
   global fileThumbzWidget
   global CUR_DIR_SELECTED
-  global fileIconThreadRunning
+  # global fileIconThreadRunning
   selected = getSelectedFiles(main_ui)
   # selected = main_ui.listFiles.selectedItems()
 
@@ -961,15 +1005,26 @@ def setToolTip(tray_icon,src,dest,main_ui):
 
 def syncingDoneEvent(src,dest,main_ui):
   global CUR_DIR_SELECTED
-  global fileIconThreadRunning
+  # global fileIconThreadRunning
+  global fileIconThreads
   if(not os.path.isdir(src)):
     fileGlob = [dest]
-    fileIconThreadRunning = fileDirLoadedThread(fileGlob,CUR_DIR_SELECTED)
-    fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = CUR_DIR_SELECTED, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
-     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
+    # fileIconThreadRunning = fileDirLoadedThread(fileGlob,CUR_DIR_SELECTED)
+    # fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = CUR_DIR_SELECTED, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
+    #  # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
+    # fileIconThreads.append(fileIconThreadRunning)
+    # fileIconThreadRunning.start()
+    # fileIconThreadRunning.wait()
+    # rbhus.debug.info("created ICON FOR : "+ dest)
+
+    fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, parent=main_ui)
+    # fileIconThreadRunning.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
+    fileIconThreadRunning.thumbzSignal.connect(lambda mediaObj, pathSelected=CUR_DIR_SELECTED, main_ui=main_ui: fileIconActivate(mediaObj, pathSelected, main_ui))
+    fileIconThreads.append(fileIconThreadRunning)
+    rbhus.debug.info("Starting thread")
     fileIconThreadRunning.start()
     fileIconThreadRunning.wait()
-    rbhus.debug.info("created ICON FOR : "+ dest)
+
 
 def copyingFinished(tray_icon,tray_icon_anim):
   global isCopying
@@ -989,7 +1044,7 @@ def copyingFinished(tray_icon,tray_icon_anim):
 def pasteFilesFromClipboard(main_ui,urls):
   global fileThumbzWidget
   global CUR_DIR_SELECTED
-  global fileIconThreadRunning
+  # global fileIconThreadRunning
   global isCopying
   # rbhus.debug.info("COPYING FILE")
   tray_icon_anim = QtGui.QMovie(busyIconGif)
@@ -1192,14 +1247,17 @@ def toggleView(main_ui):
   #   main_ui.listFiles.show()
 
 
-def updateFilterList(main_ui, ui, modelDirs):
-  if ui.isChecked():
+def updateFilterList(state, main_ui, ui, modelDirs):
+  rbhus.debug.info("updating filter list")
+  if state == QtCore.Qt.Checked:
+  # if ui.isChecked():
     filterList.append(str(ui.text()))
   else:
     try:
       filterList.remove(str(ui.text()))
     except:
       pass
+  # rbhus.debug.info(filterList)
   dirSelected(main_ui.treeDirs.currentIndex(), modelDirs, main_ui)
 
 def search(modelDirs, main_ui):
@@ -1266,7 +1324,7 @@ def mainGui(main_ui):
   main_ui.frame.setLayout(layV)
   for mimeType in rbhus.constantsPipe.mimeTypes.keys():
     chkbx = QtWidgets.QCheckBox(mimeType)
-    chkbx.clicked.connect(lambda click, main_ui=main_ui, ui=chkbx, modelDirs=modelDirs: updateFilterList(main_ui, ui, modelDirs))
+    chkbx.stateChanged.connect(lambda state, main_ui=main_ui, ui=chkbx, modelDirs=modelDirs: updateFilterList(state, main_ui, ui, modelDirs))
     layV.addWidget(chkbx)
   vSpacer = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
   layV.addItem(vSpacer)

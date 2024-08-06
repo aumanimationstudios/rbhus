@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-from PyQt4 import QtCore, QtGui
+#!/usr/bin/env python3
+from PyQt5 import QtWidgets, QtCore, QtGui
 import glob
 import os
 import sys
@@ -95,7 +95,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     
     
   def center(self):
-    Form.move(QtGui.QApplication.desktop().screen().rect().center()- Form.rect().center())
+    Form.move(QtWidgets.QApplication.desktop().screen().rect().center()- Form.rect().center())
 
   def enableAssName(self):
     if(self.checkAssName.isChecked()):
@@ -163,8 +163,8 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     else:
       debug.info("reached the end and no asset types - WTF!")
 
-    if(not assdict.has_key('assetType')):
-      QtGui.QMessageBox.critical(self.form,"WTF!!!","assetType not selected. Please select one")
+    if 'assetType' not in assdict:
+      QtWidgets.QMessageBox.critical(self.form,"WTF!!!","assetType not selected. Please select one")
       self.centralwidget.setEnabled(True)
       self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
       return
@@ -329,7 +329,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     rows = utilsPipe.getAssTypes(status=constantsPipe.typesAll)
     if(rows):
       for row in rows:
-        radioButton = QtGui.QRadioButton()
+        radioButton = QtWidgets.QRadioButton()
         radioButton.setObjectName("radio_"+ _fromUtf8(row['type']))
         radioButton.setText(_fromUtf8(row['type']))
         self.horizontalLayout_3.addWidget(radioButton)
@@ -345,8 +345,8 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
 
 
 if __name__ == "__main__":
-  app = QtGui.QApplication(sys.argv)
-  Form = QtGui.QMainWindow()
+  app = QtWidgets.QApplication(sys.argv)
+  Form = QtWidgets.QMainWindow()
   ui = Ui_Form()
   ui.setupUi(Form)
   Form.show()
