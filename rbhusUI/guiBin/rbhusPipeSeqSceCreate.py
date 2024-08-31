@@ -32,6 +32,7 @@ import dbPipe
 import constantsPipe
 import authPipe
 import utilsPipe
+import debug
 
 
 try:
@@ -40,11 +41,17 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusPipeSeqSceCreateMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.form = Form
     self.dbpipe = dbPipe.dbPipe()
@@ -75,18 +82,18 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
     seqScnDict['projName'] = os.environ['rp_proj_projName']
     if(not self.lineEditSequenceName.text()):
       return(0)
-    seqScnDict['sequenceName'] = str(self.lineEditSequenceName.text())
+    seqScnDict['sequenceName'] = str_convert(self.lineEditSequenceName.text())
     if(not self.lineEditSceneName.text()):
       return(0)
     self.centralwidget.setEnabled(False)
-    for x in str(self.lineEditSceneName.text()).split(","):
+    for x in str_convert(self.lineEditSceneName.text()).split(","):
       if(x.rstrip().lstrip()):
-        seqScnDict['sceneName'] = str(x.rstrip().lstrip())
+        seqScnDict['sceneName'] = str_convert(x.rstrip().lstrip())
         seqScnDict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-        seqScnDict['sFrame'] = str(self.spinStartFrame.value())
-        seqScnDict['eFrame'] = str(self.spinEndFrame.value())
-        seqScnDict['admins'] = str(self.lineEditAdmins.text())
-        seqScnDict['description'] = str(self.lineEditDesc.text())
+        seqScnDict['sFrame'] = str_convert(self.spinStartFrame.value())
+        seqScnDict['eFrame'] = str_convert(self.spinEndFrame.value())
+        seqScnDict['admins'] = str_convert(self.lineEditAdmins.text())
+        seqScnDict['description'] = str_convert(self.lineEditDesc.text())
         utilsPipe.setupSequenceScene(seqScnDict)
     self.centralwidget.setEnabled(True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)
@@ -101,8 +108,9 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
     if(uniqSeq):
       seqNames = uniqSeq.keys()
       seqToDisp = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(seqNames)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+      seqToDisp = str_convert(seqToDisp)
       print(seqToDisp)
-      self.lineEditSequenceName.setText(seqToDisp)
+      self.lineEditSequenceName.setText(str_convert(seqToDisp))
       return(1)
     else:
       return(0)
@@ -127,7 +135,7 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
 
   
   def updateStatus(self):
-    newStatus = utilsPipe.getSequenceScenes(os.environ["rp_proj_projName"],seq=str(self.lineEditSequenceName.text()),sce=str(self.lineEditSceneName.text()))
+    newStatus = utilsPipe.getSequenceScenes(os.environ["rp_proj_projName"],seq=str_convert(self.lineEditSequenceName.text()),sce=str_convert(self.lineEditSceneName.text()))
     if(newStatus):
       if(len(newStatus) > 0):
         self.wtf = constantsPipe.createStatus[newStatus[-1]['createStatus']]
@@ -148,7 +156,7 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
     self.comboProjType.clear()  
     if(rows):
       for row in rows:
-        self.comboProjType.addItem(_fromUtf8(row['type']))
+        self.comboProjType.addItem(str_convert(row['type']))
       
       return(1)
     return(0)     
@@ -159,7 +167,7 @@ class Ui_Form(rbhusPipeSeqSceCreateMod.Ui_MainWindow):
     self.comboDirectory.clear()
     if(dirs):
       for d in dirs:
-        self.comboDirectory.addItem(_fromUtf8(d['directory']))
+        self.comboDirectory.addItem(str_convert(d['directory']))
       return(1)
     return(0)
     

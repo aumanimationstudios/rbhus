@@ -57,6 +57,12 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 try:
   _encoding = QtWidgets.QApplication.UnicodeUTF8
   def _translate(context, text, disambig):
@@ -93,7 +99,7 @@ def app_lock():
           debug.error(sys.exc_info())
           QtCore.QCoreApplication.instance().quit()
           os._exit(1)
-      f.write(unicode(os.getpid()))
+      f.write(str_convert(os.getpid()))
       f.flush()
       if (sys.platform.find("linux") >= 0):
         fcntl.flock(f, fcntl.LOCK_UN)
@@ -107,7 +113,7 @@ def app_lock():
         debug.error(sys.exc_info())
         QtCore.QCoreApplication.instance().quit()
         os._exit(1)
-    f.write(unicode(os.getpid()))
+    f.write(str_convert(os.getpid()))
     f.flush()
     if (sys.platform.find("linux") >= 0):
       fcntl.flock(f, fcntl.LOCK_UN)
@@ -163,7 +169,7 @@ class Ui_Form(rbhusPipeNotesMod.Ui_MainWindow):
   def sendReview(self):
     if(utilsPipe.isReviewUser(self.assdets) or utilsPipe.isStageAdmin(self.assdets) or utilsPipe.isAssAssigned(self.assdets) or utilsPipe.isProjAdmin(self.assdets)):
       if(str(self.textEdit.toPlainText()) == ""):
-        self.textEdit.setText(str(self.comboProgress.currentText()))
+        self.textEdit.setText(str_convert(self.comboProgress.currentText()))
         # debug.info("not updating since there is no message")
         # return(0)
 

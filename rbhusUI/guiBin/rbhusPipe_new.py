@@ -105,6 +105,12 @@ updateSortingTimer = QtCore.QTimer()
 updateMediaTabTimer = QtCore.QTimer()
 
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class api_serv(QtCore.QThread):
   msg_recved = QtCore.pyqtSignal(object)
   def __init__(self,parent):
@@ -480,7 +486,7 @@ def changeProject(mainUid):
         t.hide()
     item = mainUid.listWidgetProj.selectedItems()
     if (item):
-      project = item[0].text()
+      project = str_convert(item[0].text())
       tag_file_path = rbhus.utilsPipe.getAbsPath(project + ":" + "tag") + os.sep + "tag.txt"
       with open(tag_file_path, 'r') as tag_file:
         tag_name = tag_file.read().strip()
@@ -513,7 +519,7 @@ def updateProjSelect(mainUid):
 
   projects = []
   for x in items:
-    projects.append(str(x.text()))
+    projects.append(str_convert(x.text()))
   saveSelectedProjects(projects)
   try:
     rbhus.utilsPipe.exportProj(projects[-1])
@@ -525,7 +531,7 @@ def clearProjSelect(mainUid):
   items = mainUid.listWidgetProj.selectedItems()
   projects = []
   for x in items:
-    projects.append(str(x.text()))
+    projects.append(str_convert(x.text()))
   saveSelectedProjects(projects)
   rbhus.utilsPipe.exportProj(projects[-1])
 
@@ -545,31 +551,31 @@ def updateAssetsForProjSelectTimed(mainUid):
   global projects
   whereDict = {}
 
-  if (mainUid.comboStage.currentText()):
-    whereDict['stageType'] = str(mainUid.comboStage.currentText())
-  if (mainUid.comboNode.currentText()):
-    whereDict['nodeType'] = str(mainUid.comboNode.currentText())
-  if (mainUid.comboSeq.currentText()):
-    whereDict['sequenceName'] = str(mainUid.comboSeq.currentText())
-  if (mainUid.comboScn.currentText()):
-    whereDict['sceneName'] = str(mainUid.comboScn.currentText())
-  if (mainUid.comboFile.currentText()):
-    whereDict['fileType'] = str(mainUid.comboFile.currentText())
-  if (mainUid.comboAssType.currentText()):
-    whereDict['assetType'] = str(mainUid.comboAssType.currentText())
+  if str_convert(mainUid.comboStage.currentText()):
+    whereDict['stageType'] = str_convert(mainUid.comboStage.currentText())
+  if str_convert(mainUid.comboNode.currentText()):
+    whereDict['nodeType'] = str_convert(mainUid.comboNode.currentText())
+  if str_convert(mainUid.comboSeq.currentText()):
+    whereDict['sequenceName'] = str_convert(mainUid.comboSeq.currentText())
+  if str_convert(mainUid.comboScn.currentText()):
+    whereDict['sceneName'] = str_convert(mainUid.comboScn.currentText())
+  if str_convert(mainUid.comboFile.currentText()):
+    whereDict['fileType'] = str_convert(mainUid.comboFile.currentText())
+  if str_convert(mainUid.comboAssType.currentText()):
+    whereDict['assetType'] = str_convert(mainUid.comboAssType.currentText())
 
 
 
 
-  if (str(mainUid.lineEditSearch.text())):
+  if (str_convert(mainUid.lineEditSearch.text())):
     if (mainUid.checkUsers.isChecked()):
-      whereDict['assignedWorker'] = str(mainUid.lineEditSearch.text())
+      whereDict['assignedWorker'] = str_convert(mainUid.lineEditSearch.text())
     if (mainUid.checkTag.isChecked()):
-      whereDict['tags'] = str(mainUid.lineEditSearch.text())
+      whereDict['tags'] = str_convert(mainUid.lineEditSearch.text())
     if (mainUid.checkAssName.isChecked()):
-      whereDict['assName'] = str(mainUid.lineEditSearch.text())
+      whereDict['assName'] = str_convert(mainUid.lineEditSearch.text())
     if (mainUid.checkAssPath.isChecked()):
-      whereDict['path'] = str(mainUid.lineEditSearch.text())
+      whereDict['path'] = str_convert(mainUid.lineEditSearch.text())
   else:
     if(mainUid.radioMineAss.isChecked()):
       whereDict['assignedWorker'] = username
@@ -621,37 +627,37 @@ def updateSorting(mainUid):
 
 def updateSortingTimed(mainUid):
   global assDetsItemsDict
-  if (mainUid.comboBoxSort.currentText() == "review"):
+  if str_convert(mainUid.comboBoxSort.currentText()) == "review":
     rbhus.debug.debug("sorting for asset review")
     for x in assDetsItemsDict:
       assDetsItemsDict[x].sortby_review()
 
-  elif (mainUid.comboBoxSort.currentText() == "modified"):
+  elif str_convert(mainUid.comboBoxSort.currentText()) == "modified":
     rbhus.debug.debug("sorting for asset modified")
     for x in assDetsItemsDict:
       assDetsItemsDict[x].sortby_modified()
 
-  elif (mainUid.comboBoxSort.currentText() == "published"):
+  elif str_convert(mainUid.comboBoxSort.currentText()) == "published":
     rbhus.debug.debug("sorting for asset published")
     for x in assDetsItemsDict:
       assDetsItemsDict[x].sortby_published()
 
-  elif (mainUid.comboBoxSort.currentText() == "version"):
+  elif str_convert(mainUid.comboBoxSort.currentText()) == "version":
     rbhus.debug.debug("sorting for asset version")
     for x in assDetsItemsDict:
       assDetsItemsDict[x].sortby_version()
 
-  elif (mainUid.comboBoxSort.currentText() == "assigned"):
+  elif str_convert(mainUid.comboBoxSort.currentText()) == "assigned":
     rbhus.debug.debug("sorting for asset assigned")
     for x in assDetsItemsDict:
       assDetsItemsDict[x].sortby_assigned()
 
-  elif (mainUid.comboBoxSort.currentText() == "reviewer"):
+  elif str_convert(mainUid.comboBoxSort.currentText()) == "reviewer":
     rbhus.debug.debug("sorting for asset reviewer")
     for x in assDetsItemsDict:
       assDetsItemsDict[x].sortby_reviewer()
 
-  elif (mainUid.comboBoxSort.currentText() == "creator"):
+  elif str_convert(mainUid.comboBoxSort.currentText()) == "creator":
     rbhus.debug.debug("sorting for asset creator")
     for x in assDetsItemsDict:
       assDetsItemsDict[x].sortby_creator()
@@ -998,7 +1004,7 @@ def detailsPanelMediaThread(mainUid):
   if(items):
     maxThumbzTrueValue = 0
     for item in items:
-      maxThumbzTrueValue = maxThumbzTrueValue + mainUid.progressBarMediaThumbz.totalObj[str(item.text())]
+      maxThumbzTrueValue = maxThumbzTrueValue + mainUid.progressBarMediaThumbz.totalObj[str_convert(item.text())]
       for media in item.medias:
         mediasToLoad.append(media)
     mainUid.progressBarMediaThumbz.setMaximum(maxThumbzTrueValue)
@@ -1154,7 +1160,7 @@ def itemChangedSequence(modelIndex, mainUid):
 
   for i in range(0,mainUid.comboSeq.model().rowCount()):
     if(mainUid.comboSeq.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboSeq.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboSeq.model().item(i).text()))
 
   if(selectedStages):
     mainUid.comboSeq.setEditText(",".join(selectedStages))
@@ -1177,7 +1183,7 @@ def setScene(mainUid):
   mainUid.comboScn.model().clear()
   if(not projects):
     return
-  seqNames = str(mainUid.comboSeq.currentText()).split(",")
+  seqNames = str_convert(mainUid.comboSeq.currentText()).split(",")
 
 
 
@@ -1244,7 +1250,7 @@ def itemChangedScenes(modelIndex,mainUid):
 
   for i in range(0,mainUid.comboScn.model().rowCount()):
     if(mainUid.comboScn.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboScn.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboScn.model().item(i).text()))
 
   #debug.info("EVENT CALLED : "+ str(index.row()))
   if(selectedStages):
@@ -1307,7 +1313,7 @@ def itemChangedStageType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboStage.model().rowCount()):
     if (mainUid.comboStage.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboStage.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboStage.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -1371,7 +1377,7 @@ def itemChangedNodeType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboNode.model().rowCount()):
     if (mainUid.comboNode.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboNode.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboNode.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -1437,7 +1443,7 @@ def itemChangedFileType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboFile.model().rowCount()):
     if (mainUid.comboFile.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboFile.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboFile.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -1510,7 +1516,7 @@ def itemChangedAssType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboAssType.model().rowCount()):
     if (mainUid.comboAssType.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboAssType.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboAssType.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -1598,7 +1604,7 @@ def popupProjects(mainUid,pos):
 def autoLineUpFunc(mainUid):
   item = mainUid.listWidgetProj.selectedItems()
   for x in item:
-    aluc = autoLineUpCmd +" "+ x.text()
+    aluc = autoLineUpCmd +" "+ str_convert(x.text())
     print(aluc)
 
 
@@ -1722,7 +1728,7 @@ def reviewAss(mainUid,assetList=None):
 def projTrak(mainUid):
   item = mainUid.listWidgetProj.selectedItems()
   if(item):
-    project = item[0].text()
+    project = str_convert(item[0].text())
 
     p = QtCore.QProcess(parent=mainUid)
     p.setStandardOutputFile(tempDir + os.sep + "rbhusTrak_" + username + ".log")
@@ -1733,7 +1739,7 @@ def projTrak(mainUid):
 def editTag(mainUid):
   item = mainUid.listWidgetProj.selectedItems()
   if (item):
-    project = item[0].text()
+    project = str_convert(item[0].text())
     try:
       returnStatus = rbhus.utilsPipe.importAssets(toProject=project, assetPath="standard:tag", toAssetPath="default",
                                                   getVersions=False, force=False)
@@ -2117,7 +2123,8 @@ def rbhusPipeAssImportEnable(mainUid):
 
 def setUsers(mainUid):
   users = rbhus.utilsPipe.getUsers()
-  outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(mainUid.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+  outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str_convert(mainUid.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+  outUsers = str_convert(outUsers)
   # if(outUsers == ""):
   #   outUsers = str(self.lineEditSearch.text()).rstrip().lstrip()
   mainUid.lineEditSearch.setText(outUsers)
@@ -2125,20 +2132,20 @@ def setUsers(mainUid):
 
 
 def saveSearchItem(mainUid,filterFile=None,noUi = False):
-  assetTypeSave = str(mainUid.comboAssType.currentText())
-  seqSave = str(mainUid.comboSeq.currentText())
-  scnSave = str(mainUid.comboScn.currentText())
-  stageSave = str(mainUid.comboStage.currentText())
-  nodeSave = str(mainUid.comboNode.currentText())
-  fileTypeSave = str(mainUid.comboFile.currentText())
-  isMineAssignedSave = str(mainUid.radioMineAss.isChecked())
-  isAllSave = str(mainUid.radioAllAss.isChecked())
-  isTagsSave = str(mainUid.checkTag.isChecked())
-  isUsersSave = str(mainUid.checkUsers.isChecked())
-  searchBoxSave = str(mainUid.lineEditSearch.text())
-  isAssetNameSave = str(mainUid.checkAssName.isChecked())
-  isAssetPathSave = str(mainUid.checkAssPath.isChecked())
-  isStarred = str(mainUid.radioStarred.isChecked())
+  assetTypeSave = str_convert(mainUid.comboAssType.currentText())
+  seqSave = str_convert(mainUid.comboSeq.currentText())
+  scnSave = str_convert(mainUid.comboScn.currentText())
+  stageSave = str_convert(mainUid.comboStage.currentText())
+  nodeSave = str_convert(mainUid.comboNode.currentText())
+  fileTypeSave = str_convert(mainUid.comboFile.currentText())
+  isMineAssignedSave = str_convert(mainUid.radioMineAss.isChecked())
+  isAllSave = str_convert(mainUid.radioAllAss.isChecked())
+  isTagsSave = str_convert(mainUid.checkTag.isChecked())
+  isUsersSave = str_convert(mainUid.checkUsers.isChecked())
+  searchBoxSave = str_convert(mainUid.lineEditSearch.text())
+  isAssetNameSave = str_convert(mainUid.checkAssName.isChecked())
+  isAssetPathSave = str_convert(mainUid.checkAssPath.isChecked())
+  isStarred = str_convert(mainUid.radioStarred.isChecked())
   saveString = assetTypeSave +"###"+ \
                seqSave +"###"+ \
                scnSave +"###"+ \
@@ -2240,7 +2247,7 @@ def searchItemChanged(mainUid,item):
   for x in savedDict:
     if(x):
       if item.assFilter in x:
-        x[item.assFilter] = str(item.text())
+        x[item.assFilter] = str_convert(item.text())
   rbhus.debug.debug(savedDict)
   fd = open(filterFile,"w")
   yaml.dump(savedDict,fd)
@@ -2357,7 +2364,7 @@ def loadDefaultProject(mainUid):
     if(projectSelected):
       totalItems = mainUid.listWidgetProj.count()
       for x in range(0,totalItems):
-        if(mainUid.listWidgetProj.item(x).text() in projectSelected):
+        if str_convert(mainUid.listWidgetProj.item(x).text()) in projectSelected:
           mainUid.listWidgetProj.setCurrentItem(mainUid.listWidgetProj.item(x))
 
 

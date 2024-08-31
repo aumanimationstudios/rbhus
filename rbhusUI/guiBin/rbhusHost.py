@@ -44,7 +44,10 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
-
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
 
 
 class Ui_Form(rbhusHostMod.Ui_MainWindow):
@@ -53,9 +56,9 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     icon = QtGui.QIcon()
     iconRefresh = QtGui.QIcon()
     iconTime = QtGui.QIcon()
-    iconTime.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_time.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    iconTime.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_time.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    iconRefresh.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.pushRefresh.setIcon(iconRefresh)
     self.checkRefresh.setIcon(iconTime)
@@ -361,7 +364,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     for row in rowsSelected:
       singleRow = {}
       for col in range(0,colCount):
-        singleRow[self.colNamesHost[col]] = str(self.tableHost.item(row,col).text())
+        singleRow[self.colNamesHost[col]] = str_convert(self.tableHost.item(row,col).text())
       if(singleRow):
         rowsHosts.append(singleRow)
 
@@ -441,7 +444,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       hostsRunning = {}
     if(hostsRunning):
       hostsRunning = hostsRunning.intersection(hostsAll)
-    self.LabelRunning.setText(QtWidgets.QApplication.translate("Form", "RUNNING : "+ str(len(hostsRunning)), None, QtWidgets.QApplication.UnicodeUTF8))
+    self.LabelRunning.setText(QtWidgets.QApplication.translate("Form", "RUNNING : "+ str(len(hostsRunning)), None))
       
     if(not rows):
       return()
@@ -451,7 +454,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
       
     self.tableHost.setColumnCount(colCount)
     self.tableHost.setRowCount(len(rows))
-    self.LabelTotal.setText(QtWidgets.QApplication.translate("Form", "TOTAL : "+ str(len(rows)), None, QtWidgets.QApplication.UnicodeUTF8))
+    self.LabelTotal.setText(QtWidgets.QApplication.translate("Form", "TOTAL : "+ str(len(rows)), None))
     
     for x in range(0,colCount):
       item = QtWidgets.QTableWidgetItem()
@@ -460,7 +463,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
     for x in self.colNamesHost:
       y = x.split(" as ")
       x = y[-1].split(".")[-1]
-      self.tableHost.horizontalHeaderItem(indx).setText(QtWidgets.QApplication.translate("Form", x, None, QtWidgets.QApplication.UnicodeUTF8))
+      self.tableHost.horizontalHeaderItem(indx).setText(QtWidgets.QApplication.translate("Form", x, None))
       indx = indx + 1
 
 
@@ -483,7 +486,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
             brush.setStyle(QtCore.Qt.SolidPattern)
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", constants.hostInfoStatus[int(row[colName])], None, QtWidgets.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", constants.hostInfoStatus[int(row[colName])], None))
           colIndx = colIndx + 1
           continue
         
@@ -496,7 +499,7 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
             brush.setStyle(QtCore.Qt.SolidPattern)
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None, QtWidgets.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None))
           if(row[colName] in hostSelected):
             self.tableHost.selectRow(indx)
           colIndx = colIndx + 1
@@ -512,25 +515,25 @@ class Ui_Form(rbhusHostMod.Ui_MainWindow):
             brush.setStyle(QtCore.Qt.SolidPattern)
           item.setBackground(brush)
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", constants.hostAliveStatus[int(row[colName])], None, QtWidgets.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", constants.hostAliveStatus[int(row[colName])], None))
           colIndx = colIndx + 1
           continue
         
         if(colName == "freeRam"):
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtWidgets.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None))
           colIndx = colIndx + 1
           continue
         
         if(colName == "totalRam"):
           self.tableHost.setItem(indx, colIndx, item)
-          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None, QtWidgets.QApplication.UnicodeUTF8))
+          self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(round(float(row[colName])/1024/1024/1024,2)) + "GB", None))
           colIndx = colIndx + 1
           continue
         
         item.setBackground(brush)
         self.tableHost.setItem(indx, colIndx, item)
-        self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None, QtWidgets.QApplication.UnicodeUTF8))
+        self.tableHost.item(indx, colIndx).setText(QtWidgets.QApplication.translate("Form", str(row[colName]), None))
         colIndx = colIndx + 1
         
       indx = indx + 1

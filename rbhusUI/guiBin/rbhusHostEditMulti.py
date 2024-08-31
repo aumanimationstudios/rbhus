@@ -37,11 +37,17 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class Ui_Form(rbhusHostEditMultiMod.Ui_rbhusHostEdit):
   def setupUi(self, Form):
     rbhusHostEditMultiMod.Ui_rbhusHostEdit.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.popData()
     self.pushApply.clicked.connect(self.applyResources)
@@ -57,16 +63,17 @@ class Ui_Form(rbhusHostEditMultiMod.Ui_rbhusHostEdit):
   def applyResources(self):
     for ip in myIps:
       h = rUtils.hosts(hostIp=ip)
-      h.updateGroups(str(self.lineEditGroups.text()))
+      h.updateGroups(str_convert(self.lineEditGroups.text()))
     QtCore.QCoreApplication.instance().quit()
     
   def printGroupSel(self):
     groups = rUtils.getHostGroupsActive()
     
-    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str_convert(self.lineEditGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = str_convert(outGroups)
     if(outGroups == ""):
       return()
-    self.lineEditGroups.setText(_fromUtf8(outGroups))
+    self.lineEditGroups.setText(str_convert(outGroups))
     
     
     

@@ -37,11 +37,17 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class Ui_Form(rbhusHostEditMod.Ui_rbhusHostEdit):
   def setupUi(self, Form):
     rbhusHostEditMod.Ui_rbhusHostEdit.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.h = rUtils.hosts(myIp)
     self.popData()
@@ -61,13 +67,14 @@ class Ui_Form(rbhusHostEditMod.Ui_rbhusHostEdit):
   
   def applyResources(self):
     self.h.setHostData("hostEffectiveResource","eCpus",str(self.spinCpu.value()))
-    self.h.setGroups(str(self.lineEditGroups.text()))
+    self.h.setGroups(str_convert(self.lineEditGroups.text()))
     QtCore.QCoreApplication.instance().quit()
     
   def printGroupSel(self):
     groups = rUtils.getHostGroupsActive()
     
-    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str_convert(self.lineEditGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = str_convert(outGroups)
     outGroupsDict = {}
     for x in outGroups.split(","):
       outGroupsDict[x] = 1
@@ -76,7 +83,7 @@ class Ui_Form(rbhusHostEditMod.Ui_rbhusHostEdit):
     
     outGroups = ",".join(outGroupsDict.keys())
     
-    self.lineEditGroups.setText(_fromUtf8(outGroups))
+    self.lineEditGroups.setText(str_convert(outGroups))
     
     
     

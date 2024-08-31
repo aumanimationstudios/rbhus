@@ -68,6 +68,11 @@ except AttributeError:
   _fromUtf8 = lambda s: s
 
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
 
 #db = QtSql.QSqlDatabase.addDatabase("QMYSQL")
 #db.setHostName("blues2")
@@ -310,7 +315,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     self.dbcon = dbPipe.dbPipe()
 
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     self.form.setWindowIcon(icon)
     self.checkLinkedProjects.hide()
     self.comboLinked.hide()
@@ -342,10 +347,10 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
     iconRefresh = QtGui.QIcon()
-    iconRefresh.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    iconRefresh.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
     iconAdd= QtGui.QIcon()
-    iconAdd.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_new.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    iconAdd.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_new.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
 
 
@@ -353,7 +358,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
     iconCancel = QtGui.QIcon()
-    iconCancel.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    iconCancel.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/ic_action_cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
     self.pushResetAsset.setIcon(iconRefresh)
     self.pushResetSeq.setIcon(iconRefresh)
@@ -373,7 +378,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
     self.iconDanger = QtGui.QIcon()
-    self.iconDanger.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    self.iconDanger.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
 
 
 
@@ -1066,7 +1071,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     for i in range(0,self.comboLinked.model().rowCount()):
       if(self.comboLinked.model().item(i).checkState() == QtCore.Qt.Checked):
-        linkedProjects.append(str(self.comboLinked.model().item(i).text()))
+        linkedProjects.append(str_convert(self.comboLinked.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(linkedProjects):
@@ -1097,7 +1102,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     linkedProjects = []
     for i in range(0,self.comboLinked.model().rowCount()):
       if(self.comboLinked.model().item(i).checkState() == QtCore.Qt.Checked):
-        linkedProjects.append(str(self.comboLinked.model().item(i).text()))
+        linkedProjects.append(str_convert(self.comboLinked.model().item(i).text()))
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(linkedProjects):
       self.comboLinked.setEditText(",".join(linkedProjects))
@@ -1153,7 +1158,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     for i in range(0,self.comboStageType.model().rowCount()):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboStageType.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboStageType.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1183,7 +1188,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     selectedStages = []
     for i in range(0,self.comboStageType.model().rowCount()):
       if(self.comboStageType.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboStageType.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboStageType.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1193,7 +1198,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def setScene(self):
-    seqNames = str(self.comboSequence.currentText()).split(",")
+    seqNames = str_convert(self.comboSequence.currentText()).split(",")
 
     self.comboScene.clear()
     scenes = {}
@@ -1255,7 +1260,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     for i in range(0,self.comboScene.model().rowCount()):
       if(self.comboScene.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboScene.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboScene.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1289,7 +1294,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     selectedStages = []
     for i in range(0,self.comboScene.model().rowCount()):
       if(self.comboScene.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboScene.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboScene.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1359,7 +1364,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     for i in range(0,self.comboSequence.model().rowCount()):
       if(self.comboSequence.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboSequence.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboSequence.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1390,7 +1395,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     selectedStages = []
     for i in range(0,self.comboSequence.model().rowCount()):
       if(self.comboSequence.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboSequence.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboSequence.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1447,7 +1452,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     for i in range(0,self.comboNodeType.model().rowCount()):
       if(self.comboNodeType.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboNodeType.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboNodeType.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1478,7 +1483,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     selectedStages = []
     for i in range(0,self.comboNodeType.model().rowCount()):
       if(self.comboNodeType.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboNodeType.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboNodeType.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1538,7 +1543,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
     for i in range(0,self.comboFileType.model().rowCount()):
       if(self.comboFileType.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboFileType.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboFileType.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1570,7 +1575,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     selectedStages = []
     for i in range(0,self.comboFileType.model().rowCount()):
       if(self.comboFileType.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(self.comboFileType.model().item(i).text()))
+        selectedStages.append(str_convert(self.comboFileType.model().item(i).text()))
 
     #debug.info("EVENT CALLED : "+ str(index.row()))
     if(selectedStages):
@@ -1604,7 +1609,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     foundIndx = -1
     if(rows):
       for row in rows:
-        self.comboAssType.addItem(_fromUtf8(row['type']))
+        self.comboAssType.addItem(str_convert(row['type']))
         indx = indx + 1
       self.comboAssType.setEditText("default")
       return(1)
@@ -1618,7 +1623,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     else:
       delmsg = "DELETE (database only)?!?!?!"
     msgbox.setText(delmsg +"\nDo you want to really delete this asset?!")
-    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger_128.png")))
+    msgbox.setIconPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/danger_128.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
     yesBut = msgbox.addButton("yes",QtWidgets.QMessageBox.YesRole)
@@ -1635,7 +1640,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     delmsg = "Replace the current asset file from template??!!!"
     msgbox.setWindowTitle("WTF!!!")
     msgbox.setText(delmsg + "\nYour time and effort used on this asset WILL be WASTED!!!!")
-    msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep + "etc/icons/danger_128.png")))
+    msgbox.setIconPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep) + os.sep + "etc/icons/danger_128.png")))
     # noBut = QtGui.QPushButton("cancel")
     # yesBut = QtGui.QPushButton("yes")
     yesBut = msgbox.addButton("yes", QtWidgets.QMessageBox.YesRole)
@@ -1683,26 +1688,26 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
       if(self.mineReviewAction.isChecked()):
         assget.whereDict['reviewUser'] = str(self.username)
         assget.whereDict['reviewStatus'] = str(constantsPipe.reviewStatusInProgress)
-    if(self.comboStageType.currentText() != "default"):
-      assget.whereDict['stageType'] = str(self.comboStageType.currentText())
-    if(self.comboNodeType.currentText() != "default"):
-      assget.whereDict['nodeType'] = str(self.comboNodeType.currentText())
-    if(self.comboSequence.currentText() != "default"):
-      assget.whereDict['sequenceName'] = str(self.comboSequence.currentText())
-    if(self.comboScene.currentText() != "default"):
-      assget.whereDict['sceneName'] = str(self.comboScene.currentText())
-    if(self.comboFileType.currentText() != "default"):
-      assget.whereDict['fileType'] = str(self.comboFileType.currentText())
-    if(self.comboAssType.currentText() != "default"):
-      assget.whereDict['assetType'] = str(self.comboAssType.currentText())
+    if str_convert(self.comboStageType.currentText()) != "default":
+      assget.whereDict['stageType'] = str_convert(self.comboStageType.currentText())
+    if str_convert(self.comboNodeType.currentText()) != "default":
+      assget.whereDict['nodeType'] = str_convert(self.comboNodeType.currentText())
+    if str_convert(self.comboSequence.currentText()) != "default":
+      assget.whereDict['sequenceName'] = str_convert(self.comboSequence.currentText())
+    if str_convert(self.comboScene.currentText()) != "default":
+      assget.whereDict['sceneName'] = str_convert(self.comboScene.currentText())
+    if str_convert(self.comboFileType.currentText()) != "default":
+      assget.whereDict['fileType'] = str_convert(self.comboFileType.currentText())
+    if str_convert(self.comboAssType.currentText()) != "default":
+      assget.whereDict['assetType'] = str_convert(self.comboAssType.currentText())
 
     if(self.checkLinkedProjects.isChecked()):
       #if(str(self.comboAssType.currentText()) == "library" or str(self.comboAssType.currentText()) == "default"):
       assget.isAssesLinked = True
-      assget.linkedProjects = str(self.comboLinked.currentText())
+      assget.linkedProjects = str_convert(self.comboLinked.currentText())
       #assget.whereDict['assetType'] = "library"
 
-    searchItems = str(self.lineEditSearch.text())
+    searchItems = str_convert(self.lineEditSearch.text())
     if(searchItems):
       if(not self.radioMineAss.isChecked()):
         if(self.checkUsers.isChecked()):
@@ -1990,18 +1995,20 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
   def setTags(self):
     tags = utilsPipe.getTags(projName=os.environ['rp_proj_projName'])
-    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str_convert(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outTags = str_convert(outTags)
     if(outTags == ""):
-      outTags = str(self.lineEditSearch.text()).rstrip().lstrip()
-    self.lineEditSearch.setText(_fromUtf8(outTags))
+      outTags = str_convert(self.lineEditSearch.text()).rstrip().lstrip()
+    self.lineEditSearch.setText(str_convert(outTags))
 
 
   def setUsers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str_convert(self.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = str_convert(outUsers)
     if(outUsers == ""):
-      outUsers = str(self.lineEditSearch.text()).rstrip().lstrip()
-    self.lineEditSearch.setText(_fromUtf8(outUsers))
+      outUsers = str_convert(self.lineEditSearch.text()).rstrip().lstrip()
+    self.lineEditSearch.setText(str_convert(outUsers))
 
 
 
@@ -2045,6 +2052,7 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
     for x in projects:
       projNames.append(x['projName'])
     projN = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(projNames)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    projN = str_convert(projN)
     debug.info(projN)
     if(not projN):
       return(0)
@@ -2088,23 +2096,23 @@ class Ui_Form(rbhusPipeMainMod.Ui_MainWindow):
 
 
   def saveSearchItem(self):
-    assetTypeSave = str(self.comboAssType.currentText())
-    seqSave = str(self.comboSequence.currentText())
-    scnSave = str(self.comboScene.currentText())
-    stageSave = str(self.comboStageType.currentText())
-    nodeSave = str(self.comboNodeType.currentText())
-    fileTypeSave = str(self.comboFileType.currentText())
-    isMineSave = str(self.radioMineAss.isChecked())
-    isMineAssignedSave = str(self.mineAssignedAction.isChecked())
-    isMineCreatedSave = str(self.mineCreatedAction.isChecked())
-    isAllSave = str(self.radioAllAss.isChecked())
-    isLinkedSave = str(self.checkLinkedProjects.isChecked())
-    linkedProjSave = str(self.comboLinked.currentText())
-    isTagsSave = str(self.checkTags.isChecked())
-    isUsersSave = str(self.checkUsers.isChecked())
-    searchBoxSave = str(self.lineEditSearch.text())
-    isAssetNameSave = str(self.checkAssetName.isChecked())
-    isAssetPathSave = str(self.checkAssetPath.isChecked())
+    assetTypeSave = str_convert(self.comboAssType.currentText())
+    seqSave = str_convert(self.comboSequence.currentText())
+    scnSave = str_convert(self.comboScene.currentText())
+    stageSave = str_convert(self.comboStageType.currentText())
+    nodeSave = str_convert(self.comboNodeType.currentText())
+    fileTypeSave = str_convert(self.comboFileType.currentText())
+    isMineSave = str_convert(self.radioMineAss.isChecked())
+    isMineAssignedSave = str_convert(self.mineAssignedAction.isChecked())
+    isMineCreatedSave = str_convert(self.mineCreatedAction.isChecked())
+    isAllSave = str_convert(self.radioAllAss.isChecked())
+    isLinkedSave = str_convert(self.checkLinkedProjects.isChecked())
+    linkedProjSave = str_convert(self.comboLinked.currentText())
+    isTagsSave = str_convert(self.checkTags.isChecked())
+    isUsersSave = str_convert(self.checkUsers.isChecked())
+    searchBoxSave = str_convert(self.lineEditSearch.text())
+    isAssetNameSave = str_convert(self.checkAssetName.isChecked())
+    isAssetPathSave = str_convert(self.checkAssetPath.isChecked())
     saveString = assetTypeSave +"###"+ \
                  seqSave +"###"+ \
                  scnSave +"###"+ \

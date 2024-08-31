@@ -33,6 +33,12 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
     
@@ -41,7 +47,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
     
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     rbhusEditMultiMod.Ui_rbhusEdit.setupUi(self,Form)
@@ -165,21 +171,21 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       editDict = {}
       self.task = rUtils.tasks(tId = t)
       if(self.db_filetype):
-        editDict["fileType"] = str(self.comboType.currentText())
+        editDict["fileType"] = str_convert(self.comboType.currentText())
       if(self.db_renderer):
-        editDict["renderer"] = str(self.comboRenderer.currentText())
+        editDict["renderer"] = str_convert(self.comboRenderer.currentText())
       if(self.db_hostgroup):
-        editDict["hostGroups"] = str(self.lineEditHostGroups.text())
+        editDict["hostGroups"] = str_convert(self.lineEditHostGroups.text())
       if(self.db_bfc):
-        editDict["beforeFrameCmd"] = str(self.lineEditBfc.text().replace("\\","/"))
+        editDict["beforeFrameCmd"] = str_convert(self.lineEditBfc.text().replace("\\","/"))
       if(self.db_afc):
-        editDict["afterFrameCmd"] = str(self.lineEditAfc.text().replace("\\","/"))
+        editDict["afterFrameCmd"] = str_convert(self.lineEditAfc.text().replace("\\","/"))
       if(self.db_aftertime):
         editDict["afterTime"] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
       if(self.db_rerunthresh):
         editDict["rerunThresh"] = str(self.db_rerunthresh)
       if(self.db_framerange):
-        editDict["fRange"] = str(self.lineEditFrange.text())
+        editDict["fRange"] = str_convert(self.lineEditFrange.text())
       if(self.db_priority):
         editDict["priority"] = str(self.db_priority)
       if(self.db_batch != -1):
@@ -191,9 +197,9 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       if(self.db_desc):
         editDict['description'] = str(self.db_desc)
       if(self.db_os):
-        editDict['os'] = str(self.comboOsType.currentText())
+        editDict['os'] = str_convert(self.comboOsType.currentText())
       if(self.db_afterTask):
-        editDict['afterTasks'] = str(self.lineEditAfterTask.text())
+        editDict['afterTasks'] = str_convert(self.lineEditAfterTask.text())
       if(self.db_afterTaskSloppy):
         editDict['afterTaskSloppy'] = 1 & self.checkSloppy.isChecked()
         
@@ -209,11 +215,12 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
   
   def hostGroupPrint(self):
     groups = rUtils.getHostGroups()
-    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str_convert(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = str_convert(outGroups)
     if(outGroups == ""):
       return
     print(outGroups)
-    self.lineEditHostGroups.setText(_fromUtf8(outGroups))
+    self.lineEditHostGroups.setText(str_convert(outGroups))
     self.db_hostgroup = 1
   
   def osTypesPrint(self):
@@ -231,7 +238,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     
   def batchStatus(self):
     print(self.comboBatching.currentText())
-    self.db_batch = constants.batchStatus[str(self.comboBatching.currentText())]
+    self.db_batch = constants.batchStatus[str_convert(self.comboBatching.currentText())]
     
     
   def afePrint(self):
@@ -342,7 +349,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       indx = 0
       setIndx = 0
       for row in rows:
-        self.comboType.addItem(_fromUtf8(row))
+        self.comboType.addItem(str_convert(row))
         print(str(self.taskDValues['fileType']))
         if(row.endswith(str(self.taskDValues['fileType']))):
           setIndx = indx
@@ -362,7 +369,7 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
       indx = 0
       setIndx = 0
       for row in rows:
-        self.comboOsType.addItem(_fromUtf8(row))
+        self.comboOsType.addItem(str_convert(row))
         print(str(self.taskDValues['os']))
         if(row.endswith(str(self.taskDValues['os']))):
           setIndx = indx
@@ -381,8 +388,8 @@ class Ui_Form(rbhusEditMultiMod.Ui_rbhusEdit):
     setIndx = 0
     try:
       for x in renders:
-        if(x['fileType'] == str(self.comboType.currentText())):
-          self.comboRenderer.addItem(_fromUtf8(x['renderer']))
+        if(x['fileType'] == str_convert(self.comboType.currentText())):
+          self.comboRenderer.addItem(str_convert(x['renderer']))
           if(x.endswith(str(self.taskDValues['renderer']))):
             setIndx = indx
           indx = indx + 1

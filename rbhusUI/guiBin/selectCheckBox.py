@@ -28,7 +28,14 @@ try:
   _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
   _fromUtf8 = lambda s: s
-  
+
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 def lowerString(a):
   return(a.lower())
 
@@ -36,7 +43,7 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
   def setupUi(self, Form):
     selectCheckBoxMod.Ui_selectCheckBox.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.inList = []
     self.defList = []
@@ -75,9 +82,9 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
     for x in self.inList:
 
       self.checkBoxes[x] = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
-      self.checkBoxes[x].setObjectName(_fromUtf8(x))
+      self.checkBoxes[x].setObjectName(str_convert(x))
       self.verticalLayout.addWidget(self.checkBoxes[x])
-      self.checkBoxes[x].setText(_fromUtf8(x))
+      self.checkBoxes[x].setText(str_convert(x))
       self.checkBoxes[x].stateChanged.connect(self.updateSelected)
       if(x in self.defList):
         self.checkBoxes[x].setChecked(2)
@@ -87,7 +94,7 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
   def updateCheckBoxes(self):
     findList = []
     for x in self.inList:
-      if((x.lower()).find(str(self.lineEditSearch.text()).lower()) >= 0):
+      if((x.lower()).find(str_convert(self.lineEditSearch.text()).lower()) >= 0):
         findList.append(x)
     
     
@@ -140,7 +147,7 @@ class Ui_Form(selectCheckBoxMod.Ui_selectCheckBox):
       #print(x + " : "+ str(self.checkBoxes[x].isChecked()))
       if(self.checkBoxes[x].isChecked()):
         self.updateLine.append(str(x))
-    self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(self.updateLine)))
+    self.plainTextEditSelected.setPlainText(str_convert(",".join(self.updateLine)))
     #self.plainTextEditSelected.setReadOnly(True)
       
         

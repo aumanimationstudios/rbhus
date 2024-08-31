@@ -35,14 +35,20 @@ try:
   _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
   _fromUtf8 = lambda s: s
-  
+
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
 
 class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   def setupUi(self, Form):
     self.form = Form
     rbhusPipeAssetCreateMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.assetTypeRadios = []
     self.username = None
@@ -125,10 +131,11 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       for x in rows:
         if(x['sceneName'].rstrip().lstrip()):
           scenes.append(x['sceneName'])
-    outScenes = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(scenes),"-d",str(self.lineEditScenes.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outScenes = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(scenes),"-d",str_convert(self.lineEditScenes.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outScenes = str_convert(outScenes)
     if(outScenes == ""):
-      outScenes = self.lineEditScenes.text()
-    self.lineEditScenes.setText(_fromUtf8(outScenes))
+      outScenes = str_convert(self.lineEditScenes.text())
+    self.lineEditScenes.setText(str_convert(outScenes))
 
   
   def setAssignedWorker(self):
@@ -154,11 +161,11 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
   def cAss(self):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     assdict = {}
-    ntypes = str(self.lineEditNodes.text()).split(",")
+    ntypes = str_convert(self.lineEditNodes.text()).split(",")
     assesNames = []
     for aT in self.assetTypeRadios:
       if(aT.isChecked()):
-        assdict['assetType'] = str(aT.text()).rstrip().lstrip()
+        assdict['assetType'] = str_convert(aT.text()).rstrip().lstrip()
         break
     else:
       debug.info("reached the end and no asset types - WTF!")
@@ -172,20 +179,20 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     assdict['directory'] = str(self.comboDirectory.currentText()).rstrip().lstrip()
     assdict['stageType'] = str(self.comboStageType.currentText()).rstrip().lstrip()
     assdict['sequenceName'] = str(self.comboSequence.currentText()).rstrip().lstrip()
-    sN = str(self.lineEditScenes.text()).rstrip().lstrip()
+    sN = str_convert(self.lineEditScenes.text()).rstrip().lstrip()
     assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second()).rstrip().lstrip()
-    assdict['assignedWorker'] = str(self.lineEditWorkers.text()).rstrip().lstrip()
-    assdict['description'] = str(self.lineEditDesc.text()).rstrip().lstrip()
-    assdict['tags'] = str(self.lineEditTags.text()).rstrip().lstrip()
-    assdict['fRange'] = str(self.lineEditFRange.text()).rstrip().lstrip()
-    assdict['reviewUser'] = str(self.lineEditReviewers.text()).rstrip().lstrip()
+    assdict['assignedWorker'] = str_convert(self.lineEditWorkers.text()).rstrip().lstrip()
+    assdict['description'] = str_convert(self.lineEditDesc.text()).rstrip().lstrip()
+    assdict['tags'] = str_convert(self.lineEditTags.text()).rstrip().lstrip()
+    assdict['fRange'] = str_convert(self.lineEditFRange.text()).rstrip().lstrip()
+    assdict['reviewUser'] = str_convert(self.lineEditReviewers.text()).rstrip().lstrip()
     if(self.checkVersion.isChecked()):
       assdict['versioning'] = 1
     else:
       assdict['versioning'] = 0
     self.centralwidget.setEnabled(False)
-    if(self.lineEditAssName.text()):
-      assesNames = str(self.lineEditAssName.text()).split(",")
+    if str_convert(self.lineEditAssName.text()):
+      assesNames = str_convert(self.lineEditAssName.text()).split(",")
       for aN in assesNames:
         if(aN):
           assdict['assName'] = aN.rstrip().lstrip()
@@ -224,35 +231,39 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     
   def setTags(self):
     tags = utilsPipe.getTags(projName=os.environ['rp_proj_projName'])
-    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str(self.lineEditTags.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str_convert(self.lineEditTags.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outTags = str_convert(outTags)
     if(outTags == ""):
       outTags = "default"
-    self.lineEditTags.setText(_fromUtf8(outTags))
+    self.lineEditTags.setText(str_convert(outTags))
   
   
   def getAssNames(self):
     asses = utilsPipe.getDistinctAssNames(projName=os.environ['rp_proj_projName'])
     if(asses):
-      selectedAss = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(asses),"-d",str(self.lineEditAssName.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+      selectedAss = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(asses),"-d",str_convert(self.lineEditAssName.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+      selectedAss = str_convert(selectedAss)
       if (selectedAss == ""):
         selectedAss = ""
-      self.lineEditAssName.setText(_fromUtf8(selectedAss))
+      self.lineEditAssName.setText(str_convert(selectedAss))
 
 
   def setUsers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str_convert(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = str_convert(outUsers)
     if(outUsers == ""):
       outUsers = str(self.lineEditWorkers.text()).rstrip().lstrip()
-    self.lineEditWorkers.setText(_fromUtf8(outUsers))
+    self.lineEditWorkers.setText(str_convert(outUsers))
 
 
   def setReviewers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str_convert(self.lineEditWorkers.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = str_convert(outUsers)
     if(outUsers == ""):
       outUsers = str(self.lineEditReviewers.text()).rstrip().lstrip()
-    self.lineEditReviewers.setText(_fromUtf8(outUsers))
+    self.lineEditReviewers.setText(str_convert(outUsers))
 
   
   
@@ -265,7 +276,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
       for d in dirs:
         if(d['directory'] == self.projDets['directory']):
           foundIndx = i
-        self.comboDirectory.addItem(_fromUtf8(d['directory']))
+        self.comboDirectory.addItem(str_convert(d['directory']))
         i = i + 1
       self.comboDirectory.setCurrentIndex(foundIndx)
       return(1)
@@ -277,7 +288,7 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     self.comboStageType.clear()  
     if(rows):
       for row in rows:
-        self.comboStageType.addItem(_fromUtf8(row['type']))
+        self.comboStageType.addItem(str_convert(row['type']))
       return(1)
     return(0)     
   
@@ -291,8 +302,8 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
         if(row['projName'] == os.environ['rp_proj_projName']):
           seq[row['sequenceName']] = 1
       if(seq):
-        for x in seq.keys():
-          self.comboSequence.addItem(_fromUtf8(x))
+        for x in list(seq.keys()):
+          self.comboSequence.addItem(str_convert(x))
       return(1)
     return(0)     
     
@@ -316,13 +327,13 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     ntypes = [str(x['type']) for x in utilsPipe.getNodeTypes()]
     ftypes = [str(x['type']) for x in utilsPipe.getFileTypes()]
     
-    defNodes =[str(df.split("#")[0]) for df in self.lineEditNodes.text().split(",")]
-    print(sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",str(self.lineEditNodes.text()))
-    outNodes = subprocess.Popen([sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",str(self.lineEditNodes.text())],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
-    
+    defNodes =[str(df.split("#")[0]) for df in str_convert(self.lineEditNodes.text()).split(",")]
+    print(sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",str_convert(self.lineEditNodes.text()))
+    outNodes = subprocess.Popen([sys.executable,selectCheckBoxComboCmd,"-i",",".join(ntypes),"-c",",".join(ftypes),"-d",str_convert(self.lineEditNodes.text())],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outNodes = str_convert(outNodes)
     if(outNodes == ""):
-      outNodes = str(self.lineEditNodes.text())
-    self.lineEditNodes.setText(_fromUtf8(outNodes))
+      outNodes = str_convert(self.lineEditNodes.text())
+    self.lineEditNodes.setText(str_convert(outNodes))
   
 
   def setAssTypes(self):
@@ -330,8 +341,8 @@ class Ui_Form(rbhusPipeAssetCreateMod.Ui_MainWindow):
     if(rows):
       for row in rows:
         radioButton = QtWidgets.QRadioButton()
-        radioButton.setObjectName("radio_"+ _fromUtf8(row['type']))
-        radioButton.setText(_fromUtf8(row['type']))
+        radioButton.setObjectName("radio_"+ str_convert(row['type']))
+        radioButton.setText(str_convert(row['type']))
         self.horizontalLayout_3.addWidget(radioButton)
         self.assetTypeRadios.append(radioButton)
       return(1)

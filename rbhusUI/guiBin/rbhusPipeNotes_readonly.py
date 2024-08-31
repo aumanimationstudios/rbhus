@@ -57,6 +57,12 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 try:
   _encoding = QtWidgets.QApplication.UnicodeUTF8
   def _translate(context, text, disambig):
@@ -93,7 +99,7 @@ def app_lock():
           debug.error(sys.exc_info())
           QtCore.QCoreApplication.instance().quit()
           os._exit(1)
-      f.write(unicode(os.getpid()))
+      f.write(str_convert(os.getpid()))
       f.flush()
       if (sys.platform.find("linux") >= 0):
         fcntl.flock(f, fcntl.LOCK_UN)
@@ -107,7 +113,7 @@ def app_lock():
         debug.error(sys.exc_info())
         QtCore.QCoreApplication.instance().quit()
         os._exit(1)
-    f.write(unicode(os.getpid()))
+    f.write(str_convert(os.getpid()))
     f.flush()
     if (sys.platform.find("linux") >= 0):
       fcntl.flock(f, fcntl.LOCK_UN)
@@ -183,7 +189,7 @@ class Ui_Form(rbhusPipeNotesMod_readonly.Ui_MainWindow):
     ui_msg.labelUser.setText("Notes by : "+ str(user1))
     ui_msg.labelDate.setText("date : "+ str(date1))
     hdoc = QtGui.QTextDocument()
-    hdoc.setPlainText(ui_msg.textEditContent.toPlainText())
+    hdoc.setPlainText(str_convert(ui_msg.textEditContent.toPlainText()))
     h = hdoc.size().height() + 40
     ui_msg.textEditContent.setMinimumHeight(h)
     debug.info("height : " + str(h))

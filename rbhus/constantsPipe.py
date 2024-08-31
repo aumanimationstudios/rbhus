@@ -106,7 +106,7 @@ mimeConvertCmds = {
 }
 
 mimeTypesOpenCmds = {
-  "image": {"linux":["gwenview","djv_view - image","djv_view - sequence","krita","inkscape","mrViewer"]},
+  "image": {"linux":["gwenview","djv_view - image","djv_view - sequence","djv_view_v2","krita","inkscape","mrViewer"]},
   "video": {"linux":["mpv - loop","mpv", "djv_view - video","mrViewer"]},
   "blender": {"linux":["project_assigned_application"]}, # Just enter "project_assigned_application" to open certain kinds of files with project assigned apps.
   "pdf": {"linux":["system_assigned_application"]}, # Just enter "system_assigned_application" to open certain kinds of files with project assigned apps.
@@ -125,6 +125,7 @@ mimeCmdsLinux = {
   "gwenview"                     : "gwenview {0}",
   "djv_view - image"             : "djv_view -seq_auto False -file_cache False {0}",
   "djv_view - sequence"          : "djv_view -seq_auto True {0}",
+  "djv_view_v2"                   : "djv_view_v2 {0}",
   "mrViewer"                     : "mrViewer.sh --playback --run -e {0}",
   "mpv"                          : "mpv --window-scale=0.5 --really-quiet {0}",
   "mpv-audio"                    : "mpv --player-operation-mode=pseudo-gui --really-quiet {0}",

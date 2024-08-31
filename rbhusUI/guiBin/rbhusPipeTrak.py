@@ -128,6 +128,13 @@ updateSortingTimer = QtCore.QTimer()
 
 allUsers = rbhus.utilsPipe.getUsers()
 
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class assetDetailRowClass(QtWidgets.QWidget):
   def __init__(self,parent=None):
     super(assetDetailRowClass, self).__init__(parent)
@@ -353,7 +360,7 @@ def updateProjSelect(mainUid):
 
   projects = []
   for x in items:
-    projects.append(str(x.text()))
+    projects.append(str_convert(x.text()))
   saveSelectedProjects(projects)
   try:
     rbhus.utilsPipe.exportProj(projects[-1])
@@ -365,7 +372,7 @@ def clearProjSelect(mainUid):
   items = mainUid.listWidgetProj.selectedItems()
   projects = []
   for x in items:
-    projects.append(str(x.text()))
+    projects.append(str_convert(x.text()))
   saveSelectedProjects(projects)
   rbhus.utilsPipe.exportProj(projects[-1])
 
@@ -385,32 +392,32 @@ def updateAssetsForProjSelectTimed(mainUid):
   global projects
   whereDict = {}
 
-  if (mainUid.comboStage.currentText()):
-    whereDict['stageType'] = str(mainUid.comboStage.currentText())
-  if (mainUid.comboNode.currentText()):
-    whereDict['nodeType'] = str(mainUid.comboNode.currentText())
-  if (mainUid.comboSeq.currentText()):
-    whereDict['sequenceName'] = str(mainUid.comboSeq.currentText())
-  if (mainUid.comboScn.currentText()):
-    whereDict['sceneName'] = str(mainUid.comboScn.currentText())
-  if (mainUid.comboFile.currentText()):
-    whereDict['fileType'] = str(mainUid.comboFile.currentText())
-  if (mainUid.comboAssType.currentText()):
-    whereDict['assetType'] = str(mainUid.comboAssType.currentText())
+  if str_convert(mainUid.comboStage.currentText()):
+    whereDict['stageType'] = str_convert(mainUid.comboStage.currentText())
+  if str_convert(mainUid.comboNode.currentText()):
+    whereDict['nodeType'] = str_convert(mainUid.comboNode.currentText())
+  if str_convert(mainUid.comboSeq.currentText()):
+    whereDict['sequenceName'] = str_convert(mainUid.comboSeq.currentText())
+  if str_convert(mainUid.comboScn.currentText()):
+    whereDict['sceneName'] = str_convert(mainUid.comboScn.currentText())
+  if str_convert(mainUid.comboFile.currentText()):
+    whereDict['fileType'] = str_convert(mainUid.comboFile.currentText())
+  if str_convert(mainUid.comboAssType.currentText()):
+    whereDict['assetType'] = str_convert(mainUid.comboAssType.currentText())
   # if (mainUid.comboAssType.currentText() and mainUid.comboAssType.currentText() != "default"):
   #   whereDict['assetType'] = str(mainUid.comboAssType.currentText())
 
 
 
-  if (str(mainUid.lineEditSearch.text())):
+  if (str_convert(mainUid.lineEditSearch.text())):
     if (mainUid.checkUsers.isChecked()):
-      whereDict['assignedWorker'] = str(mainUid.lineEditSearch.text())
+      whereDict['assignedWorker'] = str_convert(mainUid.lineEditSearch.text())
     if (mainUid.checkTag.isChecked()):
-      whereDict['tags'] = str(mainUid.lineEditSearch.text())
+      whereDict['tags'] = str_convert(mainUid.lineEditSearch.text())
     if (mainUid.checkAssName.isChecked()):
-      whereDict['assName'] = str(mainUid.lineEditSearch.text())
+      whereDict['assName'] = str_convert(mainUid.lineEditSearch.text())
     if (mainUid.checkAssPath.isChecked()):
-      whereDict['path'] = str(mainUid.lineEditSearch.text())
+      whereDict['path'] = str_convert(mainUid.lineEditSearch.text())
   else:
     if(mainUid.radioMineAss.isChecked()):
       whereDict['assignedWorker'] = username
@@ -700,7 +707,7 @@ def itemChangedSequence(modelIndex, mainUid):
 
   for i in range(0,mainUid.comboSeq.model().rowCount()):
     if(mainUid.comboSeq.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboSeq.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboSeq.model().item(i).text()))
 
   if(selectedStages):
     mainUid.comboSeq.setEditText(",".join(selectedStages))
@@ -723,7 +730,7 @@ def setScene(mainUid):
   mainUid.comboScn.model().clear()
   if(not projects):
     return
-  seqNames = str(mainUid.comboSeq.currentText()).split(",")
+  seqNames = str_convert(mainUid.comboSeq.currentText()).split(",")
 
 
 
@@ -790,7 +797,7 @@ def itemChangedScenes(modelIndex,mainUid):
 
   for i in range(0,mainUid.comboScn.model().rowCount()):
     if(mainUid.comboScn.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboScn.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboScn.model().item(i).text()))
 
   #debug.info("EVENT CALLED : "+ str(index.row()))
   if(selectedStages):
@@ -853,7 +860,7 @@ def itemChangedStageType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboStage.model().rowCount()):
     if (mainUid.comboStage.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboStage.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboStage.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -917,7 +924,7 @@ def itemChangedNodeType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboNode.model().rowCount()):
     if (mainUid.comboNode.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboNode.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboNode.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -983,7 +990,7 @@ def itemChangedFileType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboFile.model().rowCount()):
     if (mainUid.comboFile.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboFile.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboFile.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -1056,7 +1063,7 @@ def itemChangedAssType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboAssType.model().rowCount()):
     if (mainUid.comboAssType.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboAssType.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboAssType.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -1172,7 +1179,8 @@ def notesAssRO(mainUid,assetList=None):
 
 def setUsers(mainUid,lineEdit=None):
   users = rbhus.utilsPipe.getUsers()
-  outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(mainUid.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+  outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str_convert(mainUid.lineEditSearch.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+  outUsers = str_convert(outUsers)
   # if(outUsers == ""):
   #   outUsers = str(self.lineEditSearch.text()).rstrip().lstrip()
   if(lineEdit):
@@ -1183,19 +1191,19 @@ def setUsers(mainUid,lineEdit=None):
 
 
 def saveSearchItem(mainUid,filterFile=None,noUi = False):
-  assetTypeSave = str(mainUid.comboAssType.currentText())
-  seqSave = str(mainUid.comboSeq.currentText())
-  scnSave = str(mainUid.comboScn.currentText())
-  stageSave = str(mainUid.comboStage.currentText())
-  nodeSave = str(mainUid.comboNode.currentText())
-  fileTypeSave = str(mainUid.comboFile.currentText())
-  isMineAssignedSave = str(mainUid.radioMineAss.isChecked())
-  isAllSave = str(mainUid.radioAllAss.isChecked())
-  isTagsSave = str(mainUid.checkTag.isChecked())
-  isUsersSave = str(mainUid.checkUsers.isChecked())
-  searchBoxSave = str(mainUid.lineEditSearch.text())
-  isAssetNameSave = str(mainUid.checkAssName.isChecked())
-  isAssetPathSave = str(mainUid.checkAssPath.isChecked())
+  assetTypeSave = str_convert(mainUid.comboAssType.currentText())
+  seqSave = str_convert(mainUid.comboSeq.currentText())
+  scnSave = str_convert(mainUid.comboScn.currentText())
+  stageSave = str_convert(mainUid.comboStage.currentText())
+  nodeSave = str_convert(mainUid.comboNode.currentText())
+  fileTypeSave = str_convert(mainUid.comboFile.currentText())
+  isMineAssignedSave = str_convert(mainUid.radioMineAss.isChecked())
+  isAllSave = str_convert(mainUid.radioAllAss.isChecked())
+  isTagsSave = str_convert(mainUid.checkTag.isChecked())
+  isUsersSave = str_convert(mainUid.checkUsers.isChecked())
+  searchBoxSave = str_convert(mainUid.lineEditSearch.text())
+  isAssetNameSave = str_convert(mainUid.checkAssName.isChecked())
+  isAssetPathSave = str_convert(mainUid.checkAssPath.isChecked())
   isStarred = str(False)
   saveString = assetTypeSave +"###"+ \
                seqSave +"###"+ \
@@ -1301,7 +1309,7 @@ def searchItemChanged(mainUid,item,filterFile=None):
   for x in savedDict:
     if(x):
       if item.assFilter in x:
-        x[item.assFilter] = str(item.text())
+        x[item.assFilter] = str_convert(item.text())
   rbhus.debug.debug(savedDict)
   fd = open(filterFile,"w")
   yaml.dump(savedDict,fd)
@@ -1520,7 +1528,7 @@ def editAssets(mainUid):
       for assDet in assets:
         assEdit = {}
         if(editAssTrakAssigned):
-          assEdit['trakAssigned'] = str(mainUid.edit.lineEditWorkers.text())
+          assEdit['trakAssigned'] = str_convert(mainUid.edit.lineEditWorkers.text())
           rbhus.debug.info("editing trakAssigned ")
         if(editAssDueDate):
           assEdit['dueDate'] = str(mainUid.edit.dateTimeEditDue.dateTime().toPyDateTime())

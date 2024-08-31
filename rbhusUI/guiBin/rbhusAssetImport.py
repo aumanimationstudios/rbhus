@@ -35,6 +35,10 @@ ui_progress_list_dict = {}
 updateAssThreads = []
 
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
 
 
 class importAssQthread(QtCore.QThread):
@@ -179,27 +183,27 @@ def updateAssetsForProjSelect(mainUid):
   mainUid.listWidgetAssets.clear()
   whereDict = {}
 
-  if (mainUid.comboStage.currentText() and mainUid.comboStage.currentText() != "default"):
-    whereDict['stageType'] = str(mainUid.comboStage.currentText())
-  if (mainUid.comboNode.currentText() and mainUid.comboNode.currentText() != "default"):
-    whereDict['nodeType'] = str(mainUid.comboNode.currentText())
-  if (mainUid.comboSeq.currentText() and mainUid.comboSeq.currentText() != "default"):
-    whereDict['sequenceName'] = str(mainUid.comboSeq.currentText())
-  if (mainUid.comboScn.currentText() and mainUid.comboScn.currentText() != "default"):
-    whereDict['sceneName'] = str(mainUid.comboScn.currentText())
-  if (mainUid.comboFile.currentText() and mainUid.comboFile.currentText() != "default"):
-    whereDict['fileType'] = str(mainUid.comboFile.currentText())
-  if (mainUid.comboAssType.currentText() and mainUid.comboAssType.currentText() != "default"):
-    whereDict['assetType'] = str(mainUid.comboAssType.currentText())
+  if str_convert(mainUid.comboStage.currentText()) and str_convert(mainUid.comboStage.currentText()) != "default":
+    whereDict['stageType'] = str_convert(mainUid.comboStage.currentText())
+  if str_convert(mainUid.comboNode.currentText()) and str_convert(mainUid.comboNode.currentText()) != "default":
+    whereDict['nodeType'] = str_convert(mainUid.comboNode.currentText())
+  if str_convert(mainUid.comboSeq.currentText()) and str_convert(mainUid.comboSeq.currentText()) != "default":
+    whereDict['sequenceName'] = str_convert(mainUid.comboSeq.currentText())
+  if str_convert(mainUid.comboScn.currentText()) and str_convert(mainUid.comboScn.currentText()) != "default":
+    whereDict['sceneName'] = str_convert(mainUid.comboScn.currentText())
+  if str_convert(mainUid.comboFile.currentText()) and str_convert(mainUid.comboFile.currentText()) != "default":
+    whereDict['fileType'] = str_convert(mainUid.comboFile.currentText())
+  if str_convert(mainUid.comboAssType.currentText()) and str_convert(mainUid.comboAssType.currentText()) != "default":
+    whereDict['assetType'] = str_convert(mainUid.comboAssType.currentText())
   if(mainUid.checkTag.isChecked()):
     if(str(mainUid.lineEditSearch.text())):
-      whereDict['tags'] = str(mainUid.lineEditSearch.text())
+      whereDict['tags'] = str_convert(mainUid.lineEditSearch.text())
   if (mainUid.checkAssName.isChecked()):
     if(str(mainUid.lineEditSearch.text())):
-      whereDict['assName'] = str(mainUid.lineEditSearch.text())
+      whereDict['assName'] = str_convert(mainUid.lineEditSearch.text())
   if (mainUid.checkAssPath.isChecked()):
     if(str(mainUid.lineEditSearch.text())):
-      whereDict['path'] = str(mainUid.lineEditSearch.text())
+      whereDict['path'] = str_convert(mainUid.lineEditSearch.text())
 
   rbhus.debug.info(whereDict)
 
@@ -307,7 +311,7 @@ def itemChangedSequence(modelIndex, mainUid):
 
   for i in range(0,mainUid.comboSeq.model().rowCount()):
     if(mainUid.comboSeq.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboSeq.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboSeq.model().item(i).text()))
 
   if(selectedStages):
     mainUid.comboSeq.setEditText(",".join(selectedStages))
@@ -315,7 +319,7 @@ def itemChangedSequence(modelIndex, mainUid):
     mainUid.comboSeq.lineEdit().clear()
 
 def updateAssetsSeq(mainUid):
-  textSelected = unicode(mainUid.comboSeq.lineEdit().text()).split(",")
+  textSelected = str_convert(mainUid.comboSeq.lineEdit().text()).split(",")
   rbhus.debug.info(textSelected)
   updateAssetsForProjSelect(mainUid)
 
@@ -330,7 +334,7 @@ def setScene(mainUid):
     rbhus.debug.error(sys.exc_info())
   if(not projects):
     return
-  seqNames = str(mainUid.comboSeq.currentText()).split(",")
+  seqNames = str_convert(mainUid.comboSeq.currentText()).split(",")
 
 
 
@@ -397,7 +401,7 @@ def itemChangedScenes(modelIndex,mainUid):
 
   for i in range(0,mainUid.comboScn.model().rowCount()):
     if(mainUid.comboScn.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboScn.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboScn.model().item(i).text()))
 
   #debug.info("EVENT CALLED : "+ str(index.row()))
   if(selectedStages):
@@ -460,7 +464,7 @@ def itemChangedStageType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboStage.model().rowCount()):
     if (mainUid.comboStage.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboStage.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboStage.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -524,7 +528,7 @@ def itemChangedNodeType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboNode.model().rowCount()):
     if (mainUid.comboNode.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboNode.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboNode.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -590,7 +594,7 @@ def itemChangedFileType(modelIndex, mainUid):
 
   for i in range(0, mainUid.comboFile.model().rowCount()):
     if (mainUid.comboFile.model().item(i).checkState() == QtCore.Qt.Checked):
-      selectedStages.append(str(mainUid.comboFile.model().item(i).text()))
+      selectedStages.append(str_convert(mainUid.comboFile.model().item(i).text()))
 
   # debug.info("EVENT CALLED : "+ str(index.row()))
   if (selectedStages):
@@ -732,7 +736,7 @@ def getImportUidAssets(mainUid,importUid):
   for row in range(0,rows):
     assetToImport = {}
     label = importUid.tableWidget.cellWidget(row,0)
-    toAsset = str(importUid.tableWidget.cellWidget(row,1).currentText())
+    toAsset = str_convert(importUid.tableWidget.cellWidget(row,1).currentText())
     if(importUid.tableWidget.cellWidget(row,2).checkState() == QtCore.Qt.Checked):
       version = True
     else:
@@ -744,7 +748,7 @@ def getImportUidAssets(mainUid,importUid):
       force = False
 
     assetToImport['assetPath'] = str(label.assetPath)
-    assetToImport['assetPathColor'] = str(label.text())
+    assetToImport['assetPathColor'] = str_convert(label.text())
     assetToImport['toAssetPath'] = str(toAsset)
     assetToImport['getVersions'] = version
     assetToImport['force'] = force

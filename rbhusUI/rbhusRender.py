@@ -25,8 +25,13 @@ try:
   _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
   _fromUtf8 = lambda s: s
-  
-  
+
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
 
 class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   def setupUi(self, Form):
@@ -34,7 +39,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
     dbConn = dbRbhus.dbRbhus()
     clientPrefs = dbConn.getClientPrefs()
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     
     Form.setWindowIcon(icon)
     self.center()
@@ -70,7 +75,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   def tryAuth(self):
     
     rM = self.checkBoxRememberMe.isChecked()
-    ret = self.acl.ldapLogin(str(self.lineEditUser.text()), str(self.lineEditPass.text()), rM)
+    ret = self.acl.ldapLogin(str_convert(self.lineEditUser.text()), str_convert(self.lineEditPass.text()), rM)
     if(ret):
       print("VALID")
       print(str(self.acl.username))

@@ -32,19 +32,25 @@ import dbPipe
 import constantsPipe
 import authPipe
 import utilsPipe
-
+import debug
 
 try:
   _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
   _fromUtf8 = lambda s: s
-  
+
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
 
 class Ui_Form(rbhusPipeSeqSceEditMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusPipeSeqSceEditMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.form = Form
     self.dbpipe = dbPipe.dbPipe()
@@ -84,8 +90,8 @@ class Ui_Form(rbhusPipeSeqSceEditMod.Ui_MainWindow):
         if(row['projName'] == os.environ['rp_proj_projName']):
           seq[row['sequenceName']] = 1
       if(seq):
-        for x in seq.keys():
-          self.comboSequence.addItem(_fromUtf8(x))
+        for x in list(seq.keys()):
+          self.comboSequence.addItem(str_convert(x))
       return(1)
     return(0)      
     
@@ -93,19 +99,19 @@ class Ui_Form(rbhusPipeSeqSceEditMod.Ui_MainWindow):
     self.centralwidget.setCursor(QtCore.Qt.WaitCursor)
     self.centralwidget.setEnabled(False)
     seqScnDict = {}
-    seqScnDict['projName'] = str(self.lineEditProjName.text()) 
-    seqScnDict['sequenceName'] = str(self.comboSequence.currentText())
-    seqScnDict['sceneName'] = str(self.comboScene.currentText())
+    seqScnDict['projName'] = str_convert(self.lineEditProjName.text())
+    seqScnDict['sequenceName'] = str_convert(self.comboSequence.currentText())
+    seqScnDict['sceneName'] = str_convert(self.comboScene.currentText())
     if (self.checkDueDate.isChecked()):
       seqScnDict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
     if (self.checkStartFrame.isChecked()):
-      seqScnDict['sFrame'] = str(self.spinStartFrame.value()) 
+      seqScnDict['sFrame'] = str_convert(self.spinStartFrame.value())
     if (self.checkEndFrame.isChecked()):
-      seqScnDict['eFrame'] = str(self.spinEndFrame.value())
+      seqScnDict['eFrame'] = str_convert(self.spinEndFrame.value())
     if (self.checkAdmins.isChecked()):
-      seqScnDict['admins'] = str(self.lineEditAdmins.text()) 
+      seqScnDict['admins'] = str_convert(self.lineEditAdmins.text())
     if (self.checkDesc.isChecked()):
-      seqScnDict['description'] = str(self.lineEditDesc.text()) 
+      seqScnDict['description'] = str_convert(self.lineEditDesc.text())
     utilsPipe.editSequenceScene(seqScnDict)
     self.centralwidget.setEnabled(True)
     self.centralwidget.setCursor(QtCore.Qt.ArrowCursor)

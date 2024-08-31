@@ -20,13 +20,18 @@ try:
 except AttributeError:
   _fromUtf8 = lambda s: s
   
-  
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
 
 class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   def setupUi(self, Form):
     
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     
     Form.setWindowIcon(icon)
     self.center()
@@ -42,7 +47,7 @@ class Ui_Form(rbhusAuthMod.Ui_MainWindowAuth):
   
   def tryAuth(self):
     acl = auth.login()
-    ret = acl.ldapLogin(str(self.lineEditUser.text()),str(self.lineEditPass.text()))
+    ret = acl.ldapLogin(str_convert(self.lineEditUser.text()),str_convert(self.lineEditPass.text()))
     if(ret):
       print("VALID")
       print(str(acl.username))

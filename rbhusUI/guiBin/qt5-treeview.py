@@ -208,147 +208,147 @@ class getIconDoneEvent(QtCore.QThread):
 
 
 
-class server(QtCore.QThread):
-  def __init__(self,iconQDoneSignal,parent=None):
-    super(server,self).__init__(parent)
-    self.iconQDoneSignal = iconQDoneSignal
-    self._context = zmq.Context()
-    self._portServer = serverIPC
-    self._portWorker = workerIPC
-
-  def process(self, iconQ, iconQDoneSignal):
-    setproctitle.setproctitle("server-worker-process")
-
-
-    while(True):
-      fileDets = iconQ.get()
-      # rbhus.debug.info(fileDets)
-      fAbsPath = fileDets.absPath
-      mimeType = fileDets.mimeType
-      fDir = os.path.dirname(fAbsPath)
-      fName = fileDets.fileName
-      # fThumbzDbDir = os.path.join(fDir, ".thumbz.db")
-      fJson = fileDets.jsonFile
-      fThumbz = fileDets.thumbFile
-      fThumbzDir = os.path.dirname(fThumbz)
-      fLockPath = rbhus.dfl.LockFile(fThumbz,timeout=0,expiry=30)
-
-      # rbhus.debug.info(fThumbzDir)
-      try:
-        os.makedirs(fThumbzDir)
-      except:
-        pass
-      fModifiedTime = os.path.getmtime(fAbsPath)
-      # if (os.path.exists(fLockPath.lock_file)):
-      #   if ((time.time() - os.path.getmtime(fLockPath.lock_file)) > 60):
-      #     rbhus.debug.info("locked file for more than 1 minute : " + str(fAbsPath))
-
-      if (os.path.exists(fThumbzDir)):
-
-        if (os.path.exists(fJson)):
-          try:
-            with fLockPath:
-              fThumbzDetails = jsonRead(fJson)
-              if (fThumbzDetails[fName] < fModifiedTime):
-                try:
-                  thumbzCmd = rbhus.constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
-                except:
-                  thumbzCmd = None
-                if (thumbzCmd):
-                  rbhus.debug.info(thumbzCmd)
-                  p = subprocess.Popen(thumbzCmd, shell=True)
-                  retcode = p.wait()
-                  # print("generated thumb : "+ str(fThumbz))
-
-                  if (retcode == 0):
-                    fThumbzDetails = {fName: fModifiedTime}
-                    jsonWrite(fJson, fThumbzDetails)
-          except:
-            rbhus.debug.info("file is updated by someone : " + str(fAbsPath))
-        else:
-          fThumbzDetails = {fName: fModifiedTime}
-          jsonWrite(fJson, fThumbzDetails)
-          try:
-            thumbzCmd = rbhus.constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
-          except:
-            thumbzCmd = None
-          if (thumbzCmd):
-            # rbhus.debug.info(thumbzCmd)
-            p = subprocess.Popen(thumbzCmd, shell=True)
-            retcode = p.wait()
-
-      # fileDets.thumbFile = fThumbz
-      # fileDets.mainFile = fAbsPath
-      # fileDets.subPath = fDir
-      iconQDoneSignal.put(fileDets)
-
-
-
-
-
-
-  def _worker(self,worker_url,iconQ):
-
-    worker_id = uuid.uuid4()
-    setproctitle.setproctitle("server-worker : "+ str(worker_id))
-    rbhus.debug.info("running worker")
-    rbhus.debug.info (worker_url +" : "+ str(worker_id))
-    context = zmq.Context()
-    # Socket to talk to dispatcher
-    socket = context.socket(zmq.REP)
-    socket.poll(timeout=1)
-    socket.connect(worker_url)
-
-
-    while True:
-      fileDets = socket.recv_pyobj()
-      # setproctitle.setproctitle("server-worker : " + str(fileDets.absPath))
-      socket.send_pyobj(fileDets)
-      # rbhus.debug.info("Filepath recieved : [ {0} ]".format(str(fileDets.absPath)))
-      iconQ.put(fileDets)
-
-  def run(self):
-    rbhus.debug.info("server run")
-    pool_size = 4
-    worker_port = self._portWorker
-    server_port = self._portServer
-    url_worker = "ipc:///tmp/" + worker_port
-    url_client = "ipc:///tmp/" + server_port
-    clients = self._context.socket(zmq.ROUTER)
-    try:
-      clients.bind(url_client)
-    except:
-      rbhus.debug.info (sys.exc_info())
-      self._context.term()
-      sys.exit(1)
-
-    # Socket to talk to workers
-    workers = self._context.socket(zmq.DEALER)
-    try:
-      workers.bind(url_worker)
-    except:
-      rbhus.debug.info (sys.exc_info())
-      self._context.term()
-      sys.exit(1)
-
-
-    iconQ = multiprocessing.Queue(pool_size)
-
-    multiprocessing.Pool(processes=pool_size, initializer=self.process, initargs = (iconQ,self.iconQDoneSignal))
-    # Launch pool of worker process
-    multiprocessing.Pool(processes=pool_size, initializer=self._worker, initargs=(url_worker,iconQ, ))
-    # p.daemon = False
-
-    zmq.proxy(clients, workers)
-
-    print("We never get here but clean up anyhow")
-    try:
-      clients.close()
-      workers.close()
-      self._context.term()
-    except:
-      print(sys.exc_info())
-    # self.finished.emit() # dont enable this . this will simply emit finished twice .. !!!
+# class server(QtCore.QThread):
+#   def __init__(self,iconQDoneSignal,parent=None):
+#     super(server,self).__init__(parent)
+#     self.iconQDoneSignal = iconQDoneSignal
+#     self._context = zmq.Context()
+#     self._portServer = serverIPC
+#     self._portWorker = workerIPC
+#
+#   def process(self, iconQ, iconQDoneSignal):
+#     setproctitle.setproctitle("server-worker-process")
+#
+#
+#     while(True):
+#       fileDets = iconQ.get()
+#       # rbhus.debug.info(fileDets)
+#       fAbsPath = fileDets.absPath
+#       mimeType = fileDets.mimeType
+#       fDir = os.path.dirname(fAbsPath)
+#       fName = fileDets.fileName
+#       # fThumbzDbDir = os.path.join(fDir, ".thumbz.db")
+#       fJson = fileDets.jsonFile
+#       fThumbz = fileDets.thumbFile
+#       fThumbzDir = os.path.dirname(fThumbz)
+#       fLockPath = rbhus.dfl.LockFile(fThumbz,timeout=0,expiry=30)
+#
+#       # rbhus.debug.info(fThumbzDir)
+#       try:
+#         os.makedirs(fThumbzDir)
+#       except:
+#         pass
+#       fModifiedTime = os.path.getmtime(fAbsPath)
+#       # if (os.path.exists(fLockPath.lock_file)):
+#       #   if ((time.time() - os.path.getmtime(fLockPath.lock_file)) > 60):
+#       #     rbhus.debug.info("locked file for more than 1 minute : " + str(fAbsPath))
+#
+#       if (os.path.exists(fThumbzDir)):
+#
+#         if (os.path.exists(fJson)):
+#           try:
+#             with fLockPath:
+#               fThumbzDetails = jsonRead(fJson)
+#               if (fThumbzDetails[fName] < fModifiedTime):
+#                 try:
+#                   thumbzCmd = rbhus.constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
+#                 except:
+#                   thumbzCmd = None
+#                 if (thumbzCmd):
+#                   rbhus.debug.info(thumbzCmd)
+#                   p = subprocess.Popen(thumbzCmd, shell=True)
+#                   retcode = p.wait()
+#                   # print("generated thumb : "+ str(fThumbz))
+#
+#                   if (retcode == 0):
+#                     fThumbzDetails = {fName: fModifiedTime}
+#                     jsonWrite(fJson, fThumbzDetails)
+#           except:
+#             rbhus.debug.info("file is updated by someone : " + str(fAbsPath))
+#         else:
+#           fThumbzDetails = {fName: fModifiedTime}
+#           jsonWrite(fJson, fThumbzDetails)
+#           try:
+#             thumbzCmd = rbhus.constantsPipe.mimeConvertCmds[mimeType].format(fAbsPath, fThumbz)
+#           except:
+#             thumbzCmd = None
+#           if (thumbzCmd):
+#             # rbhus.debug.info(thumbzCmd)
+#             p = subprocess.Popen(thumbzCmd, shell=True)
+#             retcode = p.wait()
+#
+#       # fileDets.thumbFile = fThumbz
+#       # fileDets.mainFile = fAbsPath
+#       # fileDets.subPath = fDir
+#       iconQDoneSignal.put(fileDets)
+#
+#
+#
+#
+#
+#
+#   def _worker(self,worker_url,iconQ):
+#
+#     worker_id = uuid.uuid4()
+#     setproctitle.setproctitle("server-worker : "+ str(worker_id))
+#     rbhus.debug.info("running worker")
+#     rbhus.debug.info (worker_url +" : "+ str(worker_id))
+#     context = zmq.Context()
+#     # Socket to talk to dispatcher
+#     socket = context.socket(zmq.REP)
+#     socket.poll(timeout=1)
+#     socket.connect(worker_url)
+#
+#
+#     while True:
+#       fileDets = socket.recv_pyobj()
+#       # setproctitle.setproctitle("server-worker : " + str(fileDets.absPath))
+#       socket.send_pyobj(fileDets)
+#       # rbhus.debug.info("Filepath recieved : [ {0} ]".format(str(fileDets.absPath)))
+#       iconQ.put(fileDets)
+#
+#   def run(self):
+#     rbhus.debug.info("server run")
+#     pool_size = 4
+#     worker_port = self._portWorker
+#     server_port = self._portServer
+#     url_worker = "ipc:///tmp/" + worker_port
+#     url_client = "ipc:///tmp/" + server_port
+#     clients = self._context.socket(zmq.ROUTER)
+#     try:
+#       clients.bind(url_client)
+#     except:
+#       rbhus.debug.info (sys.exc_info())
+#       self._context.term()
+#       sys.exit(1)
+#
+#     # Socket to talk to workers
+#     workers = self._context.socket(zmq.DEALER)
+#     try:
+#       workers.bind(url_worker)
+#     except:
+#       rbhus.debug.info (sys.exc_info())
+#       self._context.term()
+#       sys.exit(1)
+#
+#
+#     iconQ = multiprocessing.Queue(pool_size)
+#
+#     multiprocessing.Pool(processes=pool_size, initializer=self.process, initargs = (iconQ,self.iconQDoneSignal))
+#     # Launch pool of worker process
+#     multiprocessing.Pool(processes=pool_size, initializer=self._worker, initargs=(url_worker,iconQ, ))
+#     # p.daemon = False
+#
+#     zmq.proxy(clients, workers)
+#
+#     print("We never get here but clean up anyhow")
+#     try:
+#       clients.close()
+#       workers.close()
+#       self._context.term()
+#     except:
+#       print(sys.exc_info())
+#     # self.finished.emit() # dont enable this . this will simply emit finished twice .. !!!
 
 
 # class fileDirLoadedThread(QtCore.QThread):
@@ -596,6 +596,8 @@ def dirSelected(idx, modelDirs, main_ui):
     # fileIconThreadRunning = fileDirLoadedThread(fileGlob,CUR_DIR_SELECTED)
     # fileIconThreadRunning.fileIcon.connect(lambda fileIconDets, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(fileIconDets,pathSelected,main_ui))
     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
+    # ass_path_selected = assPath+main_ui.labelFile.text().lstrip("-").replace("/",":")
+    # rbhus.debug.info(ass_path_selected)
     fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, parent=main_ui)
     # fileIconThreadRunning.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
     fileIconThreadRunning.thumbzSignal.connect(lambda mediaObj, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(mediaObj,pathSelected,main_ui))
@@ -630,6 +632,7 @@ def dirSelected(idx, modelDirs, main_ui):
 
 def fileIconActivate(fileIconDets,pathSelected, main_ui):
   # print("recvd preview : "+ str(fileIconDets.subPath))
+  global filterList
   global fileThumbzWidget
   global fileThumbzItems
 
@@ -643,9 +646,17 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   # main_ui.tableFiles.model().setData(fileSelectedIdx, icon, QtCore.Qt.DecorationRole)
   # main_ui.tableFiles.resizeColumnsToContents()
 
+  if filterList:
+    if not fileIconDets.mimeType in filterList:
+      return
+
+  if not fileIconDets.subPath in pathSelected:
+    return
+
   if fileIconDets.mainFile in fileThumbzWidget:
     imageWidgetUpdated(fileIconDets)
     return
+
   itemWidget = uic.loadUi(mediaThumbz_ui_file)
   fileThumbzWidget[fileIconDets.mainFile] = itemWidget
   itemWidget.labelImageName.setText(os.path.basename(fileIconDets.mainFile))
@@ -676,7 +687,7 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   main_ui.listFiles.addItem(item)
   main_ui.listFiles.setItemWidget(item, itemWidget)
   # print("thumbz added :: "+ fileIconDets.mainFile)
-
+  imageWidgetUpdated(fileIconDets)
 
 
 
@@ -801,6 +812,17 @@ def deleteFolder(main_ui):
     msgBox.exec_()
 
 
+def on_selection_changed(main_ui):
+  try:
+    for index in range(main_ui.listFiles.count()):
+      item = main_ui.listFiles.item(index)
+      fileThumbzWidget[item.media.mainFile].setStyleSheet("background-color: white;")
+    selectedItems = main_ui.listFiles.selectedItems()
+    for selectedItem in selectedItems:
+      fileThumbzWidget[selectedItem.media.mainFile].setStyleSheet("background-color: orange;")
+  except Exception as e:
+    rbhus.debug.info(f"item not found: {e}")
+
 
 def getSelectedFiles(main_ui):
   files =[]
@@ -814,7 +836,7 @@ def getSelectedFiles(main_ui):
   if currView == "ICON":
     selectedItems = main_ui.listFiles.selectedItems()
     for selectedItem in selectedItems:
-      files.append(selectedItem.media.absPath)
+      files.append(selectedItem.media.mainFile)
 
 
   return(files)
@@ -1264,9 +1286,9 @@ def search(modelDirs, main_ui):
   dirSelected(main_ui.treeDirs.currentIndex(), modelDirs, main_ui)
 
 def mainGui(main_ui):
-  iconQDoneSignal = multiprocessing.Queue(4)
-  iconServer = server(iconQDoneSignal=iconQDoneSignal,parent=main_ui)
-  iconServer.start()
+  # iconQDoneSignal = multiprocessing.Queue(4)
+  # iconServer = server(iconQDoneSignal=iconQDoneSignal,parent=main_ui)
+  # iconServer.start()
   main_ui.setWindowTitle(assPath)
   main_ui.splitter.setStretchFactor(1,10)
 
@@ -1300,15 +1322,15 @@ def mainGui(main_ui):
 
   curRootIdx = modelDirs.index(CUR_ROOTDIR_POINTER)
   main_ui.treeDirs.setCurrentIndex(curRootIdx)
-  iconEventEater = getIconDoneEvent(iconQDoneSignal,parent=main_ui)
-  iconEventEater.iconGenerated.connect(imageWidgetUpdated)
-  iconEventEater.start()
+  # iconEventEater = getIconDoneEvent(iconQDoneSignal,parent=main_ui)
+  # iconEventEater.iconGenerated.connect(imageWidgetUpdated)
+  # iconEventEater.start()
 
   main_ui.lineEditSearch.textChanged.connect(lambda x, modelDirs=modelDirs, main_ui = main_ui : search(modelDirs, main_ui))
 
   main_ui.treeDirs.clicked.connect(lambda idnx, modelDirs=modelDirs, main_ui = main_ui : dirSelected(idnx, modelDirs, main_ui))
   # main_ui.listFiles.clicked.connect(lambda idnx, main_ui = main_ui :filesSelected(modelFiles,main_ui))
-
+  main_ui.listFiles.itemSelectionChanged.connect(lambda main_ui = main_ui: on_selection_changed(main_ui))
   main_ui.listFiles.customContextMenuRequested.connect(lambda pos, context = main_ui.listFiles, main_ui = main_ui: popUpFiles(main_ui, context, pos))
   main_ui.tableFiles.customContextMenuRequested.connect(lambda pos, context = main_ui.tableFiles, main_ui = main_ui: popUpFiles(main_ui, context, pos))
   main_ui.treeDirs.customContextMenuRequested.connect(lambda pos, main_ui = main_ui: popUpFolders(main_ui, pos))

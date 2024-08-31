@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 import sys
 import os
 import time
@@ -170,9 +170,9 @@ def atUrService():
   try:
     if(sys.platform.find("linux") >=0):
       os.makedirs("/crap/versionCache/")
-      os.chmod("/crap/versionCache/",0777)
+      os.chmod("/crap/versionCache/",0o777)
       os.makedirs("/crap/mercurial/")
-      os.chmod("/crap/mercurial/",0777)
+      os.chmod("/crap/mercurial/",0o777)
     elif(sys.platform.find("linux") >=0):
       os.makedirs("d:/versionCache/")
       os.makedirs("d:/mercurial/")

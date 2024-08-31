@@ -135,7 +135,7 @@ class hg(object):
     curdir = os.getcwd()
     updatedVersion = None
     os.chdir(self.absPipePath)
-    versionCommited = None
+    versionCommited = 0
     try:
       self._init()
       self._copyIgnore()
@@ -309,10 +309,11 @@ class hg(object):
     com = p.communicate()
     out = com[0]
     debug.info(com)
-    versionCommited = None
+    versionCommited = 0
     returnCode =  p.returncode
     try:
-      outArray = out.split("\n")
+      # debug.info(out)
+      outArray = out.split(b"\n")
       for x in outArray:
         if(re.search("^committed changeset",x)):
           changeset = x.split()
@@ -432,9 +433,10 @@ class hg(object):
     ret = []
     # for t in out:
     #   if(t):
-    for g in out.split("@@@"):
+    # debug.info(out)
+    for g in out.split(b"@@@"):
       if(g):
-        ret.append(g.split("###"))
+        ret.append(g.split(b"###"))
     # self._deleteLock()
     return(ret)
 

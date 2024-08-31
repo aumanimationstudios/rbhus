@@ -696,7 +696,7 @@ class dbRbhus:
       try:
         clientSocket.connect((str(hostIp),6660))
         clientSocket.settimeout(2)
-        clientSocket.send("MURDER:"+ str(tId).lstrip("0") +"%"+ str(fId).lstrip("0"))
+        clientSocket.send(bytes("MURDER:"+ str(tId).lstrip("0") +"%"+ str(fId).lstrip("0"), 'utf-8'))
         clientSocket.close()
         break
       except:
@@ -716,7 +716,7 @@ class dbRbhus:
       try:
         clientSocket.connect((str(hostIp),6660))
         clientSocket.settimeout(2)
-        clientSocket.send("MURDERNHOLD:"+ str(tId).lstrip("0") +"%"+ str(fId).lstrip("0"))
+        clientSocket.send(bytes("MURDERNHOLD:"+ str(tId).lstrip("0") +"%"+ str(fId).lstrip("0"), 'utf-8'))
         clientSocket.close()
         break
       except:

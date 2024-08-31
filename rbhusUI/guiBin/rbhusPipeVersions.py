@@ -58,6 +58,12 @@ except AttributeError:
   _fromUtf8 = lambda s: s
 
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 parser = argparse.ArgumentParser()
 # parser.add_argument("-i","--id",dest='assId',help='asset id')
 parser.add_argument("-p","--path",dest='assPath',help='asset path')
@@ -94,7 +100,9 @@ class ImagePlayer(QtWidgets.QWidget):
 
 
   def resizeEvent(self, event):
-    self.move((self.parent.geometry().width()-100)/2,(self.parent.geometry().height()-100)/2)
+    w = (self.parent.geometry().width()-100)/2
+    h = (self.parent.geometry().height()-100)/2
+    self.move(int(w),int(h))
 
   def showEvent(self,event):
     #self.show()
@@ -161,7 +169,7 @@ def app_lock():
           debug.error(sys.exc_info())
           QtCore.QCoreApplication.instance().quit()
           os._exit(1)
-      f.write(unicode(os.getpid()))
+      f.write(str_convert(os.getpid()))
       f.flush()
       if (sys.platform.find("linux") >= 0):
         fcntl.flock(f, fcntl.LOCK_UN)
@@ -175,7 +183,7 @@ def app_lock():
         debug.error(sys.exc_info())
         QtCore.QCoreApplication.instance().quit()
         os._exit(1)
-    f.write(unicode(os.getpid()))
+    f.write(str_convert(os.getpid()))
     f.flush()
     if (sys.platform.find("linux") >= 0):
       fcntl.flock(f, fcntl.LOCK_UN)
@@ -361,7 +369,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
     for idx in rowsModel:
       rowsSelected.append(idx)
     for rows in rowsSelected:
-      rowstask.append(str(self.tableVersions.item(rows.row(), 0).text()).lstrip("0"))
+      rowstask.append(str_convert(self.tableVersions.item(rows.row(), 0).text()).lstrip("0"))
     return(rowstask)
 
 
@@ -386,26 +394,26 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           brush = QtGui.QBrush()
           self.tableVersions.setItem(indrow, indcol, item)
           if(indcol == 4):
-            self.tableVersions.item(indrow, indcol).setText(str(time.ctime(float(t.split("-")[0]))))
+            self.tableVersions.item(indrow, indcol).setText(str_convert(time.ctime(float(t.split(b"-")[0]))))
           elif(indcol == 0):
-            if(str(t) == str(self.assetDetails['publishVersion'])):
+            if(str_convert(t) == str(self.assetDetails['publishVersion'])):
               item1 = QtWidgets.QTableWidgetItem()
               brush1 = QtGui.QBrush()
               self.tableVersions.setItem(indrow, indcol+1, item1)
               brush1.setColor(QtGui.QColor(0, 200, 0))
               brush1.setStyle(QtCore.Qt.SolidPattern)
               self.tableVersions.item(indrow, indcol+1).setBackground(brush1)
-            if(str(t) == str(self.assetDetails['reviewVersion'])):
+            if(str_convert(t) == str(self.assetDetails['reviewVersion'])):
               item2 = QtWidgets.QTableWidgetItem()
               brush2 = QtGui.QBrush()
               self.tableVersions.setItem(indrow, indcol + 2, item2)
               brush2.setColor(QtGui.QColor(150, 150, 200))
               brush2.setStyle(QtCore.Qt.SolidPattern)
               self.tableVersions.item(indrow, indcol+2).setBackground(brush2)
-            self.tableVersions.item(indrow, indcol).setText(str(t).zfill(4))
+            self.tableVersions.item(indrow, indcol).setText(str_convert(t).zfill(4))
             indcol = indcol + 2
           else:
-            self.tableVersions.item(indrow, indcol).setText(str(t))
+            self.tableVersions.item(indrow, indcol).setText(str_convert(t))
           indcol = indcol + 1
 
         indrow = indrow + 1
@@ -468,8 +476,8 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         relatedAssetWidget = uic.loadUi(relatedAsset_ui)
         self.relatedAssetWidgets[x] = relatedAssetWidget
         if(assLog):
-          relatedAssetWidget.labelVersion.setText(str(assLog[0][0]).zfill(4))
-          relatedAssetWidget.labelDate.setText(str(time.ctime(float(assLog[0][2].split("-")[0]))))
+          relatedAssetWidget.labelVersion.setText(str_convert(assLog[0][0]).zfill(4))
+          relatedAssetWidget.labelDate.setText(str_convert(time.ctime(float(assLog[0][2].split(b"-")[0]))))
         assColored = utilsPipe.assPathColorCoded(assDets)
         if(selectedForAutoCommit):
           if(x in selectedForAutoCommit):
@@ -536,7 +544,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   def messageBoxWarn(self, assPath):
     msgbox = QtWidgets.QMessageBox()
     msgbox.setWindowTitle(assPath)
-    msgbox.setText(unicode(assPath +"\nNOT COMMITING !Asset not assigned to you!!!"))
+    msgbox.setText(str_convert(assPath +"\nNOT COMMITING !Asset not assigned to you!!!"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
@@ -548,7 +556,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   def messageBoxCommitFailed(self, assPath):
     msgbox = QtWidgets.QMessageBox()
     msgbox.setWindowTitle(assPath)
-    msgbox.setText(unicode(assPath +"\nCOMMIT FAILED !- Please check"))
+    msgbox.setText(str_convert(assPath +"\nCOMMIT FAILED !- Please check"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
@@ -559,7 +567,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
   def messageBoxPushFailed(self, assPath):
     msgbox = QtWidgets.QMessageBox()
     msgbox.setWindowTitle(assPath)
-    msgbox.setText(unicode(assPath +"\nPUSHING TO SERVER FAILED !- Please check"))
+    msgbox.setText(str_convert(assPath +"\nPUSHING TO SERVER FAILED !- Please check"))
     msgbox.setIconPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/poop.png")))
     #noBut = QtGui.QPushButton("cancel")
     #yesBut = QtGui.QPushButton("yes")
@@ -621,7 +629,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           assLog = xver._log()
           if(versionNumber):
             self.relatedAssetWidgets[x].labelVersion.setText(str(versionNumber).zfill(4))
-          self.relatedAssetWidgets[x].labelDate.setText(str(time.ctime(float(assLog[0][2].split("-")[0]))))
+          self.relatedAssetWidgets[x].labelDate.setText(str_convert(time.ctime(float(assLog[0][2].split(b"-")[0]))))
           utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:end:success")
 
 

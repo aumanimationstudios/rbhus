@@ -50,12 +50,18 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
   def setupUi(self, Form):
     self.form = Form
     rbhusPipeAssetEditMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     self.idList = []
@@ -129,18 +135,20 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
   
   def setReviewers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str_convert(self.lineEditWorkers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    outUsers = str_convert(outUsers)
     if(outUsers == ""):
-      outUsers = str(self.lineEditWorkers.text()).strip()
-    self.lineEditReviewers.setText(_fromUtf8(outUsers))
+      outUsers = str_convert(self.lineEditWorkers.text()).strip()
+    self.lineEditReviewers.setText(str_convert(outUsers))
 
 
   def setReviewNotifiers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(self.lineEditReviewNotifiers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str_convert(self.lineEditReviewNotifiers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    outUsers = str_convert(outUsers)
     if(not outUsers):
-      outUsers = str(self.lineEditReviewNotifiers.text()).strip()
-    self.lineEditReviewNotifiers.setText(_fromUtf8(outUsers))
+      outUsers = str_convert(self.lineEditReviewNotifiers.text()).strip()
+    self.lineEditReviewNotifiers.setText(str_convert(outUsers))
 
     
     
@@ -232,10 +240,11 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
   
   def setUsers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str(self.lineEditWorkers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    outUsers = subprocess.Popen([sys.executable,selectRadioBoxCmd,"-i",",".join(users),"-d",str_convert(self.lineEditWorkers.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    outUsers = str_convert(outUsers)
     if(outUsers == ""):
-      outUsers = str(self.lineEditWorkers.text()).strip()
-    self.lineEditWorkers.setText(_fromUtf8(outUsers))
+      outUsers = str_convert(self.lineEditWorkers.text()).strip()
+    self.lineEditWorkers.setText(str_convert(outUsers))
   
   
   def eAss(self):
@@ -247,22 +256,22 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
         if(self.checkDueDate.isChecked()):
           assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
         if(self.checkAssign.isChecked()):
-          assdict['assignedWorker'] = str(self.lineEditWorkers.text()).strip()
+          assdict['assignedWorker'] = str_convert(self.lineEditWorkers.text()).strip()
         if(self.checkDesc.isChecked()):
-          assdict['description'] = str(self.lineEditDesc.text()).strip()
+          assdict['description'] = str_convert(self.lineEditDesc.text()).strip()
         if(self.checkTags.isChecked()):
-          assdict['tags'] = str(self.lineEditTags.text()).strip()
+          assdict['tags'] = str_convert(self.lineEditTags.text()).strip()
         if(self.checkFRange.isChecked()):
-          assdict['fRange'] = str(self.lineEditFRange.text()).strip()
+          assdict['fRange'] = str_convert(self.lineEditFRange.text()).strip()
         if(self.checkVersion.isChecked()):
           if(self.checkVersionEnable.isChecked()):
             assdict['versioning'] = 1
           else:
             assdict['versioning'] = 0
         if(self.checkReview.isChecked()):
-          assdict['reviewUser'] = str(self.lineEditReviewers.text()).strip()
+          assdict['reviewUser'] = str_convert(self.lineEditReviewers.text()).strip()
         if (self.checkReviewNotifiers.isChecked()):
-          assdict['reviewNotifyUsers'] = str(self.lineEditReviewNotifiers.text()).strip()
+          assdict['reviewNotifyUsers'] = str_convert(self.lineEditReviewNotifiers.text()).strip()
           
         if(utilsPipe.isAssAssigned(assdets) or utilsPipe.isProjAdmin(assdets)):
           print("user not allowed to edit . not an admin or an asset founder!!")
@@ -280,22 +289,22 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
         if(self.checkDueDate.isChecked()):
           assdict['dueDate'] = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
         if(self.checkAssign.isChecked()):
-          assdict['assignedWorker'] = str(self.lineEditWorkers.text())
+          assdict['assignedWorker'] = str_convert(self.lineEditWorkers.text())
         if(self.checkDesc.isChecked()):
-          assdict['description'] = str(self.lineEditDesc.text())
+          assdict['description'] = str_convert(self.lineEditDesc.text())
         if(self.checkTags.isChecked()):
-          assdict['tags'] = str(self.lineEditTags.text())
+          assdict['tags'] = str_convert(self.lineEditTags.text())
         if(self.checkFRange.isChecked()):
-          assdict['fRange'] = str(self.lineEditFRange.text())
+          assdict['fRange'] = str_convert(self.lineEditFRange.text())
         if(self.checkVersion.isChecked()):
           if(self.checkVersionEnable.isChecked()):
             assdict['versioning'] = 1;
           else:
             assdict['versioning'] = 0;
         if(self.checkReview.isChecked()):
-          assdict['reviewUser'] = str(self.lineEditReviewers.text()).strip()
+          assdict['reviewUser'] = str_convert(self.lineEditReviewers.text()).strip()
         if (self.checkReviewNotifiers.isChecked()):
-          assdict['reviewNotifyUsers'] = str(self.lineEditReviewNotifiers.text()).strip()
+          assdict['reviewNotifyUsers'] = str_convert(self.lineEditReviewNotifiers.text()).strip()
           
         #if(not (self.project in os.environ['rbhusPipe_acl_projIds'].split() or assdets['createdUser'] == self.username or assdets['assignedWorker'] == self.username)):
           #print("user not allowed to edit . not an admin or an asset founder!!")
@@ -313,10 +322,11 @@ class Ui_Form(rbhusPipeAssetEditMod.Ui_MainWindow):
     
   def setTags(self):
     tags = utilsPipe.getTags(projName=os.environ['rp_proj_projName'])
-    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str(self.lineEditTags.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    outTags = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(tags),"-d",str_convert(self.lineEditTags.text()).strip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].strip()
+    outTags = str_convert(outTags)
     if(outTags == ""):
       outTags = "default"
-    self.lineEditTags.setText(_fromUtf8(outTags))
+    self.lineEditTags.setText(str_convert(outTags))
 
   
   

@@ -977,7 +977,7 @@ def setupSequenceScene(seqSceDict):
   defKeys = defaultSeq.keys()
   defValues = ["'"+ str(defaultSeq[x]).rstrip().lstrip() +"'" for x in defKeys]
 
-  seqKeys = seqSceDict.keys()
+  seqKeys = list(seqSceDict.keys())
   seqValues = ["'"+ str(seqSceDict[x]).rstrip().lstrip() +"'" for x in seqKeys]
   seqKeys.append("createDate")
   seqValues.append("'"+ str(MySQLdb.Timestamp.now()) +"'")
@@ -1048,7 +1048,7 @@ def getAbsPath(pipePath):
   absPath = []
   absPathArray = pipePath.split(":")
   for x in absPathArray:
-    if(re.search("^\$",str(x))):
+    if(re.search(r"^\$",str(x))):
       absPath.append(os.environ["rp_"+ str(x).lstrip("$")])
     else:
       absPath.append(str(x))
@@ -1480,7 +1480,7 @@ def assRegister(assDetDict,copyFromTemplate=True,assetGroup = []):
   assDetDict['createDate'] = str(MySQLdb.Timestamp.now())
   assDetDict['createdUser']  = os.environ['rbhusPipe_acl_user'].rstrip().lstrip()
   # fileName = getAssFileName(assDetDict)
-  assId = hashlib.sha256(assPath).hexdigest()
+  assId = hashlib.sha256(assPath.encode('utf-8')).hexdigest()
   assDetDict['assetId'] = assId
   assDetDict['path'] = assPath
 
@@ -1645,7 +1645,7 @@ def getAssPath(assDetDictTemp = {}):
     assTypeDets = getAssTypes(str(assDetDict['assetType']))
     if(assTypeDets):
       for p in assTypeDets['path'].split(":"):
-        if(re.search("^\$",str(p))):
+        if(re.search(r"^\$",str(p))):
           assPath = assPath +":"+ os.environ["rp_"+ str(p).lstrip("$")]
         else:
           assPath = assPath +":"+ p

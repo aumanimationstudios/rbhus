@@ -33,6 +33,12 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
     
@@ -40,7 +46,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
         
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     rbhusEditMod.Ui_rbhusEdit.setupUi(self,Form)
@@ -182,36 +188,36 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   def applyNew(self):
     editDict = {}
     if(self.db_filetype):
-      editDict["fileType"] = str(self.comboType.currentText())
+      editDict["fileType"] = str_convert(self.comboType.currentText())
       self.db_filetype = 0
     if(self.db_renderer):
-      editDict["renderer"] = str(self.comboRenderer.currentText())
+      editDict["renderer"] = str_convert(self.comboRenderer.currentText())
       self.db_renderer = 0
     if(self.db_hostgroup):
-      editDict["hostGroups"] = str(self.lineEditHostGroups.text())
+      editDict["hostGroups"] = str_convert(self.lineEditHostGroups.text())
       self.db_hostgroup = 0
     if(self.db_filename):
-      editDict["fileName"] = str(self.lineEditFileName.text().replace("\\","/"))
+      editDict["fileName"] = str_convert(self.lineEditFileName.text().replace("\\","/"))
       self.db_filename = 0
     if(self.db_cam)  :
-      editDict["camera"] = str(self.lineEditCamera.text())
+      editDict["camera"] = str_convert(self.lineEditCamera.text())
       self.db_cam = 0
     if(self.db_res):
-      editDict["resolution"] = str(self.lineEditResolution.text())
+      editDict["resolution"] = str_convert(self.lineEditResolution.text())
     if(self.db_imagename):
-      editDict["outName"] = str(self.lineEditImageName.text())
+      editDict["outName"] = str_convert(self.lineEditImageName.text())
       self.db_imagename = 0
     if(self.db_outputdir):
-      editDict["outDir"] = str(self.lineEditOutPutDir.text().replace("\\","/"))
+      editDict["outDir"] = str_convert(self.lineEditOutPutDir.text().replace("\\","/"))
       self.db_outputdir = 0
     if(self.db_bfc):
-      editDict["beforeFrameCmd"] = str(self.lineEditBfc.text().replace("\\","/"))
+      editDict["beforeFrameCmd"] = str_convert(self.lineEditBfc.text().replace("\\","/"))
       self.db_bfc = 0
     if(self.db_afc):
-      editDict["afterFrameCmd"] = str(self.lineEditAfc.text().replace("\\","/"))
+      editDict["afterFrameCmd"] = str_convert(self.lineEditAfc.text().replace("\\","/"))
       self.db_afc = 0
     if(self.db_logbase):
-      editDict["logBase"] = str(self.lineEditLogbase.text().replace("\\","/"))
+      editDict["logBase"] = str_convert(self.lineEditLogbase.text().replace("\\","/"))
       self.db_logbase = 0
     if(self.db_aftertime):
       editDict["afterTime"] = str(self.afterTimeEdit.dateTime().date().year()) +"-"+ str(self.afterTimeEdit.dateTime().date().month()) +"-"+ str(self.afterTimeEdit.dateTime().date().day()) +" "+ str(self.afterTimeEdit.dateTime().time().hour()) +":"+ str(self.afterTimeEdit.dateTime().time().minute()) +":" + str(self.afterTimeEdit.dateTime().time().second())
@@ -219,7 +225,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       editDict["rerunThresh"] = str(self.db_rerunthresh)
       self.db_rerunthresh = 0
     if(self.db_framerange):
-      editDict["fRange"] = str(self.lineEditFrange.text())
+      editDict["fRange"] = str_convert(self.lineEditFrange.text())
       self.db_framerange = 0
     if(self.db_priority):
       editDict["priority"] = str(self.db_priority)
@@ -233,13 +239,13 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     if(self.db_desc):
       editDict['description'] = str(self.db_desc)
     if(self.db_os):
-      editDict['os'] = str(self.comboOsType.currentText())
+      editDict['os'] = str_convert(self.comboOsType.currentText())
     if(self.db_afterTask):
-      editDict['afterTasks'] = str(self.lineEditAfterTask.text())
+      editDict['afterTasks'] = str_convert(self.lineEditAfterTask.text())
     if(self.db_afterTaskSloppy):
       editDict['afterTaskSloppy'] = 1 & self.checkSloppy.isChecked()
     if(self.db_imageType):
-      editDict['imageType'] = str(self.comboImageType.currentText())
+      editDict['imageType'] = str_convert(self.comboImageType.currentText())
       
     print(str(editDict))
     try:
@@ -253,11 +259,12 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
   
   def hostGroupPrint(self):
     groups = rUtils.getHostGroups()
-    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(groups),"-d",str_convert(self.lineEditHostGroups.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outGroups = str_convert(outGroups)
     if(outGroups == ""):
       return
     print(outGroups)
-    self.lineEditHostGroups.setText(_fromUtf8(outGroups))
+    self.lineEditHostGroups.setText(str_convert(outGroups))
     self.db_hostgroup = 1
   
   def osTypesPrint(self):
@@ -280,7 +287,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     
   def batchStatus(self):
     print(self.comboBatching.currentText())
-    self.db_batch = constants.batchStatus[str(self.comboBatching.currentText())]
+    self.db_batch = constants.batchStatus[str_convert(self.comboBatching.currentText())]
     
     
   def afePrint(self):
@@ -403,7 +410,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       indx = 0
       setIndx = 0
       for row in rows:
-        self.comboType.addItem(_fromUtf8(row))
+        self.comboType.addItem(str_convert(row))
         print(str(self.taskValues['fileType']))
         if(row.endswith(str(self.taskValues['fileType']))):
           setIndx = indx
@@ -423,7 +430,7 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
       indx = 0
       setIndx = 0
       for row in rows:
-        self.comboOsType.addItem(_fromUtf8(row))
+        self.comboOsType.addItem(str_convert(row))
         print(str(self.taskValues['os']))
         if(row.endswith(str(self.taskValues['os']))):
           setIndx = indx
@@ -441,9 +448,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     setIndx = 0
     try:
       for x in self.renders:
-        if(x['fileType'] == str(self.comboType.currentText())):
-          self.comboRenderer.addItem(_fromUtf8(x['renderer']))
-          if(x['renderer'] == str(self.taskValues['renderer'])):
+        if x['fileType'] == str_convert(self.comboType.currentText()):
+          self.comboRenderer.addItem(str_convert(x['renderer']))
+          if x['renderer'] == str(self.taskValues['renderer']):
             setIndx = indx
           indx = indx + 1
       self.comboRenderer.setCurrentIndex(setIndx)
@@ -458,9 +465,9 @@ class Ui_Form(rbhusEditMod.Ui_rbhusEdit):
     setIndx = 0
     try:
       for x in self.imageTypes:
-        if(x['fileType'] == str(self.comboType.currentText())):
-          self.comboImageType.addItem(_fromUtf8(x['imageType']))
-          if(x['imageType'] == str(self.taskValues['imageType'])):
+        if x['fileType'] == str_convert(self.comboType.currentText()):
+          self.comboImageType.addItem(str_convert(x['imageType']))
+          if x['imageType'] == str(self.taskValues['imageType']):
             setIndx = indx
           indx = indx + 1
       self.comboImageType.setCurrentIndex(setIndx)

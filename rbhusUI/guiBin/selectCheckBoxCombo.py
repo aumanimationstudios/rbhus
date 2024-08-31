@@ -63,13 +63,20 @@ try:
   _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
   _fromUtf8 = lambda s: s
-  
+
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 
 class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
   def setupUi(self, Form):
     selectCheckBoxComboMod.Ui_selectCheckBox.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.form = Form
     self.inList = []
@@ -112,8 +119,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
   
   def searchReset(self):
     try:
-      selectCheckBoxComboLogger.debug(str(self.plainTextEditSelected.document().toPlainText()))
-      self.defList = str(self.plainTextEditSelected.document().toPlainText()).split(",")
+      selectCheckBoxComboLogger.debug(str_convert(self.plainTextEditSelected.document().toPlainText()))
+      self.defList = str_convert(self.plainTextEditSelected.document().toPlainText()).split(",")
       #self.defDict = {}
       for x in self.defList:
         dets = x.split("#")
@@ -137,7 +144,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
   
   
   def pApply(self):
-    print(str(self.plainTextEditSelected.document().toPlainText()))
+    print(str_convert(self.plainTextEditSelected.document().toPlainText()))
     QtCore.QCoreApplication.instance().quit()
     
     
@@ -146,7 +153,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
   def updateCheckBoxes(self):
     self.findList = []
     for x in self.inDict.keys():
-      if((x.lower()).find(str(self.lineEditSearch.text()).lower()) >= 0):
+      if (x.lower()).find(str_convert(self.lineEditSearch.text()).lower()) >= 0:
         self.findList.append(x)
     
     
@@ -198,8 +205,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(checkBox.sizePolicy().hasHeightForWidth())
         checkBox.setSizePolicy(sizePolicy)
-        checkBox.setText(_fromUtf8(""))
-        comboBox.setObjectName(_fromUtf8(x))
+        checkBox.setText(str_convert(""))
+        comboBox.setObjectName(str_convert(x))
         gridLayout_2.addWidget(checkBox, 0, 0, 1, 1)
         
         comboBox.setEditable(True)
@@ -221,12 +228,12 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         #comboBox.pressedFileType = pressedFileType
         
         
-        comboBox.setObjectName(_fromUtf8(x))
+        comboBox.setObjectName(str_convert(x))
         gridLayout_2.addWidget(comboBox, 0, 1, 1, 1)
 
 
         self.checkBoxes[x] = [groupBox,checkBox,comboBox]
-        self.checkBoxes[x][0].setTitle(_fromUtf8(x))
+        self.checkBoxes[x][0].setTitle(str_convert(x))
         self.verticalLayout.addWidget(self.checkBoxes[x][0])
         self.checkBoxes[x][1].stateChanged.connect(self.updateSelected)
         self.checkBoxes[x][2].editTextChanged.connect(self.updateSelected)
@@ -260,8 +267,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
       father.model().item(index.row()).setForeground(abrush)
     changes = False
     for i in range(0,father.model().rowCount()):
-      if(father.model().item(i).checkState() == QtCore.Qt.Checked):
-        selectedStages.append(str(father.model().item(i).text()))
+      if father.model().item(i).checkState() == QtCore.Qt.Checked:
+        selectedStages.append(str_convert(father.model().item(i).text()))
         changes = True
       
     ##print("EVENT CALLED : "+ str(index.row()))
@@ -286,8 +293,8 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
     try:
 
 
-      if(len(str(self.lineEditSearch.text())) > 0):
-        a = str(self.plainTextEditSelected.document().toPlainText()).split(",")
+      if len(str_convert(self.lineEditSearch.text())) > 0:
+        a = str_convert(self.plainTextEditSelected.document().toPlainText()).split(",")
         temDict = {}
         for x in a:
           detsa = x.split("#")
@@ -299,7 +306,7 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         tempShit = []
         for y in self.checkBoxes.keys():
           if(self.checkBoxes[y][1].isChecked()):
-            tempShit.append(str(y) +"#"+ "%".join(str(self.checkBoxes[y][2].currentText()).split(",")))
+            tempShit.append(str(y) +"#"+ "%".join(str_convert(self.checkBoxes[y][2].currentText()).split(",")))
           else:
             try:
               del temDict[str(y)]
@@ -321,15 +328,15 @@ class Ui_Form(selectCheckBoxComboMod.Ui_selectCheckBox):
         tempshit2.sort()
         self.plainTextEditSelected.clear()
         
-        self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(tempshit2)))
+        self.plainTextEditSelected.setPlainText(str_convert(",".join(tempshit2)))
       else:
         self.updateLine = []
         for x in self.checkBoxes.keys():
           if(self.checkBoxes[x][1].isChecked()):
-            self.updateLine.append(str(x) +"#"+ "%".join(str(self.checkBoxes[x][2].currentText()).split(",")))
+            self.updateLine.append(str(x) +"#"+ "%".join(str_convert(self.checkBoxes[x][2].currentText()).split(",")))
         self.updateLine.sort()
         self.plainTextEditSelected.clear()
-        self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(self.updateLine)))
+        self.plainTextEditSelected.setPlainText(str_convert(",".join(self.updateLine)))
     except:
       selectCheckBoxComboLogger.debug(str(sys.exc_info()))
     #self.plainTextEditSelected.setReadOnly(True)

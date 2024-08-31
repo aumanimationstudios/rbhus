@@ -18,6 +18,13 @@ try:
 except AttributeError:
   _fromUtf8 = lambda s: s
 
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class Ui_Form(object):
   def setupUi(self, Form):
     Form.setObjectName(_fromUtf8("Form"))
@@ -46,9 +53,9 @@ class Ui_Form(object):
     Form.setWindowTitle(QtWidgets.QApplication.translate("Form", sys.argv[1], None, QtWidgets.QApplication.UnicodeUTF8))
     self.listWidget.setSortingEnabled(True)
     
-    
+
   def printSelected(self):
-    fRelative = str(self.listWidget.currentItem().text())
+    fRelative = str_convert(self.listWidget.currentItem().text())
     fAbs = os.path.abspath(sys.argv[1].rstrip("/"))
     print(fAbs +"/"+ fRelative)
     Form.close()

@@ -30,11 +30,17 @@ except AttributeError:
   _fromUtf8 = lambda s: s
   
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 class Ui_Form(selectRadioBoxMod.Ui_selectRadioBox):
   def setupUi(self, Form):
     selectRadioBoxMod.Ui_selectRadioBox.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhus.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     self.inList = []
     self.defList = []
@@ -69,7 +75,7 @@ class Ui_Form(selectRadioBoxMod.Ui_selectRadioBox):
   def updateCheckBoxes(self):
     findList = []
     for x in self.inList:
-      if((x.lower()).find(str(self.lineEditSearch.text()).lower()) >= 0):
+      if (x.lower()).find(str_convert(self.lineEditSearch.text()).lower()) >= 0:
         findList.append(x)
     
     
@@ -86,9 +92,9 @@ class Ui_Form(selectRadioBoxMod.Ui_selectRadioBox):
     if(findList):
       for x in findList:
         self.radioButts[x] = QtWidgets.QRadioButton(self.scrollAreaWidgetContents)
-        self.radioButts[x].setObjectName(_fromUtf8(x))
+        self.radioButts[x].setObjectName(str_convert(x))
         self.verticalLayout.addWidget(self.radioButts[x])
-        self.radioButts[x].setText(_fromUtf8(x))
+        self.radioButts[x].setText(str_convert(x))
         self.radioButts[x].toggled.connect(self.updateSelected)
         if(x in self.defList):
           self.radioButts[x].setChecked(2)
@@ -114,7 +120,7 @@ class Ui_Form(selectRadioBoxMod.Ui_selectRadioBox):
       #print(x + " : "+ str(self.radioButts[x].isChecked()))
       if(self.radioButts[x].isChecked()):
         self.updateLine.append(str(x))
-    self.plainTextEditSelected.setPlainText(_fromUtf8(",".join(self.updateLine)))
+    self.plainTextEditSelected.setPlainText(str_convert(",".join(self.updateLine)))
     #self.plainTextEditSelected.setReadOnly(True)
       
         

@@ -18,6 +18,7 @@ import dbPipe
 import constantsPipe
 import authPipe
 import utilsPipe
+import debug
 
 
 scb = "selectCheckBox.py" 
@@ -36,13 +37,19 @@ try:
   _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
   _fromUtf8 = lambda s: s
-  
+
+
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
 
 class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
   def setupUi(self, Form):
     rbhusPipeProjCreateMod.Ui_MainWindow.setupUi(self,Form)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(_fromUtf8(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+    icon.addPixmap(QtGui.QPixmap(str_convert(dirSelf.rstrip(os.sep).rstrip("guiBin").rstrip(os.sep).rstrip("rbhusUI").rstrip(os.sep)+ os.sep +"etc/icons/rbhusPipe.svg")), QtGui.QIcon.Normal, QtGui.QIcon.On)
     Form.setWindowIcon(icon)
     
     self.dbpipe = dbPipe.dbPipe()
@@ -79,16 +86,17 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     for x in projects:
       projNames.append(x['projName'])
       
-    outLinked = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(projNames),"-d",str(self.lineEditLinked.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outLinked = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(projNames),"-d",str_convert(self.lineEditLinked.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outLinked = str_convert(outLinked)
     if(outLinked == ""):
-      outLinked = str(self.lineEditLinked.text()).rstrip().lstrip()
-    self.lineEditLinked.setText(_fromUtf8(outLinked))
+      outLinked = str_convert(self.lineEditLinked.text()).rstrip().lstrip()
+    self.lineEditLinked.setText(str_convert(outLinked))
   
   
   
   def updateStatus(self):
     if(self.lineEditName.text()):
-      pDets = utilsPipe.getProjDetails(projName=str(self.lineEditName.text()))
+      pDets = utilsPipe.getProjDetails(projName=str_convert(self.lineEditName.text()))
       if(pDets):
         self.wtf = constantsPipe.createStatus[pDets['createStatus']]
       else:
@@ -96,45 +104,46 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     self.statusBar.showMessage("status : "+ str(self.wtf))
   
   def cProj(self):
-    pType = str(self.comboProjType.currentText()).rstrip().lstrip()
-    pName = str(self.lineEditName.text()) if(str(self.lineEditName.text()).rstrip().lstrip()) else None
-    pDir = str(self.comboDirectory.currentText()).rstrip().lstrip()
+    pType = str_convert(self.comboProjType.currentText()).rstrip().lstrip()
+    pName = str_convert(self.lineEditName.text()) if(str_convert(self.lineEditName.text()).rstrip().lstrip()) else None
+    pDir = str_convert(self.comboDirectory.currentText()).rstrip().lstrip()
     pDueDate = str(self.dateEditDue.dateTime().date().year()) +"-"+ str(self.dateEditDue.dateTime().date().month()) +"-"+ str(self.dateEditDue.dateTime().date().day()) +" "+ str(self.dateEditDue.dateTime().time().hour()) +":"+ str(self.dateEditDue.dateTime().time().minute()) +":" + str(self.dateEditDue.dateTime().time().second())
-    pAdmins = str(self.lineEditAdmins.text()).rstrip().lstrip() if(self.lineEditAdmins.text()) else None
-    pAclUser = str(self.lineEditAclUser.text()).rstrip().lstrip() if(self.lineEditAclUser.text()) else None
-    pAclGroup = str(self.lineEditAclGroup.text()).rstrip().lstrip() if(self.lineEditAclGroup.text()) else None
+    pAdmins = str_convert(self.lineEditAdmins.text()).rstrip().lstrip() if(str_convert(self.lineEditAdmins.text())) else None
+    pAclUser = str_convert(self.lineEditAclUser.text()).rstrip().lstrip() if(str_convert(self.lineEditAclUser.text())) else None
+    pAclGroup = str_convert(self.lineEditAclGroup.text()).rstrip().lstrip() if(str_convert(self.lineEditAclGroup.text())) else None
     pRI = 1 if(self.checkRI.isChecked()) else 0
-    pDesc = str(self.lineEditDesc.text()).rstrip().lstrip() if(self.lineEditDesc.text()) else None
-    linked = str(self.lineEditLinked.text()).rstrip().lstrip()
+    pDesc = str_convert(self.lineEditDesc.text()).rstrip().lstrip() if(str_convert(self.lineEditDesc.text())) else None
+    linked = str_convert(self.lineEditLinked.text()).rstrip().lstrip()
     createdUser = os.environ['rbhusPipe_acl_user']
     self.wtf = "connecting"
-    utilsPipe.setupProj(projType=pType,
-                            projName=pName,
-                            directory=pDir,
-                            admins=pAdmins,
+    utilsPipe.setupProj(projType=str_convert(pType),
+                            projName=str_convert(pName),
+                            directory=str_convert(pDir),
+                            admins=str_convert(pAdmins),
                             rbhusRenderIntegration=pRI,
                             rbhusRenderServer=None,
-                            aclUser=pAclUser,
-                            aclGroup=pAclGroup,
+                            aclUser=str_convert(pAclUser),
+                            aclGroup=str_convert(pAclGroup),
                             dueDate=pDueDate,
-                            description=pDesc,
-                            createdUser=createdUser)
+                            description=str_convert(pDesc),
+                            createdUser=str_convert(createdUser))
     
     
   def setUsers(self):
     users = utilsPipe.getUsers()
-    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str(self.lineEditAdmins.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = subprocess.Popen([sys.executable,selectCheckBoxCmd,"-i",",".join(users),"-d",str_convert(self.lineEditAdmins.text()).rstrip().lstrip()],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].rstrip().lstrip()
+    outUsers = str_convert(outUsers)
     if(outUsers == ""):
-      outUsers = str(self.lineEditAdmins.text()).rstrip().lstrip()
-    self.lineEditAdmins.setText(_fromUtf8(outUsers))
+      outUsers = str_convert(self.lineEditAdmins.text()).rstrip().lstrip()
+    self.lineEditAdmins.setText(str_convert(outUsers))
   
 
   def setProjTypes(self):
     rows = utilsPipe.getProjTypes()
-    self.comboProjType.clear()  
+    self.comboProjType.clear()
     if(rows):
       for row in rows:
-        self.comboProjType.addItem(_fromUtf8(row['type']))
+        self.comboProjType.addItem(str_convert(row['type']))
       
       return(1)
     return(0)     
@@ -145,7 +154,7 @@ class Ui_Form(rbhusPipeProjCreateMod.Ui_MainWindow):
     self.comboDirectory.clear()
     if(dirs):
       for d in dirs:
-        self.comboDirectory.addItem(_fromUtf8(d['directory']))
+        self.comboDirectory.addItem(str_convert(d['directory']))
       return(1)
     return(0)
     

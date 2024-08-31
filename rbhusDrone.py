@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 ###
 # Copyright (C) 2012  Shrinidhi Rao shrinidhi@clickbeetle.in
 #
@@ -1362,9 +1362,10 @@ def atUrService():
     data = clientSocket.recv(1024)
     data = data.rstrip()
     data = data.lstrip()
+    byte_data = b"data"
     msg = ""
     value = ""
-    if(data.rfind(":") != -1):
+    if(byte_data.rfind(b":") != -1):
       msg, value = data.split(":")
     else:
       msg = data
@@ -1673,7 +1674,7 @@ def mainFunc():
   frameScrutinizerProcess.start()
 
 
-  mainPidD = open(mainPidFile,"w",0)
+  mainPidD = open(mainPidFile,"w")
   for i in range(0,len(p)):
     try:
       mainPidD.write(str(p[i].pid) +"\n")
@@ -1681,7 +1682,7 @@ def mainFunc():
       print("Couldnt write mainPidFile : "+ str(sys.exc_info()))
   mainPidD.close()
 
-  mainOnlyD = open(pidOnlyFile,"w",0)
+  mainOnlyD = open(pidOnlyFile,"w")
   try:
     mainOnlyD.write(str(myPid) +"\n")
   except:
