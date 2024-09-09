@@ -425,10 +425,12 @@ class fileDirLoadedThread(QtCore.QThread):
   thumbzStarted = QtCore.pyqtSignal()
   thumbzTotal = QtCore.pyqtSignal(object)
 
-  def __init__(self,parent=None,assPath=None):
+  def __init__(self,parent=None,assPath=None, pathSelected=None):
     super(fileDirLoadedThread, self).__init__(parent)
     self.assPath = assPath
+    self.pathSelected = pathSelected
     self.pleaseStop = False
+    self.name = str(self.pathSelected).replace("/", ":").split(self.assPath)[1]
 
   def exitshit(self):
     self.pleaseStop = True
@@ -444,7 +446,7 @@ class fileDirLoadedThread(QtCore.QThread):
 
   def run(self):
     self.thumbzStarted.emit()
-    rbhus.utilsPipe.getUpdatedMediaThumbz(self.assPath, QT_callback_signalThumbz=self.callback_media, QT_callback_isStopped=self.callback_stop, QT_callback_total=self.callback_total)
+    rbhus.utilsPipe.getUpdatedMediaThumbz(self.assPath, pathSelected=self.pathSelected, QT_callback_signalThumbz=self.callback_media, QT_callback_isStopped=self.callback_stop, QT_callback_total=self.callback_total)
 
 
 class FSM4Files(QFileSystemModel):
@@ -598,9 +600,10 @@ def dirSelected(idx, modelDirs, main_ui):
     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
     # ass_path_selected = assPath+main_ui.labelFile.text().lstrip("-").replace("/",":")
     # rbhus.debug.info(ass_path_selected)
-    fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, parent=main_ui)
+    fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, pathSelected=pathSelected, parent=main_ui)
     # fileIconThreadRunning.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
     fileIconThreadRunning.thumbzSignal.connect(lambda mediaObj, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(mediaObj,pathSelected,main_ui))
+    fileIconThreadRunning.finished.connect(lambda main_ui=main_ui : fileIconsFinished(main_ui))
     fileIconThreads.append(fileIconThreadRunning)
     rbhus.debug.info("Starting thread")
     fileIconThreadRunning.start()
@@ -645,13 +648,20 @@ def fileIconActivate(fileIconDets,pathSelected, main_ui):
   # icon = QtGui.QIcon(fileIconDets.thumbFile)
   # main_ui.tableFiles.model().setData(fileSelectedIdx, icon, QtCore.Qt.DecorationRole)
   # main_ui.tableFiles.resizeColumnsToContents()
+  # rbhus.debug.info(fileIconDets.subPath)
+  # rbhus.debug.info(main_ui.labelFile.text().lstrip("-/"))
 
   if filterList:
     if not fileIconDets.mimeType in filterList:
       return
 
-  if not fileIconDets.subPath in pathSelected:
-    return
+  if fileIconDets.subPath == ".":
+    pass
+  else:
+    if not fileIconDets.subPath in pathSelected:
+      return
+    if not fileIconDets.subPath == main_ui.labelFile.text().lstrip("-/"):
+      return
 
   if fileIconDets.mainFile in fileThumbzWidget:
     imageWidgetUpdated(fileIconDets)
@@ -718,7 +728,13 @@ def imageWidgetUpdated(fileDets):
 #     print(modelFiles.filePath(idx))
 
 
-
+def fileIconsFinished(main_ui):
+  global fileIconThreads
+  for thread in fileIconThreads:
+    if thread.isFinished():
+      rbhus.debug.info(f"Thread <{thread.name}> is finished. Deleting...")
+      thread.deleteLater()
+      fileIconThreads.remove(thread)
 
 
 def popUpFolders(main_ui,pos):

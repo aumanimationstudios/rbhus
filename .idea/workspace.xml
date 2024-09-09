@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="c5de4dea-8992-4546-9046-bea2fae47a96" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhus/utilsPipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/utilsPipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhusUI/guiBin/qt5-treeview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -450,7 +450,7 @@ def getMediaFiles(assPath=None):
 
 
 
-def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callback_isStopped=None, QT_callback_total=None):
+def getUpdatedMediaThumbz(assPath=None, pathSelected=None, QT_callback_signalThumbz=None, QT_callback_isStopped=None, QT_callback_total=None):
   """
 
   :param assPath:
@@ -552,6 +552,9 @@ def getUpdatedMediaThumbz(assPath=None, QT_callback_signalThumbz=None, QT_callba
           if (QT_callback_isStopped()):
             return (0)
         fAbsPath = fileDet.absPath
+        if pathSelected:
+          if pathSelected not in fAbsPath:
+            continue
         mimeType = fileDet.mimeType
         fDir = os.path.dirname(fAbsPath)
         fName = os.path.basename(fAbsPath)

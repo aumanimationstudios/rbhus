@@ -7,3 +7,4 @@ pyzmq
 setproctitle==1.1.10
 simplejson==3.16.0
 PyQt5
+lxml
