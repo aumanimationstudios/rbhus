@@ -199,9 +199,10 @@ def atUrService():
     data = clientSocket.recv(1024)
     data = data.rstrip()
     data = data.lstrip()
+    byte_data = b"data"
     msg = ""
     value = ""
-    if(data.rfind(":") != -1):
+    if(byte_data.rfind(b":") != -1):
       msg, value = data.split(":")
     else:
       msg = data
