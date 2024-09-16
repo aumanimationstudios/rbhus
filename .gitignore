@@ -5,3 +5,5 @@ env.set
 *.autosave
 *.lock
 *.idea/
+*.idea/*
+
