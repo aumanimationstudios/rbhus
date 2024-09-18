@@ -77,6 +77,12 @@ LOG_FILENAME.setFormatter(BASIC_FORMAT)
 logClient.addHandler(LOG_FILENAME)
 
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 def sigHandle(sigNum, frame):
   myPid = os.getpid()
   logClient.debug("signal handler called with "+ str(sigNum) +" signal")
@@ -1362,10 +1368,10 @@ def atUrService():
     data = clientSocket.recv(1024)
     data = data.rstrip()
     data = data.lstrip()
-    byte_data = b"data"
+    data = str_convert(data)
     msg = ""
     value = ""
-    if(byte_data.rfind(b":") != -1):
+    if(data.rfind(":") != -1):
       msg, value = data.split(":")
     else:
       msg = data

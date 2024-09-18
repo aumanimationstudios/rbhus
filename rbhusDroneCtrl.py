@@ -42,6 +42,12 @@ pidOnlyFile = tempDir + os.sep +"rbhusDroneMain.pid"
 singular = tempDir + os.sep + "singularity"
 
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
+
 def CLIENTKILL(clientSocket):
   if(os.path.exists(pidOnlyFile)):
     pOf = open(pidOnlyFile,"r")
@@ -199,10 +205,10 @@ def atUrService():
     data = clientSocket.recv(1024)
     data = data.rstrip()
     data = data.lstrip()
-    byte_data = b"data"
+    data = str_convert(data)
     msg = ""
     value = ""
-    if(byte_data.rfind(b":") != -1):
+    if(data.rfind(":") != -1):
       msg, value = data.split(":")
     else:
       msg = data
