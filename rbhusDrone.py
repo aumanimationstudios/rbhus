@@ -1377,7 +1377,7 @@ def atUrService():
       msg = data
     logClient.debug("I got a connection from "+ str(address) +" : "+ str(data))
     if(msg == "ALIVE"):
-      clientSocket.send("ALIVE")
+      clientSocket.send(b"ALIVE")
     elif(msg == "MURDER"):
       try:
         taskId, frameId = value.split("%")
