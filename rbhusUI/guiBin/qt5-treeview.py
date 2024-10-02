@@ -876,9 +876,13 @@ def getSelectedFiles(main_ui):
   # if(main_ui.checkDetails.isChecked()):
   if currView == "LIST":
     selectedIdxs = main_ui.tableFiles.selectionModel().selectedRows()
-    modelFiles = main_ui.tableFiles.model()
+    # modelFiles = main_ui.tableFiles.model()
+    proxy_model = main_ui.tableFiles.model()
+    modelFiles = proxy_model.sourceModel()
     for selectedIdx in selectedIdxs:
-      files.append(modelFiles.filePath(selectedIdx))
+      proxy_index = selectedIdx
+      source_index = proxy_model.mapToSource(proxy_index)
+      files.append(modelFiles.filePath(source_index))
   # else:
   if currView == "ICON":
     selectedItems = main_ui.listFiles.selectedItems()
