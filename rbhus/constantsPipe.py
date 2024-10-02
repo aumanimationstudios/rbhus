@@ -78,6 +78,7 @@ mimeTypes = {
              "pdf":[".pdf"],
              "reel":[".reel"],
              "pureref":[".pur"],
+             "hidden":[".kra~",".png~",".jpg~",".blend1"],
              # "edl":[".reel"]
             }
 
@@ -92,6 +93,7 @@ mimeLogos = {
   "pdf": os.path.join(base_dir,"etc","icons","mime_type_pdf.png"),
   "reel": os.path.join(base_dir,"etc","icons","mime_type_reel.png"),
   "pureref": os.path.join(base_dir,"etc","icons","mime_type_pureref.png"),
+  "hidden": os.path.join(base_dir,"etc","icons","mime_type_hidden.png"),
 }
 
 mimeConvertCmds = {

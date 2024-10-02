@@ -48,6 +48,7 @@ rbhus.debug.info(main_ui_file)
 
 from PyQt5.QtWidgets import QApplication, QFileSystemModel, QListWidgetItem
 from PyQt5 import QtCore, uic, QtGui, QtWidgets
+from PyQt5.QtCore import QSortFilterProxyModel
 
 
 
@@ -470,6 +471,32 @@ class FSM4Files(QFileSystemModel):
     return super(FSM4Files, self).data(index, role)
 
 
+
+class ExtensionFilterProxyModel(QSortFilterProxyModel):
+  def __init__(self, exclude_exts=None, filter=None, parent=None):
+    super(ExtensionFilterProxyModel, self).__init__(parent)
+    # List of extensions to exclude
+    self.exclude_exts = exclude_exts if exclude_exts is not None else []
+    self.filter = filter if filter is not None else []
+
+  def filterAcceptsRow(self, source_row, source_parent):
+    # Get the index of the item
+    index = self.sourceModel().index(source_row, 0, source_parent)
+    # Get the file name and extension
+    file_name = self.sourceModel().fileName(index)
+    file_ext = file_name.split(".")[-1].lower()
+
+    # Show hidden files when the checkbox is checked
+    if 'hidden' in self.filter:
+      return True  # Show all files when checkbox is enabled
+
+    # Hide files with extensions in the exclude list
+    if file_ext in self.exclude_exts:
+      return False
+
+    return True
+
+
 class FSM(QFileSystemModel):
 
   def __init__(self,**kwargs):
@@ -609,7 +636,7 @@ def dirSelected(idx, modelDirs, main_ui):
     fileIconThreadRunning.start()
 
   searchTerm = main_ui.lineEditSearch.text().strip()
-
+  exclude_extensions = [ext.lstrip('.') for ext in rbhus.constantsPipe.mimeTypes["hidden"]]
   modelFiles = FSM4Files(parent=main_ui)
   modelFiles.setRootPath(CUR_DIR_SELECTED)
   modelFiles.setFilter(QtCore.QDir.Files | QtCore.QDir.NoDotAndDotDot)
@@ -622,8 +649,12 @@ def dirSelected(idx, modelDirs, main_ui):
     modelFiles.setNameFilters(["*" + ext for ext in mimeExts])
   modelFiles.setNameFilterDisables(False)
   rootIdx = modelFiles.index(CUR_DIR_SELECTED)
-  main_ui.tableFiles.setModel(modelFiles)
-  main_ui.tableFiles.setRootIndex(rootIdx)
+  proxy_model = ExtensionFilterProxyModel(exclude_exts=exclude_extensions,filter=filterList)
+  proxy_model.setSourceModel(modelFiles)
+  # main_ui.tableFiles.setModel(modelFiles)
+  # main_ui.tableFiles.setRootIndex(rootIdx)
+  main_ui.tableFiles.setModel(proxy_model)
+  main_ui.tableFiles.setRootIndex(proxy_model.mapFromSource(rootIdx))
   # main_ui.tableFiles.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
   header = main_ui.tableFiles.horizontalHeader()
   header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
