@@ -450,7 +450,7 @@ def getMediaFiles(assPath=None):
 
 
 
-def getUpdatedMediaThumbz(assPath=None, pathSelected=None, QT_callback_signalThumbz=None, QT_callback_isStopped=None, QT_callback_total=None):
+def getUpdatedMediaThumbz(assPath=None, pathSelected=None, versioned_ass=False, QT_callback_signalThumbz=None, QT_callback_isStopped=None, QT_callback_total=None):
   """
 
   :param assPath:
@@ -484,6 +484,8 @@ def getUpdatedMediaThumbz(assPath=None, pathSelected=None, QT_callback_signalThu
   if (assPath):
     absPath = getAbsPath(assPath)
     assDets = getAssDetails(assPath=assPath)
+    if versioned_ass:
+      absPath = pathSelected
     thumbsDbDir = os.path.join("/crap/LOCAL.crap/",username, ".thumbz.db",assDets['assetId'])
     compPaths = getCompoundPaths(assPath,QT_callback_isStopped=QT_callback_isStopped)
     if (os.path.exists(absPath)):
@@ -555,6 +557,9 @@ def getUpdatedMediaThumbz(assPath=None, pathSelected=None, QT_callback_signalThu
         if pathSelected:
           if pathSelected not in fAbsPath:
             continue
+          debug.info(pathSelected)
+          debug.info(fAbsPath)
+
         mimeType = fileDet.mimeType
         fDir = os.path.dirname(fAbsPath)
         fName = os.path.basename(fAbsPath)

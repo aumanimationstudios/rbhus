@@ -426,10 +426,11 @@ class fileDirLoadedThread(QtCore.QThread):
   thumbzStarted = QtCore.pyqtSignal()
   thumbzTotal = QtCore.pyqtSignal(object)
 
-  def __init__(self,parent=None,assPath=None, pathSelected=None):
+  def __init__(self,parent=None,assPath=None, pathSelected=None, versioned_ass=False):
     super(fileDirLoadedThread, self).__init__(parent)
     self.assPath = assPath
     self.pathSelected = pathSelected
+    self.versioned_ass = versioned_ass
     self.pleaseStop = False
     self.name = str(self.pathSelected).replace("/", ":").split(self.assPath)[1]
 
@@ -447,7 +448,7 @@ class fileDirLoadedThread(QtCore.QThread):
 
   def run(self):
     self.thumbzStarted.emit()
-    rbhus.utilsPipe.getUpdatedMediaThumbz(self.assPath, pathSelected=self.pathSelected, QT_callback_signalThumbz=self.callback_media, QT_callback_isStopped=self.callback_stop, QT_callback_total=self.callback_total)
+    rbhus.utilsPipe.getUpdatedMediaThumbz(self.assPath, pathSelected=self.pathSelected, versioned_ass=self.versioned_ass, QT_callback_signalThumbz=self.callback_media, QT_callback_isStopped=self.callback_stop, QT_callback_total=self.callback_total)
 
 
 class FSM4Files(QFileSystemModel):
@@ -627,7 +628,10 @@ def dirSelected(idx, modelDirs, main_ui):
     # fileIconThreadRunning.finished.connect(lambda main_ui= main_ui : listFilesFinished(main_ui))
     # ass_path_selected = assPath+main_ui.labelFile.text().lstrip("-").replace("/",":")
     # rbhus.debug.info(ass_path_selected)
-    fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, pathSelected=pathSelected, parent=main_ui)
+    versioned_ass = False
+    if "/crap/versionCache/" in pathSelected:
+      versioned_ass = True
+    fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, pathSelected=pathSelected, versioned_ass=versioned_ass, parent=main_ui)
     # fileIconThreadRunning.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
     fileIconThreadRunning.thumbzSignal.connect(lambda mediaObj, pathSelected = pathSelected, main_ui=main_ui :fileIconActivate(mediaObj,pathSelected,main_ui))
     fileIconThreadRunning.finished.connect(lambda main_ui=main_ui : fileIconsFinished(main_ui))
@@ -923,6 +927,7 @@ def popUpFiles(main_ui,context,pos):
 
   openWithCmdActions = {}
   if(selectedFiles):
+    rbhus.debug.info(fileThumbzItems)
     try:
       sel = re.sub("~$", "", selectedFiles[0])
       rbhus.debug.info(sel)
@@ -1089,8 +1094,11 @@ def syncingDoneEvent(src,dest,main_ui):
     # fileIconThreadRunning.start()
     # fileIconThreadRunning.wait()
     # rbhus.debug.info("created ICON FOR : "+ dest)
-
-    fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, parent=main_ui)
+    pathSelected = CUR_DIR_SELECTED
+    versioned_ass = False
+    if "/crap/versionCache/" in pathSelected:
+      versioned_ass = True
+    fileIconThreadRunning = fileDirLoadedThread(assPath=assPath, pathSelected=pathSelected, versioned_ass=versioned_ass, parent=main_ui)
     # fileIconThreadRunning.thumbzStarted.connect(lambda mainUid=mainUid: clearListWidgetSubDir(mainUid))
     fileIconThreadRunning.thumbzSignal.connect(lambda mediaObj, pathSelected=CUR_DIR_SELECTED, main_ui=main_ui: fileIconActivate(mediaObj, pathSelected, main_ui))
     fileIconThreads.append(fileIconThreadRunning)
