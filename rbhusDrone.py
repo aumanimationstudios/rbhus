@@ -550,7 +550,7 @@ def execFrames(frameInfo,frameScrutiny):
     except:
       logClient.debug("update logFile  : "+ str(sys.exc_info()))
     try:
-      logD = open(logFile,"a+",0)
+      logD = open(logFile,"a+")
     except:
       logClient.debug(sys.exc_info())
     os.environ['rbhus_logFile'] = str(logFile).lstrip().rstrip()
