@@ -6,4 +6,5 @@ env.set
 *.lock
 *.idea/
 *.idea/*
+.idea/workspace.xml
 

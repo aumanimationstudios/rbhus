@@ -36,6 +36,11 @@ import rbhus.utilsTray as utilsTray
 import re
 
 
+def str_convert(text):
+  if isinstance(text, bytes):
+    return str(text, 'utf-8')
+  return str(text)
+
 
 class hg(object):
 
@@ -241,7 +246,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose init",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","init"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if (p.returncode != 0):
       debug.error(str(out))
     else:
@@ -258,7 +264,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose merge --tool=\":local\"",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","merge","--tool",":local"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if(p.returncode != 0):
       debug.error(str(out))
     else:
@@ -274,7 +281,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose add --large",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","add","--large"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if (p.returncode != 0):
       debug.error(str(out))
     else:
@@ -289,7 +297,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose addremove",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","addremove"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if (p.returncode != 0):
       debug.error(str(out))
     else:
@@ -307,13 +316,14 @@ class hg(object):
     else:
       p = subprocess.Popen(["hg","--verbose","commit","-A","--message","\'"+ commitmsg +"\'","--user",os.environ['rbhusPipe_acl_user']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     com = p.communicate()
-    out = com[0]
-    debug.info(com)
+    out = str_convert(com[0])
+    debug.info(out)
     versionCommited = 0
     returnCode =  p.returncode
+    debug.info(returnCode)
     try:
       # debug.info(out)
-      outArray = out.split(b"\n")
+      outArray = out.split("\n")
       for x in outArray:
         if(re.search("^committed changeset",x)):
           changeset = x.split()
@@ -347,7 +357,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose push -f {0}".format(self.absPipePath),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","push","-f",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     returnCode = p.returncode
     if (returnCode != 0):
       debug.error(str(out))
@@ -363,7 +374,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose pull --force {0}".format(self.absPipePath),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","pull","--force",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if (p.returncode != 0):
       debug.error(str(out))
     else:
@@ -375,7 +387,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose clone {0} {1}".format(self.absPipePath,"."),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","clone",self.absPipePath,"."],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     p.wait()
     debug.info("_clone"+ str(out))
 
@@ -396,7 +409,8 @@ class hg(object):
       p = subprocess.Popen(cmd,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(cmd.split(),stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if (p.returncode != 0):
       debug.error(str(out))
       utilsPipe.updateAssModifies(self.assDets['assetId'], "update:end:fail:" + str(p.returncode))
@@ -416,7 +430,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose purge",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","purge"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if (p.returncode != 0):
       debug.error(str(out))
     else:
@@ -427,16 +442,18 @@ class hg(object):
       p = subprocess.Popen("hg --verbose log --template {rev}###{author}###{date}###{desc}@@@ --cwd "+ self.absPipePath,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","log","--template","{rev}###{author}###{date}###{desc}@@@","--cwd",self.absPipePath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    # out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     p.wait()
     # debug.info(out)
     ret = []
     # for t in out:
     #   if(t):
     # debug.info(out)
-    for g in out.split(b"@@@"):
+    for g in out.split("@@@"):
       if(g):
-        ret.append(g.split(b"###"))
+        ret.append(g.split("###"))
     # self._deleteLock()
     return(ret)
 
@@ -466,7 +483,8 @@ class hg(object):
       else:
         p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./publish/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-      out = p.communicate()[0]
+      com = p.communicate()
+      out = str_convert(com[0])
       p.wait()
       if (p.returncode != 0):
         debug.error(str(out))
@@ -506,7 +524,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose archive --rev {0} ./review_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./review_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if (p.returncode != 0):
       debug.error(str(out))
       return(1)
@@ -566,7 +585,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     assdict = {}
     if (p.returncode != 0):
       debug.error(str(out))
@@ -593,7 +613,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose archive --rev {0} ./export_{0}/".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","archive","--rev",str(rev),"./export_"+ str(rev) +"/"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     assdict = {}
     if (p.returncode != 0):
       debug.error(str(out))
@@ -610,7 +631,8 @@ class hg(object):
       p = subprocess.Popen("hg --verbose update --rev {0}".format(rev),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
       p = subprocess.Popen(["hg","--verbose","update","--rev",str(rev)],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out = p.communicate()[0]
+    com = p.communicate()
+    out = str_convert(com[0])
     if (p.returncode != 0):
       debug.error(str(out))
     else:

@@ -394,7 +394,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           brush = QtGui.QBrush()
           self.tableVersions.setItem(indrow, indcol, item)
           if(indcol == 4):
-            self.tableVersions.item(indrow, indcol).setText(str_convert(time.ctime(float(t.split(b"-")[0]))))
+            self.tableVersions.item(indrow, indcol).setText(str_convert(time.ctime(float(t.split("-")[0]))))
           elif(indcol == 0):
             if(str_convert(t) == str(self.assetDetails['publishVersion'])):
               item1 = QtWidgets.QTableWidgetItem()
@@ -477,7 +477,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
         self.relatedAssetWidgets[x] = relatedAssetWidget
         if(assLog):
           relatedAssetWidget.labelVersion.setText(str_convert(assLog[0][0]).zfill(4))
-          relatedAssetWidget.labelDate.setText(str_convert(time.ctime(float(assLog[0][2].split(b"-")[0]))))
+          relatedAssetWidget.labelDate.setText(str_convert(time.ctime(float(assLog[0][2].split("-")[0]))))
         assColored = utilsPipe.assPathColorCoded(assDets)
         if(selectedForAutoCommit):
           if(x in selectedForAutoCommit):
@@ -629,7 +629,7 @@ class Ui_Form(rbhusPipeVersionsMod.Ui_MainWindow):
           assLog = xver._log()
           if(versionNumber):
             self.relatedAssetWidgets[x].labelVersion.setText(str(versionNumber).zfill(4))
-          self.relatedAssetWidgets[x].labelDate.setText(str_convert(time.ctime(float(assLog[0][2].split(b"-")[0]))))
+          self.relatedAssetWidgets[x].labelDate.setText(str_convert(time.ctime(float(assLog[0][2].split("-")[0]))))
           utilsPipe.updateAssModifies(xver.assDets['assetId'],"commit_auto:end:success")
 
 
