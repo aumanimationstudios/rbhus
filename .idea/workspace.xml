@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c5de4dea-8992-4546-9046-bea2fae47a96" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/blend_lin_tj/default.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/blend_lin_tj/default.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rbhus/pyperclip.py" beforeDir="false" afterPath="$PROJECT_DIR$/rbhus/pyperclip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/rbhus/krita-thumbnailer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +21,22 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "history": [
+    {
+      "state": "OPEN"
+    }
+  ],
+  "lastFilter": {
+    "state": "OPEN"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/aumanimationstudios/rbhus.git",
+    "accountId": "9b34877f-14c3-42bc-ba8d-ceba9397e4a3"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 4
@@ -31,15 +46,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;python3-pyqt5&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/sanath/git_repos/rbhus_clone&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "python3-pyqt5",
+    "last_opened_file_path": "/home/sanath/git_repos/rbhus_clone",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />

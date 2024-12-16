@@ -11,6 +11,7 @@ import os
 # import PIL
 from lxml import etree as ET
 import sys
+import subprocess
 
 __author__ = 'pierre'
 
@@ -61,10 +62,29 @@ class Kra(object):
         return {'name': icc_name, 'data': self.icc}
 
 
-if (__name__ == '__main__'):
-    krafile = Kra(os.path.abspath(sys.argv[1]))
-    pngfile = os.path.abspath(sys.argv[2])
-    png = krafile.get_merged_image()
-    with open(pngfile, 'wb') as f:
-        f.write(png)
-        f.close()
+
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python3 krita-thumbnailer.py <input.kra> <output.png>")
+        sys.exit(1)
+
+    input_file = os.path.abspath(sys.argv[1])
+    output_file = os.path.abspath(sys.argv[2])
+
+    # Process the .kra file
+    krafile = Kra(input_file)
+    png_data = krafile.get_merged_image()
+
+    # Write the PNG data to the specified output file
+    with open(output_file, 'wb') as f:
+        f.write(png_data)
+
+    # Use ImageMagick to resize the image to 96x96
+    resized_output_file = output_file  # Overwrite the same output file
+    subprocess.run(
+        ["/usr/bin/magick", output_file, "-sample", "96x96", resized_output_file],
+        check=True
+    )
+
+    print(f"Thumbnail saved and resized to {resized_output_file}")
+
