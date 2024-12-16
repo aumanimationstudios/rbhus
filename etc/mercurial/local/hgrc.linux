@@ -11,5 +11,5 @@ usercache = /crap/mercurial/
 groups = artist
 
 [ui]
-timeout = 5
+timeout = 10
 interactive = False
